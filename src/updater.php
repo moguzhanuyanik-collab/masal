@@ -12,7 +12,7 @@ function github_repo_info(array $gh): array {
 }
 
 function updater_headers(array $gh): array {
-    $h=['User-Agent: IlkAdim-Updater/1.0.6','Accept: */*'];
+    $h=['User-Agent: IlkAdim-Updater/1.0.8','Accept: */*','Cache-Control: no-cache, no-store, must-revalidate','Pragma: no-cache'];
     $token=trim((string)($gh['token']??''));
     if($token!=='') $h[]='Authorization: Bearer '.$token;
     return $h;
@@ -28,7 +28,9 @@ function updater_http(string $url,array $gh,?string $target=null): string|array 
         CURLOPT_TIMEOUT=>120,
         CURLOPT_FAILONERROR=>false,
         CURLOPT_HTTPHEADER=>updater_headers($gh),
-        CURLOPT_USERAGENT=>'IlkAdim-Updater/1.0.6',
+        CURLOPT_USERAGENT=>'IlkAdim-Updater/1.0.8',
+        CURLOPT_FRESH_CONNECT=>true,
+        CURLOPT_FORBID_REUSE=>true,
     ];
     $fp=null;
     if($target!==null){
@@ -63,7 +65,8 @@ function updater_http(string $url,array $gh,?string $target=null): string|array 
 
 function remote_version_info(array $gh): array {
     [$owner,$repo,$branch]=github_repo_info($gh);
-    $url='https://raw.githubusercontent.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/'.rawurlencode($branch).'/version.json';
+    $cacheBuster=(string)round(microtime(true)*1000);
+    $url='https://raw.githubusercontent.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/'.rawurlencode($branch).'/version.json?cb='.$cacheBuster;
     $data=json_decode((string)updater_http($url,$gh),true);
     if(!is_array($data)||empty($data['version'])) throw new RuntimeException('GitHub version.json okunamadi veya gecersiz.');
     return [
@@ -208,7 +211,7 @@ function install_github_update(string $root,array $gh,array $preserve): array {
 
     try{
         create_project_backup($root,$backupPath);
-        $downloadUrl='https://codeload.github.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/zip/refs/heads/'.rawurlencode($branch);
+        $downloadUrl='https://codeload.github.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/zip/refs/heads/'.rawurlencode($branch).'?cb='.(string)round(microtime(true)*1000);
         updater_http($downloadUrl,$gh,$zipPath);
 
         if(!class_exists('ZipArchive')) throw new RuntimeException('PHP ZipArchive eklentisi gerekli.');
