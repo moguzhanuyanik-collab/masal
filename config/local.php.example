@@ -1,0 +1,16 @@
+<?php
+return [
+    'db' => [
+        'host' => 'localhost',
+        'port' => 3306,
+        'name' => 'ilk_adim',
+        'user' => 'VERITABANI_KULLANICI_ADI',
+        'pass' => 'VERITABANI_SIFRESI',
+    ],
+    'github' => [
+        'owner' => 'moguzhanuyanik-collab',
+        'repo' => 'masal',
+        'branch' => 'main',
+        'token' => '',
+    ],
+];
