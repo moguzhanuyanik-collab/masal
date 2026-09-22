@@ -1,5 +1,4 @@
 {
-  "version": "1.0.2",
-  "name": "IlkAdim Veritabani Uyumluluk Hotfix",
-  "description": "Guncelleme gecmisi kolon uyumlulugu ve utf8mb4_unicode_ci duzeltmesi. CSS ve resimler degismedi."
+  "version": "1.0.3",
+  "name": "İlkAdım Keyless Güncelleyici Hotfix"
 }
