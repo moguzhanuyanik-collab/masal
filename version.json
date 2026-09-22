@@ -1,6 +1,5 @@
 {
-  "version": "1.0.1",
-  "name": "İlkAdım Test Güncellemesi",
-  "description": "Otomatik güncelleme sistemi test sürümü. Uygulama dosyalarında değişiklik yok.",
-  "migrations": []
+  "version": "1.0.2",
+  "name": "IlkAdim Veritabani Uyumluluk Hotfix",
+  "description": "Guncelleme gecmisi kolon uyumlulugu ve utf8mb4_unicode_ci duzeltmesi. CSS ve resimler degismedi."
 }
