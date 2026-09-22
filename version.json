@@ -1,0 +1,6 @@
+{
+  "version": "1.0.1",
+  "name": "İlkAdım Test Güncellemesi",
+  "description": "Otomatik güncelleme sistemi test sürümü. Uygulama dosyalarında değişiklik yok.",
+  "migrations": []
+}
