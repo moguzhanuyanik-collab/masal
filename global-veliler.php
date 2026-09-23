@@ -29,8 +29,8 @@ $parents=ky_global_parents($pdo);
 ?><!doctype html><html lang="tr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Global Veliler — İlkAdım</title>
-<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.41">
-</head><body class="role-page"><div class="role-shell">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.56"><link rel="stylesheet" href="super-admin-pages.css?v=1.0.57">
+</head><body class="role-page sa-subpage"><div class="role-shell">
 <header class="role-topbar"><a class="role-icon" href="super-admin.php">←</a><span class="role-brand"><span>👪</span><span><strong>Global Veliler</strong><small>KURUMSUZ / OKULSUZ</small></span></span><a class="role-icon" href="global-ogrenciler.php">🎒</a></header>
 <main class="role-content">
 <section class="role-hero"><span class="eyeline">GLOBAL KULLANICILAR</span><h1>Kurumdan bağımsız veli hesapları.</h1><p>Global veli yalnızca kendisine eşleştirilen global öğrenciyi takip eder.</p><span class="role-hero-art">👪</span></section>
@@ -51,5 +51,11 @@ $parents=ky_global_parents($pdo);
 <?php else:foreach($parents as $p):?><div class="role-row"><span>👪</span><div><strong><?=ky_h((string)$p['ad_soyad'])?></strong><small><?=ky_h((string)$p['email'])?> · Öğrenci: <?=ky_h((string)($p['ogrenci_adlari']?:'Bağlı değil'))?></small></div><span class="role-pill ok">Global</span></div><?php endforeach;endif;?>
 </div></section>
 </main>
-<nav class="role-bottom"><a href="super-admin.php"><span>⌂</span>Panel</a><a href="global-ogrenciler.php"><span>🎒</span>Öğrenciler</a><a class="active" href="global-veliler.php"><span>👪</span>Veliler</a><a href="kurumlar.php"><span>🏫</span>Kurumlar</a></nav>
+<nav class="role-bottom">
+<a href="super-admin.php"><span>⌂</span>Panel</a>
+<a href="kurumlar.php"><span>🏫</span>Kurumlar</a>
+<a href="global-ogrenciler.php"><span>🎒</span>Öğrenciler</a>
+<a class="active" href="global-veliler.php"><span>👪</span>Veliler</a>
+<a href="hesap-guvenligi.php"><span>👤</span>Profil</a>
+</nav>
 </div></body></html>
