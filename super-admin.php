@@ -65,7 +65,7 @@ $syncCount=auth_runtime_table_exists($pdo,'pwa_sync_islemleri')?sa_scalar($pdo,'
 <div class="role-row"><span>🧱</span><div><strong>Son başarılı güncelleme</strong><small><?=sa_h($lastUpdate!==''?$lastUpdate:'Henüz kayıt yok')?></small></div><span class="role-pill">v<?=sa_h(sa_version())?></span></div>
 </div></section>
 
-<div class="role-note"><span>💡</span><p><strong>İlkAdım</strong> kurumu doğrudan uygulama alan, okula bağlı olmayan kullanıcılar için merkez kurumdur. Bu kurumun içerik kaynağı <strong>Sistem</strong> olarak kalır.</p></div>
+<div class="role-note"><span>💡</span><p><strong>Global öğrenciler ve veliler hiçbir kuruma bağlı değildir.</strong> İlkAdım ise bizim kendi kurumumuz olarak kurum listesinde ayrı tutulur ve kendi yöneticileri ayrıca eklenebilir.</p></div>
 </main>
 <nav class="role-bottom">
 <a class="active" href="super-admin.php"><span>⌂</span>Panel</a>
