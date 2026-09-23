@@ -5,10 +5,23 @@
  const weekdays=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
  const defaults=()=>({sac:'🟤',tisort:'💜',aksesuar:'✨',arka_plan:'',gece_okuma:0});
  let data=null,loading=null,draft=null,active='',showStatus='';
+ let optionalDesignChecked=false;
  const route=()=>location.hash.replace(/^#\/?/,'');
  const renderMenu=()=>{
    const menu=q('.profile-menu');if(!menu)return;
    const entries=[['🎨','Avatar Oluşturucu','Saç, kıyafet ve aksesuarını seç','#/v4/avatar'],['🎁','Yıldız Dükkânı','Başarılarından kazandığın yıldızları kullan','#/v4/magaza'],['📅','Haftalık Planım','Kendi çalışma hedeflerini belirle','#/v4/plan'],['🏅','Başarı Sertifikam','Tamamladığın dersleri kutla','#/v4/sertifika']];
+   if(!optionalDesignChecked){
+     optionalDesignChecked=true;
+     fetch('v4/index.php',{method:'HEAD',credentials:'same-origin',cache:'no-store'})
+       .then(response=>{
+         if(!response.ok||menu.querySelector('[data-v4-full-design]'))return;
+         const link=document.createElement('a');
+         link.href='v4/index.php';link.dataset.v4FullDesign='1';
+         link.innerHTML='<span class="menu-icon lavender">✨</span><div><strong>V4 Tam Tasarım</strong><small>Yeni ekranları ayrı modda aç</small></div><svg aria-hidden="true"><use href="#arrow"/></svg>';
+         const next=menu.querySelector('[data-app-update-link],[data-logout-link]');
+         next?menu.insertBefore(link,next):menu.appendChild(link);
+       }).catch(()=>{});
+   }
    const before=menu.querySelector('[data-app-update-link],[data-logout-link]');
    entries.forEach(([emoji,title,desc,href])=>{
      if(menu.querySelector('[href="'+href+'"]'))return;
