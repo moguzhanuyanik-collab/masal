@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 require dirname(__DIR__) . '/src/bootstrap.php';
+require dirname(__DIR__) . '/src/auth.php';
 require dirname(__DIR__) . '/src/normalized.php';
 
 try {
     $pdo=db();
-    $studentId=current_student_id();
+    $studentId=require_api_student();
 
     if($_SERVER['REQUEST_METHOD']==='GET'){
         $state=load_student_state($pdo,$studentId);
