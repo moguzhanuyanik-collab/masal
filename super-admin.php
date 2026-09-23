@@ -38,7 +38,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f7f7fb">
 <title>Süper Admin — İlkAdım</title>
-<link rel="stylesheet" href="super-admin.css?v=1.0.62">
+<link rel="stylesheet" href="super-admin.css?v=1.0.63">
 </head>
 <body class="sa-page">
 <svg class="sa-icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -83,7 +83,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
     <span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span>
   </a>
   <div class="sa-top-actions">
-    <a href="guncelleme.php" aria-label="Güncellemeler"><svg><use href="#sa-bell"/></svg></a>
+    <a class="sa-update-top" href="guncelleme.php" aria-label="Sistemi Güncelle"><svg><use href="#sa-refresh"/></svg><span>Güncelle</span></a>
     <a href="super-admin-profil.php" aria-label="Profilim"><?php if($profilePhoto):?><img class="sa-avatar" src="profil-foto.php?v=<?=filemtime($profilePhoto)?>" width="35" height="35" alt=""><?php else:?><svg><use href="#sa-user"/></svg><?php endif;?></a>
   </div>
 </header>
@@ -142,7 +142,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
   </section>
 
   <section class="sa-section">
-   <div class="sa-section-title"><div><small>SİSTEM</small><h2>Durum</h2></div></div>
+   <div class="sa-section-title"><div><small>SİSTEM</small><h2>Durum</h2></div><a class="sa-update-link" href="guncelleme.php"><svg><use href="#sa-refresh"/></svg>Sistemi Güncelle</a></div>
    <div class="sa-status-list">
     <div><span class="sa-status-icon"><svg><use href="#sa-database"/></svg></span><p><strong>MySQL</strong><small>Veritabanı bağlantısı</small></p><b><i></i>Çalışıyor</b></div>
     <div><span class="sa-status-icon"><svg><use href="#sa-cloud"/></svg></span><p><strong>PWA Eşitleme</strong><small><?=$syncCount?> eşitleme kaydı</small></p><b><i></i>Aktif</b></div>
