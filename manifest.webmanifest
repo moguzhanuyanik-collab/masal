@@ -1,0 +1,26 @@
+{
+  "id": "./index.php",
+  "name": "İlkAdım Eğitim",
+  "short_name": "İlkAdım",
+  "description": "İlkokul 1. sınıf dersleri, etkinlikler ve çevrimdışı öğrenme",
+  "lang": "tr",
+  "start_url": "./index.php#/anasayfa",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8f7fc",
+  "theme_color": "#7440ee",
+  "icons": [
+    {
+      "src": "./pwa-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./pwa-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
