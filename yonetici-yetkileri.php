@@ -37,7 +37,7 @@ try {
         foreach($pdo->query('SELECT kullanici_id,yetki FROM yonetici_yetkileri') as $grant)$grants[(int)$grant['kullanici_id']][]=(string)$grant['yetki'];
     }
 } catch(Throwable){$error='Yönetici listesi okunamadı.';}
-?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Yönetici Yetkileri — İlkAdım</title><link rel="stylesheet" href="super-admin-pages.css?v=1.0.61"></head>
+?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Yönetici Yetkileri — İlkAdım</title><link rel="stylesheet" href="super-admin-pages.css?v=1.0.72"></head>
 <body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?><div class="app-shell">
 <header class="app-topbar"><a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a><div class="sa-page-actions"><a class="sa-page-action" href="hesap-guvenligi.php" aria-label="Hesabım"><svg><use href="#sa-user"/></svg></a></div></header>
 <main id="screen"><div class="screen-content"><section class="subpage-intro"><span><svg><use href="#sa-shield"/></svg></span><h1>Yönetici Yetkileri</h1><p>Her yöneticinin kurum bölümlerine erişimini ayrı ayrı belirleyin.</p></section>
