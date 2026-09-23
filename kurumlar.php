@@ -31,7 +31,9 @@ function kmh(string $v): string {
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="kurum.css?v=1.0.41">
 <link rel="stylesheet" href="kurumlar-kart.css?v=1.0.51">
+<link rel="stylesheet" href="kurumlar-responsive.css?v=1.0.52">
 <script src="kurumlar-kart.js?v=1.0.51" defer></script>
+<script src="kurumlar-responsive.js?v=1.0.52" defer></script>
 </head>
 <body class="role-page">
 <div class="role-shell" data-km-root data-section="<?=kmh($initial)?>" data-kurum="<?=$institutionId?>">
