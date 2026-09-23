@@ -9,7 +9,8 @@ header('Cache-Control: no-store, max-age=0');
 $user=authenticated_user();
 $studentId=authenticated_student_id();
 if (!$user || $studentId===null) {
-    echo "window.location.replace('".($user?'rol-paneli.php':'login.php')."');\n";
+    $target=$user?auth_role_home($user):'login.php';
+    echo "window.location.replace(".json_encode($target,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES).");\n";
     exit;
 }
 
