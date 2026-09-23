@@ -32,10 +32,11 @@ function kmh(string $v): string {
 <link rel="stylesheet" href="kurum.css?v=1.0.41">
 <link rel="stylesheet" href="kurumlar-kart.css?v=1.0.51">
 <link rel="stylesheet" href="kurumlar-responsive.css?v=1.0.52">
+<link rel="stylesheet" href="super-admin-pages.css?v=1.0.57">
 <script src="kurumlar-kart.js?v=1.0.53" defer></script>
 <script src="kurumlar-responsive.js?v=1.0.52" defer></script>
 </head>
-<body class="role-page">
+<body class="role-page sa-subpage">
 <div class="role-shell" data-km-root data-section="<?=kmh($initial)?>" data-kurum="<?=$institutionId?>">
 <header class="role-topbar">
 <a class="role-icon" href="super-admin.php">←</a>
@@ -118,8 +119,9 @@ function kmh(string $v): string {
 <nav class="role-bottom">
 <a href="super-admin.php"><span>⌂</span>Panel</a>
 <a class="active" href="kurumlar.php"><span>🏫</span>Kurumlar</a>
-<a href="global-ogrenciler.php"><span>🎒</span>Global Öğr.</a>
-<a href="global-veliler.php"><span>👪</span>Global Veli</a>
+<a href="global-ogrenciler.php"><span>🎒</span>Öğrenciler</a>
+<a href="global-veliler.php"><span>👪</span>Veliler</a>
+<a href="hesap-guvenligi.php"><span>👤</span>Profil</a>
 </nav>
 </div>
 
