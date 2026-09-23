@@ -171,8 +171,9 @@ $local = read_app_version();
     <meta name="description" content="İlkAdım uygulama güncelleme merkezi.">
     <title>Uygulama Güncelleme — İlkAdım</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="super-admin-pages.css?v=1.0.57">
 </head>
-<body>
+<body class="sa-subpage">
 <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10H15v-6H9v6H3Z"/></symbol>
     <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5C8 2 3 3 3 3v16s5-1 9 2c4-3 9-2 9-2V3s-5-1-9 2Zm0 0v16"/></symbol>
@@ -263,7 +264,8 @@ $local = read_app_version();
         <a href="super-admin.php"><span><svg><use href="#i-home"/></svg></span>Panel</a>
         <a href="kurumlar.php"><span><svg><use href="#i-book"/></svg></span>Kurumlar</a>
         <a href="global-ogrenciler.php"><span><svg><use href="#i-star"/></svg></span>Öğrenciler</a>
-        <a href="logout.php"><span><svg><use href="#i-user"/></svg></span>Çıkış</a>
+        <a href="global-veliler.php"><span>👪</span>Veliler</a>
+        <a href="hesap-guvenligi.php"><span><svg><use href="#i-user"/></svg></span>Profil</a>
     </nav>
 </div>
 
