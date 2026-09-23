@@ -19,12 +19,12 @@ const fields=document.getElementById('km-fields');
 const toast=document.getElementById('km-toast');
 
 const sections={
-  kurumlar:{label:'Kurumlar',singular:'Kurum',icon:'🏫'},
-  yoneticiler:{label:'Yöneticiler',singular:'Yönetici',icon:'🧑‍💼'},
-  ogretmenler:{label:'Öğretmenler',singular:'Öğretmen',icon:'👩‍🏫'},
-  veliler:{label:'Veliler',singular:'Veli',icon:'👪'},
-  ogrenciler:{label:'Öğrenciler',singular:'Öğrenci',icon:'🎒'},
-  eslestirme:{label:'Eşleştirme',singular:'Eşleştirme',icon:'🔗'}
+  kurumlar:{label:'Kurumlar',singular:'Kurum',icon:'sa-building'},
+  yoneticiler:{label:'Yöneticiler',singular:'Yönetici',icon:'sa-shield'},
+  ogretmenler:{label:'Öğretmenler',singular:'Öğretmen',icon:'sa-teacher'},
+  veliler:{label:'Veliler',singular:'Veli',icon:'sa-users'},
+  ogrenciler:{label:'Öğrenciler',singular:'Öğrenci',icon:'sa-student'},
+  eslestirme:{label:'Eşleştirme',singular:'Eşleştirme',icon:'sa-link'}
 };
 
 let state={
@@ -36,6 +36,7 @@ let state={
 };
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const iconSvg=id=>'<svg class="sa-inline-icon" aria-hidden="true"><use href="#'+esc(id)+'"/></svg>';
 const qs=obj=>new URLSearchParams(Object.entries(obj).filter(([,v])=>v!==''&&v!==null&&v!==undefined)).toString();
 
 const fetchJson=async(url,opts={})=>{
@@ -117,7 +118,7 @@ const render=()=>{
   if(state.section==='kurumlar'){
     content.innerHTML='<div class="km-panel"><div class="km-table-wrap"><table class="km-table"><thead><tr><th>Kurum</th><th>Tür</th><th>İçerik</th><th>Kullanıcılar</th><th>Durum</th><th style="text-align:right">İşlemler</th></tr></thead><tbody>'+
     (rows.length?rows.map((r,i)=>'<tr>'+
-      '<td><div class="km-name"><span class="km-avatar">'+(r.kod==='ilkadim'?'🌞':'🏫')+'</span><div><strong>'+esc(r.ad)+'</strong><small>'+esc(r.kod)+(r.email?' · '+esc(r.email):'')+'</small></div></div></td>'+
+      '<td><div class="km-name"><span class="km-avatar">'+iconSvg(r.kod==='ilkadim'?'sa-shield':'sa-building')+'</span><div><strong>'+esc(r.ad)+'</strong><small>'+esc(r.kod)+(r.email?' · '+esc(r.email):'')+'</small></div></div></td>'+
       '<td>'+esc(r.tur)+'</td>'+
       '<td>'+esc(r.icerik_kaynagi)+'</td>'+
       '<td><div class="km-counts"><span>Yön. '+r.yonetici_sayisi+'</span><span>Öğrt. '+r.ogretmen_sayisi+'</span><span>Veli '+r.veli_sayisi+'</span><span>Öğr. '+r.ogrenci_sayisi+'</span></div></td>'+
@@ -131,7 +132,7 @@ const render=()=>{
   }else if(state.section==='eslestirme'){
     content.innerHTML='<div class="km-panel"><div class="km-table-wrap"><table class="km-table"><thead><tr><th>Öğrenci</th><th>Kurum</th><th>Veliler</th><th>Öğretmenler</th><th style="text-align:right">İşlemler</th></tr></thead><tbody>'+
     (rows.length?rows.map((r,i)=>'<tr>'+
-      '<td><div class="km-name"><span class="km-avatar">🎒</span><div><strong>'+esc(r.ogrenci_adi)+'</strong><small>'+esc(r.ogrenci_email||'')+'</small></div></div></td>'+
+      '<td><div class="km-name"><span class="km-avatar">'+iconSvg('sa-student')+'</span><div><strong>'+esc(r.ogrenci_adi)+'</strong><small>'+esc(r.ogrenci_email||'')+'</small></div></div></td>'+
       '<td>'+esc(r.kurum_adi)+'</td>'+
       '<td>'+relationHtml(r.veliler)+'</td>'+
       '<td>'+relationHtml(r.ogretmenler)+'</td>'+
@@ -140,10 +141,10 @@ const render=()=>{
       '</div></td></tr>').join(''):'<tr><td colspan="5"><div class="km-empty">Eşleştirilecek öğrenci bulunamadı.</div></td></tr>')+
     '</tbody></table></div></div>';
   }else{
-    const icon=sections[state.section]?.icon||'👤';
+    const icon=sections[state.section]?.icon||'sa-user';
     content.innerHTML='<div class="km-panel"><div class="km-table-wrap"><table class="km-table"><thead><tr><th>Ad Soyad</th><th>Kurum</th><th>E-posta</th><th>Telefon</th><th>Durum</th><th style="text-align:right">İşlemler</th></tr></thead><tbody>'+
     (rows.length?rows.map((r,i)=>'<tr>'+
-      '<td><div class="km-name"><span class="km-avatar">'+icon+'</span><div><strong>'+esc(r.ad_soyad)+'</strong><small>#'+r.kullanici_id+'</small></div></div></td>'+
+      '<td><div class="km-name"><span class="km-avatar">'+iconSvg(icon)+'</span><div><strong>'+esc(r.ad_soyad)+'</strong><small>#'+r.kullanici_id+'</small></div></div></td>'+
       '<td>'+esc(r.kurum_adi)+'</td>'+
       '<td>'+esc(r.email)+'</td>'+
       '<td>'+esc(r.telefon||'—')+'</td>'+
@@ -178,7 +179,7 @@ const load=async(push=true)=>{
     render();
     if(push)setUrl();
   }catch(error){
-    content.innerHTML='<div class="role-note"><span>⚠️</span><p>'+esc(error.message)+'</p></div>';
+    content.innerHTML='<div class="role-note"><span>'+iconSvg('sa-alert')+'</span><p>'+esc(error.message)+'</p></div>';
   }finally{
     content.classList.remove('loading');
   }
