@@ -1,7 +1,7 @@
 'use strict';
 importScripts('./pwa-store.js');
-const CACHE='ilkadim-static-1.0.34';
-const STATIC=['./offline-v4.html','./offline-v4.js?v=1.0.34','./v4-offline.css?v=1.0.34','./pwa-store.js?v=1.0.34','./manifest.webmanifest','./pwa-icon-192.png','./pwa-icon-512.png'];
+const CACHE='ilkadim-static-1.0.46';
+const STATIC=['./offline-v4.html','./offline-v4.js?v=1.0.34','./v4-offline.css?v=1.0.34','./pwa-store.js?v=1.0.34','./manifest.webmanifest?v=1.0.46','./ilkadim-logo.svg','./ilkadim-logo-192.png','./ilkadim-logo-512.png'];
 const ALLOWED=new Set(STATIC.map(x=>new URL(x,self.registration.scope).href));
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(async cache=>{
