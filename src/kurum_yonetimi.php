@@ -127,8 +127,8 @@ function ky_global_students(PDO $pdo): array {
           FROM kullanicilar k
           INNER JOIN ogrenciler o ON o.kullanici_id=k.id
           LEFT JOIN veli_ogrenci vo ON vo.ogrenci_id=o.id
-          LEFT JOIN veliler v ON v.id=vo.veli_id
-          LEFT JOIN kullanicilar pv ON pv.id=v.kullanici_id
+          LEFT JOIN veliler v ON v.id=vo.veli_id AND v.aktif=1
+          LEFT JOIN kullanicilar pv ON pv.id=v.kullanici_id AND pv.aktif=1
           WHERE k.aktif=1 AND o.aktif=1
             AND NOT EXISTS (
               SELECT 1 FROM kurum_kullanicilari kk
@@ -151,7 +151,7 @@ function ky_global_parents(PDO $pdo): array {
           FROM kullanicilar k
           INNER JOIN veliler v ON v.kullanici_id=k.id
           LEFT JOIN veli_ogrenci vo ON vo.veli_id=v.id
-          LEFT JOIN ogrenciler o ON o.id=vo.ogrenci_id
+          LEFT JOIN ogrenciler o ON o.id=vo.ogrenci_id AND o.aktif=1
           WHERE k.aktif=1 AND v.aktif=1
             AND NOT EXISTS (
               SELECT 1 FROM kurum_kullanicilari kk
@@ -203,4 +203,59 @@ function ky_link_global_parent_student(PDO $pdo,array $actor,int $parentUserId,i
         ->execute([$parentProfileId,$studentId]);
 
     auth_audit($pdo,(int)$actor['id'],$parentUserId,'global_veli_ogrenci_eslestir','Öğrenci: '.$studentId);
+}
+
+
+function ky_assert_global_user(PDO $pdo,array $actor,string $role,int $userId): array {
+    if(!auth_user_has_role($actor,'super_admin')) throw new RuntimeException('Bu işlem yalnızca Süper Admin içindir.');
+    if($userId<=0 || !in_array($role,['ogrenci','veli'],true)) throw new RuntimeException('Geçersiz global kullanıcı.');
+    if($role==='ogrenci'){
+        $s=$pdo->prepare("SELECT k.id kullanici_id,o.id profil_id FROM kullanicilar k INNER JOIN ogrenciler o ON o.kullanici_id=k.id WHERE k.id=? AND k.aktif=1 AND o.aktif=1 AND NOT EXISTS(SELECT 1 FROM kurum_kullanicilari kk WHERE kk.kullanici_id=k.id AND kk.aktif=1) LIMIT 1");
+    }else{
+        $s=$pdo->prepare("SELECT k.id kullanici_id,v.id profil_id FROM kullanicilar k INNER JOIN veliler v ON v.kullanici_id=k.id WHERE k.id=? AND k.aktif=1 AND v.aktif=1 AND NOT EXISTS(SELECT 1 FROM kurum_kullanicilari kk WHERE kk.kullanici_id=k.id AND kk.aktif=1) LIMIT 1");
+    }
+    $s->execute([$userId]);$row=$s->fetch();$s->closeCursor();
+    if(!is_array($row)) throw new RuntimeException('Global kullanıcı bulunamadı.');
+    return $row;
+}
+
+function ky_update_global_user(PDO $pdo,array $actor,string $role,int $userId,string $name,string $email,string $password=''): void {
+    $row=ky_assert_global_user($pdo,$actor,$role,$userId);
+    $name=trim($name);$email=mb_strtolower(trim($email));
+    if(mb_strlen($name)<2 || mb_strlen($name)>190) throw new RuntimeException('Ad soyad bilgisini kontrol et.');
+    if(!filter_var($email,FILTER_VALIDATE_EMAIL)) throw new RuntimeException('Geçerli bir e-posta yaz.');
+    $hash=null;
+    if($password!==''){
+        if(mb_strlen($password)<8) throw new RuntimeException('Yeni şifre en az 8 karakter olmalı.');
+        $hash=password_hash($password,PASSWORD_DEFAULT);
+        if(!is_string($hash)||$hash==='') throw new RuntimeException('Şifre oluşturulamadı.');
+    }
+    $pdo->beginTransaction();
+    try{
+        if($hash!==null){
+            $pdo->prepare('UPDATE kullanicilar SET ad_soyad=?,email=?,sifre_hash=? WHERE id=?')->execute([$name,$email,$hash,$userId]);
+        }else{
+            $pdo->prepare('UPDATE kullanicilar SET ad_soyad=?,email=? WHERE id=?')->execute([$name,$email,$userId]);
+        }
+        if($role==='ogrenci'){
+            if($hash!==null)$pdo->prepare('UPDATE ogrenciler SET ad=?,email=?,sifre_hash=? WHERE id=?')->execute([$name,$email,$hash,(int)$row['profil_id']]);
+            else $pdo->prepare('UPDATE ogrenciler SET ad=?,email=? WHERE id=?')->execute([$name,$email,(int)$row['profil_id']]);
+        }else{
+            $pdo->prepare('UPDATE veliler SET ad_soyad=? WHERE id=?')->execute([$name,(int)$row['profil_id']]);
+        }
+        $pdo->commit();
+    }catch(Throwable $e){if($pdo->inTransaction())$pdo->rollBack();throw $e;}
+    auth_audit($pdo,(int)$actor['id'],$userId,'global_kullanici_guncelle','Rol: '.$role);
+}
+
+function ky_deactivate_global_user(PDO $pdo,array $actor,string $role,int $userId): void {
+    $row=ky_assert_global_user($pdo,$actor,$role,$userId);
+    $pdo->beginTransaction();
+    try{
+        $pdo->prepare('UPDATE kullanicilar SET aktif=0 WHERE id=?')->execute([$userId]);
+        if($role==='ogrenci')$pdo->prepare('UPDATE ogrenciler SET aktif=0 WHERE id=?')->execute([(int)$row['profil_id']]);
+        else $pdo->prepare('UPDATE veliler SET aktif=0 WHERE id=?')->execute([(int)$row['profil_id']]);
+        $pdo->commit();
+    }catch(Throwable $e){if($pdo->inTransaction())$pdo->rollBack();throw $e;}
+    auth_audit($pdo,(int)$actor['id'],$userId,'global_kullanici_pasif','Rol: '.$role);
 }
