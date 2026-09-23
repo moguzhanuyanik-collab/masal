@@ -39,7 +39,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
 <meta name="theme-color" content="#f7f7fb">
 <title>Süper Admin — İlkAdım</title>
 <link rel="stylesheet" href="super-admin.css?v=1.0.72">
-<link rel="stylesheet" href="adimbot-demo.css?v=1.0.73">
+<link rel="stylesheet" href="adimbot-demo.css?v=1.0.74">
 </head>
 <body class="sa-page">
 <svg class="sa-icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -165,29 +165,15 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
 
 <div class="adb-widget" data-adimbot aria-label="AdımBot hareketli prototip">
   <div class="adb-bubble" data-adimbot-bubble aria-live="polite">Merhaba! Ben AdımBot 👋</div>
-  <div class="adb-stage" data-adimbot-stage role="button" tabindex="0" aria-label="AdımBot ile etkileşime geç">
+  <div class="adb-stage" data-adimbot-stage role="button" tabindex="0" aria-label="AdımBot'u sürükle veya konuştur">
     <button class="adb-close" type="button" data-adimbot-close aria-label="AdımBot'u kapat">×</button>
-    <div class="adb-robot" aria-hidden="true">
-      <span class="adb-antenna"></span>
-      <div class="adb-head">
-        <span class="adb-ear left"></span>
-        <span class="adb-ear right"></span>
-        <div class="adb-face">
-          <span class="adb-brow left"></span>
-          <span class="adb-brow right"></span>
-          <span class="adb-eye left"></span>
-          <span class="adb-eye right"></span>
-          <span class="adb-mouth"></span>
-        </div>
-      </div>
-      <span class="adb-arm left"></span>
-      <span class="adb-arm right"></span>
-      <div class="adb-body"><span class="adb-badge"></span></div>
-      <span class="adb-foot left"></span>
-      <span class="adb-foot right"></span>
+    <span class="adb-pulse" aria-hidden="true"></span>
+    <div class="adb-visual" aria-hidden="true">
+      <img class="adb-image" src="adimbot/adimbot-mascot.webp?v=1.0.74" width="180" height="180" alt="">
+      <span class="adb-drag-chip">Sürükle</span>
     </div>
   </div>
 </div>
-<script src="adimbot-demo.js?v=1.0.73" defer></script>
+<script src="adimbot-demo.js?v=1.0.74" defer></script>
 </body>
 </html>
