@@ -30,7 +30,7 @@ $syncCount=auth_runtime_table_exists($pdo,'pwa_sync_islemleri')?sa_scalar($pdo,'
 ?><!doctype html><html lang="tr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Süper Admin — İlkAdım</title>
-<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.40">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.41">
 </head><body class="role-page"><div class="role-shell">
 <header class="role-topbar">
 <a class="role-brand" href="super-admin.php"><span>🌞</span><span><strong>İlkAdım</strong><small>SÜPER ADMIN</small></span></a>
@@ -51,9 +51,10 @@ $syncCount=auth_runtime_table_exists($pdo,'pwa_sync_islemleri')?sa_scalar($pdo,'
 
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">HIZLI ERİŞİM</span><h2>Yönetim Modülleri</h2></div></div>
 <div class="role-modules">
-<a class="role-module" href="kurumlar.php"><span>🏫</span><div><strong>Kurum Yönetimi</strong><small>İlkAdım merkezini, okul ve kursları yönet.</small></div><b>→</b></a>
-<a class="role-module" href="yetkilendirme.php"><span>👥</span><div><strong>Global Kullanıcılar</strong><small>Sistem genelindeki hesap ve rolleri yönet.</small></div><b>→</b></a>
-<a class="role-module" href="kurum-kullanicilari.php"><span>🧩</span><div><strong>Kurum Kullanıcıları</strong><small>Kurum altına yönetici, öğretmen, veli ve öğrenci ekle.</small></div><b>→</b></a>
+<a class="role-module" href="kurumlar.php"><span>🏫</span><div><strong>Kurumlar</strong><small>Okul ve kursları aç; her kurumu kendi detay sayfasından yönet.</small></div><b>→</b></a>
+<a class="role-module" href="global-ogrenciler.php"><span>🎒</span><div><strong>Global Öğrenciler</strong><small>Kurum ve öğretmen bağı olmayan doğrudan öğrencileri yönet.</small></div><b>→</b></a>
+<a class="role-module" href="global-veliler.php"><span>👪</span><div><strong>Global Veliler</strong><small>Kurumsuz veli hesabı aç ve global öğrenciyle eşleştir.</small></div><b>→</b></a>
+<a class="role-module" href="yetkilendirme.php"><span>🛡️</span><div><strong>Sistem Rolleri</strong><small>Gelişmiş rol ve hesap yetkilerini yönet.</small></div><b>→</b></a>
 <a class="role-module" href="guncelleme.php"><span>🔄</span><div><strong>Uygulama Güncelleme</strong><small>GitHub sürümünü kontrol et ve kur.</small></div><b>→</b></a>
 </div></section>
 
@@ -69,6 +70,6 @@ $syncCount=auth_runtime_table_exists($pdo,'pwa_sync_islemleri')?sa_scalar($pdo,'
 <nav class="role-bottom">
 <a class="active" href="super-admin.php"><span>⌂</span>Panel</a>
 <a href="kurumlar.php"><span>🏫</span>Kurumlar</a>
-<a href="kurum-kullanicilari.php"><span>👥</span>Kullanıcılar</a>
-<a href="rol-paneli.php"><span>🛡️</span>Yetkiler</a>
+<a href="global-ogrenciler.php"><span>🎒</span>Öğrenciler</a>
+<a href="global-veliler.php"><span>👪</span>Veliler</a>
 </nav></div></body></html>
