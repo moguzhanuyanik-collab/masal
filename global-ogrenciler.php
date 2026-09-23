@@ -49,16 +49,18 @@ $parents=ky_global_parents($pdo);
 ?><!doctype html><html lang="tr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Global Öğrenciler — İlkAdım</title>
-<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.56"><link rel="stylesheet" href="super-admin-pages.css?v=1.0.57">
-</head><body class="role-page sa-subpage"><div class="role-shell">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.56"><link rel="stylesheet" href="super-admin-pages.css?v=1.0.58">
+</head><body class="role-page sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?><div class="role-shell">
 <header class="role-topbar">
-<a class="role-icon" href="super-admin.php">←</a>
-<span class="role-brand"><span>🎒</span><span><strong>Global Öğrenciler</strong><small>KURUMSUZ / OKULSUZ</small></span></span>
-<a class="role-icon" href="global-veliler.php">👪</a>
+<a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a>
+<div class="sa-page-actions">
+<a class="sa-page-action" href="guncelleme.php" aria-label="Güncellemeler"><svg><use href="#sa-bell"/></svg></a>
+<a class="sa-page-action" href="hesap-guvenligi.php" aria-label="Hesabım"><svg><use href="#sa-user"/></svg></a>
+</div>
 </header>
 <main class="role-content">
 <section class="role-hero"><span class="eyeline">GLOBAL KULLANICILAR</span><h1>Kurum ve öğretmen bağı olmayan öğrenciler.</h1>
-<p>Bu öğrenciler yalnızca İlkAdım’ın sistem dersleri ve etkinliklerini kullanır. İstenirse global veliyle eşleştirilir.</p><span class="role-hero-art">🎒</span></section>
+<p>Bu öğrenciler yalnızca İlkAdım’ın sistem dersleri ve etkinliklerini kullanır. İstenirse global veliyle eşleştirilir.</p><span class="role-hero-art"><svg><use href="#sa-student"/></svg></span></section>
 
 <?php if($message!==''):?><div class="role-note"><span>✅</span><p><?=ky_h($message)?></p></div><?php endif;?>
 <?php if($error!==''):?><div class="role-note"><span>⚠️</span><p><?=ky_h($error)?></p></div><?php endif;?>
@@ -98,10 +100,10 @@ $parents=ky_global_parents($pdo);
 </div></section>
 </main>
 <nav class="role-bottom">
-<a href="super-admin.php"><span>⌂</span>Panel</a>
-<a href="kurumlar.php"><span>🏫</span>Kurumlar</a>
-<a class="active" href="global-ogrenciler.php"><span>🎒</span>Öğrenciler</a>
-<a href="global-veliler.php"><span>👪</span>Veliler</a>
-<a href="hesap-guvenligi.php"><span>👤</span>Profil</a>
+<a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a>
+<a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a>
+<a class="active" href="global-ogrenciler.php"><span><svg><use href="#sa-student"/></svg></span>Öğrenciler</a>
+<a href="global-veliler.php"><span><svg><use href="#sa-users"/></svg></span>Veliler</a>
+<a href="hesap-guvenligi.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
 </nav>
 </div></body></html>
