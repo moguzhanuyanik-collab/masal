@@ -47,25 +47,33 @@
     return s;
   };
 
-  const decorateActivityList=()=>{
+  const decorateActivityCards=()=>{
     if(!isActivitiesPage())return;
     const screen=document.getElementById('screen');
-    const list=screen?.querySelector('.game-list');
-    if(!screen||!list)return;
+    if(!screen)return;
 
-    const names=[...list.querySelectorAll('.game-tile h3')]
-      .map(el=>clean(el.textContent))
-      .filter(Boolean);
-    if(!names.length)return;
+    [...screen.querySelectorAll('.game-tile')].forEach(card=>{
+      if(card.dataset.speechCardDecorated==='1')return;
 
-    let control=screen.querySelector('[data-speech-kind="activity-list"]');
-    if(!control){
-      control=iconControl('Etkinliklerin adlarını dinle','activity-list','');
-      const heading=screen.querySelector('.subpage-intro h1,.screen-content h1,.section-heading h2');
-      if(heading)heading.appendChild(control);
-      else list.insertAdjacentElement('beforebegin',control);
-    }
-    control.dataset.speechText='Etkinlikler. '+names.join('. ');
+      const titleEl=card.querySelector('h3');
+      const descEl=card.querySelector('p');
+      const title=clean(titleEl?.textContent);
+      const desc=clean(descEl?.textContent);
+      if(!title)return;
+
+      const control=iconControl(
+        title+' etkinliğini dinle',
+        'activity-card',
+        [title,desc].filter(Boolean).join('. ')
+      );
+
+      if(titleEl){
+        titleEl.prepend(control);
+      }else{
+        card.prepend(control);
+      }
+      card.dataset.speechCardDecorated='1';
+    });
   };
 
   const decorateIntro=scope=>{
@@ -98,7 +106,7 @@
   };
 
   const decorateActivities=()=>{
-    decorateActivityList();
+    decorateActivityCards();
     if(!isActivityGame())return;
     const screen=document.getElementById('screen');
     if(!screen)return;
