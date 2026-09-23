@@ -188,7 +188,30 @@ PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- Önceki yarım kurulumlarda ilişki tablosu farklı/eksik oluşmuşsa tamamla.
+-- Önceki yarım veya eski kurulumlarda ilişki tablosu farklı/eksik oluşmuşsa tamamla.
+-- Eski satırlar korunur; yeni kimlik kolonları önce NULL eklenir ve yeni kayıtlar açık değerlerle yazılır.
+SET @has_kk_kurum_id = (
+  SELECT COUNT(*) FROM information_schema.columns
+  WHERE table_schema=DATABASE() AND table_name='kurum_kullanicilari' AND column_name='kurum_id'
+);
+SET @sql = IF(@has_kk_kurum_id=0,
+  CONCAT('ALTER TABLE kurum_kullanicilari ADD COLUMN kurum_id ',@kurum_id_type,' NULL FIRST'),
+  'SET @ilkadim_noop = 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @has_kk_kullanici_id = (
+  SELECT COUNT(*) FROM information_schema.columns
+  WHERE table_schema=DATABASE() AND table_name='kurum_kullanicilari' AND column_name='kullanici_id'
+);
+SET @sql = IF(@has_kk_kullanici_id=0,
+  CONCAT('ALTER TABLE kurum_kullanicilari ADD COLUMN kullanici_id ',@kullanici_id_type,' NULL AFTER kurum_id'),
+  'SET @ilkadim_noop = 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
 SET @has_kk_rol = (
   SELECT COUNT(*) FROM information_schema.columns
   WHERE table_schema=DATABASE() AND table_name='kurum_kullanicilari' AND column_name='kurum_rolu'
@@ -217,6 +240,28 @@ SET @has_kk_created = (
 );
 SET @sql = IF(@has_kk_created=0,
   'ALTER TABLE kurum_kullanicilari ADD COLUMN olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP',
+  'SET @ilkadim_noop = 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @has_kk_user_index = (
+  SELECT COUNT(*) FROM information_schema.statistics
+  WHERE table_schema=DATABASE() AND table_name='kurum_kullanicilari' AND index_name='ix_kurum_kullanici_user'
+);
+SET @sql = IF(@has_kk_user_index=0,
+  'ALTER TABLE kurum_kullanicilari ADD KEY ix_kurum_kullanici_user (kullanici_id,aktif)',
+  'SET @ilkadim_noop = 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @has_kk_role_index = (
+  SELECT COUNT(*) FROM information_schema.statistics
+  WHERE table_schema=DATABASE() AND table_name='kurum_kullanicilari' AND index_name='ix_kurum_kullanici_role'
+);
+SET @sql = IF(@has_kk_role_index=0,
+  'ALTER TABLE kurum_kullanicilari ADD KEY ix_kurum_kullanici_role (kurum_id,kurum_rolu,aktif)',
   'SET @ilkadim_noop = 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
