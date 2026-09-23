@@ -57,17 +57,36 @@
       });
     }
 
-    const extras = [...document.querySelectorAll('.screen-content .reading-entry')];
-    if (extras.length >= 2) {
-      const ref = extras[0];
-      const refIcon = ref.querySelector(':scope > span');
-      const refTitle = ref.querySelector('strong');
-      const refDesc = ref.querySelector('small');
+    const specialCards = [...document.querySelectorAll('.screen-content .reading-entry, .screen-content .island')]
+      .filter(card => {
+        const text = (card.textContent || '').replace(/\s+/g, ' ').trim();
+        return text.includes('Okuma Bahçem') || text.includes('Keşif Haritam');
+      });
 
-      extras.forEach(card => {
-        copyIconBox(refIcon, card.querySelector(':scope > span'));
-        copyTextMetrics(refTitle, card.querySelector('strong'));
-        copyTextMetrics(refDesc, card.querySelector('small'));
+    if (rows.length && specialCards.length) {
+      const ref = rows[0];
+      const refIcon = ref.querySelector('.course-row-art');
+      const refTitle = ref.querySelector('h3');
+      const refDesc = ref.querySelector('p');
+
+      specialCards.forEach(card => {
+        const icon = card.querySelector(':scope > span, .reading-art, .island-art');
+        const title = card.querySelector('strong, h3, h2');
+        const desc = card.querySelector('small, p');
+
+        copyIconBox(refIcon, icon);
+        copyTextMetrics(refTitle, title);
+        copyTextMetrics(refDesc, desc);
+
+        if (refIcon && icon) {
+          const refSvg = refIcon.querySelector('svg');
+          const targetSvg = icon.querySelector('svg');
+          if (refSvg && targetSvg) {
+            const rect = refSvg.getBoundingClientRect();
+            if (rect.width > 0) targetSvg.style.width = rect.width + 'px';
+            if (rect.height > 0) targetSvg.style.height = rect.height + 'px';
+          }
+        }
       });
     }
   };
