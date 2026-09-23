@@ -17,6 +17,7 @@ require_student_login();
   <link rel="stylesheet" href="styles.css">
   <script src="api/bootstrap.js.php" defer></script>
   <script src="app-runtime.js" defer></script>
+  <script src="lesson-ui-fix.js?v=1.0.19" defer></script>
   <script src="settings-account.js" defer></script>
   <script src="profile-update-link.js" defer></script>
 </head>
