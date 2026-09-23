@@ -188,9 +188,9 @@ $local = read_app_version();
 
 <div class="app-shell">
     <header class="app-topbar">
-        <a class="icon-button" href="index.php#/profil" aria-label="Profile dön">←</a>
+        <a class="icon-button" href="super-admin.php" aria-label="Süper Admin paneline dön">←</a>
         <div class="topbar-title">Uygulama Güncelleme</div>
-        <a class="mini-avatar" href="index.php#/profil" aria-label="Profil">
+        <a class="mini-avatar" href="super-admin.php" aria-label="Süper Admin">
             <span class="avatar-emoji">🌞</span>
         </a>
     </header>
@@ -261,11 +261,11 @@ $local = read_app_version();
         </div>
     </main>
 
-    <nav class="app-nav" aria-label="Hızlı erişim">
-        <a href="index.php#/anasayfa"><span><svg><use href="#i-home"/></svg></span>Anasayfa</a>
-        <a href="index.php#/dersler"><span><svg><use href="#i-book"/></svg></span>Dersler</a>
-        <a href="index.php#/etkinlikler"><span><svg><use href="#i-star"/></svg></span>Etkinlikler</a>
-        <a class="active" href="index.php#/profil"><span><svg><use href="#i-user"/></svg></span>Profil</a>
+    <nav class="app-nav" aria-label="Süper Admin hızlı erişim">
+        <a href="super-admin.php"><span><svg><use href="#i-home"/></svg></span>Panel</a>
+        <a href="kurumlar.php"><span><svg><use href="#i-book"/></svg></span>Kurumlar</a>
+        <a href="global-ogrenciler.php"><span><svg><use href="#i-star"/></svg></span>Öğrenciler</a>
+        <a href="logout.php"><span><svg><use href="#i-user"/></svg></span>Çıkış</a>
     </nav>
 </div>
 
