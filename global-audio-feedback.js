@@ -210,9 +210,47 @@
     speak(b.dataset.speechText||'');
   },true);
 
+  // A correct answer changes both its class and the feedback text.
+  // Merge both mutations into one announcement after the DOM has settled.
+  const pendingFeedback=new Map();
+  const announcedFeedback=new WeakMap();
+
   const feedbackFor=target=>{
-    const scope=target.closest('.question-card,#game-board,.game-screen,.screen-content')||document;
-    return scope.querySelector('.feedback,.game-feedback');
+    let scope=target.closest('.question-card,#game-board,.game-screen,.screen-content');
+    while(scope){
+      const feedback=scope.querySelector('.feedback,.game-feedback');
+      if(feedback)return feedback;
+      scope=scope.parentElement?.closest('.question-card,#game-board,.game-screen,.screen-content')||null;
+    }
+    return null;
+  };
+
+  const defaultFeedback=state=>state==='correct'
+    ? 'Harika, doğru cevap!'
+    : 'Olmadı, tekrar deneyelim.';
+
+  const queueFeedback=(feedback,state='',answer=null)=>{
+    if(!feedback)return;
+    const pending=pendingFeedback.get(feedback);
+    if(pending){
+      if(state)pending.state=state;
+      if(answer)pending.answer=answer;
+      return;
+    }
+    const item={state,answer};
+    pendingFeedback.set(feedback,item);
+    requestAnimationFrame(()=>{
+      pendingFeedback.delete(feedback);
+      if(!isActivityGame()||!feedback.isConnected)return;
+      const content=clean(feedback.textContent);
+      const instruction=/^(biraz düşün|bir cevap seç|cevabını seç)/i.test(content);
+      const text=content&&!instruction?content:(item.state?defaultFeedback(item.state):'');
+      if(!text)return;
+      const previous=announcedFeedback.get(feedback);
+      if(previous&&previous.text===text&&previous.answer===item.answer)return;
+      announcedFeedback.set(feedback,{text,answer:item.answer});
+      speak(text);
+    });
   };
 
   const speakAnswerState=target=>{
@@ -221,20 +259,29 @@
     if(!state||spokenState.get(target)===state)return;
     spokenState.set(target,state);
 
+    if(isActivityGame()){
+      const feedback=feedbackFor(target);
+      if(feedback){
+        queueFeedback(feedback,state,target);
+      }else{
+        requestAnimationFrame(()=>{
+          if(isActivityGame())speak(defaultFeedback(state));
+        });
+      }
+      return;
+    }
+
+    // Keep the existing speech behavior for exercises outside the games.
     requestAnimationFrame(()=>{
       const feedback=feedbackFor(target);
-      const text=clean(feedback&&feedback.textContent);
-      speak(text || (state==='correct'?'Harika, doğru cevap!':'Olmadı, tekrar deneyelim.'));
+      const text=clean(feedback?.textContent);
+      speak(text||defaultFeedback(state));
     });
   };
 
-  let feedbackLast='';
   const speakFeedbackElement=target=>{
-    if(!(target instanceof HTMLElement))return;
-    const text=clean(target.textContent);
-    if(!text||text===feedbackLast)return;
-    feedbackLast=text;
-    speak(text);
+    if(!(target instanceof HTMLElement)||!isActivityGame())return;
+    queueFeedback(target);
   };
 
   const observer=new MutationObserver(mutations=>{
@@ -269,7 +316,7 @@
     stopSpeech();
     clearArmTimer();
     armedCard=null;
-    feedbackLast='';
+    pendingFeedback.clear();
     setTimeout(()=>{removeLegacyCardSpeakers(document);decorateActivities();},0);
   });
   window.addEventListener('pagehide',()=>{
