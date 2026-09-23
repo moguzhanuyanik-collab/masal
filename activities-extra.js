@@ -1,6 +1,6 @@
 'use strict';
 (() => {
-  const EXTRA_IDS=["hece_birlestir","kelime_yakala","ona_tamamla","sayi_avi","dogru_yanlis","golgesini_bul","ritmi_tekrarla"];
+  const EXTRA_IDS=["hece_birlestir","kelime_yakala","ona_tamamla","sayi_avi","dogru_yanlis","golgesini_bul","ritmi_tekrarla","eksik_harfi_bul","kelimeyi_hecele","cumleyi_tamamla","dogru_cumleyi_bul","hikayeyi_sirala","hangisi_fazla","eksik_sayi","toplama_makinesi","cikarma_bahcesi","buyuk_kucuk","onluk_birlik","saati_bul","sekli_yakala","guvenli_davranis","duyguyu_bul"];
   const NATIVE_IDS=["hafiza","renkler","oruntu"];
   const ALL_GAME_IDS=[...NATIVE_IDS,...EXTRA_IDS];
   const STORE='ilkadim-extra-games-v1';
@@ -205,7 +205,7 @@
     document.querySelectorAll('.report-stats > div').forEach(box=>{
       const label=box.querySelector('span');
       const strong=box.querySelector('strong');
-      if(label&&strong&&label.textContent.trim()==='Oyun') strong.innerHTML=total+'<small>/10</small>';
+      if(label&&strong&&label.textContent.trim()==='Oyun') strong.innerHTML=total+'<small>/25</small>';
     });
   }
 
