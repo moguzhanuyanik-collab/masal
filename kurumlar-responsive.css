@@ -1,0 +1,294 @@
+/* V1.0.52 — Kurumlar modülü mobil tablo düzeltmesi.
+   Mevcut CSS dosyalarına dokunmadan yalnızca responsive override sağlar. */
+
+.km-name,
+.km-name > div,
+.km-section-tools,
+.km-content,
+.km-panel,
+.km-table-wrap{min-width:0}
+
+.km-name strong,
+.km-name small,
+.km-table td{
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+@media (max-width:760px){
+  .role-content{overflow-x:hidden}
+
+  .km-section-toolbar{
+    display:grid;
+    grid-template-columns:1fr;
+    width:100%;
+    gap:12px;
+  }
+
+  .km-section-title{
+    min-width:0;
+    width:100%;
+  }
+
+  .km-section-title > div{min-width:0}
+
+  .km-section-tools{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    width:100%;
+    gap:8px;
+  }
+
+  .km-select,
+  .km-search,
+  .km-add{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    box-sizing:border-box;
+  }
+
+  .km-add{
+    grid-column:1/-1;
+    margin:0;
+    min-height:42px;
+  }
+
+  .km-panel{
+    background:transparent;
+    border:0;
+    border-radius:0;
+    box-shadow:none;
+    overflow:visible;
+  }
+
+  .km-table-wrap{
+    width:100%;
+    max-width:100%;
+    overflow:visible;
+  }
+
+  .km-table{
+    display:block;
+    width:100%;
+    min-width:0 !important;
+    border-collapse:separate;
+  }
+
+  .km-table thead{display:none}
+
+  .km-table tbody{
+    display:grid;
+    width:100%;
+    gap:11px;
+  }
+
+  .km-table tr{
+    display:block;
+    width:100%;
+    min-width:0;
+    background:#fff;
+    border:1px solid var(--role-line);
+    border-radius:18px;
+    box-shadow:0 8px 22px #4b35620b;
+    overflow:hidden;
+  }
+
+  .km-table td{
+    display:grid;
+    grid-template-columns:minmax(82px,32%) minmax(0,1fr);
+    align-items:start;
+    gap:10px;
+    width:100%;
+    min-width:0;
+    padding:10px 12px;
+    box-sizing:border-box;
+    border:0;
+    border-bottom:1px solid var(--role-line);
+    font-size:10px;
+  }
+
+  .km-table td:last-child{border-bottom:0}
+
+  .km-table td::before{
+    content:attr(data-label);
+    color:var(--role-muted);
+    font-size:7px;
+    line-height:1.4;
+    letter-spacing:.45px;
+    text-transform:uppercase;
+    font-weight:1000;
+    padding-top:2px;
+  }
+
+  .km-table td:first-child{
+    grid-template-columns:1fr;
+    padding:13px 12px;
+    background:#fcfbfd;
+  }
+
+  .km-table td:first-child::before{
+    margin-bottom:-3px;
+  }
+
+  .km-table td[data-label="İşlemler"]{
+    grid-template-columns:1fr;
+    background:#fcfbfd;
+    padding:10px 12px 12px;
+  }
+
+  .km-table td[data-label="İşlemler"]::before{display:none}
+
+  .km-table td[colspan]{
+    display:block;
+    padding:0;
+    border:0;
+  }
+
+  .km-table td[colspan]::before{display:none}
+
+  .km-name{
+    width:100%;
+    align-items:center;
+  }
+
+  .km-avatar{
+    width:42px;
+    height:42px;
+    border-radius:13px;
+    font-size:21px;
+  }
+
+  .km-name strong{font-size:11px}
+  .km-name small{font-size:8px}
+
+  .km-counts{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    width:100%;
+    gap:5px;
+  }
+
+  .km-counts span{
+    text-align:center;
+    padding:6px 5px;
+    font-size:7px;
+  }
+
+  .km-relations{
+    max-width:none;
+    width:100%;
+  }
+
+  .km-relation{
+    max-width:100%;
+    white-space:normal;
+    line-height:1.35;
+  }
+
+  .km-actions{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    width:100%;
+    gap:7px;
+    justify-content:stretch;
+  }
+
+  .km-actions .km-btn{
+    width:100%;
+    min-width:0;
+    white-space:normal;
+    min-height:36px;
+    padding:8px 7px;
+  }
+
+  .km-actions .km-btn:only-child{grid-column:1/-1}
+
+  .km-empty{
+    background:#fff;
+    border:1px solid var(--role-line);
+    border-radius:18px;
+    padding:28px 14px;
+  }
+
+  .km-dialog{
+    width:calc(100vw - 22px);
+    max-width:calc(100vw - 22px);
+    max-height:88dvh;
+    margin:auto;
+    border-radius:20px;
+    overflow:hidden;
+  }
+
+  .km-dialog-head{
+    position:sticky;
+    top:0;
+    z-index:2;
+    background:#fff;
+  }
+
+  .km-form{
+    max-height:calc(88dvh - 70px);
+    overflow-y:auto;
+    overflow-x:hidden;
+    padding:14px;
+  }
+
+  .km-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  .km-form .role-input,
+  .km-form select,
+  .km-form textarea,
+  .km-form input{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    box-sizing:border-box;
+  }
+
+  .km-match-list{
+    max-height:165px;
+  }
+
+  .km-dialog-actions{
+    position:sticky;
+    bottom:0;
+    background:#fff;
+    padding-top:8px;
+  }
+}
+
+@media (max-width:430px){
+  .km-card-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+
+  .km-module-card{
+    width:100%;
+    min-width:0;
+    padding:12px 10px;
+  }
+
+  .km-section-tools{
+    grid-template-columns:1fr;
+  }
+
+  .km-add{grid-column:auto}
+
+  .km-table td{
+    grid-template-columns:minmax(72px,30%) minmax(0,1fr);
+    padding:9px 10px;
+  }
+
+  .km-table td:first-child,
+  .km-table td[data-label="İşlemler"]{
+    grid-template-columns:1fr;
+  }
+
+  .km-actions{
+    grid-template-columns:1fr 1fr;
+  }
+}
