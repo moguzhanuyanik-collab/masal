@@ -113,11 +113,17 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
         if ($action==='toggle_active') {
             $targetId=(int)($_POST['kullanici_id']??0);
             if ($targetId===(int)$user['id']) throw new RuntimeException('Kendi hesabını buradan kapatamazsın.');
-            $target=auth_fetch_user($pdo,$targetId);
-            if (!$target) throw new RuntimeException('Kullanıcı bulunamadı.');
-            if (!$isSuper && auth_user_has_role($target,['yonetici','super_admin'])) throw new RuntimeException('Bu hesabı değiştirme yetkin yok.');
-            $current=(int)($_POST['aktif']??0)===1;
+            $rawTarget=$pdo->prepare('SELECT id,ana_rol,aktif FROM kullanicilar WHERE id=? LIMIT 1');
+            $rawTarget->execute([$targetId]);
+            $targetRow=$rawTarget->fetch();
+            if (!is_array($targetRow)) throw new RuntimeException('Kullanıcı bulunamadı.');
+            $targetRoles=auth_user_roles($pdo,$targetId,(string)$targetRow['ana_rol']);
+            if (!$isSuper && (in_array('yonetici',$targetRoles,true)||in_array('super_admin',$targetRoles,true))) {
+                throw new RuntimeException('Bu hesabı değiştirme yetkin yok.');
+            }
+            $current=(int)$targetRow['aktif']===1;
             $pdo->prepare('UPDATE kullanicilar SET aktif=? WHERE id=?')->execute([$current?0:1,$targetId]);
+            if ($current) $pdo->prepare('DELETE FROM kullanici_oturum_tokenlari WHERE kullanici_id=?')->execute([$targetId]);
             auth_audit($pdo,(int)$user['id'],$targetId,'hesap_durum',($current?'pasif':'aktif'));
             $message='Kullanıcı durumu güncellendi.';
         }
