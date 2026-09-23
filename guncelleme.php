@@ -34,7 +34,7 @@ try {
             header('Location: login.php');
             exit;
         }
-        if (!auth_user_has_role($updateUser,'super_admin')) {
+        if (auth_effective_role($updateUser)!=='super_admin') {
             if ($isAjax) {
                 if (ob_get_level()>0) ob_clean();
                 http_response_code(403);
