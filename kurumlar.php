@@ -32,8 +32,8 @@ function kmh(string $v): string {
 <link rel="stylesheet" href="kurum.css?v=1.0.41">
 <link rel="stylesheet" href="kurumlar-kart.css?v=1.0.51">
 <link rel="stylesheet" href="kurumlar-responsive.css?v=1.0.52">
-<link rel="stylesheet" href="super-admin-pages.css?v=1.0.58">
-<script src="kurumlar-kart.js?v=1.0.53" defer></script>
+<link rel="stylesheet" href="super-admin-pages.css?v=1.0.59">
+<script src="kurumlar-kart.js?v=1.0.59" defer></script>
 <script src="kurumlar-responsive.js?v=1.0.52" defer></script>
 </head>
 <body class="role-page sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -57,37 +57,37 @@ function kmh(string $v): string {
 
 <div class="km-card-grid">
 <button class="km-module-card" type="button" data-km-card="kurumlar">
-<span class="km-module-icon">🏫</span>
+<span class="km-module-icon"><svg><use href="#sa-building"/></svg></span>
 <div><strong>Kurumlar</strong><small>Kurumları listele, ekle, güncelle ve pasife al.</small></div>
 <span class="km-module-arrow">→</span>
 </button>
 
 <button class="km-module-card" type="button" data-km-card="yoneticiler">
-<span class="km-module-icon">🧑‍💼</span>
+<span class="km-module-icon"><svg><use href="#sa-shield"/></svg></span>
 <div><strong>Yöneticiler</strong><small>Kurum yöneticilerini tablo halinde yönet.</small></div>
 <span class="km-module-arrow">→</span>
 </button>
 
 <button class="km-module-card" type="button" data-km-card="ogretmenler">
-<span class="km-module-icon">👩‍🏫</span>
+<span class="km-module-icon"><svg><use href="#sa-teacher"/></svg></span>
 <div><strong>Öğretmenler</strong><small>Öğretmen hesaplarını kurum bazında yönet.</small></div>
 <span class="km-module-arrow">→</span>
 </button>
 
 <button class="km-module-card" type="button" data-km-card="veliler">
-<span class="km-module-icon">👪</span>
+<span class="km-module-icon"><svg><use href="#sa-users"/></svg></span>
 <div><strong>Veliler</strong><small>Velileri listele, ekle, güncelle ve kurumdan çıkar.</small></div>
 <span class="km-module-arrow">→</span>
 </button>
 
 <button class="km-module-card" type="button" data-km-card="ogrenciler">
-<span class="km-module-icon">🎒</span>
+<span class="km-module-icon"><svg><use href="#sa-student"/></svg></span>
 <div><strong>Öğrenciler</strong><small>Kuruma ait öğrencileri tablo üzerinden yönet.</small></div>
 <span class="km-module-arrow">→</span>
 </button>
 
 <button class="km-module-card" type="button" data-km-card="eslestirme">
-<span class="km-module-icon">🔗</span>
+<span class="km-module-icon"><svg><use href="#sa-link"/></svg></span>
 <div><strong>Eşleştirme</strong><small>Öğrenciyi aynı kurumdaki veli ve öğretmenlere bağla.</small></div>
 <span class="km-module-arrow">→</span>
 </button>
@@ -114,7 +114,7 @@ function kmh(string $v): string {
 </section>
 
 <noscript>
-<div class="role-note"><span>⚠️</span><p>Kurumlar Modülü AJAX ile çalışır. JavaScript etkin olmalıdır.</p></div>
+<div class="role-note"><span><svg><use href="#sa-alert"/></svg></span><p>Kurumlar Modülü AJAX ile çalışır. JavaScript etkin olmalıdır.</p></div>
 </noscript>
 </main>
 
