@@ -4,9 +4,9 @@ require __DIR__ . '/src/bootstrap.php';
 require __DIR__ . '/src/auth.php';
 
 $user=require_login();
-if (auth_user_has_role($user,'ogrenci') && (string)($user['ana_rol']??'')==='ogrenci') {
+if (auth_effective_role($user)==='ogrenci') {
     header('Location: index.php#/profil/ayarlar');
 } else {
-    header('Location: rol-paneli.php#hesap');
+    header('Location: hesap-guvenligi.php');
 }
 exit;
