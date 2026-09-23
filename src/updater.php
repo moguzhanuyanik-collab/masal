@@ -166,13 +166,77 @@ function ensure_updater_schema(PDO $pdo): void {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 }
 
+
+function ensure_student_auth_schema(PDO $pdo): void {
+    $cols=[];
+    foreach($pdo->query('SHOW COLUMNS FROM ogrenciler')?:[] as $row){
+        if(isset($row['Field'])) $cols[(string)$row['Field']]=true;
+    }
+
+    $columnSql=[
+        'email'=>"ALTER TABLE ogrenciler ADD COLUMN email VARCHAR(190) NULL AFTER ad",
+        'sifre_hash'=>"ALTER TABLE ogrenciler ADD COLUMN sifre_hash VARCHAR(255) NULL AFTER email",
+        'son_giris_tarihi'=>"ALTER TABLE ogrenciler ADD COLUMN son_giris_tarihi DATETIME NULL AFTER sifre_hash",
+        'son_giris_ip'=>"ALTER TABLE ogrenciler ADD COLUMN son_giris_ip VARCHAR(45) NULL AFTER son_giris_tarihi",
+        'profil_fotografi'=>"ALTER TABLE ogrenciler ADD COLUMN profil_fotografi LONGTEXT NULL"
+    ];
+    foreach($columnSql as $name=>$sql){
+        if(!isset($cols[$name])) $pdo->exec($sql);
+    }
+
+    $hasEmailIndex=false;
+    foreach($pdo->query("SHOW INDEX FROM ogrenciler")?:[] as $row){
+        if(($row['Key_name']??'')==='uk_ogrenci_email') {$hasEmailIndex=true;break;}
+    }
+    if(!$hasEmailIndex){
+        $pdo->exec("ALTER TABLE ogrenciler ADD UNIQUE KEY uk_ogrenci_email (email)");
+    }
+
+    $pdo->exec("CREATE TABLE IF NOT EXISTS ogrenci_oturum_tokenlari (
+        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+        ogrenci_id INT UNSIGNED NOT NULL,
+        token_hash CHAR(64) NOT NULL,
+        son_kullanma_tarihi DATETIME NOT NULL,
+        olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id),
+        UNIQUE KEY uk_ogrenci_oturum_token (token_hash),
+        KEY ix_ogrenci_oturum_student (ogrenci_id),
+        KEY ix_ogrenci_oturum_expire (son_kullanma_tarihi)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+    $testEmail='test@ilkadim.local';
+    $testHash='$2y$12$Ly6z0Sws1jTLLj2gpBPHAentpxI0zVP0g9tV4JoHqfewDaf8hRsrW';
+
+    $s=$pdo->prepare('SELECT id FROM ogrenciler WHERE email=? LIMIT 1');
+    $s->execute([$testEmail]);
+    $testId=(int)($s->fetchColumn()?:0);
+
+    if($testId>0){
+        $pdo->prepare('UPDATE ogrenciler SET sifre_hash=?, aktif=1 WHERE id=?')->execute([$testHash,$testId]);
+    }else{
+        $first=$pdo->query('SELECT id FROM ogrenciler WHERE aktif=1 ORDER BY id LIMIT 1');
+        $firstId=(int)($first?$first->fetchColumn():0);
+        if($firstId>0){
+            $pdo->prepare('UPDATE ogrenciler SET email=?, sifre_hash=? WHERE id=?')->execute([$testEmail,$testHash,$firstId]);
+        }else{
+            $pdo->prepare("INSERT INTO ogrenciler (ad,email,sifre_hash,avatar,aktif) VALUES (?,?,?,?,1)")
+                ->execute(['Test Ogrenci',$testEmail,$testHash,'🌞']);
+        }
+    }
+}
+
 function run_pending_migrations(PDO $pdo,string $root): array {
     $applied=[]; $files=glob($root.'/database/migrations/*.sql')?:[]; sort($files,SORT_NATURAL);
     $check=$pdo->prepare('SELECT 1 FROM sistem_migrations WHERE migration=? LIMIT 1');
     $insert=$pdo->prepare('INSERT INTO sistem_migrations (migration) VALUES (?)');
     foreach($files as $file){
         $name=basename($file,'.sql'); $check->execute([$name]); if($check->fetchColumn()) continue;
-        run_migration_sql($pdo,$file); $insert->execute([$name]); $applied[]=$name;
+        if($name==='004_ogrenci_giris_sistemi'){
+            ensure_student_auth_schema($pdo);
+        }else{
+            run_migration_sql($pdo,$file);
+        }
+        $insert->execute([$name]); $applied[]=$name;
     }
     return $applied;
 }
