@@ -19,7 +19,7 @@ require_student_login();
   <script src="activities-extra.js?v=1.0.31" defer></script>
   <script src="app-runtime.js" defer></script>
   <script src="global-audio-feedback.js?v=1.0.31" defer></script>
-  <script src="lesson-ui-fix.js?v=1.0.19" defer></script>
+  <script src="lesson-ui-fix.js?v=1.0.32" defer></script>
   <script src="settings-account.js" defer></script>
   <script src="profile-update-link.js" defer></script>
   <script src="pwa-cleanup.js?v=1.0.31" defer></script>
