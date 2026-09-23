@@ -6,6 +6,7 @@ require __DIR__ . '/src/auth.php';
 $user=require_login();
 $pdo=db();
 $roleHome=auth_role_home($user);
+$isSuper=auth_user_has_role($user,'super_admin');
 $message='';
 $error='';
 
@@ -77,19 +78,30 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 <meta name="theme-color" content="#f8f7fc">
 <title>Hesap Güvenliği — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
-<?php if($isSuper): ?><link rel="stylesheet" href="super-admin-pages.css?v=1.0.57"><?php endif; ?>
+<?php if($isSuper): ?><link rel="stylesheet" href="super-admin-pages.css?v=1.0.58"><?php endif; ?>
 </head>
 <body<?= $isSuper?' class="sa-subpage"':'' ?>>
+<?php if($isSuper) require __DIR__.'/src/super_admin_icons.php'; ?>
 <div class="app-shell">
+<?php if($isSuper): ?>
+<header class="app-topbar">
+<a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a>
+<div class="sa-page-actions">
+<a class="sa-page-action" href="guncelleme.php" aria-label="Güncellemeler"><svg><use href="#sa-bell"/></svg></a>
+<a class="sa-page-action" href="hesap-guvenligi.php" aria-label="Hesabım"><svg><use href="#sa-user"/></svg></a>
+</div>
+</header>
+<?php else: ?>
 <header class="app-topbar">
 <a class="icon-button" href="<?=h_sec($roleHome)?>" aria-label="Geri">←</a>
 <span class="topbar-title">Hesap Güvenliği</span>
 <a class="mini-avatar" href="logout.php" aria-label="Çıkış">🚪</a>
 </header>
+<?php endif; ?>
 <main id="screen" tabindex="-1">
 <div class="screen-content settings-screen">
 <section class="subpage-intro">
-<span>🔐</span><h1>Giriş Bilgilerim</h1><p>E-posta adresini ve şifreni güvenli biçimde güncelle.</p>
+<span><?php if($isSuper): ?><svg><use href="#sa-lock"/></svg><?php else: ?>🔐<?php endif; ?></span><h1>Giriş Bilgilerim</h1><p>E-posta adresini ve şifreni güvenli biçimde güncelle.</p>
 </section>
 <?php if ($message!==''): ?><section class="settings-block local-data"><p><?=h_sec($message)?></p></section><?php endif; ?>
 <?php if ($error!==''): ?><section class="settings-block local-data"><p><?=h_sec($error)?></p></section><?php endif; ?>
@@ -111,11 +123,11 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 </main>
 <?php if($isSuper): ?>
 <nav class="app-nav" aria-label="Süper Admin menüsü">
-<a href="super-admin.php"><span>⌂</span>Panel</a>
-<a href="kurumlar.php"><span>🏫</span>Kurumlar</a>
-<a href="global-ogrenciler.php"><span>🎒</span>Öğrenciler</a>
-<a href="global-veliler.php"><span>👪</span>Veliler</a>
-<a class="active" href="hesap-guvenligi.php"><span>👤</span>Profil</a>
+<a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a>
+<a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a>
+<a href="global-ogrenciler.php"><span><svg><use href="#sa-student"/></svg></span>Öğrenciler</a>
+<a href="global-veliler.php"><span><svg><use href="#sa-users"/></svg></span>Veliler</a>
+<a class="active" href="hesap-guvenligi.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
 </nav>
 <?php endif; ?>
 </div>
