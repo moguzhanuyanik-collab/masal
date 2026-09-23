@@ -49,8 +49,8 @@ $parents=ky_global_parents($pdo);
 ?><!doctype html><html lang="tr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Global Öğrenciler — İlkAdım</title>
-<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.41">
-</head><body class="role-page"><div class="role-shell">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.56"><link rel="stylesheet" href="super-admin-pages.css?v=1.0.57">
+</head><body class="role-page sa-subpage"><div class="role-shell">
 <header class="role-topbar">
 <a class="role-icon" href="super-admin.php">←</a>
 <span class="role-brand"><span>🎒</span><span><strong>Global Öğrenciler</strong><small>KURUMSUZ / OKULSUZ</small></span></span>
@@ -97,5 +97,11 @@ $parents=ky_global_parents($pdo);
 <?php else:foreach($students as $s):?><div class="role-row"><span>🎒</span><div><strong><?=ky_h((string)($s['ad']?:$s['email']))?></strong><small><?=ky_h((string)$s['email'])?> · Veli: <?=ky_h((string)($s['veli_adlari']?:'Bağlı değil'))?></small></div><span class="role-pill ok">Global</span></div><?php endforeach;endif;?>
 </div></section>
 </main>
-<nav class="role-bottom"><a href="super-admin.php"><span>⌂</span>Panel</a><a class="active" href="global-ogrenciler.php"><span>🎒</span>Öğrenciler</a><a href="global-veliler.php"><span>👪</span>Veliler</a><a href="kurumlar.php"><span>🏫</span>Kurumlar</a></nav>
+<nav class="role-bottom">
+<a href="super-admin.php"><span>⌂</span>Panel</a>
+<a href="kurumlar.php"><span>🏫</span>Kurumlar</a>
+<a class="active" href="global-ogrenciler.php"><span>🎒</span>Öğrenciler</a>
+<a href="global-veliler.php"><span>👪</span>Veliler</a>
+<a href="hesap-guvenligi.php"><span>👤</span>Profil</a>
+</nav>
 </div></body></html>
