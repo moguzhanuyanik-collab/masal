@@ -215,7 +215,7 @@ $local = read_app_version();
                 Güncellemeyi Şimdi Kur
             </button>
 
-            <p class="little-note">Güncelleme başlamadan önce sistem otomatik yedek alır. CSS ve mevcut görseller korunur.</p>
+            <p class="little-note">Sunucuda yalnızca bir önceki sürümün tek yedeği tutulur. Yeni güncellemede eski yedek güvenli biçimde yenilenir. CSS ve mevcut görseller korunur.</p>
         </div>
     </main>
 
