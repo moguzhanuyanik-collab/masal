@@ -49,7 +49,7 @@ $parents=ky_global_parents($pdo);
 ?><!doctype html><html lang="tr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Global Öğrenciler — İlkAdım</title>
-<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.56"><link rel="stylesheet" href="super-admin-pages.css?v=1.0.58">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.56"><link rel="stylesheet" href="super-admin-pages.css?v=1.0.59">
 </head><body class="role-page sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?><div class="role-shell">
 <header class="role-topbar">
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a>
@@ -62,8 +62,8 @@ $parents=ky_global_parents($pdo);
 <section class="role-hero"><span class="eyeline">GLOBAL KULLANICILAR</span><h1>Kurum ve öğretmen bağı olmayan öğrenciler.</h1>
 <p>Bu öğrenciler yalnızca İlkAdım’ın sistem dersleri ve etkinliklerini kullanır. İstenirse global veliyle eşleştirilir.</p><span class="role-hero-art"><svg><use href="#sa-student"/></svg></span></section>
 
-<?php if($message!==''):?><div class="role-note"><span>✅</span><p><?=ky_h($message)?></p></div><?php endif;?>
-<?php if($error!==''):?><div class="role-note"><span>⚠️</span><p><?=ky_h($error)?></p></div><?php endif;?>
+<?php if($message!==''):?><div class="role-note"><span><svg><use href="#sa-check"/></svg></span><p><?=ky_h($message)?></p></div><?php endif;?>
+<?php if($error!==''):?><div class="role-note"><span><svg><use href="#sa-alert"/></svg></span><p><?=ky_h($error)?></p></div><?php endif;?>
 
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">YENİ ÖĞRENCİ</span><h2>Global Öğrenci Ekle</h2></div></div>
 <form class="role-form" method="post" autocomplete="off">
@@ -79,11 +79,11 @@ $parents=ky_global_parents($pdo);
 </select>
 <button class="role-button" type="submit">Global Öğrenci Oluştur</button>
 </form>
-<p class="role-note"><span>ℹ️</span><span>Global öğrencinin kurumu ve öğretmeni olmaz. Veli ayrı Global Veliler sayfasından da oluşturulabilir.</span></p>
+<p class="role-note"><span><svg><use href="#sa-info"/></svg></span><span>Global öğrencinin kurumu ve öğretmeni olmaz. Veli ayrı Global Veliler sayfasından da oluşturulabilir.</span></p>
 </section>
 
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">EŞLEŞTİRME</span><h2>Veli Bağla</h2></div><a href="global-veliler.php">Veli Ekle</a></div>
-<?php if(!$students||!$parents):?><div class="role-list"><div class="role-empty"><span>🔗</span>Eşleştirme için en az bir global öğrenci ve global veli gerekir.</div></div>
+<?php if(!$students||!$parents):?><div class="role-list"><div class="role-empty"><span><svg><use href="#sa-link"/></svg></span>Eşleştirme için en az bir global öğrenci ve global veli gerekir.</div></div>
 <?php else:?><form class="role-form" method="post">
 <input type="hidden" name="csrf" value="<?=ky_h(csrf_token())?>">
 <input type="hidden" name="action" value="link_parent">
@@ -95,8 +95,8 @@ $parents=ky_global_parents($pdo);
 
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">ÖĞRENCİLER</span><h2>Global Öğrenci Listesi</h2></div><span class="role-pill"><?=count($students)?></span></div>
 <div class="role-list">
-<?php if(!$students):?><div class="role-empty"><span>🎒</span>Henüz global öğrenci yok.</div>
-<?php else:foreach($students as $s):?><div class="role-row"><span>🎒</span><div><strong><?=ky_h((string)($s['ad']?:$s['email']))?></strong><small><?=ky_h((string)$s['email'])?> · Veli: <?=ky_h((string)($s['veli_adlari']?:'Bağlı değil'))?></small></div><span class="role-pill ok">Global</span></div><?php endforeach;endif;?>
+<?php if(!$students):?><div class="role-empty"><span><svg><use href="#sa-student"/></svg></span>Henüz global öğrenci yok.</div>
+<?php else:foreach($students as $s):?><div class="role-row"><span><svg><use href="#sa-student"/></svg></span><div><strong><?=ky_h((string)($s['ad']?:$s['email']))?></strong><small><?=ky_h((string)$s['email'])?> · Veli: <?=ky_h((string)($s['veli_adlari']?:'Bağlı değil'))?></small></div><span class="role-pill ok">Global</span></div><?php endforeach;endif;?>
 </div></section>
 </main>
 <nav class="role-bottom">
