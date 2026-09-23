@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 <meta name="theme-color" content="#f8f7fc">
 <title>Hesap Güvenliği — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
-<?php if($isSuper): ?><link rel="stylesheet" href="super-admin-pages.css?v=1.0.58"><?php endif; ?>
+<?php if($isSuper): ?><link rel="stylesheet" href="super-admin-pages.css?v=1.0.59"><?php endif; ?>
 </head>
 <body<?= $isSuper?' class="sa-subpage"':'' ?>>
 <?php if($isSuper) require __DIR__.'/src/super_admin_icons.php'; ?>
