@@ -48,7 +48,7 @@ try{
 <body class="role-page"><div class="role-shell">
 <header class="role-topbar"><a class="role-icon" href="super-admin.php">←</a><span class="role-brand"><span>🏫</span><span><strong>Kurumlar</strong><small>İLKADIM YÖNETİMİ</small></span></span><a class="role-icon" href="hesap-guvenligi.php">👑</a></header>
 <main class="role-content">
-<section class="role-hero"><span class="eyeline">KURUM MİMARİSİ</span><h1>Okul, kurs ve İlkAdım merkezi.</h1><p>Kurum altına yönetici, öğretmen, veli ve öğrenci bağlanır. Doğrudan kullanıcılar İlkAdım merkezinde sistem içeriklerini kullanır.</p><span class="role-hero-art">🏫</span></section>
+<section class="role-hero"><span class="eyeline">KURUM MİMARİSİ</span><h1>Okul, kurs ve İlkAdım merkezi.</h1><p>Kurumlar kendi yönetici, öğretmen, veli ve öğrencilerini ayrı sayfalarda yönetir. Global kullanıcılar kurumdan bağımsızdır.</p><span class="role-hero-art">🏫</span></section>
 <?php if($message!==''):?><div class="role-note"><span>✅</span><p><?=kr_h($message)?></p></div><?php endif;?>
 <?php if($error!==''):?><div class="role-note"><span>⚠️</span><p><?=kr_h($error)?></p></div><?php endif;?>
 
