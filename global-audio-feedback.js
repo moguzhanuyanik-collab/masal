@@ -4,7 +4,13 @@
   const spokenState=new WeakMap();
 
   const clean=value=>String(value||'')
-    .replace(/[★⭐✨🎉💡💜✅❌🔊🌱🎯🔢🔟🌑👏🧩🎨🍓🦵🤫]/gu,' ')
+    .replace(/[\u{1F1E6}-\u{1F1FF}]/gu,' ')
+    .replace(/[\u{1F300}-\u{1FAFF}]/gu,' ')
+    .replace(/[\u2600-\u27BF]/gu,' ')
+    .replace(/[\u2190-\u21FF]/gu,' ')
+    .replace(/[\u2300-\u23FF]/gu,' ')
+    .replace(/[\u25A0-\u25FF]/gu,' ')
+    .replace(/[\uFE0E\uFE0F\u200D]/gu,' ')
     .replace(/\s+/g,' ')
     .trim();
 
