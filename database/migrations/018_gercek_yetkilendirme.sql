@@ -65,25 +65,119 @@ CREATE TABLE IF NOT EXISTS ogretmenler (
     REFERENCES kullanicilar(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS veli_ogrenci (
-  veli_id BIGINT UNSIGNED NOT NULL,
-  ogrenci_id INT UNSIGNED NOT NULL,
-  olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (veli_id,ogrenci_id),
-  KEY ix_veli_ogrenci_ogrenci (ogrenci_id),
-  CONSTRAINT fk_veli_ogrenci_veli FOREIGN KEY (veli_id) REFERENCES veliler(id) ON DELETE CASCADE,
-  CONSTRAINT fk_veli_ogrenci_ogrenci FOREIGN KEY (ogrenci_id) REFERENCES ogrenciler(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+-- Eski veritabanlarında veliler/ogretmenler tabloları daha önceden var olabilir.
+-- Var olan veriyi silmeden yalnızca V1.0.35 yetkilendirmesinin ihtiyaç duyduğu eksik kolonları ekle.
+SET @has_veli_kullanici_id = (
+  SELECT COUNT(*) FROM information_schema.columns
+  WHERE table_schema=DATABASE() AND table_name='veliler' AND column_name='kullanici_id'
+);
+SET @sql = IF(@has_veli_kullanici_id=0,
+  'ALTER TABLE veliler ADD COLUMN kullanici_id BIGINT UNSIGNED NULL',
+  'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
 
-CREATE TABLE IF NOT EXISTS ogretmen_ogrenci (
-  ogretmen_id BIGINT UNSIGNED NOT NULL,
-  ogrenci_id INT UNSIGNED NOT NULL,
-  olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (ogretmen_id,ogrenci_id),
-  KEY ix_ogretmen_ogrenci_ogrenci (ogrenci_id),
-  CONSTRAINT fk_ogretmen_ogrenci_ogretmen FOREIGN KEY (ogretmen_id) REFERENCES ogretmenler(id) ON DELETE CASCADE,
-  CONSTRAINT fk_ogretmen_ogrenci_ogrenci FOREIGN KEY (ogrenci_id) REFERENCES ogrenciler(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+SET @has_veli_ad_soyad = (
+  SELECT COUNT(*) FROM information_schema.columns
+  WHERE table_schema=DATABASE() AND table_name='veliler' AND column_name='ad_soyad'
+);
+SET @sql = IF(@has_veli_ad_soyad=0,
+  'ALTER TABLE veliler ADD COLUMN ad_soyad VARCHAR(190) NULL',
+  'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @has_veli_aktif = (
+  SELECT COUNT(*) FROM information_schema.columns
+  WHERE table_schema=DATABASE() AND table_name='veliler' AND column_name='aktif'
+);
+SET @sql = IF(@has_veli_aktif=0,
+  'ALTER TABLE veliler ADD COLUMN aktif TINYINT(1) NOT NULL DEFAULT 1',
+  'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @has_ogretmen_kullanici_id = (
+  SELECT COUNT(*) FROM information_schema.columns
+  WHERE table_schema=DATABASE() AND table_name='ogretmenler' AND column_name='kullanici_id'
+);
+SET @sql = IF(@has_ogretmen_kullanici_id=0,
+  'ALTER TABLE ogretmenler ADD COLUMN kullanici_id BIGINT UNSIGNED NULL',
+  'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @has_ogretmen_ad_soyad = (
+  SELECT COUNT(*) FROM information_schema.columns
+  WHERE table_schema=DATABASE() AND table_name='ogretmenler' AND column_name='ad_soyad'
+);
+SET @sql = IF(@has_ogretmen_ad_soyad=0,
+  'ALTER TABLE ogretmenler ADD COLUMN ad_soyad VARCHAR(190) NULL',
+  'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @has_ogretmen_aktif = (
+  SELECT COUNT(*) FROM information_schema.columns
+  WHERE table_schema=DATABASE() AND table_name='ogretmenler' AND column_name='aktif'
+);
+SET @sql = IF(@has_ogretmen_aktif=0,
+  'ALTER TABLE ogretmenler ADD COLUMN aktif TINYINT(1) NOT NULL DEFAULT 1',
+  'SELECT 1');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @veli_id_type = (
+  SELECT COLUMN_TYPE FROM information_schema.columns
+  WHERE table_schema=DATABASE() AND table_name='veliler' AND column_name='id'
+  LIMIT 1
+);
+SET @ogrenci_id_type = (
+  SELECT COLUMN_TYPE FROM information_schema.columns
+  WHERE table_schema=DATABASE() AND table_name='ogrenciler' AND column_name='id'
+  LIMIT 1
+);
+SET @veli_id_type = IFNULL(@veli_id_type,'BIGINT UNSIGNED');
+SET @ogrenci_id_type = IFNULL(@ogrenci_id_type,'INT UNSIGNED');
+
+SET @sql = CONCAT(
+  'CREATE TABLE IF NOT EXISTS veli_ogrenci (',
+  'veli_id ',@veli_id_type,' NOT NULL,',
+  'ogrenci_id ',@ogrenci_id_type,' NOT NULL,',
+  'olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,',
+  'PRIMARY KEY (veli_id,ogrenci_id),',
+  'KEY ix_veli_ogrenci_ogrenci (ogrenci_id)',
+  ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+);
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @ogretmen_id_type = (
+  SELECT COLUMN_TYPE FROM information_schema.columns
+  WHERE table_schema=DATABASE() AND table_name='ogretmenler' AND column_name='id'
+  LIMIT 1
+);
+SET @ogretmen_id_type = IFNULL(@ogretmen_id_type,'BIGINT UNSIGNED');
+
+SET @sql = CONCAT(
+  'CREATE TABLE IF NOT EXISTS ogretmen_ogrenci (',
+  'ogretmen_id ',@ogretmen_id_type,' NOT NULL,',
+  'ogrenci_id ',@ogrenci_id_type,' NOT NULL,',
+  'olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,',
+  'PRIMARY KEY (ogretmen_id,ogrenci_id),',
+  'KEY ix_ogretmen_ogrenci_ogrenci (ogrenci_id)',
+  ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+);
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
 
 CREATE TABLE IF NOT EXISTS yetki_loglari (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
