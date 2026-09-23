@@ -1,0 +1,43 @@
+.app-nav-five{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+.app-nav-five>a{min-width:0}
+.teacher-page{padding-bottom:92px}
+.teacher-hero{margin:12px 14px 16px;padding:20px;border-radius:24px;background:linear-gradient(135deg,#fff6cf,#f0e7ff);border:1px solid #eadff7;position:relative;overflow:hidden}
+.teacher-hero .teacher-star{position:absolute;right:18px;top:12px;font-size:48px;opacity:.42}
+.teacher-hero small{display:block;font-size:10px;font-weight:900;letter-spacing:.8px;color:#8a6a34}
+.teacher-hero h1{margin:6px 0 5px;font-size:25px;letter-spacing:-.7px}
+.teacher-hero p{margin:0;color:#716a7a;font-size:12px;line-height:1.55;max-width:80%}
+.teacher-empty{margin:14px;padding:28px 18px;text-align:center;background:#fff;border:1px solid #ece8f2;border-radius:20px;color:#776f81;font-size:12px}
+.teacher-empty span{display:block;font-size:38px;margin-bottom:8px}
+.teacher-groups{display:grid;gap:12px;margin:0 14px}
+.teacher-group,.teacher-lesson,.teacher-topic{border:1px solid #ece8f2;background:#fff;border-radius:18px;overflow:hidden}
+.teacher-group>summary,.teacher-lesson>summary,.teacher-topic>summary{list-style:none;cursor:pointer}
+.teacher-group>summary::-webkit-details-marker,.teacher-lesson>summary::-webkit-details-marker,.teacher-topic>summary::-webkit-details-marker{display:none}
+.teacher-group-head{display:flex;align-items:center;gap:11px;padding:14px 15px}
+.teacher-avatar{width:46px;height:46px;border-radius:15px;background:#fff3b8;display:grid;place-items:center;font-size:24px;flex:0 0 auto}
+.teacher-group-head strong{display:block;font-size:13px}
+.teacher-group-head small{display:block;margin-top:3px;font-size:9px;color:#877f91}
+.teacher-group-head b{margin-left:auto;font-size:17px;color:#8f76b3}
+.teacher-group-body{padding:0 10px 10px;display:grid;gap:9px}
+.teacher-lesson{background:#faf8fd}
+.teacher-lesson>summary{display:flex;align-items:center;gap:8px;padding:12px 13px;font-size:11px;font-weight:900}
+.teacher-lesson>summary span:first-child{font-size:20px}
+.teacher-topic{margin:0 8px 8px;background:#fff}
+.teacher-topic>summary{padding:10px 12px;font-size:10px;font-weight:900;color:#655d70}
+.teacher-topic-body{padding:0 10px 10px;display:grid;gap:9px}
+.teacher-content-card{padding:13px;border:1px solid #eee9f4;border-radius:15px;background:#fff;box-shadow:0 7px 18px #4f386208}
+.teacher-content-badges{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.teacher-from{display:inline-flex;align-items:center;gap:4px;padding:5px 8px;border-radius:999px;background:#fff5c9;color:#7f641f;font-size:8px;font-weight:1000}
+.teacher-type{display:inline-flex;padding:5px 8px;border-radius:999px;background:#f1ebff;color:#6d52a5;font-size:8px;font-weight:1000}
+.teacher-content-card h3{margin:0 0 6px;font-size:12px}
+.teacher-content-card p{margin:5px 0;color:#6f6878;font-size:10px;line-height:1.55}
+.teacher-question{margin-top:10px;padding:11px;border-radius:13px;background:#faf8fd}
+.teacher-question>strong{display:block;font-size:11px;margin-bottom:8px}
+.teacher-option{display:flex;align-items:flex-start;gap:8px;padding:8px 9px;margin:6px 0;border:1px solid #e8e2ef;border-radius:11px;background:#fff;font-size:10px}
+.teacher-option input{margin-top:1px;accent-color:#7959b4}
+.teacher-answer-button{width:100%;margin-top:8px;border:0;border-radius:11px;padding:10px 12px;background:linear-gradient(120deg,#8666c5,#67489f);color:#fff;font:inherit;font-size:9px;font-weight:1000;cursor:pointer}
+.teacher-answer-status{margin-top:8px;padding:8px 10px;border-radius:10px;font-size:9px;font-weight:900}
+.teacher-answer-status.ok{background:#eaf8ef;color:#28714d}
+.teacher-answer-status.bad{background:#fff0f0;color:#a94848}
+.teacher-explanation{margin-top:7px;padding:8px 10px;border-left:3px solid #d8c9f5;background:#faf8fd;border-radius:8px;font-size:9px;color:#6e6578}
+.teacher-flash{margin:0 14px 12px;padding:11px 13px;border-radius:14px;background:#eef9f2;border:1px solid #d4efdd;color:#2f7652;font-size:10px;font-weight:800}
+@media(max-width:430px){.app-nav-five>a{font-size:9px}.teacher-hero h1{font-size:22px}.teacher-hero p{max-width:86%}}
