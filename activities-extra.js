@@ -48,12 +48,12 @@
   const route=()=>location.hash.replace(/^#\/?/,'').split('/');
 
   const cleanSpeechText=value=>String(value||'')
-    .replace(/[★⭐✨🎉💡💜✅❌🔊🎯🔢🔟🌑👏🧩🎨🍓]/gu,' ')
+    .replace(/[★⭐✨🎉💡💜✅❌🔊🎯🔢🔟🌑👏🧩🎨🍓🦵🤫]/gu,' ')
     .replace(/\s+/g,' ')
     .trim();
 
   const speakText=text=>{
-    if(!('speechSynthesis' in window)) return false;
+    if(!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance==='undefined') return false;
     const value=cleanSpeechText(text);
     if(!value) return false;
     window.speechSynthesis.cancel();
@@ -71,38 +71,6 @@
   const stopSpeech=()=>{
     if('speechSynthesis' in window) window.speechSynthesis.cancel();
   };
-
-  const speak=(text)=>{
-    const value=String(text||'').replace(/[⭐🍎🐱🏠☀️✏️🔟🔢✅❌🌑👏🦵🤫🎯🧩]/gu,' ').replace(/\s+/g,' ').trim();
-    if(!value)return false;
-    if(!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined')return false;
-    window.speechSynthesis.cancel();
-    const utter=new SpeechSynthesisUtterance(value);
-    utter.lang='tr-TR';
-    utter.rate=0.88;
-    utter.pitch=1.02;
-    const voices=window.speechSynthesis.getVoices();
-    const trVoice=voices.find(v=>String(v.lang||'').toLowerCase().startsWith('tr'));
-    if(trVoice)utter.voice=trVoice;
-    window.speechSynthesis.speak(utter);
-    return true;
-  };
-
-  const speakIntro=(g)=>{
-    speak(g.name+'. '+g.description);
-  };
-
-  const speakQuestion=(g,q)=>{
-    const readingGames=new Set(['hece_birlestir','kelime_yakala']);
-    if(readingGames.has(g.id)){
-      return speak(q.question);
-    }
-    const opts=Array.isArray(q.options)&&q.options.length
-      ? ' Seçenekler: '+q.options.map((o,i)=>String.fromCharCode(65+i)+': '+o).join('. ')
-      : '';
-    return speak(q.question+opts);
-  };
-
 
   function load(){
     nativeFetch('api/activities.php',{headers:{'Accept':'application/json'},credentials:'same-origin'})
@@ -171,13 +139,9 @@
     const introListen=document.getElementById('listen-game-intro');
     if(introListen){
       introListen.addEventListener('click',()=>{
-        speakText(g.name+'. '+g.description);
+        if(!speakText(g.name+'. '+g.description)) introListen.textContent='Seslendirme desteklenmiyor';
       });
     }
-    const introListen=document.getElementById('listen-game-intro');
-    if(introListen)introListen.addEventListener('click',()=>{
-      if(!speakIntro(g))introListen.textContent='Seslendirme desteklenmiyor';
-    });
 
     const show=()=>{
       if(!qs.length){
@@ -190,21 +154,15 @@
         progress(Math.round(round/total*100),'Oyun ilerlemesi')+
         '<div class="puzzle-visual">'+esc(q.visual)+'</div>'+
         '<h2 class="puzzle-question">'+esc(q.question)+'</h2>'+
-        '<button class="button soft full" type="button" id="listen-extra-question">🔊 Soruyu Dinle</button>'+
         '<button class="button soft" type="button" id="listen-extra-question">🔊 Soruyu Dinle</button>'+
         '<div class="answers">'+q.options.map((o,i)=>'<button class="answer" data-extra-choice="'+i+'">'+esc(o)+'</button>').join('')+'</div>'+
         '<p class="feedback" role="status" aria-live="polite">💡 Biraz düşün, bir cevap seç.</p><div id="next-extra-round"></div>';
 
       const listenQuestion=document.getElementById('listen-extra-question');
-      if(listenQuestion)listenQuestion.addEventListener('click',()=>{
-        if(!speakQuestion(g,q))listenQuestion.textContent='Seslendirme desteklenmiyor';
-      });
-
-      const listenQuestion=document.getElementById('listen-extra-question');
       if(listenQuestion){
         listenQuestion.addEventListener('click',()=>{
           const spokenOptions=(q.options||[]).map((o,i)=>(i+1)+'. seçenek: '+cleanSpeechText(o)).join('. ');
-          speakText(q.question+'. '+spokenOptions);
+          if(!speakText(q.question+'. '+spokenOptions)) listenQuestion.textContent='Seslendirme desteklenmiyor';
         });
       }
 
@@ -218,12 +176,12 @@
           feedback.textContent='🌟 Doğru cevap: '+q.result+'. '+(q.explanation||'Harikasın!');
           board.querySelectorAll('[data-extra-choice]').forEach(x=>x.disabled=true);
           const next=document.getElementById('next-extra-round');
-          next.innerHTML='<button class="button soft full" id="listen-extra-explanation" type="button">🔊 Açıklamayı Dinle</button>'+
+          next.innerHTML='<button class="button soft" id="listen-extra-explanation" type="button">🔊 Açıklamayı Dinle</button>'+
             '<button class="button primary full" id="advance-extra">'+(round===total-1?'Oyunu Tamamla ✨':'Sonraki Keşif '+arrow())+'</button>';
           const explainListen=document.getElementById('listen-extra-explanation');
           if(explainListen){
             explainListen.addEventListener('click',()=>{
-              speakText('Doğru cevap: '+q.result+'. '+(q.explanation||'Harikasın!'));
+              if(!speakText('Doğru cevap: '+q.result+'. '+(q.explanation||'Harikasın!'))) explainListen.textContent='Seslendirme desteklenmiyor';
             });
           }
           document.getElementById('advance-extra').addEventListener('click',()=>{
@@ -266,7 +224,6 @@
   let scheduled=false;
   function apply(){
     scheduled=false;
-    if('speechSynthesis' in window)window.speechSynthesis.cancel();
     const r=route();
     const screen=document.getElementById('screen');
     if(screen && !(r[0]==='oyun'&&EXTRA_IDS.includes(r[1]))) delete screen.dataset.extraGame;
