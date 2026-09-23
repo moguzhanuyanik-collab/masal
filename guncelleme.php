@@ -171,9 +171,9 @@ $local = read_app_version();
     <meta name="description" content="İlkAdım uygulama güncelleme merkezi.">
     <title>Uygulama Güncelleme — İlkAdım</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="super-admin-pages.css?v=1.0.57">
+    <link rel="stylesheet" href="super-admin-pages.css?v=1.0.58">
 </head>
-<body class="sa-subpage">
+<body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?>
 <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10H15v-6H9v6H3Z"/></symbol>
     <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5C8 2 3 3 3 3v16s5-1 9 2c4-3 9-2 9-2V3s-5-1-9 2Zm0 0v16"/></symbol>
@@ -187,17 +187,17 @@ $local = read_app_version();
 
 <div class="app-shell">
     <header class="app-topbar">
-        <a class="icon-button" href="super-admin.php" aria-label="Süper Admin paneline dön">←</a>
-        <div class="topbar-title">Uygulama Güncelleme</div>
-        <a class="mini-avatar" href="super-admin.php" aria-label="Süper Admin">
-            <span class="avatar-emoji">🌞</span>
-        </a>
+        <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a>
+        <div class="sa-page-actions">
+            <a class="sa-page-action" href="guncelleme.php" aria-label="Güncellemeler"><svg><use href="#sa-bell"/></svg></a>
+            <a class="sa-page-action" href="hesap-guvenligi.php" aria-label="Hesabım"><svg><use href="#sa-user"/></svg></a>
+        </div>
     </header>
 
     <main id="screen" tabindex="-1">
         <div class="screen-content">
             <section class="subpage-intro">
-                <span>🔄</span>
+                <span><svg><use href="#sa-refresh"/></svg></span>
                 <h1>Uygulama Güncelleme</h1>
                 <p>Yeni sürümleri GitHub üzerinden kontrol et ve uygulamayı tek dokunuşla güncelle.</p>
             </section>
@@ -261,11 +261,11 @@ $local = read_app_version();
     </main>
 
     <nav class="app-nav" aria-label="Süper Admin hızlı erişim">
-        <a href="super-admin.php"><span><svg><use href="#i-home"/></svg></span>Panel</a>
-        <a href="kurumlar.php"><span><svg><use href="#i-book"/></svg></span>Kurumlar</a>
-        <a href="global-ogrenciler.php"><span><svg><use href="#i-star"/></svg></span>Öğrenciler</a>
-        <a href="global-veliler.php"><span>👪</span>Veliler</a>
-        <a href="hesap-guvenligi.php"><span><svg><use href="#i-user"/></svg></span>Profil</a>
+        <a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a>
+        <a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a>
+        <a href="global-ogrenciler.php"><span><svg><use href="#sa-student"/></svg></span>Öğrenciler</a>
+        <a href="global-veliler.php"><span><svg><use href="#sa-users"/></svg></span>Veliler</a>
+        <a href="hesap-guvenligi.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
     </nav>
 </div>
 
