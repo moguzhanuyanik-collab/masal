@@ -186,3 +186,43 @@ body.sa-subpage .sp-profile-photo img,body.sa-subpage .sp-profile-photo>span{wid
 body.sa-subpage .sp-profile-photo>span svg{width:34px;height:34px;fill:none;stroke:currentColor;stroke-width:1.8}
 body.sa-subpage .sp-profile-photo strong{display:block;font-size:15px}
 body.sa-subpage .sp-profile-photo small{display:block;margin-top:4px;color:var(--sap-muted);font-size:9px}
+
+
+/* V1.0.64 — Global öğrenci/veli tablo yönetimi */
+body.sa-subpage .sa-data-toolbar{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:12px}
+body.sa-subpage .sa-data-toolbar .eyeline{display:block;font-size:8px;font-weight:900;letter-spacing:1.2px;color:var(--sap-primary)}
+body.sa-subpage .sa-data-toolbar h2{font-size:16px;font-weight:900;letter-spacing:-.35px;margin-top:3px}
+body.sa-subpage .sa-data-toolbar small{display:block;margin-top:4px;font-size:8px;color:var(--sap-muted)}
+body.sa-subpage .sa-data-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+body.sa-subpage .sa-primary-btn,body.sa-subpage .sa-secondary-btn,body.sa-subpage .sa-edit-btn,body.sa-subpage .sa-delete-btn{border:0;border-radius:10px;min-height:36px;padding:8px 11px;font:inherit;font-size:8.5px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap}
+body.sa-subpage .sa-primary-btn{background:linear-gradient(135deg,var(--sap-primary),var(--sap-primary-dark));color:#fff;box-shadow:0 6px 15px rgba(91,75,219,.16)}
+body.sa-subpage .sa-secondary-btn{background:#fff;color:var(--sap-primary);border:1px solid #ddd9fb}
+body.sa-subpage .sa-edit-btn{background:var(--sap-primary-soft);color:var(--sap-primary);border:1px solid #dfdcfb}
+body.sa-subpage .sa-delete-btn{background:#fff3f4;color:#bd4350;border:1px solid #f3d5d9}
+body.sa-subpage .sa-table-card{background:#fff;border:1px solid var(--sap-line);border-radius:18px;box-shadow:0 5px 18px rgba(38,45,70,.03);overflow:hidden}
+body.sa-subpage .sa-table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+body.sa-subpage .sa-data-table{width:100%;min-width:720px;border-collapse:collapse;font-size:9px}
+body.sa-subpage .sa-data-table th{padding:11px 13px;text-align:left;background:#f8f9fc;color:#777f91;font-size:7.5px;font-weight:900;letter-spacing:.45px;border-bottom:1px solid var(--sap-line)}
+body.sa-subpage .sa-data-table td{padding:12px 13px;border-bottom:1px solid #eff1f5;color:#465066;vertical-align:middle}
+body.sa-subpage .sa-data-table tbody tr:last-child td{border-bottom:0}
+body.sa-subpage .sa-data-table td strong{font-size:9.5px;color:var(--sap-ink);font-weight:900}
+body.sa-subpage .sa-actions-col{text-align:right!important}
+body.sa-subpage .sa-row-actions{display:flex;justify-content:flex-end;align-items:center;gap:7px}
+body.sa-subpage .sa-row-actions form{margin:0}
+body.sa-subpage .sa-empty-cell{text-align:center!important;padding:28px!important;color:var(--sap-muted)!important}
+body.sa-subpage .sa-data-dialog{width:min(92vw,500px);border:0;border-radius:20px;padding:0;box-shadow:0 30px 80px rgba(24,29,45,.24)}
+body.sa-subpage .sa-data-dialog::backdrop{background:rgba(25,30,45,.46);backdrop-filter:blur(3px)}
+body.sa-subpage .sa-dialog-form{margin:0;background:#fff}
+body.sa-subpage .sa-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--sap-line)}
+body.sa-subpage .sa-dialog-head small{display:block;color:var(--sap-primary);font-size:7.5px;font-weight:900;letter-spacing:1.1px}
+body.sa-subpage .sa-dialog-head h3{font-size:15px;font-weight:900;margin-top:3px}
+body.sa-subpage .sa-dialog-head>button{width:34px;height:34px;border-radius:10px;border:1px solid var(--sap-line);background:#fff;color:#6d7586;font-size:18px;cursor:pointer}
+body.sa-subpage .sa-dialog-body{display:grid;gap:9px;padding:16px 18px}
+body.sa-subpage .sa-dialog-body label{font-size:8.5px;font-weight:850;color:#596174}
+body.sa-subpage .sa-dialog-body .little-note{margin-top:-2px!important}
+body.sa-subpage .sa-dialog-actions{display:flex;justify-content:flex-end;gap:8px;padding:0 18px 18px}
+@media(max-width:560px){
+ body.sa-subpage .sa-data-toolbar{align-items:stretch;flex-direction:column}
+ body.sa-subpage .sa-data-actions{justify-content:stretch}
+ body.sa-subpage .sa-data-actions>*{flex:1}
+}
