@@ -47,6 +47,38 @@
   const user=()=>'<svg aria-hidden="true"><use href="#user"/></svg>';
   const route=()=>location.hash.replace(/^#\/?/,'').split('/');
 
+  const speak=(text)=>{
+    const value=String(text||'').replace(/[⭐🍎🐱🏠☀️✏️🔟🔢✅❌🌑👏🦵🤫🎯🧩]/gu,' ').replace(/\s+/g,' ').trim();
+    if(!value)return false;
+    if(!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined')return false;
+    window.speechSynthesis.cancel();
+    const utter=new SpeechSynthesisUtterance(value);
+    utter.lang='tr-TR';
+    utter.rate=0.88;
+    utter.pitch=1.02;
+    const voices=window.speechSynthesis.getVoices();
+    const trVoice=voices.find(v=>String(v.lang||'').toLowerCase().startsWith('tr'));
+    if(trVoice)utter.voice=trVoice;
+    window.speechSynthesis.speak(utter);
+    return true;
+  };
+
+  const speakIntro=(g)=>{
+    speak(g.name+'. '+g.description);
+  };
+
+  const speakQuestion=(g,q)=>{
+    const readingGames=new Set(['hece_birlestir','kelime_yakala']);
+    if(readingGames.has(g.id)){
+      return speak(q.question);
+    }
+    const opts=Array.isArray(q.options)&&q.options.length
+      ? ' Seçenekler: '+q.options.map((o,i)=>String.fromCharCode(65+i)+': '+o).join('. ')
+      : '';
+    return speak(q.question+opts);
+  };
+
+
   function load(){
     nativeFetch('api/activities.php',{headers:{'Accept':'application/json'},credentials:'same-origin'})
       .then(r=>r.ok?r.json():Promise.reject(new Error('HTTP '+r.status)))
@@ -106,11 +138,15 @@
     screen.dataset.extraGame=g.id;
     setTopbar(g);
     screen.innerHTML='<div class="screen-content game-screen" data-extra-game-screen="'+esc(g.id)+'"><div class="game-intro" style="--tint:'+esc(g.color)+'">'+
-      '<span>'+esc(g.emoji)+'</span><h1>'+esc(g.name)+'</h1><p>'+esc(g.description)+'</p></div><div id="game-board"></div></div>';
+      '<span>'+esc(g.emoji)+'</span><h1>'+esc(g.name)+'</h1><p>'+esc(g.description)+'</p><button class="button soft" id="listen-game-intro" type="button">🔊 Anlatımı Dinle</button></div><div id="game-board"></div></div>';
 
     const qs=Array.isArray(g.questions)?g.questions:[];
     let round=0;
     const board=document.getElementById('game-board');
+    const introListen=document.getElementById('listen-game-intro');
+    if(introListen)introListen.addEventListener('click',()=>{
+      if(!speakIntro(g))introListen.textContent='Seslendirme desteklenmiyor';
+    });
 
     const show=()=>{
       if(!qs.length){
@@ -122,9 +158,15 @@
       board.innerHTML='<div class="puzzle-count"><span>KEŞİF '+(round+1)+' / '+total+'</span><span>⭐</span></div>'+
         progress(Math.round(round/total*100),'Oyun ilerlemesi')+
         '<div class="puzzle-visual">'+esc(q.visual)+'</div>'+
-        '<h2 class="puzzle-question">'+esc(q.question)+'</h2>'+
+        '<h2 class="puzzle-question">'+esc(q.question)+'</h2>'+\
+        '<button class="button soft" type="button" id="listen-extra-question">🔊 Soruyu Dinle</button>'+
         '<div class="answers">'+q.options.map((o,i)=>'<button class="answer" data-extra-choice="'+i+'">'+esc(o)+'</button>').join('')+'</div>'+
         '<p class="feedback" role="status" aria-live="polite">💡 Biraz düşün, bir cevap seç.</p><div id="next-extra-round"></div>';
+
+      const listenQuestion=document.getElementById('listen-extra-question');
+      if(listenQuestion)listenQuestion.addEventListener('click',()=>{
+        if(!speakQuestion(g,q))listenQuestion.textContent='Seslendirme desteklenmiyor';
+      });
 
       board.querySelectorAll('[data-extra-choice]').forEach(btn=>btn.addEventListener('click',()=>{
         const correct=Number(btn.dataset.extraChoice)===Number(q.answer);
@@ -176,6 +218,7 @@
   let scheduled=false;
   function apply(){
     scheduled=false;
+    if('speechSynthesis' in window)window.speechSynthesis.cancel();
     const r=route();
     const screen=document.getElementById('screen');
     if(screen && !(r[0]==='oyun'&&EXTRA_IDS.includes(r[1]))) delete screen.dataset.extraGame;
