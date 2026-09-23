@@ -50,9 +50,44 @@ if (!function_exists('auth_runtime_table_exists')) {
         try {
             $stmt=$pdo->prepare('SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name=?');
             $stmt->execute([$table]);
-            return (int)$stmt->fetchColumn()>0;
+            $exists=(int)$stmt->fetchColumn()>0;
+            $stmt->closeCursor();
+            return $exists;
         } catch (Throwable) {
             return false;
+        }
+    }
+}
+
+if (!function_exists('auth_runtime_column_exists')) {
+    function auth_runtime_column_exists(PDO $pdo, string $table, string $column): bool {
+        try {
+            $stmt=$pdo->prepare('SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name=? AND column_name=?');
+            $stmt->execute([$table,$column]);
+            $exists=(int)$stmt->fetchColumn()>0;
+            $stmt->closeCursor();
+            return $exists;
+        } catch (Throwable) {
+            return false;
+        }
+    }
+}
+
+if (!function_exists('auth_user_id_by_email')) {
+    function auth_user_id_by_email(PDO $pdo, string $email): ?int {
+        $email=mb_strtolower(trim($email));
+        if ($email==='' || !auth_runtime_table_exists($pdo,'kullanicilar')) return null;
+        try {
+            $stmt=$pdo->prepare("SELECT id FROM kullanicilar
+                WHERE (email COLLATE utf8mb4_turkish_ci)=(CONVERT(? USING utf8mb4) COLLATE utf8mb4_turkish_ci)
+                  AND aktif=1
+                LIMIT 1");
+            $stmt->execute([$email]);
+            $id=(int)($stmt->fetchColumn()?:0);
+            $stmt->closeCursor();
+            return $id>0?$id:null;
+        } catch (Throwable) {
+            return null;
         }
     }
 }
@@ -108,11 +143,41 @@ if (!function_exists('auth_user_has_role')) {
 
 if (!function_exists('auth_student_id_for_user')) {
     function auth_student_id_for_user(PDO $pdo, int $userId): ?int {
+        if ($userId<=0 || !auth_runtime_table_exists($pdo,'ogrenciler')) return null;
+
         try {
-            $stmt=$pdo->prepare('SELECT id FROM ogrenciler WHERE kullanici_id=? AND aktif=1 LIMIT 1');
-            $stmt->execute([$userId]);
-            $id=(int)($stmt->fetchColumn()?:0);
-            return $id>0?$id:null;
+            if (auth_runtime_column_exists($pdo,'ogrenciler','kullanici_id')) {
+                $stmt=$pdo->prepare('SELECT id FROM ogrenciler WHERE kullanici_id=? AND aktif=1 LIMIT 1');
+                $stmt->execute([$userId]);
+                $id=(int)($stmt->fetchColumn()?:0);
+                $stmt->closeCursor();
+                if ($id>0) return $id;
+            }
+
+            if (!auth_runtime_table_exists($pdo,'kullanicilar')) return null;
+            $u=$pdo->prepare('SELECT email FROM kullanicilar WHERE id=? AND aktif=1 LIMIT 1');
+            $u->execute([$userId]);
+            $email=trim((string)($u->fetchColumn()?:''));
+            $u->closeCursor();
+            if ($email==='') return null;
+
+            $s=$pdo->prepare("SELECT id FROM ogrenciler
+                WHERE (email COLLATE utf8mb4_turkish_ci)=(CONVERT(? USING utf8mb4) COLLATE utf8mb4_turkish_ci)
+                  AND aktif=1
+                ORDER BY id
+                LIMIT 1");
+            $s->execute([$email]);
+            $studentId=(int)($s->fetchColumn()?:0);
+            $s->closeCursor();
+
+            if ($studentId>0 && auth_runtime_column_exists($pdo,'ogrenciler','kullanici_id')) {
+                try {
+                    $pdo->prepare('UPDATE ogrenciler SET kullanici_id=? WHERE id=? AND kullanici_id IS NULL')
+                        ->execute([$userId,$studentId]);
+                } catch (Throwable) {}
+            }
+
+            return $studentId>0?$studentId:null;
         } catch (Throwable) {
             return null;
         }
@@ -222,10 +287,36 @@ if (!function_exists('authenticated_user')) {
             }
 
             $legacyStudent=(int)($_SESSION['ogrenci_id']??0);
-            if ($legacyStudent>0 && auth_runtime_table_exists($pdo,'kullanicilar')) {
-                $stmt=$pdo->prepare('SELECT kullanici_id FROM ogrenciler WHERE id=? AND aktif=1 LIMIT 1');
-                $stmt->execute([$legacyStudent]);
-                $legacyUser=(int)($stmt->fetchColumn()?:0);
+            if ($legacyStudent>0 && auth_runtime_table_exists($pdo,'ogrenciler') && auth_runtime_table_exists($pdo,'kullanicilar')) {
+                $legacyUser=0;
+
+                if (auth_runtime_column_exists($pdo,'ogrenciler','kullanici_id')) {
+                    try {
+                        $stmt=$pdo->prepare('SELECT kullanici_id FROM ogrenciler WHERE id=? AND aktif=1 LIMIT 1');
+                        $stmt->execute([$legacyStudent]);
+                        $legacyUser=(int)($stmt->fetchColumn()?:0);
+                        $stmt->closeCursor();
+                    } catch (Throwable) {}
+                }
+
+                if ($legacyUser<=0) {
+                    try {
+                        $stmt=$pdo->prepare('SELECT email FROM ogrenciler WHERE id=? AND aktif=1 LIMIT 1');
+                        $stmt->execute([$legacyStudent]);
+                        $legacyEmail=trim((string)($stmt->fetchColumn()?:''));
+                        $stmt->closeCursor();
+                        if ($legacyEmail!=='') {
+                            $legacyUser=(int)(auth_user_id_by_email($pdo,$legacyEmail)??0);
+                            if ($legacyUser>0 && auth_runtime_column_exists($pdo,'ogrenciler','kullanici_id')) {
+                                try {
+                                    $pdo->prepare('UPDATE ogrenciler SET kullanici_id=? WHERE id=? AND kullanici_id IS NULL')
+                                        ->execute([$legacyUser,$legacyStudent]);
+                                } catch (Throwable) {}
+                            }
+                        }
+                    } catch (Throwable) {}
+                }
+
                 if ($legacyUser>0) {
                     $user=auth_set_user_session($pdo,$legacyUser,false);
                     if ($user) return $user;
@@ -348,16 +439,28 @@ if (!function_exists('auth_accessible_student_ids')) {
             if ($studentId) $ids[]=$studentId;
         }
 
-        if (auth_user_has_role($user,'veli')) {
-            $stmt=$pdo->prepare('SELECT vo.ogrenci_id FROM veli_ogrenci vo INNER JOIN veliler v ON v.id=vo.veli_id WHERE v.kullanici_id=? AND v.aktif=1');
-            $stmt->execute([$userId]);
-            foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $id) $ids[]=(int)$id;
+        if (auth_user_has_role($user,'veli')
+            && auth_runtime_table_exists($pdo,'veli_ogrenci')
+            && auth_runtime_table_exists($pdo,'veliler')
+            && auth_runtime_column_exists($pdo,'veliler','kullanici_id')) {
+            try {
+                $stmt=$pdo->prepare('SELECT vo.ogrenci_id FROM veli_ogrenci vo INNER JOIN veliler v ON v.id=vo.veli_id WHERE v.kullanici_id=? AND v.aktif=1');
+                $stmt->execute([$userId]);
+                foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $id) $ids[]=(int)$id;
+                $stmt->closeCursor();
+            } catch (Throwable) {}
         }
 
-        if (auth_user_has_role($user,'ogretmen')) {
-            $stmt=$pdo->prepare('SELECT oo.ogrenci_id FROM ogretmen_ogrenci oo INNER JOIN ogretmenler o ON o.id=oo.ogretmen_id WHERE o.kullanici_id=? AND o.aktif=1');
-            $stmt->execute([$userId]);
-            foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $id) $ids[]=(int)$id;
+        if (auth_user_has_role($user,'ogretmen')
+            && auth_runtime_table_exists($pdo,'ogretmen_ogrenci')
+            && auth_runtime_table_exists($pdo,'ogretmenler')
+            && auth_runtime_column_exists($pdo,'ogretmenler','kullanici_id')) {
+            try {
+                $stmt=$pdo->prepare('SELECT oo.ogrenci_id FROM ogretmen_ogrenci oo INNER JOIN ogretmenler o ON o.id=oo.ogretmen_id WHERE o.kullanici_id=? AND o.aktif=1');
+                $stmt->execute([$userId]);
+                foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $id) $ids[]=(int)$id;
+                $stmt->closeCursor();
+            } catch (Throwable) {}
         }
 
         return array_values(array_unique(array_filter($ids,static fn(int $id):bool=>$id>0)));
