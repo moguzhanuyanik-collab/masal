@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 require __DIR__.'/src/bootstrap.php';require __DIR__.'/src/auth.php';require_role('super_admin');
-?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Global Yönetim — İlkAdım</title><link rel="stylesheet" href="super-admin-pages.css?v=1.0.61"></head>
+?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Global Yönetim — İlkAdım</title><link rel="stylesheet" href="super-admin-pages.css?v=1.0.72"></head>
 <body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?><div class="app-shell"><header class="app-topbar"><a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a><div class="sa-page-actions"><a class="sa-page-action" href="super-admin-profil.php" aria-label="Profil"><svg><use href="#sa-user"/></svg></a></div></header>
 <main id="screen"><div class="screen-content"><section class="subpage-intro"><span><svg><use href="#sa-users"/></svg></span><h1>Global Yönetim</h1><p>Kurumdan bağımsız öğrenci ve veli hesapları ile eşleştirmelerini yönetin.</p></section>
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">GLOBAL</span><h2>Yönetim Bölümleri</h2></div></div><div class="sa-hub-list">
