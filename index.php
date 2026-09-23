@@ -14,8 +14,8 @@ require_student_login();
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="description" content="İlkAdım: 1. sınıf için renkli dersler, eğlenceli oyunlar ve kişisel öğrenme yolculuğun.">
   <title>İlkAdım — Benim öğrenme dünyam</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="pwa-icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest?v=1.0.46">
+  <link rel="icon" href="ilkadim-logo.svg" type="image/svg+xml">\n  <link rel="apple-touch-icon" href="ilkadim-logo-192.png">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="v4-features.css?v=1.0.34">
   <script src="api/bootstrap.js.php" defer></script>
