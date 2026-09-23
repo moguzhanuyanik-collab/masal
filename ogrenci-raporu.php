@@ -6,6 +6,7 @@ require __DIR__ . '/src/normalized.php';
 
 $user=require_login();
 $pdo=db();
+$roleHome=auth_role_home($user);
 $studentId=(int)($_GET['id']??0);
 if ($studentId<=0 || !can_access_student((int)$user['id'],$studentId)) {
     http_response_code(403);
@@ -44,7 +45,7 @@ function h_report(string $v): string { return htmlspecialchars($v,ENT_QUOTES,'UT
 <body>
 <div class="app-shell">
 <header class="app-topbar">
-<a class="icon-button" href="rol-paneli.php" aria-label="Geri">←</a>
+<a class="icon-button" href="<?=h_report($roleHome)?>" aria-label="Geri">←</a>
 <span class="topbar-title">Öğrenci Raporu</span>
 <a class="mini-avatar" href="logout.php" aria-label="Çıkış">🚪</a>
 </header>
@@ -83,7 +84,7 @@ $total=(int)$lesson['toplam_modul'];$done=(int)$lesson['tamamlanan_modul'];$perc
 <?php endforeach; ?>
 </section>
 
-<a class="button soft full" href="rol-paneli.php">Yetki Merkezine Dön</a>
+<a class="button soft full" href="<?=h_report($roleHome)?>">Panelime Dön</a>
 </div>
 </main>
 </div>
