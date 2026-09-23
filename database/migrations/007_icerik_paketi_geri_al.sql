@@ -1,0 +1,6 @@
+SET NAMES utf8mb4;
+
+DROP TABLE IF EXISTS etkinlikler;
+DROP TABLE IF EXISTS sorular;
+DROP TABLE IF EXISTS ders_icerikleri;
+DROP TABLE IF EXISTS konular;
