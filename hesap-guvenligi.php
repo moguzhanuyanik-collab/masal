@@ -5,6 +5,7 @@ require __DIR__ . '/src/auth.php';
 
 $user=require_login();
 $pdo=db();
+$roleHome=auth_role_home($user);
 $message='';
 $error='';
 
@@ -80,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 <body>
 <div class="app-shell">
 <header class="app-topbar">
-<a class="icon-button" href="rol-paneli.php" aria-label="Geri">←</a>
+<a class="icon-button" href="<?=h_sec($roleHome)?>" aria-label="Geri">←</a>
 <span class="topbar-title">Hesap Güvenliği</span>
 <a class="mini-avatar" href="logout.php" aria-label="Çıkış">🚪</a>
 </header>
@@ -104,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 <input class="text-input" type="password" name="new_password_repeat" minlength="8" autocomplete="new-password">
 <button class="button primary full" type="submit">Giriş Bilgilerini Kaydet</button>
 </form>
-<a class="button soft full" href="rol-paneli.php">Yetki Merkezine Dön</a>
+<a class="button soft full" href="<?=h_sec($roleHome)?>">Panelime Dön</a>
 </div>
 </main>
 </div>
