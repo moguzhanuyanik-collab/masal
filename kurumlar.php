@@ -32,16 +32,18 @@ function kmh(string $v): string {
 <link rel="stylesheet" href="kurum.css?v=1.0.41">
 <link rel="stylesheet" href="kurumlar-kart.css?v=1.0.51">
 <link rel="stylesheet" href="kurumlar-responsive.css?v=1.0.52">
-<link rel="stylesheet" href="super-admin-pages.css?v=1.0.57">
+<link rel="stylesheet" href="super-admin-pages.css?v=1.0.58">
 <script src="kurumlar-kart.js?v=1.0.53" defer></script>
 <script src="kurumlar-responsive.js?v=1.0.52" defer></script>
 </head>
-<body class="role-page sa-subpage">
+<body class="role-page sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?>
 <div class="role-shell" data-km-root data-section="<?=kmh($initial)?>" data-kurum="<?=$institutionId?>">
 <header class="role-topbar">
-<a class="role-icon" href="super-admin.php">←</a>
-<span class="role-brand"><span>🏫</span><span><strong>Kurumlar Modülü</strong><small>İLKADIM YÖNETİMİ</small></span></span>
-<a class="role-icon" href="hesap-guvenligi.php">👑</a>
+<a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a>
+<div class="sa-page-actions">
+<a class="sa-page-action" href="guncelleme.php" aria-label="Güncellemeler"><svg><use href="#sa-bell"/></svg></a>
+<a class="sa-page-action" href="hesap-guvenligi.php" aria-label="Hesabım"><svg><use href="#sa-user"/></svg></a>
+</div>
 </header>
 
 <main class="role-content">
@@ -117,11 +119,11 @@ function kmh(string $v): string {
 </main>
 
 <nav class="role-bottom">
-<a href="super-admin.php"><span>⌂</span>Panel</a>
-<a class="active" href="kurumlar.php"><span>🏫</span>Kurumlar</a>
-<a href="global-ogrenciler.php"><span>🎒</span>Öğrenciler</a>
-<a href="global-veliler.php"><span>👪</span>Veliler</a>
-<a href="hesap-guvenligi.php"><span>👤</span>Profil</a>
+<a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a>
+<a class="active" href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a>
+<a href="global-ogrenciler.php"><span><svg><use href="#sa-student"/></svg></span>Öğrenciler</a>
+<a href="global-veliler.php"><span><svg><use href="#sa-users"/></svg></span>Veliler</a>
+<a href="hesap-guvenligi.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
 </nav>
 </div>
 
