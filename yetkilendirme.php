@@ -1,0 +1,232 @@
+<?php
+declare(strict_types=1);
+require __DIR__ . '/src/bootstrap.php';
+require __DIR__ . '/src/auth.php';
+
+$user=require_role(['yonetici','super_admin']);
+$pdo=db();
+$isSuper=auth_user_has_role($user,'super_admin');
+$message='';
+$error='';
+
+function h_auth(string $v): string { return htmlspecialchars($v,ENT_QUOTES,'UTF-8'); }
+function require_target_role(PDO $pdo,int $userId,string $role): array {
+    $target=auth_fetch_user($pdo,$userId);
+    if (!$target || !auth_user_has_role($target,$role)) throw new RuntimeException('Seçilen kullanıcı bu role sahip değil.');
+    return $target;
+}
+
+if ($_SERVER['REQUEST_METHOD']==='POST') {
+    try {
+        if (!verify_csrf($_POST['csrf']??null)) throw new RuntimeException('Güvenlik doğrulaması başarısız.');
+        $action=(string)($_POST['action']??'');
+
+        if ($action==='create_user') {
+            $name=trim((string)($_POST['ad_soyad']??''));
+            $email=mb_strtolower(trim((string)($_POST['email']??'')));
+            $password=(string)($_POST['password']??'');
+            $role=(string)($_POST['rol']??'');
+
+            $allowed=$isSuper?['veli','ogretmen','yonetici']:['veli','ogretmen'];
+            if (!in_array($role,$allowed,true)) throw new RuntimeException('Bu rolü oluşturma yetkin yok.');
+            if (mb_strlen($name)<2 || mb_strlen($name)>190) throw new RuntimeException('Ad soyad bilgisini kontrol et.');
+            if (!filter_var($email,FILTER_VALIDATE_EMAIL)) throw new RuntimeException('Geçerli bir e-posta yaz.');
+            if (mb_strlen($password)<8) throw new RuntimeException('Şifre en az 8 karakter olmalı.');
+
+            $hash=password_hash($password,PASSWORD_DEFAULT);
+            if (!is_string($hash)||$hash==='') throw new RuntimeException('Şifre oluşturulamadı.');
+
+            $pdo->beginTransaction();
+            try {
+                $stmt=$pdo->prepare('INSERT INTO kullanicilar (email,sifre_hash,ad_soyad,ana_rol,aktif) VALUES (?,?,?,?,1)');
+                $stmt->execute([$email,$hash,$name,$role]);
+                $targetId=(int)$pdo->lastInsertId();
+                $pdo->prepare('INSERT INTO kullanici_rolleri (kullanici_id,rol) VALUES (?,?)')->execute([$targetId,$role]);
+                if ($role==='veli') {
+                    $pdo->prepare('INSERT INTO veliler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')->execute([$targetId,$name]);
+                } elseif ($role==='ogretmen') {
+                    $pdo->prepare('INSERT INTO ogretmenler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')->execute([$targetId,$name]);
+                }
+                $pdo->commit();
+            } catch (Throwable $e) {
+                if ($pdo->inTransaction()) $pdo->rollBack();
+                throw $e;
+            }
+            auth_audit($pdo,(int)$user['id'],$targetId,'kullanici_olustur','Rol: '.$role);
+            $message='Yeni kullanıcı hesabı oluşturuldu.';
+        }
+
+        if ($action==='add_role') {
+            if (!$isSuper) throw new RuntimeException('Ek rol verme işlemi yalnızca Süper Admin içindir.');
+            $targetId=(int)($_POST['kullanici_id']??0);
+            $role=(string)($_POST['rol']??'');
+            if (!in_array($role,['veli','ogretmen','yonetici','super_admin'],true)) throw new RuntimeException('Geçersiz rol.');
+            $target=auth_fetch_user($pdo,$targetId);
+            if (!$target) throw new RuntimeException('Kullanıcı bulunamadı.');
+            $pdo->prepare('INSERT IGNORE INTO kullanici_rolleri (kullanici_id,rol) VALUES (?,?)')->execute([$targetId,$role]);
+            if ($role==='veli') $pdo->prepare('INSERT IGNORE INTO veliler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')->execute([$targetId,(string)$target['ad_soyad']]);
+            if ($role==='ogretmen') $pdo->prepare('INSERT IGNORE INTO ogretmenler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')->execute([$targetId,(string)$target['ad_soyad']]);
+            auth_audit($pdo,(int)$user['id'],$targetId,'rol_ekle','Rol: '.$role);
+            $message='Rol kullanıcıya eklendi.';
+        }
+
+        if ($action==='link_student') {
+            $targetId=(int)($_POST['kullanici_id']??0);
+            $studentId=(int)($_POST['ogrenci_id']??0);
+            $role=(string)($_POST['rol']??'');
+            if (!in_array($role,['veli','ogretmen'],true)) throw new RuntimeException('Yalnızca veli veya öğretmen öğrenciyle eşleştirilebilir.');
+            $target=require_target_role($pdo,$targetId,$role);
+            $check=$pdo->prepare('SELECT id FROM ogrenciler WHERE id=? AND aktif=1 LIMIT 1');
+            $check->execute([$studentId]);
+            if (!$check->fetchColumn()) throw new RuntimeException('Öğrenci bulunamadı.');
+
+            if ($role==='veli') {
+                $pdo->prepare('INSERT IGNORE INTO veliler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')->execute([$targetId,(string)$target['ad_soyad']]);
+                $p=$pdo->prepare('SELECT id FROM veliler WHERE kullanici_id=? LIMIT 1');$p->execute([$targetId]);$profileId=(int)$p->fetchColumn();
+                $pdo->prepare('INSERT IGNORE INTO veli_ogrenci (veli_id,ogrenci_id) VALUES (?,?)')->execute([$profileId,$studentId]);
+            } else {
+                $pdo->prepare('INSERT IGNORE INTO ogretmenler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')->execute([$targetId,(string)$target['ad_soyad']]);
+                $p=$pdo->prepare('SELECT id FROM ogretmenler WHERE kullanici_id=? LIMIT 1');$p->execute([$targetId]);$profileId=(int)$p->fetchColumn();
+                $pdo->prepare('INSERT IGNORE INTO ogretmen_ogrenci (ogretmen_id,ogrenci_id) VALUES (?,?)')->execute([$profileId,$studentId]);
+            }
+            auth_audit($pdo,(int)$user['id'],$targetId,'ogrenci_eslestir','Rol: '.$role.' Öğrenci: '.$studentId);
+            $message='Öğrenci eşleştirmesi kaydedildi.';
+        }
+
+        if ($action==='toggle_active') {
+            $targetId=(int)($_POST['kullanici_id']??0);
+            if ($targetId===(int)$user['id']) throw new RuntimeException('Kendi hesabını buradan kapatamazsın.');
+            $target=auth_fetch_user($pdo,$targetId);
+            if (!$target) throw new RuntimeException('Kullanıcı bulunamadı.');
+            if (!$isSuper && auth_user_has_role($target,['yonetici','super_admin'])) throw new RuntimeException('Bu hesabı değiştirme yetkin yok.');
+            $current=(int)($_POST['aktif']??0)===1;
+            $pdo->prepare('UPDATE kullanicilar SET aktif=? WHERE id=?')->execute([$current?0:1,$targetId]);
+            auth_audit($pdo,(int)$user['id'],$targetId,'hesap_durum',($current?'pasif':'aktif'));
+            $message='Kullanıcı durumu güncellendi.';
+        }
+    } catch (PDOException $e) {
+        $error=$e->getCode()==='23000'?'Bu e-posta veya eşleştirme zaten kullanılıyor.':'Veritabanı işlemi tamamlanamadı.';
+    } catch (Throwable $e) {
+        $error=$e->getMessage();
+    }
+}
+
+$users=$pdo->query("SELECT k.id,k.email,k.ad_soyad,k.ana_rol,k.aktif,
+    GROUP_CONCAT(r.rol ORDER BY r.rol SEPARATOR ',') roller
+    FROM kullanicilar k
+    LEFT JOIN kullanici_rolleri r ON r.kullanici_id=k.id
+    GROUP BY k.id,k.email,k.ad_soyad,k.ana_rol,k.aktif
+    ORDER BY k.id")->fetchAll();
+$students=$pdo->query("SELECT id,email FROM ogrenciler WHERE aktif=1 ORDER BY id")->fetchAll();
+
+$assignable=array_values(array_filter($users,static function(array $u):bool{
+    $roles=explode(',',(string)($u['roller']??''));
+    return in_array('veli',$roles,true)||in_array('ogretmen',$roles,true);
+}));
+?><!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#f8f7fc">
+<title>Kullanıcı Yönetimi — İlkAdım</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell">
+<header class="app-topbar">
+<a class="icon-button" href="rol-paneli.php" aria-label="Geri">←</a>
+<span class="topbar-title">Kullanıcı Yönetimi</span>
+<a class="mini-avatar" href="logout.php" aria-label="Çıkış">🚪</a>
+</header>
+<main id="screen" tabindex="-1">
+<div class="screen-content settings-screen">
+<section class="subpage-intro">
+<span>👥</span><h1>Gerçek Yetkilendirme</h1>
+<p>Hesap oluştur, rol ver ve veli/öğretmenleri yalnızca yetkili oldukları öğrencilerle eşleştir.</p>
+</section>
+
+<?php if ($message!==''): ?><section class="settings-block local-data"><p><?=h_auth($message)?></p></section><?php endif; ?>
+<?php if ($error!==''): ?><section class="settings-block local-data"><p><?=h_auth($error)?></p></section><?php endif; ?>
+
+<form method="post" class="settings-block">
+<input type="hidden" name="csrf" value="<?=h_auth(csrf_token())?>">
+<input type="hidden" name="action" value="create_user">
+<h2>Yeni kullanıcı</h2>
+<label class="field-label">Ad Soyad</label>
+<input class="text-input" name="ad_soyad" required maxlength="190">
+<label class="field-label">E-posta</label>
+<input class="text-input" type="email" name="email" required>
+<label class="field-label">Geçici şifre</label>
+<input class="text-input" type="password" name="password" minlength="8" required>
+<label class="field-label">Rol</label>
+<select class="text-input" name="rol" required>
+<option value="veli">Veli</option>
+<option value="ogretmen">Öğretmen</option>
+<?php if ($isSuper): ?><option value="yonetici">Yönetici</option><?php endif; ?>
+</select>
+<button class="button primary full" type="submit">Kullanıcı Oluştur</button>
+</form>
+
+<form method="post" class="settings-block">
+<input type="hidden" name="csrf" value="<?=h_auth(csrf_token())?>">
+<input type="hidden" name="action" value="link_student">
+<h2>Öğrenci eşleştir</h2>
+<label class="field-label">Veli / Öğretmen</label>
+<select class="text-input" name="kullanici_id" required>
+<?php foreach ($assignable as $u): ?>
+<option value="<?=(int)$u['id']?>"><?=h_auth((string)$u['email'])?> — <?=h_auth((string)$u['roller'])?></option>
+<?php endforeach; ?>
+</select>
+<label class="field-label">Eşleştirme rolü</label>
+<select class="text-input" name="rol" required><option value="veli">Veli</option><option value="ogretmen">Öğretmen</option></select>
+<label class="field-label">Öğrenci</label>
+<select class="text-input" name="ogrenci_id" required>
+<?php foreach ($students as $s): ?><option value="<?=(int)$s['id']?>"><?=h_auth((string)($s['email']??('Öğrenci #'.$s['id'])))?></option><?php endforeach; ?>
+</select>
+<button class="button primary full" type="submit">Eşleştirmeyi Kaydet</button>
+</form>
+
+<?php if ($isSuper): ?>
+<form method="post" class="settings-block">
+<input type="hidden" name="csrf" value="<?=h_auth(csrf_token())?>">
+<input type="hidden" name="action" value="add_role">
+<h2>Mevcut kullanıcıya ek rol</h2>
+<select class="text-input" name="kullanici_id" required>
+<?php foreach ($users as $u): ?><option value="<?=(int)$u['id']?>"><?=h_auth((string)$u['email'])?></option><?php endforeach; ?>
+</select>
+<select class="text-input" name="rol" required>
+<option value="veli">Veli</option><option value="ogretmen">Öğretmen</option>
+<option value="yonetici">Yönetici</option><option value="super_admin">Süper Admin</option>
+</select>
+<button class="button soft full" type="submit">Rol Ekle</button>
+</form>
+<?php endif; ?>
+
+<section class="settings-block">
+<h2>Kullanıcılar</h2>
+<?php foreach ($users as $u): ?>
+<div class="history-item">
+<span><?=((int)$u['aktif']===1?'🟢':'⚪')?></span>
+<div>
+<strong><?=h_auth((string)$u['email'])?></strong>
+<small><?=h_auth((string)$u['ad_soyad'])?> · <?=h_auth((string)$u['roller'])?></small>
+</div>
+<?php if ((int)$u['id']!==(int)$user['id'] && ($isSuper || !preg_match('/(^|,)(yonetici|super_admin)(,|$)/',(string)$u['roller']))): ?>
+<form method="post">
+<input type="hidden" name="csrf" value="<?=h_auth(csrf_token())?>">
+<input type="hidden" name="action" value="toggle_active">
+<input type="hidden" name="kullanici_id" value="<?=(int)$u['id']?>">
+<input type="hidden" name="aktif" value="<?=(int)$u['aktif']?>">
+<button class="button soft" type="submit"><?=((int)$u['aktif']===1?'Pasifleştir':'Aktifleştir')?></button>
+</form>
+<?php endif; ?>
+</div>
+<?php endforeach; ?>
+</section>
+<a class="button soft full" href="rol-paneli.php">Yetki Merkezine Dön</a>
+</div>
+</main>
+</div>
+</body>
+</html>
