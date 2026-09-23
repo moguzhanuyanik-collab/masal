@@ -126,7 +126,7 @@ $canManage=auth_user_has_role($user,['yonetici','super_admin']);
 <?=$s['completed_steps']?> ders adımı · <?=$s['games']?> oyun · <?=$s['stars']?> yıldız
 </small>
 </div>
-<a href="api/report.php?student_id=<?=$student['id']?>" aria-label="Raporu aç">→</a>
+<a href="ogrenci-raporu.php?id=<?=$student['id']?>" aria-label="Raporu aç">→</a>
 </div>
 <?php endforeach; endif; ?>
 </section>
