@@ -58,13 +58,19 @@ function km_member_rows(PDO $pdo,string $role,int $institutionId=0): array {
     $phoneExpr='NULL';
     $join='';
     if($role==='ogretmen'){
-        $join="LEFT JOIN ogretmenler p ON p.kullanici_id=u.id";
-        $phoneExpr='p.telefon';
+        if(auth_runtime_table_exists($pdo,'ogretmenler') && auth_runtime_column_exists($pdo,'ogretmenler','kullanici_id')){
+            $join="LEFT JOIN ogretmenler p ON p.kullanici_id=u.id";
+            if(auth_runtime_column_exists($pdo,'ogretmenler','telefon')) $phoneExpr='p.telefon';
+        }
     }elseif($role==='veli'){
-        $join="LEFT JOIN veliler p ON p.kullanici_id=u.id";
-        $phoneExpr='p.telefon';
+        if(auth_runtime_table_exists($pdo,'veliler') && auth_runtime_column_exists($pdo,'veliler','kullanici_id')){
+            $join="LEFT JOIN veliler p ON p.kullanici_id=u.id";
+            if(auth_runtime_column_exists($pdo,'veliler','telefon')) $phoneExpr='p.telefon';
+        }
     }elseif($role==='ogrenci'){
-        $join="LEFT JOIN ogrenciler p ON p.kullanici_id=u.id";
+        if(auth_runtime_table_exists($pdo,'ogrenciler') && auth_runtime_column_exists($pdo,'ogrenciler','kullanici_id')){
+            $join="LEFT JOIN ogrenciler p ON p.kullanici_id=u.id";
+        }
     }
 
     $sql="SELECT kk.kurum_id,k.ad kurum_adi,k.kod kurum_kodu,
