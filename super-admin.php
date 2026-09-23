@@ -30,11 +30,11 @@ $syncCount=auth_runtime_table_exists($pdo,'pwa_sync_islemleri')?sa_scalar($pdo,'
 ?><!doctype html><html lang="tr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Süper Admin — İlkAdım</title>
-<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.41">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.42">
 </head><body class="role-page"><div class="role-shell">
 <header class="role-topbar">
 <a class="role-brand" href="super-admin.php"><span>🌞</span><span><strong>İlkAdım</strong><small>SÜPER ADMIN</small></span></a>
-<div class="role-actions"><a class="role-icon" href="rol-paneli.php">🛡️</a><a class="role-icon" href="hesap-guvenligi.php">👑</a></div>
+<div class="role-actions"><a class="role-icon" href="super-admin.php">🛡️</a><a class="role-icon" href="hesap-guvenligi.php">👑</a></div>
 </header>
 <main class="role-content">
 <section class="role-hero"><span class="eyeline">SİSTEM YÖNETİMİ</span><h1>Kurumlar ve kullanıcılar tek merkezde.</h1>
