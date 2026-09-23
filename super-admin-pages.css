@@ -124,3 +124,19 @@ body.sa-subpage .km-toast{border-radius:12px;background:#262d42;color:#fff;box-s
  body.sa-subpage .km-card-grid{gap:8px}
  body.sa-subpage .km-module-card{padding:13px;min-height:116px}
 }
+
+/* Ana panel ile ortak marka ve SVG ikon dili */
+body.sa-subpage .sa-sub-icon-library{position:absolute;width:0;height:0;overflow:hidden}
+body.sa-subpage .sa-page-brand{display:flex;align-items:center;gap:11px;min-width:0}
+body.sa-subpage .sa-brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,var(--sap-primary),var(--sap-primary-dark));color:#fff;font-size:13px;font-weight:1000;letter-spacing:-.3px;box-shadow:0 8px 18px rgba(91,75,219,.22);flex:0 0 auto}
+body.sa-subpage .sa-page-brand strong{display:block;font-size:19px;font-weight:900;letter-spacing:-.45px}
+body.sa-subpage .sa-page-brand small{display:block;margin-top:2px;font-size:8.5px;font-weight:800;color:var(--sap-muted);letter-spacing:.25px}
+body.sa-subpage .sa-page-actions{display:flex;gap:8px}
+body.sa-subpage .sa-page-action{width:40px;height:40px;display:grid;place-items:center;border-radius:13px;background:#fff;border:1px solid var(--sap-line);color:#555f73;box-shadow:0 5px 16px rgba(38,45,70,.04)}
+body.sa-subpage .sa-page-action svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+body.sa-subpage .role-bottom svg,body.sa-subpage .app-nav svg,
+body.sa-subpage .role-hero-art svg,body.sa-subpage .subpage-intro>span:first-child svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+body.sa-subpage .role-bottom svg,body.sa-subpage .app-nav svg{font-size:18px}
+body.sa-subpage .role-hero-art svg{font-size:30px}
+body.sa-subpage .subpage-intro>span:first-child svg{font-size:24px}
+body.sa-subpage .role-hero-art,body.sa-subpage .subpage-intro>span:first-child{color:#e3e0ff}
