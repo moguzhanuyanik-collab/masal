@@ -13,6 +13,8 @@ UPDATE veliler SET aktif=0;
 UPDATE ogretmenler SET aktif=0;
 UPDATE kurum_kullanicilari SET aktif=0;
 UPDATE ogretmen_icerikleri SET aktif=0;
+UPDATE kullanici_oturum_tokenlari SET son_kullanma_tarihi=NOW();
+UPDATE ogrenci_oturum_tokenlari SET son_kullanma_tarihi=NOW();
 
 INSERT INTO kullanicilar
 (email,sifre_hash,ad_soyad,ana_rol,aktif,son_giris_tarihi,son_giris_ip)
