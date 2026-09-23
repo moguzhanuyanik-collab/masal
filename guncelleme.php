@@ -14,10 +14,12 @@ try {
     $authPdo=db();
     $superAdminReady=false;
     if (auth_runtime_table_exists($authPdo,'kullanicilar') && auth_runtime_table_exists($authPdo,'kullanici_rolleri')) {
-        $superAdminReady=(int)$authPdo->query("SELECT COUNT(DISTINCT k.id)
+        $superAdminStmt=$authPdo->query("SELECT COUNT(DISTINCT k.id)
             FROM kullanicilar k
             INNER JOIN kullanici_rolleri r ON r.kullanici_id=k.id AND r.rol='super_admin'
-            WHERE k.aktif=1")->fetchColumn()>0;
+            WHERE k.aktif=1");
+        $superAdminReady=(int)($superAdminStmt?$superAdminStmt->fetchColumn():0)>0;
+        if($superAdminStmt)$superAdminStmt->closeCursor();
     }
     if ($superAdminReady) {
         $updateUser=authenticated_user();
