@@ -44,7 +44,7 @@ try{
  $kurumlar=$s?$s->fetchAll():[]; if($s)$s->closeCursor();
 }catch(Throwable){}
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Kurumlar — İlkAdım</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="kurum.css?v=1.0.40"></head>
+<title>Kurumlar — İlkAdım</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="kurum.css?v=1.0.41"></head>
 <body class="role-page"><div class="role-shell">
 <header class="role-topbar"><a class="role-icon" href="super-admin.php">←</a><span class="role-brand"><span>🏫</span><span><strong>Kurumlar</strong><small>İLKADIM YÖNETİMİ</small></span></span><a class="role-icon" href="hesap-guvenligi.php">👑</a></header>
 <main class="role-content">
@@ -66,11 +66,11 @@ try{
 <div class="role-list">
 <?php if(!$kurumlar):?><div class="role-empty"><span>🏫</span>Kurum bulunamadı.</div>
 <?php else:foreach($kurumlar as $k):?>
-<a class="role-row" href="kurum-kullanicilari.php?kurum_id=<?=(int)$k['id']?>">
+<a class="role-row" href="kurum-detay.php?kurum_id=<?=(int)$k['id']?>">
 <span><?=$k['tur']==='platform'?'🌞':'🏫'?></span><div><strong><?=kr_h((string)$k['ad'])?></strong>
 <small><?=kr_h((string)$k['tur'])?> · İçerik: <?=kr_h((string)$k['icerik_kaynagi'])?> · Yön. <?= (int)$k['yonetici_sayisi']?> · Öğrt. <?= (int)$k['ogretmen_sayisi']?> · Veli <?= (int)$k['veli_sayisi']?> · Öğr. <?= (int)$k['ogrenci_sayisi']?></small></div><span class="role-pill <?=((int)$k['aktif']===1?'ok':'off')?>"><?=((int)$k['aktif']===1?'Aktif':'Pasif')?></span></a>
 <?php endforeach;endif;?>
 </div></section>
 </main>
-<nav class="role-bottom"><a href="super-admin.php"><span>⌂</span>Panel</a><a class="active" href="kurumlar.php"><span>🏫</span>Kurumlar</a><a href="kurum-kullanicilari.php"><span>👥</span>Kullanıcılar</a><a href="rol-paneli.php"><span>🛡️</span>Yetkiler</a></nav>
+<nav class="role-bottom"><a href="super-admin.php"><span>⌂</span>Panel</a><a class="active" href="kurumlar.php"><span>🏫</span>Kurumlar</a><a href="global-ogrenciler.php"><span>🎒</span>Öğrenciler</a><a href="global-veliler.php"><span>👪</span>Veliler</a></nav>
 </div></body></html>
