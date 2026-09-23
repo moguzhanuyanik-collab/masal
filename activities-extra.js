@@ -158,7 +158,7 @@
       board.innerHTML='<div class="puzzle-count"><span>KEŞİF '+(round+1)+' / '+total+'</span><span>⭐</span></div>'+
         progress(Math.round(round/total*100),'Oyun ilerlemesi')+
         '<div class="puzzle-visual">'+esc(q.visual)+'</div>'+
-        '<h2 class="puzzle-question">'+esc(q.question)+'</h2>'+\
+        '<h2 class="puzzle-question">'+esc(q.question)+'</h2>'+
         '<button class="button soft" type="button" id="listen-extra-question">🔊 Soruyu Dinle</button>'+
         '<div class="answers">'+q.options.map((o,i)=>'<button class="answer" data-extra-choice="'+i+'">'+esc(o)+'</button>').join('')+'</div>'+
         '<p class="feedback" role="status" aria-live="polite">💡 Biraz düşün, bir cevap seç.</p><div id="next-extra-round"></div>';
