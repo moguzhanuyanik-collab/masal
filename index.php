@@ -24,7 +24,7 @@ require_student_login();
   <script src="global-audio-feedback.js?v=1.0.33" defer></script>
   <script src="lesson-ui-fix.js?v=1.0.32" defer></script>
   <script src="settings-account.js" defer></script>
-  <script src="profile-update-link.js" defer></script>
+  <script src="profile-update-link.js?v=1.0.35" defer></script>
   <script src="v4-features.js?v=1.0.34" defer></script>
   <script src="pwa-store.js?v=1.0.34" defer></script>
   <script src="pwa-v4.js?v=1.0.34" defer></script>
