@@ -12,7 +12,7 @@ function github_repo_info(array $gh): array {
 }
 
 function updater_headers(array $gh): array {
-    $h=['User-Agent: IlkAdim-Updater/1.0.8','Accept: */*','Cache-Control: no-cache, no-store, must-revalidate','Pragma: no-cache'];
+    $h=['User-Agent: IlkAdim-Updater/1.0.11','Accept: */*','Cache-Control: no-cache, no-store, must-revalidate','Pragma: no-cache'];
     $token=trim((string)($gh['token']??''));
     if($token!=='') $h[]='Authorization: Bearer '.$token;
     return $h;
@@ -28,7 +28,7 @@ function updater_http(string $url,array $gh,?string $target=null): string|array 
         CURLOPT_TIMEOUT=>120,
         CURLOPT_FAILONERROR=>false,
         CURLOPT_HTTPHEADER=>updater_headers($gh),
-        CURLOPT_USERAGENT=>'IlkAdim-Updater/1.0.8',
+        CURLOPT_USERAGENT=>'IlkAdim-Updater/1.0.11',
         CURLOPT_FRESH_CONNECT=>true,
         CURLOPT_FORBID_REUSE=>true,
     ];
@@ -167,61 +167,122 @@ function ensure_updater_schema(PDO $pdo): void {
 }
 
 
+function auth_table_exists(PDO $pdo,string $table): bool {
+    $stmt=$pdo->prepare("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name=?");
+    $stmt->execute([$table]);
+    return (int)$stmt->fetchColumn()>0;
+}
+
+function auth_column_map(PDO $pdo,string $table): array {
+    $out=[];
+    foreach($pdo->query("SHOW COLUMNS FROM `".$table."`")?:[] as $row){
+        if(isset($row['Field'])) $out[(string)$row['Field']]=true;
+    }
+    return $out;
+}
+
 function ensure_student_auth_schema(PDO $pdo): void {
-    $cols=[];
-    foreach($pdo->query('SHOW COLUMNS FROM ogrenciler')?:[] as $row){
-        if(isset($row['Field'])) $cols[(string)$row['Field']]=true;
-    }
-
-    $columnSql=[
-        'email'=>"ALTER TABLE ogrenciler ADD COLUMN email VARCHAR(190) NULL AFTER ad",
-        'sifre_hash'=>"ALTER TABLE ogrenciler ADD COLUMN sifre_hash VARCHAR(255) NULL AFTER email",
-        'son_giris_tarihi'=>"ALTER TABLE ogrenciler ADD COLUMN son_giris_tarihi DATETIME NULL AFTER sifre_hash",
-        'son_giris_ip'=>"ALTER TABLE ogrenciler ADD COLUMN son_giris_ip VARCHAR(45) NULL AFTER son_giris_tarihi",
-        'profil_fotografi'=>"ALTER TABLE ogrenciler ADD COLUMN profil_fotografi LONGTEXT NULL"
-    ];
-    foreach($columnSql as $name=>$sql){
-        if(!isset($cols[$name])) $pdo->exec($sql);
-    }
-
-    $hasEmailIndex=false;
-    foreach($pdo->query("SHOW INDEX FROM ogrenciler")?:[] as $row){
-        if(($row['Key_name']??'')==='uk_ogrenci_email') {$hasEmailIndex=true;break;}
-    }
-    if(!$hasEmailIndex){
-        $pdo->exec("ALTER TABLE ogrenciler ADD UNIQUE KEY uk_ogrenci_email (email)");
-    }
-
-    $pdo->exec("CREATE TABLE IF NOT EXISTS ogrenci_oturum_tokenlari (
-        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-        ogrenci_id INT UNSIGNED NOT NULL,
-        token_hash CHAR(64) NOT NULL,
-        son_kullanma_tarihi DATETIME NOT NULL,
-        olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (id),
-        UNIQUE KEY uk_ogrenci_oturum_token (token_hash),
-        KEY ix_ogrenci_oturum_student (ogrenci_id),
-        KEY ix_ogrenci_oturum_expire (son_kullanma_tarihi)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
-
-    $testEmail='test@ilkadim.local';
-    $testHash='$2y$12$Ly6z0Sws1jTLLj2gpBPHAentpxI0zVP0g9tV4JoHqfewDaf8hRsrW';
-
-    $s=$pdo->prepare('SELECT id FROM ogrenciler WHERE email=? LIMIT 1');
-    $s->execute([$testEmail]);
-    $testId=(int)($s->fetchColumn()?:0);
-
-    if($testId>0){
-        $pdo->prepare('UPDATE ogrenciler SET sifre_hash=?, aktif=1 WHERE id=?')->execute([$testHash,$testId]);
+    if(!auth_table_exists($pdo,'ogrenciler')){
+        $pdo->exec("CREATE TABLE ogrenciler (
+            id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            ad VARCHAR(190) NOT NULL DEFAULT 'Ogrenci',
+            email VARCHAR(190) NULL,
+            sifre_hash VARCHAR(255) NULL,
+            avatar VARCHAR(32) NULL DEFAULT '🌞',
+            profil_fotografi LONGTEXT NULL,
+            aktif TINYINT(1) NOT NULL DEFAULT 1,
+            son_giris_tarihi DATETIME NULL,
+            son_giris_ip VARCHAR(45) NULL,
+            olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            guncellenme_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY ix_ogrenci_email (email)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
     }else{
-        $first=$pdo->query('SELECT id FROM ogrenciler WHERE aktif=1 ORDER BY id LIMIT 1');
-        $firstId=(int)($first?$first->fetchColumn():0);
-        if($firstId>0){
-            $pdo->prepare('UPDATE ogrenciler SET email=?, sifre_hash=? WHERE id=?')->execute([$testEmail,$testHash,$firstId]);
-        }else{
-            $pdo->prepare("INSERT INTO ogrenciler (ad,email,sifre_hash,avatar,aktif) VALUES (?,?,?,?,1)")
-                ->execute(['Test Ogrenci',$testEmail,$testHash,'🌞']);
+        $cols=auth_column_map($pdo,'ogrenciler');
+
+        if(!isset($cols['id'])){
+            throw new RuntimeException('ogrenciler tablosunda id kolonu yok. Otomatik onarim guvenli degil.');
         }
+
+        $columnSql=[
+            'ad'=>"ALTER TABLE ogrenciler ADD COLUMN ad VARCHAR(190) NOT NULL DEFAULT 'Ogrenci' AFTER id",
+            'email'=>"ALTER TABLE ogrenciler ADD COLUMN email VARCHAR(190) NULL",
+            'sifre_hash'=>"ALTER TABLE ogrenciler ADD COLUMN sifre_hash VARCHAR(255) NULL",
+            'avatar'=>"ALTER TABLE ogrenciler ADD COLUMN avatar VARCHAR(32) NULL DEFAULT '🌞'",
+            'profil_fotografi'=>"ALTER TABLE ogrenciler ADD COLUMN profil_fotografi LONGTEXT NULL",
+            'aktif'=>"ALTER TABLE ogrenciler ADD COLUMN aktif TINYINT(1) NOT NULL DEFAULT 1",
+            'son_giris_tarihi'=>"ALTER TABLE ogrenciler ADD COLUMN son_giris_tarihi DATETIME NULL",
+            'son_giris_ip'=>"ALTER TABLE ogrenciler ADD COLUMN son_giris_ip VARCHAR(45) NULL"
+        ];
+        foreach($columnSql as $name=>$sql){
+            if(!isset($cols[$name])) $pdo->exec($sql);
+        }
+
+        $hasEmailIndex=false;
+        foreach($pdo->query("SHOW INDEX FROM ogrenciler")?:[] as $row){
+            if(($row['Column_name']??'')==='email'){$hasEmailIndex=true;break;}
+        }
+        if(!$hasEmailIndex){
+            try{$pdo->exec("ALTER TABLE ogrenciler ADD KEY ix_ogrenci_email (email)");}catch(Throwable $ignored){}
+        }
+    }
+
+    if(!auth_table_exists($pdo,'ogrenci_oturum_tokenlari')){
+        $pdo->exec("CREATE TABLE ogrenci_oturum_tokenlari (
+            id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+            ogrenci_id INT UNSIGNED NOT NULL,
+            token_hash CHAR(64) NOT NULL,
+            son_kullanma_tarihi DATETIME NOT NULL,
+            olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY uk_ogrenci_oturum_token_v11 (token_hash),
+            KEY ix_ogrenci_oturum_student_v11 (ogrenci_id),
+            KEY ix_ogrenci_oturum_expire_v11 (son_kullanma_tarihi)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+    }else{
+        $cols=auth_column_map($pdo,'ogrenci_oturum_tokenlari');
+        $tokenColumns=[
+            'ogrenci_id'=>"ALTER TABLE ogrenci_oturum_tokenlari ADD COLUMN ogrenci_id INT UNSIGNED NOT NULL DEFAULT 0",
+            'token_hash'=>"ALTER TABLE ogrenci_oturum_tokenlari ADD COLUMN token_hash CHAR(64) NULL",
+            'son_kullanma_tarihi'=>"ALTER TABLE ogrenci_oturum_tokenlari ADD COLUMN son_kullanma_tarihi DATETIME NULL",
+            'olusturulma_tarihi'=>"ALTER TABLE ogrenci_oturum_tokenlari ADD COLUMN olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP"
+        ];
+        foreach($tokenColumns as $name=>$sql){
+            if(!isset($cols[$name])) $pdo->exec($sql);
+        }
+    }
+
+    $email='masal@gmail.com';
+    $passwordHash=password_hash('12345678',PASSWORD_DEFAULT);
+    if(!is_string($passwordHash)||$passwordHash===''){
+        throw new RuntimeException('Test ogrenci sifresi olusturulamadi.');
+    }
+
+    $stmt=$pdo->prepare('SELECT id FROM ogrenciler WHERE email=? LIMIT 1');
+    $stmt->execute([$email]);
+    $studentId=(int)($stmt->fetchColumn()?:0);
+
+    if($studentId<=0){
+        $old=$pdo->prepare('SELECT id FROM ogrenciler WHERE email=? LIMIT 1');
+        $old->execute(['test@ilkadim.local']);
+        $studentId=(int)($old->fetchColumn()?:0);
+    }
+
+    if($studentId<=0){
+        $first=$pdo->query('SELECT id FROM ogrenciler WHERE aktif=1 ORDER BY id LIMIT 1');
+        $studentId=(int)($first?$first->fetchColumn():0);
+    }
+
+    if($studentId>0){
+        $pdo->prepare("UPDATE ogrenciler
+            SET ad=CASE WHEN ad IS NULL OR ad='' THEN 'Test Ogrenci' ELSE ad END,
+                email=?,sifre_hash=?,aktif=1
+            WHERE id=?")
+            ->execute([$email,$passwordHash,$studentId]);
+    }else{
+        $pdo->prepare("INSERT INTO ogrenciler (ad,email,sifre_hash,avatar,aktif) VALUES (?,?,?,?,1)")
+            ->execute(['Test Ogrenci',$email,$passwordHash,'🌞']);
     }
 }
 
@@ -287,6 +348,7 @@ function install_github_update(string $root,array $gh,array $preserve): array {
 
         $sourceRoot=detect_update_root($extractDir);
         copy_update_tree($sourceRoot,$root,$preserve);
+        ensure_student_auth_schema($pdo);
         $migrations=run_pending_migrations($pdo,$root);
         $pdo->prepare("INSERT INTO sistem_ayarlar (ayar_anahtari,ayar_degeri) VALUES ('uygulama_surumu',?) ON DUPLICATE KEY UPDATE ayar_degeri=VALUES(ayar_degeri)")->execute([$remote['version']]);
         $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='basarili',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute(['Guncelleme tamamlandi. Yedek: '.basename($backupPath),$logId]);
