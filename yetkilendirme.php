@@ -171,7 +171,7 @@ $links=array_merge($parentLinks?:[],$teacherLinks?:[]);
 <meta name="theme-color" content="#f8f7fc">
 <title>Kullanıcı Yönetimi — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="super-admin-pages.css?v=1.0.61">
+<link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
 </head>
 <body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?>
 <div class="app-shell">
