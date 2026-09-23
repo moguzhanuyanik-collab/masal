@@ -109,7 +109,7 @@ function h(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8')
 <button class="button primary full" type="submit">Giriş Yap →</button>
 </form>
 
-<p class="little-note">Test: test@ilkadim.local</p>
+<p class="little-note">Test: masal@gmail.com</p>
 </div>
 </main>
 </div>
