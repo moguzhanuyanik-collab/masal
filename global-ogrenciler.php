@@ -17,8 +17,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             $uid=ky_create_user(
                 $pdo,$user,'ogrenci',
                 (string)($_POST['ad_soyad']??''),
-                (string)($_POST['email']??''),
-                (string)($_POST['password']??''),
+                (string)($_POST['yeni_kullanici_eposta']??''),
+                (string)($_POST['yeni_kullanici_sifre']??''),
                 null
             );
             $studentId=auth_student_id_for_user($pdo,$uid);
@@ -64,12 +64,12 @@ $parents=ky_global_parents($pdo);
 <?php if($error!==''):?><div class="role-note"><span>⚠️</span><p><?=ky_h($error)?></p></div><?php endif;?>
 
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">YENİ ÖĞRENCİ</span><h2>Global Öğrenci Ekle</h2></div></div>
-<form class="role-form" method="post">
+<form class="role-form" method="post" autocomplete="off">
 <input type="hidden" name="csrf" value="<?=ky_h(csrf_token())?>">
 <input type="hidden" name="action" value="create_student">
 <label>Ad Soyad</label><input class="role-input" name="ad_soyad" required maxlength="190">
-<label>E-posta</label><input class="role-input" type="email" name="email" required>
-<label>Geçici şifre</label><input class="role-input" type="password" name="password" minlength="8" required>
+<label>E-posta</label><input class="role-input" type="email" name="yeni_kullanici_eposta" autocomplete="off" autocapitalize="none" spellcheck="false" value="" required>
+<label>Geçici şifre</label><input class="role-input" type="password" name="yeni_kullanici_sifre" autocomplete="new-password" minlength="8" value="" required>
 <label>Veli (isteğe bağlı)</label>
 <select class="role-input" name="veli_kullanici_id">
 <option value="0">Şimdilik veli bağlama</option>
