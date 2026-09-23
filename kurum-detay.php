@@ -57,11 +57,11 @@ $isSuper=auth_user_has_role($user,'super_admin');
 <div class="role-section-head"><div><span class="eyeline">KULLANICI YÖNETİMİ</span><h2>Ayrı Bölümler</h2></div></div>
 <div class="role-modules">
 <?php if($isSuper):?>
-<a class="role-module" href="kurum-yoneticileri.php?kurum_id=<?=$institutionId?>"><span>🧑‍💼</span><div><strong>Yöneticiler</strong><small><?=$counts['yonetici']?> yönetici · Yönetici ekleme ve listeleme</small></div><b>→</b></a>
+<a class="role-module" href="<?=$isSuper?'kurumlar.php?sekme=yoneticiler&amp;kurum_id='.$institutionId:'kurum-yoneticileri.php?kurum_id='.$institutionId?>"><span>🧑‍💼</span><div><strong>Yöneticiler</strong><small><?=$counts['yonetici']?> yönetici · Yönetici ekleme ve listeleme</small></div><b>→</b></a>
 <?php endif;?>
-<a class="role-module" href="kurum-ogretmenleri.php?kurum_id=<?=$institutionId?>"><span>👩‍🏫</span><div><strong>Öğretmenler</strong><small><?=$counts['ogretmen']?> öğretmen · Ayrı öğretmen sayfası</small></div><b>→</b></a>
-<a class="role-module" href="kurum-velileri.php?kurum_id=<?=$institutionId?>"><span>👪</span><div><strong>Veliler</strong><small><?=$counts['veli']?> veli · Ayrı veli sayfası</small></div><b>→</b></a>
-<a class="role-module" href="kurum-ogrencileri.php?kurum_id=<?=$institutionId?>"><span>🎒</span><div><strong>Öğrenciler</strong><small><?=$counts['ogrenci']?> öğrenci · Ayrı öğrenci sayfası</small></div><b>→</b></a>
+<a class="role-module" href="<?=$isSuper?'kurumlar.php?sekme=ogretmenler&amp;kurum_id='.$institutionId:'kurum-ogretmenleri.php?kurum_id='.$institutionId?>"><span>👩‍🏫</span><div><strong>Öğretmenler</strong><small><?=$counts['ogretmen']?> öğretmen · Ayrı öğretmen sayfası</small></div><b>→</b></a>
+<a class="role-module" href="<?=$isSuper?'kurumlar.php?sekme=veliler&amp;kurum_id='.$institutionId:'kurum-velileri.php?kurum_id='.$institutionId?>"><span>👪</span><div><strong>Veliler</strong><small><?=$counts['veli']?> veli · Ayrı veli sayfası</small></div><b>→</b></a>
+<a class="role-module" href="<?=$isSuper?'kurumlar.php?sekme=ogrenciler&amp;kurum_id='.$institutionId:'kurum-ogrencileri.php?kurum_id='.$institutionId?>"><span>🎒</span><div><strong>Öğrenciler</strong><small><?=$counts['ogrenci']?> öğrenci · Ayrı öğrenci sayfası</small></div><b>→</b></a>
 </div>
 </section>
 
@@ -76,8 +76,8 @@ $isSuper=auth_user_has_role($user,'super_admin');
 </main>
 <nav class="role-bottom">
 <a class="active" href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>⌂</span>Kurum</a>
-<a href="kurum-ogretmenleri.php?kurum_id=<?=$institutionId?>"><span>👩‍🏫</span>Öğretmen</a>
-<a href="kurum-velileri.php?kurum_id=<?=$institutionId?>"><span>👪</span>Veli</a>
-<a href="kurum-ogrencileri.php?kurum_id=<?=$institutionId?>"><span>🎒</span>Öğrenci</a>
+<a href="<?=$isSuper?'kurumlar.php?sekme=ogretmenler&amp;kurum_id='.$institutionId:'kurum-ogretmenleri.php?kurum_id='.$institutionId?>"><span>👩‍🏫</span>Öğretmen</a>
+<a href="<?=$isSuper?'kurumlar.php?sekme=veliler&amp;kurum_id='.$institutionId:'kurum-velileri.php?kurum_id='.$institutionId?>"><span>👪</span>Veli</a>
+<a href="<?=$isSuper?'kurumlar.php?sekme=ogrenciler&amp;kurum_id='.$institutionId:'kurum-ogrencileri.php?kurum_id='.$institutionId?>"><span>🎒</span>Öğrenci</a>
 </nav>
 </div></body></html>
