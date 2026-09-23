@@ -171,7 +171,7 @@ $local = read_app_version();
     <meta name="description" content="İlkAdım uygulama güncelleme merkezi.">
     <title>Uygulama Güncelleme — İlkAdım</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="super-admin-pages.css?v=1.0.58">
+    <link rel="stylesheet" href="super-admin-pages.css?v=1.0.59">
 </head>
 <body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?>
 <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -206,7 +206,7 @@ $local = read_app_version();
                 <h2>Sürüm Bilgileri</h2>
 
                 <div class="history-item">
-                    <span>📱</span>
+                    <span><svg><use href="#sa-device"/></svg></span>
                     <div>
                         <strong>Kurulu sürüm</strong>
                         <small id="localVersion"><?=h($local)?></small>
@@ -215,7 +215,7 @@ $local = read_app_version();
                 </div>
 
                 <div class="history-item">
-                    <span>☁️</span>
+                    <span><svg><use href="#sa-cloud"/></svg></span>
                     <div>
                         <strong>GitHub sürümü</strong>
                         <small><span id="remoteVersion">Kontrol ediliyor...</span><span id="remoteName"></span></small>
@@ -224,7 +224,7 @@ $local = read_app_version();
                 </div>
 
                 <div class="history-item">
-                    <span>🧩</span>
+                    <span><svg><use href="#sa-code"/></svg></span>
                     <div>
                         <strong>Commit</strong>
                         <small id="commit">-</small>
