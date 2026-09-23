@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
             $password=(string)($_POST['password']??'');
             $role=(string)($_POST['rol']??'');
 
-            $allowed=$isSuper?['veli','ogretmen','yonetici']:['veli','ogretmen'];
+            $allowed=$isSuper?['ogrenci','veli','ogretmen','yonetici']:['ogrenci','veli','ogretmen'];
             if (!in_array($role,$allowed,true)) throw new RuntimeException('Bu rolü oluşturma yetkin yok.');
             if (mb_strlen($name)<2 || mb_strlen($name)>190) throw new RuntimeException('Ad soyad bilgisini kontrol et.');
             if (!filter_var($email,FILTER_VALIDATE_EMAIL)) throw new RuntimeException('Geçerli bir e-posta yaz.');
@@ -42,7 +42,10 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
                 $stmt->execute([$email,$hash,$name,$role]);
                 $targetId=(int)$pdo->lastInsertId();
                 $pdo->prepare('INSERT INTO kullanici_rolleri (kullanici_id,rol) VALUES (?,?)')->execute([$targetId,$role]);
-                if ($role==='veli') {
+                if ($role==='ogrenci') {
+                    $pdo->prepare("INSERT INTO ogrenciler (kullanici_id,ad,email,sifre_hash,avatar,aktif) VALUES (?,?,?,?,?,1)")
+                        ->execute([$targetId,$name,$email,$hash,'🌞']);
+                } elseif ($role==='veli') {
                     $pdo->prepare('INSERT INTO veliler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')->execute([$targetId,$name]);
                 } elseif ($role==='ogretmen') {
                     $pdo->prepare('INSERT INTO ogretmenler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')->execute([$targetId,$name]);
@@ -197,6 +200,7 @@ $links=array_merge($parentLinks?:[],$teacherLinks?:[]);
 <input class="text-input" type="password" name="password" minlength="8" required>
 <label class="field-label">Rol</label>
 <select class="text-input" name="rol" required>
+<option value="ogrenci">Öğrenci</option>
 <option value="veli">Veli</option>
 <option value="ogretmen">Öğretmen</option>
 <?php if ($isSuper): ?><option value="yonetici">Yönetici</option><?php endif; ?>
