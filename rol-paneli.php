@@ -34,6 +34,10 @@ try {
     $error='Yetki bilgileri yüklenirken veritabanı kontrolü tamamlanamadı.';
 }
 
+if ($superAdminCount>0) {
+    auth_redirect_to_role_home($user);
+}
+
 if ($_SERVER['REQUEST_METHOD']==='POST' && (string)($_POST['action']??'')==='bootstrap_super_admin') {
     try {
         if (!verify_csrf($_POST['csrf']??null)) throw new RuntimeException('Güvenlik doğrulaması başarısız.');
