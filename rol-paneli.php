@@ -105,6 +105,12 @@ $canManage=auth_user_has_role($user,['yonetici','super_admin']);
 </section>
 <?php endif; ?>
 
+<section class="settings-block">
+<h2>🔐 Hesap Güvenliği</h2>
+<p class="little-note">E-posta adresini veya şifreni değiştirebilirsin.</p>
+<a class="button soft full" href="hesap-guvenligi.php">Giriş Bilgilerimi Düzenle</a>
+</section>
+
 <?php if ($canManage): ?>
 <section class="settings-block">
 <h2>👥 Kullanıcı Yönetimi</h2>
