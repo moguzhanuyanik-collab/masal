@@ -44,10 +44,19 @@ try {
     }
 }catch(Throwable $e){$error=$e->getMessage();}
 $photoPath=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase.'.jpg')?$photoBase.'.jpg':'');
-?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Profil — İlkAdım</title><link rel="stylesheet" href="super-admin-pages.css?v=1.0.61"></head>
+?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Profil — İlkAdım</title><link rel="stylesheet" href="super-admin-pages.css?v=1.0.63"></head>
 <body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?><div class="app-shell"><header class="app-topbar"><a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a></header><main id="screen"><div class="screen-content"><section class="subpage-intro"><span><svg><use href="#sa-user"/></svg></span><h1>Profilim</h1><p>Görünür adınızı ve profil fotoğrafınızı yönetin.</p></section>
 <?php if($message):?><div class="role-note"><p><?=sp_h($message)?></p></div><?php endif;?><?php if($error):?><div class="role-note"><p><?=sp_h($error)?></p></div><?php endif;?>
 <form method="post" enctype="multipart/form-data" class="settings-block"><input type="hidden" name="csrf" value="<?=sp_h(csrf_token())?>"><div class="sp-profile-photo"><?php if($photoPath):?><img src="profil-foto.php?v=<?=filemtime($photoPath)?>" width="82" height="82" alt="Profil fotoğrafı"><?php else:?><span><svg><use href="#sa-user"/></svg></span><?php endif;?><div><strong><?=sp_h((string)$user['ad_soyad'])?></strong><small><?=sp_h((string)$user['email'])?></small></div></div>
 <label class="field-label" for="profile-name">Ad Soyad</label><input class="text-input" id="profile-name" name="ad_soyad" maxlength="190" required value="<?=sp_h((string)$user['ad_soyad'])?>">
-<label class="field-label" for="profile-photo">Profil fotoğrafı</label><input class="text-input" id="profile-photo" type="file" name="fotograf" accept="image/jpeg,image/png,image/webp"><p class="little-note">Fotoğraf en çok 256 piksele küçültülür ve 150 KB sınırında saklanır.</p><button class="button primary full" type="submit">Profili Kaydet</button></form><a class="button soft full" href="hesap-guvenligi.php">E-posta ve Şifre Ayarları</a></div></main>
+<label class="field-label" for="profile-photo">Profil fotoğrafı</label><input class="text-input" id="profile-photo" type="file" name="fotograf" accept="image/jpeg,image/png,image/webp"><p class="little-note">Fotoğraf en çok 256 piksele küçültülür ve 150 KB sınırında saklanır.</p><button class="button primary full" type="submit">Profili Kaydet</button></form>
+
+<section class="role-section">
+<div class="role-section-head"><div><span class="eyeline">PROFİL MENÜSÜ</span><h2>Hesap ve Sistem</h2></div></div>
+<div class="sa-hub-list">
+<a href="hesap-guvenligi.php"><span class="sa-hub-icon"><svg><use href="#sa-lock"/></svg></span><span><strong>Hesap &amp; Güvenlik</strong><small>E-posta ve şifre ayarlarını yönet</small></span><svg class="sa-hub-arrow"><use href="#sa-arrow"/></svg></a>
+<a href="guncelleme.php"><span class="sa-hub-icon"><svg><use href="#sa-refresh"/></svg></span><span><strong>Sistem Güncelleme</strong><small>GitHub'daki son sürümü kontrol et ve sistemi güncelle</small></span><svg class="sa-hub-arrow"><use href="#sa-arrow"/></svg></a>
+</div>
+</section>
+</div></main>
 <nav class="app-nav" aria-label="Süper Admin menüsü"><a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a><a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a><a href="global.php"><span><svg><use href="#sa-users"/></svg></span>Global</a><a href="yonetici-yetkileri.php"><span><svg><use href="#sa-shield"/></svg></span>Yetkiler</a><a class="active" href="super-admin-profil.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a></nav></div></body></html>
