@@ -39,7 +39,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
 <meta name="theme-color" content="#f7f7fb">
 <title>Süper Admin — İlkAdım</title>
 <link rel="stylesheet" href="super-admin.css?v=1.0.72">
-<link rel="stylesheet" href="adimbot-demo.css?v=1.0.75">
+<link rel="stylesheet" href="adimbot-demo.css?v=1.0.75&rev=2">
 </head>
 <body class="sa-page">
 <svg class="sa-icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -169,18 +169,13 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
     <button class="adb-close" type="button" data-adimbot-close aria-label="AdımBot'u kapat">×</button>
     <span class="adb-pulse" aria-hidden="true"></span>
     <div class="adb-visual" aria-hidden="true">
-      <div class="adb-robot">
-        <img class="adb-part adb-part-head" src="adimbot/adimbot-mascot.webp?v=1.0.75" alt="">
-        <img class="adb-part adb-part-core" src="adimbot/adimbot-mascot.webp?v=1.0.75" alt="">
-        <img class="adb-part adb-part-arm-left" src="adimbot/adimbot-mascot.webp?v=1.0.75" alt="">
-        <img class="adb-part adb-part-hand-left" src="adimbot/adimbot-mascot.webp?v=1.0.75" alt="">
-        <img class="adb-part adb-part-arm-right" src="adimbot/adimbot-mascot.webp?v=1.0.75" alt="">
-        <img class="adb-part adb-part-hand-right" src="adimbot/adimbot-mascot.webp?v=1.0.75" alt="">
+      <div class="adb-robot-canvas">
+        <span class="adb-sprite adb-arm-leftview"></span>
+        <span class="adb-sprite adb-arm-rightview"></span>
+        <span class="adb-sprite adb-body"></span>
         <span class="adb-lid adb-lid-left"></span>
         <span class="adb-lid adb-lid-right"></span>
-        <span class="adb-gaze adb-gaze-left"></span>
-        <span class="adb-gaze adb-gaze-right"></span>
-        <span class="adb-mouth-motion"></span>
+        <span class="adb-sprite adb-mouth-open"></span>
       </div>
       <span class="adb-drag-chip">Sürükle</span>
     </div>
