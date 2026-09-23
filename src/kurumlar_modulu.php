@@ -392,9 +392,11 @@ function km_matching_rows(PDO $pdo,int $institutionId=0): array {
       os.id ogrenci_id,us.id ogrenci_kullanici_id,
       COALESCE(NULLIF(TRIM(os.ad),''),us.ad_soyad) ogrenci_adi,
       us.email ogrenci_email,
-      GROUP_CONCAT(DISTINCT CONCAT(v.id,'::',COALESCE(NULLIF(TRIM(v.ad_soyad),''),uv.ad_soyad))
+      GROUP_CONCAT(DISTINCT CASE WHEN kkv.kullanici_id IS NOT NULL
+        THEN CONCAT(v.id,'::',COALESCE(NULLIF(TRIM(v.ad_soyad),''),uv.ad_soyad)) END
         ORDER BY COALESCE(NULLIF(TRIM(v.ad_soyad),''),uv.ad_soyad) SEPARATOR '||') veli_bilgileri,
-      GROUP_CONCAT(DISTINCT CONCAT(og.id,'::',COALESCE(NULLIF(TRIM(og.ad_soyad),''),uo.ad_soyad))
+      GROUP_CONCAT(DISTINCT CASE WHEN kko.kullanici_id IS NOT NULL
+        THEN CONCAT(og.id,'::',COALESCE(NULLIF(TRIM(og.ad_soyad),''),uo.ad_soyad)) END
         ORDER BY COALESCE(NULLIF(TRIM(og.ad_soyad),''),uo.ad_soyad) SEPARATOR '||') ogretmen_bilgileri
       FROM kurum_kullanicilari kks
       INNER JOIN kurumlar k ON k.id=kks.kurum_id
@@ -544,7 +546,7 @@ function km_save_matching(PDO $pdo,array $actor,int $institutionId,int $studentI
           INNER JOIN veliler v ON v.id=vo.veli_id
           INNER JOIN kurum_kullanicilari kk
             ON kk.kullanici_id=v.kullanici_id
-           AND kk.kurum_id=? AND kk.kurum_rolu='veli'
+           AND kk.kurum_id=? AND kk.kurum_rolu='veli' AND kk.aktif=1
           WHERE vo.ogrenci_id=?");
         $stmt->execute([$institutionId,$studentId]);
         $stmt->closeCursor();
@@ -553,7 +555,7 @@ function km_save_matching(PDO $pdo,array $actor,int $institutionId,int $studentI
           INNER JOIN ogretmenler og ON og.id=oo.ogretmen_id
           INNER JOIN kurum_kullanicilari kk
             ON kk.kullanici_id=og.kullanici_id
-           AND kk.kurum_id=? AND kk.kurum_rolu='ogretmen'
+           AND kk.kurum_id=? AND kk.kurum_rolu='ogretmen' AND kk.aktif=1
           WHERE oo.ogrenci_id=?");
         $stmt->execute([$institutionId,$studentId]);
         $stmt->closeCursor();
