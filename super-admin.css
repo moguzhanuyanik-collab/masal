@@ -155,3 +155,27 @@ body.sa-page{margin:0;min-width:280px;min-height:100dvh;background:#e9ebf2;color
  .sa-bottom{display:none}
 }
 @media(min-width:1024px) and (max-width:1190px){.sa-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.sa-menu-grid{grid-template-columns:1fr}}
+
+
+/* V1.0.62 — sade Süper Admin ana sayfası */
+.sa-welcome-compact{min-height:154px;padding:23px 25px}
+.sa-welcome-compact .sa-welcome-meta{margin-top:13px}
+.sa-summary-section{margin-top:22px}
+.sa-summary-section .sa-card{min-height:90px}
+.sa-simple-grid{display:grid;grid-template-columns:1fr;gap:0}
+.sa-simple-grid>.sa-section{min-width:0}
+.sa-simple-grid .sa-status-list>div{min-height:64px}
+@media(min-width:1024px){
+ .sa-content{max-width:1220px}
+ .sa-welcome-compact{min-height:154px;padding:24px 30px}
+ .sa-summary-section .sa-cards{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .sa-summary-section .sa-card{min-height:92px}
+ .sa-simple-grid{grid-template-columns:minmax(0,1.8fr) minmax(280px,.9fr);gap:24px;align-items:start}
+ .sa-simple-grid>.sa-section{margin-top:27px}
+}
+@media(max-width:520px){
+ .sa-welcome-compact{min-height:148px;padding:20px}
+ .sa-welcome-compact .sa-welcome-mark{width:50px;height:50px;right:14px;bottom:16px}
+ .sa-welcome-compact .sa-welcome-mark svg{font-size:25px}
+ .sa-summary-section .sa-card{min-height:84px}
+}
