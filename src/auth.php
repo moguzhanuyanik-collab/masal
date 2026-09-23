@@ -141,6 +141,81 @@ if (!function_exists('auth_user_has_role')) {
     }
 }
 
+if (!function_exists('auth_user_institution_ids')) {
+    function auth_user_institution_ids(PDO $pdo, int $userId, ?string $institutionRole=null): array {
+        if ($userId<=0 || !auth_runtime_table_exists($pdo,'kurum_kullanicilari')) return [];
+        try {
+            if ($institutionRole!==null) {
+                $stmt=$pdo->prepare('SELECT DISTINCT kurum_id FROM kurum_kullanicilari WHERE kullanici_id=? AND kurum_rolu=? AND aktif=1 ORDER BY kurum_id');
+                $stmt->execute([$userId,$institutionRole]);
+            } else {
+                $stmt=$pdo->prepare('SELECT DISTINCT kurum_id FROM kurum_kullanicilari WHERE kullanici_id=? AND aktif=1 ORDER BY kurum_id');
+                $stmt->execute([$userId]);
+            }
+            $ids=array_map('intval',$stmt->fetchAll(PDO::FETCH_COLUMN)?:[]);
+            $stmt->closeCursor();
+            return array_values(array_filter(array_unique($ids),static fn(int $id):bool=>$id>0));
+        } catch (Throwable) {
+            return [];
+        }
+    }
+}
+
+if (!function_exists('auth_user_in_institution')) {
+    function auth_user_in_institution(PDO $pdo, int $userId, int $institutionId, ?string $institutionRole=null): bool {
+        if ($userId<=0 || $institutionId<=0 || !auth_runtime_table_exists($pdo,'kurum_kullanicilari')) return false;
+        try {
+            if ($institutionRole!==null) {
+                $stmt=$pdo->prepare('SELECT 1 FROM kurum_kullanicilari WHERE kurum_id=? AND kullanici_id=? AND kurum_rolu=? AND aktif=1 LIMIT 1');
+                $stmt->execute([$institutionId,$userId,$institutionRole]);
+            } else {
+                $stmt=$pdo->prepare('SELECT 1 FROM kurum_kullanicilari WHERE kurum_id=? AND kullanici_id=? AND aktif=1 LIMIT 1');
+                $stmt->execute([$institutionId,$userId]);
+            }
+            $ok=(bool)$stmt->fetchColumn();
+            $stmt->closeCursor();
+            return $ok;
+        } catch (Throwable) {
+            return false;
+        }
+    }
+}
+
+if (!function_exists('auth_manageable_institution_ids')) {
+    function auth_manageable_institution_ids(PDO $pdo, array $user): array {
+        if (auth_user_has_role($user,'super_admin')) {
+            if (!auth_runtime_table_exists($pdo,'kurumlar')) return [];
+            try {
+                $stmt=$pdo->query('SELECT id FROM kurumlar WHERE aktif=1 ORDER BY id');
+                $ids=$stmt?array_map('intval',$stmt->fetchAll(PDO::FETCH_COLUMN)?:[]):[];
+                if ($stmt) $stmt->closeCursor();
+                return array_values(array_filter($ids,static fn(int $id):bool=>$id>0));
+            } catch (Throwable) {
+                return [];
+            }
+        }
+        if (auth_user_has_role($user,'yonetici')) {
+            return auth_user_institution_ids($pdo,(int)$user['id'],'yonetici');
+        }
+        return [];
+    }
+}
+
+if (!function_exists('auth_institution_content_source')) {
+    function auth_institution_content_source(PDO $pdo, int $institutionId): string {
+        if ($institutionId<=0 || !auth_runtime_table_exists($pdo,'kurumlar')) return 'sistem';
+        try {
+            $stmt=$pdo->prepare('SELECT icerik_kaynagi FROM kurumlar WHERE id=? AND aktif=1 LIMIT 1');
+            $stmt->execute([$institutionId]);
+            $value=(string)($stmt->fetchColumn()?:'sistem');
+            $stmt->closeCursor();
+            return $value==='kurum'?'kurum':'sistem';
+        } catch (Throwable) {
+            return 'sistem';
+        }
+    }
+}
+
 if (!function_exists('auth_student_id_for_user')) {
     function auth_student_id_for_user(PDO $pdo, int $userId): ?int {
         if ($userId<=0 || !auth_runtime_table_exists($pdo,'ogrenciler')) return null;
@@ -428,8 +503,26 @@ if (!function_exists('auth_accessible_student_ids')) {
         $user=auth_fetch_user($pdo,$userId);
         if (!$user) return [];
 
-        if (auth_user_has_role($user,['super_admin','yonetici'])) {
-            $rows=$pdo->query('SELECT id FROM ogrenciler WHERE aktif=1 ORDER BY id')->fetchAll(PDO::FETCH_COLUMN);
+        if (auth_user_has_role($user,'super_admin')) {
+            $stmt=$pdo->query('SELECT id FROM ogrenciler WHERE aktif=1 ORDER BY id');
+            $rows=$stmt?$stmt->fetchAll(PDO::FETCH_COLUMN):[];
+            if ($stmt) $stmt->closeCursor();
+            return array_values(array_map('intval',$rows?:[]));
+        }
+
+        if (auth_user_has_role($user,'yonetici')) {
+            $institutionIds=auth_user_institution_ids($pdo,$userId,'yonetici');
+            if (!$institutionIds || !auth_runtime_table_exists($pdo,'kurum_kullanicilari')) return [];
+            $placeholders=implode(',',array_fill(0,count($institutionIds),'?'));
+            $stmt=$pdo->prepare("SELECT DISTINCT o.id
+                FROM ogrenciler o
+                INNER JOIN kurum_kullanicilari kk ON kk.kullanici_id=o.kullanici_id
+                  AND kk.kurum_rolu='ogrenci' AND kk.aktif=1
+                WHERE o.aktif=1 AND kk.kurum_id IN ({$placeholders})
+                ORDER BY o.id");
+            $stmt->execute($institutionIds);
+            $rows=$stmt->fetchAll(PDO::FETCH_COLUMN);
+            $stmt->closeCursor();
             return array_values(array_map('intval',$rows?:[]));
         }
 
@@ -497,9 +590,12 @@ if (!function_exists('require_api_student_access')) {
 
 if (!function_exists('auth_post_login_url')) {
     function auth_post_login_url(array $user): string {
-        return auth_user_has_role($user,'ogrenci') && (string)($user['ana_rol']??'')==='ogrenci'
-            ? 'index.php'
-            : 'rol-paneli.php';
+        if (auth_user_has_role($user,'super_admin')) return 'super-admin.php';
+        if (auth_user_has_role($user,'yonetici')) return 'yonetici-paneli.php';
+        if (auth_user_has_role($user,'ogretmen')) return 'ogretmen-paneli.php';
+        if (auth_user_has_role($user,'veli')) return 'veli-paneli.php';
+        if (auth_user_has_role($user,'ogrenci')) return 'index.php';
+        return 'rol-paneli.php';
     }
 }
 
