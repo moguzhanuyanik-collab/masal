@@ -3,107 +3,61 @@ declare(strict_types=1);
 require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
 require __DIR__.'/src/kurum_yonetimi.php';
-
-$user=require_role('super_admin');
-$pdo=db();
-$message='';$error='';
-
+$user=require_role('super_admin');$pdo=db();$message='';$error='';
 if($_SERVER['REQUEST_METHOD']==='POST'){
-    try{
-        if(!verify_csrf($_POST['csrf']??null)) throw new RuntimeException('Güvenlik doğrulaması başarısız.');
-        $action=(string)($_POST['action']??'');
-
-        if($action==='create_student'){
-            $uid=ky_create_user(
-                $pdo,$user,'ogrenci',
-                (string)($_POST['ad_soyad']??''),
-                (string)($_POST['yeni_kullanici_eposta']??''),
-                (string)($_POST['yeni_kullanici_sifre']??''),
-                null
-            );
-            $studentId=auth_student_id_for_user($pdo,$uid);
-            $parentUserId=(int)($_POST['veli_kullanici_id']??0);
-            if($studentId && $parentUserId>0){
-                ky_link_global_parent_student($pdo,$user,$parentUserId,$studentId);
-            }
-            $message='Global öğrenci oluşturuldu'.($parentUserId>0?' ve veliyle eşleştirildi.':'.');
-        }
-
-        if($action==='link_parent'){
-            ky_link_global_parent_student(
-                $pdo,$user,
-                (int)($_POST['veli_kullanici_id']??0),
-                (int)($_POST['ogrenci_id']??0)
-            );
-            $message='Veli ve öğrenci eşleştirildi.';
-        }
-    }catch(PDOException $e){
-        $error=$e->getCode()==='23000'?'Bu e-posta veya eşleştirme zaten kullanılıyor.':'Veritabanı işlemi tamamlanamadı.';
-    }catch(Throwable $e){
-        $error=$e->getMessage();
-    }
+ try{
+  if(!verify_csrf($_POST['csrf']??null)) throw new RuntimeException('Güvenlik doğrulaması başarısız.');
+  $action=(string)($_POST['action']??'');
+  if($action==='create'){
+   ky_create_user($pdo,$user,'ogrenci',(string)($_POST['ad_soyad']??''),(string)($_POST['email']??''),(string)($_POST['sifre']??''),null);
+   $message='Global öğrenci oluşturuldu.';
+  }elseif($action==='update'){
+   ky_update_global_user($pdo,$user,'ogrenci',(int)($_POST['kullanici_id']??0),(string)($_POST['ad_soyad']??''),(string)($_POST['email']??''),(string)($_POST['sifre']??''));
+   $message='Global öğrenci güncellendi.';
+  }elseif($action==='delete'){
+   ky_deactivate_global_user($pdo,$user,'ogrenci',(int)($_POST['kullanici_id']??0));
+   $message='Global öğrenci pasife alındı.';
+  }
+ }catch(PDOException $e){$error=$e->getCode()==='23000'?'Bu e-posta zaten kullanılıyor.':'Veritabanı işlemi tamamlanamadı.';}catch(Throwable $e){$error=$e->getMessage();}
 }
-
 $students=ky_global_students($pdo);
-$parents=ky_global_parents($pdo);
-?><!doctype html><html lang="tr"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Global Öğrenciler — İlkAdım</title>
-<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.56"><link rel="stylesheet" href="super-admin-pages.css?v=1.0.59">
-</head><body class="role-page sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?><div class="role-shell">
-<header class="role-topbar">
-<a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a>
-<div class="sa-page-actions">
-<a class="sa-page-action" href="guncelleme.php" aria-label="Güncellemeler"><svg><use href="#sa-bell"/></svg></a>
-<a class="sa-page-action" href="hesap-guvenligi.php" aria-label="Hesabım"><svg><use href="#sa-user"/></svg></a>
+?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Global Öğrenciler — İlkAdım</title>
+<link rel="stylesheet" href="super-admin-pages.css?v=1.0.64"></head>
+<body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?><div class="app-shell">
+<header class="app-topbar"><a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a><div class="sa-page-actions"><a class="sa-page-action" href="super-admin-profil.php"><svg><use href="#sa-user"/></svg></a></div></header>
+<main id="screen"><div class="screen-content">
+<section class="subpage-intro"><span><svg><use href="#sa-student"/></svg></span><h1>Global Öğrenciler</h1><p>Kurumdan bağımsız öğrenci hesaplarını tablo üzerinden yönetin.</p></section>
+<?php if($message):?><div class="role-note"><span><svg><use href="#sa-check"/></svg></span><p><?=ky_h($message)?></p></div><?php endif;?>
+<?php if($error):?><div class="role-note"><span><svg><use href="#sa-alert"/></svg></span><p><?=ky_h($error)?></p></div><?php endif;?>
+
+<section class="role-section">
+<div class="sa-data-toolbar"><div><span class="eyeline">ÖĞRENCİLER</span><h2>Global Öğrenci Listesi</h2><small><?=count($students)?> kayıt</small></div><div class="sa-data-actions"><a class="sa-secondary-btn" href="global-eslestirme.php">Eşleştirme</a><button class="sa-primary-btn" type="button" data-open-create>+ Yeni Öğrenci</button></div></div>
+<div class="sa-table-card"><div class="sa-table-scroll"><table class="sa-data-table"><thead><tr><th>Öğrenci</th><th>E-posta</th><th>Veli</th><th>Durum</th><th class="sa-actions-col">İşlemler</th></tr></thead><tbody>
+<?php if(!$students):?><tr><td colspan="5" class="sa-empty-cell">Henüz global öğrenci yok.</td></tr><?php endif;?>
+<?php foreach($students as $s):?><tr>
+<td><strong><?=ky_h((string)($s['ad']?:$s['ad_soyad']))?></strong></td>
+<td><?=ky_h((string)$s['email'])?></td>
+<td><?=ky_h((string)($s['veli_adlari']?:'Bağlı değil'))?></td>
+<td><span class="role-pill ok">Global</span></td>
+<td class="sa-row-actions">
+<button type="button" class="sa-edit-btn" data-edit data-id="<?=(int)$s['kullanici_id']?>" data-name="<?=ky_h((string)($s['ad']?:$s['ad_soyad']))?>" data-email="<?=ky_h((string)$s['email'])?>">Güncelle</button>
+<form method="post" onsubmit="return confirm('Bu öğrenci pasife alınsın mı?')"><input type="hidden" name="csrf" value="<?=ky_h(csrf_token())?>"><input type="hidden" name="action" value="delete"><input type="hidden" name="kullanici_id" value="<?=(int)$s['kullanici_id']?>"><button class="sa-delete-btn" type="submit">Sil</button></form>
+</td></tr><?php endforeach;?>
+</tbody></table></div></div>
+</section>
+</div></main>
+
+<dialog class="sa-data-dialog" id="studentDialog"><form method="post" class="sa-dialog-form" autocomplete="off"><input type="hidden" name="csrf" value="<?=ky_h(csrf_token())?>"><input type="hidden" name="action" id="studentAction" value="create"><input type="hidden" name="kullanici_id" id="studentId" value="0">
+<div class="sa-dialog-head"><div><small id="studentEyeline">YENİ KAYIT</small><h3 id="studentTitle">Global Öğrenci Ekle</h3></div><button type="button" data-close>×</button></div>
+<div class="sa-dialog-body"><label>Ad Soyad</label><input class="role-input" id="studentName" name="ad_soyad" required maxlength="190"><label>E-posta</label><input class="role-input" id="studentEmail" type="email" name="email" required><label id="studentPasswordLabel">Geçici Şifre</label><input class="role-input" id="studentPassword" type="password" name="sifre" minlength="8"><p class="little-note" id="studentPasswordNote">Yeni hesap için en az 8 karakter.</p></div>
+<div class="sa-dialog-actions"><button type="button" class="sa-secondary-btn" data-close>Vazgeç</button><button type="submit" class="sa-primary-btn">Kaydet</button></div></form></dialog>
+
+<nav class="app-nav"><a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a><a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a><a class="active" href="global.php"><span><svg><use href="#sa-users"/></svg></span>Global</a><a href="yonetici-yetkileri.php"><span><svg><use href="#sa-shield"/></svg></span>Yetkiler</a><a href="super-admin-profil.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a></nav>
 </div>
-</header>
-<main class="role-content">
-<section class="role-hero"><span class="eyeline">GLOBAL KULLANICILAR</span><h1>Kurum ve öğretmen bağı olmayan öğrenciler.</h1>
-<p>Bu öğrenciler yalnızca İlkAdım’ın sistem dersleri ve etkinliklerini kullanır. İstenirse global veliyle eşleştirilir.</p><span class="role-hero-art"><svg><use href="#sa-student"/></svg></span></section>
-
-<?php if($message!==''):?><div class="role-note"><span><svg><use href="#sa-check"/></svg></span><p><?=ky_h($message)?></p></div><?php endif;?>
-<?php if($error!==''):?><div class="role-note"><span><svg><use href="#sa-alert"/></svg></span><p><?=ky_h($error)?></p></div><?php endif;?>
-
-<section class="role-section"><div class="role-section-head"><div><span class="eyeline">YENİ ÖĞRENCİ</span><h2>Global Öğrenci Ekle</h2></div></div>
-<form class="role-form" method="post" autocomplete="off">
-<input type="hidden" name="csrf" value="<?=ky_h(csrf_token())?>">
-<input type="hidden" name="action" value="create_student">
-<label>Ad Soyad</label><input class="role-input" name="ad_soyad" required maxlength="190">
-<label>E-posta</label><input class="role-input" type="email" name="yeni_kullanici_eposta" autocomplete="off" autocapitalize="none" spellcheck="false" value="" required>
-<label>Geçici şifre</label><input class="role-input" type="password" name="yeni_kullanici_sifre" autocomplete="new-password" minlength="8" value="" required>
-<label>Veli (isteğe bağlı)</label>
-<select class="role-input" name="veli_kullanici_id">
-<option value="0">Şimdilik veli bağlama</option>
-<?php foreach($parents as $p):?><option value="<?=(int)$p['kullanici_id']?>"><?=ky_h((string)$p['ad_soyad'])?> — <?=ky_h((string)$p['email'])?></option><?php endforeach;?>
-</select>
-<button class="role-button" type="submit">Global Öğrenci Oluştur</button>
-</form>
-<p class="role-note"><span><svg><use href="#sa-info"/></svg></span><span>Global öğrencinin kurumu ve öğretmeni olmaz. Veli ayrı Global Veliler sayfasından da oluşturulabilir.</span></p>
-</section>
-
-<section class="role-section"><div class="role-section-head"><div><span class="eyeline">EŞLEŞTİRME</span><h2>Veli Bağla</h2></div><a href="global-veliler.php">Veli Ekle</a></div>
-<?php if(!$students||!$parents):?><div class="role-list"><div class="role-empty"><span><svg><use href="#sa-link"/></svg></span>Eşleştirme için en az bir global öğrenci ve global veli gerekir.</div></div>
-<?php else:?><form class="role-form" method="post">
-<input type="hidden" name="csrf" value="<?=ky_h(csrf_token())?>">
-<input type="hidden" name="action" value="link_parent">
-<label>Öğrenci</label><select class="role-input" name="ogrenci_id" required><?php foreach($students as $s):?><option value="<?=(int)$s['ogrenci_id']?>"><?=ky_h((string)($s['ad']?:$s['email']))?></option><?php endforeach;?></select>
-<label>Veli</label><select class="role-input" name="veli_kullanici_id" required><?php foreach($parents as $p):?><option value="<?=(int)$p['kullanici_id']?>"><?=ky_h((string)$p['ad_soyad'])?> — <?=ky_h((string)$p['email'])?></option><?php endforeach;?></select>
-<button class="role-button" type="submit">Veliyle Eşleştir</button>
-</form><?php endif;?>
-</section>
-
-<section class="role-section"><div class="role-section-head"><div><span class="eyeline">ÖĞRENCİLER</span><h2>Global Öğrenci Listesi</h2></div><span class="role-pill"><?=count($students)?></span></div>
-<div class="role-list">
-<?php if(!$students):?><div class="role-empty"><span><svg><use href="#sa-student"/></svg></span>Henüz global öğrenci yok.</div>
-<?php else:foreach($students as $s):?><div class="role-row"><span><svg><use href="#sa-student"/></svg></span><div><strong><?=ky_h((string)($s['ad']?:$s['email']))?></strong><small><?=ky_h((string)$s['email'])?> · Veli: <?=ky_h((string)($s['veli_adlari']?:'Bağlı değil'))?></small></div><span class="role-pill ok">Global</span></div><?php endforeach;endif;?>
-</div></section>
-</main>
-<nav class="role-bottom">
-<a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a>
-<a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a>
-<a class="active" href="global-ogrenciler.php"><span><svg><use href="#sa-student"/></svg></span>Öğrenciler</a>
-<a href="global-veliler.php"><span><svg><use href="#sa-users"/></svg></span>Veliler</a>
-<a href="hesap-guvenligi.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
-</nav>
-</div></body></html>
+<script>
+(()=>{const d=document.getElementById('studentDialog'),a=document.getElementById('studentAction'),id=document.getElementById('studentId'),n=document.getElementById('studentName'),e=document.getElementById('studentEmail'),p=document.getElementById('studentPassword'),t=document.getElementById('studentTitle'),ey=document.getElementById('studentEyeline'),pl=document.getElementById('studentPasswordLabel'),pn=document.getElementById('studentPasswordNote');
+const openCreate=()=>{a.value='create';id.value='0';n.value='';e.value='';p.value='';p.required=true;t.textContent='Global Öğrenci Ekle';ey.textContent='YENİ KAYIT';pl.textContent='Geçici Şifre';pn.textContent='Yeni hesap için en az 8 karakter.';d.showModal();};
+document.querySelector('[data-open-create]')?.addEventListener('click',openCreate);
+document.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>{a.value='update';id.value=b.dataset.id||'0';n.value=b.dataset.name||'';e.value=b.dataset.email||'';p.value='';p.required=false;t.textContent='Global Öğrenciyi Güncelle';ey.textContent='KAYIT DÜZENLE';pl.textContent='Yeni Şifre (isteğe bağlı)';pn.textContent='Şifre değişmeyecekse boş bırak.';d.showModal();}));
+document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>d.close()));d.addEventListener('click',ev=>{if(ev.target===d)d.close();});})();
+</script></body></html>
