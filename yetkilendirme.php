@@ -171,19 +171,21 @@ $links=array_merge($parentLinks?:[],$teacherLinks?:[]);
 <meta name="theme-color" content="#f8f7fc">
 <title>Kullanıcı Yönetimi — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="super-admin-pages.css?v=1.0.57">
+<link rel="stylesheet" href="super-admin-pages.css?v=1.0.58">
 </head>
-<body class="sa-subpage">
+<body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?>
 <div class="app-shell">
 <header class="app-topbar">
-<a class="icon-button" href="rol-paneli.php" aria-label="Geri">←</a>
-<span class="topbar-title">Kullanıcı Yönetimi</span>
-<a class="mini-avatar" href="logout.php" aria-label="Çıkış">🚪</a>
+<a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a>
+<div class="sa-page-actions">
+<a class="sa-page-action" href="guncelleme.php" aria-label="Güncellemeler"><svg><use href="#sa-bell"/></svg></a>
+<a class="sa-page-action" href="hesap-guvenligi.php" aria-label="Hesabım"><svg><use href="#sa-user"/></svg></a>
+</div>
 </header>
 <main id="screen" tabindex="-1">
 <div class="screen-content settings-screen">
 <section class="subpage-intro">
-<span>🛡️</span><h1>Sistem Rolleri</h1>
+<span><svg><use href="#sa-shield"/></svg></span><h1>Sistem Rolleri</h1>
 <p>Global öğrenci/veli oluşturmak için ayrı Global Kullanıcılar sayfalarını; kurum kullanıcıları için kurum detayını kullan. Bu ekran gelişmiş rol işlemleri içindir.</p>
 </section>
 
@@ -292,11 +294,11 @@ $links=array_merge($parentLinks?:[],$teacherLinks?:[]);
 </div>
 </main>
 <nav class="app-nav" aria-label="Süper Admin menüsü">
-<a href="super-admin.php"><span>⌂</span>Panel</a>
-<a href="kurumlar.php"><span>🏫</span>Kurumlar</a>
-<a href="global-ogrenciler.php"><span>🎒</span>Öğrenciler</a>
-<a href="global-veliler.php"><span>👪</span>Veliler</a>
-<a href="hesap-guvenligi.php"><span>👤</span>Profil</a>
+<a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a>
+<a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a>
+<a href="global-ogrenciler.php"><span><svg><use href="#sa-student"/></svg></span>Öğrenciler</a>
+<a href="global-veliler.php"><span><svg><use href="#sa-users"/></svg></span>Veliler</a>
+<a href="hesap-guvenligi.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
 </nav>
 </div>
 </body>
