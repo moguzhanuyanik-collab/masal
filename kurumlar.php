@@ -10,6 +10,7 @@ $sections=[
   'ogretmenler'=>'Öğretmenler',
   'veliler'=>'Veliler',
   'ogrenciler'=>'Öğrenciler',
+  'eslestirme'=>'Eşleştirme',
 ];
 $initial=(string)($_GET['sekme']??'kurumlar');
 if(!isset($sections[$initial])) $initial='kurumlar';
@@ -25,8 +26,8 @@ function kmh(string $v): string { return htmlspecialchars($v,ENT_QUOTES,'UTF-8')
 <title>Kurumlar Modülü — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="kurum.css?v=1.0.41">
-<link rel="stylesheet" href="kurumlar-modul.css?v=1.0.49">
-<script src="kurumlar-modul.js?v=1.0.49" defer></script>
+<link rel="stylesheet" href="kurumlar-modul.css?v=1.0.50">
+<script src="kurumlar-modul.js?v=1.0.50" defer></script>
 </head>
 <body class="role-page">
 <div class="role-shell" data-km-root data-section="<?=kmh($initial)?>" data-kurum="<?=$institutionId?>">
@@ -43,6 +44,7 @@ function kmh(string $v): string { return htmlspecialchars($v,ENT_QUOTES,'UTF-8')
 <button class="km-tab" type="button" data-km-section="ogretmenler">👩‍🏫 Öğretmenler</button>
 <button class="km-tab" type="button" data-km-section="veliler">👪 Veliler</button>
 <button class="km-tab" type="button" data-km-section="ogrenciler">🎒 Öğrenciler</button>
+<button class="km-tab" type="button" data-km-section="eslestirme">🔗 Eşleştirme</button>
 </nav>
 
 <div class="km-toolbar">
