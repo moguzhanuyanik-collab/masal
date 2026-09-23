@@ -30,7 +30,7 @@ try{
     $stmt=$pdo->query('SELECT veli_id,ogrenci_id FROM veli_ogrenci ORDER BY veli_id,ogrenci_id');
     foreach($stmt as $row){$pid=(int)$row['veli_id'];$sid=(int)$row['ogrenci_id'];if(isset($parentNames[$pid],$studentNames[$sid]))$links[]=[$pid,$sid];}
 }catch(Throwable){$error='Eşleştirmeler okunamadı.';}
-?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Global Eşleştirme — İlkAdım</title><link rel="stylesheet" href="super-admin-pages.css?v=1.0.61"></head>
+?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Global Eşleştirme — İlkAdım</title><link rel="stylesheet" href="super-admin-pages.css?v=1.0.72"></head>
 <body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?><div class="app-shell">
 <header class="app-topbar"><a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a><div class="sa-page-actions"><a class="sa-page-action" href="super-admin-profil.php" aria-label="Profil"><svg><use href="#sa-user"/></svg></a></div></header>
 <main id="screen"><div class="screen-content"><section class="subpage-intro"><span><svg><use href="#sa-link"/></svg></span><h1>Global Eşleştirme</h1><p>Kurumdan bağımsız öğrencilerle velilerini eşleştirin.</p></section>
