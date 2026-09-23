@@ -73,7 +73,7 @@ SET @has_veli_kullanici_id = (
 );
 SET @sql = IF(@has_veli_kullanici_id=0,
   'ALTER TABLE veliler ADD COLUMN kullanici_id BIGINT UNSIGNED NULL',
-  'SELECT 1');
+  'SET @ilkadim_noop = 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
@@ -84,7 +84,7 @@ SET @has_veli_ad_soyad = (
 );
 SET @sql = IF(@has_veli_ad_soyad=0,
   'ALTER TABLE veliler ADD COLUMN ad_soyad VARCHAR(190) NULL',
-  'SELECT 1');
+  'SET @ilkadim_noop = 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
@@ -95,7 +95,7 @@ SET @has_veli_aktif = (
 );
 SET @sql = IF(@has_veli_aktif=0,
   'ALTER TABLE veliler ADD COLUMN aktif TINYINT(1) NOT NULL DEFAULT 1',
-  'SELECT 1');
+  'SET @ilkadim_noop = 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
@@ -106,7 +106,7 @@ SET @has_ogretmen_kullanici_id = (
 );
 SET @sql = IF(@has_ogretmen_kullanici_id=0,
   'ALTER TABLE ogretmenler ADD COLUMN kullanici_id BIGINT UNSIGNED NULL',
-  'SELECT 1');
+  'SET @ilkadim_noop = 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
@@ -117,7 +117,7 @@ SET @has_ogretmen_ad_soyad = (
 );
 SET @sql = IF(@has_ogretmen_ad_soyad=0,
   'ALTER TABLE ogretmenler ADD COLUMN ad_soyad VARCHAR(190) NULL',
-  'SELECT 1');
+  'SET @ilkadim_noop = 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
@@ -128,7 +128,7 @@ SET @has_ogretmen_aktif = (
 );
 SET @sql = IF(@has_ogretmen_aktif=0,
   'ALTER TABLE ogretmenler ADD COLUMN aktif TINYINT(1) NOT NULL DEFAULT 1',
-  'SELECT 1');
+  'SET @ilkadim_noop = 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
@@ -200,7 +200,7 @@ SET @has_kullanici_id = (
 );
 SET @sql = IF(@has_kullanici_id=0,
   'ALTER TABLE ogrenciler ADD COLUMN kullanici_id BIGINT UNSIGNED NULL AFTER id',
-  'SELECT 1');
+  'SET @ilkadim_noop = 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
@@ -230,7 +230,7 @@ SET @has_ogrenci_user_index = (
 );
 SET @sql = IF(@has_ogrenci_user_index=0,
   'ALTER TABLE ogrenciler ADD UNIQUE KEY uk_ogrenciler_kullanici (kullanici_id)',
-  'SELECT 1');
+  'SET @ilkadim_noop = 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
@@ -242,7 +242,7 @@ SET @has_ogrenci_user_fk = (
 );
 SET @sql = IF(@has_ogrenci_user_fk=0,
   'ALTER TABLE ogrenciler ADD CONSTRAINT fk_ogrenciler_kullanici FOREIGN KEY (kullanici_id) REFERENCES kullanicilar(id) ON DELETE SET NULL',
-  'SELECT 1');
+  'SET @ilkadim_noop = 1');
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
