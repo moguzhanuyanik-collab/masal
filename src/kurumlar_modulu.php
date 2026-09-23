@@ -15,6 +15,7 @@ function km_sections(): array {
         'ogretmenler'=>['label'=>'Öğretmenler','icon'=>'👩‍🏫','role'=>'ogretmen'],
         'veliler'=>['label'=>'Veliler','icon'=>'👪','role'=>'veli'],
         'ogrenciler'=>['label'=>'Öğrenciler','icon'=>'🎒','role'=>'ogrenci'],
+        'eslestirme'=>['label'=>'Eşleştirme','icon'=>'🔗','role'=>null],
     ];
 }
 
@@ -375,4 +376,211 @@ function km_delete_member(PDO $pdo,array $actor,string $role,int $userId,int $in
 
     auth_audit($pdo,(int)$actor['id'],$userId,'kurum_kullanici_sil','Rol '.$role.' / kurum '.$institutionId.' / hesap pasif '.($deactivated?'1':'0'));
     return ['account_deactivated'=>$deactivated];
+}
+
+
+function km_matching_rows(PDO $pdo,int $institutionId=0): array {
+    $params=[];
+    $where="k.aktif=1 AND kks.aktif=1 AND kks.kurum_rolu='ogrenci' AND os.aktif=1 AND us.aktif=1";
+    if($institutionId>0){
+        $where.=" AND k.id=?";
+        $params[]=$institutionId;
+    }
+
+    $sql="SELECT
+      k.id kurum_id,k.ad kurum_adi,
+      os.id ogrenci_id,us.id ogrenci_kullanici_id,
+      COALESCE(NULLIF(TRIM(os.ad),''),us.ad_soyad) ogrenci_adi,
+      us.email ogrenci_email,
+      GROUP_CONCAT(DISTINCT CONCAT(v.id,'::',COALESCE(NULLIF(TRIM(v.ad_soyad),''),uv.ad_soyad))
+        ORDER BY COALESCE(NULLIF(TRIM(v.ad_soyad),''),uv.ad_soyad) SEPARATOR '||') veli_bilgileri,
+      GROUP_CONCAT(DISTINCT CONCAT(og.id,'::',COALESCE(NULLIF(TRIM(og.ad_soyad),''),uo.ad_soyad))
+        ORDER BY COALESCE(NULLIF(TRIM(og.ad_soyad),''),uo.ad_soyad) SEPARATOR '||') ogretmen_bilgileri
+      FROM kurum_kullanicilari kks
+      INNER JOIN kurumlar k ON k.id=kks.kurum_id
+      INNER JOIN kullanicilar us ON us.id=kks.kullanici_id
+      INNER JOIN ogrenciler os ON os.kullanici_id=us.id
+      LEFT JOIN veli_ogrenci vo ON vo.ogrenci_id=os.id
+      LEFT JOIN veliler v ON v.id=vo.veli_id AND v.aktif=1
+      LEFT JOIN kullanicilar uv ON uv.id=v.kullanici_id AND uv.aktif=1
+      LEFT JOIN kurum_kullanicilari kkv
+        ON kkv.kurum_id=k.id AND kkv.kullanici_id=uv.id
+       AND kkv.kurum_rolu='veli' AND kkv.aktif=1
+      LEFT JOIN ogretmen_ogrenci oo ON oo.ogrenci_id=os.id
+      LEFT JOIN ogretmenler og ON og.id=oo.ogretmen_id AND og.aktif=1
+      LEFT JOIN kullanicilar uo ON uo.id=og.kullanici_id AND uo.aktif=1
+      LEFT JOIN kurum_kullanicilari kko
+        ON kko.kurum_id=k.id AND kko.kullanici_id=uo.id
+       AND kko.kurum_rolu='ogretmen' AND kko.aktif=1
+      WHERE {$where}
+      GROUP BY k.id,k.ad,os.id,us.id,os.ad,us.ad_soyad,us.email
+      ORDER BY k.ad,ogrenci_adi,os.id";
+
+    $stmt=$pdo->prepare($sql);
+    $stmt->execute($params);
+    $rows=$stmt->fetchAll();
+    $stmt->closeCursor();
+
+    if(!is_array($rows)) return [];
+    foreach($rows as &$row){
+        $parents=[];
+        foreach(array_filter(explode('||',(string)($row['veli_bilgileri']??''))) as $part){
+            [$id,$name]=array_pad(explode('::',$part,2),2,'');
+            if((int)$id>0 && trim($name)!=='') $parents[]=['id'=>(int)$id,'name'=>$name];
+        }
+        $teachers=[];
+        foreach(array_filter(explode('||',(string)($row['ogretmen_bilgileri']??''))) as $part){
+            [$id,$name]=array_pad(explode('::',$part,2),2,'');
+            if((int)$id>0 && trim($name)!=='') $teachers[]=['id'=>(int)$id,'name'=>$name];
+        }
+        $row['veliler']=$parents;
+        $row['ogretmenler']=$teachers;
+        unset($row['veli_bilgileri'],$row['ogretmen_bilgileri']);
+    }
+    unset($row);
+    return $rows;
+}
+
+function km_matching_options(PDO $pdo,int $institutionId=0): array {
+    $params=[];
+    $where="k.aktif=1 AND kk.aktif=1";
+    if($institutionId>0){
+        $where.=" AND k.id=?";
+        $params[]=$institutionId;
+    }
+
+    $sql="SELECT kk.kurum_id,k.ad kurum_adi,kk.kurum_rolu,
+      u.id kullanici_id,u.ad_soyad,u.email,
+      CASE
+        WHEN kk.kurum_rolu='ogrenci' THEN o.id
+        WHEN kk.kurum_rolu='veli' THEN v.id
+        WHEN kk.kurum_rolu='ogretmen' THEN og.id
+        ELSE NULL
+      END profil_id,
+      CASE
+        WHEN kk.kurum_rolu='ogrenci' THEN COALESCE(NULLIF(TRIM(o.ad),''),u.ad_soyad)
+        WHEN kk.kurum_rolu='veli' THEN COALESCE(NULLIF(TRIM(v.ad_soyad),''),u.ad_soyad)
+        WHEN kk.kurum_rolu='ogretmen' THEN COALESCE(NULLIF(TRIM(og.ad_soyad),''),u.ad_soyad)
+        ELSE u.ad_soyad
+      END ad
+      FROM kurum_kullanicilari kk
+      INNER JOIN kurumlar k ON k.id=kk.kurum_id
+      INNER JOIN kullanicilar u ON u.id=kk.kullanici_id AND u.aktif=1
+      LEFT JOIN ogrenciler o ON o.kullanici_id=u.id AND o.aktif=1
+      LEFT JOIN veliler v ON v.kullanici_id=u.id AND v.aktif=1
+      LEFT JOIN ogretmenler og ON og.kullanici_id=u.id AND og.aktif=1
+      WHERE {$where}
+        AND kk.kurum_rolu IN ('ogrenci','veli','ogretmen')
+      ORDER BY k.ad,kk.kurum_rolu,ad,u.id";
+
+    $stmt=$pdo->prepare($sql);
+    $stmt->execute($params);
+    $rows=$stmt->fetchAll();
+    $stmt->closeCursor();
+
+    $result=['ogrenciler'=>[],'veliler'=>[],'ogretmenler'=>[]];
+    foreach(is_array($rows)?$rows:[] as $row){
+        $profileId=(int)($row['profil_id']??0);
+        if($profileId<=0) continue;
+        $key=match((string)$row['kurum_rolu']){
+            'ogrenci'=>'ogrenciler',
+            'veli'=>'veliler',
+            'ogretmen'=>'ogretmenler',
+            default=>''
+        };
+        if($key==='') continue;
+        $result[$key][]=[
+            'kurum_id'=>(int)$row['kurum_id'],
+            'kurum_adi'=>(string)$row['kurum_adi'],
+            'profil_id'=>$profileId,
+            'kullanici_id'=>(int)$row['kullanici_id'],
+            'ad'=>(string)$row['ad'],
+            'email'=>(string)$row['email'],
+        ];
+    }
+    return $result;
+}
+
+function km_matching_assert_profile_in_institution(PDO $pdo,string $role,int $profileId,int $institutionId): bool {
+    if($profileId<=0 || $institutionId<=0 || !in_array($role,['ogrenci','veli','ogretmen'],true)) return false;
+    $table=match($role){'ogrenci'=>'ogrenciler','veli'=>'veliler','ogretmen'=>'ogretmenler'};
+    $profileRole=$role;
+    $stmt=$pdo->prepare("SELECT 1
+      FROM {$table} p
+      INNER JOIN kullanicilar u ON u.id=p.kullanici_id AND u.aktif=1
+      INNER JOIN kurum_kullanicilari kk
+        ON kk.kullanici_id=u.id AND kk.kurum_id=? AND kk.kurum_rolu=? AND kk.aktif=1
+      INNER JOIN kurumlar k ON k.id=kk.kurum_id AND k.aktif=1
+      WHERE p.id=? AND p.aktif=1
+      LIMIT 1");
+    $stmt->execute([$institutionId,$profileRole,$profileId]);
+    $ok=(bool)$stmt->fetchColumn();
+    $stmt->closeCursor();
+    return $ok;
+}
+
+function km_save_matching(PDO $pdo,array $actor,int $institutionId,int $studentId,array $parentIds,array $teacherIds): void {
+    if(!km_matching_assert_profile_in_institution($pdo,'ogrenci',$studentId,$institutionId)){
+        throw new RuntimeException('Öğrenci seçilen kuruma ait değil.');
+    }
+
+    $parentIds=array_values(array_unique(array_filter(array_map('intval',$parentIds),static fn(int $id):bool=>$id>0)));
+    $teacherIds=array_values(array_unique(array_filter(array_map('intval',$teacherIds),static fn(int $id):bool=>$id>0)));
+
+    foreach($parentIds as $id){
+        if(!km_matching_assert_profile_in_institution($pdo,'veli',$id,$institutionId)){
+            throw new RuntimeException('Seçilen velilerden biri bu kuruma ait değil.');
+        }
+    }
+    foreach($teacherIds as $id){
+        if(!km_matching_assert_profile_in_institution($pdo,'ogretmen',$id,$institutionId)){
+            throw new RuntimeException('Seçilen öğretmenlerden biri bu kuruma ait değil.');
+        }
+    }
+
+    $pdo->beginTransaction();
+    try{
+        $stmt=$pdo->prepare("DELETE vo FROM veli_ogrenci vo
+          INNER JOIN veliler v ON v.id=vo.veli_id
+          INNER JOIN kurum_kullanicilari kk
+            ON kk.kullanici_id=v.kullanici_id
+           AND kk.kurum_id=? AND kk.kurum_rolu='veli'
+          WHERE vo.ogrenci_id=?");
+        $stmt->execute([$institutionId,$studentId]);
+        $stmt->closeCursor();
+
+        $stmt=$pdo->prepare("DELETE oo FROM ogretmen_ogrenci oo
+          INNER JOIN ogretmenler og ON og.id=oo.ogretmen_id
+          INNER JOIN kurum_kullanicilari kk
+            ON kk.kullanici_id=og.kullanici_id
+           AND kk.kurum_id=? AND kk.kurum_rolu='ogretmen'
+          WHERE oo.ogrenci_id=?");
+        $stmt->execute([$institutionId,$studentId]);
+        $stmt->closeCursor();
+
+        if($parentIds){
+            $stmt=$pdo->prepare('INSERT IGNORE INTO veli_ogrenci (veli_id,ogrenci_id) VALUES (?,?)');
+            foreach($parentIds as $id) $stmt->execute([$id,$studentId]);
+            $stmt->closeCursor();
+        }
+        if($teacherIds){
+            $stmt=$pdo->prepare('INSERT IGNORE INTO ogretmen_ogrenci (ogretmen_id,ogrenci_id) VALUES (?,?)');
+            foreach($teacherIds as $id) $stmt->execute([$id,$studentId]);
+            $stmt->closeCursor();
+        }
+        $pdo->commit();
+    }catch(Throwable $e){
+        if($pdo->inTransaction()) $pdo->rollBack();
+        throw $e;
+    }
+
+    auth_audit(
+        $pdo,(int)$actor['id'],null,'kurum_eslestirme_guncelle',
+        'Kurum '.$institutionId.' / öğrenci '.$studentId.' / veli '.count($parentIds).' / öğretmen '.count($teacherIds)
+    );
+}
+
+function km_delete_matching(PDO $pdo,array $actor,int $institutionId,int $studentId): void {
+    km_save_matching($pdo,$actor,$institutionId,$studentId,[],[]);
+    auth_audit($pdo,(int)$actor['id'],null,'kurum_eslestirme_sil','Kurum '.$institutionId.' / öğrenci '.$studentId);
 }
