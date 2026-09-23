@@ -171,7 +171,7 @@ $links=array_merge($parentLinks?:[],$teacherLinks?:[]);
 <meta name="theme-color" content="#f8f7fc">
 <title>Kullanıcı Yönetimi — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="super-admin-pages.css?v=1.0.58">
+<link rel="stylesheet" href="super-admin-pages.css?v=1.0.59">
 </head>
 <body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?>
 <div class="app-shell">
@@ -236,7 +236,7 @@ $links=array_merge($parentLinks?:[],$teacherLinks?:[]);
 <?php if (!$links): ?><p class="little-note">Henüz eşleştirme yapılmamış.</p><?php endif; ?>
 <?php foreach ($links as $link): ?>
 <div class="history-item">
-<span><?=((string)$link['rol']==='veli'?'👪':'👩‍🏫')?></span>
+<span><svg><use href="<?=((string)$link['rol']==='veli'?'#sa-users':'#sa-teacher')?>"/></svg></span>
 <div>
 <strong><?=h_auth((string)$link['email'])?></strong>
 <small><?=h_auth((string)$link['rol'])?> · Öğrenci #<?=(int)$link['ogrenci_id']?></small>
@@ -273,7 +273,7 @@ $links=array_merge($parentLinks?:[],$teacherLinks?:[]);
 <h2>Kullanıcılar</h2>
 <?php foreach ($users as $u): ?>
 <div class="history-item">
-<span><?=((int)$u['aktif']===1?'🟢':'⚪')?></span>
+<span class="sa-status-dot"><svg><use href="#sa-circle"/></svg></span>
 <div>
 <strong><?=h_auth((string)$u['email'])?></strong>
 <small><?=h_auth((string)$u['ad_soyad'])?> · <?=h_auth((string)$u['roller'])?></small>
