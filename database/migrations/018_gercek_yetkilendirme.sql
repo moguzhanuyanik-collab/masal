@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS kullanicilar (
   PRIMARY KEY (id),
   UNIQUE KEY uk_kullanicilar_email (email),
   KEY ix_kullanicilar_rol (ana_rol,aktif)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
 
 CREATE TABLE IF NOT EXISTS kullanici_rolleri (
   kullanici_id BIGINT UNSIGNED NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS kullanici_rolleri (
   KEY ix_kullanici_rolleri_rol (rol),
   CONSTRAINT fk_kullanici_rolleri_kullanici FOREIGN KEY (kullanici_id)
     REFERENCES kullanicilar(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
 
 CREATE TABLE IF NOT EXISTS kullanici_oturum_tokenlari (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS kullanici_oturum_tokenlari (
   KEY ix_kullanici_token_user (kullanici_id,son_kullanma_tarihi),
   CONSTRAINT fk_kullanici_token_user FOREIGN KEY (kullanici_id)
     REFERENCES kullanicilar(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
 
 CREATE TABLE IF NOT EXISTS veliler (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS veliler (
   UNIQUE KEY uk_veli_kullanici (kullanici_id),
   CONSTRAINT fk_veli_kullanici FOREIGN KEY (kullanici_id)
     REFERENCES kullanicilar(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
 
 CREATE TABLE IF NOT EXISTS ogretmenler (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS ogretmenler (
   UNIQUE KEY uk_ogretmen_kullanici (kullanici_id),
   CONSTRAINT fk_ogretmen_kullanici FOREIGN KEY (kullanici_id)
     REFERENCES kullanicilar(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
 
 -- Eski veritabanlarında veliler/ogretmenler tabloları daha önceden var olabilir.
 -- Var olan veriyi silmeden yalnızca V1.0.35 yetkilendirmesinin ihtiyaç duyduğu eksik kolonları ekle.
@@ -153,7 +153,7 @@ SET @sql = CONCAT(
   'olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,',
   'PRIMARY KEY (veli_id,ogrenci_id),',
   'KEY ix_veli_ogrenci_ogrenci (ogrenci_id)',
-  ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+  ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci'
 );
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
@@ -173,7 +173,7 @@ SET @sql = CONCAT(
   'olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,',
   'PRIMARY KEY (ogretmen_id,ogrenci_id),',
   'KEY ix_ogretmen_ogrenci_ogrenci (ogrenci_id)',
-  ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+  ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci'
 );
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
@@ -192,7 +192,18 @@ CREATE TABLE IF NOT EXISTS yetki_loglari (
   KEY ix_yetki_log_hedef (hedef_kullanici_id,olusturulma_tarihi),
   CONSTRAINT fk_yetki_log_yapan FOREIGN KEY (yapan_kullanici_id) REFERENCES kullanicilar(id) ON DELETE SET NULL,
   CONSTRAINT fk_yetki_log_hedef FOREIGN KEY (hedef_kullanici_id) REFERENCES kullanicilar(id) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
+
+-- Önceki yarım kurulumlarda oluşmuş yetkilendirme tablolarının collation'ını
+-- uygulamanın ana standardı olan utf8mb4_turkish_ci ile hizala.
+ALTER TABLE kullanicilar CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+ALTER TABLE kullanici_rolleri CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+ALTER TABLE kullanici_oturum_tokenlari CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+ALTER TABLE veliler CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+ALTER TABLE ogretmenler CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+ALTER TABLE veli_ogrenci CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+ALTER TABLE ogretmen_ogrenci CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
+ALTER TABLE yetki_loglari CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci;
 
 SET @has_kullanici_id = (
   SELECT COUNT(*) FROM information_schema.columns
@@ -216,11 +227,11 @@ ON DUPLICATE KEY UPDATE
 INSERT IGNORE INTO kullanici_rolleri (kullanici_id,rol)
 SELECT k.id,'ogrenci'
 FROM kullanicilar k
-INNER JOIN ogrenciler o ON LOWER(TRIM(o.email))=k.email
+INNER JOIN ogrenciler o ON (LOWER(TRIM(o.email)) COLLATE utf8mb4_turkish_ci)=(k.email COLLATE utf8mb4_turkish_ci)
 WHERE o.email IS NOT NULL AND TRIM(o.email)<>'';
 
 UPDATE ogrenciler o
-INNER JOIN kullanicilar k ON LOWER(TRIM(o.email))=k.email
+INNER JOIN kullanicilar k ON (LOWER(TRIM(o.email)) COLLATE utf8mb4_turkish_ci)=(k.email COLLATE utf8mb4_turkish_ci)
 SET o.kullanici_id=k.id
 WHERE o.kullanici_id IS NULL;
 
