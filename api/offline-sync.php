@@ -122,7 +122,14 @@ try {
             $merged = pwa_merge_progress($state, $local, $games);
             $pdo->prepare('INSERT INTO pwa_sync_islemleri (ogrenci_id,islem_anahtari) VALUES (?,?)')
                 ->execute([$studentId, $operation]);
-            save_student_state($pdo, $studentId, $merged);
+            // save_student_state() starts its own transaction, so persist here inside
+            // our account lock and idempotency transaction instead.
+            $merged = sanitize_state($merged);
+            $json = json_encode($merged, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            if (!is_string($json)) throw new RuntimeException('Kayıt kodlanamadı.');
+            $save = $pdo->prepare('INSERT INTO ogrenci_durumlari (ogrenci_id,durum_json) VALUES (?,?)
+                ON DUPLICATE KEY UPDATE durum_json=VALUES(durum_json),son_senkron=CURRENT_TIMESTAMP');
+            $save->execute([$studentId, $json]);
             normalized_sync($pdo, $studentId, $merged);
         }
 
