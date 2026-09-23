@@ -22,6 +22,8 @@ try{
 <header class="role-topbar"><a class="role-brand" href="ogretmen-paneli.php"><span>👩‍🏫</span><span><strong>Öğretmen</strong><small>ÖĞRENCİ TAKİBİ</small></span></a><div class="role-actions"><a class="role-icon" href="ogretmen-paneli.php">👩‍🏫</a><a class="role-icon" href="hesap-guvenligi.php">⚙️</a></div></header>
 <main class="role-content">
 <section class="role-hero"><span class="eyeline">ÖĞRETMEN ALANI</span><h1>Öğrencilerini takip et.</h1><p><?=tp_h((string)$user['ad_soyad'])?> · <?=count($institutionNames)?> kurum · <?=count($students)?> öğrenci</p><span class="role-hero-art">📚</span></section>
+<section class="role-section"><div class="role-section-head"><div><span class="eyeline">ÖĞRETMENİM</span><h2>Özel İçerikler</h2></div></div>
+<div class="role-modules"><a class="role-module" href="ogretmen-icerikleri.php"><span>⭐</span><div><strong>İçeriklerim</strong><small>Ders ve konu seçerek soru, tekrar, ödev veya not yayınla. Yalnızca sana bağlı öğrenciler görür.</small></div><b>→</b></a></div></section>
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">KURUMLARIM</span><h2>Bağlı Kurumlar</h2></div></div><div class="role-list">
 <?php if(!$institutionNames):?><div class="role-empty"><span>🏫</span>Henüz kuruma bağlanmadın.</div><?php else:foreach($institutionNames as $k):?><div class="role-row"><span>🏫</span><div><strong><?=tp_h((string)$k['ad'])?></strong><small>Öğretmen üyeliği</small></div><span class="role-pill ok">Aktif</span></div><?php endforeach;endif;?>
 </div></section>
@@ -29,4 +31,4 @@ try{
 <?php if(!$students):?><div class="role-empty"><span>🎒</span>Henüz öğrenci eşleştirilmedi.</div><?php else:foreach($students as $s):$x=$s['summary'];?><a class="role-row" href="ogrenci-raporu.php?id=<?=(int)$s['id']?>"><span>🎒</span><div><strong><?=tp_h((string)($s['ad']?:$s['email']))?></strong><small><?=$x['completed_steps']?> ders adımı · <?=$x['games']?> oyun · <?=$x['stars']?> yıldız</small></div><b>→</b></a><?php endforeach;endif;?>
 </div></section>
 <div class="role-note"><span>ℹ️</span><p>Öğretmene özel içerik üretimi ve kurum içeriği daha sonra bağlanacak. Şimdilik mevcut sistem verileri ve öğrenci raporları korunuyor.</p></div>
-</main><nav class="role-bottom"><a class="active" href="ogretmen-paneli.php"><span>⌂</span>Panel</a><a href="ogretmen-paneli.php#ogrenciler"><span>🎒</span>Öğrenciler</a><a href="hesap-guvenligi.php"><span>⚙️</span>Hesap</a><a href="logout.php"><span>🚪</span>Çıkış</a></nav></div></body></html>
+</main><nav class="role-bottom"><a class="active" href="ogretmen-paneli.php"><span>⌂</span>Panel</a><a href="ogretmen-paneli.php#ogrenciler"><span>🎒</span>Öğrenciler</a><a href="ogretmen-icerikleri.php"><span>⭐</span>İçeriklerim</a><a href="logout.php"><span>🚪</span>Çıkış</a></nav></div></body></html>
