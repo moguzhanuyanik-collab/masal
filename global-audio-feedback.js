@@ -2,6 +2,10 @@
 (() => {
   let speakingText='';
   const spokenState=new WeakMap();
+  let activeMotion=null;
+  let activeMotionCard=null;
+  let armedCard=null;
+  let armTimer=null;
 
   const clean=value=>String(value||'')
     .replace(/[\u{1F1E6}-\u{1F1FF}]/gu,' ')
@@ -14,11 +18,40 @@
     .replace(/\s+/g,' ')
     .trim();
 
-  const speak=text=>{
+  const stopCardMotion=()=>{
+    try{if(activeMotion)activeMotion.cancel();}catch{}
+    activeMotion=null;
+    activeMotionCard=null;
+  };
+
+  const startCardMotion=card=>{
+    stopCardMotion();
+    if(!card||typeof card.animate!=='function')return;
+    if(document.documentElement.classList.contains('reduce-motion'))return;
+    if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    activeMotionCard=card;
+    activeMotion=card.animate([
+      {transform:'translateX(0) scale(1)'},
+      {transform:'translateX(-2px) scale(1.008)'},
+      {transform:'translateX(2px) scale(1.008)'},
+      {transform:'translateX(0) scale(1)'}
+    ],{
+      duration:720,
+      iterations:Infinity,
+      easing:'ease-in-out'
+    });
+  };
+
+  const stopSpeech=()=>{
+    if('speechSynthesis' in window)window.speechSynthesis.cancel();
+    speakingText='';
+    stopCardMotion();
+  };
+
+  const speak=(text,motionCard=null,onEnd=null)=>{
     const value=clean(text);
     if(!value||!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined')return false;
-    if(value===speakingText&&window.speechSynthesis.speaking)return true;
-    window.speechSynthesis.cancel();
+    stopSpeech();
     const utterance=new SpeechSynthesisUtterance(value);
     utterance.lang='tr-TR';
     utterance.rate=0.86;
@@ -27,10 +60,85 @@
     const trVoice=voices.find(v=>/^tr(?:-|_)/i.test(v.lang||''));
     if(trVoice)utterance.voice=trVoice;
     speakingText=value;
-    utterance.onend=()=>{if(speakingText===value)speakingText='';};
-    utterance.onerror=()=>{if(speakingText===value)speakingText='';};
+    if(motionCard)startCardMotion(motionCard);
+    const done=()=>{
+      if(speakingText===value)speakingText='';
+      if(activeMotionCard===motionCard)stopCardMotion();
+      if(typeof onEnd==='function')onEnd();
+    };
+    utterance.onend=done;
+    utterance.onerror=done;
     window.speechSynthesis.speak(utterance);
     return true;
+  };
+
+  const spokenCardSelector=[
+    'a.game-tile',
+    '.course-row > a',
+    'a.home-course',
+    'a.home-game',
+    'a.resume-card',
+    'a.lesson-step',
+    '.story-list > a',
+    'a.reading-entry',
+    'a.island',
+    'a.mina-card',
+    '.daily-tasks > a'
+  ].join(',');
+
+  const clearArmTimer=()=>{
+    if(armTimer){clearTimeout(armTimer);armTimer=null;}
+  };
+
+  const disarmCard=card=>{
+    clearArmTimer();
+    if(!card||armedCard===card)armedCard=null;
+  };
+
+  const scheduleDisarm=card=>{
+    clearArmTimer();
+    armTimer=setTimeout(()=>{
+      if(armedCard===card)armedCard=null;
+    },5000);
+  };
+
+  const cardSpeechText=card=>{
+    if(!card)return '';
+    const titleEl=card.querySelector('h1,h2,h3,strong');
+    const descEl=card.querySelector('p');
+    const smallEl=card.querySelector('small');
+    const title=clean(titleEl?.textContent);
+    const desc=clean(descEl?.textContent);
+    const small=clean(smallEl?.textContent);
+    return [title,desc||small].filter(Boolean).join('. ');
+  };
+
+  const removeLegacyCardSpeakers=scope=>{
+    (scope||document).querySelectorAll?.('[data-speech-kind="activity-card"]').forEach(el=>el.remove());
+  };
+
+  const handleSpokenCardClick=e=>{
+    const target=e.target;
+    if(!(target instanceof Element))return;
+    if(target.closest('.activity-speech-icon,button,input,select,textarea,label'))return;
+
+    const card=target.closest(spokenCardSelector);
+    if(!card)return;
+
+    if(armedCard===card){
+      disarmCard(card);
+      stopSpeech();
+      return;
+    }
+
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    disarmCard(armedCard);
+    armedCard=card;
+    const text=cardSpeechText(card);
+    const ok=speak(text,card,()=>scheduleDisarm(card));
+    if(!ok)scheduleDisarm(card);
   };
 
   const isActivityGame=()=>location.hash.startsWith('#/oyun/');
@@ -45,35 +153,6 @@
     s.dataset.speechText=text;
     s.textContent='🔊 ';
     return s;
-  };
-
-  const decorateActivityCards=()=>{
-    if(!isActivitiesPage())return;
-    const screen=document.getElementById('screen');
-    if(!screen)return;
-
-    [...screen.querySelectorAll('.game-tile')].forEach(card=>{
-      if(card.dataset.speechCardDecorated==='1')return;
-
-      const titleEl=card.querySelector('h3');
-      const descEl=card.querySelector('p');
-      const title=clean(titleEl?.textContent);
-      const desc=clean(descEl?.textContent);
-      if(!title)return;
-
-      const control=iconControl(
-        title+' etkinliğini dinle',
-        'activity-card',
-        [title,desc].filter(Boolean).join('. ')
-      );
-
-      if(titleEl){
-        titleEl.prepend(control);
-      }else{
-        card.prepend(control);
-      }
-      card.dataset.speechCardDecorated='1';
-    });
   };
 
   const decorateIntro=scope=>{
@@ -106,7 +185,6 @@
   };
 
   const decorateActivities=()=>{
-    decorateActivityCards();
     if(!isActivityGame())return;
     const screen=document.getElementById('screen');
     if(!screen)return;
@@ -116,6 +194,7 @@
   };
 
   document.addEventListener('click',e=>{
+    handleSpokenCardClick(e);
     const b=e.target.closest?.('.activity-speech-icon');
     if(!b)return;
     e.preventDefault();
@@ -171,7 +250,7 @@
         if(feedback && isActivityGame()) requestAnimationFrame(()=>speakFeedbackElement(feedback));
       }
     }
-    if(needsDecorate)requestAnimationFrame(decorateActivities);
+    if(needsDecorate)requestAnimationFrame(()=>{removeLegacyCardSpeakers(document);decorateActivities();});
   });
 
   const start=()=>{
@@ -182,17 +261,21 @@
       childList:true,
       characterData:true
     });
+    removeLegacyCardSpeakers(document);
     decorateActivities();
   };
 
   window.addEventListener('hashchange',()=>{
-    if('speechSynthesis' in window)window.speechSynthesis.cancel();
-    speakingText='';
+    stopSpeech();
+    clearArmTimer();
+    armedCard=null;
     feedbackLast='';
-    setTimeout(decorateActivities,0);
+    setTimeout(()=>{removeLegacyCardSpeakers(document);decorateActivities();},0);
   });
   window.addEventListener('pagehide',()=>{
-    if('speechSynthesis' in window)window.speechSynthesis.cancel();
+    stopSpeech();
+    clearArmTimer();
+    armedCard=null;
   });
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);
