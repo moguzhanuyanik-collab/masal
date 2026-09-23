@@ -247,7 +247,7 @@
       const text=content&&!instruction?content:(item.state?defaultFeedback(item.state):'');
       if(!text)return;
       const previous=announcedFeedback.get(feedback);
-      if(previous&&previous.text===text&&previous.answer===item.answer)return;
+      if(previous&&previous.text===text&&(!item.answer||previous.answer===item.answer))return;
       announcedFeedback.set(feedback,{text,answer:item.answer});
       speak(text);
     });
