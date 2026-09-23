@@ -140,3 +140,29 @@ body.sa-subpage .role-bottom svg,body.sa-subpage .app-nav svg{font-size:18px}
 body.sa-subpage .role-hero-art svg{font-size:30px}
 body.sa-subpage .subpage-intro>span:first-child svg{font-size:24px}
 body.sa-subpage .role-hero-art,body.sa-subpage .subpage-intro>span:first-child{color:#e3e0ff}
+
+
+/* V1.0.59 — Süper Admin iç sayfa ikonlarını ana panel SVG diliyle eşitle */
+body.sa-subpage .sa-inline-icon,
+body.sa-subpage .role-note>span:first-child svg,
+body.sa-subpage .role-row>span:first-child svg,
+body.sa-subpage .history-item>span:first-child svg,
+body.sa-subpage .role-empty>span svg,
+body.sa-subpage .km-module-icon svg,
+body.sa-subpage .km-avatar svg{
+  width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round
+}
+body.sa-subpage .role-note>span:first-child{display:grid;place-items:center;flex:0 0 auto;color:var(--sap-primary)}
+body.sa-subpage .role-note>span:first-child svg{font-size:17px}
+body.sa-subpage .role-row>span:first-child,
+body.sa-subpage .history-item>span:first-child{color:var(--sap-primary)}
+body.sa-subpage .role-row>span:first-child svg,
+body.sa-subpage .history-item>span:first-child svg{font-size:19px}
+body.sa-subpage .role-empty>span{width:48px;height:48px;margin:0 auto 9px;border-radius:15px;display:grid!important;place-items:center;background:var(--sap-primary-soft);color:var(--sap-primary)}
+body.sa-subpage .role-empty>span svg{font-size:23px}
+body.sa-subpage .km-module-icon{color:var(--sap-primary)}
+body.sa-subpage .km-module-icon svg{font-size:21px}
+body.sa-subpage .km-avatar{color:var(--sap-primary)}
+body.sa-subpage .km-avatar svg{font-size:18px}
+body.sa-subpage .sa-status-dot{width:10px!important;height:10px!important;border-radius:50%!important;background:var(--sap-success-soft)!important;color:var(--sap-success)!important}
+body.sa-subpage .sa-status-dot svg{font-size:8px!important;fill:currentColor;stroke:none!important}
