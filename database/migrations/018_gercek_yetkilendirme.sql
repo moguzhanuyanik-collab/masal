@@ -112,7 +112,7 @@ EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
 INSERT INTO kullanicilar (email,sifre_hash,ad_soyad,ana_rol,aktif,son_giris_tarihi,son_giris_ip)
-SELECT LOWER(TRIM(o.email)),o.sifre_hash,SUBSTRING_INDEX(LOWER(TRIM(o.email)),'@',1),'ogrenci',o.aktif,o.son_giris_tarihi,o.son_giris_ip
+SELECT LOWER(TRIM(o.email)),o.sifre_hash,COALESCE(NULLIF(TRIM(o.ad),''),SUBSTRING_INDEX(LOWER(TRIM(o.email)),'@',1)),'ogrenci',o.aktif,o.son_giris_tarihi,o.son_giris_ip
 FROM ogrenciler o
 WHERE o.email IS NOT NULL AND TRIM(o.email)<>'' AND o.sifre_hash IS NOT NULL AND o.sifre_hash<>''
 ON DUPLICATE KEY UPDATE
