@@ -4,12 +4,11 @@
  if(!Number.isInteger(sid)||sid<=0)return;
  const store=window.IlkAdimPwaStore;
  const q=s=>document.querySelector(s);
- const e=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&gt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const e=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  let installPrompt=null,installed=window.matchMedia?.('(display-mode: standalone)').matches||false;
  let registration=null,ready=false,pack=null,count=0,syncing=false,message='',syncTime='';
  let panelActive=false;
  try{localStorage.setItem('ilkadim-pwa34-active-student',String(sid));}catch{}
- const supported='indexedDB' in window&&'serviceWorker' in navigator&&location.protocol==='https:'||location.hostname==='localhost';
  const reg=async()=>{
   if(!('serviceWorker' in navigator)||!(location.protocol==='https:'||location.hostname==='localhost'))return;
   try{registration=await navigator.serviceWorker.register('service-worker.js',{updateViaCache:'none'});await registration.update();}catch(err){console.warn('İlkAdım PWA:',err);}
