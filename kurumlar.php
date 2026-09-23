@@ -30,7 +30,7 @@ function kmh(string $v): string {
 <title>Kurumlar Modülü — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="kurum.css?v=1.0.41">
-<link rel="stylesheet" href="kurumlar-kart.css?v=1.0.51">
+<link rel="stylesheet" href="kurumlar-kart.css?v=1.0.71">
 <link rel="stylesheet" href="kurumlar-responsive.css?v=1.0.52">
 <link rel="stylesheet" href="super-admin-pages.css?v=1.0.61">
 <script src="kurumlar-kart.js?v=1.0.59" defer></script>
