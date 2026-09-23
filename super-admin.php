@@ -22,21 +22,13 @@ function sa_version(): string {
 }
 $stats=[
  'kurum'=>auth_runtime_table_exists($pdo,'kurumlar')?sa_scalar($pdo,'SELECT COUNT(*) FROM kurumlar WHERE aktif=1'):0,
- 'kullanici'=>auth_runtime_table_exists($pdo,'kullanicilar')?sa_scalar($pdo,'SELECT COUNT(*) FROM kullanicilar WHERE aktif=1'):0,
  'ogrenci'=>auth_runtime_table_exists($pdo,'ogrenciler')?sa_scalar($pdo,'SELECT COUNT(*) FROM ogrenciler WHERE aktif=1'):0,
- 'yonetici'=>auth_runtime_table_exists($pdo,'kullanici_rolleri')?sa_scalar($pdo,"SELECT COUNT(DISTINCT kullanici_id) FROM kullanici_rolleri WHERE rol='yonetici'"):0,
+ 'ogretmen'=>auth_runtime_table_exists($pdo,'ogretmenler')?sa_scalar($pdo,'SELECT COUNT(*) FROM ogretmenler WHERE aktif=1'):0,
+ 'veli'=>auth_runtime_table_exists($pdo,'veliler')?sa_scalar($pdo,'SELECT COUNT(*) FROM veliler WHERE aktif=1'):0,
 ];
 $lastUpdate=auth_runtime_table_exists($pdo,'guncelleme_gecmisi')?sa_value($pdo,"SELECT COALESCE(MAX(bitis_tarihi),'') FROM guncelleme_gecmisi WHERE durum='basarili'"):'';
 $syncCount=auth_runtime_table_exists($pdo,'pwa_sync_islemleri')?sa_scalar($pdo,'SELECT COUNT(*) FROM pwa_sync_islemleri'):0;
 $institutionRows=auth_runtime_table_exists($pdo,'kurumlar')?sa_rows($pdo,'SELECT id,ad,kod,tur,aktif FROM kurumlar ORDER BY aktif DESC,id DESC LIMIT 5'):[];
-$institutionTotal=auth_runtime_table_exists($pdo,'kurumlar')?sa_scalar($pdo,'SELECT COUNT(*) FROM kurumlar'):0;
-$roleStats=[];
-if(auth_runtime_table_exists($pdo,'kurum_kullanicilari')) {
-    foreach(['yonetici','ogretmen','veli'] as $role) {
-        $roleStats[$role]=sa_scalar($pdo,'SELECT COUNT(DISTINCT kullanici_id) FROM kurum_kullanicilari WHERE kurum_rolu=? AND aktif=1',[$role]);
-    }
-}
-$roleStats+=['yonetici'=>0,'ogretmen'=>0,'veli'=>0];
 $photoBase=__DIR__.'/storage/profil/'.(int)$user['id'];
 $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase.'.jpg')?$photoBase.'.jpg':'');
 ?><!doctype html>
@@ -46,7 +38,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f7f7fb">
 <title>Süper Admin — İlkAdım</title>
-<link rel="stylesheet" href="super-admin.css?v=1.0.61">
+<link rel="stylesheet" href="super-admin.css?v=1.0.62">
 </head>
 <body class="sa-page">
 <svg class="sa-icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -97,20 +89,17 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
 </header>
 
 <main class="sa-content">
-<section class="sa-welcome">
+<section class="sa-welcome sa-welcome-compact">
   <div class="sa-welcome-copy">
     <span class="sa-kicker">SÜPER ADMİN · GENEL BAKIŞ</span>
     <h1>Hoş geldiniz, <?=sa_h((string)$user['ad_soyad'])?></h1>
-    <p>Kurumları, kullanıcıları ve sistem durumunu tek merkezden yönetin.</p>
+    <p>Önemli bilgileri tek bakışta görün; ayrıntılı işlemleri menülerden yönetin.</p>
     <div class="sa-welcome-meta"><span><i></i>Sistem aktif</span><span>v<?=sa_h(sa_version())?></span></div>
   </div>
   <div class="sa-welcome-mark"><svg><use href="#sa-shield"/></svg></div>
 </section>
 
-<section class="sa-crm-grid" aria-label="Yönetim özeti">
-  <div class="sa-crm-main">
-
-<section class="sa-section">
+<section class="sa-section sa-summary-section">
  <div class="sa-section-title"><div><small>GENEL BAKIŞ</small><h2>Sistem Özeti</h2></div><span class="sa-section-note">Canlı veriler</span></div>
  <div class="sa-cards">
   <a href="kurumlar.php" class="sa-card">
@@ -118,87 +107,48 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
     <div><strong><?=$stats['kurum']?></strong><small>Aktif Kurum</small></div>
     <span class="sa-card-arrow"><svg><use href="#sa-arrow"/></svg></span>
   </a>
-  <a href="yetkilendirme.php" class="sa-card">
-    <span class="sa-stat-icon"><svg><use href="#sa-users"/></svg></span>
-    <div><strong><?=$stats['kullanici']?></strong><small>Aktif Kullanıcı</small></div>
-    <span class="sa-card-arrow"><svg><use href="#sa-arrow"/></svg></span>
-  </a>
   <a href="global-ogrenciler.php" class="sa-card">
     <span class="sa-stat-icon"><svg><use href="#sa-student"/></svg></span>
     <div><strong><?=$stats['ogrenci']?></strong><small>Öğrenci</small></div>
     <span class="sa-card-arrow"><svg><use href="#sa-arrow"/></svg></span>
   </a>
-  <a href="yetkilendirme.php" class="sa-card">
-    <span class="sa-stat-icon"><svg><use href="#sa-shield"/></svg></span>
-    <div><strong><?=$stats['yonetici']?></strong><small>Yönetici</small></div>
+  <a href="kurumlar.php?sekme=ogretmenler" class="sa-card">
+    <span class="sa-stat-icon"><svg><use href="#sa-users"/></svg></span>
+    <div><strong><?=$stats['ogretmen']?></strong><small>Öğretmen</small></div>
+    <span class="sa-card-arrow"><svg><use href="#sa-arrow"/></svg></span>
+  </a>
+  <a href="kurumlar.php?sekme=veliler" class="sa-card">
+    <span class="sa-stat-icon"><svg><use href="#sa-users"/></svg></span>
+    <div><strong><?=$stats['veli']?></strong><small>Veli</small></div>
     <span class="sa-card-arrow"><svg><use href="#sa-arrow"/></svg></span>
   </a>
  </div>
 </section>
 
-<section class="sa-section">
- <div class="sa-section-title"><div><small>CRM İŞLEMLERİ</small><h2>Kurum Yönetimi</h2></div></div>
- <div class="sa-menu-grid">
-  <a href="kurumlar.php?sekme=kurumlar"><span class="sa-menu-icon"><svg><use href="#sa-building"/></svg></span><span><strong>Kurumlar</strong><small>Kurumları görüntüle, ekle ve düzenle</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-  <a href="kurumlar.php?sekme=yoneticiler"><span class="sa-menu-icon"><svg><use href="#sa-shield"/></svg></span><span><strong>Kurum Yöneticileri</strong><small>Kurumlara bağlı yöneticileri yönet</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-  <a href="kurumlar.php?sekme=ogretmenler"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Öğretmenler</strong><small>Kurum bazında öğretmen hesapları</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-  <a href="kurumlar.php?sekme=veliler"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Veliler</strong><small>Kurum bazında veli hesapları</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
- </div>
-</section>
-<section class="sa-section">
- <div class="sa-section-title"><div><small>KURUMDAN BAĞIMSIZ</small><h2>Global</h2></div></div>
- <div class="sa-menu-grid">
-  <a href="global-ogrenciler.php"><span class="sa-menu-icon"><svg><use href="#sa-student"/></svg></span><span><strong>Global Öğrenciler</strong><small>Öğrenci hesapları ve listesi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-  <a href="global-veliler.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Global Veliler</strong><small>Veli hesapları ve listesi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-  <a href="global-eslestirme.php"><span class="sa-menu-icon"><svg><use href="#sa-link"/></svg></span><span><strong>Veli · Öğrenci Eşleştirme</strong><small>Global bağlantıları yönet</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
- </div>
-</section>
-<section class="sa-section">
- <div class="sa-section-title"><div><small>YÖNETİM</small><h2>Yetki ve Sistem</h2></div></div>
- <div class="sa-menu-grid">
-  <a href="yonetici-yetkileri.php"><span class="sa-menu-icon"><svg><use href="#sa-shield"/></svg></span><span><strong>Yönetici Yetkileri</strong><small>Her yönetici için erişim izinleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-  <a href="yetkilendirme.php"><span class="sa-menu-icon"><svg><use href="#sa-settings"/></svg></span><span><strong>Sistem Rolleri</strong><small>Kullanıcı rolü ve erişim yönetimi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-  <a href="guncelleme.php"><span class="sa-menu-icon"><svg><use href="#sa-refresh"/></svg></span><span><strong>Güncelleme</strong><small>Yeni sürümleri kontrol edin</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-  <a href="super-admin-profil.php"><span class="sa-menu-icon"><svg><use href="#sa-user"/></svg></span><span><strong>Profilim</strong><small>Fotoğraf ve kişisel bilgiler</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
- </div>
-</section>
+<section class="sa-simple-grid" aria-label="Süper Admin özeti">
+  <section class="sa-section">
+   <div class="sa-section-title"><div><small>KURUMLAR</small><h2>Son Kurumlar</h2></div><a class="sa-section-link" href="kurumlar.php">Tümünü Gör <svg><use href="#sa-arrow"/></svg></a></div>
+   <div class="sa-institution-list">
+    <?php if(!$institutionRows): ?><p class="sa-empty">Henüz kurum kaydı yok. Kurumlar bölümünden ilk kurumu ekleyebilirsiniz.</p><?php endif; ?>
+    <?php foreach($institutionRows as $institution): ?>
+    <a href="kurumlar.php?sekme=kurumlar&amp;kurum_id=<?=(int)$institution['id']?>">
+      <span class="sa-menu-icon"><svg><use href="#sa-building"/></svg></span>
+      <span class="sa-institution-name"><strong><?=sa_h((string)$institution['ad'])?></strong><small><?=sa_h((string)($institution['tur']?:$institution['kod']))?></small></span>
+      <span class="sa-institution-state <?=$institution['aktif']?'is-active':'is-inactive'?>"><?=$institution['aktif']?'Aktif':'Pasif'?></span>
+      <svg class="sa-row-arrow"><use href="#sa-arrow"/></svg>
+    </a>
+    <?php endforeach; ?>
+   </div>
+  </section>
 
-<section class="sa-section">
- <div class="sa-section-title"><div><small>KURUM PORTFÖYÜ</small><h2>Kurum Listesi</h2></div><a class="sa-section-link" href="kurumlar.php?sekme=kurumlar">Tümünü Gör <svg><use href="#sa-arrow"/></svg></a></div>
- <div class="sa-institution-list">
-  <?php if(!$institutionRows): ?><p class="sa-empty">Henüz kurum kaydı yok. Kurumlar alanından ilk kurumu ekleyebilirsiniz.</p><?php endif; ?>
-  <?php foreach($institutionRows as $institution): ?>
-  <a href="kurumlar.php?sekme=kurumlar&amp;kurum_id=<?=(int)$institution['id']?>">
-    <span class="sa-menu-icon"><svg><use href="#sa-building"/></svg></span>
-    <span class="sa-institution-name"><strong><?=sa_h((string)$institution['ad'])?></strong><small><?=sa_h((string)($institution['tur']?:$institution['kod']))?></small></span>
-    <span class="sa-institution-state <?=$institution['aktif']?'is-active':'is-inactive'?>"><?=$institution['aktif']?'Aktif':'Pasif'?></span>
-    <svg class="sa-row-arrow"><use href="#sa-arrow"/></svg>
-  </a>
-  <?php endforeach; ?>
- </div>
-</section>
-</div>
-<div class="sa-crm-aside">
-<section class="sa-section sa-crm-snapshot">
- <div class="sa-section-title"><div><small>OPERASYON</small><h2>Kurum Özeti</h2></div></div>
- <div class="sa-snapshot"><div><span>Toplam kurum</span><strong><?=$institutionTotal?></strong></div><div><span>Aktif kurum</span><strong><?=$stats['kurum']?></strong></div><div><span>Pasif kurum</span><strong><?=max(0,$institutionTotal-$stats['kurum'])?></strong></div></div>
- <a class="sa-primary-action" href="kurumlar.php?sekme=kurumlar">Kurumları Yönet <svg><use href="#sa-arrow"/></svg></a>
-</section>
-<section class="sa-section sa-crm-snapshot">
- <div class="sa-section-title"><div><small>EKİP</small><h2>Aktif Roller</h2></div></div>
- <div class="sa-snapshot"><div><span>Kurum yöneticileri</span><strong><?=$roleStats['yonetici']?></strong></div><div><span>Öğretmenler</span><strong><?=$roleStats['ogretmen']?></strong></div><div><span>Veliler</span><strong><?=$roleStats['veli']?></strong></div></div>
- <a class="sa-text-action" href="yetkilendirme.php">Rolleri Yönet <svg><use href="#sa-arrow"/></svg></a>
-</section>
-
-<section class="sa-section">
- <div class="sa-section-title"><div><small>ALTYAPI</small><h2>Sistem Durumu</h2></div></div>
- <div class="sa-status-list">
-  <div><span class="sa-status-icon"><svg><use href="#sa-database"/></svg></span><p><strong>MySQL Veritabanı</strong><small>Canlı veritabanı bağlantısı</small></p><b><i></i>Çalışıyor</b></div>
-  <div><span class="sa-status-icon"><svg><use href="#sa-cloud"/></svg></span><p><strong>PWA Eşitleme</strong><small><?=$syncCount?> eşitleme kaydı</small></p><b><i></i>Aktif</b></div>
-  <div><span class="sa-status-icon"><svg><use href="#sa-refresh"/></svg></span><p><strong>Son Başarılı Güncelleme</strong><small><?=sa_h($lastUpdate!==''?$lastUpdate:'Henüz kayıt yok')?></small></p><em>v<?=sa_h(sa_version())?></em></div>
- </div>
-</section>
-</div>
+  <section class="sa-section">
+   <div class="sa-section-title"><div><small>SİSTEM</small><h2>Durum</h2></div></div>
+   <div class="sa-status-list">
+    <div><span class="sa-status-icon"><svg><use href="#sa-database"/></svg></span><p><strong>MySQL</strong><small>Veritabanı bağlantısı</small></p><b><i></i>Çalışıyor</b></div>
+    <div><span class="sa-status-icon"><svg><use href="#sa-cloud"/></svg></span><p><strong>PWA Eşitleme</strong><small><?=$syncCount?> eşitleme kaydı</small></p><b><i></i>Aktif</b></div>
+    <div><span class="sa-status-icon"><svg><use href="#sa-refresh"/></svg></span><p><strong>Güncelleme</strong><small><?=sa_h($lastUpdate!==''?$lastUpdate:'Henüz kayıt yok')?></small></p><em>v<?=sa_h(sa_version())?></em></div>
+   </div>
+  </section>
 </section>
 </main>
 
