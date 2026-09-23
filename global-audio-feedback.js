@@ -34,15 +34,16 @@
   };
 
   const isActivityGame=()=>location.hash.startsWith('#/oyun/');
-  const iconButton=(label,kind,text)=>{
-    const b=document.createElement('button');
-    b.type='button';
-    b.className='icon-button activity-speech-icon';
-    b.setAttribute('aria-label',label);
-    b.dataset.speechKind=kind;
-    b.dataset.speechText=text;
-    b.textContent='🔊';
-    return b;
+  const iconControl=(label,kind,text)=>{
+    const s=document.createElement('span');
+    s.className='activity-speech-icon';
+    s.setAttribute('role','button');
+    s.setAttribute('tabindex','0');
+    s.setAttribute('aria-label',label);
+    s.dataset.speechKind=kind;
+    s.dataset.speechText=text;
+    s.textContent='🔊 ';
+    return s;
   };
 
   const decorateIntro=scope=>{
@@ -51,33 +52,26 @@
     const title=clean(intro.querySelector('h1')?.textContent);
     const desc=clean(intro.querySelector('p')?.textContent);
     const text=[title,desc].filter(Boolean).join('. ');
-    if(text)intro.appendChild(iconButton('Anlatımı dinle','intro',text));
+    if(text)intro.appendChild(iconControl('Anlatımı dinle','intro',text));
   };
 
   const decorateQuestions=scope=>{
-    const questions=[...scope.querySelectorAll('.puzzle-question')];
-    questions.forEach(q=>{
-      if(q.parentElement?.querySelector('[data-speech-for-question="'+(q.dataset.speechId||'')+'"]'))return;
-      if(!q.dataset.speechId)q.dataset.speechId='q'+Math.random().toString(36).slice(2);
-      if(scope.querySelector('[data-speech-for-question="'+q.dataset.speechId+'"]'))return;
-      const b=iconButton('Soruyu dinle','question',clean(q.textContent));
-      b.dataset.speechForQuestion=q.dataset.speechId;
-      q.insertAdjacentElement('afterend',b);
+    [...scope.querySelectorAll('.puzzle-question')].forEach(q=>{
+      if(q.dataset.speechDecorated==='1')return;
+      const text=clean(q.textContent);
+      if(!text)return;
+      q.dataset.speechDecorated='1';
+      q.prepend(iconControl('Soruyu dinle','question',text));
     });
   };
 
   const decorateAnswers=scope=>{
     [...scope.querySelectorAll('.answers .answer')].forEach(answer=>{
       if(answer.dataset.speechDecorated==='1')return;
-      answer.dataset.speechDecorated='1';
       const text=clean(answer.textContent);
-      const b=iconButton('Bu şıkkı dinle','option',text);
-      b.addEventListener('click',e=>{
-        e.preventDefault();
-        e.stopPropagation();
-        speak(text);
-      });
-      answer.insertAdjacentElement('beforebegin',b);
+      if(!text)return;
+      answer.dataset.speechDecorated='1';
+      answer.prepend(iconControl('Bu şıkkı dinle','option',text));
     });
   };
 
@@ -93,6 +87,14 @@
   document.addEventListener('click',e=>{
     const b=e.target.closest?.('.activity-speech-icon');
     if(!b)return;
+    e.preventDefault();
+    e.stopPropagation();
+    speak(b.dataset.speechText||'');
+  },true);
+
+  document.addEventListener('keydown',e=>{
+    const b=e.target.closest?.('.activity-speech-icon');
+    if(!b||!(e.key==='Enter'||e.key===' '))return;
     e.preventDefault();
     e.stopPropagation();
     speak(b.dataset.speechText||'');
