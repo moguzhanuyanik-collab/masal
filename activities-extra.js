@@ -100,10 +100,12 @@
 
   function play(g){
     const screen=document.getElementById('screen');
-    if(!screen||screen.dataset.extraGame===g.id)return;
+    if(!screen)return;
+    const mounted=screen.querySelector('[data-extra-game-screen="'+g.id+'"]');
+    if(screen.dataset.extraGame===g.id && mounted)return;
     screen.dataset.extraGame=g.id;
     setTopbar(g);
-    screen.innerHTML='<div class="screen-content game-screen"><div class="game-intro" style="--tint:'+esc(g.color)+'">'+
+    screen.innerHTML='<div class="screen-content game-screen" data-extra-game-screen="'+esc(g.id)+'"><div class="game-intro" style="--tint:'+esc(g.color)+'">'+
       '<span>'+esc(g.emoji)+'</span><h1>'+esc(g.name)+'</h1><p>'+esc(g.description)+'</p></div><div id="game-board"></div></div>';
 
     const qs=Array.isArray(g.questions)?g.questions:[];
@@ -175,6 +177,8 @@
   function apply(){
     scheduled=false;
     const r=route();
+    const screen=document.getElementById('screen');
+    if(screen && !(r[0]==='oyun'&&EXTRA_IDS.includes(r[1]))) delete screen.dataset.extraGame;
     if(r[0]==='etkinlikler') injectActivities();
     if(r[0]==='oyun'&&EXTRA_IDS.includes(r[1])){
       const g=extraGames.find(x=>x.id===r[1]);
