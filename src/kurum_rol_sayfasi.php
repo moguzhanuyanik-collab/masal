@@ -5,6 +5,7 @@ if(!isset($kyRole,$kyTitle,$kyIcon,$kyDescription)) throw new RuntimeException('
 require __DIR__.'/bootstrap.php';
 require __DIR__.'/auth.php';
 require __DIR__.'/kurum_yonetimi.php';
+require __DIR__.'/yonetici_yetkileri.php';
 
 $user=require_role(['yonetici','super_admin']);
 $pdo=db();
@@ -16,6 +17,10 @@ try{
     $institution=ky_assert_manageable($pdo,$user,$institutionId);
     if($kyRole==='yonetici' && !$isSuper){
         throw new RuntimeException('Kurum yöneticilerini yalnızca Süper Admin yönetebilir.');
+    }
+    $permission=['ogretmen'=>'ogretmen_yonet','veli'=>'veli_yonet','ogrenci'=>'ogrenci_yonet'][$kyRole]??'';
+    if(!$isSuper && ($permission==='' || !yy_can($pdo,$user,$permission))) {
+        throw new RuntimeException('Bu bölüm için yönetici izni verilmemiş.');
     }
 }catch(Throwable $e){
     http_response_code(403);

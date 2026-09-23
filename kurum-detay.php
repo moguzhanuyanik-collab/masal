@@ -3,6 +3,7 @@ declare(strict_types=1);
 require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
 require __DIR__.'/src/kurum_yonetimi.php';
+require __DIR__.'/src/yonetici_yetkileri.php';
 
 $user=require_role(['yonetici','super_admin']);
 $pdo=db();
@@ -10,6 +11,7 @@ $institutionId=(int)($_GET['kurum_id']??0);
 
 try{
     $institution=ky_assert_manageable($pdo,$user,$institutionId);
+    if(!yy_can($pdo,$user,'kurum_goruntule')) throw new RuntimeException('Kurum görüntüleme izni yok.');
 }catch(Throwable){
     http_response_code(403);
     echo 'Bu kuruma erişim yetkin yok.';
@@ -59,9 +61,9 @@ $isSuper=auth_user_has_role($user,'super_admin');
 <?php if($isSuper):?>
 <a class="role-module" href="<?=$isSuper?'kurumlar.php?sekme=yoneticiler&amp;kurum_id='.$institutionId:'kurum-yoneticileri.php?kurum_id='.$institutionId?>"><span>🧑‍💼</span><div><strong>Yöneticiler</strong><small><?=$counts['yonetici']?> yönetici · Yönetici ekleme ve listeleme</small></div><b>→</b></a>
 <?php endif;?>
-<a class="role-module" href="<?=$isSuper?'kurumlar.php?sekme=ogretmenler&amp;kurum_id='.$institutionId:'kurum-ogretmenleri.php?kurum_id='.$institutionId?>"><span>👩‍🏫</span><div><strong>Öğretmenler</strong><small><?=$counts['ogretmen']?> öğretmen · Ayrı öğretmen sayfası</small></div><b>→</b></a>
-<a class="role-module" href="<?=$isSuper?'kurumlar.php?sekme=veliler&amp;kurum_id='.$institutionId:'kurum-velileri.php?kurum_id='.$institutionId?>"><span>👪</span><div><strong>Veliler</strong><small><?=$counts['veli']?> veli · Ayrı veli sayfası</small></div><b>→</b></a>
-<a class="role-module" href="<?=$isSuper?'kurumlar.php?sekme=ogrenciler&amp;kurum_id='.$institutionId:'kurum-ogrencileri.php?kurum_id='.$institutionId?>"><span>🎒</span><div><strong>Öğrenciler</strong><small><?=$counts['ogrenci']?> öğrenci · Ayrı öğrenci sayfası</small></div><b>→</b></a>
+<?php if(yy_can($pdo,$user,'ogretmen_yonet')):?><a class="role-module" href="<?=$isSuper?'kurumlar.php?sekme=ogretmenler&amp;kurum_id='.$institutionId:'kurum-ogretmenleri.php?kurum_id='.$institutionId?>"><span>👩‍🏫</span><div><strong>Öğretmenler</strong><small><?=$counts['ogretmen']?> öğretmen · Ayrı öğretmen sayfası</small></div><b>→</b></a><?php endif;?>
+<?php if(yy_can($pdo,$user,'veli_yonet')):?><a class="role-module" href="<?=$isSuper?'kurumlar.php?sekme=veliler&amp;kurum_id='.$institutionId:'kurum-velileri.php?kurum_id='.$institutionId?>"><span>👪</span><div><strong>Veliler</strong><small><?=$counts['veli']?> veli · Ayrı veli sayfası</small></div><b>→</b></a><?php endif;?>
+<?php if(yy_can($pdo,$user,'ogrenci_yonet')):?><a class="role-module" href="<?=$isSuper?'kurumlar.php?sekme=ogrenciler&amp;kurum_id='.$institutionId:'kurum-ogrencileri.php?kurum_id='.$institutionId?>"><span>🎒</span><div><strong>Öğrenciler</strong><small><?=$counts['ogrenci']?> öğrenci · Ayrı öğrenci sayfası</small></div><b>→</b></a><?php endif;?>
 </div>
 </section>
 
@@ -76,8 +78,8 @@ $isSuper=auth_user_has_role($user,'super_admin');
 </main>
 <nav class="role-bottom">
 <a class="active" href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>⌂</span>Kurum</a>
-<a href="<?=$isSuper?'kurumlar.php?sekme=ogretmenler&amp;kurum_id='.$institutionId:'kurum-ogretmenleri.php?kurum_id='.$institutionId?>"><span>👩‍🏫</span>Öğretmen</a>
-<a href="<?=$isSuper?'kurumlar.php?sekme=veliler&amp;kurum_id='.$institutionId:'kurum-velileri.php?kurum_id='.$institutionId?>"><span>👪</span>Veli</a>
-<a href="<?=$isSuper?'kurumlar.php?sekme=ogrenciler&amp;kurum_id='.$institutionId:'kurum-ogrencileri.php?kurum_id='.$institutionId?>"><span>🎒</span>Öğrenci</a>
+<?php if(yy_can($pdo,$user,'ogretmen_yonet')):?><a href="<?=$isSuper?'kurumlar.php?sekme=ogretmenler&amp;kurum_id='.$institutionId:'kurum-ogretmenleri.php?kurum_id='.$institutionId?>"><span>👩‍🏫</span>Öğretmen</a><?php endif;?>
+<?php if(yy_can($pdo,$user,'veli_yonet')):?><a href="<?=$isSuper?'kurumlar.php?sekme=veliler&amp;kurum_id='.$institutionId:'kurum-velileri.php?kurum_id='.$institutionId?>"><span>👪</span>Veli</a><?php endif;?>
+<?php if(yy_can($pdo,$user,'ogrenci_yonet')):?><a href="<?=$isSuper?'kurumlar.php?sekme=ogrenciler&amp;kurum_id='.$institutionId:'kurum-ogrencileri.php?kurum_id='.$institutionId?>"><span>🎒</span>Öğrenci</a><?php endif;?>
 </nav>
 </div></body></html>

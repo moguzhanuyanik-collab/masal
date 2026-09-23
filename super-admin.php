@@ -37,6 +37,8 @@ if(auth_runtime_table_exists($pdo,'kurum_kullanicilari')) {
     }
 }
 $roleStats+=['yonetici'=>0,'ogretmen'=>0,'veli'=>0];
+$photoBase=__DIR__.'/storage/profil/'.(int)$user['id'];
+$profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase.'.jpg')?$photoBase.'.jpg':'');
 ?><!doctype html>
 <html lang="tr">
 <head>
@@ -44,7 +46,7 @@ $roleStats+=['yonetici'=>0,'ogretmen'=>0,'veli'=>0];
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f7f7fb">
 <title>Süper Admin — İlkAdım</title>
-<link rel="stylesheet" href="super-admin.css?v=1.0.60">
+<link rel="stylesheet" href="super-admin.css?v=1.0.61">
 </head>
 <body class="sa-page">
 <svg class="sa-icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -60,6 +62,7 @@ $roleStats+=['yonetici'=>0,'ogretmen'=>0,'veli'=>0];
   <symbol id="sa-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
   <symbol id="sa-cloud" viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 .7-7.94A6 6 0 0 0 6.3 8.4 4.5 4.5 0 0 0 7 18Z"/></symbol>
   <symbol id="sa-arrow" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+  <symbol id="sa-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1 0l2.1-2.1a5 5 0 0 0-7.1-7.1L10 6M14 11a5 5 0 0 0-7.1 0l-2.1 2.1a5 5 0 0 0 7.1 7.1L14 18"/></symbol>
 </svg>
 
 <div class="sa-shell">
@@ -67,14 +70,19 @@ $roleStats+=['yonetici'=>0,'ogretmen'=>0,'veli'=>0];
   <a class="sa-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a>
   <p class="sa-sidebar-label">ÇALIŞMA ALANI</p>
   <a class="active" href="super-admin.php"><svg><use href="#sa-home"/></svg>Genel Bakış</a>
-  <a href="kurumlar.php?sekme=kurumlar"><svg><use href="#sa-building"/></svg>Kurum Yönetimi</a>
+  <a href="kurumlar.php"><svg><use href="#sa-building"/></svg>Kurum Yönetimi</a>
   <a href="kurumlar.php?sekme=yoneticiler"><svg><use href="#sa-shield"/></svg>Kurum Yöneticileri</a>
   <a href="kurumlar.php?sekme=ogretmenler"><svg><use href="#sa-users"/></svg>Öğretmenler</a>
   <a href="kurumlar.php?sekme=veliler"><svg><use href="#sa-users"/></svg>Veliler</a>
-  <a href="yetkilendirme.php"><svg><use href="#sa-settings"/></svg>Yetkilendirme</a>
+  <p class="sa-sidebar-label">GLOBAL</p>
+  <a href="global-ogrenciler.php"><svg><use href="#sa-student"/></svg>Global Öğrenciler</a>
+  <a href="global-veliler.php"><svg><use href="#sa-users"/></svg>Global Veliler</a>
+  <a href="global-eslestirme.php"><svg><use href="#sa-link"/></svg>Eşleştirme</a>
+  <p class="sa-sidebar-label">YETKİLENDİRME</p>
+  <a href="yonetici-yetkileri.php"><svg><use href="#sa-shield"/></svg>Yönetici Yetkileri</a>
   <p class="sa-sidebar-label">SİSTEM</p>
   <a href="guncelleme.php"><svg><use href="#sa-refresh"/></svg>Güncellemeler</a>
-  <a href="hesap-guvenligi.php"><svg><use href="#sa-user"/></svg>Hesabım</a>
+  <a href="super-admin-profil.php"><svg><use href="#sa-user"/></svg>Profilim</a>
 </aside>
 <div class="sa-workspace">
 <header class="sa-topbar">
@@ -84,7 +92,7 @@ $roleStats+=['yonetici'=>0,'ogretmen'=>0,'veli'=>0];
   </a>
   <div class="sa-top-actions">
     <a href="guncelleme.php" aria-label="Güncellemeler"><svg><use href="#sa-bell"/></svg></a>
-    <a href="hesap-guvenligi.php" aria-label="Hesabım"><svg><use href="#sa-user"/></svg></a>
+    <a href="super-admin-profil.php" aria-label="Profilim"><?php if($profilePhoto):?><img class="sa-avatar" src="profil-foto.php?v=<?=filemtime($profilePhoto)?>" width="35" height="35" alt=""><?php else:?><svg><use href="#sa-user"/></svg><?php endif;?></a>
   </div>
 </header>
 
@@ -129,17 +137,29 @@ $roleStats+=['yonetici'=>0,'ogretmen'=>0,'veli'=>0];
 </section>
 
 <section class="sa-section">
- <div class="sa-section-title"><div><small>CRM İŞLEMLERİ</small><h2>Yönetim Alanları</h2></div></div>
+ <div class="sa-section-title"><div><small>CRM İŞLEMLERİ</small><h2>Kurum Yönetimi</h2></div></div>
  <div class="sa-menu-grid">
   <a href="kurumlar.php?sekme=kurumlar"><span class="sa-menu-icon"><svg><use href="#sa-building"/></svg></span><span><strong>Kurumlar</strong><small>Kurumları görüntüle, ekle ve düzenle</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
   <a href="kurumlar.php?sekme=yoneticiler"><span class="sa-menu-icon"><svg><use href="#sa-shield"/></svg></span><span><strong>Kurum Yöneticileri</strong><small>Kurumlara bağlı yöneticileri yönet</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
   <a href="kurumlar.php?sekme=ogretmenler"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Öğretmenler</strong><small>Kurum bazında öğretmen hesapları</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
   <a href="kurumlar.php?sekme=veliler"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Veliler</strong><small>Kurum bazında veli hesapları</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-  <a href="global-ogrenciler.php"><span class="sa-menu-icon"><svg><use href="#sa-student"/></svg></span><span><strong>Öğrenciler</strong><small>Global öğrenci yönetimi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-  <a href="global-veliler.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Global Veliler</strong><small>Kurumdan bağımsız veli hesapları</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-  <a href="yetkilendirme.php"><span class="sa-menu-icon"><svg><use href="#sa-shield"/></svg></span><span><strong>Yetkilendirme</strong><small>Rol ve erişim yönetimi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+ </div>
+</section>
+<section class="sa-section">
+ <div class="sa-section-title"><div><small>KURUMDAN BAĞIMSIZ</small><h2>Global</h2></div></div>
+ <div class="sa-menu-grid">
+  <a href="global-ogrenciler.php"><span class="sa-menu-icon"><svg><use href="#sa-student"/></svg></span><span><strong>Global Öğrenciler</strong><small>Öğrenci hesapları ve listesi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+  <a href="global-veliler.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Global Veliler</strong><small>Veli hesapları ve listesi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+  <a href="global-eslestirme.php"><span class="sa-menu-icon"><svg><use href="#sa-link"/></svg></span><span><strong>Veli · Öğrenci Eşleştirme</strong><small>Global bağlantıları yönet</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+ </div>
+</section>
+<section class="sa-section">
+ <div class="sa-section-title"><div><small>YÖNETİM</small><h2>Yetki ve Sistem</h2></div></div>
+ <div class="sa-menu-grid">
+  <a href="yonetici-yetkileri.php"><span class="sa-menu-icon"><svg><use href="#sa-shield"/></svg></span><span><strong>Yönetici Yetkileri</strong><small>Her yönetici için erişim izinleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+  <a href="yetkilendirme.php"><span class="sa-menu-icon"><svg><use href="#sa-settings"/></svg></span><span><strong>Sistem Rolleri</strong><small>Kullanıcı rolü ve erişim yönetimi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
   <a href="guncelleme.php"><span class="sa-menu-icon"><svg><use href="#sa-refresh"/></svg></span><span><strong>Güncelleme</strong><small>Yeni sürümleri kontrol edin</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-  <a href="hesap-guvenligi.php"><span class="sa-menu-icon"><svg><use href="#sa-settings"/></svg></span><span><strong>Hesap & Güvenlik</strong><small>Profil ve güvenlik ayarları</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+  <a href="super-admin-profil.php"><span class="sa-menu-icon"><svg><use href="#sa-user"/></svg></span><span><strong>Profilim</strong><small>Fotoğraf ve kişisel bilgiler</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
  </div>
 </section>
 
@@ -185,9 +205,9 @@ $roleStats+=['yonetici'=>0,'ogretmen'=>0,'veli'=>0];
 <nav class="sa-bottom" aria-label="Süper Admin menüsü">
  <a class="active" href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a>
  <a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a>
- <a href="global-ogrenciler.php"><span><svg><use href="#sa-student"/></svg></span>Öğrenciler</a>
- <a href="global-veliler.php"><span><svg><use href="#sa-users"/></svg></span>Veliler</a>
- <a href="hesap-guvenligi.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
+ <a href="global.php"><span><svg><use href="#sa-users"/></svg></span>Global</a>
+ <a href="yonetici-yetkileri.php"><span><svg><use href="#sa-shield"/></svg></span>Yetkiler</a>
+ <a href="super-admin-profil.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
 </nav>
 </div>
 </div>

@@ -32,7 +32,7 @@ function kmh(string $v): string {
 <link rel="stylesheet" href="kurum.css?v=1.0.41">
 <link rel="stylesheet" href="kurumlar-kart.css?v=1.0.51">
 <link rel="stylesheet" href="kurumlar-responsive.css?v=1.0.52">
-<link rel="stylesheet" href="super-admin-pages.css?v=1.0.59">
+<link rel="stylesheet" href="super-admin-pages.css?v=1.0.61">
 <script src="kurumlar-kart.js?v=1.0.59" defer></script>
 <script src="kurumlar-responsive.js?v=1.0.52" defer></script>
 </head>
@@ -121,9 +121,9 @@ function kmh(string $v): string {
 <nav class="role-bottom">
 <a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a>
 <a class="active" href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a>
-<a href="global-ogrenciler.php"><span><svg><use href="#sa-student"/></svg></span>Öğrenciler</a>
-<a href="global-veliler.php"><span><svg><use href="#sa-users"/></svg></span>Veliler</a>
-<a href="hesap-guvenligi.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
+<a href="global.php"><span><svg><use href="#sa-users"/></svg></span>Global</a>
+<a href="yonetici-yetkileri.php"><span><svg><use href="#sa-shield"/></svg></span>Yetkiler</a>
+<a href="super-admin-profil.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
 </nav>
 </div>
 

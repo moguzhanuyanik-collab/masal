@@ -29,7 +29,7 @@ $parents=ky_global_parents($pdo);
 ?><!doctype html><html lang="tr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Global Veliler — İlkAdım</title>
-<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.56"><link rel="stylesheet" href="super-admin-pages.css?v=1.0.59">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.56"><link rel="stylesheet" href="super-admin-pages.css?v=1.0.61">
 </head><body class="role-page sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?><div class="role-shell">
 <header class="role-topbar">
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a>
@@ -60,8 +60,8 @@ $parents=ky_global_parents($pdo);
 <nav class="role-bottom">
 <a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a>
 <a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a>
-<a href="global-ogrenciler.php"><span><svg><use href="#sa-student"/></svg></span>Öğrenciler</a>
-<a class="active" href="global-veliler.php"><span><svg><use href="#sa-users"/></svg></span>Veliler</a>
-<a href="hesap-guvenligi.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
+<a class="active" href="global.php"><span><svg><use href="#sa-users"/></svg></span>Global</a>
+<a href="yonetici-yetkileri.php"><span><svg><use href="#sa-shield"/></svg></span>Yetkiler</a>
+<a href="super-admin-profil.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
 </nav>
 </div></body></html>

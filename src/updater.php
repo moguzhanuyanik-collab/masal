@@ -391,7 +391,9 @@ function install_github_update(string $root,array $gh,array $preserve): array {
 
         $sourceRoot=detect_update_root($extractDir);
         copy_update_tree($sourceRoot,$root,$preserve);
-        ensure_student_auth_schema($pdo);
+        // Mevcut öğrenci hesabını her güncellemede yeniden yazma.
+        // Şema kurulumu yalnızca sıfırdan kurulumda veya ilgili migration'da yapılır.
+        if(!auth_table_exists($pdo,'ogrenciler')) ensure_student_auth_schema($pdo);
         $migrations=run_pending_migrations($pdo,$root);
         $pdo->prepare("INSERT INTO sistem_ayarlar (ayar_anahtari,ayar_degeri) VALUES ('uygulama_surumu',?) ON DUPLICATE KEY UPDATE ayar_degeri=VALUES(ayar_degeri)")->execute([$remote['version']]);
         $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='basarili',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute(['Guncelleme tamamlandi. Yedek: '.$backupName,$logId]);

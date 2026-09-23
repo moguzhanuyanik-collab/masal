@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
+require __DIR__.'/src/yonetici_yetkileri.php';
 
 $user=require_role('yonetici');
 $pdo=db();
@@ -20,6 +21,7 @@ function yp_count(PDO $pdo,string $role,int $institutionId):int{
 }
 $stats=['ogrenci'=>0,'veli'=>0,'ogretmen'=>0,'yonetici'=>0];
 if($institutionId>0)foreach(array_keys($stats) as $r)$stats[$r]=yp_count($pdo,$r,$institutionId);
+$canView=yy_can($pdo,$user,'kurum_goruntule');
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Yönetici Paneli — İlkAdım</title>
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="yonetici.css?v=1.0.42"></head>
 <body class="role-page"><div class="role-shell">
@@ -27,27 +29,26 @@ if($institutionId>0)foreach(array_keys($stats) as $r)$stats[$r]=yp_count($pdo,$r
 <main class="role-content">
 <section class="role-hero"><span class="eyeline">KURUM YÖNETİMİ</span><h1><?=yp_h((string)($institution['ad']??'Kurum bulunamadı'))?></h1>
 <p><?=yp_h((string)$user['ad_soyad'])?> · İçerik kaynağı: <?=yp_h((string)($institution['icerik_kaynagi']??'—'))?></p>
-<?php if($institutionId>0):?><a class="role-primary" href="kurum-detay.php?kurum_id=<?=$institutionId?>">Kullanıcı Ekle →</a><?php endif;?><span class="role-hero-art">🏫</span></section>
+<?php if($institutionId>0 && $canView):?><a class="role-primary" href="kurum-detay.php?kurum_id=<?=$institutionId?>">Kurum Bölümlerini Aç →</a><?php endif;?><span class="role-hero-art">🏫</span></section>
 
 <?php if(count($ids)>1):?><section class="role-section"><div class="role-section-head"><div><span class="eyeline">KURUMLARIM</span><h2>Kurum Değiştir</h2></div></div><div class="role-list">
 <?php foreach($ids as $id): try{$s=$pdo->prepare('SELECT ad FROM kurumlar WHERE id=?');$s->execute([$id]);$name=(string)($s->fetchColumn()?:('Kurum #'.$id));$s->closeCursor();}catch(Throwable){$name='Kurum #'.$id;}?>
 <a class="role-row" href="yonetici-paneli.php?kurum_id=<?=$id?>"><span>🏫</span><div><strong><?=yp_h($name)?></strong><small>Kurum panelini aç</small></div><?=($id===$institutionId?'<span class="role-pill ok">Seçili</span>':'')?></a>
 <?php endforeach;?></div></section><?php endif;?>
 
-<section class="role-section"><div class="role-section-head"><div><span class="eyeline">GENEL BAKIŞ</span><h2>Kurum Özeti</h2></div></div><div class="role-stats">
+<?php if($canView):?><section class="role-section"><div class="role-section-head"><div><span class="eyeline">GENEL BAKIŞ</span><h2>Kurum Özeti</h2></div></div><div class="role-stats">
 <div class="role-stat"><span>🎒</span><strong><?=$stats['ogrenci']?></strong><small>Öğrenci</small></div>
 <div class="role-stat"><span>👪</span><strong><?=$stats['veli']?></strong><small>Veli</small></div>
 <div class="role-stat"><span>👩‍🏫</span><strong><?=$stats['ogretmen']?></strong><small>Öğretmen</small></div>
 <div class="role-stat"><span>🧑‍💼</span><strong><?=$stats['yonetici']?></strong><small>Yönetici</small></div>
-</div></section>
+</div></section><?php endif;?>
 
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">HIZLI ERİŞİM</span><h2>Yönetim İşlemleri</h2></div></div><div class="role-modules">
-<a class="role-module" href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>🏫</span><div><strong>Kurum Yönetimi</strong><small>Öğretmen, veli ve öğrencileri ayrı sayfalardan yönet.</small></div><b>→</b></a>
-<a class="role-module" href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>🏫</span><div><strong>Kurum Bölümleri</strong><small>Kendi kurumunun öğretmen, veli ve öğrenci bölümlerini aç.</small></div><b>→</b></a>
+<?php if($canView):?><a class="role-module" href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>🏫</span><div><strong>Kurum Yönetimi</strong><small>İzin verilen kurum bölümlerini görüntüle.</small></div><b>→</b></a><?php endif;?>
 <a class="role-module" href="hesap-guvenligi.php"><span>🔐</span><div><strong>Hesap Güvenliği</strong><small>E-posta ve şifre ayarlarını düzenle.</small></div><b>→</b></a>
 </div></section>
 
 <div class="role-note"><span>💡</span><p><?=($institution['icerik_kaynagi']??'sistem')==='sistem'?'Bu kurum İlkAdım sistem içeriklerini kullanır. Doğrudan/okulsuz öğrenciler için uygundur.':'Bu kurumun özel içerik kaynağı daha sonra öğretmen içerikleriyle etkinleştirilecek.'?></p></div>
 </main>
-<nav class="role-bottom"><a class="active" href="yonetici-paneli.php?kurum_id=<?=$institutionId?>"><span>⌂</span>Panel</a><a href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>👥</span>Kullanıcılar</a><a href="hesap-guvenligi.php"><span>⚙️</span>Hesap</a><a href="logout.php"><span>🚪</span>Çıkış</a></nav>
+<nav class="role-bottom"><a class="active" href="yonetici-paneli.php?kurum_id=<?=$institutionId?>"><span>⌂</span>Panel</a><?php if($canView):?><a href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>👥</span>Kullanıcılar</a><?php endif;?><a href="hesap-guvenligi.php"><span>⚙️</span>Hesap</a><a href="logout.php"><span>🚪</span>Çıkış</a></nav>
 </div></body></html>

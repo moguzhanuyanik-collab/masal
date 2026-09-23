@@ -166,3 +166,23 @@ body.sa-subpage .km-avatar{color:var(--sap-primary)}
 body.sa-subpage .km-avatar svg{font-size:18px}
 body.sa-subpage .sa-status-dot{width:10px!important;height:10px!important;border-radius:50%!important;background:var(--sap-success-soft)!important;color:var(--sap-success)!important}
 body.sa-subpage .sa-status-dot svg{font-size:8px!important;fill:currentColor;stroke:none!important}
+
+/* Süper Admin CRM alt sayfaları */
+body.sa-subpage .sa-hub-list{display:grid;gap:9px}
+body.sa-subpage .sa-hub-list>a{min-height:72px;display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff;border:1px solid var(--sap-line);border-radius:17px;box-shadow:0 4px 16px rgba(38,45,70,.028)}
+body.sa-subpage .sa-hub-icon{width:43px;height:43px;flex:0 0 43px;display:grid;place-items:center;border-radius:13px;background:var(--sap-primary-soft);color:var(--sap-primary)}
+body.sa-subpage .sa-hub-icon svg,body.sa-subpage .sa-hub-arrow{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+body.sa-subpage .sa-hub-list>a>span:nth-child(2){flex:1;min-width:0}
+body.sa-subpage .sa-hub-list strong{display:block;font-size:11px;font-weight:900}
+body.sa-subpage .sa-hub-list small{display:block;margin-top:3px;font-size:9px;color:var(--sap-muted)}
+body.sa-subpage .sa-hub-arrow{width:14px;height:14px;color:#b6bac6}
+body.sa-subpage .yy-manager-card>p{margin-top:3px;color:var(--sap-muted);font-size:9px}
+body.sa-subpage .yy-permissions{display:grid;gap:9px;margin-top:16px}
+body.sa-subpage .yy-permissions label{display:flex;align-items:center;gap:10px;padding:11px;border:1px solid var(--sap-line);border-radius:12px;font-size:10px;font-weight:800;cursor:pointer}
+body.sa-subpage .yy-permissions input{width:17px;height:17px;accent-color:var(--sap-primary)}
+body.sa-subpage .yy-remove{padding:8px 10px;border:1px solid #f4d6db;border-radius:10px;background:#fff4f5;color:#b93d4d;font-size:9px;font-weight:850;cursor:pointer}
+body.sa-subpage .sp-profile-photo{display:flex;align-items:center;gap:13px;padding-bottom:13px;border-bottom:1px solid var(--sap-line)}
+body.sa-subpage .sp-profile-photo img,body.sa-subpage .sp-profile-photo>span{width:82px;height:82px;object-fit:cover;border-radius:23px;background:var(--sap-primary-soft);color:var(--sap-primary);display:grid;place-items:center}
+body.sa-subpage .sp-profile-photo>span svg{width:34px;height:34px;fill:none;stroke:currentColor;stroke-width:1.8}
+body.sa-subpage .sp-profile-photo strong{display:block;font-size:15px}
+body.sa-subpage .sp-profile-photo small{display:block;margin-top:4px;color:var(--sap-muted);font-size:9px}

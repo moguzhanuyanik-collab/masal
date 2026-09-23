@@ -171,7 +171,7 @@ $local = read_app_version();
     <meta name="description" content="İlkAdım uygulama güncelleme merkezi.">
     <title>Uygulama Güncelleme — İlkAdım</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="super-admin-pages.css?v=1.0.59">
+    <link rel="stylesheet" href="super-admin-pages.css?v=1.0.61">
 </head>
 <body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?>
 <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -263,9 +263,9 @@ $local = read_app_version();
     <nav class="app-nav" aria-label="Süper Admin hızlı erişim">
         <a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a>
         <a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a>
-        <a href="global-ogrenciler.php"><span><svg><use href="#sa-student"/></svg></span>Öğrenciler</a>
-        <a href="global-veliler.php"><span><svg><use href="#sa-users"/></svg></span>Veliler</a>
-        <a href="hesap-guvenligi.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
+        <a href="global.php"><span><svg><use href="#sa-users"/></svg></span>Global</a>
+        <a href="yonetici-yetkileri.php"><span><svg><use href="#sa-shield"/></svg></span>Yetkiler</a>
+        <a href="super-admin-profil.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
     </nav>
 </div>
 

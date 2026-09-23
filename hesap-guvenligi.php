@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 <meta name="theme-color" content="#f8f7fc">
 <title>Hesap Güvenliği — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
-<?php if($isSuper): ?><link rel="stylesheet" href="super-admin-pages.css?v=1.0.59"><?php endif; ?>
+<?php if($isSuper): ?><link rel="stylesheet" href="super-admin-pages.css?v=1.0.61"><?php endif; ?>
 </head>
 <body<?= $isSuper?' class="sa-subpage"':'' ?>>
 <?php if($isSuper) require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -125,9 +125,9 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 <nav class="app-nav" aria-label="Süper Admin menüsü">
 <a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a>
 <a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a>
-<a href="global-ogrenciler.php"><span><svg><use href="#sa-student"/></svg></span>Öğrenciler</a>
-<a href="global-veliler.php"><span><svg><use href="#sa-users"/></svg></span>Veliler</a>
-<a class="active" href="hesap-guvenligi.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
+<a href="global.php"><span><svg><use href="#sa-users"/></svg></span>Global</a>
+<a href="yonetici-yetkileri.php"><span><svg><use href="#sa-shield"/></svg></span>Yetkiler</a>
+<a class="active" href="super-admin-profil.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a>
 </nav>
 <?php endif; ?>
 </div>
