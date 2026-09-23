@@ -329,7 +329,59 @@ function ensure_student_auth_schema(PDO $pdo): void {
     }
 }
 
+function repair_legacy_institution_membership_schema(PDO $pdo): void {
+    if(!auth_table_exists($pdo,'kurum_kullanicilari')) return;
+
+    $cols=auth_column_map($pdo,'kurum_kullanicilari');
+    $legacyColumns=['veli_id','ogretmen_id','ogrenci_id','yonetici_id'];
+    $hasLegacy=false;
+    foreach($legacyColumns as $column){
+        if(isset($cols[$column])){$hasLegacy=true;break;}
+    }
+    if(!$hasLegacy) return;
+    if(!auth_table_exists($pdo,'kurumlar')||!auth_table_exists($pdo,'kullanicilar')){
+        throw new RuntimeException('Eski kurum kullanıcısı şeması onarılamadı: temel tablolar eksik.');
+    }
+
+    $typeStmt=$pdo->prepare("SELECT COLUMN_TYPE FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name=? AND column_name='id' LIMIT 1");
+    $typeStmt->execute(['kurumlar']);
+    $kurumType=(string)($typeStmt->fetchColumn()?:'BIGINT UNSIGNED');
+    $typeStmt->closeCursor();
+    $typeStmt->execute(['kullanicilar']);
+    $kullaniciType=(string)($typeStmt->fetchColumn()?:'BIGINT UNSIGNED');
+    $typeStmt->closeCursor();
+
+    foreach([$kurumType,$kullaniciType] as $columnType){
+        if(!preg_match('/^[a-zA-Z0-9(), ]+$/',$columnType)){
+            throw new RuntimeException('Kurum kullanıcı şeması için geçersiz kolon tipi algılandı.');
+        }
+    }
+
+    $oldFk=(int)$pdo->query('SELECT @@FOREIGN_KEY_CHECKS')->fetchColumn();
+    try{
+        $pdo->exec('SET FOREIGN_KEY_CHECKS=0');
+        $pdo->exec('DROP TABLE kurum_kullanicilari');
+        $pdo->exec("CREATE TABLE kurum_kullanicilari (
+            kurum_id {$kurumType} NOT NULL,
+            kullanici_id {$kullaniciType} NOT NULL,
+            kurum_rolu VARCHAR(30) NOT NULL,
+            aktif TINYINT(1) NOT NULL DEFAULT 1,
+            olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (kurum_id,kullanici_id,kurum_rolu),
+            KEY ix_kurum_kullanici_user (kullanici_id,aktif),
+            KEY ix_kurum_kullanici_role (kurum_id,kurum_rolu,aktif),
+            CONSTRAINT fk_kurum_kullanici_kurum FOREIGN KEY (kurum_id)
+                REFERENCES kurumlar(id) ON DELETE CASCADE,
+            CONSTRAINT fk_kurum_kullanici_user FOREIGN KEY (kullanici_id)
+                REFERENCES kullanicilar(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
+    }finally{
+        $pdo->exec('SET FOREIGN_KEY_CHECKS='.(string)$oldFk);
+    }
+}
+
 function run_pending_migrations(PDO $pdo,string $root): array {
+    repair_legacy_institution_membership_schema($pdo);
     $applied=[]; $files=glob($root.'/database/migrations/*.sql')?:[]; sort($files,SORT_NATURAL);
     $check=$pdo->prepare('SELECT 1 FROM sistem_migrations WHERE migration=? LIMIT 1');
     $insert=$pdo->prepare('INSERT INTO sistem_migrations (migration) VALUES (?)');
