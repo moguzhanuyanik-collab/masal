@@ -23,8 +23,8 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 
         if ($action==='create_user') {
             $name=trim((string)($_POST['ad_soyad']??''));
-            $email=mb_strtolower(trim((string)($_POST['email']??'')));
-            $password=(string)($_POST['password']??'');
+            $email=mb_strtolower(trim((string)($_POST['yeni_kullanici_eposta']??'')));
+            $password=(string)($_POST['yeni_kullanici_sifre']??'');
             $role=(string)($_POST['rol']??'');
 
             $allowed=$isSuper?['ogrenci','veli','ogretmen','yonetici']:['ogrenci','veli','ogretmen'];
@@ -189,16 +189,16 @@ $links=array_merge($parentLinks?:[],$teacherLinks?:[]);
 <?php if ($message!==''): ?><section class="settings-block local-data"><p><?=h_auth($message)?></p></section><?php endif; ?>
 <?php if ($error!==''): ?><section class="settings-block local-data"><p><?=h_auth($error)?></p></section><?php endif; ?>
 
-<form method="post" class="settings-block">
+<form method="post" class="settings-block" autocomplete="off">
 <input type="hidden" name="csrf" value="<?=h_auth(csrf_token())?>">
 <input type="hidden" name="action" value="create_user">
 <h2>Yeni kullanıcı</h2>
 <label class="field-label">Ad Soyad</label>
 <input class="text-input" name="ad_soyad" required maxlength="190">
 <label class="field-label">E-posta</label>
-<input class="text-input" type="email" name="email" required>
+<input class="text-input" type="email" name="yeni_kullanici_eposta" autocomplete="off" autocapitalize="none" spellcheck="false" value="" required>
 <label class="field-label">Geçici şifre</label>
-<input class="text-input" type="password" name="password" minlength="8" required>
+<input class="text-input" type="password" name="yeni_kullanici_sifre" autocomplete="new-password" minlength="8" value="" required>
 <label class="field-label">Rol</label>
 <select class="text-input" name="rol" required>
 <option value="ogrenci">Öğrenci</option>
