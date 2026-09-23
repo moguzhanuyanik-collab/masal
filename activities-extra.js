@@ -1,6 +1,8 @@
 'use strict';
 (() => {
   const EXTRA_IDS=["hece_birlestir","kelime_yakala","ona_tamamla","sayi_avi","dogru_yanlis","golgesini_bul","ritmi_tekrarla"];
+  const NATIVE_IDS=["hafiza","renkler","oruntu"];
+  const ALL_GAME_IDS=[...NATIVE_IDS,...EXTRA_IDS];
   const STORE='ilkadim-extra-games-v1';
   let extraGames=[];
   let completed=new Set();
@@ -77,12 +79,50 @@
       .then(r=>r.ok?r.json():Promise.reject(new Error('HTTP '+r.status)))
       .then(data=>{
         if(!data||data.ok!==true||!Array.isArray(data.games))return;
-        extraGames=data.games;
-        data.games.filter(g=>g.completed).forEach(g=>completed.add(g.id));
+        extraGames=data.games.filter(g=>EXTRA_IDS.includes(g.id));
+        data.games.filter(g=>g.completed&&ALL_GAME_IDS.includes(g.id)).forEach(g=>completed.add(g.id));
         writeStored();
         schedule();
       })
       .catch(err=>console.warn('İlkAdım etkinlik verileri:',err));
+  }
+
+  function postCompletion(gameId){
+    if(!ALL_GAME_IDS.includes(gameId))return;
+    completed.add(gameId);
+    if(EXTRA_IDS.includes(gameId))writeStored();
+    nativeFetch('api/activities.php',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({game:gameId}),
+      credentials:'same-origin'
+    }).catch(()=>{});
+  }
+
+  function hookNativeGameCompletion(){
+    const original=window.recordGame;
+    if(typeof original!=='function'||original.__ilkadimDbCompletionHook)return;
+    const wrapped=function(g){
+      const result=original.apply(this,arguments);
+      if(g&&NATIVE_IDS.includes(String(g.id||''))){
+        postCompletion(String(g.id));
+        schedule();
+      }
+      return result;
+    };
+    wrapped.__ilkadimDbCompletionHook=true;
+    window.recordGame=wrapped;
+  }
+
+  function syncNativeCompletionBadges(){
+    const list=document.querySelector('.game-list');
+    if(!list)return;
+    NATIVE_IDS.forEach(id=>{
+      if(!completed.has(id))return;
+      const link=list.querySelector('a[href="#/oyun/'+CSS.escape(id)+'"]');
+      const time=link&&link.querySelector('.game-time');
+      if(time)time.textContent='✓ Tamamlandı';
+    });
   }
 
   function card(g){
@@ -113,11 +153,7 @@
   }
 
   function markComplete(g){
-    completed.add(g.id); writeStored();
-    nativeFetch('api/activities.php',{
-      method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({game:g.id}),credentials:'same-origin'
-    }).catch(()=>{});
+    postCompletion(g.id);
     try{
       if(typeof window.recordGame==='function') window.recordGame({id:g.id,name:g.name});
     }catch{}
@@ -227,7 +263,7 @@
     const r=route();
     const screen=document.getElementById('screen');
     if(screen && !(r[0]==='oyun'&&EXTRA_IDS.includes(r[1]))) delete screen.dataset.extraGame;
-    if(r[0]==='etkinlikler') injectActivities();
+    if(r[0]==='etkinlikler'){injectActivities();syncNativeCompletionBadges();}
     if(r[0]==='oyun'&&EXTRA_IDS.includes(r[1])){
       const g=extraGames.find(x=>x.id===r[1]);
       if(g) play(g);
@@ -241,6 +277,7 @@
   }
 
   document.addEventListener('DOMContentLoaded',()=>{
+    hookNativeGameCompletion();
     const screen=document.getElementById('screen');
     if(screen)new MutationObserver(schedule).observe(screen,{childList:true,subtree:true});
     window.addEventListener('hashchange',()=>{stopSpeech();schedule();});
