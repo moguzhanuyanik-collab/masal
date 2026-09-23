@@ -17,7 +17,7 @@ require_student_login();
   <link rel="manifest" href="manifest.webmanifest?v=1.0.46">
   <link rel="icon" href="ilkadim-logo.svg" type="image/svg+xml">\n  <link rel="apple-touch-icon" href="ilkadim-logo-192.png">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="v4-features.css?v=1.0.34">
+  <link rel="stylesheet" href="v4-features.css?v=1.0.34">\n  <link rel="stylesheet" href="ogretmenim.css?v=1.0.48">
   <script src="api/bootstrap.js.php" defer></script>
   <script src="activities-extra.js?v=1.0.31" defer></script>
   <script src="app-runtime.js" defer></script>
@@ -47,9 +47,10 @@ require_student_login();
   <div class="app-shell">
     <header class="app-topbar" id="app-topbar"></header>
     <main id="screen" tabindex="-1"><noscript>İlkAdım’ı kullanmak için tarayıcında JavaScript’i etkinleştir.</noscript></main>
-    <nav class="app-nav" aria-label="Uygulama menüsü">
+    <nav class="app-nav app-nav-five" aria-label="Uygulama menüsü">
       <a href="#/anasayfa" data-tab="anasayfa"><span><svg><use href="#home"/></svg></span>Anasayfa</a>
       <a href="#/dersler" data-tab="dersler"><span><svg><use href="#book"/></svg></span>Dersler</a>
+      <a href="ogretmenim.php"><span>⭐</span>Öğretmenim</a>
       <a href="#/etkinlikler" data-tab="etkinlikler"><span><svg><use href="#star"/></svg></span>Etkinlikler</a>
       <a href="#/profil" data-tab="profil"><span><svg><use href="#user"/></svg></span>Profil</a>
     </nav>
