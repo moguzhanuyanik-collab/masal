@@ -171,7 +171,7 @@ $local = read_app_version();
     <meta name="description" content="İlkAdım uygulama güncelleme merkezi.">
     <title>Uygulama Güncelleme — İlkAdım</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="super-admin-pages.css?v=1.0.61">
+    <link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
 </head>
 <body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?>
 <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
