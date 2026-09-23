@@ -101,14 +101,14 @@ function ky_role_members(PDO $pdo,int $institutionId,string $role): array {
                 FROM kurum_kullanicilari kk
                 INNER JOIN kullanicilar k ON k.id=kk.kullanici_id
                 INNER JOIN ogrenciler o ON o.kullanici_id=k.id
-                WHERE kk.kurum_id=? AND kk.kurum_rolu='ogrenci' AND kk.aktif=1
+                WHERE kk.kurum_id=? AND kk.kurum_rolu='ogrenci' AND kk.aktif=1 AND k.aktif=1 AND o.aktif=1
                 ORDER BY o.ad,o.id");
             $s->execute([$institutionId]);
         }else{
             $s=$pdo->prepare("SELECT k.id kullanici_id,k.ad_soyad,k.email,k.aktif,NULL ogrenci_id,k.ad_soyad ad
                 FROM kurum_kullanicilari kk
                 INNER JOIN kullanicilar k ON k.id=kk.kullanici_id
-                WHERE kk.kurum_id=? AND kk.kurum_rolu=? AND kk.aktif=1
+                WHERE kk.kurum_id=? AND kk.kurum_rolu=? AND kk.aktif=1 AND k.aktif=1
                 ORDER BY k.ad_soyad,k.id");
             $s->execute([$institutionId,$role]);
         }
