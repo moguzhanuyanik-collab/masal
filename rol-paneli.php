@@ -17,12 +17,22 @@ function role_labels(array $roles): string {
     return implode(' · ',$out);
 }
 
+function role_scalar(PDO $pdo,string $sql): int {
+    $stmt=$pdo->query($sql);
+    if (!$stmt) return 0;
+    $value=(int)($stmt->fetchColumn()?:0);
+    $stmt->closeCursor();
+    return $value;
+}
+
 $superAdminCount=0;
 $activeUserCount=0;
 try {
-    $superAdminCount=(int)$pdo->query("SELECT COUNT(DISTINCT k.id) FROM kullanicilar k INNER JOIN kullanici_rolleri r ON r.kullanici_id=k.id AND r.rol='super_admin' WHERE k.aktif=1")->fetchColumn();
-    $activeUserCount=(int)$pdo->query("SELECT COUNT(*) FROM kullanicilar WHERE aktif=1")->fetchColumn();
-} catch (Throwable) {}
+    $superAdminCount=role_scalar($pdo,"SELECT COUNT(DISTINCT k.id) FROM kullanicilar k INNER JOIN kullanici_rolleri r ON r.kullanici_id=k.id AND r.rol='super_admin' WHERE k.aktif=1");
+    $activeUserCount=role_scalar($pdo,"SELECT COUNT(*) FROM kullanicilar WHERE aktif=1");
+} catch (Throwable $e) {
+    $error='Yetki bilgileri yüklenirken veritabanı kontrolü tamamlanamadı.';
+}
 
 if ($_SERVER['REQUEST_METHOD']==='POST' && (string)($_POST['action']??'')==='bootstrap_super_admin') {
     try {
@@ -45,20 +55,33 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && (string)($_POST['action']??'')==='boo
     }
 }
 
-$studentIds=auth_accessible_student_ids($pdo,(int)$user['id']);
+$studentIds=[];
 $students=[];
-if ($studentIds) {
-    $placeholders=implode(',',array_fill(0,count($studentIds),'?'));
-    $stmt=$pdo->prepare("SELECT id,email FROM ogrenciler WHERE id IN ({$placeholders}) AND aktif=1 ORDER BY id");
-    $stmt->execute($studentIds);
-    foreach ($stmt->fetchAll() as $row) {
-        $sid=(int)$row['id'];
-        $students[]=[
-            'id'=>$sid,
-            'email'=>(string)($row['email']??''),
-            'summary'=>normalized_summary($pdo,$sid)
-        ];
+try {
+    $studentIds=auth_accessible_student_ids($pdo,(int)$user['id']);
+    if ($studentIds) {
+        $placeholders=implode(',',array_fill(0,count($studentIds),'?'));
+        $stmt=$pdo->prepare("SELECT id,email FROM ogrenciler WHERE id IN ({$placeholders}) AND aktif=1 ORDER BY id");
+        $stmt->execute($studentIds);
+        $rows=$stmt->fetchAll();
+        $stmt->closeCursor();
+
+        foreach ($rows as $row) {
+            $sid=(int)$row['id'];
+            try {
+                $summary=normalized_summary($pdo,$sid);
+            } catch (Throwable) {
+                $summary=['completed_steps'=>0,'games'=>0,'stars'=>0];
+            }
+            $students[]=[
+                'id'=>$sid,
+                'email'=>(string)($row['email']??''),
+                'summary'=>$summary
+            ];
+        }
     }
+} catch (Throwable $e) {
+    if ($error==='') $error='Bağlı öğrenci bilgileri şu anda yüklenemedi. Yetki Merkezi yine de kullanılabilir.';
 }
 $canManage=auth_user_has_role($user,['yonetici','super_admin']);
 ?><!DOCTYPE html>
