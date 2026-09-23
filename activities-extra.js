@@ -47,6 +47,31 @@
   const user=()=>'<svg aria-hidden="true"><use href="#user"/></svg>';
   const route=()=>location.hash.replace(/^#\/?/,'').split('/');
 
+  const cleanSpeechText=value=>String(value||'')
+    .replace(/[★⭐✨🎉💡💜✅❌🔊🎯🔢🔟🌑👏🧩🎨🍓]/gu,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+
+  const speakText=text=>{
+    if(!('speechSynthesis' in window)) return false;
+    const value=cleanSpeechText(text);
+    if(!value) return false;
+    window.speechSynthesis.cancel();
+    const utterance=new SpeechSynthesisUtterance(value);
+    utterance.lang='tr-TR';
+    utterance.rate=0.86;
+    utterance.pitch=1.03;
+    const voices=window.speechSynthesis.getVoices();
+    const trVoice=voices.find(v=>/^tr(?:-|_)/i.test(v.lang||''));
+    if(trVoice) utterance.voice=trVoice;
+    window.speechSynthesis.speak(utterance);
+    return true;
+  };
+
+  const stopSpeech=()=>{
+    if('speechSynthesis' in window) window.speechSynthesis.cancel();
+  };
+
   const speak=(text)=>{
     const value=String(text||'').replace(/[⭐🍎🐱🏠☀️✏️🔟🔢✅❌🌑👏🦵🤫🎯🧩]/gu,' ').replace(/\s+/g,' ').trim();
     if(!value)return false;
@@ -144,6 +169,12 @@
     let round=0;
     const board=document.getElementById('game-board');
     const introListen=document.getElementById('listen-game-intro');
+    if(introListen){
+      introListen.addEventListener('click',()=>{
+        speakText(g.name+'. '+g.description);
+      });
+    }
+    const introListen=document.getElementById('listen-game-intro');
     if(introListen)introListen.addEventListener('click',()=>{
       if(!speakIntro(g))introListen.textContent='Seslendirme desteklenmiyor';
     });
@@ -159,6 +190,7 @@
         progress(Math.round(round/total*100),'Oyun ilerlemesi')+
         '<div class="puzzle-visual">'+esc(q.visual)+'</div>'+
         '<h2 class="puzzle-question">'+esc(q.question)+'</h2>'+
+        '<button class="button soft full" type="button" id="listen-extra-question">🔊 Soruyu Dinle</button>'+
         '<button class="button soft" type="button" id="listen-extra-question">🔊 Soruyu Dinle</button>'+
         '<div class="answers">'+q.options.map((o,i)=>'<button class="answer" data-extra-choice="'+i+'">'+esc(o)+'</button>').join('')+'</div>'+
         '<p class="feedback" role="status" aria-live="polite">💡 Biraz düşün, bir cevap seç.</p><div id="next-extra-round"></div>';
@@ -167,6 +199,14 @@
       if(listenQuestion)listenQuestion.addEventListener('click',()=>{
         if(!speakQuestion(g,q))listenQuestion.textContent='Seslendirme desteklenmiyor';
       });
+
+      const listenQuestion=document.getElementById('listen-extra-question');
+      if(listenQuestion){
+        listenQuestion.addEventListener('click',()=>{
+          const spokenOptions=(q.options||[]).map((o,i)=>(i+1)+'. seçenek: '+cleanSpeechText(o)).join('. ');
+          speakText(q.question+'. '+spokenOptions);
+        });
+      }
 
       board.querySelectorAll('[data-extra-choice]').forEach(btn=>btn.addEventListener('click',()=>{
         const correct=Number(btn.dataset.extraChoice)===Number(q.answer);
@@ -178,8 +218,16 @@
           feedback.textContent='🌟 Doğru cevap: '+q.result+'. '+(q.explanation||'Harikasın!');
           board.querySelectorAll('[data-extra-choice]').forEach(x=>x.disabled=true);
           const next=document.getElementById('next-extra-round');
-          next.innerHTML='<button class="button primary full" id="advance-extra">'+(round===total-1?'Oyunu Tamamla ✨':'Sonraki Keşif '+arrow())+'</button>';
+          next.innerHTML='<button class="button soft full" id="listen-extra-explanation" type="button">🔊 Açıklamayı Dinle</button>'+
+            '<button class="button primary full" id="advance-extra">'+(round===total-1?'Oyunu Tamamla ✨':'Sonraki Keşif '+arrow())+'</button>';
+          const explainListen=document.getElementById('listen-extra-explanation');
+          if(explainListen){
+            explainListen.addEventListener('click',()=>{
+              speakText('Doğru cevap: '+q.result+'. '+(q.explanation||'Harikasın!'));
+            });
+          }
           document.getElementById('advance-extra').addEventListener('click',()=>{
+            stopSpeech();
             round++;
             if(round<total) show();
             else{
@@ -187,7 +235,7 @@
               board.innerHTML='<section class="game-complete"><span>🎉</span><h2>Harika iş!</h2><p>'+total+' keşfin tamamını bitirdin.<br>Başarın kaydedildi.</p>'+
                 '<a class="button primary full" href="#/etkinlikler">Oyunlara Dön '+arrow()+'</a>'+
                 '<button class="button soft full" id="extra-again">Yeniden Oyna</button></section>';
-              document.getElementById('extra-again').addEventListener('click',()=>{round=0;show();});
+              document.getElementById('extra-again').addEventListener('click',()=>{stopSpeech();round=0;show();});
             }
           });
         }else{
@@ -238,7 +286,8 @@
   document.addEventListener('DOMContentLoaded',()=>{
     const screen=document.getElementById('screen');
     if(screen)new MutationObserver(schedule).observe(screen,{childList:true,subtree:true});
-    window.addEventListener('hashchange',schedule);
+    window.addEventListener('hashchange',()=>{stopSpeech();schedule();});
+    window.addEventListener('pagehide',stopSpeech);
     load(); schedule();
   });
 })();
