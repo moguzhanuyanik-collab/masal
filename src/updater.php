@@ -260,7 +260,10 @@ function ensure_student_auth_schema(PDO $pdo): void {
         }
 
         $hasEmailIndex=false;
-        foreach($pdo->query("SHOW INDEX FROM ogrenciler")?:[] as $row){
+        $indexStmt=$pdo->query("SHOW INDEX FROM ogrenciler");
+        $indexRows=$indexStmt ? $indexStmt->fetchAll() : [];
+        if($indexStmt) $indexStmt->closeCursor();
+        foreach($indexRows as $row){
             if(($row['Column_name']??'')==='email'){$hasEmailIndex=true;break;}
         }
         if(!$hasEmailIndex){
