@@ -34,6 +34,7 @@
   };
 
   const isActivityGame=()=>location.hash.startsWith('#/oyun/');
+  const isActivitiesPage=()=>location.hash.startsWith('#/etkinlikler');
   const iconControl=(label,kind,text)=>{
     const s=document.createElement('span');
     s.className='activity-speech-icon';
@@ -44,6 +45,27 @@
     s.dataset.speechText=text;
     s.textContent='🔊 ';
     return s;
+  };
+
+  const decorateActivityList=()=>{
+    if(!isActivitiesPage())return;
+    const screen=document.getElementById('screen');
+    const list=screen?.querySelector('.game-list');
+    if(!screen||!list)return;
+
+    const names=[...list.querySelectorAll('.game-tile h3')]
+      .map(el=>clean(el.textContent))
+      .filter(Boolean);
+    if(!names.length)return;
+
+    let control=screen.querySelector('[data-speech-kind="activity-list"]');
+    if(!control){
+      control=iconControl('Etkinliklerin adlarını dinle','activity-list','');
+      const heading=screen.querySelector('.subpage-intro h1,.screen-content h1,.section-heading h2');
+      if(heading)heading.appendChild(control);
+      else list.insertAdjacentElement('beforebegin',control);
+    }
+    control.dataset.speechText='Etkinlikler. '+names.join('. ');
   };
 
   const decorateIntro=scope=>{
@@ -76,6 +98,7 @@
   };
 
   const decorateActivities=()=>{
+    decorateActivityList();
     if(!isActivityGame())return;
     const screen=document.getElementById('screen');
     if(!screen)return;
