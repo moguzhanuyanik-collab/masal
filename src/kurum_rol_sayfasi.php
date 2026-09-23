@@ -48,9 +48,9 @@ $members=ky_role_members($pdo,$institutionId,$kyRole);
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="kurum.css?v=1.0.41">
 </head><body class="role-page"><div class="role-shell">
 <header class="role-topbar">
-<a class="role-icon" href="../kurum-detay.php?kurum_id=<?=$institutionId?>">←</a>
+<a class="role-icon" href="kurum-detay.php?kurum_id=<?=$institutionId?>">←</a>
 <span class="role-brand"><span><?=ky_h($kyIcon)?></span><span><strong><?=ky_h($kyTitle)?></strong><small><?=ky_h((string)$institution['ad'])?></small></span></span>
-<a class="role-icon" href="../hesap-guvenligi.php">⚙️</a>
+<a class="role-icon" href="hesap-guvenligi.php">⚙️</a>
 </header>
 <main class="role-content">
 <section class="role-hero"><span class="eyeline">KURUM YÖNETİMİ</span><h1><?=ky_h($kyTitle)?></h1><p><?=ky_h($kyDescription)?></p><span class="role-hero-art"><?=ky_h($kyIcon)?></span></section>
@@ -75,8 +75,8 @@ $members=ky_role_members($pdo,$institutionId,$kyRole);
 </div></section>
 </main>
 <nav class="role-bottom">
-<a href="../kurum-detay.php?kurum_id=<?=$institutionId?>"><span>⌂</span>Kurum</a>
-<a href="../kurum-ogretmenleri.php?kurum_id=<?=$institutionId?>"><span>👩‍🏫</span>Öğretmen</a>
-<a href="../kurum-velileri.php?kurum_id=<?=$institutionId?>"><span>👪</span>Veli</a>
-<a href="../kurum-ogrencileri.php?kurum_id=<?=$institutionId?>"><span>🎒</span>Öğrenci</a>
+<a href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>⌂</span>Kurum</a>
+<a href="kurum-ogretmenleri.php?kurum_id=<?=$institutionId?>"><span>👩‍🏫</span>Öğretmen</a>
+<a href="kurum-velileri.php?kurum_id=<?=$institutionId?>"><span>👪</span>Veli</a>
+<a href="kurum-ogrencileri.php?kurum_id=<?=$institutionId?>"><span>🎒</span>Öğrenci</a>
 </nav></div></body></html>
