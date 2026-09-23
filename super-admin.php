@@ -38,7 +38,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f7f7fb">
 <title>Süper Admin — İlkAdım</title>
-<link rel="stylesheet" href="super-admin.css?v=1.0.63">
+<link rel="stylesheet" href="super-admin.css?v=1.0.72">
 </head>
 <body class="sa-page">
 <svg class="sa-icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
