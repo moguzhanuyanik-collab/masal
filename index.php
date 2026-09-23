@@ -16,12 +16,13 @@ require_student_login();
   <title>İlkAdım — Benim öğrenme dünyam</title>
   <link rel="stylesheet" href="styles.css">
   <script src="api/bootstrap.js.php" defer></script>
-  <script src="activities-extra.js?v=1.0.29" defer></script>
+  <script src="activities-extra.js?v=1.0.31" defer></script>
   <script src="app-runtime.js" defer></script>
-  <script src="global-audio-feedback.js?v=1.0.29" defer></script>
+  <script src="global-audio-feedback.js?v=1.0.31" defer></script>
   <script src="lesson-ui-fix.js?v=1.0.19" defer></script>
   <script src="settings-account.js" defer></script>
   <script src="profile-update-link.js" defer></script>
+  <script src="pwa-cleanup.js?v=1.0.31" defer></script>
 </head>
 <body>
   <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
