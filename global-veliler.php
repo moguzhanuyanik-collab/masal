@@ -22,7 +22,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 }
 $parents=ky_global_parents($pdo);
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Global Veliler — İlkAdım</title>
-<link rel="stylesheet" href="super-admin-pages.css?v=1.0.64"></head>
+<link rel="stylesheet" href="super-admin-pages.css?v=1.0.72"></head>
 <body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?><div class="app-shell">
 <header class="app-topbar"><a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a><div class="sa-page-actions"><a class="sa-page-action" href="super-admin-profil.php"><svg><use href="#sa-user"/></svg></a></div></header>
 <main id="screen"><div class="screen-content">
