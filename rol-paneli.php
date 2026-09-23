@@ -134,11 +134,33 @@ $canManage=auth_user_has_role($user,['yonetici','super_admin']);
 <a class="button soft full" href="hesap-guvenligi.php">Giriş Bilgilerimi Düzenle</a>
 </section>
 
-<?php if ($canManage): ?>
+<?php if (auth_user_has_role($user,'super_admin')): ?>
 <section class="settings-block">
-<h2>👥 Kullanıcı Yönetimi</h2>
-<p class="little-note">Veli, öğretmen ve yönetici hesaplarını oluştur; öğrencilerle güvenli eşleştirme yap.</p>
-<a class="button primary full" href="yetkilendirme.php">Kullanıcı ve Eşleştirmeleri Yönet</a>
+<h2>👑 Süper Admin</h2>
+<p class="little-note">Kurumları, yöneticileri ve sistem genelindeki kullanıcıları tek merkezden yönet.</p>
+<a class="button primary full" href="super-admin.php">Süper Admin Panelini Aç</a>
+</section>
+<?php elseif (auth_user_has_role($user,'yonetici')): ?>
+<section class="settings-block">
+<h2>🏫 Kurum Yönetimi</h2>
+<p class="little-note">Kurumundaki öğretmen, veli ve öğrencileri yönet.</p>
+<a class="button primary full" href="yonetici-paneli.php">Yönetici Panelini Aç</a>
+</section>
+<?php endif; ?>
+
+<?php if (auth_user_has_role($user,'ogretmen')): ?>
+<section class="settings-block">
+<h2>👩‍🏫 Öğretmen Paneli</h2>
+<p class="little-note">Eşleştirilmiş öğrencilerini ve raporlarını görüntüle.</p>
+<a class="button soft full" href="ogretmen-paneli.php">Öğretmen Panelini Aç</a>
+</section>
+<?php endif; ?>
+
+<?php if (auth_user_has_role($user,'veli')): ?>
+<section class="settings-block">
+<h2>👪 Veli Paneli</h2>
+<p class="little-note">Bağlı öğrencilerinin gelişimini takip et.</p>
+<a class="button soft full" href="veli-paneli.php">Veli Panelini Aç</a>
 </section>
 <?php endif; ?>
 
