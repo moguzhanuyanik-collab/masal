@@ -77,8 +77,9 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 <meta name="theme-color" content="#f8f7fc">
 <title>Hesap Güvenliği — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
+<?php if($isSuper): ?><link rel="stylesheet" href="super-admin-pages.css?v=1.0.57"><?php endif; ?>
 </head>
-<body>
+<body<?= $isSuper?' class="sa-subpage"':'' ?>>
 <div class="app-shell">
 <header class="app-topbar">
 <a class="icon-button" href="<?=h_sec($roleHome)?>" aria-label="Geri">←</a>
@@ -108,6 +109,15 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 <a class="button soft full" href="<?=h_sec($roleHome)?>">Panelime Dön</a>
 </div>
 </main>
+<?php if($isSuper): ?>
+<nav class="app-nav" aria-label="Süper Admin menüsü">
+<a href="super-admin.php"><span>⌂</span>Panel</a>
+<a href="kurumlar.php"><span>🏫</span>Kurumlar</a>
+<a href="global-ogrenciler.php"><span>🎒</span>Öğrenciler</a>
+<a href="global-veliler.php"><span>👪</span>Veliler</a>
+<a class="active" href="hesap-guvenligi.php"><span>👤</span>Profil</a>
+</nav>
+<?php endif; ?>
 </div>
 </body>
 </html>
