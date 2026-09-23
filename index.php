@@ -14,7 +14,10 @@ require_student_login();
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="description" content="İlkAdım: 1. sınıf için renkli dersler, eğlenceli oyunlar ve kişisel öğrenme yolculuğun.">
   <title>İlkAdım — Benim öğrenme dünyam</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="pwa-icon-192.png">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="v4-features.css?v=1.0.34">
   <script src="api/bootstrap.js.php" defer></script>
   <script src="activities-extra.js?v=1.0.31" defer></script>
   <script src="app-runtime.js" defer></script>
@@ -22,7 +25,9 @@ require_student_login();
   <script src="lesson-ui-fix.js?v=1.0.32" defer></script>
   <script src="settings-account.js" defer></script>
   <script src="profile-update-link.js" defer></script>
-  <script src="pwa-cleanup.js?v=1.0.31" defer></script>
+  <script src="v4-features.js?v=1.0.34" defer></script>
+  <script src="pwa-store.js?v=1.0.34" defer></script>
+  <script src="pwa-v4.js?v=1.0.34" defer></script>
 </head>
 <body>
   <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
