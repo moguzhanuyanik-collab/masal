@@ -29,8 +29,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         ky_create_user(
             $pdo,$user,$kyRole,
             (string)($_POST['ad_soyad']??''),
-            (string)($_POST['email']??''),
-            (string)($_POST['password']??''),
+            (string)($_POST['yeni_kullanici_eposta']??''),
+            (string)($_POST['yeni_kullanici_sifre']??''),
             $institutionId
         );
         $message=$kyTitle.' hesabı kuruma eklendi.';
@@ -59,12 +59,12 @@ $members=ky_role_members($pdo,$institutionId,$kyRole);
 <?php if($error!==''):?><div class="role-note"><span>⚠️</span><p><?=ky_h($error)?></p></div><?php endif;?>
 
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">YENİ HESAP</span><h2><?=ky_h($kyTitle)?> Ekle</h2></div></div>
-<form class="role-form" method="post">
+<form class="role-form" method="post" autocomplete="off">
 <input type="hidden" name="csrf" value="<?=ky_h(csrf_token())?>">
 <input type="hidden" name="kurum_id" value="<?=$institutionId?>">
 <label>Ad Soyad</label><input class="role-input" name="ad_soyad" required maxlength="190">
-<label>E-posta</label><input class="role-input" type="email" name="email" required>
-<label>Geçici şifre</label><input class="role-input" type="password" name="password" minlength="8" required>
+<label>E-posta</label><input class="role-input" type="email" name="yeni_kullanici_eposta" autocomplete="off" autocapitalize="none" spellcheck="false" value="" required>
+<label>Geçici şifre</label><input class="role-input" type="password" name="yeni_kullanici_sifre" autocomplete="new-password" minlength="8" value="" required>
 <button class="role-button" type="submit"><?=ky_h($kyTitle)?> Hesabı Oluştur</button>
 </form></section>
 
