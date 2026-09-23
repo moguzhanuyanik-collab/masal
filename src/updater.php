@@ -12,7 +12,7 @@ function github_repo_info(array $gh): array {
 }
 
 function updater_headers(array $gh): array {
-    $h=['User-Agent: IlkAdim-Updater/1.0.11','Accept: */*','Cache-Control: no-cache, no-store, must-revalidate','Pragma: no-cache'];
+    $h=['User-Agent: IlkAdim-Updater/1.0.12','Accept: */*','Cache-Control: no-cache, no-store, must-revalidate','Pragma: no-cache'];
     $token=trim((string)($gh['token']??''));
     if($token!=='') $h[]='Authorization: Bearer '.$token;
     return $h;
@@ -28,7 +28,7 @@ function updater_http(string $url,array $gh,?string $target=null): string|array 
         CURLOPT_TIMEOUT=>120,
         CURLOPT_FAILONERROR=>false,
         CURLOPT_HTTPHEADER=>updater_headers($gh),
-        CURLOPT_USERAGENT=>'IlkAdim-Updater/1.0.11',
+        CURLOPT_USERAGENT=>'IlkAdim-Updater/1.0.12',
         CURLOPT_FRESH_CONNECT=>true,
         CURLOPT_FORBID_REUSE=>true,
     ];
@@ -122,6 +122,46 @@ function create_project_backup(string $root,string $target): void {
         $zip->addFile($path,$rel);
     }
     $zip->close();
+}
+
+function create_single_previous_backup(string $root): string {
+    $dir=$root.'/storage/backups';
+    if(!is_dir($dir)&&!mkdir($dir,0775,true)&&!is_dir($dir)){
+        throw new RuntimeException('Yedek klasoru olusturulamadi.');
+    }
+
+    $final=$dir.'/onceki_surum.zip';
+    $tmp=$dir.'/onceki_surum.tmp.zip';
+    $old=$dir.'/onceki_surum.old.zip';
+
+    @unlink($tmp);
+    @unlink($old);
+
+    create_project_backup($root,$tmp);
+
+    if(!is_file($tmp)||(int)(filesize($tmp)?:0)<4){
+        @unlink($tmp);
+        throw new RuntimeException('Onceki surum yedegi olusturulamadi.');
+    }
+
+    if(is_file($final)&&!@rename($final,$old)){
+        @unlink($tmp);
+        throw new RuntimeException('Mevcut yedek guvenli sekilde degistirilemedi.');
+    }
+
+    if(!@rename($tmp,$final)){
+        if(is_file($old)) @rename($old,$final);
+        @unlink($tmp);
+        throw new RuntimeException('Yeni yedek etkinlestirilemedi.');
+    }
+
+    @unlink($old);
+
+    foreach(glob($dir.'/pre_*.zip')?:[] as $legacy){
+        @unlink($legacy);
+    }
+
+    return basename($final);
 }
 
 function run_migration_sql(PDO $pdo,string $path): void {
@@ -328,14 +368,14 @@ function install_github_update(string $root,array $gh,array $preserve): array {
     $stamp=date('Ymd_His');
     $zipPath=$storage.'/updates/github_'.$stamp.'.zip';
     $extractDir=$storage.'/updates/extract_'.$stamp;
-    $backupPath=$storage.'/backups/pre_'.str_replace('.','_',$localVersion).'_'.$stamp.'.zip';
+    $backupPath=$storage.'/backups/onceki_surum.zip';
 
     $pdo=db(); ensure_updater_schema($pdo);
     $log=$pdo->prepare("INSERT INTO guncelleme_gecmisi (onceki_surumu,yeni_surumu,github_commit,durum) VALUES (?,?,?,'basladi')");
     $log->execute([$localVersion,$remote['version'],$remote['commit']]); $logId=(int)$pdo->lastInsertId();
 
     try{
-        create_project_backup($root,$backupPath);
+        $backupName=create_single_previous_backup($root);
         $downloadUrl='https://codeload.github.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/zip/refs/heads/'.rawurlencode($branch).'?cb='.(string)round(microtime(true)*1000);
         updater_http($downloadUrl,$gh,$zipPath);
 
@@ -351,10 +391,10 @@ function install_github_update(string $root,array $gh,array $preserve): array {
         ensure_student_auth_schema($pdo);
         $migrations=run_pending_migrations($pdo,$root);
         $pdo->prepare("INSERT INTO sistem_ayarlar (ayar_anahtari,ayar_degeri) VALUES ('uygulama_surumu',?) ON DUPLICATE KEY UPDATE ayar_degeri=VALUES(ayar_degeri)")->execute([$remote['version']]);
-        $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='basarili',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute(['Guncelleme tamamlandi. Yedek: '.basename($backupPath),$logId]);
+        $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='basarili',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute(['Guncelleme tamamlandi. Yedek: '.$backupName,$logId]);
 
         @unlink($zipPath); delete_tree($extractDir);
-        return ['updated'=>true,'message'=>'Guncelleme basariyla kuruldu.','remote'=>$remote,'local'=>$localVersion,'backup'=>basename($backupPath),'migrations'=>$migrations];
+        return ['updated'=>true,'message'=>'Guncelleme basariyla kuruldu.','remote'=>$remote,'local'=>$localVersion,'backup'=>$backupName,'migrations'=>$migrations];
     }catch(Throwable $e){
         try{ $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='hatali',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute([$e->getMessage(),$logId]); }catch(Throwable $ignored){}
         @unlink($zipPath); delete_tree($extractDir); throw $e;
