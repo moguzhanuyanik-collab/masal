@@ -3,7 +3,7 @@ declare(strict_types=1);
 require __DIR__ . '/src/bootstrap.php';
 require __DIR__ . '/src/auth.php';
 
-$user=require_role(['yonetici','super_admin']);
+$user=require_role('super_admin');
 $pdo=db();
 $isSuper=auth_user_has_role($user,'super_admin');
 $message='';
