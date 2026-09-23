@@ -13,3 +13,6 @@ Etkinlikler ses arayüzü sadeleştirildi.
 - V1.0.24'teki oyun tamamlama ve veritabanı kayıt sistemi korunur.
 - index.php içindeki yanlışlıkla kalmış düz metin \n temizlendi.
 - CSS ve mevcut görseller değiştirilmedi.
+
+- Hoparlör simgesi soru ve cevap metinlerinin başına yerleştirildi.
+- Cevap satırındaki hoparlöre basmak cevabı seçmez; yalnızca ilgili şıkkı okur.
