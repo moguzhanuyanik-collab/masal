@@ -31,9 +31,16 @@ if(!isset($sections[$section])) $section='kurumlar';
 try{
     if($_SERVER['REQUEST_METHOD']==='GET'){
         $institutionId=max(0,(int)($_GET['kurum_id']??0));
-        $rows=$section==='kurumlar'
-            ?km_institution_rows($pdo)
-            :km_member_rows($pdo,(string)$sections[$section]['role'],$institutionId);
+        if($section==='kurumlar'){
+            $rows=km_institution_rows($pdo);
+            $matchingOptions=null;
+        }elseif($section==='eslestirme'){
+            $rows=km_matching_rows($pdo,$institutionId);
+            $matchingOptions=km_matching_options($pdo,0);
+        }else{
+            $rows=km_member_rows($pdo,(string)$sections[$section]['role'],$institutionId);
+            $matchingOptions=null;
+        }
 
         km_api_response([
             'ok'=>true,
@@ -42,6 +49,7 @@ try{
             'section_icon'=>$sections[$section]['icon'],
             'rows'=>$rows,
             'institutions'=>km_active_institutions($pdo),
+            'matching_options'=>$matchingOptions,
             'filter_institution_id'=>$institutionId,
         ]);
     }
@@ -75,6 +83,26 @@ try{
             ]);
         }
         km_api_response(['ok'=>false,'message'=>'Geçersiz kurum işlemi.'],400);
+    }
+
+    if($section==='eslestirme'){
+        if($action==='save'){
+            $institutionId=(int)($_POST['kurum_id']??0);
+            $studentId=(int)($_POST['ogrenci_id']??0);
+            $parentIds=$_POST['veli_ids']??[];
+            $teacherIds=$_POST['ogretmen_ids']??[];
+            if(!is_array($parentIds)) $parentIds=[];
+            if(!is_array($teacherIds)) $teacherIds=[];
+            km_save_matching($pdo,$user,$institutionId,$studentId,$parentIds,$teacherIds);
+            km_api_response(['ok'=>true,'message'=>'Öğrenci, veli ve öğretmen eşleştirmeleri kaydedildi.']);
+        }
+        if($action==='delete'){
+            $institutionId=(int)($_POST['kurum_id']??0);
+            $studentId=(int)($_POST['ogrenci_id']??0);
+            km_delete_matching($pdo,$user,$institutionId,$studentId);
+            km_api_response(['ok'=>true,'message'=>'Öğrencinin bu kurumdaki veli ve öğretmen eşleştirmeleri kaldırıldı.']);
+        }
+        km_api_response(['ok'=>false,'message'=>'Geçersiz eşleştirme işlemi.'],400);
     }
 
     $role=(string)$sections[$section]['role'];
