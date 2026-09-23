@@ -29,7 +29,7 @@ $parents=ky_global_parents($pdo);
 ?><!doctype html><html lang="tr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Global Veliler — İlkAdım</title>
-<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.56"><link rel="stylesheet" href="super-admin-pages.css?v=1.0.58">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="super-admin.css?v=1.0.56"><link rel="stylesheet" href="super-admin-pages.css?v=1.0.59">
 </head><body class="role-page sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?><div class="role-shell">
 <header class="role-topbar">
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a>
@@ -40,8 +40,8 @@ $parents=ky_global_parents($pdo);
 </header>
 <main class="role-content">
 <section class="role-hero"><span class="eyeline">GLOBAL KULLANICILAR</span><h1>Kurumdan bağımsız veli hesapları.</h1><p>Global veli yalnızca kendisine eşleştirilen global öğrenciyi takip eder.</p><span class="role-hero-art"><svg><use href="#sa-users"/></svg></span></section>
-<?php if($message!==''):?><div class="role-note"><span>✅</span><p><?=ky_h($message)?></p></div><?php endif;?>
-<?php if($error!==''):?><div class="role-note"><span>⚠️</span><p><?=ky_h($error)?></p></div><?php endif;?>
+<?php if($message!==''):?><div class="role-note"><span><svg><use href="#sa-check"/></svg></span><p><?=ky_h($message)?></p></div><?php endif;?>
+<?php if($error!==''):?><div class="role-note"><span><svg><use href="#sa-alert"/></svg></span><p><?=ky_h($error)?></p></div><?php endif;?>
 
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">YENİ VELİ</span><h2>Global Veli Ekle</h2></div></div>
 <form class="role-form" method="post" autocomplete="off">
@@ -53,8 +53,8 @@ $parents=ky_global_parents($pdo);
 </form></section>
 
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">VELİLER</span><h2>Global Veli Listesi</h2></div><span class="role-pill"><?=count($parents)?></span></div><div class="role-list">
-<?php if(!$parents):?><div class="role-empty"><span>👪</span>Henüz global veli yok.</div>
-<?php else:foreach($parents as $p):?><div class="role-row"><span>👪</span><div><strong><?=ky_h((string)$p['ad_soyad'])?></strong><small><?=ky_h((string)$p['email'])?> · Öğrenci: <?=ky_h((string)($p['ogrenci_adlari']?:'Bağlı değil'))?></small></div><span class="role-pill ok">Global</span></div><?php endforeach;endif;?>
+<?php if(!$parents):?><div class="role-empty"><span><svg><use href="#sa-users"/></svg></span>Henüz global veli yok.</div>
+<?php else:foreach($parents as $p):?><div class="role-row"><span><svg><use href="#sa-users"/></svg></span><div><strong><?=ky_h((string)$p['ad_soyad'])?></strong><small><?=ky_h((string)$p['email'])?> · Öğrenci: <?=ky_h((string)($p['ogrenci_adlari']?:'Bağlı değil'))?></small></div><span class="role-pill ok">Global</span></div><?php endforeach;endif;?>
 </div></section>
 </main>
 <nav class="role-bottom">
