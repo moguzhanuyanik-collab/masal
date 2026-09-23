@@ -226,7 +226,8 @@ if (!function_exists('auth_user_in_institution')) {
 
 if (!function_exists('auth_manageable_institution_ids')) {
     function auth_manageable_institution_ids(PDO $pdo, array $user): array {
-        if (auth_user_has_role($user,'super_admin')) {
+        $effective=auth_effective_role($user);
+        if ($effective==='super_admin') {
             if (!auth_runtime_table_exists($pdo,'kurumlar')) return [];
             try {
                 $stmt=$pdo->query('SELECT id FROM kurumlar WHERE aktif=1 ORDER BY id');
@@ -237,7 +238,7 @@ if (!function_exists('auth_manageable_institution_ids')) {
                 return [];
             }
         }
-        if (auth_user_has_role($user,'yonetici')) {
+        if ($effective==='yonetici') {
             return auth_user_institution_ids($pdo,(int)$user['id'],'yonetici');
         }
         return [];
@@ -311,11 +312,12 @@ if (!function_exists('auth_set_user_session')) {
         $_SESSION['kullanici_id']=$userId;
         $_SESSION['csrf_token']=bin2hex(random_bytes(32));
         $studentId=auth_student_id_for_user($pdo,$userId);
-        if ($studentId!==null && auth_user_has_role($user,'ogrenci')) {
+        if ($studentId!==null && auth_effective_role($user)==='ogrenci') {
             $_SESSION['ogrenci_id']=$studentId;
         } else {
             unset($_SESSION['ogrenci_id']);
         }
+        $_SESSION['aktif_rol']=auth_effective_role($user);
         return $user;
     }
 }
@@ -540,15 +542,16 @@ if (!function_exists('auth_accessible_student_ids')) {
     function auth_accessible_student_ids(PDO $pdo, int $userId): array {
         $user=auth_fetch_user($pdo,$userId);
         if (!$user) return [];
+        $effective=auth_effective_role($user);
 
-        if (auth_user_has_role($user,'super_admin')) {
+        if ($effective==='super_admin') {
             $stmt=$pdo->query('SELECT id FROM ogrenciler WHERE aktif=1 ORDER BY id');
             $rows=$stmt?$stmt->fetchAll(PDO::FETCH_COLUMN):[];
             if ($stmt) $stmt->closeCursor();
             return array_values(array_map('intval',$rows?:[]));
         }
 
-        if (auth_user_has_role($user,'yonetici')) {
+        if ($effective==='yonetici') {
             $institutionIds=auth_user_institution_ids($pdo,$userId,'yonetici');
             if (!$institutionIds || !auth_runtime_table_exists($pdo,'kurum_kullanicilari')) return [];
             $placeholders=implode(',',array_fill(0,count($institutionIds),'?'));
@@ -564,37 +567,42 @@ if (!function_exists('auth_accessible_student_ids')) {
             return array_values(array_map('intval',$rows?:[]));
         }
 
-        $ids=[];
-        if (auth_user_has_role($user,'ogrenci')) {
-            $studentId=auth_student_id_for_user($pdo,$userId);
-            if ($studentId) $ids[]=$studentId;
-        }
-
-        if (auth_user_has_role($user,'veli')
-            && auth_runtime_table_exists($pdo,'veli_ogrenci')
-            && auth_runtime_table_exists($pdo,'veliler')
-            && auth_runtime_column_exists($pdo,'veliler','kullanici_id')) {
-            try {
-                $stmt=$pdo->prepare('SELECT vo.ogrenci_id FROM veli_ogrenci vo INNER JOIN veliler v ON v.id=vo.veli_id WHERE v.kullanici_id=? AND v.aktif=1');
-                $stmt->execute([$userId]);
-                foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $id) $ids[]=(int)$id;
-                $stmt->closeCursor();
-            } catch (Throwable) {}
-        }
-
-        if (auth_user_has_role($user,'ogretmen')
+        if ($effective==='ogretmen'
             && auth_runtime_table_exists($pdo,'ogretmen_ogrenci')
             && auth_runtime_table_exists($pdo,'ogretmenler')
             && auth_runtime_column_exists($pdo,'ogretmenler','kullanici_id')) {
             try {
-                $stmt=$pdo->prepare('SELECT oo.ogrenci_id FROM ogretmen_ogrenci oo INNER JOIN ogretmenler o ON o.id=oo.ogretmen_id WHERE o.kullanici_id=? AND o.aktif=1');
+                $stmt=$pdo->prepare('SELECT DISTINCT oo.ogrenci_id FROM ogretmen_ogrenci oo INNER JOIN ogretmenler o ON o.id=oo.ogretmen_id WHERE o.kullanici_id=? AND o.aktif=1 ORDER BY oo.ogrenci_id');
                 $stmt->execute([$userId]);
-                foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $id) $ids[]=(int)$id;
+                $ids=array_map('intval',$stmt->fetchAll(PDO::FETCH_COLUMN)?:[]);
                 $stmt->closeCursor();
-            } catch (Throwable) {}
+                return array_values(array_filter($ids,static fn(int $id):bool=>$id>0));
+            } catch (Throwable) {
+                return [];
+            }
         }
 
-        return array_values(array_unique(array_filter($ids,static fn(int $id):bool=>$id>0)));
+        if ($effective==='veli'
+            && auth_runtime_table_exists($pdo,'veli_ogrenci')
+            && auth_runtime_table_exists($pdo,'veliler')
+            && auth_runtime_column_exists($pdo,'veliler','kullanici_id')) {
+            try {
+                $stmt=$pdo->prepare('SELECT DISTINCT vo.ogrenci_id FROM veli_ogrenci vo INNER JOIN veliler v ON v.id=vo.veli_id WHERE v.kullanici_id=? AND v.aktif=1 ORDER BY vo.ogrenci_id');
+                $stmt->execute([$userId]);
+                $ids=array_map('intval',$stmt->fetchAll(PDO::FETCH_COLUMN)?:[]);
+                $stmt->closeCursor();
+                return array_values(array_filter($ids,static fn(int $id):bool=>$id>0));
+            } catch (Throwable) {
+                return [];
+            }
+        }
+
+        if ($effective==='ogrenci') {
+            $studentId=auth_student_id_for_user($pdo,$userId);
+            return $studentId?[$studentId]:[];
+        }
+
+        return [];
     }
 }
 
