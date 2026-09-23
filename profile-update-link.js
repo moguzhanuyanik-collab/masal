@@ -4,6 +4,16 @@
     const menu = document.querySelector('.profile-menu');
     if (!menu) return;
 
+    const roles = Array.isArray(window.ILKADIM_CURRENT_USER_ROLES) ? window.ILKADIM_CURRENT_USER_ROLES : [];
+    const hasRoleCenter = roles.some(role => ['veli','ogretmen','yonetici','super_admin'].includes(role));
+    if (hasRoleCenter && !menu.querySelector('[data-role-center-link]')) {
+      const roleLink = document.createElement('a');
+      roleLink.href = 'rol-paneli.php';
+      roleLink.setAttribute('data-role-center-link', '1');
+      roleLink.innerHTML = '<span class="menu-icon purple">🛡️</span><div><strong>Yetki Merkezi</strong><small>Veli, öğretmen ve yönetim erişimleri</small></div><svg aria-hidden="true"><use href="#arrow"/></svg>';
+      menu.appendChild(roleLink);
+    }
+
     if (!menu.querySelector('[data-app-update-link]')) {
       const updateLink = document.createElement('a');
       updateLink.href = 'guncelleme.php';
