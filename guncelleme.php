@@ -42,9 +42,7 @@ try {
                 echo json_encode(['ok'=>false,'message'=>'Güncelleme yalnızca Süper Admin tarafından kurulabilir.'],JSON_UNESCAPED_UNICODE);
                 exit;
             }
-            http_response_code(403);
-            echo 'Güncelleme yalnızca Süper Admin tarafından kurulabilir.';
-            exit;
+            auth_redirect_to_role_home($updateUser);
         }
     }
 } catch (Throwable) {
