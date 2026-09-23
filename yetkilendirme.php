@@ -93,6 +93,23 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
             $message='Öğrenci eşleştirmesi kaydedildi.';
         }
 
+        if ($action==='unlink_student') {
+            $targetId=(int)($_POST['kullanici_id']??0);
+            $studentId=(int)($_POST['ogrenci_id']??0);
+            $role=(string)($_POST['rol']??'');
+            if (!in_array($role,['veli','ogretmen'],true)) throw new RuntimeException('Geçersiz eşleştirme türü.');
+            require_target_role($pdo,$targetId,$role);
+            if ($role==='veli') {
+                $p=$pdo->prepare('SELECT id FROM veliler WHERE kullanici_id=? LIMIT 1');$p->execute([$targetId]);$profileId=(int)$p->fetchColumn();
+                if ($profileId>0) $pdo->prepare('DELETE FROM veli_ogrenci WHERE veli_id=? AND ogrenci_id=?')->execute([$profileId,$studentId]);
+            } else {
+                $p=$pdo->prepare('SELECT id FROM ogretmenler WHERE kullanici_id=? LIMIT 1');$p->execute([$targetId]);$profileId=(int)$p->fetchColumn();
+                if ($profileId>0) $pdo->prepare('DELETE FROM ogretmen_ogrenci WHERE ogretmen_id=? AND ogrenci_id=?')->execute([$profileId,$studentId]);
+            }
+            auth_audit($pdo,(int)$user['id'],$targetId,'ogrenci_eslestirme_kaldir','Rol: '.$role.' Öğrenci: '.$studentId);
+            $message='Öğrenci eşleştirmesi kaldırıldı.';
+        }
+
         if ($action==='toggle_active') {
             $targetId=(int)($_POST['kullanici_id']??0);
             if ($targetId===(int)$user['id']) throw new RuntimeException('Kendi hesabını buradan kapatamazsın.');
@@ -123,6 +140,19 @@ $assignable=array_values(array_filter($users,static function(array $u):bool{
     $roles=explode(',',(string)($u['roller']??''));
     return in_array('veli',$roles,true)||in_array('ogretmen',$roles,true);
 }));
+
+$links=[];
+$parentLinks=$pdo->query("SELECT k.id kullanici_id,k.email,vo.ogrenci_id,'veli' rol
+    FROM veli_ogrenci vo
+    INNER JOIN veliler v ON v.id=vo.veli_id
+    INNER JOIN kullanicilar k ON k.id=v.kullanici_id
+    ORDER BY k.email,vo.ogrenci_id")->fetchAll();
+$teacherLinks=$pdo->query("SELECT k.id kullanici_id,k.email,oo.ogrenci_id,'ogretmen' rol
+    FROM ogretmen_ogrenci oo
+    INNER JOIN ogretmenler o ON o.id=oo.ogretmen_id
+    INNER JOIN kullanicilar k ON k.id=o.kullanici_id
+    ORDER BY k.email,oo.ogrenci_id")->fetchAll();
+$links=array_merge($parentLinks?:[],$teacherLinks?:[]);
 ?><!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -186,6 +216,28 @@ $assignable=array_values(array_filter($users,static function(array $u):bool{
 </select>
 <button class="button primary full" type="submit">Eşleştirmeyi Kaydet</button>
 </form>
+
+<section class="settings-block">
+<h2>Aktif öğrenci eşleştirmeleri</h2>
+<?php if (!$links): ?><p class="little-note">Henüz eşleştirme yapılmamış.</p><?php endif; ?>
+<?php foreach ($links as $link): ?>
+<div class="history-item">
+<span><?=((string)$link['rol']==='veli'?'👪':'👩‍🏫')?></span>
+<div>
+<strong><?=h_auth((string)$link['email'])?></strong>
+<small><?=h_auth((string)$link['rol'])?> · Öğrenci #<?=(int)$link['ogrenci_id']?></small>
+</div>
+<form method="post">
+<input type="hidden" name="csrf" value="<?=h_auth(csrf_token())?>">
+<input type="hidden" name="action" value="unlink_student">
+<input type="hidden" name="kullanici_id" value="<?=(int)$link['kullanici_id']?>">
+<input type="hidden" name="ogrenci_id" value="<?=(int)$link['ogrenci_id']?>">
+<input type="hidden" name="rol" value="<?=h_auth((string)$link['rol'])?>">
+<button class="button soft" type="submit">Kaldır</button>
+</form>
+</div>
+<?php endforeach; ?>
+</section>
 
 <?php if ($isSuper): ?>
 <form method="post" class="settings-block">
