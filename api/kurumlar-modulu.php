@@ -35,8 +35,13 @@ try{
             $rows=km_institution_rows($pdo);
             $matchingOptions=null;
         }elseif($section==='eslestirme'){
-            $rows=km_matching_rows($pdo,$institutionId);
-            $matchingOptions=km_matching_options($pdo,0);
+            if($institutionId>0){
+                $rows=km_matching_rows($pdo,$institutionId);
+                $matchingOptions=km_matching_options($pdo,$institutionId);
+            }else{
+                $rows=[];
+                $matchingOptions=['ogrenciler'=>[],'veliler'=>[],'ogretmenler'=>[]];
+            }
         }else{
             $rows=km_member_rows($pdo,(string)$sections[$section]['role'],$institutionId);
             $matchingOptions=null;
