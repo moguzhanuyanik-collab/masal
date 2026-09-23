@@ -98,6 +98,8 @@ function h(string $v): string { return htmlspecialchars($v,ENT_QUOTES,'UTF-8'); 
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#f8f7fc">
 <title>Giriş — İlkAdım</title>
+<link rel="icon" href="ilkadim-logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="ilkadim-logo-192.png">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
