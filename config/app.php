@@ -29,6 +29,7 @@ $defaults = [
             'app-style.css',
             'features-style.css',
             'assets',
+            'v4',
         ],
     ],
 ];
