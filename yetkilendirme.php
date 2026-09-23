@@ -171,8 +171,9 @@ $links=array_merge($parentLinks?:[],$teacherLinks?:[]);
 <meta name="theme-color" content="#f8f7fc">
 <title>Kullanıcı Yönetimi — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="super-admin-pages.css?v=1.0.57">
 </head>
-<body>
+<body class="sa-subpage">
 <div class="app-shell">
 <header class="app-topbar">
 <a class="icon-button" href="rol-paneli.php" aria-label="Geri">←</a>
@@ -287,9 +288,16 @@ $links=array_merge($parentLinks?:[],$teacherLinks?:[]);
 </div>
 <?php endforeach; ?>
 </section>
-<a class="button soft full" href="rol-paneli.php">Yetki Merkezine Dön</a>
+<a class="button soft full" href="super-admin.php">Süper Admin Paneline Dön</a>
 </div>
 </main>
+<nav class="app-nav" aria-label="Süper Admin menüsü">
+<a href="super-admin.php"><span>⌂</span>Panel</a>
+<a href="kurumlar.php"><span>🏫</span>Kurumlar</a>
+<a href="global-ogrenciler.php"><span>🎒</span>Öğrenciler</a>
+<a href="global-veliler.php"><span>👪</span>Veliler</a>
+<a href="hesap-guvenligi.php"><span>👤</span>Profil</a>
+</nav>
 </div>
 </body>
 </html>
