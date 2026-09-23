@@ -50,6 +50,17 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
                 } elseif ($role==='ogretmen') {
                     $pdo->prepare('INSERT INTO ogretmenler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')->execute([$targetId,$name]);
                 }
+
+                if (auth_runtime_table_exists($pdo,'kurumlar') && auth_runtime_table_exists($pdo,'kurum_kullanicilari')) {
+                    $q=$pdo->query("SELECT id FROM kurumlar WHERE kod='ilkadim' AND aktif=1 LIMIT 1");
+                    $platformId=(int)($q?$q->fetchColumn():0);
+                    if($q)$q->closeCursor();
+                    if($platformId>0){
+                        $institutionRole=$role==='yonetici'?'yonetici':$role;
+                        $pdo->prepare('INSERT IGNORE INTO kurum_kullanicilari (kurum_id,kullanici_id,kurum_rolu,aktif) VALUES (?,?,?,1)')
+                            ->execute([$platformId,$targetId,$institutionRole]);
+                    }
+                }
                 $pdo->commit();
             } catch (Throwable $e) {
                 if ($pdo->inTransaction()) $pdo->rollBack();
@@ -182,7 +193,7 @@ $links=array_merge($parentLinks?:[],$teacherLinks?:[]);
 <div class="screen-content settings-screen">
 <section class="subpage-intro">
 <span>👥</span><h1>Gerçek Yetkilendirme</h1>
-<p>Hesap oluştur, rol ver ve veli/öğretmenleri yalnızca yetkili oldukları öğrencilerle eşleştir.</p>
+<p>Bu ekran doğrudan İlkAdım kullanıcılarını yönetir. Okul/kurs kullanıcılarını kurum panelinden oluştur.</p>
 </section>
 
 <?php if ($message!==''): ?><section class="settings-block local-data"><p><?=h_auth($message)?></p></section><?php endif; ?>
