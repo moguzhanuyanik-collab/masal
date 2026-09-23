@@ -226,3 +226,76 @@ body.sa-subpage .sa-dialog-actions{display:flex;justify-content:flex-end;gap:8px
  body.sa-subpage .sa-data-actions{justify-content:stretch}
  body.sa-subpage .sa-data-actions>*{flex:1}
 }
+
+
+/* V1.0.72 — Tüm Süper Admin alt sayfalarında okunabilirlik artışı */
+body.sa-subpage .role-brand small,
+body.sa-subpage .sa-page-brand small{font-size:10px}
+body.sa-subpage .role-hero .eyeline,
+body.sa-subpage .subpage-intro>span:first-child,
+body.sa-subpage .role-section-head .eyeline,
+body.sa-subpage .km-section-title .eyeline,
+body.sa-subpage .sa-data-toolbar .eyeline{font-size:10px}
+body.sa-subpage .role-hero p,
+body.sa-subpage .subpage-intro p{font-size:12px}
+body.sa-subpage .role-section-head h2,
+body.sa-subpage .settings-block h2,
+body.sa-subpage .sa-data-toolbar h2{font-size:18px}
+body.sa-subpage .role-section-head>a{font-size:10.5px}
+body.sa-subpage .role-form label,
+body.sa-subpage .field-label,
+body.sa-subpage .sa-dialog-body label{font-size:11px}
+body.sa-subpage .role-input,
+body.sa-subpage .text-input{font-size:12px}
+body.sa-subpage .role-button,
+body.sa-subpage .button{font-size:11.5px}
+body.sa-subpage .role-row strong{font-size:12px}
+body.sa-subpage .role-row small{font-size:10.5px}
+body.sa-subpage .role-row time{font-size:9.5px}
+body.sa-subpage .role-pill{font-size:9.5px}
+body.sa-subpage .role-note p{font-size:10.5px}
+body.sa-subpage .role-empty{font-size:11px}
+body.sa-subpage .role-bottom a,
+body.sa-subpage .app-nav a{font-size:10px}
+body.sa-subpage .sa-hub-list strong{font-size:12px}
+body.sa-subpage .sa-hub-list small{font-size:10.5px}
+body.sa-subpage .yy-manager-card>p{font-size:10.5px}
+body.sa-subpage .yy-permissions label{font-size:11.5px}
+body.sa-subpage .yy-remove{font-size:10.5px}
+body.sa-subpage .sp-profile-photo small{font-size:10.5px}
+body.sa-subpage .sa-data-toolbar small{font-size:10px}
+body.sa-subpage .sa-primary-btn,
+body.sa-subpage .sa-secondary-btn,
+body.sa-subpage .sa-edit-btn,
+body.sa-subpage .sa-delete-btn{font-size:10.5px}
+body.sa-subpage .sa-data-table{font-size:10.5px}
+body.sa-subpage .sa-data-table th{font-size:9px}
+body.sa-subpage .sa-data-table td strong{font-size:11px}
+body.sa-subpage .sa-dialog-head small{font-size:9px}
+body.sa-subpage .sa-dialog-head h3{font-size:16px}
+body.sa-subpage .km-section-title h1{font-size:22px}
+body.sa-subpage .km-search,
+body.sa-subpage .km-select,
+body.sa-subpage .km-add{font-size:11px}
+body.sa-subpage .km-loading{font-size:10.5px}
+body.sa-subpage .km-content table{font-size:10.5px}
+body.sa-subpage .km-content th{font-size:9px}
+body.sa-subpage .km-dialog-head strong{font-size:15px}
+body.sa-subpage .km-cancel{font-size:11px}
+
+/* Kurumlar kutuları ana Süper Admin kart ölçeğinde kalır. */
+body.sa-subpage .km-card-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+body.sa-subpage .km-module-card{
+ min-height:90px;padding:14px;border-radius:18px;
+ flex-direction:row;align-items:center;gap:11px
+}
+body.sa-subpage .km-module-icon{width:39px;height:39px;border-radius:12px;flex:0 0 auto}
+body.sa-subpage .km-module-card strong{font-size:12px}
+body.sa-subpage .km-module-card small{font-size:9.5px;line-height:1.4}
+body.sa-subpage .km-module-arrow{right:11px;top:11px;font-size:13px}
+@media(max-width:390px){
+ body.sa-subpage .km-module-card{min-height:84px;padding:12px;gap:9px}
+ body.sa-subpage .km-module-icon{width:35px;height:35px}
+ body.sa-subpage .km-module-card strong{font-size:11.5px}
+ body.sa-subpage .km-module-card small{font-size:9px}
+}
