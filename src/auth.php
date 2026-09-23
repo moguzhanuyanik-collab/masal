@@ -141,6 +141,49 @@ if (!function_exists('auth_user_has_role')) {
     }
 }
 
+if (!function_exists('auth_effective_role')) {
+    function auth_effective_role(?array $user): ?string {
+        if (!$user) return null;
+        $roles=is_array($user['roles']??null)?$user['roles']:[];
+        $primary=(string)($user['ana_rol']??'');
+        if ($primary!=='' && !in_array($primary,$roles,true)) $roles[]=$primary;
+
+        foreach (['super_admin','yonetici','ogretmen','veli','ogrenci'] as $role) {
+            if (in_array($role,$roles,true)) return $role;
+        }
+        return null;
+    }
+}
+
+if (!function_exists('auth_role_home')) {
+    function auth_role_home(?array $user): string {
+        return match(auth_effective_role($user)) {
+            'super_admin' => 'super-admin.php',
+            'yonetici' => 'yonetici-paneli.php',
+            'ogretmen' => 'ogretmen-paneli.php',
+            'veli' => 'veli-paneli.php',
+            'ogrenci' => 'index.php',
+            default => 'login.php',
+        };
+    }
+}
+
+if (!function_exists('auth_is_effective_role')) {
+    function auth_is_effective_role(?array $user, string|array $roles): bool {
+        $effective=auth_effective_role($user);
+        if ($effective===null) return false;
+        $wanted=is_array($roles)?$roles:[$roles];
+        return in_array($effective,array_map('strval',$wanted),true);
+    }
+}
+
+if (!function_exists('auth_redirect_to_role_home')) {
+    function auth_redirect_to_role_home(array $user): never {
+        header('Location: '.auth_role_home($user));
+        exit;
+    }
+}
+
 if (!function_exists('auth_user_institution_ids')) {
     function auth_user_institution_ids(PDO $pdo, int $userId, ?string $institutionRole=null): array {
         if ($userId<=0 || !auth_runtime_table_exists($pdo,'kurum_kullanicilari')) return [];
@@ -440,7 +483,7 @@ if (!function_exists('authenticated_user')) {
 if (!function_exists('authenticated_student_id')) {
     function authenticated_student_id(): ?int {
         $user=authenticated_user();
-        if (!$user || !auth_user_has_role($user,'ogrenci')) return null;
+        if (!$user || auth_effective_role($user)!=='ogrenci') return null;
         try {
             return auth_student_id_for_user(db(),(int)$user['id']);
         } catch (Throwable) {
@@ -461,10 +504,8 @@ if (!function_exists('require_login')) {
 if (!function_exists('require_role')) {
     function require_role(string|array $roles): array {
         $user=require_login();
-        if (auth_user_has_role($user,$roles)) return $user;
-        http_response_code(403);
-        echo 'Bu sayfayı görüntüleme yetkiniz yok.';
-        exit;
+        if (auth_is_effective_role($user,$roles)) return $user;
+        auth_redirect_to_role_home($user);
     }
 }
 
@@ -473,10 +514,7 @@ if (!function_exists('require_student_login')) {
         $id=authenticated_student_id();
         if ($id!==null) return $id;
         $user=authenticated_user();
-        if ($user) {
-            header('Location: rol-paneli.php');
-            exit;
-        }
+        if ($user) auth_redirect_to_role_home($user);
         header('Location: login.php');
         exit;
     }
@@ -590,12 +628,7 @@ if (!function_exists('require_api_student_access')) {
 
 if (!function_exists('auth_post_login_url')) {
     function auth_post_login_url(array $user): string {
-        if (auth_user_has_role($user,'super_admin')) return 'super-admin.php';
-        if (auth_user_has_role($user,'yonetici')) return 'yonetici-paneli.php';
-        if (auth_user_has_role($user,'ogretmen')) return 'ogretmen-paneli.php';
-        if (auth_user_has_role($user,'veli')) return 'veli-paneli.php';
-        if (auth_user_has_role($user,'ogrenci')) return 'index.php';
-        return 'rol-paneli.php';
+        return auth_role_home($user);
     }
 }
 
