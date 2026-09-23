@@ -79,6 +79,7 @@ const showSectionShell=()=>{
     :state.section==='eslestirme'
       ?'＋ Yeni Eşleştirme'
       :'＋ Yeni '+info.singular;
+  addBtn.disabled=state.section==='eslestirme'&&state.filterId<=0;
 };
 
 const setUrl=()=>{
@@ -94,7 +95,8 @@ const renderFilter=()=>{
     return;
   }
   filter.hidden=false;
-  filter.innerHTML='<option value="0">Tüm kurumlar</option>'+institutionOptions(state.filterId);
+  const emptyLabel=state.section==='eslestirme'?'Önce kurum seçin':'Tüm kurumlar';
+  filter.innerHTML='<option value="0">'+emptyLabel+'</option>'+institutionOptions(state.filterId);
   filter.value=String(state.filterId||0);
 };
 
@@ -106,6 +108,11 @@ const relationHtml=items=>{
 const render=()=>{
   const term=(search.value||'').trim().toLocaleLowerCase('tr-TR');
   const rows=state.rows.filter(r=>!term||JSON.stringify(r).toLocaleLowerCase('tr-TR').includes(term));
+
+  if(state.section==='eslestirme'&&state.filterId<=0){
+    content.innerHTML='<div class="km-panel"><div class="km-empty">Önce kurum seç. Öğrenci, veli ve öğretmen listeleri seçtiğin kuruma göre yüklenecek.</div></div>';
+    return;
+  }
 
   if(state.section==='kurumlar'){
     content.innerHTML='<div class="km-panel"><div class="km-table-wrap"><table class="km-table"><thead><tr><th>Kurum</th><th>Tür</th><th>İçerik</th><th>Kullanıcılar</th><th>Durum</th><th style="text-align:right">İşlemler</th></tr></thead><tbody>'+
@@ -200,8 +207,10 @@ const memberFields=(row={},edit=false)=>{
 };
 
 const matchingFields=(row={})=>{
-  const institutionId=Number(row.kurum_id||state.filterId||state.institutions[0]?.id||0);
-  return '<label>Kurum</label><select class="role-input" name="kurum_id" required><option value="">Kurum seç</option>'+institutionOptions(institutionId)+'</select>'+
+  const institutionId=Number(row.kurum_id||state.filterId||0);
+  const institutionName=state.institutions.find(k=>Number(k.id)===institutionId)?.ad||'Kurum';
+  return '<input type="hidden" name="kurum_id" value="'+institutionId+'">'+
+  '<label>Kurum</label><input class="role-input" value="'+esc(institutionName)+'" disabled>'+
   '<label>Öğrenci</label><select class="role-input" name="ogrenci_id" required></select>'+
   '<div class="km-grid"><div><label>Veliler</label><div class="km-match-list" data-match-parents></div></div>'+
   '<div><label>Öğretmenler</label><div class="km-match-list" data-match-teachers></div></div></div>'+
