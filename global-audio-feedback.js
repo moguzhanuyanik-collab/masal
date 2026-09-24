@@ -125,6 +125,8 @@
     'a.island',
     'a.mina-card',
     '.daily-tasks > a',
+    '#screen button:not([type="submit"]):not([data-adimbot-ignore])',
+    '#screen summary:not([data-adimbot-ignore])',
     '.answers .answer',
     '.teacher-option',
     '.teacher-group > summary',
@@ -195,21 +197,79 @@
     return null;
   };
 
+  const directReadableLabel=element=>{
+    if(!(element instanceof Element))return '';
+    const direct=[...element.childNodes]
+      .filter(node=>node.nodeType===Node.TEXT_NODE)
+      .map(node=>node.textContent||'')
+      .join(' ');
+    const own=clean(direct);
+    if(own)return own;
+    const total=clean(element.textContent);
+    return total.length<=120?total:'';
+  };
+
+  const discoveryContainerForHeading=heading=>{
+    if(!(heading instanceof Element))return null;
+    let node=heading;
+    for(let depth=0;node&&depth<6;depth++,node=node.parentElement){
+      if(!node.closest?.('#screen'))break;
+      const text=clean(node.textContent);
+      if(!text||text.length>1800)continue;
+      const withoutTitle=text.replace(/^(?:birlikte\s+)?keşfedelim\b[\s:!?.\-–—]*/i,'').trim();
+      if(withoutTitle.length>=12)return node;
+    }
+    return readableContainerForHeading(heading);
+  };
+
+  const discoverySpeechText=(heading,card)=>{
+    if(!(card instanceof Element))return '';
+    const clone=card.cloneNode(true);
+    clone.querySelectorAll?.(
+      '.answers,.teacher-option,.feedback,.game-feedback,form,button,input,select,textarea,svg,'+
+      '[data-question-text],.question-text,.question-title,.question-prompt,.question-stem,.puzzle-question,.prompt'
+    ).forEach(el=>el.remove());
+
+    let value=stripReadingLabels(clone.textContent);
+    const marker=value.search(/(?:şimdi\s+)?sıra\s+sende\b/i);
+    if(marker>0)value=value.slice(0,marker).trim();
+
+    const title=clean(heading.textContent);
+    if(title&&value&&!value.toLocaleLowerCase('tr-TR').startsWith(title.toLocaleLowerCase('tr-TR'))){
+      value=title+'. '+value;
+    }
+    return value.slice(0,700);
+  };
+
+  const lessonTextCandidates=rootScope=>{
+    const result=[];
+    if(rootScope===document){
+      const screen=document.getElementById('screen');
+      if(screen)result.push(...screen.querySelectorAll('*'));
+      return result;
+    }
+    if(rootScope instanceof Element&&rootScope.closest('#screen')){
+      result.push(rootScope,...rootScope.querySelectorAll('*'));
+    }
+    return result;
+  };
+
   const markTextDrivenLessonReadables=rootScope=>{
-    rootScope.querySelectorAll?.('#screen h1,#screen h2,#screen h3,#screen h4,#screen strong,#screen .section-title,#screen .card-title').forEach(heading=>{
-      const label=clean(heading.textContent).toLocaleLowerCase('tr-TR');
+    const candidates=lessonTextCandidates(rootScope);
 
-      if(/^birlikte\s+keşfedelim\b/i.test(label)){
-        const card=readableContainerForHeading(heading);
+    candidates.forEach(heading=>{
+      const label=directReadableLabel(heading).toLocaleLowerCase('tr-TR');
+      if(!label)return;
+
+      if(/^(?:birlikte\s+)?keşfedelim\b/i.test(label)){
+        const card=discoveryContainerForHeading(heading);
         if(!card||card.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
-
-        const clone=card.cloneNode(true);
-        clone.querySelectorAll?.('.answers,.teacher-option,.feedback,.game-feedback,form,button,input,select,textarea,svg').forEach(el=>el.remove());
-        const value=stripReadingLabels(clone.textContent);
+        const value=discoverySpeechText(heading,card);
         if(!value)return;
 
         card.setAttribute('data-adimbot-read','text');
         card.setAttribute('data-adimbot-text',value);
+        card.setAttribute('data-adimbot-discovery','1');
         return;
       }
 

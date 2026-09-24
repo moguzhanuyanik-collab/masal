@@ -1069,8 +1069,29 @@
     else scheduleIdlePower();
   });
 
+  const greetingSessionKey='ilkadim.adimbot.home-greeting.v1';
+  const isHomeRoute=()=>{
+    const path=(location.pathname.split('/').pop()||'').toLocaleLowerCase('tr-TR');
+    const hash=location.hash||'#/anasayfa';
+    const studentHome=path===''||path==='index.php';
+    const homeHash=hash===''||hash==='#'||hash==='#/'||hash.startsWith('#/anasayfa');
+    return studentHome&&homeHash;
+  };
+  const maybeShowHomeGreeting=()=>{
+    if(!isHomeRoute())return false;
+    try{
+      if(sessionStorage.getItem(greetingSessionKey)==='1')return false;
+      sessionStorage.setItem(greetingSessionKey,'1');
+    }catch(_){}
+    setTimeout(()=>{
+      if(isHomeRoute())speak(chooseCharacterPhrase('greeting'),{voice:false});
+    },550);
+    return true;
+  };
+
   setMinimized(preferences.minimized,{save:false});
   if(pageSuspended)root.classList.add('adb-is-suspended');
   else scheduleIdlePower(8000);
-  setTimeout(()=>speak(chooseCharacterPhrase('greeting'),{voice:false}),550);
+  maybeShowHomeGreeting();
+  window.addEventListener('hashchange',maybeShowHomeGreeting);
 })();
