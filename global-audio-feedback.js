@@ -119,7 +119,7 @@
     'a.home-course',
     'a.home-game',
     'a.resume-card',
-    'a.lesson-step',
+    '.lesson-step',
     '.story-list > a',
     'a.reading-entry',
     'a.island',
@@ -146,34 +146,67 @@
     return letters[index]||String(index+1);
   };
 
+  const optionSpeechText=(option,index)=>{
+    if(!(option instanceof Element))return '';
+    const letter=optionPrefix(index);
+    const clone=option.cloneNode(true);
+    clone.querySelectorAll?.('input,button,svg,.option-letter,.answer-letter,.choice-letter,.option-key,.answer-key').forEach(el=>el.remove());
+
+    const first=clone.firstElementChild;
+    if(first&&clean(first.textContent).toLocaleUpperCase('tr-TR')===letter)first.remove();
+
+    let optionText=clean(clone.textContent);
+    optionText=optionText.replace(new RegExp('^\\s*(?:\\('+letter+'\\)|'+letter+'\\s*[\\).:\\-])\\s*','i'),'').trim();
+    return optionText?letter+' şıkkı. '+optionText:letter+' şıkkı.';
+  };
+
+  const questionSpeechText=question=>{
+    if(!(question instanceof Element))return '';
+    const directSelector='[data-question-text],.question-text,.question-title,.question-prompt,.question-stem,.puzzle-question,.prompt';
+    const direct=question.matches?.(directSelector)?question:question.querySelector?.(directSelector);
+    if(direct){
+      const value=clean(direct.textContent);
+      if(value)return value;
+    }
+
+    const clone=question.cloneNode(true);
+    clone.querySelectorAll?.('.answers,.teacher-option,.feedback,.game-feedback,form,button,input,select,textarea,svg').forEach(el=>el.remove());
+    return clean(clone.textContent);
+  };
+
   const markQuestionReadables=scope=>{
     const rootScope=scope&&scope.querySelectorAll?scope:document;
+    const questionSelector='.puzzle-question,.teacher-question > strong,[data-question-text],.question-text,.question-title,.question-prompt,.question-stem';
 
-    rootScope.querySelectorAll?.('.puzzle-question,.teacher-question > strong').forEach(question=>{
+    rootScope.querySelectorAll?.(questionSelector).forEach(question=>{
       if(question.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
-      const text=clean(question.textContent);
+      const questionText=questionSpeechText(question);
       question.setAttribute('data-adimbot-read','text');
-      if(text)question.setAttribute('data-adimbot-text','Soru: '+text);
+      if(questionText)question.setAttribute('data-adimbot-text','Soru. '+questionText);
     });
 
-    const answerGroups=[
-      ...rootScope.querySelectorAll?.('.answers')||[]
-    ];
+    rootScope.querySelectorAll?.('.question-card,.quiz-question,.exercise-question,.question-block').forEach(card=>{
+      if(card.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
+      const questionText=questionSpeechText(card);
+      if(!questionText)return;
+      card.setAttribute('data-adimbot-read','text');
+      card.setAttribute('data-adimbot-text','Soru. '+questionText);
+    });
+
+    const answerGroups=[...rootScope.querySelectorAll?.('.answers')||[]];
     answerGroups.forEach(group=>{
       [...group.querySelectorAll('.answer')].forEach((answer,index)=>{
         if(answer.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
-        const text=clean(answer.textContent);
         answer.setAttribute('data-adimbot-read','action');
-        if(text)answer.setAttribute('data-adimbot-text',optionPrefix(index)+' seçeneği: '+text);
+        answer.setAttribute('data-adimbot-text',optionSpeechText(answer,index));
       });
     });
 
     rootScope.querySelectorAll?.('.teacher-question form').forEach(form=>{
       [...form.querySelectorAll('.teacher-option')].forEach((option,index)=>{
         if(option.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
-        const text=clean(option.querySelector('span')?.textContent||option.textContent);
         option.setAttribute('data-adimbot-read','action');
-        if(text)option.setAttribute('data-adimbot-text',optionPrefix(index)+' seçeneği: '+text);
+        option.setAttribute('data-adimbot-text',optionSpeechText(option,index));
       });
     });
   };
