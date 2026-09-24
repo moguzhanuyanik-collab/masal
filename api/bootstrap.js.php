@@ -24,6 +24,76 @@ $studentGrade=1;
 $educationStage='temel_egitim';
 $error=null;
 
+function ilkadim_topic_icon(string $code,string $fallback='📘'): string {
+    static $icons=[
+        // 1. sınıf Türkçe — harf konularında doğrudan harfin kendisi
+        'tr-harf-a'=>'A','tr-harf-n'=>'N','tr-harf-e'=>'E','tr-harf-t'=>'T',
+        'tr-harf-i'=>'İ','tr-harf-l'=>'L','tr-harf-o'=>'O','tr-harf-k'=>'K',
+        'tr-harf-u'=>'U','tr-harf-r'=>'R','tr-harf-ı'=>'I','tr-harf-m'=>'M',
+        'tr-harf-ü'=>'Ü','tr-harf-s'=>'S','tr-harf-ö'=>'Ö','tr-harf-y'=>'Y',
+        'tr-harf-d'=>'D','tr-harf-z'=>'Z','tr-harf-ç'=>'Ç','tr-harf-b'=>'B',
+        'tr-harf-g'=>'G','tr-harf-c'=>'C','tr-harf-ş'=>'Ş','tr-harf-p'=>'P',
+        'tr-harf-h'=>'H','tr-harf-v'=>'V','tr-harf-ğ'=>'Ğ','tr-harf-f'=>'F',
+        'tr-harf-j'=>'J',
+        'tr-heceler'=>'🧩',
+        'tr-kelime-olusturma'=>'🔤',
+        'tr-cumle-noktalama'=>'✍️',
+        'tr-okudugunu-anlama'=>'📖',
+
+        // 1. sınıf Matematik
+        'mat-sayilar-0-20'=>'🔢',
+        'mat-once-sonra'=>'↔️',
+        'mat-karsilastirma'=>'≷',
+        'mat-ritmik'=>'🔁',
+        'mat-oruntu'=>'🧩',
+        'mat-tahmin'=>'🎯',
+        'mat-uzunluk'=>'📏',
+        'mat-kutle'=>'⚖️',
+        'mat-para'=>'₺',
+        'mat-toplama'=>'➕',
+        'mat-cikarma'=>'➖',
+        'mat-esitlik'=>'🟰',
+        'mat-problem'=>'🧠',
+        'mat-yon-konum'=>'🧭',
+        'mat-sekiller'=>'🔺',
+        'mat-veri-okuma'=>'📊',
+
+        // 1. sınıf Hayat Bilgisi / Görsel Sanatlar / Müzik / Beden
+        'hb-okul'=>'🏫','hb-saglik'=>'🛡️','hb-aile'=>'👨‍👩‍👧','hb-ulkem'=>'🇹🇷','hb-doga'=>'🌿','hb-bilim'=>'🔬',
+        'gs-hayat'=>'🎨','gs-dil'=>'🖌️','gs-sanatci'=>'🖼️','gs-cizim-konu'=>'✏️','gs-renk'=>'🌈','gs-milli'=>'🇹🇷','gs-muze'=>'🏛️',
+        'muz-dil'=>'🎵','muz-kultur'=>'🎼',
+        'be-hareket-konu'=>'🏃','be-kural-konu'=>'🎯','be-ritim-konu'=>'💃','be-saglik-konu'=>'💪',
+
+        // 2. sınıf Türkçe
+        'tr2-baglam'=>'📚','tr2-nezaket'=>'💬','tr2-noktalama'=>'❗','tr2-ataturk-metin'=>'🇹🇷',
+        'tr2-olay-sirasi'=>'🔢','tr2-tahmin'=>'🔮','tr2-konu-baslik'=>'📖','tr2-kitap-bolum'=>'📚',
+        'tr2-cumle'=>'✍️','tr2-yazim'=>'📝','tr2-yonerge'=>'📋','tr2-bilgi-cikarim'=>'🧠',
+        'tr2-kultur-metin'=>'🏛️','tr2-sozcuk-iliski'=>'🔗','tr2-haklar-metin'=>'⚖️','tr2-metin-anlama'=>'🔍',
+
+        // 2. sınıf Matematik
+        'mat2-100'=>'🔢','mat2-basamak'=>'🔟','mat2-karsilastirma'=>'≷','mat2-yuvarlama'=>'🎯',
+        'mat2-ritmik'=>'🔁','mat2-oruntu'=>'🧩','mat2-tahmin'=>'🎯','mat2-kesir'=>'🍕',
+        'mat2-para'=>'₺','mat2-zaman'=>'⏰','mat2-uzunluk'=>'📏','mat2-kutle'=>'⚖️',
+        'mat2-toplama'=>'➕','mat2-cikarma'=>'➖','mat2-esitlik'=>'🟰','mat2-carpma'=>'✖️',
+        'mat2-bolme'=>'➗','mat2-problem'=>'🧠','mat2-cisimler'=>'🧊','mat2-sekiller'=>'🔺',
+        'mat2-sivi'=>'🥛','mat2-yon'=>'🧭','mat2-simetri'=>'🦋','mat2-veri'=>'📊',
+
+        // 2. sınıf İngilizce
+        'eng2-greetings'=>'👋','eng2-school-people'=>'🧑‍🏫','eng2-school-places'=>'🏫','eng2-days'=>'📅',
+        'eng2-celebrations'=>'🎉','eng2-instructions'=>'📋','eng2-objects'=>'✏️','eng2-colours'=>'🌈',
+        'eng2-body'=>'🧍','eng2-clothes'=>'👕','eng2-age-birthday'=>'🎂','eng2-weather'=>'🌤️',
+        'eng2-family-members'=>'👨‍👩‍👧','eng2-appearance'=>'🪞','eng2-rooms'=>'🏠','eng2-furniture'=>'🛋️',
+        'eng2-pets'=>'🐾','eng2-food'=>'🍎',
+
+        // 2. sınıf diğer dersler
+        'hb2-okul-konu'=>'🏫','hb2-saglik-konu'=>'🛡️','hb2-aile-konu'=>'👨‍👩‍👧','hb2-ulkem-konu'=>'🇹🇷','hb2-doga-konu'=>'🌿','hb2-bilim-konu'=>'🔬',
+        'gs2-hayat-konu'=>'🎨','gs2-dil-konu'=>'🖌️','gs2-sanatci-konu'=>'🖼️','gs2-cizim-konu'=>'✏️','gs2-renk-konu'=>'🌈','gs2-milli-konu'=>'🇹🇷','gs2-muze-konu'=>'🏛️',
+        'muz2-dil-konu'=>'🎵','muz2-kultur-konu'=>'🎼',
+        'be2-hareket-konu'=>'🏃','be2-kural-konu'=>'🎯','be2-ritim-konu'=>'💃','be2-saglik-konu'=>'💪',
+    ];
+    return $icons[$code]??($fallback!==''?$fallback:'📘');
+}
+
 try {
     $pdo=db();
 
@@ -83,12 +153,13 @@ try {
                         if($questionCount<1) continue;
 
                         $startIndex=count($modules);
+                        $topicIcon=ilkadim_topic_icon((string)$topic['konu_kodu'],(string)($row['emoji']??''));
                         foreach($questions as $questionIndex=>$q){
                             $opts=json_decode((string)$q['secenekler_json'],true);
                             $modules[]=[
                                 'title'=>(string)$topic['ad'],
                                 'subtitle'=>(string)$section['ad'].' • '.$questionCount.' soru',
-                                'emoji'=>(string)($row['emoji']??''),
+                                'emoji'=>$topicIcon,
                                 'reading'=>(string)($topic['anlatim']?:$topic['aciklama']),
                                 'example'=>(string)($topic['ornek_metni']??''),
                                 'question'=>(string)$q['soru'],
@@ -102,6 +173,7 @@ try {
                                     'topicId'=>(int)$topic['id'],
                                     'topicCode'=>(string)$topic['konu_kodu'],
                                     'topicTitle'=>(string)$topic['ad'],
+                                    'topicIcon'=>$topicIcon,
                                     'questionId'=>(int)$q['id'],
                                     'questionCode'=>(string)$q['soru_kodu'],
                                     'questionIndex'=>(int)$questionIndex,
@@ -114,6 +186,7 @@ try {
                             'id'=>(int)$topic['id'],
                             'code'=>(string)$topic['konu_kodu'],
                             'title'=>(string)$topic['ad'],
+                            'icon'=>$topicIcon,
                             'description'=>(string)($topic['aciklama']??''),
                             'startIndex'=>$startIndex,
                             'questionCount'=>$questionCount,
