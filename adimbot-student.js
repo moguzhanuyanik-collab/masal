@@ -184,15 +184,15 @@
 
   const clearIdlePower=()=>{
     clearTimeout(idlePowerTimer);
-    root.classList.remove('is-idle-power');
+    root.classList.remove('adb-is-idle-power');
   };
 
   const scheduleIdlePower=(delay=12000)=>{
     clearTimeout(idlePowerTimer);
     if(pageSuspended||preferences.minimized||state.speaking||dragging)return;
     idlePowerTimer=setTimeout(()=>{
-      if(!pageSuspended&&!preferences.minimized&&!state.speaking&&!dragging&&!root.classList.contains('is-settings-open')){
-        root.classList.add('is-idle-power');
+      if(!pageSuspended&&!preferences.minimized&&!state.speaking&&!dragging&&!root.classList.contains('adb-is-settings-open')){
+        root.classList.add('adb-is-idle-power');
       }
     },delay);
   };
@@ -215,8 +215,8 @@
 
   const setMinimized=(minimized,{save=true}={})=>{
     preferences.minimized=minimized===true;
-    root.classList.toggle('is-minimized',preferences.minimized);
-    root.classList.remove('is-settings-open');
+    root.classList.toggle('adb-is-minimized',preferences.minimized);
+    root.classList.remove('adb-is-settings-open');
     if(preferences.minimized){
       stopSpeaking();
       clearIdlePower();
@@ -256,7 +256,7 @@
   };
 
   const triggerSpeechGesture=(preferred='auto',force=false)=>{
-    if(dragging||!root.classList.contains('is-speaking'))return;
+    if(dragging||!root.classList.contains('adb-is-speaking'))return;
     const now=performance.now();
     if(!force&&now-lastGestureAt<880)return;
     lastGestureAt=now;
@@ -338,7 +338,7 @@
     speechStarted=false;
     resetMouthCadence();
     clearSpeechGestures();
-    root.classList.remove('is-speaking');
+    root.classList.remove('adb-is-speaking');
     if(!cancelled&&!dragging){
       root.classList.add('adb-speech-settle');
       settleTimer=setTimeout(()=>root.classList.remove('adb-speech-settle'),460);
@@ -355,7 +355,7 @@
     if(token!==activeSpeechToken||speechStarted||pageSuspended)return;
     clearIdlePower();
     speechStarted=true;
-    root.classList.add('is-speaking');
+    root.classList.add('adb-is-speaking');
     setState({speaking:true});
     const spokenText=activeUtterance?.text||'';
     gestureIndex=spokenText.length%gestureClasses.length;
@@ -376,7 +376,7 @@
       clearTimeout(timer);
       resetMouthCadence();
       clearSpeechGestures();
-      root.classList.remove('is-speaking');
+      root.classList.remove('adb-is-speaking');
       setState({speaking:false});
     }
     try{speech?.cancel();}catch(_){}
@@ -388,7 +388,7 @@
 
     stopSpeaking();
     bubble.textContent=text;
-    root.classList.add('is-ready');
+    root.classList.add('adb-is-ready');
 
     if(!voice||!preferences.sound){
       if(typeof onStart==='function'){
@@ -533,7 +533,7 @@
   };
 
   const ensureSafePosition=({save=true}={})=>{
-    if(dragging||preferences.minimized||root.classList.contains('is-hidden'))return false;
+    if(dragging||preferences.minimized||root.classList.contains('adb-is-hidden'))return false;
     const robot=root.getBoundingClientRect();
     if(robot.width<2||robot.height<2)return false;
 
@@ -615,7 +615,7 @@
     startTop=r.top;
     startX=event.clientX;
     startY=event.clientY;
-    root.classList.add('is-dragging');
+    root.classList.add('adb-is-dragging');
     stage.setPointerCapture?.(pointerId);
     event.preventDefault();
   });
@@ -633,7 +633,7 @@
     if(!dragging||event.pointerId!==pointerId)return;
     dragging=false;
     setState({dragging:false});
-    root.classList.remove('is-dragging');
+    root.classList.remove('adb-is-dragging');
     if(frame){cancelAnimationFrame(frame);frame=0;setPosition(pendingX,pendingY,false);}
     const r=root.getBoundingClientRect();
     setPosition(r.left,r.top,true);
@@ -658,7 +658,7 @@
     if(!dragging||event.pointerId!==pointerId)return;
     dragging=false;
     setState({dragging:false});
-    root.classList.remove('is-dragging');
+    root.classList.remove('adb-is-dragging');
     if(frame){cancelAnimationFrame(frame);frame=0;setPosition(pendingX,pendingY,false);}
     const r=root.getBoundingClientRect();
     setPosition(r.left,r.top,true);
@@ -681,7 +681,7 @@
   help?.addEventListener('pointerdown',event=>event.stopPropagation());
   help?.addEventListener('click',event=>{
     event.stopPropagation();
-    root.classList.remove('is-settings-open');
+    root.classList.remove('adb-is-settings-open');
     try{
       const helper=window.AdimBotHelp;
       if(helper&&typeof helper.request==='function'){
@@ -696,7 +696,7 @@
   settingsButton?.addEventListener('click',event=>{
     event.stopPropagation();
     wakeAdimBot();
-    root.classList.toggle('is-settings-open');
+    root.classList.toggle('adb-is-settings-open');
     syncSettingsUi();
     scheduleIdlePower();
   });
@@ -726,12 +726,12 @@
   close?.addEventListener('pointerdown',event=>event.stopPropagation());
   close?.addEventListener('click',event=>{
     event.stopPropagation();
-    root.classList.remove('is-settings-open');
+    root.classList.remove('adb-is-settings-open');
     setMinimized(true);
   });
 
   window.addEventListener('resize',()=>{
-    if(root.classList.contains('is-hidden'))return;
+    if(root.classList.contains('adb-is-hidden'))return;
     const r=root.getBoundingClientRect();
     setPosition(r.left,r.top,true);
     scheduleSafePosition(100);
@@ -740,9 +740,9 @@
   window.addEventListener('hashchange',()=>scheduleSafePosition(180));
 
   const suspendAdimBot=()=>{
-    if(pageSuspended&&root.classList.contains('is-suspended'))return;
+    if(pageSuspended&&root.classList.contains('adb-is-suspended'))return;
     pageSuspended=true;
-    root.classList.add('is-suspended');
+    root.classList.add('adb-is-suspended');
     clearIdlePower();
     stopSpeaking();
     clearTimeout(safePositionTimer);
@@ -752,13 +752,13 @@
       dragging=false;
       pointerId=null;
       setState({dragging:false});
-      root.classList.remove('is-dragging');
+      root.classList.remove('adb-is-dragging');
     }
   };
 
   const resumeAdimBot=()=>{
     pageSuspended=false;
-    root.classList.remove('is-suspended');
+    root.classList.remove('adb-is-suspended');
     refreshVoices();
     try{speech?.resume?.();}catch(_){}
     scheduleSafePosition(120);
@@ -787,9 +787,9 @@
   if(screen)safeObserver.observe(screen,{subtree:true,childList:true,attributes:true,attributeFilter:['class','open']});
 
   document.addEventListener('click',event=>{
-    if(!root.classList.contains('is-settings-open'))return;
+    if(!root.classList.contains('adb-is-settings-open'))return;
     if(event.target instanceof Node&&root.contains(event.target))return;
-    root.classList.remove('is-settings-open');
+    root.classList.remove('adb-is-settings-open');
   });
 
   const react=(type,context={},options={})=>{
@@ -812,7 +812,7 @@
     },
     stop:()=>{try{stopSpeaking();return true;}catch(error){console.error('AdımBot stop hatası:',error);return false;}},
     show:()=>{
-      try{root.classList.remove('is-hidden');setMinimized(false);setState({hidden:false});return true;}
+      try{root.classList.remove('adb-is-hidden');setMinimized(false);setState({hidden:false});return true;}
       catch(error){console.error('AdımBot show hatası:',error);return false;}
     },
     hide:()=>{
@@ -858,7 +858,7 @@
 
   setMinimized(preferences.minimized,{save:false});
   syncSettingsUi();
-  if(pageSuspended)root.classList.add('is-suspended');
+  if(pageSuspended)root.classList.add('adb-is-suspended');
   else scheduleIdlePower(8000);
   setTimeout(()=>speak(chooseCharacterPhrase('greeting'),{voice:false}),550);
 })();

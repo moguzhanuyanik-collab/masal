@@ -1,12 +1,13 @@
-/* İlkAdım V1.0.95 — AdımBot performans ve düşük güç modu */
+/* İlkAdım V1.0.96 — AdımBot CSS/JS izolasyonu */
 .adb-student-widget{
   position:fixed;
   right:max(18px,env(safe-area-inset-right));
   bottom:max(92px,calc(env(safe-area-inset-bottom) + 76px));
-  z-index:70;width:184px;
+  z-index:70;width:184px;isolation:isolate;
   font-family:"Inter","Nunito","Segoe UI",system-ui,-apple-system,sans-serif;
   user-select:none;-webkit-user-select:none
 }
+.adb-student-widget,.adb-student-widget *{box-sizing:border-box}
 .adb-bubble{
   position:relative;margin:0 7px 7px auto;max-width:240px;padding:11px 13px;
   border:1px solid #dfe7f2;border-radius:17px 17px 5px 17px;
@@ -18,27 +19,27 @@
   content:"";position:absolute;right:20px;bottom:-7px;width:13px;height:13px;
   background:#fff;border-right:1px solid #dfe7f2;border-bottom:1px solid #dfe7f2;transform:rotate(45deg)
 }
-.adb-student-widget.is-ready .adb-bubble,.adb-student-widget.is-speaking .adb-bubble{opacity:1;transform:none}
+.adb-student-widget.adb-is-ready .adb-bubble,.adb-student-widget.adb-is-speaking .adb-bubble{opacity:1;transform:none}
 
 .adb-stage{
   position:relative;width:92px;height:126px;margin-left:auto;display:grid;place-items:start center;
   touch-action:none;cursor:grab;outline:none
 }
-.adb-stage:active,.adb-student-widget.is-dragging .adb-stage{cursor:grabbing}
+.adb-stage:active,.adb-student-widget.adb-is-dragging .adb-stage{cursor:grabbing}
 
 .adb-visual{
   position:relative;width:84px;height:114px;overflow:visible;
   filter:drop-shadow(0 15px 18px rgba(40,80,130,.20));
   animation:adbFloat 3.5s ease-in-out infinite;transform-origin:50% 90%
 }
-.adb-student-widget.is-dragging .adb-visual{animation:none;transform:scale(1.02)}
+.adb-student-widget.adb-is-dragging .adb-visual{animation:none;transform:scale(1.02)}
 
 .adb-robot-canvas{
   position:absolute;left:0;top:0;width:221px;height:299px;
   transform:scale(.38);transform-origin:0 0;overflow:visible
 }
 .adb-sprite{
-  position:absolute;display:block;background-image:url("adimbot/adimbot-atlas.webp?v=1.0.95");
+  position:absolute;display:block;background-image:url("adimbot/adimbot-atlas.webp?v=1.0.96");
   background-repeat:no-repeat;pointer-events:none
 }
 .adb-body{
@@ -60,11 +61,11 @@
   background-size:281.48px 246.30px;background-position:-142.15px -95.70px;
   opacity:0;transform-origin:50% 20%
 }
-.adb-student-widget.is-speaking .adb-mouth-open{
+.adb-student-widget.adb-is-speaking .adb-mouth-open{
   opacity:1;animation:adbMouth .32s cubic-bezier(.42,0,.58,1) infinite alternate;
   will-change:transform
 }
-.adb-student-widget.is-speaking .adb-pulse{animation-duration:1.9s}
+.adb-student-widget.adb-is-speaking .adb-pulse{animation-duration:1.9s}
 .adb-lid{
   position:absolute;z-index:6;top:84px;width:28px;height:16px;
   background:linear-gradient(180deg,#0b1a2b 0%,#10283e 72%,#12344d 100%);
@@ -79,8 +80,8 @@
 .adb-lid-right{left:124px;animation-delay:.025s}
 
 /* Konuşurken kollar sürekli sallanmaz; sakin bekler, vurgu anlarında kısa jest yapar. */
-.adb-student-widget.is-speaking .adb-arm-leftview{animation:adbArmLeftSpeechRest 3.2s ease-in-out infinite}
-.adb-student-widget.is-speaking .adb-arm-rightview{animation:adbArmRightSpeechRest 3.7s ease-in-out infinite}
+.adb-student-widget.adb-is-speaking .adb-arm-leftview{animation:adbArmLeftSpeechRest 3.2s ease-in-out infinite}
+.adb-student-widget.adb-is-speaking .adb-arm-rightview{animation:adbArmRightSpeechRest 3.7s ease-in-out infinite}
 .adb-student-widget.adb-gesture-left .adb-arm-leftview{animation:adbGestureLeft .72s cubic-bezier(.22,.75,.25,1) 1 both}
 .adb-student-widget.adb-gesture-right .adb-arm-rightview{animation:adbGestureRight .72s cubic-bezier(.22,.75,.25,1) 1 both}
 .adb-student-widget.adb-gesture-open .adb-arm-leftview{animation:adbGestureOpenLeft .76s cubic-bezier(.22,.75,.25,1) 1 both}
@@ -89,39 +90,39 @@
 .adb-student-widget.adb-speech-settle .adb-arm-rightview{animation:adbSpeechSettleRight .46s cubic-bezier(.2,.7,.25,1) 1 both}
 
 /* Cevap sonrası karakter tepkileri */
-.adb-student-widget[data-adimbot-mood="success"].is-speaking:not(.is-dragging) .adb-visual{
+.adb-student-widget[data-adimbot-mood="success"].adb-is-speaking:not(.adb-is-dragging) .adb-visual{
   animation:adbSuccessBounce .82s cubic-bezier(.2,.8,.25,1) 1 both
 }
-.adb-student-widget[data-adimbot-mood="success"].is-speaking .adb-arm-leftview{
+.adb-student-widget[data-adimbot-mood="success"].adb-is-speaking .adb-arm-leftview{
   animation:adbSuccessArmLeft .86s cubic-bezier(.2,.8,.25,1) 1 both
 }
-.adb-student-widget[data-adimbot-mood="success"].is-speaking .adb-arm-rightview{
+.adb-student-widget[data-adimbot-mood="success"].adb-is-speaking .adb-arm-rightview{
   animation:adbSuccessArmRight .86s cubic-bezier(.2,.8,.25,1) 1 both
 }
-.adb-student-widget[data-adimbot-mood="success"].is-speaking .adb-lid{
+.adb-student-widget[data-adimbot-mood="success"].adb-is-speaking .adb-lid{
   animation:adbHappyBlink 1.05s ease-in-out 1
 }
-.adb-student-widget[data-adimbot-mood="success"].is-speaking .adb-pulse{
+.adb-student-widget[data-adimbot-mood="success"].adb-is-speaking .adb-pulse{
   animation:adbSuccessPulse .72s ease-out 2
 }
 
-.adb-student-widget[data-adimbot-mood="retry"].is-speaking:not(.is-dragging) .adb-visual{
+.adb-student-widget[data-adimbot-mood="retry"].adb-is-speaking:not(.adb-is-dragging) .adb-visual{
   animation:adbRetryNod .95s cubic-bezier(.3,.65,.3,1) 1 both
 }
-.adb-student-widget[data-adimbot-mood="retry"].is-speaking .adb-arm-leftview{
+.adb-student-widget[data-adimbot-mood="retry"].adb-is-speaking .adb-arm-leftview{
   animation:adbRetryArmLeft 1.1s ease-in-out 1 both
 }
-.adb-student-widget[data-adimbot-mood="retry"].is-speaking .adb-arm-rightview{
+.adb-student-widget[data-adimbot-mood="retry"].adb-is-speaking .adb-arm-rightview{
   animation:adbRetryArmRight 1.1s ease-in-out 1 both
 }
-.adb-student-widget[data-adimbot-mood="retry"].is-speaking .adb-lid{
+.adb-student-widget[data-adimbot-mood="retry"].adb-is-speaking .adb-lid{
   animation:adbRetryBlink 1.35s ease-in-out 1
 }
 
-.adb-student-widget.is-dragging .adb-arm-leftview,
-.adb-student-widget.is-dragging .adb-arm-rightview,
-.adb-student-widget.is-dragging .adb-mouth-open,
-.adb-student-widget.is-dragging .adb-lid{animation-play-state:paused!important}
+.adb-student-widget.adb-is-dragging .adb-arm-leftview,
+.adb-student-widget.adb-is-dragging .adb-arm-rightview,
+.adb-student-widget.adb-is-dragging .adb-mouth-open,
+.adb-student-widget.adb-is-dragging .adb-lid{animation-play-state:paused!important}
 
 .adb-arm-leftview,.adb-arm-rightview{
   will-change:transform;
@@ -157,7 +158,7 @@
   background:rgba(255,255,255,.98);box-shadow:0 16px 42px rgba(30,54,90,.20);backdrop-filter:blur(12px);
   opacity:0;visibility:hidden;transform:translateY(6px) scale(.98);transition:.16s ease;z-index:60
 }
-.adb-student-widget.is-settings-open .adb-settings-panel{opacity:1;visibility:visible;transform:none}
+.adb-student-widget.adb-is-settings-open .adb-settings-panel{opacity:1;visibility:visible;transform:none}
 .adb-settings-panel strong{display:block;margin-bottom:8px;color:#25344b;font-size:12px}
 .adb-setting-row{
   display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 0;
@@ -174,49 +175,34 @@
   background:#fff;color:#216f9e;box-shadow:0 10px 28px rgba(33,72,110,.20);
   font:900 23px/1 inherit;cursor:pointer
 }
-.adb-student-widget.is-minimized{width:48px}
-.adb-student-widget.is-minimized .adb-bubble,
-.adb-student-widget.is-minimized .adb-stage,
-.adb-student-widget.is-minimized .adb-settings-panel{display:none!important}
-.adb-student-widget.is-minimized .adb-minimized{display:grid;place-items:center}
+.adb-student-widget.adb-is-minimized{width:48px}
+.adb-student-widget.adb-is-minimized .adb-bubble,
+.adb-student-widget.adb-is-minimized .adb-stage,
+.adb-student-widget.adb-is-minimized .adb-settings-panel{display:none!important}
+.adb-student-widget.adb-is-minimized .adb-minimized{display:grid;place-items:center}
 .adb-minimized:hover,.adb-minimized:focus-visible{transform:scale(1.05);outline:3px solid rgba(63,174,255,.24);outline-offset:2px}
 .adb-pulse{
   position:absolute;z-index:0;left:8px;right:8px;top:18px;height:74px;border-radius:50%;
   background:radial-gradient(circle,rgba(54,203,255,.16),rgba(54,203,255,0) 68%);
   animation:adbPulse 2.5s ease-in-out infinite;pointer-events:none
 }
-.adb-student-widget.is-hidden{display:none}
+.adb-student-widget.adb-is-hidden{display:none}
 
 /* Uzun süre boşta veya arka planda gereksiz dekoratif animasyon çalıştırma. */
-.adb-student-widget.is-idle-power .adb-visual,
-.adb-student-widget.is-idle-power .adb-pulse,
-.adb-student-widget.is-idle-power .adb-arm-leftview,
-.adb-student-widget.is-idle-power .adb-arm-rightview,
-.adb-student-widget.is-idle-power .adb-lid,
-.adb-student-widget.is-suspended .adb-visual,
-.adb-student-widget.is-suspended .adb-pulse,
-.adb-student-widget.is-suspended .adb-arm-leftview,
-.adb-student-widget.is-suspended .adb-arm-rightview,
-.adb-student-widget.is-suspended .adb-lid,
-.adb-student-widget.is-suspended .adb-mouth-open{
+.adb-student-widget.adb-is-idle-power .adb-visual,
+.adb-student-widget.adb-is-idle-power .adb-pulse,
+.adb-student-widget.adb-is-idle-power .adb-arm-leftview,
+.adb-student-widget.adb-is-idle-power .adb-arm-rightview,
+.adb-student-widget.adb-is-idle-power .adb-lid,
+.adb-student-widget.adb-is-suspended .adb-visual,
+.adb-student-widget.adb-is-suspended .adb-pulse,
+.adb-student-widget.adb-is-suspended .adb-arm-leftview,
+.adb-student-widget.adb-is-suspended .adb-arm-rightview,
+.adb-student-widget.adb-is-suspended .adb-lid,
+.adb-student-widget.adb-is-suspended .adb-mouth-open{
   animation-play-state:paused!important
 }
-.adb-student-widget.is-suspended{pointer-events:none}
-
-/* Öğrenci tarafında eski hoparlör/ses ikonları görünmez; seslendirme AdımBot üzerinden yapılır. */
-.activity-speech-icon,
-.speech-icon,
-.speaker-icon,
-.audio-speech-icon,
-.tts-button,
-.listen-button,
-[data-speech-kind="activity-card"],
-button[data-speech-action],
-button[data-tts],
-button[data-action="speak"],
-button[data-action="speech"],
-a[data-action="speak"],
-a[data-action="speech"]{display:none!important}
+.adb-student-widget.adb-is-suspended{pointer-events:none}
 
 /* Sesli rehber hedefi: layout ve mevcut transformları bozmadan görünür odak. */
 .adb-guide-target{
@@ -379,7 +365,7 @@ a[data-action="speech"]{display:none!important}
   .adb-robot-canvas{transform:scale(.35)}
   .adb-bubble{font-size:10.5px;max-width:205px;padding:10px 11px}
   .adb-settings-panel{right:0;bottom:110px;width:198px}
-  .adb-student-widget.is-minimized{width:46px}
+  .adb-student-widget.adb-is-minimized{width:46px}
 }
 @media(prefers-reduced-motion:reduce){
   .adb-visual,.adb-pulse,.adb-arm-leftview,.adb-arm-rightview,.adb-lid,.adb-mouth-open,.adb-guide-target{animation:none!important}
