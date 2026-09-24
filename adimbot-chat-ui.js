@@ -247,6 +247,7 @@
       '<button type="button" data-adimbot-hint>💡 1. ipucu</button>',
       '<button type="button" data-adimbot-suggestion="Bununla ilgili kolay bir örnek verir misin?">🧩 Örnek ver</button>',
       '<button type="button" data-adimbot-together aria-pressed="false">🤝 Birlikte çözelim</button>',
+      '<button type="button" data-adimbot-summary>📋 Ders özeti</button>',
       '</div>',
       '<form class="adb-chat-form" data-adimbot-chat-form>',
       '<input type="text" maxlength="400" autocomplete="off" enterkeyhint="send" placeholder="AdımBot’a bir şey sor..." data-adimbot-chat-input>',
@@ -330,6 +331,18 @@
       if(counter)counter.textContent=String(input.value.length)+' / 400';
       input.focus();
       if(typeof form?.requestSubmit==='function')form.requestSubmit();
+    });
+
+    const summaryButton=modal.querySelector('[data-adimbot-summary]');
+    summaryButton?.addEventListener('click',()=>{
+      if(chatBusy||!box)return;
+      const summary=window.AdimBotStudent?.lessonSummary?.(currentContext());
+      const message=clean(summary?.text)||'Bugün güzel bir çalışma yaptın. Şimdi öğrendiğin bir şeyi kendi cümlenle söylemeyi dene.';
+      appendMessage(box,'bot',message);
+      remember('assistant',message);
+      try{window.AdimBotStudent?.speak?.(message);}catch(_){}
+      if(status)status.textContent='Ders özeti hazır.';
+      input?.focus();
     });
 
     const hintButton=modal.querySelector('[data-adimbot-hint]');

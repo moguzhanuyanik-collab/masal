@@ -103,6 +103,39 @@
     };
   };
 
+  const lessonMiniSummary=(context={})=>{
+    const state=readProfileState();
+    const lessonRaw=String(context.lesson||context.lessonCode||'').trim();
+    const lessonCode=normalizeLesson(lessonRaw);
+    const label=lessonLabel(lessonRaw||lessonCode||'bu ders');
+    const attempts=safeArray(state.attempts)
+      .filter(item=>item&&typeof item==='object'&&normalizeLesson(item.lesson)===lessonCode)
+      .sort((a,b)=>(Number(b.at)||0)-(Number(a.at)||0))
+      .slice(0,20);
+    const correct=attempts.filter(item=>item.correct===true).length;
+    const wrong=Math.max(0,attempts.length-correct);
+    const steps=safeArray(state.steps).filter(step=>{
+      const value=String(step||'');
+      return lessonCode&&normalizeLesson(value.replace(/-\d+$/,''))===lessonCode;
+    }).length;
+    const difficulty=difficultySummary(context);
+    const topic=String(context.topic||'').trim().slice(0,80);
+    const parts=[];
+    if(steps>0)parts.push(`${steps} çalışma adımı tamamladın`);
+    if(attempts.length>0)parts.push(`${attempts.length} soruda ${correct} doğru cevap verdin`);
+    let text=`${label} çalışmasının mini özeti: `;
+    text+=parts.length?parts.join(' ve ')+'. ':'Bugün bu derste güzel bir çalışma yaptın. ';
+    if(difficulty.primary&&difficulty.primary.lessonCode===lessonCode){
+      text+=topic
+        ?`${topic} konusunda biraz daha pratik yapmak sana yardımcı olabilir. `
+        :'Biraz daha pratik yapmak öğrendiklerini güçlendirebilir. ';
+    }else if(attempts.length>=3&&correct===attempts.length){
+      text+='Sorularda çok dikkatli ilerledin. ';
+    }
+    text+='Şimdi öğrendiğin bir şeyi kendi cümlenle söylemeyi dene.';
+    return {lesson:label,lessonCode,attempts:attempts.length,correct,wrong,steps,text:text.slice(0,360)};
+  };
+
   const studentContext=()=>{
     const stateData=readProfileState();
     const summary=window.ILKADIM_DB_SUMMARY&&typeof window.ILKADIM_DB_SUMMARY==='object'
@@ -195,7 +228,10 @@
     }
 
     if(label&&type==='lessonStart')phrase=`${name?name+', ':''}${label} dersine başlayalım. Hazırsan ilk adımı atalım.`;
-    if(label&&type==='lessonEnd')phrase=`${name?name+', ':''}${label} çalışmasını tamamladın. Harika ilerledin!`;
+    if(label&&type==='lessonEnd'){
+      const summary=lessonMiniSummary({...context,lesson:label});
+      phrase=`${name?name+', ':''}${summary.text}`;
+    }
     return phrase;
   };
 
@@ -823,6 +859,9 @@
     },
     difficulty:(context={})=>{
       try{return difficultySummary(context);}catch(_){return {hasDifficulty:false,primary:null,lessons:[],currentTopic:''};}
+    },
+    lessonSummary:(context={})=>{
+      try{return lessonMiniSummary(context);}catch(_){return {lesson:'',lessonCode:'',attempts:0,correct:0,wrong:0,steps:0,text:'Bugün güzel bir çalışma yaptın. Şimdi öğrendiğin bir şeyi kendi cümlenle söylemeyi dene.'};}
     },
     stop:()=>{try{stopSpeaking();return true;}catch(error){console.error('AdımBot stop hatası:',error);return false;}},
     show:()=>{
