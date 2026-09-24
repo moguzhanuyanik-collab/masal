@@ -56,7 +56,7 @@
     return {screen:(location.hash||'#/anasayfa').replace(/^#\//,'').split('/')[0]||'anasayfa'};
   };
 
-  const appendMessage=(box,role,message)=>{
+  const appendMessage=(box,role,message,{speakable=true}={})=>{
     const item=document.createElement('div');
     item.className='adb-chat-message '+(role==='user'?'adb-chat-user':'adb-chat-bot');
 
@@ -67,10 +67,24 @@
     body.textContent=String(message||'');
 
     item.append(label,body);
+
+    if(role!=='user'&&speakable&&clean(message)){
+      const listen=document.createElement('button');
+      listen.type='button';
+      listen.className='adb-chat-listen';
+      listen.setAttribute('aria-label','AdımBot yanıtını tekrar dinle');
+      listen.textContent='🔊 Tekrar dinle';
+      listen.addEventListener('click',()=>{
+        try{window.AdimBotStudent?.speak?.(clean(message));}catch(_){}
+      });
+      item.appendChild(listen);
+    }
+
     box.appendChild(item);
 
     while(box.children.length>12)box.firstElementChild?.remove();
     box.scrollTop=box.scrollHeight;
+    return item;
   };
 
   const readHistory=()=>{
@@ -129,7 +143,7 @@
       '<input type="text" maxlength="400" autocomplete="off" enterkeyhint="send" placeholder="AdımBot’a bir şey sor..." data-adimbot-chat-input>',
       '<button type="submit">Gönder</button>',
       '</form>',
-      '<small class="adb-chat-status" data-adimbot-chat-status></small>',
+      '<div class="adb-chat-meta"><small data-adimbot-chat-counter>0 / 400</small><small class="adb-chat-status" data-adimbot-chat-status></small></div>',
       '</section>'
     ].join('');
 
@@ -139,7 +153,21 @@
     const form=modal.querySelector('[data-adimbot-chat-form]');
     const input=modal.querySelector('[data-adimbot-chat-input]');
     const status=modal.querySelector('[data-adimbot-chat-status]');
+    const counter=modal.querySelector('[data-adimbot-chat-counter]');
     const contextBadge=modal.querySelector('[data-adimbot-chat-context]');
+
+    const syncConnection=()=>{
+      if(!status)return;
+      if(!navigator.onLine)status.textContent='İnternet bağlantısı yok. Bağlantı gelince tekrar deneyebilirsin.';
+      else if(!chatBusy)status.textContent='';
+    };
+
+    input?.addEventListener('input',()=>{
+      if(counter)counter.textContent=String(input.value.length)+' / 400';
+    });
+    window.addEventListener('online',syncConnection);
+    window.addEventListener('offline',syncConnection);
+    syncConnection();
 
     const savedHistory=readHistory();
     if(savedHistory.length){
@@ -182,9 +210,14 @@
 
       const message=clean(input?.value).slice(0,400);
       if(!message||!input||!box)return;
+      if(!navigator.onLine){
+        if(status)status.textContent='İnternet bağlantısı yok. Bağlantı gelince tekrar deneyebilirsin.';
+        return;
+      }
 
       chatBusy=true;
       input.value='';
+      if(counter)counter.textContent='0 / 400';
       input.disabled=true;
       const submit=form.querySelector('button[type="submit"]');
       if(submit)submit.disabled=true;
@@ -209,7 +242,7 @@
         chatBusy=false;
         input.disabled=false;
         if(submit)submit.disabled=false;
-        if(status)status.textContent='';
+        if(status)status.textContent=navigator.onLine?'':'İnternet bağlantısı yok. Bağlantı gelince tekrar deneyebilirsin.';
         if(!modal.hidden)input.focus();
       }
     });

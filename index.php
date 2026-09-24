@@ -20,14 +20,14 @@ require_student_login();
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="v4-features.css?v=1.0.34">
   <link rel="stylesheet" href="ogretmenim.css?v=1.0.48">
-  <link rel="stylesheet" href="adimbot-student.css?v=1.1.5">
+  <link rel="stylesheet" href="adimbot-student.css?v=1.1.6">
   <script src="api/bootstrap.js.php" defer></script>
   <script src="activities-extra.js?v=1.0.31" defer></script>
   <script src="app-runtime.js" defer></script>
   <script src="adimbot-student.js?v=1.0.98" defer></script>
   <script src="global-audio-feedback.js?v=1.1.1" defer></script>
   <script src="adimbot-ai-bridge.js?v=1.1.4" defer></script>
-  <script src="adimbot-chat-ui.js?v=1.1.5" defer></script>
+  <script src="adimbot-chat-ui.js?v=1.1.6" defer></script>
   <script src="lesson-ui-fix.js?v=1.0.32" defer></script>
   <script src="settings-account.js" defer></script>
   <script src="profile-update-link.js?v=1.1.3" defer></script>
