@@ -225,6 +225,53 @@
     });
   };
 
+  const hintTriggerText=trigger=>{
+    if(!(trigger instanceof Element))return '';
+    const ids=[
+      trigger.getAttribute('aria-controls'),
+      trigger.getAttribute('aria-describedby')
+    ].filter(Boolean).flatMap(value=>String(value).split(/\s+/)).filter(Boolean);
+    for(const id of ids){
+      const target=document.getElementById(id);
+      if(!target)continue;
+      const value=stripReadingLabels(target.textContent);
+      if(value)return /^ipucu\b/i.test(value)?value:'İpucu. '+value;
+    }
+
+    const selector=trigger.getAttribute('data-target')||trigger.getAttribute('data-bs-target')||'';
+    if(/^#[A-Za-z][\w:.-]*$/.test(selector)){
+      const target=document.querySelector(selector);
+      const value=stripReadingLabels(target?.textContent);
+      if(value)return /^ipucu\b/i.test(value)?value:'İpucu. '+value;
+    }
+
+    const sibling=trigger.nextElementSibling;
+    if(sibling&&sibling.matches?.('.hint-content,.hint-text,.tip-content,.question-hint-content,[data-hint-content]')){
+      const value=stripReadingLabels(sibling.textContent);
+      if(value)return /^ipucu\b/i.test(value)?value:'İpucu. '+value;
+    }
+
+    const scope=trigger.closest('.hint-card,.hint-box,.tip-card,.tip-box,.question-hint,[data-hint]');
+    if(scope){
+      const clone=scope.cloneNode(true);
+      clone.querySelectorAll?.('button,summary,svg,.answers,.teacher-option,.feedback,.game-feedback').forEach(el=>el.remove());
+      const value=stripReadingLabels(clone.textContent);
+      if(value)return /^ipucu\b/i.test(value)?value:'İpucu. '+value;
+    }
+    return '';
+  };
+
+  const markHintReadables=rootScope=>{
+    rootScope.querySelectorAll?.('#screen button,#screen summary,#screen h1,#screen h2,#screen h3,#screen h4,#screen strong,#screen [data-hint-trigger]').forEach(trigger=>{
+      if(trigger.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
+      const label=clean(trigger.getAttribute('aria-label')||trigger.textContent).toLocaleLowerCase('tr-TR');
+      if(!/^ipucu\b/i.test(label)&&!trigger.hasAttribute('data-hint-trigger'))return;
+      const value=hintTriggerText(trigger);
+      trigger.setAttribute('data-adimbot-hint-trigger','1');
+      if(value)trigger.setAttribute('data-adimbot-text',value);
+    });
+  };
+
   const markQuestionReadables=scope=>{
     const rootScope=scope&&scope.querySelectorAll?scope:document;
     const questionSelector='.puzzle-question,.teacher-question > strong,[data-question-text],.question-text,.question-title,.question-prompt,.question-stem';
@@ -276,6 +323,7 @@
       if(!el.hasAttribute('data-adimbot-read'))el.setAttribute('data-adimbot-read','text');
     });
     markQuestionReadables(rootScope);
+    markHintReadables(rootScope);
   };
 
   const clearArmTimer=()=>{
@@ -571,6 +619,23 @@
   };
 
   document.addEventListener('click',handleReadableClick,true);
+  const handleHintTriggerClick=e=>{
+    const target=e.target;
+    if(!(target instanceof Element)||!canSpeak())return;
+    const trigger=target.closest('[data-adimbot-hint-trigger]');
+    if(!trigger||trigger.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
+
+    // İpucu düğmesinin kendi açma/kapatma davranışını engellemeden,
+    // DOM güncellendikten sonra ipucu metnini seslendir.
+    setTimeout(()=>{
+      if(!trigger.isConnected)return;
+      const text=hintTriggerText(trigger)||stripReadingLabels(trigger.getAttribute('data-adimbot-text'));
+      if(text)speak(text);
+    },60);
+  };
+
+  document.addEventListener('click',handleHintTriggerClick,false);
+
 
   // A correct answer changes both its class and the feedback text.
   // Merge both mutations into one announcement after the DOM has settled.
