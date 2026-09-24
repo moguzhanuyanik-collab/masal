@@ -4,6 +4,7 @@
 
   const CONTEXT_KEY='ilkadim.adimbot.chat.context.v1';
   const HISTORY_KEY='ilkadim.adimbot.chat.history.v1';
+  const HINT_KEY='ilkadim.adimbot.chat.hint.v1';
   const MAX_HISTORY=6;
   let modal=null;
   let chatBusy=false;
@@ -104,6 +105,42 @@
     return {screen:(location.hash||'#/anasayfa').replace(/^#\//,'').split('/')[0]||'anasayfa'};
   };
 
+
+  const hintSignature=()=>{
+    const context=currentContext();
+    return clean([context.screen,context.lesson,context.topic,context.activity,context.question].filter(Boolean).join('|')).slice(0,480);
+  };
+
+  const readHintState=()=>{
+    const signature=hintSignature();
+    try{
+      const saved=JSON.parse(sessionStorage.getItem(HINT_KEY)||'null');
+      if(saved&&saved.signature===signature){
+        return {signature,level:Math.max(0,Math.min(3,Number(saved.level)||0))};
+      }
+    }catch(_){}
+    return {signature,level:0};
+  };
+
+  const writeHintLevel=level=>{
+    const state={signature:hintSignature(),level:Math.max(0,Math.min(3,Number(level)||0))};
+    try{sessionStorage.setItem(HINT_KEY,JSON.stringify(state));}catch(_){}
+    return state;
+  };
+
+  const resetHintState=()=>{
+    try{sessionStorage.removeItem(HINT_KEY);}catch(_){}
+  };
+
+  const hintStep=()=>{
+    const current=readHintState();
+    const level=Math.min(3,current.level+1);
+    writeHintLevel(level);
+    if(level===1)return 'Bu sorunun cevabını söylemeden yalnızca ilk küçük ipucunu ver. Çocuğun kendisinin düşünmesini sağla.';
+    if(level===2)return 'İlk ipucundan biraz daha açıklayıcı ikinci bir ipucu ver. Doğru cevabı veya doğru şıkkı yine söyleme.';
+    return 'Bu soruyu 1. sınıf öğrencisinin anlayacağı şekilde adım adım açıkla. Sonucu veya doğru şıkkı doğrudan söyleme; son adımı öğrencinin bulmasına bırak.';
+  };
+
   const appendMessage=(box,role,message,{speakable=true}={})=>{
     const item=document.createElement('div');
     item.className='adb-chat-message '+(role==='user'?'adb-chat-user':'adb-chat-bot');
@@ -159,6 +196,12 @@
 
   const clearHistory=()=>{
     try{sessionStorage.removeItem(HISTORY_KEY);}catch(_){}
+    resetHintState();
+    const hintButton=modal?.querySelector('[data-adimbot-hint]');
+    if(hintButton){
+      hintButton.textContent='💡 1. ipucu';
+      hintButton.setAttribute('aria-label','Birinci ipucunu iste');
+    }
     const box=modal?.querySelector('[data-adimbot-chat-messages]');
     if(box){
       box.innerHTML='';
@@ -182,9 +225,9 @@
       '</header>',
       '<div class="adb-chat-context" data-adimbot-chat-context hidden></div>',
       '<div class="adb-chat-messages" data-adimbot-chat-messages aria-live="polite"></div>',
-      '<div class="adb-chat-suggestions" data-adimbot-chat-suggestions>',
+      '<div class="adb-chat-suggestions" data-adimbot-chat-suggestions aria-label="AdımBot hızlı yardım seçenekleri">',
       '<button type="button" data-adimbot-suggestion="Bunu bana daha basit anlatır mısın?">✨ Basit anlat</button>',
-      '<button type="button" data-adimbot-suggestion="Bana cevabı söylemeden küçük bir ipucu verir misin?">💡 İpucu ver</button>',
+      '<button type="button" data-adimbot-hint>💡 1. ipucu</button>',
       '<button type="button" data-adimbot-suggestion="Bununla ilgili kolay bir örnek verir misin?">🧩 Örnek ver</button>',
       '</div>',
       '<form class="adb-chat-form" data-adimbot-chat-form>',
@@ -243,10 +286,29 @@
       }
     };
 
+    const hintButton=modal.querySelector('[data-adimbot-hint]');
+    const refreshHintButton=()=>{
+      if(!hintButton)return;
+      const level=readHintState().level;
+      hintButton.textContent=level===0?'💡 1. ipucu':level===1?'💡 2. ipucu':'🧠 Birlikte açıkla';
+      hintButton.setAttribute('aria-label',level===0?'Birinci ipucunu iste':level===1?'İkinci ipucunu iste':'Soruyu birlikte açıklayalım');
+    };
+    refreshHintButton();
+
+    hintButton?.addEventListener('click',()=>{
+      if(chatBusy||!input)return;
+      input.value=hintStep();
+      if(counter)counter.textContent=String(input.value.length)+' / 400';
+      refreshHintButton();
+      input.focus();
+      if(typeof form?.requestSubmit==='function')form.requestSubmit();
+    });
+
     modal.querySelectorAll('[data-adimbot-suggestion]').forEach(button=>{
       button.addEventListener('click',()=>{
         if(chatBusy||!input)return;
         input.value=button.getAttribute('data-adimbot-suggestion')||'';
+        if(counter)counter.textContent=String(input.value.length)+' / 400';
         input.focus();
         if(typeof form?.requestSubmit==='function')form.requestSubmit();
       });
@@ -312,6 +374,12 @@
       const parts=[context.lesson,context.topic,context.activity].map(clean).filter(Boolean);
       contextBadge.textContent=parts.length?'📚 '+parts.slice(0,2).join(' • '):'';
       contextBadge.hidden=!parts.length;
+    }
+    const hintButton=dialog.querySelector('[data-adimbot-hint]');
+    if(hintButton){
+      const level=readHintState().level;
+      hintButton.textContent=level===0?'💡 1. ipucu':level===1?'💡 2. ipucu':'🧠 Birlikte açıkla';
+      hintButton.setAttribute('aria-label',level===0?'Birinci ipucunu iste':level===1?'İkinci ipucunu iste':'Soruyu birlikte açıklayalım');
     }
     dialog.hidden=false;
     document.documentElement.classList.add('adb-chat-open');
