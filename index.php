@@ -20,6 +20,7 @@ require_student_login();
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="v4-features.css?v=1.0.34">
   <link rel="stylesheet" href="ogretmenim.css?v=1.0.48">
+  <link rel="stylesheet" href="adimbot-student.css?v=1.0.81">
   <script src="api/bootstrap.js.php" defer></script>
   <script src="activities-extra.js?v=1.0.31" defer></script>
   <script src="app-runtime.js" defer></script>
@@ -59,5 +60,24 @@ require_student_login();
   </div>
   <dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-title"><h2 id="confirm-title">Yeni bir başlangıç?</h2><p>İlerleme, yıldızlar, oyun sonuçları ve geçmiş bu tarayıcıdan silinecek. İsmin ve favorilerin korunacak.</p><div><button class="button soft" id="cancel-reset">Vazgeç</button><button class="button danger" id="confirm-reset">İlerlemeyi Sıfırla</button></div></dialog>
   <div class="toast" role="status" aria-live="polite"></div>
+  <div class="adb-student-widget" data-adimbot-student aria-label="AdımBot öğrenci yardımcısı">
+    <div class="adb-bubble" data-adimbot-bubble aria-live="polite">Merhaba! Ben AdımBot 👋</div>
+    <div class="adb-stage" data-adimbot-stage role="button" tabindex="0" aria-label="AdımBot'u sürükle veya konuştur">
+      <button class="adb-close" type="button" data-adimbot-close aria-label="AdımBot'u kapat">×</button>
+      <span class="adb-pulse" aria-hidden="true"></span>
+      <div class="adb-visual" aria-hidden="true">
+        <div class="adb-robot-canvas">
+          <span class="adb-sprite adb-arm-leftview"></span>
+          <span class="adb-sprite adb-arm-rightview"></span>
+          <span class="adb-sprite adb-body"></span>
+          <span class="adb-lid adb-lid-left"></span>
+          <span class="adb-lid adb-lid-right"></span>
+          <span class="adb-sprite adb-mouth-open"></span>
+        </div>
+        <span class="adb-drag-chip">Sürükle</span>
+      </div>
+    </div>
+  </div>
+  <script src="adimbot-student.js?v=1.0.81" defer></script>
 </body>
 </html>

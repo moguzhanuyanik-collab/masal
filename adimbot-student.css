@@ -1,0 +1,211 @@
+/* İlkAdım V1.0.81 — Öğrenci AdımBot izole konuşma prototipi */
+.adb-student-widget{
+  position:fixed;right:18px;bottom:92px;z-index:70;width:184px;
+  font-family:"Inter","Nunito","Segoe UI",system-ui,-apple-system,sans-serif;
+  user-select:none;-webkit-user-select:none
+}
+.adb-bubble{
+  position:relative;margin:0 7px 7px auto;max-width:240px;padding:11px 13px;
+  border:1px solid #dfe7f2;border-radius:17px 17px 5px 17px;
+  background:rgba(255,255,255,.97);color:#25344b;font-size:11px;font-weight:800;line-height:1.4;
+  box-shadow:0 14px 38px rgba(30,54,90,.16);backdrop-filter:blur(12px);
+  opacity:0;transform:translateY(7px) scale(.97);pointer-events:none;transition:.2s ease
+}
+.adb-bubble:after{
+  content:"";position:absolute;right:20px;bottom:-7px;width:13px;height:13px;
+  background:#fff;border-right:1px solid #dfe7f2;border-bottom:1px solid #dfe7f2;transform:rotate(45deg)
+}
+.adb-student-widget.is-ready .adb-bubble,.adb-student-widget.is-speaking .adb-bubble{opacity:1;transform:none}
+
+.adb-stage{
+  position:relative;width:92px;height:126px;margin-left:auto;display:grid;place-items:start center;
+  touch-action:none;cursor:grab;outline:none
+}
+.adb-stage:active,.adb-student-widget.is-dragging .adb-stage{cursor:grabbing}
+
+.adb-visual{
+  position:relative;width:84px;height:114px;overflow:visible;
+  filter:drop-shadow(0 15px 18px rgba(40,80,130,.20));
+  animation:adbFloat 3.5s ease-in-out infinite;transform-origin:50% 90%
+}
+.adb-student-widget.is-dragging .adb-visual{animation:none;transform:scale(1.02)}
+
+.adb-robot-canvas{
+  position:absolute;left:0;top:0;width:221px;height:299px;
+  transform:scale(.38);transform-origin:0 0;overflow:visible
+}
+.adb-sprite{
+  position:absolute;display:block;background-image:url("adimbot/adimbot-atlas.webp?v=1.0.81");
+  background-repeat:no-repeat;pointer-events:none
+}
+.adb-body{
+  left:25px;top:12px;width:171px;height:267px;z-index:3;
+  background-size:345.45px 302.27px;background-position:0 0
+}
+.adb-arm-leftview{
+  left:29px;top:152px;width:53px;height:105px;z-index:2;
+  background-size:311.76px 272.79px;background-position:-227.58px 0;
+  transform-origin:88% 8%;animation:adbArmLeftIdle 4.4s cubic-bezier(.45,0,.55,1) infinite
+}
+.adb-arm-rightview{
+  left:136px;top:152px;width:67px;height:104px;z-index:2;
+  background-size:311.63px 272.68px;background-position:-157.37px 0;
+  transform-origin:12% 8%;animation:adbArmRightIdle 4.7s cubic-bezier(.45,0,.55,1) infinite
+}
+.adb-mouth-open{
+  left:92px;top:119px;width:38px;height:21px;z-index:7;
+  background-size:281.48px 246.30px;background-position:-142.15px -95.70px;
+  opacity:0;transform-origin:50% 20%
+}
+.adb-student-widget.is-speaking .adb-mouth-open{
+  opacity:1;animation:adbMouth .32s cubic-bezier(.45,0,.55,1) infinite alternate
+}
+.adb-lid{
+  position:absolute;z-index:6;top:84px;width:28px;height:16px;
+  background:linear-gradient(180deg,#0b1a2b 0%,#10283e 72%,#12344d 100%);
+  border-radius:50% 50% 44% 44%;transform:scaleY(0);transform-origin:50% 0;
+  animation:adbBlink 6.2s infinite;pointer-events:none;overflow:hidden
+}
+.adb-lid:after{
+  content:"";position:absolute;left:22%;right:22%;bottom:1px;height:4px;
+  border-bottom:2px solid rgba(79,215,255,.82);border-radius:0 0 999px 999px
+}
+.adb-lid-left{left:69px}
+.adb-lid-right{left:124px;animation-delay:.025s}
+
+/* Konuşurken kollar sürekli sallanmaz; sakin bekler, vurgu anlarında kısa jest yapar. */
+.adb-student-widget.is-speaking .adb-arm-leftview{animation:adbArmLeftSpeechRest 3.2s ease-in-out infinite}
+.adb-student-widget.is-speaking .adb-arm-rightview{animation:adbArmRightSpeechRest 3.7s ease-in-out infinite}
+.adb-student-widget.adb-gesture-left .adb-arm-leftview{animation:adbGestureLeft .72s cubic-bezier(.22,.75,.25,1) 1 both}
+.adb-student-widget.adb-gesture-right .adb-arm-rightview{animation:adbGestureRight .72s cubic-bezier(.22,.75,.25,1) 1 both}
+.adb-student-widget.adb-gesture-open .adb-arm-leftview{animation:adbGestureOpenLeft .76s cubic-bezier(.22,.75,.25,1) 1 both}
+.adb-student-widget.adb-gesture-open .adb-arm-rightview{animation:adbGestureOpenRight .82s cubic-bezier(.22,.75,.25,1) 1 both}
+
+.adb-student-widget.is-dragging .adb-arm-leftview,
+.adb-student-widget.is-dragging .adb-arm-rightview,
+.adb-student-widget.is-dragging .adb-mouth-open,
+.adb-student-widget.is-dragging .adb-lid{animation-play-state:paused!important}
+
+.adb-arm-leftview,.adb-arm-rightview{
+  will-change:transform;
+  filter:drop-shadow(0 2px 2px rgba(10,32,55,.10))
+}
+.adb-arm-leftview:after,.adb-arm-rightview:after{
+  content:"";position:absolute;top:2px;width:18px;height:22px;border-radius:50%;
+  background:radial-gradient(circle at 50% 45%,rgba(42,171,221,.20),rgba(16,57,83,.08) 52%,rgba(16,57,83,0) 72%);
+  pointer-events:none
+}
+.adb-arm-leftview:after{right:-3px}
+.adb-arm-rightview:after{left:-3px}
+.adb-drag-chip{
+  position:absolute;z-index:20;left:50%;bottom:0;transform:translateX(-50%);
+  padding:5px 9px;border-radius:999px;background:rgba(18,34,57,.82);color:#fff;
+  font-size:8.5px;font-weight:900;letter-spacing:.15px;
+  box-shadow:0 5px 14px rgba(20,35,60,.16);opacity:.66;pointer-events:none
+}
+.adb-stage:hover .adb-drag-chip,.adb-student-widget.is-dragging .adb-drag-chip{opacity:1}
+.adb-close{
+  position:absolute;right:-1px;top:2px;width:27px;height:27px;border:1px solid #e4e9f1;border-radius:50%;
+  background:#fff;color:#6c788c;box-shadow:0 6px 18px rgba(33,52,80,.15);
+  font:900 16px/1 inherit;cursor:pointer;z-index:30
+}
+.adb-close:hover{color:#26344b;transform:scale(1.04)}
+.adb-pulse{
+  position:absolute;z-index:0;left:8px;right:8px;top:18px;height:74px;border-radius:50%;
+  background:radial-gradient(circle,rgba(54,203,255,.16),rgba(54,203,255,0) 68%);
+  animation:adbPulse 2.5s ease-in-out infinite;pointer-events:none
+}
+.adb-student-widget.is-hidden{display:none}
+
+@keyframes adbFloat{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  28%{transform:translateY(-2px) rotate(-.15deg)}
+  56%{transform:translateY(-4px) rotate(.12deg)}
+  78%{transform:translateY(-1px) rotate(-.08deg)}
+}
+@keyframes adbArmLeftIdle{
+  0%,100%{transform:rotate(0deg)}
+  30%{transform:rotate(-.9deg)}
+  62%{transform:rotate(.45deg)}
+  82%{transform:rotate(-.22deg)}
+}
+@keyframes adbArmRightIdle{
+  0%,100%{transform:rotate(0deg)}
+  34%{transform:rotate(.75deg)}
+  67%{transform:rotate(-.4deg)}
+  86%{transform:rotate(.2deg)}
+}
+@keyframes adbArmLeftSpeechRest{
+  0%,100%{transform:rotate(-.25deg) translateY(0)}
+  35%{transform:rotate(-.55deg) translateY(-.35px)}
+  70%{transform:rotate(-.85deg) translateY(0)}
+}
+@keyframes adbArmRightSpeechRest{
+  0%,100%{transform:rotate(.2deg) translateY(0)}
+  42%{transform:rotate(.48deg) translateY(-.3px)}
+  76%{transform:rotate(.72deg) translateY(0)}
+}
+@keyframes adbGestureLeft{
+  0%{transform:rotate(-.4deg) translateY(0)}
+  18%{transform:rotate(-2.2deg) translateY(-.7px)}
+  42%{transform:rotate(-5deg) translateY(-1.3px)}
+  62%{transform:rotate(-3.7deg) translateY(-.8px)}
+  82%{transform:rotate(-1.35deg) translateY(-.2px)}
+  100%{transform:rotate(-.55deg) translateY(0)}
+}
+@keyframes adbGestureRight{
+  0%{transform:rotate(.35deg) translateY(0)}
+  20%{transform:rotate(2deg) translateY(-.6px)}
+  44%{transform:rotate(4.6deg) translateY(-1.2px)}
+  64%{transform:rotate(3.15deg) translateY(-.7px)}
+  84%{transform:rotate(1.15deg) translateY(-.15px)}
+  100%{transform:rotate(.45deg) translateY(0)}
+}
+@keyframes adbGestureOpenLeft{
+  0%{transform:rotate(-.3deg) translateY(0)}
+  24%{transform:rotate(-2.1deg) translateY(-.5px)}
+  48%{transform:rotate(-4.1deg) translateY(-1px)}
+  72%{transform:rotate(-2.45deg) translateY(-.45px)}
+  100%{transform:rotate(-.45deg) translateY(0)}
+}
+@keyframes adbGestureOpenRight{
+  0%{transform:rotate(.25deg) translateY(0)}
+  26%{transform:rotate(1.9deg) translateY(-.45px)}
+  50%{transform:rotate(3.8deg) translateY(-.95px)}
+  74%{transform:rotate(2.3deg) translateY(-.4px)}
+  100%{transform:rotate(.4deg) translateY(0)}
+}
+@keyframes adbBlink{
+  0%,57.2%,59.5%,100%{transform:scaleY(0)}
+  57.65%{transform:scaleY(.62)}
+  58.15%{transform:scaleY(.96)}
+  58.65%{transform:scaleY(.72)}
+  59.05%{transform:scaleY(.18)}
+}
+@keyframes adbMouth{
+  0%{transform:scale(.98,.78)}
+  32%{transform:scale(1.01,.96)}
+  68%{transform:scale(.99,.86)}
+  100%{transform:scale(1.015,1.04)}
+}
+@keyframes adbPulse{
+  0%,100%{transform:scale(.94);opacity:.35}
+  50%{transform:scale(1.06);opacity:.72}
+}
+@media(min-width:1024px){
+  .adb-student-widget{right:30px;bottom:92px;width:196px}
+  .adb-stage{width:96px;height:128px}
+  .adb-visual{width:89px;height:120px}
+  .adb-robot-canvas{transform:scale(.40)}
+  .adb-bubble{font-size:12px;max-width:250px}
+}
+@media(max-width:390px){
+  .adb-student-widget{right:8px;bottom:88px;width:166px}
+  .adb-stage{width:82px;height:112px}
+  .adb-visual{width:77px;height:105px}
+  .adb-robot-canvas{transform:scale(.35)}
+  .adb-bubble{font-size:10.5px;max-width:205px;padding:10px 11px}
+}
+@media(prefers-reduced-motion:reduce){
+  .adb-visual,.adb-pulse,.adb-arm-leftview,.adb-arm-rightview,.adb-lid,.adb-mouth-open{animation:none!important}
+}
