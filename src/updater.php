@@ -230,6 +230,7 @@ function ensure_student_auth_schema(PDO $pdo): void {
             sifre_hash VARCHAR(255) NULL,
             avatar VARCHAR(32) NULL DEFAULT '🌞',
             profil_fotografi LONGTEXT NULL,
+            sinif_seviyesi TINYINT UNSIGNED NOT NULL DEFAULT 1,
             aktif TINYINT(1) NOT NULL DEFAULT 1,
             son_giris_tarihi DATETIME NULL,
             son_giris_ip VARCHAR(45) NULL,
@@ -251,6 +252,7 @@ function ensure_student_auth_schema(PDO $pdo): void {
             'sifre_hash'=>"ALTER TABLE ogrenciler ADD COLUMN sifre_hash VARCHAR(255) NULL",
             'avatar'=>"ALTER TABLE ogrenciler ADD COLUMN avatar VARCHAR(32) NULL DEFAULT '🌞'",
             'profil_fotografi'=>"ALTER TABLE ogrenciler ADD COLUMN profil_fotografi LONGTEXT NULL",
+            'sinif_seviyesi'=>"ALTER TABLE ogrenciler ADD COLUMN sinif_seviyesi TINYINT UNSIGNED NOT NULL DEFAULT 1",
             'aktif'=>"ALTER TABLE ogrenciler ADD COLUMN aktif TINYINT(1) NOT NULL DEFAULT 1",
             'son_giris_tarihi'=>"ALTER TABLE ogrenciler ADD COLUMN son_giris_tarihi DATETIME NULL",
             'son_giris_ip'=>"ALTER TABLE ogrenciler ADD COLUMN son_giris_ip VARCHAR(45) NULL"
