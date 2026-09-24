@@ -45,14 +45,20 @@
   };
 
   const stepLinks=()=>[...document.querySelectorAll('#screen a.lesson-step')]
-    .filter(link=>link instanceof HTMLAnchorElement);
+    .filter(link=>link instanceof HTMLAnchorElement&&!link.hidden&&link.getAttribute('aria-hidden')!=='true');
+
+  const stepIndexFor=(link,index)=>{
+    const raw=String(link?.dataset?.ilkadimStepIndex||'').trim();
+    if(/^\d+$/.test(raw))return Number(raw);
+    return index;
+  };
 
   const stepKeyFor=(link,index,currentCourse)=>{
     const ids=new Set(lessonIds());
     const parts=hashParts(link.href||link.getAttribute('href')||'');
     const course=parts.find(part=>ids.has(part))||currentCourse;
     if(!course)return '';
-    return course+'-'+index;
+    return course+'-'+stepIndexFor(link,index);
   };
 
   const markVisibleSteps=()=>{

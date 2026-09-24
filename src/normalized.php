@@ -28,13 +28,23 @@ function normalized_longest_streak(array $days):int{
 function normalized_badges(PDO $pdo,array $state,int $studentId=0):array{
     $steps=[];foreach(($state['steps']??[]) as $k)if(preg_match('/^([a-z0-9_-]+)-(\\d+)$/i',(string)$k,$m))$steps[$m[1]][(int)$m[2]]=true;
     $grade=normalized_student_grade($pdo,$studentId);$counts=[];
+    $hasCurriculum=normalized_table_exists($pdo,'ders_konulari')&&normalized_table_exists($pdo,'ders_sorulari');
     if(normalized_table_exists($pdo,'sinif_dersleri')&&normalized_column_exists($pdo,'ders_modulleri','sinif_seviyesi')){
-        $q=$pdo->prepare("SELECT d.kod,COUNT(m.id) modul_sayisi FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id AND sd.kademe_kodu='temel_egitim' AND sd.sinif_seviyesi=? AND sd.aktif=1 LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.kademe_kodu='temel_egitim' AND m.sinif_seviyesi=? AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod");
-        $q->execute([$grade,$grade]);$rows=$q->fetchAll();
+        if($hasCurriculum){
+            $q=$pdo->prepare("SELECT d.kod,COUNT(DISTINCT ds.id) soru_sayisi,COUNT(DISTINCT m.id) modul_sayisi FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id AND sd.kademe_kodu='temel_egitim' AND sd.sinif_seviyesi=? AND sd.aktif=1 LEFT JOIN ders_konulari k ON k.ders_id=d.id AND k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=? AND k.aktif=1 LEFT JOIN ders_sorulari ds ON ds.konu_id=k.id AND ds.aktif=1 LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.kademe_kodu='temel_egitim' AND m.sinif_seviyesi=? AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod");
+            $q->execute([$grade,$grade,$grade]);$rows=$q->fetchAll();
+        }else{
+            $q=$pdo->prepare("SELECT d.kod,0 soru_sayisi,COUNT(m.id) modul_sayisi FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id AND sd.kademe_kodu='temel_egitim' AND sd.sinif_seviyesi=? AND sd.aktif=1 LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.kademe_kodu='temel_egitim' AND m.sinif_seviyesi=? AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod");
+            $q->execute([$grade,$grade]);$rows=$q->fetchAll();
+        }
     }else{
-        $rows=$pdo->query("SELECT d.kod,COUNT(m.id) modul_sayisi FROM dersler d LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod")?:[];
+        $rows=$pdo->query("SELECT d.kod,0 soru_sayisi,COUNT(m.id) modul_sayisi FROM dersler d LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod")?:[];
     }
-    foreach($rows as $r)$counts[(string)$r['kod']]=(int)$r['modul_sayisi'];
+    foreach($rows as $r){
+        $questionCount=(int)($r['soru_sayisi']??0);
+        $legacyCount=(int)($r['modul_sayisi']??0);
+        $counts[(string)$r['kod']]=$questionCount>0?$questionCount:$legacyCount;
+    }
     $complete=0;foreach($counts as $c=>$n)if($n>0&&count($steps[$c]??[])>=$n)$complete++;
     $games=array_fill_keys(array_map('strval',$state['games']??[]),true);$math=0;
     foreach(($state['attempts']??[]) as $a)if(is_array($a)&&($a['lesson']??'')==='matematik'&&($a['correct']??false)===true)$math++;

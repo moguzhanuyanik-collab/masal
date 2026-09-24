@@ -37,25 +37,126 @@ try {
     $lessonStmt=$pdo->prepare('SELECT d.*,sd.haftalik_saat AS sinif_haftalik_saat,sd.sira AS sinif_sira FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id WHERE d.aktif=1 AND sd.aktif=1 AND sd.kademe_kodu=? AND sd.sinif_seviyesi=? ORDER BY sd.sira,d.id');
     $lessonStmt->execute([$educationStage,$studentGrade]);
     $rows=$lessonStmt->fetchAll();
+    $lessonStmt->closeCursor();
+
+    $curriculumReady=false;
+    try {
+        $tableCheck=$pdo->prepare('SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name=?');
+        $requiredTables=['ders_bolumleri','ders_konulari','ders_sorulari'];
+        $curriculumReady=true;
+        foreach($requiredTables as $requiredTable){
+            $tableCheck->execute([$requiredTable]);
+            $exists=(int)$tableCheck->fetchColumn()>0;
+            $tableCheck->closeCursor();
+            if(!$exists){$curriculumReady=false;break;}
+        }
+    } catch (Throwable) {
+        $curriculumReady=false;
+    }
+
     $moduleStmt=$pdo->prepare('SELECT * FROM ders_modulleri WHERE ders_id=? AND kademe_kodu=? AND sinif_seviyesi=? AND aktif=1 ORDER BY sira,id');
+    $sectionStmt=$curriculumReady?$pdo->prepare('SELECT id,kod,ad,aciklama,tur,sira FROM ders_bolumleri WHERE ders_id=? AND kademe_kodu=? AND sinif_seviyesi=? AND aktif=1 ORDER BY sira,id'):null;
+    $topicStmt=$curriculumReady?$pdo->prepare('SELECT id,bolum_id,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira FROM ders_konulari WHERE ders_id=? AND bolum_id=? AND kademe_kodu=? AND sinif_seviyesi=? AND aktif=1 ORDER BY sira,id'):null;
+    $questionStmt=$curriculumReady?$pdo->prepare('SELECT id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,gorsel_anahtari,ses_metni,sira FROM ders_sorulari WHERE konu_id=? AND aktif=1 ORDER BY sira,id'):null;
 
     foreach ($rows as $row) {
-        $moduleStmt->execute([(int)$row['id'],$educationStage,$studentGrade]);
         $modules=[];
-        foreach ($moduleStmt->fetchAll() as $m) {
-            $opts=json_decode((string)$m['secenekler_json'],true);
-            $modules[]=[
-                'title'=>$m['baslik'],
-                'subtitle'=>$m['alt_baslik'],
-                'emoji'=>$m['emoji'],
-                'reading'=>$m['okuma_metni'],
-                'example'=>$m['ornek_metni'],
-                'question'=>$m['soru'],
-                'options'=>is_array($opts)?$opts:[],
-                'answer'=>(int)$m['dogru_cevap_indeksi'],
-                'explanation'=>$m['aciklama'],
-            ];
+        $curriculum=[];
+
+        if($curriculumReady&&$sectionStmt&&$topicStmt&&$questionStmt){
+            try {
+                $sectionStmt->execute([(int)$row['id'],$educationStage,$studentGrade]);
+                $sections=$sectionStmt->fetchAll();
+                $sectionStmt->closeCursor();
+
+                foreach($sections as $section){
+                    $sectionTopics=[];
+                    $topicStmt->execute([(int)$row['id'],(int)$section['id'],$educationStage,$studentGrade]);
+                    $topics=$topicStmt->fetchAll();
+                    $topicStmt->closeCursor();
+
+                    foreach($topics as $topic){
+                        $questionStmt->execute([(int)$topic['id']]);
+                        $questions=$questionStmt->fetchAll();
+                        $questionStmt->closeCursor();
+                        $questionCount=count($questions);
+                        if($questionCount<1) continue;
+
+                        $startIndex=count($modules);
+                        foreach($questions as $questionIndex=>$q){
+                            $opts=json_decode((string)$q['secenekler_json'],true);
+                            $modules[]=[
+                                'title'=>(string)$topic['ad'],
+                                'subtitle'=>(string)$section['ad'].' • '.$questionCount.' soru',
+                                'emoji'=>(string)($row['emoji']??''),
+                                'reading'=>(string)($topic['anlatim']?:$topic['aciklama']),
+                                'example'=>(string)($topic['ornek_metni']??''),
+                                'question'=>(string)$q['soru'],
+                                'options'=>is_array($opts)?array_values($opts):[],
+                                'answer'=>(int)$q['dogru_cevap_indeksi'],
+                                'explanation'=>(string)($q['aciklama']??''),
+                                'curriculum'=>[
+                                    'sectionId'=>(int)$section['id'],
+                                    'sectionCode'=>(string)$section['kod'],
+                                    'sectionTitle'=>(string)$section['ad'],
+                                    'topicId'=>(int)$topic['id'],
+                                    'topicCode'=>(string)$topic['konu_kodu'],
+                                    'topicTitle'=>(string)$topic['ad'],
+                                    'questionId'=>(int)$q['id'],
+                                    'questionCode'=>(string)$q['soru_kodu'],
+                                    'questionIndex'=>(int)$questionIndex,
+                                    'questionCount'=>$questionCount,
+                                ],
+                            ];
+                        }
+
+                        $sectionTopics[]=[
+                            'id'=>(int)$topic['id'],
+                            'code'=>(string)$topic['konu_kodu'],
+                            'title'=>(string)$topic['ad'],
+                            'description'=>(string)($topic['aciklama']??''),
+                            'startIndex'=>$startIndex,
+                            'questionCount'=>$questionCount,
+                        ];
+                    }
+
+                    if($sectionTopics!==[]){
+                        $curriculum[]=[
+                            'id'=>(int)$section['id'],
+                            'code'=>(string)$section['kod'],
+                            'title'=>(string)$section['ad'],
+                            'description'=>(string)($section['aciklama']??''),
+                            'type'=>(string)($section['tur']??'tema'),
+                            'topics'=>$sectionTopics,
+                        ];
+                    }
+                }
+            } catch (Throwable) {
+                $modules=[];
+                $curriculum=[];
+            }
         }
+
+        if($modules===[]){
+            $moduleStmt->execute([(int)$row['id'],$educationStage,$studentGrade]);
+            $legacyModules=$moduleStmt->fetchAll();
+            $moduleStmt->closeCursor();
+            foreach ($legacyModules as $m) {
+                $opts=json_decode((string)$m['secenekler_json'],true);
+                $modules[]=[
+                    'title'=>$m['baslik'],
+                    'subtitle'=>$m['alt_baslik'],
+                    'emoji'=>$m['emoji'],
+                    'reading'=>$m['okuma_metni'],
+                    'example'=>$m['ornek_metni'],
+                    'question'=>$m['soru'],
+                    'options'=>is_array($opts)?$opts:[],
+                    'answer'=>(int)$m['dogru_cevap_indeksi'],
+                    'explanation'=>$m['aciklama'],
+                ];
+            }
+        }
+
         $lessons[]=[
             'id'=>$row['kod'],
             'name'=>$row['ad'],
@@ -66,6 +167,8 @@ try {
             'color'=>$row['renk'],
             'ink'=>$row['yazi_renk'],
             'description'=>$row['aciklama'],
+            'curriculumEnabled'=>$curriculum!==[],
+            'curriculum'=>$curriculum,
             'modules'=>$modules,
         ];
     }
