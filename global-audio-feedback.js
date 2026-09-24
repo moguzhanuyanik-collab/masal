@@ -89,7 +89,9 @@
     }
   };
 
-  const spokenCardSelector=[
+  // Legacy selectors are only used to auto-label current UI.
+  // Runtime behavior itself depends on the stable data-adimbot-read contract.
+  const autoActionSelector=[
     '.app-nav a[href]',
     '#screen a[href]',
     'a.game-tile',
@@ -109,7 +111,7 @@
     '.teacher-topic > summary'
   ].join(',');
 
-  const spokenTextSelector=[
+  const autoTextSelector=[
     '.game-intro',
     '.puzzle-question',
     '.teacher-content-card h3',
@@ -117,6 +119,19 @@
     '.teacher-question > strong',
     '.teacher-explanation'
   ].join(',');
+
+  const markReadableElements=scope=>{
+    const rootScope=scope&&scope.querySelectorAll?scope:document;
+    rootScope.querySelectorAll?.(autoActionSelector).forEach(el=>{
+      if(el.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
+      if(!el.hasAttribute('data-adimbot-read'))el.setAttribute('data-adimbot-read','action');
+    });
+    rootScope.querySelectorAll?.(autoTextSelector).forEach(el=>{
+      if(el.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
+      if(el.closest('[data-adimbot-read="action"]'))return;
+      if(!el.hasAttribute('data-adimbot-read'))el.setAttribute('data-adimbot-read','text');
+    });
+  };
 
   const clearArmTimer=()=>{
     if(armTimer){clearTimeout(armTimer);armTimer=null;}
@@ -136,6 +151,8 @@
 
   const cardSpeechText=card=>{
     if(!card)return '';
+    const explicit=clean(card.getAttribute?.('data-adimbot-text'));
+    if(explicit)return explicit;
     const titleEl=card.querySelector?.('h1,h2,h3,strong');
     const descEl=card.querySelector?.('p');
     const smallEl=card.querySelector?.('small');
@@ -150,58 +167,47 @@
     (scope||document).querySelectorAll?.('.activity-speech-icon,[data-speech-kind="activity-card"]').forEach(el=>el.remove());
   };
 
-  const handleSpokenCardClick=e=>{
+  const handleReadableClick=e=>{
     const target=e.target;
-    if(!(target instanceof Element))return;
-    const card=target.closest(spokenCardSelector);
-    if(!card)return;
+    if(!(target instanceof Element)||!canSpeak())return;
+
+    const item=target.closest('[data-adimbot-read]');
+    if(!item||item.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
     if(target.closest('input,select,textarea,label'))return;
 
-    // Progressive enhancement: AdımBot yoksa mevcut öğrenci davranışına hiç karışma.
-    if(!canSpeak())return;
+    const mode=item.getAttribute('data-adimbot-read');
 
-    if(armedCard===card){
-      disarmCard(card);
-      stopSpeech();
+    if(mode==='action'){
+      if(armedCard===item){
+        disarmCard(item);
+        stopSpeech();
+        return; // second click continues to the original action
+      }
+
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      disarmCard(armedCard);
+      armedCard=item;
+      const text=cardSpeechText(item);
+      const ok=speak(text,item,()=>scheduleDisarm(item));
+      if(!ok)disarmCard(item);
       return;
     }
 
-    e.preventDefault();
-    e.stopImmediatePropagation();
-
-    disarmCard(armedCard);
-    armedCard=card;
-    const text=cardSpeechText(card);
-    const ok=speak(text,card,()=>scheduleDisarm(card));
-    if(!ok){
-      disarmCard(card);
-      // Ses katmanı çalışmazsa ikinci tık zorunluluğu bırakma.
-      if(card instanceof HTMLAnchorElement && card.href)location.href=card.href;
+    if(mode==='text'){
+      const text=cardSpeechText(item);
+      if(text)speak(text);
     }
   };
-
-  const handleSpokenTextClick=e=>{
-    if(!canSpeak())return;
-    const target=e.target;
-    if(!(target instanceof Element))return;
-    if(target.closest(spokenCardSelector))return;
-    if(target.closest('button,input,select,textarea,label,a[href]'))return;
-    const item=target.closest(spokenTextSelector);
-    if(!item)return;
-    const text=clean(item.textContent);
-    if(text)speak(text);
-  };
-
   const isActivityGame=()=>location.hash.startsWith('#/oyun/');
 
   const decorateActivities=()=>{
     removeLegacyCardSpeakers(document);
+    markReadableElements(document);
   };
 
-  document.addEventListener('click',e=>{
-    handleSpokenCardClick(e);
-    handleSpokenTextClick(e);
-  },true);
+  document.addEventListener('click',handleReadableClick,true);
 
   // A correct answer changes both its class and the feedback text.
   // Merge both mutations into one announcement after the DOM has settled.
@@ -301,8 +307,22 @@
       childList:true,
       characterData:true
     });
-    removeLegacyCardSpeakers(document);
     decorateActivities();
+    window.AdimBotReadable=Object.freeze({
+      refresh:()=>markReadableElements(document),
+      register:(element,mode='action',text='')=>{
+        if(!(element instanceof Element))return false;
+        if(mode!=='action'&&mode!=='text')return false;
+        element.setAttribute('data-adimbot-read',mode);
+        if(text)element.setAttribute('data-adimbot-text',String(text));
+        return true;
+      },
+      ignore:element=>{
+        if(!(element instanceof Element))return false;
+        element.setAttribute('data-adimbot-ignore','1');
+        return true;
+      }
+    });
   };
 
   window.addEventListener('hashchange',()=>{
