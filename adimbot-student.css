@@ -1,4 +1,4 @@
-/* İlkAdım V1.1.1 — AdımBot AI Chat MVP */
+/* İlkAdım V1.1.3 — AdımBot ayrı ayar sayfası ve modal sohbet */
 .adb-student-widget{
   position:fixed;
   right:max(18px,env(safe-area-inset-right));
@@ -133,44 +133,65 @@
   box-shadow:0 6px 18px rgba(33,89,130,.15);font:900 15px/1 inherit;cursor:pointer;z-index:30
 }
 .adb-help:hover,.adb-help:focus-visible{color:#145987;transform:scale(1.04);outline:2px solid rgba(63,174,255,.28);outline-offset:2px}
+.adb-chat-trigger{
+  position:absolute;right:-1px;top:2px;width:29px;height:29px;border:1px solid #dce8f5;border-radius:50%;
+  display:grid;place-items:center;background:#fff;color:#2178b8;
+  box-shadow:0 6px 18px rgba(33,89,130,.15);font:900 14px/1 inherit;cursor:pointer;z-index:30
+}
+.adb-chat-trigger:hover,.adb-chat-trigger:focus-visible{transform:scale(1.04);outline:2px solid rgba(63,174,255,.28);outline-offset:2px}
 .adb-student-widget.adb-is-minimized{display:none!important}
 
-.adb-profile-settings{
-  margin:14px 0 4px;padding:16px;border:1px solid #dfe8f3;border-radius:18px;
-  background:#fff;box-shadow:0 12px 32px rgba(30,54,90,.10)
+.adb-settings-page{max-width:680px;margin:0 auto;padding:18px 14px 34px}
+.adb-settings-page-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.adb-settings-page-head>div{min-width:0}
+.adb-settings-page-head strong{display:block;color:#25344b;font-size:20px}
+.adb-settings-page-head small{display:block;margin-top:4px;color:#74839a;font-size:11px;line-height:1.4}
+.adb-settings-back{
+  width:42px;height:42px;flex:0 0 42px;border:1px solid #dce5ef;border-radius:14px;
+  background:#fff;color:#273c56;box-shadow:0 6px 18px rgba(30,54,90,.08);font:900 27px/1 inherit;cursor:pointer
 }
-.adb-profile-settings[hidden]{display:none!important}
-.adb-profile-settings-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.adb-profile-settings-head strong{display:block;color:#25344b;font-size:15px}
-.adb-profile-settings-head small{display:block;margin-top:3px;color:#74839a;font-size:11px;line-height:1.35}
-.adb-profile-setting-row{
-  display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;
+.adb-settings-page-card{padding:8px 16px;border:1px solid #dfe8f3;border-radius:20px;background:#fff;box-shadow:0 12px 32px rgba(30,54,90,.10)}
+.adb-settings-page-row{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 0;
   border-top:1px solid #edf2f7;color:#32445d
 }
-.adb-profile-setting-row span{min-width:0}
-.adb-profile-setting-row strong{display:block;font-size:12px}
-.adb-profile-setting-row small{display:block;margin-top:3px;color:#7a8798;font-size:10px}
-.adb-profile-setting-row input[type="checkbox"]{width:20px;height:20px;accent-color:#289ed8;flex:0 0 auto}
-.adb-profile-setting-row select{
-  min-width:100px;border:1px solid #dce5ef;border-radius:10px;background:#fff;color:#31435c;
-  padding:7px 8px;font:800 11px/1 inherit
+.adb-settings-page-row:first-child{border-top:0}
+.adb-settings-page-row span{min-width:0}
+.adb-settings-page-row strong{display:block;font-size:13px}
+.adb-settings-page-row small{display:block;margin-top:3px;color:#7a8798;font-size:10px}
+.adb-settings-page-row input[type="checkbox"]{width:21px;height:21px;accent-color:#289ed8;flex:0 0 auto}
+.adb-settings-page-row select{
+  min-width:104px;border:1px solid #dce5ef;border-radius:10px;background:#fff;color:#31435c;
+  padding:8px 9px;font:800 11px/1 inherit
 }
+.adb-settings-page-note{margin-top:12px;padding:12px 14px;border-radius:14px;background:#f2f8fc;color:#557087;font-size:10.5px;line-height:1.45}
 
-.adb-profile-chat{margin-top:14px;padding-top:14px;border-top:1px solid #e7edf5}
-.adb-profile-chat-head strong{display:block;color:#25344b;font-size:13px}
-.adb-profile-chat-head small{display:block;margin-top:4px;color:#74839a;font-size:10px;line-height:1.4}
-.adb-profile-chat-messages{
-  margin-top:10px;max-height:260px;overflow:auto;padding:8px;border-radius:14px;background:#f6f9fc
+html.adb-chat-open,html.adb-chat-open body{overflow:hidden}
+.adb-chat-modal[hidden]{display:none!important}
+.adb-chat-modal{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:18px}
+.adb-chat-backdrop{position:absolute;inset:0;background:rgba(18,35,52,.48);backdrop-filter:blur(5px)}
+.adb-chat-dialog{
+  position:relative;width:min(520px,100%);max-height:min(680px,88vh);display:flex;flex-direction:column;
+  overflow:hidden;border:1px solid rgba(255,255,255,.72);border-radius:24px;background:#fff;
+  box-shadow:0 26px 80px rgba(12,35,60,.34)
 }
-.adb-profile-chat-message{max-width:90%;margin:7px 0;padding:9px 10px;border-radius:13px;background:#fff;color:#33455e;box-shadow:0 4px 14px rgba(35,65,100,.06)}
-.adb-profile-chat-message.is-user{margin-left:auto;background:#eaf7ff}
-.adb-profile-chat-message strong{display:block;font-size:10px}
-.adb-profile-chat-message p{margin:3px 0 0;font-size:11px;line-height:1.45}
-.adb-profile-chat-form{display:flex;gap:8px;margin-top:9px}
-.adb-profile-chat-form input{flex:1;min-width:0;border:1px solid #d8e3ef;border-radius:11px;padding:9px 10px;font:700 11px/1.2 inherit;color:#263a52;background:#fff}
-.adb-profile-chat-form button{border:0;border-radius:11px;padding:9px 12px;background:#289ed8;color:#fff;font:900 11px/1 inherit;cursor:pointer}
-.adb-profile-chat-form button:disabled,.adb-profile-chat-form input:disabled{opacity:.6;cursor:default}
-.adb-profile-chat-status{display:block;min-height:14px;margin-top:5px;color:#7d8a9a;font-size:9.5px}
+.adb-chat-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px 16px 12px;border-bottom:1px solid #e8eef5}
+.adb-chat-dialog-head strong{display:block;color:#21354e;font-size:16px}
+.adb-chat-dialog-head small{display:block;margin-top:4px;color:#758399;font-size:10px;line-height:1.4}
+.adb-chat-close{
+  width:34px;height:34px;flex:0 0 34px;border:1px solid #dfe7f0;border-radius:50%;background:#fff;color:#526277;
+  font:900 20px/1 inherit;cursor:pointer
+}
+.adb-chat-messages{flex:1;min-height:180px;max-height:430px;overflow:auto;padding:14px;background:#f6f9fc}
+.adb-chat-message{max-width:88%;margin:8px 0;padding:10px 11px;border-radius:14px;background:#fff;color:#33455e;box-shadow:0 4px 14px rgba(35,65,100,.06)}
+.adb-chat-message.adb-chat-user{margin-left:auto;background:#e8f7ff}
+.adb-chat-message strong{display:block;font-size:10px}
+.adb-chat-message p{margin:4px 0 0;font-size:11.5px;line-height:1.48}
+.adb-chat-form{display:flex;gap:8px;padding:12px 14px 8px;border-top:1px solid #e8eef5;background:#fff}
+.adb-chat-form input{flex:1;min-width:0;border:1px solid #d8e3ef;border-radius:12px;padding:10px 11px;font:700 11px/1.2 inherit;color:#263a52;background:#fff}
+.adb-chat-form button{border:0;border-radius:12px;padding:10px 13px;background:#289ed8;color:#fff;font:900 11px/1 inherit;cursor:pointer}
+.adb-chat-form button:disabled,.adb-chat-form input:disabled{opacity:.6;cursor:default}
+.adb-chat-status{display:block;min-height:18px;padding:0 14px 9px;color:#7d8a9a;font-size:9.5px;background:#fff}
 .adb-pulse{
   position:absolute;z-index:0;left:8px;right:8px;top:18px;height:74px;border-radius:50%;
   background:radial-gradient(circle,rgba(54,203,255,.16),rgba(54,203,255,0) 68%);
@@ -353,9 +374,11 @@
   .adb-stage{width:82px;height:112px}
   .adb-visual{width:77px;height:105px}
   .adb-robot-canvas{transform:scale(.35)}
-  .adb-profile-settings{padding:14px}
+  .adb-settings-page{padding:14px 10px 28px}
+  .adb-chat-modal{padding:10px}
+  .adb-chat-dialog{max-height:90vh;border-radius:20px}
 }
 @media(prefers-reduced-motion:reduce){
   .adb-visual,.adb-pulse,.adb-arm-leftview,.adb-arm-rightview,.adb-lid,.adb-mouth-open,.adb-guide-target{animation:none!important}
-  .adb-help{transition:none!important}
+  .adb-help,.adb-chat-trigger{transition:none!important}
 }

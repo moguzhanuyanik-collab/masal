@@ -20,16 +20,17 @@ require_student_login();
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="v4-features.css?v=1.0.34">
   <link rel="stylesheet" href="ogretmenim.css?v=1.0.48">
-  <link rel="stylesheet" href="adimbot-student.css?v=1.1.1">
+  <link rel="stylesheet" href="adimbot-student.css?v=1.1.3">
   <script src="api/bootstrap.js.php" defer></script>
   <script src="activities-extra.js?v=1.0.31" defer></script>
   <script src="app-runtime.js" defer></script>
   <script src="adimbot-student.js?v=1.0.98" defer></script>
   <script src="global-audio-feedback.js?v=1.1.1" defer></script>
   <script src="adimbot-ai-bridge.js?v=1.1.2" defer></script>
+  <script src="adimbot-chat-ui.js?v=1.1.3" defer></script>
   <script src="lesson-ui-fix.js?v=1.0.32" defer></script>
   <script src="settings-account.js" defer></script>
-  <script src="profile-update-link.js?v=1.1.2" defer></script>
+  <script src="profile-update-link.js?v=1.1.3" defer></script>
   <script src="v4-features.js?v=1.0.34" defer></script>
   <script src="pwa-store.js?v=1.0.34" defer></script>
   <script src="pwa-v4.js?v=1.0.34" defer></script>
@@ -66,6 +67,7 @@ require_student_login();
     <span class="adb-live-text" data-adimbot-bubble aria-live="polite">Merhaba! Ben AdımBot 👋</span>
     <div class="adb-stage" data-adimbot-stage role="button" tabindex="0" aria-label="AdımBot'u sürükle veya konuştur">
       <button class="adb-help" type="button" data-adimbot-help aria-label="Bana yardım et">?</button>
+      <button class="adb-chat-trigger" type="button" data-adimbot-chat-open aria-label="AdımBot ile sohbet et">💬</button>
       <span class="adb-pulse" aria-hidden="true"></span>
       <div class="adb-visual" aria-hidden="true">
         <div class="adb-robot-canvas">
