@@ -23,51 +23,25 @@ $error=null;
 
 try {
     $pdo=db();
-    $state=load_student_state($pdo,$studentId);
-
-    $completedSteps=[];
-    foreach ((array)($state['steps'] ?? []) as $stepKey) {
-        $stepKey=trim((string)$stepKey);
-        if ($stepKey!=='') $completedSteps[$stepKey]=true;
-    }
-
-    // Normalize edilmiş ilerleme tablosundaki tamamlanmış kayıtları da birleştir.
-    // Tablo eski kurulumda yoksa ana state ile güvenli biçimde devam edilir.
-    try {
-        $completedStmt=$pdo->prepare('SELECT ders_kodu,modul_indeksi FROM ogrenci_ilerleme WHERE ogrenci_id=? AND tamamlandi=1');
-        $completedStmt->execute([$studentId]);
-        foreach ($completedStmt->fetchAll() as $completedRow) {
-            $code=trim((string)($completedRow['ders_kodu'] ?? ''));
-            $index=(int)($completedRow['modul_indeksi'] ?? -1);
-            if ($code!=='' && $index>=0) $completedSteps[$code.'-'.$index]=true;
-        }
-    } catch (Throwable) {}
-
     $rows=$pdo->query('SELECT * FROM dersler WHERE aktif=1 ORDER BY sira,id')->fetchAll();
     $moduleStmt=$pdo->prepare('SELECT * FROM ders_modulleri WHERE ders_id=? AND aktif=1 ORDER BY sira,id');
 
     foreach ($rows as $row) {
         $moduleStmt->execute([(int)$row['id']]);
         $modules=[];
-        $moduleIndex=0;
         foreach ($moduleStmt->fetchAll() as $m) {
-            $stepKey=(string)$row['kod'].'-'.$moduleIndex;
-            $completed=isset($completedSteps[$stepKey]);
-            $opts=$completed?[]:json_decode((string)$m['secenekler_json'],true);
+            $opts=json_decode((string)$m['secenekler_json'],true);
             $modules[]=[
                 'title'=>$m['baslik'],
                 'subtitle'=>$m['alt_baslik'],
                 'emoji'=>$m['emoji'],
                 'reading'=>$m['okuma_metni'],
                 'example'=>$m['ornek_metni'],
-                'question'=>$completed?'':$m['soru'],
-                'options'=>$completed?[]:(is_array($opts)?$opts:[]),
-                'answer'=>$completed?-1:(int)$m['dogru_cevap_indeksi'],
+                'question'=>$m['soru'],
+                'options'=>is_array($opts)?$opts:[],
+                'answer'=>(int)$m['dogru_cevap_indeksi'],
                 'explanation'=>$m['aciklama'],
-                'completed'=>$completed,
-                'stepKey'=>$stepKey,
             ];
-            $moduleIndex++;
         }
         $lessons[]=[
             'id'=>$row['kod'],
@@ -83,6 +57,7 @@ try {
         ];
     }
 
+    $state=load_student_state($pdo,$studentId);
     $summary=function_exists('student_database_summary')?student_database_summary($pdo,$studentId):null;
     $dbConnected=true;
 } catch (Throwable $e) {
