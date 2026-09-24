@@ -5,6 +5,7 @@
   const CONTEXT_KEY='ilkadim.adimbot.chat.context.v1';
   const HISTORY_KEY='ilkadim.adimbot.chat.history.v1';
   const HINT_KEY='ilkadim.adimbot.chat.hint.v1';
+  const TOGETHER_KEY='ilkadim.adimbot.chat.together.v1';
   const MAX_HISTORY=6;
   let modal=null;
   let chatBusy=false;
@@ -132,6 +133,21 @@
     try{sessionStorage.removeItem(HINT_KEY);}catch(_){}
   };
 
+  const togetherActive=()=>{
+    const signature=hintSignature();
+    try{
+      const saved=JSON.parse(sessionStorage.getItem(TOGETHER_KEY)||'null');
+      return Boolean(saved&&saved.signature===signature&&saved.active===true);
+    }catch(_){return false;}
+  };
+
+  const setTogetherActive=active=>{
+    try{
+      if(active)sessionStorage.setItem(TOGETHER_KEY,JSON.stringify({signature:hintSignature(),active:true}));
+      else sessionStorage.removeItem(TOGETHER_KEY);
+    }catch(_){}
+  };
+
   const hintStep=()=>{
     const current=readHintState();
     const level=Math.min(3,current.level+1);
@@ -197,6 +213,7 @@
   const clearHistory=()=>{
     try{sessionStorage.removeItem(HISTORY_KEY);}catch(_){}
     resetHintState();
+    setTogetherActive(false);
     const hintButton=modal?.querySelector('[data-adimbot-hint]');
     if(hintButton){
       hintButton.textContent='💡 1. ipucu';
@@ -229,6 +246,7 @@
       '<button type="button" data-adimbot-suggestion="Bunu bana daha basit anlatır mısın?">✨ Basit anlat</button>',
       '<button type="button" data-adimbot-hint>💡 1. ipucu</button>',
       '<button type="button" data-adimbot-suggestion="Bununla ilgili kolay bir örnek verir misin?">🧩 Örnek ver</button>',
+      '<button type="button" data-adimbot-together aria-pressed="false">🤝 Birlikte çözelim</button>',
       '</div>',
       '<form class="adb-chat-form" data-adimbot-chat-form>',
       '<input type="text" maxlength="400" autocomplete="off" enterkeyhint="send" placeholder="AdımBot’a bir şey sor..." data-adimbot-chat-input>',
@@ -282,9 +300,37 @@
       const labels=[];
       if(parts.length)labels.push('📚 '+parts.slice(0,2).join(' • '));
       if(practice)labels.push(practice);
+      if(togetherActive())labels.push('🤝 Birlikte çözüyoruz');
       contextBadge.textContent=labels.join('   ');
       contextBadge.hidden=!labels.length;
     };
+
+    const togetherButton=modal.querySelector('[data-adimbot-together]');
+    const refreshTogetherButton=()=>{
+      if(!togetherButton)return;
+      const active=togetherActive();
+      togetherButton.textContent=active?'🤝 Birlikte çözüyoruz':'🤝 Birlikte çözelim';
+      togetherButton.setAttribute('aria-pressed',active?'true':'false');
+    };
+    refreshTogetherButton();
+    togetherButton?.addEventListener('click',()=>{
+      if(chatBusy||!input)return;
+      if(togetherActive()){
+        setTogetherActive(false);
+        refreshTogetherButton();
+        refreshContextBadge();
+        if(status)status.textContent='Birlikte çözüm modu kapatıldı.';
+        input.focus();
+        return;
+      }
+      setTogetherActive(true);
+      refreshTogetherButton();
+      refreshContextBadge();
+      input.value='Bu soruyu benim yerime yapmadan küçük adımlarla birlikte düşünelim. Önce yalnızca ilk adımı sor.';
+      if(counter)counter.textContent=String(input.value.length)+' / 400';
+      input.focus();
+      if(typeof form?.requestSubmit==='function')form.requestSubmit();
+    });
 
     const hintButton=modal.querySelector('[data-adimbot-hint]');
     const refreshHintButton=()=>{
@@ -318,6 +364,8 @@
       event.preventDefault();
       if(chatBusy)return;
 
+      refreshTogetherButton();
+      refreshContextBadge();
       const message=clean(input?.value).slice(0,400);
       if(!message||!input||!box)return;
       if(!navigator.onLine){
@@ -376,8 +424,15 @@
       const labels=[];
       if(parts.length)labels.push('📚 '+parts.slice(0,2).join(' • '));
       if(difficulty?.primary?.lesson)labels.push('🎯 Biraz pratik: '+difficulty.primary.lesson);
+      if(togetherActive())labels.push('🤝 Birlikte çözüyoruz');
       contextBadge.textContent=labels.join('   ');
       contextBadge.hidden=!labels.length;
+    }
+    const togetherButton=dialog.querySelector('[data-adimbot-together]');
+    if(togetherButton){
+      const active=togetherActive();
+      togetherButton.textContent=active?'🤝 Birlikte çözüyoruz':'🤝 Birlikte çözelim';
+      togetherButton.setAttribute('aria-pressed',active?'true':'false');
     }
     const hintButton=dialog.querySelector('[data-adimbot-hint]');
     if(hintButton){
