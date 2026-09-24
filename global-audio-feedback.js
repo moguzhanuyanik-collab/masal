@@ -591,9 +591,44 @@
     ? 'Harika, doğru cevap!'
     : 'Olmadı, tekrar deneyelim.';
 
-  const reactToAnswer=(state,onEnd=null)=>{
+  const questionTextFor=answer=>{
+    if(!(answer instanceof Element))return '';
+    const scope=answer.closest('.question-card,.quiz-question,.exercise-question,.question-block,#game-board,.game-screen,.screen-content');
+    if(!scope)return '';
+    const question=scope.querySelector('[data-question-text],[data-adimbot-text^="Soru"],.question-text,.question-title,.question-prompt,.question-stem,.puzzle-question,.teacher-question > strong');
+    return stripReadingLabels(question?.getAttribute?.('data-question-text')||question?.getAttribute?.('data-adimbot-text')||question?.textContent||'')
+      .replace(/^soru\s*[!:.-–—]*\s*/i,'')
+      .slice(0,240);
+  };
+
+  const coachingPhraseFor=answer=>{
+    const question=questionTextFor(answer).toLocaleLowerCase('tr-TR');
+    if(!question)return 'Bir kez daha düşün. Soruyu yavaşça okuyup önemli kelimelere dikkat et.';
+    if(/[0-9０-９]+\s*[+＋]\s*[0-9０-９]+|topla|toplam|kaç tane|kaç eder/.test(question)){
+      return 'Bir daha deneyelim. Sayıları tek tek düşün; istersen parmaklarınla ya da nesneleri sayarak toplama yap.';
+    }
+    if(/[0-9０-９]+\s*[-−–]\s*[0-9０-９]+|çıkar|eksil|kaldı|fark/.test(question)){
+      return 'Bir daha deneyelim. Önce başlangıçtaki sayıyı düşün, sonra çıkarılan kadarını azaltıp yeniden say.';
+    }
+    if(/büyük|küçük|fazla|az|karşılaştır|eşit/.test(question)){
+      return 'Sayıları ya da grupları yeniden karşılaştır. Hangisinin daha büyük, daha küçük veya eşit olduğuna dikkat et.';
+    }
+    if(/harf|hece|kelime|ses|okuy|cümle/.test(question)){
+      return 'Kelimeyi ya da cümleyi yavaşça bir kez daha oku. Sesleri ve heceleri sırayla düşün.';
+    }
+    if(/önce|sonra|sıra|örüntü|devam|hangisi gelir/.test(question)){
+      return 'Sıraya yeniden bak. Önceki adımlarda neyin tekrar ettiğini bulup bir sonraki adımı düşün.';
+    }
+    if(/şekil|renk|üçgen|kare|daire|dikdörtgen/.test(question)){
+      return 'Şeklin özelliklerine dikkat et. Kenarlarını, biçimini veya rengini yeniden karşılaştır.';
+    }
+    return 'Soruyu bir kez daha yavaşça oku. Önemli kelimeyi bul ve seçenekleri onunla karşılaştır.';
+  };
+
+  const reactToAnswer=(state,answer=null,onEnd=null)=>{
     const type=state==='correct'?'success':'retry';
-    return react(type,{},onEnd)||speak(defaultFeedback(state),null,onEnd);
+    const context=state==='incorrect'?{coachingPhrase:coachingPhraseFor(answer)}:{};
+    return react(type,context,onEnd)||speak(state==='incorrect'?context.coachingPhrase:defaultFeedback(state),null,onEnd);
   };
 
   const queueFeedback=(feedback,state='',answer=null)=>{
@@ -618,7 +653,7 @@
       if(previous&&previous.text===signature&&(!item.answer||previous.answer===item.answer))return;
       announcedFeedback.set(feedback,{text:signature,answer:item.answer});
       if(item.state){
-        const reacted=reactToAnswer(item.state,({cancelled=false}={})=>{
+        const reacted=reactToAnswer(item.state,item.answer,({cancelled=false}={})=>{
           if(!cancelled&&text)setTimeout(()=>speak(text),120);
         });
         if(!reacted&&text)speak(text);
@@ -640,7 +675,7 @@
         queueFeedback(feedback,state,target);
       }else{
         requestAnimationFrame(()=>{
-          if(isActivityGame())reactToAnswer(state);
+          if(isActivityGame())reactToAnswer(state,target);
         });
       }
       return;
@@ -651,12 +686,12 @@
       const feedback=feedbackFor(target);
       const text=clean(feedback?.textContent);
       if(text){
-        const reacted=reactToAnswer(state,({cancelled=false}={})=>{
+        const reacted=reactToAnswer(state,target,({cancelled=false}={})=>{
           if(!cancelled)setTimeout(()=>speak(text),120);
         });
         if(!reacted)speak(text);
       }else{
-        reactToAnswer(state);
+        reactToAnswer(state,target);
       }
     });
   };

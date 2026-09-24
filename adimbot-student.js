@@ -124,6 +124,10 @@
       else if(name)phrase=`${name}, hazırsan birlikte yeni bir adım atalım.`;
     }
 
+    if(type==='retry'&&String(personal.coachingPhrase||'').trim()){
+      phrase=String(personal.coachingPhrase).trim().slice(0,220);
+    }
+
     if(label&&type==='lessonStart')phrase=`${name?name+', ':''}${label} dersine başlayalım. Hazırsan ilk adımı atalım.`;
     if(label&&type==='lessonEnd')phrase=`${name?name+', ':''}${label} çalışmasını tamamladın. Harika ilerledin!`;
     return phrase;
