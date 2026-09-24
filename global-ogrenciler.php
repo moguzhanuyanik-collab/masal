@@ -9,10 +9,10 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
   if(!verify_csrf($_POST['csrf']??null)) throw new RuntimeException('Güvenlik doğrulaması başarısız.');
   $action=(string)($_POST['action']??'');
   if($action==='create'){
-   ky_create_user($pdo,$user,'ogrenci',(string)($_POST['ad_soyad']??''),(string)($_POST['email']??''),(string)($_POST['sifre']??''),null);
+   ky_create_user($pdo,$user,'ogrenci',(string)($_POST['ad_soyad']??''),(string)($_POST['email']??''),(string)($_POST['sifre']??''),null,(int)($_POST['sinif_seviyesi']??1));
    $message='Global öğrenci oluşturuldu.';
   }elseif($action==='update'){
-   ky_update_global_user($pdo,$user,'ogrenci',(int)($_POST['kullanici_id']??0),(string)($_POST['ad_soyad']??''),(string)($_POST['email']??''),(string)($_POST['sifre']??''));
+   ky_update_global_user($pdo,$user,'ogrenci',(int)($_POST['kullanici_id']??0),(string)($_POST['ad_soyad']??''),(string)($_POST['email']??''),(string)($_POST['sifre']??''),(int)($_POST['sinif_seviyesi']??1));
    $message='Global öğrenci güncellendi.';
   }elseif($action==='delete'){
    ky_deactivate_global_user($pdo,$user,'ogrenci',(int)($_POST['kullanici_id']??0));
@@ -32,15 +32,16 @@ $students=ky_global_students($pdo);
 
 <section class="role-section">
 <div class="sa-data-toolbar"><div><span class="eyeline">ÖĞRENCİLER</span><h2>Global Öğrenci Listesi</h2><small><?=count($students)?> kayıt</small></div><div class="sa-data-actions"><a class="sa-secondary-btn" href="global-eslestirme.php">Eşleştirme</a><button class="sa-primary-btn" type="button" data-open-create>+ Yeni Öğrenci</button></div></div>
-<div class="sa-table-card"><div class="sa-table-scroll"><table class="sa-data-table"><thead><tr><th>Öğrenci</th><th>E-posta</th><th>Veli</th><th>Durum</th><th class="sa-actions-col">İşlemler</th></tr></thead><tbody>
-<?php if(!$students):?><tr><td colspan="5" class="sa-empty-cell">Henüz global öğrenci yok.</td></tr><?php endif;?>
+<div class="sa-table-card"><div class="sa-table-scroll"><table class="sa-data-table"><thead><tr><th>Öğrenci</th><th>Sınıf</th><th>E-posta</th><th>Veli</th><th>Durum</th><th class="sa-actions-col">İşlemler</th></tr></thead><tbody>
+<?php if(!$students):?><tr><td colspan="6" class="sa-empty-cell">Henüz global öğrenci yok.</td></tr><?php endif;?>
 <?php foreach($students as $s):?><tr>
 <td><strong><?=ky_h((string)($s['ad']?:$s['ad_soyad']))?></strong></td>
+<td><?=max(1,(int)($s['sinif_seviyesi']??1))?>. sınıf</td>
 <td><?=ky_h((string)$s['email'])?></td>
 <td><?=ky_h((string)($s['veli_adlari']?:'Bağlı değil'))?></td>
 <td><span class="role-pill ok">Global</span></td>
 <td class="sa-row-actions">
-<button type="button" class="sa-edit-btn" data-edit data-id="<?=(int)$s['kullanici_id']?>" data-name="<?=ky_h((string)($s['ad']?:$s['ad_soyad']))?>" data-email="<?=ky_h((string)$s['email'])?>">Güncelle</button>
+<button type="button" class="sa-edit-btn" data-edit data-id="<?=(int)$s['kullanici_id']?>" data-name="<?=ky_h((string)($s['ad']?:$s['ad_soyad']))?>" data-email="<?=ky_h((string)$s['email'])?>" data-grade="<?=max(1,(int)($s['sinif_seviyesi']??1))?>">Güncelle</button>
 <form method="post" onsubmit="return confirm('Bu öğrenci pasife alınsın mı?')"><input type="hidden" name="csrf" value="<?=ky_h(csrf_token())?>"><input type="hidden" name="action" value="delete"><input type="hidden" name="kullanici_id" value="<?=(int)$s['kullanici_id']?>"><button class="sa-delete-btn" type="submit">Sil</button></form>
 </td></tr><?php endforeach;?>
 </tbody></table></div></div>
@@ -49,15 +50,15 @@ $students=ky_global_students($pdo);
 
 <dialog class="sa-data-dialog" id="studentDialog"><form method="post" class="sa-dialog-form" autocomplete="off"><input type="hidden" name="csrf" value="<?=ky_h(csrf_token())?>"><input type="hidden" name="action" id="studentAction" value="create"><input type="hidden" name="kullanici_id" id="studentId" value="0">
 <div class="sa-dialog-head"><div><small id="studentEyeline">YENİ KAYIT</small><h3 id="studentTitle">Global Öğrenci Ekle</h3></div><button type="button" data-close>×</button></div>
-<div class="sa-dialog-body"><label>Ad Soyad</label><input class="role-input" id="studentName" name="ad_soyad" required maxlength="190"><label>E-posta</label><input class="role-input" id="studentEmail" type="email" name="email" required><label id="studentPasswordLabel">Geçici Şifre</label><input class="role-input" id="studentPassword" type="password" name="sifre" minlength="8"><p class="little-note" id="studentPasswordNote">Yeni hesap için en az 8 karakter.</p></div>
+<div class="sa-dialog-body"><label>Ad Soyad</label><input class="role-input" id="studentName" name="ad_soyad" required maxlength="190"><label>Sınıf</label><select class="role-input" id="studentGrade" name="sinif_seviyesi" required><?php for($g=1;$g<=12;$g++):?><option value="<?=$g?>"><?=$g?>. sınıf</option><?php endfor;?></select><label>E-posta</label><input class="role-input" id="studentEmail" type="email" name="email" required><label id="studentPasswordLabel">Geçici Şifre</label><input class="role-input" id="studentPassword" type="password" name="sifre" minlength="8"><p class="little-note" id="studentPasswordNote">Yeni hesap için en az 8 karakter.</p></div>
 <div class="sa-dialog-actions"><button type="button" class="sa-secondary-btn" data-close>Vazgeç</button><button type="submit" class="sa-primary-btn">Kaydet</button></div></form></dialog>
 
 <nav class="app-nav"><a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a><a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a><a class="active" href="global.php"><span><svg><use href="#sa-users"/></svg></span>Global</a><a href="yonetici-yetkileri.php"><span><svg><use href="#sa-shield"/></svg></span>Yetkiler</a><a href="super-admin-profil.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a></nav>
 </div>
 <script>
-(()=>{const d=document.getElementById('studentDialog'),a=document.getElementById('studentAction'),id=document.getElementById('studentId'),n=document.getElementById('studentName'),e=document.getElementById('studentEmail'),p=document.getElementById('studentPassword'),t=document.getElementById('studentTitle'),ey=document.getElementById('studentEyeline'),pl=document.getElementById('studentPasswordLabel'),pn=document.getElementById('studentPasswordNote');
-const openCreate=()=>{a.value='create';id.value='0';n.value='';e.value='';p.value='';p.required=true;t.textContent='Global Öğrenci Ekle';ey.textContent='YENİ KAYIT';pl.textContent='Geçici Şifre';pn.textContent='Yeni hesap için en az 8 karakter.';d.showModal();};
+(()=>{const d=document.getElementById('studentDialog'),a=document.getElementById('studentAction'),id=document.getElementById('studentId'),n=document.getElementById('studentName'),g=document.getElementById('studentGrade'),e=document.getElementById('studentEmail'),p=document.getElementById('studentPassword'),t=document.getElementById('studentTitle'),ey=document.getElementById('studentEyeline'),pl=document.getElementById('studentPasswordLabel'),pn=document.getElementById('studentPasswordNote');
+const openCreate=()=>{a.value='create';id.value='0';n.value='';g.value='1';e.value='';p.value='';p.required=true;t.textContent='Global Öğrenci Ekle';ey.textContent='YENİ KAYIT';pl.textContent='Geçici Şifre';pn.textContent='Yeni hesap için en az 8 karakter.';d.showModal();};
 document.querySelector('[data-open-create]')?.addEventListener('click',openCreate);
-document.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>{a.value='update';id.value=b.dataset.id||'0';n.value=b.dataset.name||'';e.value=b.dataset.email||'';p.value='';p.required=false;t.textContent='Global Öğrenciyi Güncelle';ey.textContent='KAYIT DÜZENLE';pl.textContent='Yeni Şifre (isteğe bağlı)';pn.textContent='Şifre değişmeyecekse boş bırak.';d.showModal();}));
+document.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>{a.value='update';id.value=b.dataset.id||'0';n.value=b.dataset.name||'';g.value=b.dataset.grade||'1';e.value=b.dataset.email||'';p.value='';p.required=false;t.textContent='Global Öğrenciyi Güncelle';ey.textContent='KAYIT DÜZENLE';pl.textContent='Yeni Şifre (isteğe bağlı)';pn.textContent='Şifre değişmeyecekse boş bırak.';d.showModal();}));
 document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>d.close()));d.addEventListener('click',ev=>{if(ev.target===d)d.close();});})();
 </script></body></html>
