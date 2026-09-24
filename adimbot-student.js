@@ -20,7 +20,10 @@
     success:[
       'Harika! Doğru yaptın.',
       'Süpersin! Güzel bir iş çıkardın.',
-      'Tebrikler! Bir adım daha ilerledin.'
+      'Tebrikler! Bir adım daha ilerledin.',
+      'Çok güzel düşündün! Devam edelim.',
+      'Bravo! Doğru yolu buldun.',
+      'Muhteşem! Bu adımı da tamamladın.'
     ],
     retry:[
       'Olmadıysa sorun değil. Bir daha deneyelim.',
@@ -112,8 +115,14 @@
     }
 
     if(type==='success'&&name){
-      if(stars>=5&&cursor%3===2)phrase=`${name}, ${stars} yıldızın var. Harika ilerliyorsun!`;
-      else phrase=cursor%2===0?`${name}, harika! Doğru yaptın.`:`Süpersin ${name}! Güzel bir iş çıkardın.`;
+      const namedSuccess=[
+        `${name}, harika! Doğru yaptın.`,
+        `Süpersin ${name}! Güzel bir iş çıkardın.`,
+        `${name}, çok güzel düşündün! Devam edelim.`,
+        `Bravo ${name}! Doğru yolu buldun.`
+      ];
+      if(stars>=5&&cursor%5===4)phrase=`${name}, ${stars} yıldızın var. Harika ilerliyorsun!`;
+      else phrase=namedSuccess[cursor%namedSuccess.length];
     }
 
     if(type==='motivation'){
@@ -735,6 +744,12 @@
     const phrase=chooseCharacterPhrase(type,context);
     if(!phrase)return false;
     root.dataset.adimbotMood=type;
+    if(type==='success'){
+      const successIndex=Math.max(0,(reactionCursor.success||1)-1)%3;
+      root.dataset.adimbotSuccess=String(successIndex);
+    }else{
+      delete root.dataset.adimbotSuccess;
+    }
     setState({mood:type});
     return speak(phrase,options);
   };
