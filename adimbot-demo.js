@@ -107,6 +107,15 @@
 
   stage?.addEventListener('pointerup',end);
   stage?.addEventListener('pointercancel',end);
+  stage?.addEventListener('lostpointercapture',event=>{
+    if(!dragging||event.pointerId!==pointerId)return;
+    dragging=false;
+    root.classList.remove('is-dragging');
+    if(frame){cancelAnimationFrame(frame);frame=0;setPosition(pendingX,pendingY,false);}
+    const r=root.getBoundingClientRect();
+    setPosition(r.left,r.top,true);
+    pointerId=null;
+  });
 
   stage?.addEventListener('keydown',event=>{
     if(event.key==='Enter'||event.key===' '){
