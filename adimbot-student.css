@@ -1,4 +1,4 @@
-/* İlkAdım V1.0.94 — AdımBot mobil/PWA stabilizasyonu ve 1.0.93 arayüz düzeltmesi */
+/* İlkAdım V1.0.95 — AdımBot performans ve düşük güç modu */
 .adb-student-widget{
   position:fixed;
   right:max(18px,env(safe-area-inset-right));
@@ -38,7 +38,7 @@
   transform:scale(.38);transform-origin:0 0;overflow:visible
 }
 .adb-sprite{
-  position:absolute;display:block;background-image:url("adimbot/adimbot-atlas.webp?v=1.0.94");
+  position:absolute;display:block;background-image:url("adimbot/adimbot-atlas.webp?v=1.0.95");
   background-repeat:no-repeat;pointer-events:none
 }
 .adb-body{
@@ -186,6 +186,22 @@
   animation:adbPulse 2.5s ease-in-out infinite;pointer-events:none
 }
 .adb-student-widget.is-hidden{display:none}
+
+/* Uzun süre boşta veya arka planda gereksiz dekoratif animasyon çalıştırma. */
+.adb-student-widget.is-idle-power .adb-visual,
+.adb-student-widget.is-idle-power .adb-pulse,
+.adb-student-widget.is-idle-power .adb-arm-leftview,
+.adb-student-widget.is-idle-power .adb-arm-rightview,
+.adb-student-widget.is-idle-power .adb-lid,
+.adb-student-widget.is-suspended .adb-visual,
+.adb-student-widget.is-suspended .adb-pulse,
+.adb-student-widget.is-suspended .adb-arm-leftview,
+.adb-student-widget.is-suspended .adb-arm-rightview,
+.adb-student-widget.is-suspended .adb-lid,
+.adb-student-widget.is-suspended .adb-mouth-open{
+  animation-play-state:paused!important
+}
+.adb-student-widget.is-suspended{pointer-events:none}
 
 /* Öğrenci tarafında eski hoparlör/ses ikonları görünmez; seslendirme AdımBot üzerinden yapılır. */
 .activity-speech-icon,

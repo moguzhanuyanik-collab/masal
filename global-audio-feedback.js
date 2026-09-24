@@ -478,9 +478,10 @@
   };
   const isActivityGame=()=>location.hash.startsWith('#/oyun/');
 
-  const decorateActivities=()=>{
-    removeLegacyCardSpeakers(document);
-    markReadableElements(document);
+  const decorateActivities=(scope=document)=>{
+    const rootScope=scope&&scope.querySelectorAll?scope:document;
+    removeLegacyCardSpeakers(rootScope);
+    markReadableElements(rootScope);
   };
 
   document.addEventListener('click',handleReadableClick,true);
@@ -579,28 +580,49 @@
     queueFeedback(target);
   };
 
+  let decorateFrame=0,observing=false;
+  const pendingDecorateScopes=new Set();
+
+  const flushDecorations=()=>{
+    decorateFrame=0;
+    if(document.hidden){
+      pendingDecorateScopes.clear();
+      return;
+    }
+    const scopes=[...pendingDecorateScopes];
+    pendingDecorateScopes.clear();
+    if(!scopes.length)return;
+    scopes.forEach(scope=>{
+      if(scope?.isConnected!==false)decorateActivities(scope);
+    });
+  };
+
+  const scheduleDecoration=scope=>{
+    const rootScope=scope instanceof Element?scope:scope?.parentElement;
+    if(rootScope)pendingDecorateScopes.add(rootScope);
+    if(decorateFrame||document.hidden)return;
+    decorateFrame=requestAnimationFrame(flushDecorations);
+  };
+
   const observer=new MutationObserver(mutations=>{
-    let needsDecorate=false;
     for(const mutation of mutations){
       if(mutation.type==='attributes'&&mutation.attributeName==='class'){
         speakAnswerState(mutation.target);
+        continue;
       }
       if(mutation.type==='childList'||mutation.type==='characterData'){
-        needsDecorate=true;
         const el=mutation.target instanceof HTMLElement ? mutation.target : mutation.target.parentElement;
+        scheduleDecoration(el);
         const feedback=el?.closest?.('.feedback,.game-feedback');
         if(feedback && isActivityGame() && !pendingFeedback.has(feedback)){
           requestAnimationFrame(()=>speakFeedbackElement(feedback));
         }
       }
     }
-    if(needsDecorate)requestAnimationFrame(()=>{
-      removeLegacyCardSpeakers(document);
-      decorateActivities();
-    });
   });
 
-  const start=()=>{
+  const observeDom=()=>{
+    if(observing||!document.body)return;
     observer.observe(document.body,{
       subtree:true,
       attributes:true,
@@ -608,6 +630,19 @@
       childList:true,
       characterData:true
     });
+    observing=true;
+  };
+
+  const pauseDomObserver=()=>{
+    if(!observing)return;
+    observer.disconnect();
+    observing=false;
+    pendingDecorateScopes.clear();
+    if(decorateFrame){cancelAnimationFrame(decorateFrame);decorateFrame=0;}
+  };
+
+  const start=()=>{
+    observeDom();
     decorateActivities();
 
     try{guideActive=sessionStorage.getItem(GUIDE_KEY)==='1';}catch(_){guideActive=false;}
@@ -669,13 +704,29 @@
       if(guideActive)presentGuide({voice:true});
     },140);
   });
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){
+      stopSpeech();
+      pauseDomObserver();
+    }else{
+      observeDom();
+      decorateActivities();
+    }
+  });
+
   window.addEventListener('pagehide',()=>{
     stopSpeech();
     clearArmTimer();
     armedCard=null;
     clearGuideTarget();
+    pauseDomObserver();
   });
 
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);
+  window.addEventListener('pageshow',()=>{
+    observeDom();
+    decorateActivities();
+  });
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});
   else start();
 })();

@@ -148,6 +148,7 @@
   let pendingX=0,pendingY=0,frame=0,activeUtterance=null;
   let activeSpeechToken=0,activeOnEnd=null,activeOnStart=null,speechStarted=false;
   let gestureLoopTimer=0,gestureReleaseTimer=0,settleTimer=0,gestureIndex=0,lastGestureAt=0;
+  let pageSuspended=document.hidden===true,idlePowerTimer=0;
   const defaultSettings=Object.freeze({sound:true,rate:.95,minimized:false});
   let preferences={...defaultSettings};
   try{
@@ -181,6 +182,26 @@
     if(changed)emitState();
   };
 
+  const clearIdlePower=()=>{
+    clearTimeout(idlePowerTimer);
+    root.classList.remove('is-idle-power');
+  };
+
+  const scheduleIdlePower=(delay=12000)=>{
+    clearTimeout(idlePowerTimer);
+    if(pageSuspended||preferences.minimized||state.speaking||dragging)return;
+    idlePowerTimer=setTimeout(()=>{
+      if(!pageSuspended&&!preferences.minimized&&!state.speaking&&!dragging&&!root.classList.contains('is-settings-open')){
+        root.classList.add('is-idle-power');
+      }
+    },delay);
+  };
+
+  const wakeAdimBot=()=>{
+    clearIdlePower();
+    if(!pageSuspended)scheduleIdlePower();
+  };
+
   const syncSettingsUi=()=>{
     if(soundInput)soundInput.checked=preferences.sound;
     if(rateInput)rateInput.value=String(preferences.rate);
@@ -196,7 +217,12 @@
     preferences.minimized=minimized===true;
     root.classList.toggle('is-minimized',preferences.minimized);
     root.classList.remove('is-settings-open');
-    if(preferences.minimized)stopSpeaking();
+    if(preferences.minimized){
+      stopSpeaking();
+      clearIdlePower();
+    }else{
+      wakeAdimBot();
+    }
     setState({minimized:preferences.minimized,hidden:false});
     if(save)savePreferences();
     syncSettingsUi();
@@ -253,11 +279,11 @@
     clearTimeout(gestureLoopTimer);
     const delays=[1250,1750,1450,2050];
     const run=()=>{
-      if(activeUtterance!==utterance||dragging)return;
+      if(activeUtterance!==utterance||dragging||pageSuspended||preferences.minimized)return;
       triggerSpeechGesture();
       gestureLoopTimer=setTimeout(run,delays[gestureIndex%delays.length]);
     };
-    gestureLoopTimer=setTimeout(run,900);
+    if(!pageSuspended&&!preferences.minimized)gestureLoopTimer=setTimeout(run,900);
   };
 
   const resetMouthCadence=()=>{
@@ -319,13 +345,15 @@
     }
     if(root.dataset.adimbotMood)delete root.dataset.adimbotMood;
     setState({speaking:false,mood:'idle'});
+    scheduleIdlePower();
     if(typeof done==='function'){
       try{done({cancelled});}catch(error){console.error('AdımBot onEnd hatası:',error);}
     }
   };
 
   const beginSpeech=token=>{
-    if(token!==activeSpeechToken||speechStarted)return;
+    if(token!==activeSpeechToken||speechStarted||pageSuspended)return;
+    clearIdlePower();
     speechStarted=true;
     root.classList.add('is-speaking');
     setState({speaking:true});
@@ -557,7 +585,10 @@
 
   const scheduleSafePosition=(delay=90)=>{
     clearTimeout(safePositionTimer);
-    safePositionTimer=setTimeout(()=>ensureSafePosition({save:true}),delay);
+    if(pageSuspended||preferences.minimized)return;
+    safePositionTimer=setTimeout(()=>{
+      if(!pageSuspended&&!preferences.minimized)ensureSafePosition({save:true});
+    },delay);
   };
 
   try{
@@ -664,8 +695,10 @@
   settingsButton?.addEventListener('pointerdown',event=>event.stopPropagation());
   settingsButton?.addEventListener('click',event=>{
     event.stopPropagation();
+    wakeAdimBot();
     root.classList.toggle('is-settings-open');
     syncSettingsUi();
+    scheduleIdlePower();
   });
 
   settingsPanel?.addEventListener('pointerdown',event=>event.stopPropagation());
@@ -706,12 +739,14 @@
 
   window.addEventListener('hashchange',()=>scheduleSafePosition(180));
 
-  let pageSuspended=false;
   const suspendAdimBot=()=>{
-    if(pageSuspended)return;
+    if(pageSuspended&&root.classList.contains('is-suspended'))return;
     pageSuspended=true;
+    root.classList.add('is-suspended');
+    clearIdlePower();
     stopSpeaking();
     clearTimeout(safePositionTimer);
+    clearSpeechGestures();
     if(frame){cancelAnimationFrame(frame);frame=0;}
     if(dragging){
       dragging=false;
@@ -723,9 +758,11 @@
 
   const resumeAdimBot=()=>{
     pageSuspended=false;
+    root.classList.remove('is-suspended');
     refreshVoices();
     try{speech?.resume?.();}catch(_){}
     scheduleSafePosition(120);
+    scheduleIdlePower(8000);
   };
 
   document.addEventListener('visibilitychange',()=>{
@@ -812,7 +849,16 @@
     characterTypes:()=>Object.keys(characterPhrases)
   });
 
+  root.addEventListener('pointerdown',wakeAdimBot,{passive:true});
+  root.addEventListener('keydown',wakeAdimBot);
+  window.addEventListener('adimbot:statechange',event=>{
+    if(event.detail?.speaking)clearIdlePower();
+    else scheduleIdlePower();
+  });
+
   setMinimized(preferences.minimized,{save:false});
   syncSettingsUi();
+  if(pageSuspended)root.classList.add('is-suspended');
+  else scheduleIdlePower(8000);
   setTimeout(()=>speak(chooseCharacterPhrase('greeting'),{voice:false}),550);
 })();
