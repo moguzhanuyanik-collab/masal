@@ -42,47 +42,51 @@
     });
   };
 
+  const botApi=()=>window.AdimBotStudent||null;
+  const canSpeak=()=>{
+    const bot=botApi();
+    if(!bot||typeof bot.speak!=='function')return false;
+    return typeof bot.isReady==='function'?bot.isReady()===true:true;
+  };
+
   const stopSpeech=()=>{
-    const bot=window.AdimBotStudent;
-    if(bot&&typeof bot.stop==='function')bot.stop();
-    else if('speechSynthesis' in window)window.speechSynthesis.cancel();
+    const bot=botApi();
+    if(bot&&typeof bot.stop==='function'){
+      try{bot.stop();}catch(error){console.error('AdımBot durdurma hatası:',error);}
+    }
     speakingText='';
     stopCardMotion();
   };
 
   const speak=(text,motionCard=null,onEnd=null)=>{
     const value=clean(text);
-    if(!value)return false;
+    if(!value||!canSpeak())return false;
+
     stopSpeech();
     speakingText=value;
     if(motionCard)startCardMotion(motionCard);
 
-    const bot=window.AdimBotStudent;
-    if(bot&&typeof bot.speak==='function'){
-      const ok=bot.speak(value)!==false;
-      if(ok){
-        if(typeof onEnd==='function')setTimeout(onEnd,Math.max(1400,Math.min(6500,value.length*95)));
-        return true;
-      }
-    }
-
-    if(!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined')return false;
-    const utterance=new SpeechSynthesisUtterance(value);
-    utterance.lang='tr-TR';
-    utterance.rate=0.86;
-    utterance.pitch=1.03;
-    const voices=window.speechSynthesis.getVoices();
-    const trVoice=voices.find(v=>/^tr(?:-|_)/i.test(v.lang||''));
-    if(trVoice)utterance.voice=trVoice;
-    const done=()=>{
+    const done=({cancelled=false}={})=>{
       if(speakingText===value)speakingText='';
       if(activeMotionCard===motionCard)stopCardMotion();
-      if(typeof onEnd==='function')onEnd();
+      if(typeof onEnd==='function'){
+        try{onEnd({cancelled});}catch(error){console.error('AdımBot etkileşim onEnd hatası:',error);}
+      }
     };
-    utterance.onend=done;
-    utterance.onerror=done;
-    window.speechSynthesis.speak(utterance);
-    return true;
+
+    try{
+      const ok=botApi().speak(value,{onEnd:done})!==false;
+      if(!ok){
+        speakingText='';
+        if(activeMotionCard===motionCard)stopCardMotion();
+      }
+      return ok;
+    }catch(error){
+      console.error('AdımBot etkileşim konuşma hatası:',error);
+      speakingText='';
+      if(activeMotionCard===motionCard)stopCardMotion();
+      return false;
+    }
   };
 
   const spokenCardSelector=[
@@ -153,6 +157,9 @@
     if(!card)return;
     if(target.closest('input,select,textarea,label'))return;
 
+    // Progressive enhancement: AdımBot yoksa mevcut öğrenci davranışına hiç karışma.
+    if(!canSpeak())return;
+
     if(armedCard===card){
       disarmCard(card);
       stopSpeech();
@@ -166,10 +173,15 @@
     armedCard=card;
     const text=cardSpeechText(card);
     const ok=speak(text,card,()=>scheduleDisarm(card));
-    if(!ok)scheduleDisarm(card);
+    if(!ok){
+      disarmCard(card);
+      // Ses katmanı çalışmazsa ikinci tık zorunluluğu bırakma.
+      if(card instanceof HTMLAnchorElement && card.href)location.href=card.href;
+    }
   };
 
   const handleSpokenTextClick=e=>{
+    if(!canSpeak())return;
     const target=e.target;
     if(!(target instanceof Element))return;
     if(target.closest(spokenCardSelector))return;

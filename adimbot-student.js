@@ -15,7 +15,21 @@
 
   let index=0,timer=0,dragging=false,moved=false,pointerId=null,startX=0,startY=0,startLeft=0,startTop=0;
   let pendingX=0,pendingY=0,frame=0,activeUtterance=null;
+  let activeSpeechToken=0,activeOnEnd=null,activeOnStart=null,speechStarted=false;
   let gestureLoopTimer=0,gestureReleaseTimer=0,gestureIndex=0,lastGestureAt=0;
+  const state={ready:true,speaking:false,dragging:false,hidden:false};
+
+  const emitState=()=>{
+    try{window.dispatchEvent(new CustomEvent('adimbot:statechange',{detail:{...state}}));}catch(_){}
+  };
+
+  const setState=patch=>{
+    let changed=false;
+    for(const [name,value] of Object.entries(patch)){
+      if(state[name]!==value){state[name]=value;changed=true;}
+    }
+    if(changed)emitState();
+  };
   const gestureClasses=['adb-gesture-left','adb-gesture-right','adb-gesture-open'];
 
   const clearSpeechGestures=()=>{
@@ -72,36 +86,74 @@
   refreshVoices();
   speech?.addEventListener?.('voiceschanged',refreshVoices);
 
-  const stopSpeaking=()=>{
+  const finishSpeech=(token,cancelled=false)=>{
+    if(token!==activeSpeechToken)return;
     clearTimeout(timer);
+    const done=activeOnEnd;
     activeUtterance=null;
+    activeOnEnd=null;
+    activeOnStart=null;
+    speechStarted=false;
     resetMouthCadence();
     clearSpeechGestures();
-    try{speech?.cancel();}catch(_){}
     root.classList.remove('is-speaking');
+    setState({speaking:false});
+    if(typeof done==='function'){
+      try{done({cancelled});}catch(error){console.error('AdımBot onEnd hatası:',error);}
+    }
   };
 
-  const speak=(message,{voice=true}={})=>{
-    if(!bubble)return;
+  const beginSpeech=token=>{
+    if(token!==activeSpeechToken||speechStarted)return;
+    speechStarted=true;
+    root.classList.add('is-speaking');
+    setState({speaking:true});
+    gestureIndex=(activeUtterance?.text?.length||0)%gestureClasses.length;
+    lastGestureAt=0;
+    triggerSpeechGesture();
+    if(activeUtterance)scheduleSpeechGestures(activeUtterance);
+    if(typeof activeOnStart==='function'){
+      try{activeOnStart();}catch(error){console.error('AdımBot onStart hatası:',error);}
+    }
+  };
+
+  const stopSpeaking=()=>{
+    const token=activeSpeechToken;
+    const hadActive=state.speaking||activeUtterance!==null;
+    if(hadActive)finishSpeech(token,true);
+    else{
+      clearTimeout(timer);
+      resetMouthCadence();
+      clearSpeechGestures();
+      root.classList.remove('is-speaking');
+      setState({speaking:false});
+    }
+    try{speech?.cancel();}catch(_){}
+  };
+  const speak=(message,{voice=true,onStart=null,onEnd=null}={})=>{
+    if(!bubble)return false;
+    const text=String(message||'').trim();
+    if(!text)return false;
+
     stopSpeaking();
-    bubble.textContent=message;
+    bubble.textContent=text;
     root.classList.add('is-ready');
 
-    if(!voice)return;
+    if(!voice)return true;
+
+    const token=++activeSpeechToken;
+    activeOnStart=typeof onStart==='function'?onStart:null;
+    activeOnEnd=typeof onEnd==='function'?onEnd:null;
+    speechStarted=false;
 
     if(!speech){
-      root.classList.add('is-speaking');
-      lastGestureAt=0;
-      triggerSpeechGesture();
-      timer=setTimeout(()=>{
-        clearSpeechGestures();
-        root.classList.remove('is-speaking');
-      },1700);
-      return;
+      beginSpeech(token);
+      timer=setTimeout(()=>finishSpeech(token,false),1700);
+      return true;
     }
 
     refreshVoices();
-    const utterance=new SpeechSynthesisUtterance(message.replace('👋','').trim());
+    const utterance=new SpeechSynthesisUtterance(text.replace('👋','').trim());
     activeUtterance=utterance;
     utterance.lang='tr-TR';
     utterance.rate=.95;
@@ -111,27 +163,11 @@
     const selectedVoice=pickTurkishVoice();
     if(selectedVoice)utterance.voice=selectedVoice;
 
-    const finish=()=>{
-      if(activeUtterance!==utterance)return;
-      clearTimeout(timer);
-      activeUtterance=null;
-      resetMouthCadence();
-      clearSpeechGestures();
-      root.classList.remove('is-speaking');
-    };
-
-    utterance.onstart=()=>{
-      if(activeUtterance!==utterance)return;
-      gestureIndex=utterance.text.length%gestureClasses.length;
-      lastGestureAt=0;
-      root.classList.add('is-speaking');
-      triggerSpeechGesture();
-      scheduleSpeechGestures(utterance);
-    };
-    utterance.onend=finish;
-    utterance.onerror=finish;
+    utterance.onstart=()=>beginSpeech(token);
+    utterance.onend=()=>finishSpeech(token,false);
+    utterance.onerror=()=>finishSpeech(token,false);
     utterance.onboundary=event=>{
-      if(activeUtterance!==utterance||!mouth)return;
+      if(activeSpeechToken!==token||activeUtterance!==utterance||!mouth)return;
       const charIndex=Number.isFinite(event.charIndex)?event.charIndex:0;
       const remaining=utterance.text.slice(charIndex);
       const word=(remaining.match(/^[^\\s.,!?;:]+/)||[''])[0];
@@ -142,21 +178,16 @@
       if(word.length>=7||/[,.!?;:]/.test(afterWord))triggerSpeechGesture();
     };
 
-    root.classList.add('is-speaking');
-    timer=setTimeout(finish,Math.max(3500,message.length*120));
+    beginSpeech(token);
+    timer=setTimeout(()=>finishSpeech(token,false),Math.max(3500,text.length*120));
 
     try{
       speech.speak(utterance);
-    }catch(_){
-      activeUtterance=null;
-      clearTimeout(timer);
-      root.classList.add('is-speaking');
-      lastGestureAt=0;
-      triggerSpeechGesture();
-      timer=setTimeout(()=>{
-        clearSpeechGestures();
-        root.classList.remove('is-speaking');
-      },1700);
+      return true;
+    }catch(error){
+      console.error('AdımBot seslendirme başlatılamadı:',error);
+      finishSpeech(token,true);
+      return false;
     }
   };
 
@@ -202,6 +233,7 @@
     pointerId=event.pointerId;
     dragging=true;
     moved=false;
+    setState({dragging:true});
     const r=root.getBoundingClientRect();
     startLeft=r.left;
     startTop=r.top;
@@ -224,6 +256,7 @@
   const end=event=>{
     if(!dragging||event.pointerId!==pointerId)return;
     dragging=false;
+    setState({dragging:false});
     root.classList.remove('is-dragging');
     if(frame){cancelAnimationFrame(frame);frame=0;setPosition(pendingX,pendingY,false);}
     const r=root.getBoundingClientRect();
@@ -242,6 +275,7 @@
   stage?.addEventListener('lostpointercapture',event=>{
     if(!dragging||event.pointerId!==pointerId)return;
     dragging=false;
+    setState({dragging:false});
     root.classList.remove('is-dragging');
     if(frame){cancelAnimationFrame(frame);frame=0;setPosition(pendingX,pendingY,false);}
     const r=root.getBoundingClientRect();
@@ -262,6 +296,7 @@
     event.stopPropagation();
     stopSpeaking();
     root.classList.add('is-hidden');
+    setState({hidden:true});
   });
 
   window.addEventListener('resize',()=>{
@@ -270,11 +305,22 @@
     setPosition(r.left,r.top,true);
   });
 
-  window.AdimBotStudent={
-    speak:text=>{speak(String(text||''));return true;},
-    stop:()=>stopSpeaking(),
-    show:()=>root.classList.remove('is-hidden')
-  };
+  window.AdimBotStudent=Object.freeze({
+    speak:(text,options={})=>{
+      try{return speak(text,options);}catch(error){console.error('AdımBot speak hatası:',error);return false;}
+    },
+    stop:()=>{try{stopSpeaking();return true;}catch(error){console.error('AdımBot stop hatası:',error);return false;}},
+    show:()=>{
+      try{root.classList.remove('is-hidden');setState({hidden:false});return true;}
+      catch(error){console.error('AdımBot show hatası:',error);return false;}
+    },
+    hide:()=>{
+      try{stopSpeaking();root.classList.add('is-hidden');setState({hidden:true});return true;}
+      catch(error){console.error('AdımBot hide hatası:',error);return false;}
+    },
+    isReady:()=>state.ready===true,
+    getState:()=>({...state})
+  });
 
   setTimeout(()=>speak(messages[0],{voice:false}),550);
 })();

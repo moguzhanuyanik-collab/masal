@@ -24,8 +24,8 @@ require_student_login();
   <script src="api/bootstrap.js.php" defer></script>
   <script src="activities-extra.js?v=1.0.31" defer></script>
   <script src="app-runtime.js" defer></script>
-  <script src="adimbot-student.js?v=1.0.82" defer></script>
-  <script src="global-audio-feedback.js?v=1.0.82" defer></script>
+  <script src="adimbot-student.js?v=1.0.83" defer></script>
+  <script src="global-audio-feedback.js?v=1.0.83" defer></script>
   <script src="lesson-ui-fix.js?v=1.0.32" defer></script>
   <script src="settings-account.js" defer></script>
   <script src="profile-update-link.js?v=1.0.42" defer></script>
