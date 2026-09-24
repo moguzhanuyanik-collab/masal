@@ -6,18 +6,65 @@
   const close=root.querySelector('[data-adimbot-close]');
   const mouth=root.querySelector('.adb-mouth-open');
   const key='ilkadim.adimbot.student.position.v1';
+  const characterPhrases=Object.freeze({
+    greeting:[
+      'Merhaba! Ben AdımBot 👋 Birlikte küçük adımlarla ilerleyelim.',
+      'Hazırsan başlayalım. Bugün yeni bir şey öğrenebiliriz.'
+    ],
+    motivation:[
+      'Harika gidiyorsun! Biraz daha denersen başaracaksın.',
+      'Küçük bir adım daha. Yapabilirsin!',
+      'Denemeye devam et. Her deneme seni geliştirir.'
+    ],
+    success:[
+      'Harika! Doğru yaptın.',
+      'Süpersin! Güzel bir iş çıkardın.',
+      'Tebrikler! Bir adım daha ilerledin.'
+    ],
+    retry:[
+      'Olmadıysa sorun değil. Bir daha deneyelim.',
+      'Bir kez daha düşün. Yapabilirsin.',
+      'Hadi tekrar deneyelim. Sana güveniyorum.'
+    ],
+    help:[
+      'Buradayım. İstersen ekrandaki bölümleri sana okuyabilirim.',
+      'Yardıma ihtiyacın olursa bana dokunabilirsin.'
+    ],
+    lessonStart:[
+      'Derse başlayalım. Hazırsan ilk adımı atalım.',
+      'Yeni bir ders başlıyor. Birlikte yapabiliriz.'
+    ],
+    lessonEnd:[
+      'Dersi tamamladın. Emeğine sağlık!',
+      'Bugünkü çalışmayı bitirdin. Harika ilerledin.'
+    ]
+  });
+  const reactionCursor=Object.create(null);
+
+  const chooseCharacterPhrase=(type,context={})=>{
+    const list=characterPhrases[type];
+    if(!Array.isArray(list)||!list.length)return '';
+    const cursor=reactionCursor[type]||0;
+    reactionCursor[type]=cursor+1;
+    let phrase=list[cursor%list.length];
+    const label=String(context.label||'').trim();
+    if(label&&type==='lessonStart')phrase=`${label} dersine başlayalım. Hazırsan ilk adımı atalım.`;
+    if(label&&type==='lessonEnd')phrase=`${label} çalışmasını tamamladın. Harika ilerledin!`;
+    return phrase;
+  };
+
   const messages=[
-    'Merhaba! Ben AdımBot 👋 Birlikte küçük adımlarla ilerleyelim.',
-    'Bir derste zorlanırsan bana dokun; seni motive edeyim.',
-    'Harika gidiyorsun! Biraz daha denersen başaracaksın.',
-    'Bugün öğrendiğin her yeni şey seni bir adım ileri taşır.'
+    characterPhrases.greeting[0],
+    characterPhrases.help[0],
+    characterPhrases.motivation[0],
+    characterPhrases.motivation[1]
   ];
 
   let index=0,timer=0,dragging=false,moved=false,pointerId=null,startX=0,startY=0,startLeft=0,startTop=0;
   let pendingX=0,pendingY=0,frame=0,activeUtterance=null;
   let activeSpeechToken=0,activeOnEnd=null,activeOnStart=null,speechStarted=false;
   let gestureLoopTimer=0,gestureReleaseTimer=0,settleTimer=0,gestureIndex=0,lastGestureAt=0;
-  const state={ready:true,speaking:false,dragging:false,hidden:false};
+  const state={ready:true,speaking:false,dragging:false,hidden:false,mood:'idle'};
 
   const emitState=()=>{
     try{window.dispatchEvent(new CustomEvent('adimbot:statechange',{detail:{...state}}));}catch(_){}
@@ -127,7 +174,8 @@
       root.classList.add('adb-speech-settle');
       settleTimer=setTimeout(()=>root.classList.remove('adb-speech-settle'),460);
     }
-    setState({speaking:false});
+    if(root.dataset.adimbotMood)delete root.dataset.adimbotMood;
+    setState({speaking:false,mood:'idle'});
     if(typeof done==='function'){
       try{done({cancelled});}catch(error){console.error('AdımBot onEnd hatası:',error);}
     }
@@ -341,9 +389,23 @@
     setPosition(r.left,r.top,true);
   });
 
+  const react=(type,context={},options={})=>{
+    const phrase=chooseCharacterPhrase(type,context);
+    if(!phrase)return false;
+    root.dataset.adimbotMood=type;
+    setState({mood:type});
+    return speak(phrase,options);
+  };
+
   window.AdimBotStudent=Object.freeze({
     speak:(text,options={})=>{
       try{return speak(text,options);}catch(error){console.error('AdımBot speak hatası:',error);return false;}
+    },
+    react:(type,context={},options={})=>{
+      try{return react(String(type||''),context,options);}catch(error){console.error('AdımBot react hatası:',error);return false;}
+    },
+    phrase:(type,context={})=>{
+      try{return chooseCharacterPhrase(String(type||''),context);}catch(_){return '';}
     },
     stop:()=>{try{stopSpeaking();return true;}catch(error){console.error('AdımBot stop hatası:',error);return false;}},
     show:()=>{
@@ -355,8 +417,9 @@
       catch(error){console.error('AdımBot hide hatası:',error);return false;}
     },
     isReady:()=>state.ready===true,
-    getState:()=>({...state})
+    getState:()=>({...state}),
+    characterTypes:()=>Object.keys(characterPhrases)
   });
 
-  setTimeout(()=>speak(messages[0],{voice:false}),550);
+  setTimeout(()=>speak(chooseCharacterPhrase('greeting'),{voice:false}),550);
 })();

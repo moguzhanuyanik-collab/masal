@@ -89,6 +89,22 @@
     }
   };
 
+  const react=(type,context={},onEnd=null)=>{
+    const bot=botApi();
+    if(!bot||typeof bot.react!=='function'||!canSpeak())return false;
+    stopSpeech();
+    try{
+      return bot.react(type,context,{onEnd:({cancelled=false}={})=>{
+        if(typeof onEnd==='function'){
+          try{onEnd({cancelled});}catch(error){console.error('AdımBot tepki onEnd hatası:',error);}
+        }
+      }})!==false;
+    }catch(error){
+      console.error('AdımBot karakter tepkisi başlatılamadı:',error);
+      return false;
+    }
+  };
+
   // Legacy selectors are only used to auto-label current UI.
   // Runtime behavior itself depends on the stable data-adimbot-read contract.
   const autoActionSelector=[
@@ -228,6 +244,11 @@
     ? 'Harika, doğru cevap!'
     : 'Olmadı, tekrar deneyelim.';
 
+  const reactToAnswer=state=>{
+    const type=state==='correct'?'success':'retry';
+    return react(type)||speak(defaultFeedback(state));
+  };
+
   const queueFeedback=(feedback,state='',answer=null)=>{
     if(!feedback)return;
     const pending=pendingFeedback.get(feedback);
@@ -243,12 +264,14 @@
       if(!isActivityGame()||!feedback.isConnected)return;
       const content=clean(feedback.textContent);
       const instruction=/^(biraz düşün|bir cevap seç|cevabını seç)/i.test(content);
-      const text=content&&!instruction?content:(item.state?defaultFeedback(item.state):'');
-      if(!text)return;
+      const text=content&&!instruction?content:'';
+      const signature=text||(item.state?defaultFeedback(item.state):'');
+      if(!signature)return;
       const previous=announcedFeedback.get(feedback);
-      if(previous&&previous.text===text&&(!item.answer||previous.answer===item.answer))return;
-      announcedFeedback.set(feedback,{text,answer:item.answer});
-      speak(text);
+      if(previous&&previous.text===signature&&(!item.answer||previous.answer===item.answer))return;
+      announcedFeedback.set(feedback,{text:signature,answer:item.answer});
+      if(text)speak(text);
+      else if(item.state)reactToAnswer(item.state);
     });
   };
 
@@ -264,7 +287,7 @@
         queueFeedback(feedback,state,target);
       }else{
         requestAnimationFrame(()=>{
-          if(isActivityGame())speak(defaultFeedback(state));
+          if(isActivityGame())reactToAnswer(state);
         });
       }
       return;
@@ -274,7 +297,8 @@
     requestAnimationFrame(()=>{
       const feedback=feedbackFor(target);
       const text=clean(feedback?.textContent);
-      speak(text||defaultFeedback(state));
+      if(text)speak(text);
+      else reactToAnswer(state);
     });
   };
 
