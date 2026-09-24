@@ -6,6 +6,10 @@
   let activeMotionCard=null;
   let armedCard=null;
   let armTimer=null;
+  let guideActive=false;
+  let guideTarget=null;
+  let guideTimer=null;
+  const GUIDE_KEY='ilkadim.adimbot.guide.v1';
 
   const clean=value=>String(value||'')
     .replace(/[\u{1F1E6}-\u{1F1FF}]/gu,' ')
@@ -222,6 +226,119 @@
     (scope||document).querySelectorAll?.('.activity-speech-icon,[data-speech-kind="activity-card"]').forEach(el=>el.remove());
   };
 
+  const clearGuideTarget=()=>{
+    if(guideTarget&&guideTarget.classList)guideTarget.classList.remove('adb-guide-target');
+    guideTarget=null;
+  };
+
+  const setGuideState=active=>{
+    guideActive=active===true;
+    try{sessionStorage.setItem(GUIDE_KEY,guideActive?'1':'0');}catch(_){}
+    try{botApi()?.setGuideMode?.(guideActive);}catch(_){}
+    if(!guideActive)clearGuideTarget();
+  };
+
+  const firstVisible=selector=>[...document.querySelectorAll(selector)].find(el=>{
+    const rect=el.getBoundingClientRect();
+    const style=getComputedStyle(el);
+    return rect.width>0&&rect.height>0&&style.display!=='none'&&style.visibility!=='hidden';
+  })||null;
+
+  const guideStepForScreen=()=>{
+    const path=location.pathname.split('/').pop()||'';
+    const hash=location.hash||'#/anasayfa';
+
+    if(path==='ogretmenim.php'){
+      const target=firstVisible('.teacher-group > summary,.teacher-lesson > summary,.teacher-topic > summary');
+      return {
+        key:'ogretmenim',
+        target,
+        text:target
+          ?'Öğretmeninin çalışmalarını görmek için açık olan başlıklara dokunabilirsin.'
+          :'Öğretmenin sana içerik gönderdiğinde çalışmalar burada görünecek.'
+      };
+    }
+
+    if(hash.startsWith('#/oyun/')){
+      const target=firstVisible('#screen .answers .answer');
+      return {
+        key:'oyun',
+        target,
+        text:target
+          ?'Soruyu dinle. Sonra doğru olduğunu düşündüğün seçeneğe dokun.'
+          :'Oyunu dikkatlice incele. Hazır olduğunda ilk adıma dokun.'
+      };
+    }
+
+    if(hash.startsWith('#/etkinlikler')){
+      const target=firstVisible('#screen a.game-tile,#screen a.home-game');
+      return {
+        key:'etkinlikler',
+        target,
+        text:target
+          ?'Oynamak istediğin etkinliğe dokun. İlk dokunuşta sana okuyacağım.'
+          :'Etkinlikler yüklendiğinde buradan bir oyun seçebilirsin.'
+      };
+    }
+
+    if(hash.startsWith('#/dersler')){
+      const target=firstVisible('#screen .course-row > a,#screen a.home-course,#screen a.lesson-step');
+      return {
+        key:'dersler',
+        target,
+        text:target
+          ?'Öğrenmek istediğin ders veya çalışma kartına dokun.'
+          :'Ders kartları burada görünecek. Bir ders seçerek başlayabilirsin.'
+      };
+    }
+
+    if(hash.startsWith('#/profil')){
+      const target=firstVisible('#screen a[href],#screen button');
+      return {
+        key:'profil',
+        target,
+        text:'Profilindeki bölümleri buradan açabilir ve ilerlemeni inceleyebilirsin.'
+      };
+    }
+
+    const target=firstVisible('.app-nav a[data-tab="dersler"],#screen a[href]');
+    return {
+      key:'anasayfa',
+      target,
+      text:target
+        ?'Başlamak için Dersler bölümüne ya da ekrandaki bir çalışma kartına dokun.'
+        :'Hazır olduğunda birlikte bir ders seçebiliriz.'
+    };
+  };
+
+  const presentGuide=({voice=true}={})=>{
+    if(!guideActive||!canSpeak())return false;
+    clearTimeout(guideTimer);
+    clearGuideTarget();
+
+    const step=guideStepForScreen();
+    if(step.target){
+      guideTarget=step.target;
+      guideTarget.classList.add('adb-guide-target');
+      try{guideTarget.scrollIntoView({block:'nearest',inline:'nearest',behavior:'smooth'});}catch(_){}
+    }
+
+    return botApi().speak(step.text,{voice});
+  };
+
+  const requestGuide=()=>{
+    if(!canSpeak())return false;
+    if(!guideActive)setGuideState(true);
+    return presentGuide({voice:true});
+  };
+
+  const stopGuide=({silent=false}={})=>{
+    clearTimeout(guideTimer);
+    setGuideState(false);
+    if(!silent&&canSpeak())botApi().speak('Rehberi kapattım. İstersen yine bana dokunabilirsin.');
+    return true;
+  };
+
   const handleReadableClick=e=>{
     const target=e.target;
     if(!(target instanceof Element)||!canSpeak())return;
@@ -386,6 +503,22 @@
       characterData:true
     });
     decorateActivities();
+
+    try{guideActive=sessionStorage.getItem(GUIDE_KEY)==='1';}catch(_){guideActive=false;}
+    try{botApi()?.setGuideMode?.(guideActive);}catch(_){}
+    if(guideActive){
+      clearTimeout(guideTimer);
+      guideTimer=setTimeout(()=>presentGuide({voice:false}),350);
+    }
+
+    window.AdimBotGuide=Object.freeze({
+      request:()=>requestGuide(),
+      start:()=>{setGuideState(true);return presentGuide({voice:true});},
+      stop:options=>stopGuide(options||{}),
+      repeat:()=>presentGuide({voice:true}),
+      isActive:()=>guideActive
+    });
+
     window.AdimBotReadable=Object.freeze({
       refresh:()=>markReadableElements(document),
       register:(element,mode='action',text='')=>{
@@ -408,12 +541,18 @@
     clearArmTimer();
     armedCard=null;
     pendingFeedback.clear();
-    setTimeout(()=>{removeLegacyCardSpeakers(document);decorateActivities();},0);
+    clearGuideTarget();
+    setTimeout(()=>{
+      removeLegacyCardSpeakers(document);
+      decorateActivities();
+      if(guideActive)presentGuide({voice:true});
+    },140);
   });
   window.addEventListener('pagehide',()=>{
     stopSpeech();
     clearArmTimer();
     armedCard=null;
+    clearGuideTarget();
   });
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);

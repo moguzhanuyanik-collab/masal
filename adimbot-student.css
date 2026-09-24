@@ -1,4 +1,4 @@
-/* İlkAdım V1.0.88 — AdımBot doğru/yanlış özel tepki animasyonları */
+/* İlkAdım V1.0.89 — AdımBot sesli rehber modu */
 .adb-student-widget{
   position:fixed;right:18px;bottom:92px;z-index:70;width:184px;
   font-family:"Inter","Nunito","Segoe UI",system-ui,-apple-system,sans-serif;
@@ -35,7 +35,7 @@
   transform:scale(.38);transform-origin:0 0;overflow:visible
 }
 .adb-sprite{
-  position:absolute;display:block;background-image:url("adimbot/adimbot-atlas.webp?v=1.0.88");
+  position:absolute;display:block;background-image:url("adimbot/adimbot-atlas.webp?v=1.0.89");
   background-repeat:no-repeat;pointer-events:none
 }
 .adb-body{
@@ -151,6 +151,18 @@
 }
 .adb-student-widget.is-hidden{display:none}
 
+/* Sesli rehber hedefi: layout ve mevcut transformları bozmadan görünür odak. */
+.adb-guide-target{
+  outline:3px solid rgba(63,174,255,.78)!important;
+  outline-offset:4px!important;
+  box-shadow:0 0 0 6px rgba(63,174,255,.12),0 10px 28px rgba(43,113,180,.18)!important;
+  animation:adbGuideFocus 1.15s ease-in-out infinite!important
+}
+
+@keyframes adbGuideFocus{
+  0%,100%{outline-color:rgba(63,174,255,.48);box-shadow:0 0 0 4px rgba(63,174,255,.08),0 8px 22px rgba(43,113,180,.12)}
+  50%{outline-color:rgba(63,174,255,.92);box-shadow:0 0 0 8px rgba(63,174,255,.16),0 12px 30px rgba(43,113,180,.22)}
+}
 @keyframes adbFloat{
   0%,100%{transform:translateY(0) rotate(0deg)}
   28%{transform:translateY(-2px) rotate(-.15deg)}
@@ -301,5 +313,5 @@
   .adb-bubble{font-size:10.5px;max-width:205px;padding:10px 11px}
 }
 @media(prefers-reduced-motion:reduce){
-  .adb-visual,.adb-pulse,.adb-arm-leftview,.adb-arm-rightview,.adb-lid,.adb-mouth-open{animation:none!important}
+  .adb-visual,.adb-pulse,.adb-arm-leftview,.adb-arm-rightview,.adb-lid,.adb-mouth-open,.adb-guide-target{animation:none!important}
 }

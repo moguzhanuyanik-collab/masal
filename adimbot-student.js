@@ -64,7 +64,7 @@
   let pendingX=0,pendingY=0,frame=0,activeUtterance=null;
   let activeSpeechToken=0,activeOnEnd=null,activeOnStart=null,speechStarted=false;
   let gestureLoopTimer=0,gestureReleaseTimer=0,settleTimer=0,gestureIndex=0,lastGestureAt=0;
-  const state={ready:true,speaking:false,dragging:false,hidden:false,mood:'idle'};
+  const state={ready:true,speaking:false,dragging:false,hidden:false,mood:'idle',guide:false};
 
   const emitState=()=>{
     try{window.dispatchEvent(new CustomEvent('adimbot:statechange',{detail:{...state}}));}catch(_){}
@@ -348,8 +348,13 @@
     try{stage.releasePointerCapture?.(pointerId);}catch(_){}
     pointerId=null;
     if(!moved){
-      index=(index+1)%messages.length;
-      speak(messages[index]);
+      const guide=window.AdimBotGuide;
+      if(guide&&typeof guide.request==='function'){
+        guide.request();
+      }else{
+        index=(index+1)%messages.length;
+        speak(messages[index]);
+      }
     }
     event.preventDefault();
   };
@@ -370,17 +375,22 @@
   stage?.addEventListener('keydown',event=>{
     if(event.key==='Enter'||event.key===' '){
       event.preventDefault();
-      index=(index+1)%messages.length;
-      speak(messages[index]);
+      const guide=window.AdimBotGuide;
+      if(guide&&typeof guide.request==='function')guide.request();
+      else{
+        index=(index+1)%messages.length;
+        speak(messages[index]);
+      }
     }
   });
 
   close?.addEventListener('pointerdown',event=>event.stopPropagation());
   close?.addEventListener('click',event=>{
     event.stopPropagation();
+    try{window.AdimBotGuide?.stop?.({silent:true});}catch(_){}
     stopSpeaking();
     root.classList.add('is-hidden');
-    setState({hidden:true});
+    setState({hidden:true,guide:false});
   });
 
   window.addEventListener('resize',()=>{
@@ -418,6 +428,10 @@
     },
     isReady:()=>state.ready===true,
     getState:()=>({...state}),
+    setGuideMode:active=>{
+      try{setState({guide:active===true});return true;}
+      catch(error){console.error('AdımBot guide state hatası:',error);return false;}
+    },
     characterTypes:()=>Object.keys(characterPhrases)
   });
 
