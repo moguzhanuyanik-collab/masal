@@ -11,39 +11,86 @@
 
   const clean=value=>String(value??'').replace(/\s+/g,' ').trim();
 
+  const isVisible=el=>{
+    if(!(el instanceof Element)||el.closest('[data-adimbot-student],[data-adimbot-chat-modal]'))return false;
+    const style=getComputedStyle(el);
+    if(style.display==='none'||style.visibility==='hidden'||Number(style.opacity)===0)return false;
+    const rect=el.getBoundingClientRect();
+    return rect.width>1&&rect.height>1;
+  };
+
+  const elementText=el=>{
+    if(!(el instanceof Element))return '';
+    const explicit=clean(
+      el.getAttribute('data-question-text')||
+      el.getAttribute('data-adimbot-text')||
+      el.getAttribute('data-title')||
+      ''
+    );
+    return explicit||clean(el.textContent);
+  };
+
   const firstText=selectors=>{
     for(const selector of selectors){
-      const el=document.querySelector(selector);
-      const value=clean(el?.textContent);
+      const elements=[...document.querySelectorAll(selector)];
+      const el=elements.find(isVisible);
+      const value=elementText(el);
       if(value)return value;
     }
     return '';
+  };
+
+  const stripContextLabel=value=>clean(value)
+    .replace(/^soru\s*[!:.-–—]*\s*/i,'')
+    .replace(/^(?:[👉➡️✨⭐]\s*)*(?:şimdi\s+)?sıra\s+sende\s*[!:.-–—]*\s*/i,'')
+    .trim();
+
+  const routeLabel=()=>{
+    const active=document.querySelector('.app-nav a.active,.app-nav a[aria-current="page"],.app-nav a.is-active');
+    return isVisible(active)?clean(active.textContent):'';
   };
 
   const captureContext=()=>{
     const hash=location.hash||'#/anasayfa';
     if(hash.startsWith('#/profil')||hash.startsWith('#/adimbot-ayarlari'))return;
 
-    const context={screen:hash.replace(/^#\//,'').split('/')[0]||'anasayfa'};
+    const route=hash.replace(/^#\//,'').split('/').filter(Boolean);
+    const context={screen:(routeLabel()||route[0]||'anasayfa').slice(0,80)};
+
     const lesson=firstText([
-      '#screen .lesson-title','#screen .course-title','#screen .screen-title',
-      '#screen h1','#screen h2'
+      '#screen [data-lesson-title]','#screen [data-lesson-name]','#screen [data-course-title]',
+      '#screen .lesson-title','#screen .course-title',
+      '#screen .teacher-lesson[open] > summary',
+      '#screen .screen-title','#screen .page-title','#screen h1','#screen h2'
     ]);
-    const topic=firstText(['#screen .topic-title','#screen .lesson-topic','#screen h3']);
-    const activity=firstText(['#screen .game-title','#screen .activity-title','#screen .game-intro']);
+    const topic=firstText([
+      '#screen [data-topic-title]','#screen [data-topic-name]',
+      '#screen .topic-title','#screen .lesson-topic',
+      '#screen .teacher-topic[open] > summary',
+      '#screen .breadcrumb .active','#screen h3'
+    ]);
+    const activity=firstText([
+      '#screen [data-activity-title]','#screen [data-game-title]',
+      '#screen .game-title','#screen .activity-title',
+      '#screen .teacher-content-card h3','#screen .game-intro'
+    ]);
     const question=firstText([
-      '#screen [data-question-text]','#screen .question-text','#screen .question-prompt',
-      '#screen .question-stem','#screen .puzzle-question','#screen .teacher-question > strong'
+      '#screen [data-adimbot-read="text"][data-adimbot-text^="Soru"]',
+      '#screen [data-question-text]','#screen .question-text','#screen .question-title',
+      '#screen .question-prompt','#screen .question-stem',
+      '#screen .question-card','#screen .quiz-question','#screen .exercise-question',
+      '#screen .puzzle-question','#screen .teacher-question > strong'
     ]);
 
-    if(lesson)context.lesson=lesson.slice(0,80);
-    if(topic&&topic!==lesson)context.topic=topic.slice(0,80);
-    if(activity)context.activity=activity.slice(0,80);
-    if(question){
-      context.question=question
-        .replace(/^(?:şimdi\s+)?sıra\s+sende\s*[!:.\-–—]*\s*/i,'')
-        .slice(0,240);
-    }
+    const safeLesson=stripContextLabel(lesson);
+    const safeTopic=stripContextLabel(topic);
+    const safeActivity=stripContextLabel(activity);
+    const safeQuestion=stripContextLabel(question);
+
+    if(safeLesson)context.lesson=safeLesson.slice(0,80);
+    if(safeTopic&&safeTopic!==safeLesson)context.topic=safeTopic.slice(0,80);
+    if(safeActivity&&safeActivity!==safeLesson&&safeActivity!==safeTopic)context.activity=safeActivity.slice(0,80);
+    if(safeQuestion)context.question=safeQuestion.slice(0,240);
 
     try{sessionStorage.setItem(CONTEXT_KEY,JSON.stringify(context));}catch(_){}
   };
