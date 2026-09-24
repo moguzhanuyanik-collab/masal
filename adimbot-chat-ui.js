@@ -277,13 +277,13 @@
       if(!contextBadge)return;
       const context=currentContext();
       const parts=[context.lesson,context.topic,context.activity].map(clean).filter(Boolean);
-      if(parts.length){
-        contextBadge.textContent='📚 '+parts.slice(0,2).join(' • ');
-        contextBadge.hidden=false;
-      }else{
-        contextBadge.textContent='';
-        contextBadge.hidden=true;
-      }
+      const difficulty=window.AdimBotStudent?.difficulty?.(context);
+      const practice=difficulty?.primary?.lesson?('🎯 Biraz pratik: '+difficulty.primary.lesson):'';
+      const labels=[];
+      if(parts.length)labels.push('📚 '+parts.slice(0,2).join(' • '));
+      if(practice)labels.push(practice);
+      contextBadge.textContent=labels.join('   ');
+      contextBadge.hidden=!labels.length;
     };
 
     const hintButton=modal.querySelector('[data-adimbot-hint]');
@@ -372,8 +372,12 @@
     if(contextBadge){
       const context=currentContext();
       const parts=[context.lesson,context.topic,context.activity].map(clean).filter(Boolean);
-      contextBadge.textContent=parts.length?'📚 '+parts.slice(0,2).join(' • '):'';
-      contextBadge.hidden=!parts.length;
+      const difficulty=window.AdimBotStudent?.difficulty?.(context);
+      const labels=[];
+      if(parts.length)labels.push('📚 '+parts.slice(0,2).join(' • '));
+      if(difficulty?.primary?.lesson)labels.push('🎯 Biraz pratik: '+difficulty.primary.lesson);
+      contextBadge.textContent=labels.join('   ');
+      contextBadge.hidden=!labels.length;
     }
     const hintButton=dialog.querySelector('[data-adimbot-hint]');
     if(hintButton){

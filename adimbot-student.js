@@ -56,6 +56,53 @@
       :{};
   };
 
+  const lessonLabels=Object.freeze({
+    turkce:'Türkçe',matematik:'Matematik','hayat-bilgisi':'Hayat Bilgisi',hayat_bilgisi:'Hayat Bilgisi',
+    gorsel:'Görsel Sanatlar','gorsel-sanatlar':'Görsel Sanatlar',muzik:'Müzik',
+    beden:'Beden Eğitimi ve Oyun','beden-ve-oyun':'Beden Eğitimi ve Oyun','beden-egitimi-ve-oyun':'Beden Eğitimi ve Oyun',
+    serbest:'Serbest Etkinlikler','serbest-etkinlikler':'Serbest Etkinlikler'
+  });
+  const normalizeLesson=value=>String(value||'').trim().toLocaleLowerCase('tr-TR')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ı/g,'i')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  const lessonLabel=value=>{
+    const raw=String(value||'').trim();
+    const key=normalizeLesson(raw);
+    return lessonLabels[key]||raw.replace(/[-_]+/g,' ').replace(/\b\w/g,ch=>ch.toLocaleUpperCase('tr-TR'));
+  };
+  const difficultySummary=(context={})=>{
+    const state=readProfileState();
+    const attempts=safeArray(state.attempts)
+      .filter(item=>item&&typeof item==='object'&&String(item.lesson||'').trim())
+      .sort((a,b)=>(Number(b.at)||0)-(Number(a.at)||0))
+      .slice(0,40);
+    const groups=new Map();
+    attempts.forEach(item=>{
+      const key=normalizeLesson(item.lesson);
+      if(!key)return;
+      const group=groups.get(key)||{key,label:lessonLabel(item.lesson),attempts:0,wrong:0,correct:0};
+      group.attempts++;
+      if(item.correct===true)group.correct++;
+      else{
+        group.wrong++;
+      }
+      groups.set(key,group);
+    });
+    const difficult=[...groups.values()]
+      .map(group=>({...group,errorRate:group.attempts?group.wrong/group.attempts:0}))
+      .filter(group=>group.attempts>=3&&group.wrong>=2&&group.errorRate>=0.4)
+      .sort((a,b)=>b.errorRate-a.errorRate||b.wrong-a.wrong||b.attempts-a.attempts);
+    const currentKey=normalizeLesson(context.lesson||context.lessonCode||'');
+    const current=difficult.find(group=>group.key===currentKey)||null;
+    const primary=current||difficult[0]||null;
+    return {
+      hasDifficulty:Boolean(primary),
+      primary:primary?{lesson:primary.label,lessonCode:primary.key,attempts:primary.attempts,wrong:primary.wrong,correct:primary.correct,errorRate:Math.round(primary.errorRate*100)}:null,
+      lessons:difficult.slice(0,3).map(group=>({lesson:group.label,lessonCode:group.key,attempts:group.attempts,wrong:group.wrong,correct:group.correct,errorRate:Math.round(group.errorRate*100)})),
+      currentTopic:String(context.topic||'').trim().slice(0,80)
+    };
+  };
+
   const studentContext=()=>{
     const stateData=readProfileState();
     const summary=window.ILKADIM_DB_SUMMARY&&typeof window.ILKADIM_DB_SUMMARY==='object'
@@ -131,6 +178,16 @@
       else if(games>=2)phrase=`${prefix}${games} etkinlik tamamladın. Böyle devam!`;
       else if(stars>0)phrase=`${prefix}${stars} yıldız topladın. Bir küçük adım daha atalım!`;
       else if(name)phrase=`${name}, hazırsan birlikte yeni bir adım atalım.`;
+    }
+
+    if(type==='help'){
+      const difficulty=difficultySummary(context);
+      if(difficulty.primary){
+        const topic=String(context.topic||'').trim();
+        phrase=topic
+          ?`${topic} konusunda biraz daha pratik yapabiliriz. İstersen birlikte küçük bir adımla başlayalım.`
+          :`${difficulty.primary.lesson} dersinde biraz daha pratik yapabiliriz. İstersen birlikte küçük bir adımla başlayalım.`;
+      }
     }
 
     if(type==='retry'&&String(personal.coachingPhrase||'').trim()){
@@ -763,6 +820,9 @@
     },
     phrase:(type,context={})=>{
       try{return chooseCharacterPhrase(String(type||''),context);}catch(_){return '';}
+    },
+    difficulty:(context={})=>{
+      try{return difficultySummary(context);}catch(_){return {hasDifficulty:false,primary:null,lessons:[],currentTopic:''};}
     },
     stop:()=>{try{stopSpeaking();return true;}catch(error){console.error('AdımBot stop hatası:',error);return false;}},
     show:()=>{
