@@ -4,6 +4,7 @@
   const bubble=root.querySelector('[data-adimbot-bubble]');
   const stage=root.querySelector('[data-adimbot-stage]');
   const close=root.querySelector('[data-adimbot-close]');
+  const help=root.querySelector('[data-adimbot-help]');
   const mouth=root.querySelector('.adb-mouth-open');
   const key='ilkadim.adimbot.student.position.v1';
   const characterPhrases=Object.freeze({
@@ -384,6 +385,19 @@
     }
   });
 
+  help?.addEventListener('pointerdown',event=>event.stopPropagation());
+  help?.addEventListener('click',event=>{
+    event.stopPropagation();
+    try{
+      const helper=window.AdimBotHelp;
+      if(helper&&typeof helper.request==='function'){
+        helper.request();
+        return;
+      }
+    }catch(error){console.error('AdımBot yardım isteği hatası:',error);}
+    react('help');
+  });
+
   close?.addEventListener('pointerdown',event=>event.stopPropagation());
   close?.addEventListener('click',event=>{
     event.stopPropagation();
@@ -431,6 +445,13 @@
     setGuideMode:active=>{
       try{setState({guide:active===true});return true;}
       catch(error){console.error('AdımBot guide state hatası:',error);return false;}
+    },
+    help:()=>{
+      try{
+        const helper=window.AdimBotHelp;
+        if(helper&&typeof helper.request==='function')return helper.request();
+        return react('help');
+      }catch(error){console.error('AdımBot help API hatası:',error);return false;}
     },
     characterTypes:()=>Object.keys(characterPhrases)
   });

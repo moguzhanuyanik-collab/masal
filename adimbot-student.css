@@ -1,4 +1,4 @@
-/* İlkAdım V1.0.89 — AdımBot sesli rehber modu */
+/* İlkAdım V1.0.90 — AdımBot bağlama duyarlı yardım sistemi */
 .adb-student-widget{
   position:fixed;right:18px;bottom:92px;z-index:70;width:184px;
   font-family:"Inter","Nunito","Segoe UI",system-ui,-apple-system,sans-serif;
@@ -35,7 +35,7 @@
   transform:scale(.38);transform-origin:0 0;overflow:visible
 }
 .adb-sprite{
-  position:absolute;display:block;background-image:url("adimbot/adimbot-atlas.webp?v=1.0.89");
+  position:absolute;display:block;background-image:url("adimbot/adimbot-atlas.webp?v=1.0.90");
   background-repeat:no-repeat;pointer-events:none
 }
 .adb-body{
@@ -144,6 +144,12 @@
   font:900 16px/1 inherit;cursor:pointer;z-index:30
 }
 .adb-close:hover{color:#26344b;transform:scale(1.04)}
+.adb-help{
+  position:absolute;left:-1px;top:2px;width:27px;height:27px;border:1px solid #dce8f5;border-radius:50%;
+  display:grid;place-items:center;background:#fff;color:#2178b8;
+  box-shadow:0 6px 18px rgba(33,89,130,.15);font:900 15px/1 inherit;cursor:pointer;z-index:30
+}
+.adb-help:hover,.adb-help:focus-visible{color:#145987;transform:scale(1.04);outline:2px solid rgba(63,174,255,.28);outline-offset:2px}
 .adb-pulse{
   position:absolute;z-index:0;left:8px;right:8px;top:18px;height:74px;border-radius:50%;
   background:radial-gradient(circle,rgba(54,203,255,.16),rgba(54,203,255,0) 68%);
@@ -314,4 +320,5 @@
 }
 @media(prefers-reduced-motion:reduce){
   .adb-visual,.adb-pulse,.adb-arm-leftview,.adb-arm-rightview,.adb-lid,.adb-mouth-open,.adb-guide-target{animation:none!important}
+  .adb-help{transition:none!important}
 }

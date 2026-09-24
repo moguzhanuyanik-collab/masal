@@ -67,9 +67,9 @@ function ois_icon(string $type): string {
 <link rel="apple-touch-icon" href="ilkadim-logo-192.png">
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="ogretmenim.css?v=1.0.48">
-<link rel="stylesheet" href="adimbot-student.css?v=1.0.89">
-<script src="adimbot-student.js?v=1.0.89" defer></script>
-<script src="global-audio-feedback.js?v=1.0.89" defer></script>
+<link rel="stylesheet" href="adimbot-student.css?v=1.0.90">
+<script src="adimbot-student.js?v=1.0.90" defer></script>
+<script src="global-audio-feedback.js?v=1.0.90" defer></script>
 </head>
 <body>
 <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -194,6 +194,7 @@ function ois_icon(string $type): string {
 <div class="adb-student-widget" data-adimbot-student aria-label="AdımBot öğrenci yardımcısı">
   <div class="adb-bubble" data-adimbot-bubble aria-live="polite">Merhaba! Ben AdımBot 👋</div>
   <div class="adb-stage" data-adimbot-stage role="button" tabindex="0" aria-label="AdımBot'u sürükle veya konuştur">
+    <button class="adb-help" type="button" data-adimbot-help aria-label="Bana yardım et">?</button>
     <button class="adb-close" type="button" data-adimbot-close aria-label="AdımBot'u kapat">×</button>
     <span class="adb-pulse" aria-hidden="true"></span>
     <div class="adb-visual" aria-hidden="true">

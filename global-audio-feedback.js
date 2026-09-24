@@ -244,6 +244,55 @@
     return rect.width>0&&rect.height>0&&style.display!=='none'&&style.visibility!=='hidden';
   })||null;
 
+  const helpForScreen=()=>{
+    const path=location.pathname.split('/').pop()||'';
+    const hash=location.hash||'#/anasayfa';
+
+    if(path==='ogretmenim.php'){
+      const question=firstVisible('.teacher-question > strong');
+      if(question){
+        return 'Burası Öğretmenim bölümü. Öğretmeninin gönderdiği soruları ve çalışmaları burada görebilirsin. Soruya dokunursan okuyabilirim. Seçeneklere ilk dokunuşta şıkkı okurum, ikinci dokunuşta seçebilirsin.';
+      }
+      return 'Burası Öğretmenim bölümü. Öğretmeninin sana gönderdiği soru, tekrar, ödev ve notlar burada görünür. Başlıklara dokunarak içerikleri açabilirsin.';
+    }
+
+    if(hash.startsWith('#/oyun/')){
+      const hasAnswers=!!firstVisible('#screen .answers .answer');
+      return hasAnswers
+        ?'Şu anda bir oyundasın. Soruyu dinleyebilirsin. Şıklara ilk dokunuşta seçeneği okurum, ikinci dokunuşta cevabını seçersin. Doğru cevabı sen seçmeden söylemem.'
+        :'Şu anda bir oyundasın. Ekrandaki yönergeyi dikkatlice incele. Yardım istediğinde ne yapacağını sana açıklayabilirim.';
+    }
+
+    if(hash.startsWith('#/etkinlikler')){
+      return 'Burası Etkinlikler bölümü. Buradan bir oyun seçebilirsin. Bir oyuna ilk dokunuşta adını ve açıklamasını okurum, ikinci dokunuşta oyunu açarım.';
+    }
+
+    if(hash.startsWith('#/dersler')){
+      const lessonStep=firstVisible('#screen a.lesson-step');
+      return lessonStep
+        ?'Şu anda bir dersin içindesin. Çalışma adımlarını sırayla açabilirsin. Bir karta ilk dokunuşta içeriğini okurum, ikinci dokunuşta açarım.'
+        :'Burası Dersler bölümü. Öğrenmek istediğin dersi seçebilirsin. Ders kartlarına ilk dokunuşta sana okuyacağım, ikinci dokunuşta açacağım.';
+    }
+
+    if(hash.startsWith('#/profil')){
+      return 'Burası Profil bölümü. Buradan ilerlemeni, ayarlarını ve sana ait bilgileri görebilirsin. Açmak istediğin bölüme dokunabilirsin.';
+    }
+
+    if(hash.startsWith('#/anasayfa')||hash==='#/'||hash==='#'){
+      return 'Burası ana sayfa. Derslere, etkinliklere ve diğer bölümlere buradan ulaşabilirsin. Ne yapacağını bilmiyorsan robota dokunarak sesli rehberi de başlatabilirsin.';
+    }
+
+    return 'Bu ekranda sana görünen başlıkları ve kartları okuyabilirim. Bir kartı açmadan önce ilk dokunuşta ne olduğunu söyleyebilirim. Robota dokunursan adım adım rehber de başlatabilirim.';
+  };
+
+  const requestHelp=()=>{
+    if(!canSpeak())return false;
+    // Yardım açıklaması rehber modunu kapatmaz; yalnızca mevcut rehber hedefini geçici olarak temizler.
+    clearGuideTarget();
+    const text=helpForScreen();
+    return botApi().speak(text);
+  };
+
   const guideStepForScreen=()=>{
     const path=location.pathname.split('/').pop()||'';
     const hash=location.hash||'#/anasayfa';
@@ -517,6 +566,21 @@
       stop:options=>stopGuide(options||{}),
       repeat:()=>presentGuide({voice:true}),
       isActive:()=>guideActive
+    });
+
+    window.AdimBotHelp=Object.freeze({
+      request:()=>requestHelp(),
+      explain:()=>helpForScreen(),
+      screen:()=>{
+        const path=location.pathname.split('/').pop()||'';
+        const hash=location.hash||'#/anasayfa';
+        if(path==='ogretmenim.php')return 'ogretmenim';
+        if(hash.startsWith('#/oyun/'))return 'oyun';
+        if(hash.startsWith('#/etkinlikler'))return 'etkinlikler';
+        if(hash.startsWith('#/dersler'))return 'dersler';
+        if(hash.startsWith('#/profil'))return 'profil';
+        return 'anasayfa';
+      }
     });
 
     window.AdimBotReadable=Object.freeze({
