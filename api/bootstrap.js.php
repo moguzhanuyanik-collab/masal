@@ -76,6 +76,7 @@ echo 'window.ILKADIM_CURRENT_USER_NAME='.json_encode((string)($user['ad_soyad']?
 echo 'window.ILKADIM_CURRENT_USER_ROLE='.json_encode((string)$user['ana_rol'],$flags).";\n";
 echo 'window.ILKADIM_CURRENT_USER_ROLES='.json_encode(array_values((array)$user['roles']),$flags).";\n";
 echo 'window.ILKADIM_CURRENT_STUDENT_ID='.json_encode($studentId,$flags).";\n";
+echo 'window.ILKADIM_CSRF_TOKEN='.json_encode(csrf_token(),$flags).";\n";
 echo 'window.ILKADIM_DB_CONNECTED='.($dbConnected?'true':'false').";\n";
 echo 'window.ILKADIM_DB_ERROR='.json_encode($error,$flags).";\n";
 echo 'window.ILKADIM_DB_SUMMARY='.json_encode($summary,$flags).";\n";

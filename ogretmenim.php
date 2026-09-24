@@ -71,7 +71,7 @@ function ois_icon(string $type): string {
 <script src="api/bootstrap.js.php" defer></script>
 <script src="adimbot-student.js?v=1.0.98" defer></script>
 <script src="global-audio-feedback.js?v=1.1.1" defer></script>
-<script src="adimbot-ai-bridge.js?v=1.1.1" defer></script>
+<script src="adimbot-ai-bridge.js?v=1.1.2" defer></script>
 </head>
 <body>
 <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

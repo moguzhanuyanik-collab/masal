@@ -72,6 +72,16 @@ if ($role!=='ogrenci' || $studentId<=0 || $userId<=0) {
     adimbot_ai_json(['ok'=>false,'message'=>'Bu özellik yalnızca öğrenci hesabında kullanılabilir.'],403);
 }
 
+$csrf=(string)($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
+if (!verify_csrf($csrf)) {
+    adimbot_ai_json(['ok'=>false,'message'=>'Oturum doğrulaması yenilenmeli. Sayfayı yenileyip tekrar deneyebilirsin.','reason'=>'csrf'],403);
+}
+
+$contentType=strtolower((string)($_SERVER['CONTENT_TYPE'] ?? ''));
+if ($contentType!=='' && !str_starts_with($contentType,'application/json')) {
+    adimbot_ai_json(['ok'=>false,'message'=>'Geçersiz istek biçimi.','reason'=>'content_type'],415);
+}
+
 $origin=(string)($_SERVER['HTTP_ORIGIN'] ?? '');
 if ($origin!=='') {
     $host=(string)($_SERVER['HTTP_HOST'] ?? '');

@@ -61,6 +61,10 @@
     text.textContent=String(message||'');
     item.append(label,text);
     box.appendChild(item);
+
+    while(box.children.length>12){
+      box.firstElementChild?.remove();
+    }
     box.scrollTop=box.scrollHeight;
   };
 
@@ -136,6 +140,7 @@
     const chatForm=panel.querySelector('[data-adimbot-chat-form]');
     const chatInput=panel.querySelector('[data-adimbot-chat-input]');
     const chatStatus=panel.querySelector('[data-adimbot-chat-status]');
+    let chatBusy=false;
 
     if(chatBox&&!chatBox.children.length){
       appendChatMessage(chatBox,'bot','Merhaba! Dersinle ilgili merak ettiğin bir şeyi sorabilirsin.');
@@ -143,9 +148,12 @@
 
     chatForm?.addEventListener('submit',async event=>{
       event.preventDefault();
+      if(chatBusy)return;
+
       const message=clean(chatInput?.value).slice(0,400);
       if(!message||!chatInput||!chatBox)return;
 
+      chatBusy=true;
       chatInput.value='';
       chatInput.disabled=true;
       const submit=chatForm.querySelector('button[type="submit"]');
@@ -162,8 +170,9 @@
         const result=await ai.askAndSpeak(message,currentChatContext());
         appendChatMessage(chatBox,'bot',result?.text||'Şu anda yanıt oluşturamadım.');
       }catch(_){
-        appendChatMessage(chatBox,'bot','Şu anda yanıt veremedim. Biraz sonra tekrar deneyebilirsin.');
+        appendChatMessage(chatBox,'bot','Şu anda yanıt veremedim. İstersen tekrar deneyebilirsin.');
       }finally{
+        chatBusy=false;
         chatInput.disabled=false;
         if(submit)submit.disabled=false;
         if(chatStatus)chatStatus.textContent='';

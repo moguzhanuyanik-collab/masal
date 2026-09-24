@@ -3,7 +3,7 @@
   if (window.AdimBotAI) return;
 
   const POLICY = Object.freeze({
-    version: '1.1.1',
+    version: '1.1.2',
     childMode: true,
     gradeLevel: 1,
     maxInputChars: 400,
@@ -164,26 +164,44 @@
   };
 
   const sameOriginProvider = async request => {
-    const response = await fetch('api/adimbot-ai.php',{
-      method:'POST',
-      credentials:'same-origin',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify(request)
-    });
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),25000);
 
-    let payload=null;
-    try{payload=await response.json();}catch(_){}
+    try{
+      const csrf=String(window.ILKADIM_CSRF_TOKEN||'');
+      if(!csrf)throw new Error('csrf_missing');
 
-    if(!payload||typeof payload!=='object'){
-      throw new Error('invalid_response');
+      const response = await fetch('api/adimbot-ai.php',{
+        method:'POST',
+        credentials:'same-origin',
+        signal:controller.signal,
+        headers:{
+          'Content-Type':'application/json',
+          'Accept':'application/json',
+          'X-CSRF-Token':csrf
+        },
+        body:JSON.stringify(request)
+      });
+
+      let payload=null;
+      try{payload=await response.json();}catch(_){}
+
+      if(!payload||typeof payload!=='object'){
+        throw new Error('invalid_response');
+      }
+
+      if(!response.ok){
+        if(typeof payload.text==='string'&&payload.text.trim()!=='')return {text:payload.text};
+        throw new Error(String(payload.reason||payload.message||'provider_error'));
+      }
+
+      return {text:String(payload.text||'')};
+    }catch(error){
+      if(error?.name==='AbortError')throw new Error('timeout');
+      throw error;
+    }finally{
+      clearTimeout(timeout);
     }
-
-    if(!response.ok){
-      if(typeof payload.text==='string'&&payload.text.trim()!=='')return {text:payload.text};
-      throw new Error(String(payload.reason||payload.message||'provider_error'));
-    }
-
-    return {text:String(payload.text||'')};
   };
 
   const registerProvider = fn => {
@@ -233,13 +251,18 @@
       const providerResult = await provider(prepared.request);
       const safe = sanitizeResponse(providerResult);
       return Object.freeze({...safe, local:false});
-    } catch (_) {
+    } catch (error) {
+      const reason=String(error?.message||'provider_error');
+      let text='Şu anda yapay zekâ yanıtına ulaşamadım. Dersine devam edebiliriz.';
+      if(reason==='timeout')text='AdımBot yanıtı biraz gecikti. İstersen tekrar deneyebilirsin.';
+      else if(reason==='csrf'||reason==='csrf_missing')text='Oturum doğrulaması yenilenmeli. Sayfayı yenileyip tekrar deneyebilirsin.';
+      else if(reason==='rate_limit')text='AdımBot biraz dinlensin. Birkaç dakika sonra tekrar deneyebilirsin.';
       return Object.freeze({
         ok:false,
         blocked:false,
         local:true,
-        reason:'provider_error',
-        text:'Şu anda yapay zekâ yanıtına ulaşamadım. Dersine devam edebiliriz.'
+        reason,
+        text
       });
     }
   };
