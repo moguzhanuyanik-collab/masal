@@ -146,6 +146,11 @@
     return letters[index]||String(index+1);
   };
 
+  const stripReadingLabels=value=>clean(value)
+    .replace(/^(?:[👉➡️✨⭐]\s*)*(?:şimdi\s+)?sıra\s+sende\s*[!:.\-–—]*\s*/i,'')
+    .replace(/^şimdi\s+sıra\s+sende\s*[!:.\-–—]*\s*/i,'')
+    .trim();
+
   const optionSpeechText=(option,index)=>{
     if(!(option instanceof Element))return '';
     const letter=optionPrefix(index);
@@ -155,7 +160,7 @@
     const first=clone.firstElementChild;
     if(first&&clean(first.textContent).toLocaleUpperCase('tr-TR')===letter)first.remove();
 
-    let optionText=clean(clone.textContent);
+    let optionText=stripReadingLabels(clone.textContent);
     optionText=optionText.replace(new RegExp('^\\s*(?:\\('+letter+'\\)|'+letter+'\\s*[\\).:\\-])\\s*','i'),'').trim();
     return optionText?letter+' şıkkı. '+optionText:letter+' şıkkı.';
   };
@@ -165,13 +170,59 @@
     const directSelector='[data-question-text],.question-text,.question-title,.question-prompt,.question-stem,.puzzle-question,.prompt';
     const direct=question.matches?.(directSelector)?question:question.querySelector?.(directSelector);
     if(direct){
-      const value=clean(direct.textContent);
+      const value=stripReadingLabels(direct.textContent);
       if(value)return value;
     }
 
     const clone=question.cloneNode(true);
     clone.querySelectorAll?.('.answers,.teacher-option,.feedback,.game-feedback,form,button,input,select,textarea,svg').forEach(el=>el.remove());
-    return clean(clone.textContent);
+    return stripReadingLabels(clone.textContent);
+  };
+
+  const readableContainerForHeading=heading=>{
+    if(!(heading instanceof Element))return null;
+    const preferred=heading.closest(
+      '.discover-card,.discovery-card,.lesson-card,.lesson-step,.activity-card,.content-card,.question-card,article,section'
+    );
+    if(preferred&&preferred.closest('#screen'))return preferred;
+
+    let node=heading.parentElement;
+    for(let depth=0;node&&depth<3;depth++,node=node.parentElement){
+      if(!node.closest?.('#screen'))break;
+      const value=clean(node.textContent);
+      if(value&&value.length<=1200)return node;
+    }
+    return null;
+  };
+
+  const markTextDrivenLessonReadables=rootScope=>{
+    rootScope.querySelectorAll?.('#screen h1,#screen h2,#screen h3,#screen h4,#screen strong,#screen .section-title,#screen .card-title').forEach(heading=>{
+      const label=clean(heading.textContent).toLocaleLowerCase('tr-TR');
+
+      if(/^birlikte\s+keşfedelim\b/i.test(label)){
+        const card=readableContainerForHeading(heading);
+        if(!card||card.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
+
+        const clone=card.cloneNode(true);
+        clone.querySelectorAll?.('.answers,.teacher-option,.feedback,.game-feedback,form,button,input,select,textarea,svg').forEach(el=>el.remove());
+        const value=stripReadingLabels(clone.textContent);
+        if(!value)return;
+
+        card.setAttribute('data-adimbot-read','text');
+        card.setAttribute('data-adimbot-text',value);
+        return;
+      }
+
+      if(/^(?:şimdi\s+)?sıra\s+sende\b/i.test(label)){
+        const card=readableContainerForHeading(heading);
+        if(!card||card.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
+        const value=questionSpeechText(card);
+        if(!value)return;
+
+        card.setAttribute('data-adimbot-read','text');
+        card.setAttribute('data-adimbot-text','Soru. '+value);
+      }
+    });
   };
 
   const markQuestionReadables=scope=>{
@@ -209,6 +260,8 @@
         option.setAttribute('data-adimbot-text',optionSpeechText(option,index));
       });
     });
+
+    markTextDrivenLessonReadables(rootScope);
   };
 
   const markReadableElements=scope=>{
@@ -243,7 +296,7 @@
 
   const cardSpeechText=card=>{
     if(!card)return '';
-    const explicit=clean(card.getAttribute?.('data-adimbot-text'));
+    const explicit=stripReadingLabels(card.getAttribute?.('data-adimbot-text'));
     if(explicit)return explicit;
     const titleEl=card.querySelector?.('h1,h2,h3,strong');
     const descEl=card.querySelector?.('p');
@@ -252,7 +305,7 @@
     const desc=clean(descEl?.textContent);
     const small=clean(smallEl?.textContent);
     const composed=[title,desc||small].filter(Boolean).join('. ');
-    return composed||clean(card.getAttribute?.('aria-label'))||clean(card.textContent);
+    return stripReadingLabels(composed||card.getAttribute?.('aria-label')||card.textContent);
   };
 
   const legacySpeakerSelector=[
