@@ -36,7 +36,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             (string)($_POST['ad_soyad']??''),
             (string)($_POST['yeni_kullanici_eposta']??''),
             (string)($_POST['yeni_kullanici_sifre']??''),
-            $institutionId
+            $institutionId,
+            $kyRole==='ogrenci'?(int)($_POST['sinif_seviyesi']??1):null
         );
         $message=$kyTitle.' hesabı kuruma eklendi.';
     }catch(PDOException $e){
@@ -68,6 +69,7 @@ $members=ky_role_members($pdo,$institutionId,$kyRole);
 <input type="hidden" name="csrf" value="<?=ky_h(csrf_token())?>">
 <input type="hidden" name="kurum_id" value="<?=$institutionId?>">
 <label>Ad Soyad</label><input class="role-input" name="ad_soyad" required maxlength="190">
+<?php if($kyRole==='ogrenci'):?><label>Sınıf</label><select class="role-input" name="sinif_seviyesi" required><?php for($g=1;$g<=12;$g++):?><option value="<?=$g?>"><?=$g?>. sınıf</option><?php endfor;?></select><?php endif;?>
 <label>E-posta</label><input class="role-input" type="email" name="yeni_kullanici_eposta" autocomplete="off" autocapitalize="none" spellcheck="false" value="" required>
 <label>Geçici şifre</label><input class="role-input" type="password" name="yeni_kullanici_sifre" autocomplete="new-password" minlength="8" value="" required>
 <button class="role-button" type="submit"><?=ky_h($kyTitle)?> Hesabı Oluştur</button>
@@ -76,7 +78,7 @@ $members=ky_role_members($pdo,$institutionId,$kyRole);
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">KAYITLAR</span><h2><?=ky_h($kyTitle)?> Listesi</h2></div><span class="role-pill"><?=count($members)?></span></div>
 <div class="role-list">
 <?php if(!$members):?><div class="role-empty"><span><?=ky_h($kyIcon)?></span>Henüz kayıt yok.</div>
-<?php else:foreach($members as $m):?><div class="role-row"><span><?=ky_h($kyIcon)?></span><div><strong><?=ky_h((string)($m['ad']?:$m['ad_soyad']))?></strong><small><?=ky_h((string)$m['email'])?></small></div><span class="role-pill <?=((int)$m['aktif']===1?'ok':'off')?>"><?=((int)$m['aktif']===1?'Aktif':'Pasif')?></span></div><?php endforeach;endif;?>
+<?php else:foreach($members as $m):?><div class="role-row"><span><?=ky_h($kyIcon)?></span><div><strong><?=ky_h((string)($m['ad']?:$m['ad_soyad']))?></strong><small><?=ky_h((string)$m['email'])?><?=$kyRole==='ogrenci'?' · '.max(1,(int)($m['sinif_seviyesi']??1)).'. sınıf':''?></small></div><span class="role-pill <?=((int)$m['aktif']===1?'ok':'off')?>"><?=((int)$m['aktif']===1?'Aktif':'Pasif')?></span></div><?php endforeach;endif;?>
 </div></section>
 </main>
 <nav class="role-bottom">
