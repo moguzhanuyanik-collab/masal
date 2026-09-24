@@ -118,7 +118,13 @@
       '<div><strong id="adb-chat-title">AdımBot ile Sohbet</strong><small>Dersinle ilgili sor. Birlikte düşünüp keşfedelim.</small></div>',
       '<div class="adb-chat-head-actions"><button type="button" class="adb-chat-clear" data-adimbot-chat-clear>Temizle</button><button type="button" class="adb-chat-close" data-adimbot-chat-close aria-label="Sohbeti kapat">×</button></div>',
       '</header>',
+      '<div class="adb-chat-context" data-adimbot-chat-context hidden></div>',
       '<div class="adb-chat-messages" data-adimbot-chat-messages aria-live="polite"></div>',
+      '<div class="adb-chat-suggestions" data-adimbot-chat-suggestions>',
+      '<button type="button" data-adimbot-suggestion="Bunu bana daha basit anlatır mısın?">✨ Basit anlat</button>',
+      '<button type="button" data-adimbot-suggestion="Bana cevabı söylemeden küçük bir ipucu verir misin?">💡 İpucu ver</button>',
+      '<button type="button" data-adimbot-suggestion="Bununla ilgili kolay bir örnek verir misin?">🧩 Örnek ver</button>',
+      '</div>',
       '<form class="adb-chat-form" data-adimbot-chat-form>',
       '<input type="text" maxlength="400" autocomplete="off" enterkeyhint="send" placeholder="AdımBot’a bir şey sor..." data-adimbot-chat-input>',
       '<button type="submit">Gönder</button>',
@@ -133,6 +139,7 @@
     const form=modal.querySelector('[data-adimbot-chat-form]');
     const input=modal.querySelector('[data-adimbot-chat-input]');
     const status=modal.querySelector('[data-adimbot-chat-status]');
+    const contextBadge=modal.querySelector('[data-adimbot-chat-context]');
 
     const savedHistory=readHistory();
     if(savedHistory.length){
@@ -145,6 +152,28 @@
 
     modal.querySelectorAll('[data-adimbot-chat-close]').forEach(el=>{
       el.addEventListener('click',()=>close());
+    });
+
+    const refreshContextBadge=()=>{
+      if(!contextBadge)return;
+      const context=currentContext();
+      const parts=[context.lesson,context.topic,context.activity].map(clean).filter(Boolean);
+      if(parts.length){
+        contextBadge.textContent='📚 '+parts.slice(0,2).join(' • ');
+        contextBadge.hidden=false;
+      }else{
+        contextBadge.textContent='';
+        contextBadge.hidden=true;
+      }
+    };
+
+    modal.querySelectorAll('[data-adimbot-suggestion]').forEach(button=>{
+      button.addEventListener('click',()=>{
+        if(chatBusy||!input)return;
+        input.value=button.getAttribute('data-adimbot-suggestion')||'';
+        input.focus();
+        if(typeof form?.requestSubmit==='function')form.requestSubmit();
+      });
     });
 
     form?.addEventListener('submit',async event=>{
@@ -191,6 +220,13 @@
   const open=()=>{
     const dialog=buildModal();
     captureContext();
+    const contextBadge=dialog.querySelector('[data-adimbot-chat-context]');
+    if(contextBadge){
+      const context=currentContext();
+      const parts=[context.lesson,context.topic,context.activity].map(clean).filter(Boolean);
+      contextBadge.textContent=parts.length?'📚 '+parts.slice(0,2).join(' • '):'';
+      contextBadge.hidden=!parts.length;
+    }
     dialog.hidden=false;
     document.documentElement.classList.add('adb-chat-open');
     setTimeout(()=>dialog.querySelector('[data-adimbot-chat-input]')?.focus(),40);
