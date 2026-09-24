@@ -45,18 +45,18 @@
   background-size:345.45px 302.27px;background-position:0 0
 }
 
-/* İzleyenin solu: sağ kol sprite'ı. Omuz gövdenin arkasında kalır. */
+/* İzleyenin solu: sağ kol sprite'ı. Pivot omuz ekleminin içine taşındı. */
 .adb-arm-leftview{
   left:29px;top:152px;width:53px;height:105px;z-index:2;
   background-size:311.76px 272.79px;background-position:-227.58px 0;
-  transform-origin:82% 10%;animation:adbArmLeftIdle 4.4s cubic-bezier(.45,0,.55,1) infinite
+  transform-origin:88% 8%;animation:adbArmLeftIdle 4.4s cubic-bezier(.45,0,.55,1) infinite
 }
 
-/* İzleyenin sağı: sol kol sprite'ı. */
+/* İzleyenin sağı: sol kol sprite'ı. Pivot omuz ekleminin içine taşındı. */
 .adb-arm-rightview{
   left:136px;top:152px;width:67px;height:104px;z-index:2;
   background-size:311.63px 272.68px;background-position:-157.37px 0;
-  transform-origin:18% 10%;animation:adbArmRightIdle 4.7s cubic-bezier(.45,0,.55,1) infinite
+  transform-origin:12% 8%;animation:adbArmRightIdle 4.7s cubic-bezier(.45,0,.55,1) infinite
 }
 
 /* Açık ağız yalnız konuşurken kapalı ağzın tam üstüne gelir. */
@@ -137,23 +137,23 @@
 }
 @keyframes adbArmLeftIdle{
   0%,100%{transform:rotate(0deg)}
-  30%{transform:rotate(-1.1deg)}
-  62%{transform:rotate(.55deg)}
-  82%{transform:rotate(-.3deg)}
+  30%{transform:rotate(-.9deg)}
+  62%{transform:rotate(.45deg)}
+  82%{transform:rotate(-.22deg)}
 }
 @keyframes adbArmRightIdle{
   0%,100%{transform:rotate(0deg)}
-  34%{transform:rotate(.9deg)}
-  67%{transform:rotate(-.5deg)}
-  86%{transform:rotate(.25deg)}
+  34%{transform:rotate(.75deg)}
+  67%{transform:rotate(-.4deg)}
+  86%{transform:rotate(.2deg)}
 }
 @keyframes adbArmLeftTalk{
-  from{transform:rotate(-1deg)}
-  to{transform:rotate(-5.2deg)}
+  from{transform:rotate(-.8deg)}
+  to{transform:rotate(-4.6deg)}
 }
 @keyframes adbArmRightTalk{
-  from{transform:rotate(.5deg)}
-  to{transform:rotate(4.1deg)}
+  from{transform:rotate(.4deg)}
+  to{transform:rotate(3.6deg)}
 }
 @keyframes adbBlink{
   0%,57.2%,59.5%,100%{transform:scaleY(0)}
