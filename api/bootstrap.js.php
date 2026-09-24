@@ -20,15 +20,23 @@ $lessons=[];
 $state=null;
 $summary=null;
 $completedSteps=[];
+$studentGrade=1;
 $error=null;
 
 try {
     $pdo=db();
-    $rows=$pdo->query('SELECT * FROM dersler WHERE aktif=1 ORDER BY sira,id')->fetchAll();
-    $moduleStmt=$pdo->prepare('SELECT * FROM ders_modulleri WHERE ders_id=? AND aktif=1 ORDER BY sira,id');
+
+    $gradeStmt=$pdo->prepare('SELECT sinif_seviyesi FROM ogrenciler WHERE id=? AND aktif=1 LIMIT 1');
+    $gradeStmt->execute([$studentId]);
+    $studentGrade=max(1,min(12,(int)($gradeStmt->fetchColumn()?:1)));
+
+    $lessonStmt=$pdo->prepare('SELECT d.*,sd.haftalik_saat AS sinif_haftalik_saat,sd.sira AS sinif_sira FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id WHERE d.aktif=1 AND sd.aktif=1 AND sd.sinif_seviyesi=? ORDER BY sd.sira,d.id');
+    $lessonStmt->execute([$studentGrade]);
+    $rows=$lessonStmt->fetchAll();
+    $moduleStmt=$pdo->prepare('SELECT * FROM ders_modulleri WHERE ders_id=? AND sinif_seviyesi=? AND aktif=1 ORDER BY sira,id');
 
     foreach ($rows as $row) {
-        $moduleStmt->execute([(int)$row['id']]);
+        $moduleStmt->execute([(int)$row['id'],$studentGrade]);
         $modules=[];
         foreach ($moduleStmt->fetchAll() as $m) {
             $opts=json_decode((string)$m['secenekler_json'],true);
@@ -47,7 +55,7 @@ try {
         $lessons[]=[
             'id'=>$row['kod'],
             'name'=>$row['ad'],
-            'hours'=>(int)$row['haftalik_saat'],
+            'hours'=>(int)($row['sinif_haftalik_saat']??$row['haftalik_saat']),
             'emoji'=>$row['emoji'],
             'art'=>$row['sanat'],
             'artClass'=>$row['sanat_sinifi'],
@@ -60,20 +68,50 @@ try {
 
     $state=load_student_state($pdo,$studentId);
 
-    // Ders verisini değiştirmeden yalnız tamamlanan adım anahtarlarını yayınla.
-    foreach ((array)($state['steps'] ?? []) as $stepKey) {
-        $stepKey=trim((string)$stepKey);
-        if ($stepKey!=='') $completedSteps[$stepKey]=true;
-    }
+    $gradeSteps=[];
     try {
-        $completedStmt=$pdo->prepare('SELECT ders_kodu,modul_indeksi FROM ogrenci_ilerleme WHERE ogrenci_id=? AND tamamlandi=1');
-        $completedStmt->execute([$studentId]);
+        $completedStmt=$pdo->prepare('SELECT ders_kodu,modul_indeksi FROM ogrenci_ilerleme WHERE ogrenci_id=? AND sinif_seviyesi=? AND tamamlandi=1 ORDER BY ders_kodu,modul_indeksi');
+        $completedStmt->execute([$studentId,$studentGrade]);
         foreach ($completedStmt->fetchAll() as $completedRow) {
             $code=trim((string)($completedRow['ders_kodu'] ?? ''));
             $index=(int)($completedRow['modul_indeksi'] ?? -1);
-            if ($code!=='' && $index>=0) $completedSteps[$code.'-'.$index]=true;
+            if ($code!=='' && $index>=0) {
+                $key=$code.'-'.$index;
+                $completedSteps[$key]=true;
+                $gradeSteps[]=$key;
+            }
         }
     } catch (Throwable) {}
+
+    if (is_array($state)) {
+        if ($gradeSteps!==[] || $studentGrade!==1) {
+            $state['steps']=$gradeSteps;
+        } else {
+            foreach ((array)($state['steps'] ?? []) as $stepKey) {
+                $stepKey=trim((string)$stepKey);
+                if ($stepKey!=='') $completedSteps[$stepKey]=true;
+            }
+        }
+
+        try {
+            $attemptStmt=$pdo->prepare('SELECT ders_kodu,soru_anahtari,secilen_cevap,dogru,sure_ms,cevap_tarihi FROM ogrenci_cevaplari WHERE ogrenci_id=? AND sinif_seviyesi=? ORDER BY id');
+            $attemptStmt->execute([$studentId,$studentGrade]);
+            $gradeAttempts=[];
+            foreach ($attemptStmt->fetchAll() as $attemptRow) {
+                $selected=json_decode((string)($attemptRow['secilen_cevap']??'null'),true);
+                $at=strtotime((string)($attemptRow['cevap_tarihi']??''));
+                $gradeAttempts[]=[
+                    'lesson'=>(string)($attemptRow['ders_kodu']??''),
+                    'index'=>(string)($attemptRow['soru_anahtari']??''),
+                    'selected'=>$selected,
+                    'correct'=>(int)($attemptRow['dogru']??0)===1,
+                    'ms'=>(int)($attemptRow['sure_ms']??0),
+                    'at'=>$at!==false?$at*1000:(int)round(microtime(true)*1000),
+                ];
+            }
+            if ($gradeAttempts!==[] || $studentGrade!==1) $state['attempts']=$gradeAttempts;
+        } catch (Throwable) {}
+    }
 
     $summary=function_exists('student_database_summary')?student_database_summary($pdo,$studentId):null;
     $dbConnected=true;
@@ -93,6 +131,7 @@ echo 'window.ILKADIM_CURRENT_USER_NAME='.json_encode((string)($user['ad_soyad']?
 echo 'window.ILKADIM_CURRENT_USER_ROLE='.json_encode((string)$user['ana_rol'],$flags).";\n";
 echo 'window.ILKADIM_CURRENT_USER_ROLES='.json_encode(array_values((array)$user['roles']),$flags).";\n";
 echo 'window.ILKADIM_CURRENT_STUDENT_ID='.json_encode($studentId,$flags).";\n";
+echo 'window.ILKADIM_CURRENT_GRADE='.json_encode($studentGrade,$flags).";\n";
 echo 'window.ILKADIM_CSRF_TOKEN='.json_encode(csrf_token(),$flags).";\n";
 echo 'window.ILKADIM_DB_CONNECTED='.($dbConnected?'true':'false').";\n";
 echo 'window.ILKADIM_DB_ERROR='.json_encode($error,$flags).";\n";
