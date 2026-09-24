@@ -699,7 +699,6 @@
     pendingFeedback.clear();
     clearGuideTarget();
     setTimeout(()=>{
-      removeLegacyCardSpeakers(document);
       decorateActivities();
       if(guideActive)presentGuide({voice:true});
     },140);
