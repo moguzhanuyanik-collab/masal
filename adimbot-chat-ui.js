@@ -388,6 +388,10 @@
 
       chatBusy=true;
       modal.setAttribute('aria-busy','true');
+      try{window.AdimBotStudent?.emote?.('think',1600);}catch(_){}
+      const waitEmotionTimer=setTimeout(()=>{
+        if(chatBusy){try{window.AdimBotStudent?.emote?.('wait',5000);}catch(_){}}
+      },1500);
       input.value='';
       if(counter)counter.textContent='0 / 400';
       input.disabled=true;
@@ -404,6 +408,8 @@
           appendMessage(box,'bot','AdımBot yapay zekâ bağlantısı henüz hazır değil.');
         }else{
           const result=await ai.askAndSpeak(message,currentContext(),historyBefore);
+          clearTimeout(waitEmotionTimer);
+          try{window.AdimBotStudent?.clearEmotion?.();window.AdimBotStudent?.emote?.('surprised',850);}catch(_){}
           const reply=result?.text||'Şu anda yanıt oluşturamadım.';
           appendMessage(box,'bot',reply);
           remember('assistant',reply);
@@ -411,6 +417,7 @@
       }catch(_){
         appendMessage(box,'bot','Şu anda yanıt veremedim. İstersen tekrar deneyebilirsin.');
       }finally{
+        clearTimeout(waitEmotionTimer);
         chatBusy=false;
         modal.removeAttribute('aria-busy');
         input.disabled=false;

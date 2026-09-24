@@ -132,6 +132,20 @@
   animation:adbRetryBlink 1.35s ease-in-out 1
 }
 
+/* v1.1.16 Duygu sistemi: yalnızca robotun iç görsel parçaları hareket eder. */
+.adb-student-widget[data-adimbot-emotion="think"]:not(.adb-is-dragging) .adb-visual{animation:adbEmotionThink 1.25s ease-in-out infinite}
+.adb-student-widget[data-adimbot-emotion="think"] .adb-arm-rightview{animation:adbEmotionThinkArm 1.25s ease-in-out infinite}
+.adb-student-widget[data-adimbot-emotion="think"] .adb-lid-left{animation:adbEmotionThinkBlink 1.8s ease-in-out infinite}
+.adb-student-widget[data-adimbot-emotion="happy"]:not(.adb-is-dragging) .adb-visual{animation:adbEmotionHappy .78s cubic-bezier(.2,.8,.25,1) 1 both}
+.adb-student-widget[data-adimbot-emotion="happy"] .adb-lid{animation:adbHappyBlink 1.05s ease-in-out 1}
+.adb-student-widget[data-adimbot-emotion="surprised"]:not(.adb-is-dragging) .adb-visual{animation:adbEmotionSurprised .72s cubic-bezier(.2,.8,.25,1) 1 both}
+.adb-student-widget[data-adimbot-emotion="surprised"] .adb-pulse{animation:adbEmotionSurprisedPulse .72s ease-out 1}
+.adb-student-widget[data-adimbot-emotion="encourage"]:not(.adb-is-dragging) .adb-visual{animation:adbEmotionEncourage .9s ease-in-out 1 both}
+.adb-student-widget[data-adimbot-emotion="encourage"] .adb-arm-leftview{animation:adbGestureOpenLeft .9s ease-in-out 1 both}
+.adb-student-widget[data-adimbot-emotion="encourage"] .adb-arm-rightview{animation:adbGestureOpenRight .9s ease-in-out 1 both}
+.adb-student-widget[data-adimbot-emotion="wait"]:not(.adb-is-dragging) .adb-visual{animation:adbEmotionWait 1.8s ease-in-out infinite}
+.adb-student-widget[data-adimbot-emotion="wait"] .adb-pulse{animation:adbEmotionWaitPulse 1.8s ease-in-out infinite}
+
 .adb-student-widget.adb-is-dragging .adb-arm-leftview,
 .adb-student-widget.adb-is-dragging .adb-arm-rightview,
 .adb-student-widget.adb-is-dragging .adb-mouth-open,
@@ -428,6 +442,50 @@ html.adb-chat-open,html.adb-chat-open body{overflow:hidden}
   0%,25%,72%,100%{transform:scaleY(0)}
   40%{transform:scaleY(.82)}
   58%{transform:scaleY(.28)}
+}
+
+@keyframes adbEmotionThink{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-1.5px) rotate(-1.2deg)}
+}
+@keyframes adbEmotionThinkArm{
+  0%,100%{transform:rotate(.45deg) translateY(0)}
+  50%{transform:rotate(-5deg) translateY(-1px)}
+}
+@keyframes adbEmotionThinkBlink{
+  0%,34%,58%,100%{transform:scaleY(0)}
+  44%{transform:scaleY(.62)}
+  50%{transform:scaleY(.12)}
+}
+@keyframes adbEmotionHappy{
+  0%{transform:translateY(0) scale(1)}
+  38%{transform:translateY(-4px) scale(1.025)}
+  68%{transform:translateY(-1px) scale(1.01)}
+  100%{transform:translateY(0) scale(1)}
+}
+@keyframes adbEmotionSurprised{
+  0%{transform:scale(1) translateY(0)}
+  28%{transform:scale(1.045) translateY(-2px)}
+  58%{transform:scale(.995) translateY(0)}
+  100%{transform:scale(1) translateY(0)}
+}
+@keyframes adbEmotionSurprisedPulse{
+  0%{transform:scale(.9);opacity:.28}
+  45%{transform:scale(1.18);opacity:.9}
+  100%{transform:scale(1.02);opacity:.45}
+}
+@keyframes adbEmotionEncourage{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  32%{transform:translateY(-2px) rotate(-1deg)}
+  64%{transform:translateY(-1px) rotate(1deg)}
+}
+@keyframes adbEmotionWait{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-1px) rotate(.65deg)}
+}
+@keyframes adbEmotionWaitPulse{
+  0%,100%{transform:scale(.96);opacity:.32}
+  50%{transform:scale(1.06);opacity:.58}
 }
 @keyframes adbBlink{
   0%,57.2%,59.5%,100%{transform:scaleY(0)}

@@ -246,6 +246,7 @@
   let pendingX=0,pendingY=0,frame=0,activeUtterance=null;
   let activeSpeechToken=0,activeOnEnd=null,activeOnStart=null,speechStarted=false;
   let gestureLoopTimer=0,gestureReleaseTimer=0,settleTimer=0,gestureIndex=0,lastGestureAt=0;
+  let emotionTimer=0;
   let pageSuspended=document.hidden===true,idlePowerTimer=0;
   const defaultSettings=Object.freeze({sound:true,rate:.95,minimized:false});
   let preferences={...defaultSettings};
@@ -264,7 +265,7 @@
   };
 
   const state={
-    ready:true,speaking:false,dragging:false,hidden:false,mood:'idle',guide:false,
+    ready:true,speaking:false,dragging:false,hidden:false,mood:'idle',emotion:'idle',guide:false,
     sound:preferences.sound,rate:preferences.rate,minimized:preferences.minimized
   };
 
@@ -278,6 +279,24 @@
       if(state[name]!==value){state[name]=value;changed=true;}
     }
     if(changed)emitState();
+  };
+
+  const emotionTypes=new Set(['think','happy','surprised','encourage','wait']);
+  const clearEmotion=()=>{
+    clearTimeout(emotionTimer);
+    emotionTimer=0;
+    if(root.dataset.adimbotEmotion)delete root.dataset.adimbotEmotion;
+    setState({emotion:'idle'});
+  };
+  const setEmotion=(type,duration=1400)=>{
+    const emotion=String(type||'').trim().toLowerCase();
+    if(!emotionTypes.has(emotion)||dragging||preferences.minimized||root.classList.contains('adb-is-hidden'))return false;
+    clearTimeout(emotionTimer);
+    root.dataset.adimbotEmotion=emotion;
+    setState({emotion});
+    const ms=Math.max(450,Math.min(8000,Number(duration)||1400));
+    emotionTimer=setTimeout(clearEmotion,ms);
+    return true;
   };
 
   const clearIdlePower=()=>{
@@ -840,8 +859,11 @@
     if(type==='success'){
       const successIndex=Math.max(0,(reactionCursor.success||1)-1)%3;
       root.dataset.adimbotSuccess=String(successIndex);
+      setEmotion('happy',1800);
     }else{
       delete root.dataset.adimbotSuccess;
+      if(type==='retry'||type==='motivation')setEmotion('encourage',1800);
+      else if(type==='help')setEmotion('surprised',1200);
     }
     setState({mood:type});
     return speak(phrase,options);
@@ -859,6 +881,12 @@
     },
     difficulty:(context={})=>{
       try{return difficultySummary(context);}catch(_){return {hasDifficulty:false,primary:null,lessons:[],currentTopic:''};}
+    },
+    emote:(type,duration=1400)=>{
+      try{return setEmotion(type,duration);}catch(error){console.error('AdımBot emotion hatası:',error);return false;}
+    },
+    clearEmotion:()=>{
+      try{clearEmotion();return true;}catch(_){return false;}
     },
     lessonSummary:(context={})=>{
       try{return lessonMiniSummary(context);}catch(_){return {lesson:'',lessonCode:'',attempts:0,correct:0,wrong:0,steps:0,text:'Bugün güzel bir çalışma yaptın. Şimdi öğrendiğin bir şeyi kendi cümlenle söylemeyi dene.'};}
