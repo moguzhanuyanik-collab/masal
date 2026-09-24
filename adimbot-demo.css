@@ -1,4 +1,4 @@
-/* İlkAdım V1.0.75 — AdımBot hassas sprite hareket prototipi */
+/* İlkAdım V1.0.76 — AdımBot kompakt Süper Admin prototipi */
 .adb-widget{
   position:fixed;right:18px;bottom:92px;z-index:70;width:184px;
   font-family:"Inter","Nunito","Segoe UI",system-ui,-apple-system,sans-serif;
@@ -18,13 +18,13 @@
 .adb-widget.is-ready .adb-bubble,.adb-widget.is-speaking .adb-bubble{opacity:1;transform:none}
 
 .adb-stage{
-  position:relative;width:178px;height:240px;margin-left:auto;display:grid;place-items:start center;
+  position:relative;width:92px;height:126px;margin-left:auto;display:grid;place-items:start center;
   touch-action:none;cursor:grab;outline:none
 }
 .adb-stage:active,.adb-widget.is-dragging .adb-stage{cursor:grabbing}
 
 .adb-visual{
-  position:relative;width:168px;height:228px;overflow:visible;
+  position:relative;width:84px;height:114px;overflow:visible;
   filter:drop-shadow(0 15px 18px rgba(40,80,130,.20));
   animation:adbFloat 3.5s ease-in-out infinite;transform-origin:50% 90%
 }
@@ -32,7 +32,7 @@
 
 .adb-robot-canvas{
   position:absolute;left:0;top:0;width:221px;height:299px;
-  transform:scale(.76);transform-origin:0 0;overflow:visible
+  transform:scale(.38);transform-origin:0 0;overflow:visible
 }
 .adb-sprite{
   position:absolute;display:block;background-image:url("adimbot/adimbot-atlas.webp?v=1.0.75&rev=2");
@@ -123,7 +123,7 @@
 }
 .adb-close:hover{color:#26344b;transform:scale(1.04)}
 .adb-pulse{
-  position:absolute;z-index:0;left:18px;right:18px;top:38px;height:145px;border-radius:50%;
+  position:absolute;z-index:0;left:8px;right:8px;top:18px;height:74px;border-radius:50%;
   background:radial-gradient(circle,rgba(54,203,255,.16),rgba(54,203,255,0) 68%);
   animation:adbPulse 2.5s ease-in-out infinite;pointer-events:none
 }
@@ -179,16 +179,16 @@
 
 @media(min-width:1024px){
   .adb-widget{right:30px;bottom:26px;width:196px}
-  .adb-stage{width:190px;height:252px}
-  .adb-visual{width:177px;height:240px}
-  .adb-robot-canvas{transform:scale(.80)}
+  .adb-stage{width:96px;height:128px}
+  .adb-visual{width:89px;height:120px}
+  .adb-robot-canvas{transform:scale(.40)}
   .adb-bubble{font-size:12px;max-width:250px}
 }
 @media(max-width:390px){
   .adb-widget{right:8px;bottom:88px;width:166px}
-  .adb-stage{width:160px;height:218px}
-  .adb-visual{width:154px;height:210px}
-  .adb-robot-canvas{transform:scale(.70)}
+  .adb-stage{width:82px;height:112px}
+  .adb-visual{width:77px;height:105px}
+  .adb-robot-canvas{transform:scale(.35)}
   .adb-bubble{font-size:10.5px;max-width:205px;padding:10px 11px}
 }
 @media(prefers-reduced-motion:reduce){
