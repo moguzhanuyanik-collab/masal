@@ -144,10 +144,14 @@ if (!$enabled || $provider!=='openai' || $apiKey==='' || $apiKey==='OPENAI_API_A
 
 $context=is_array($payload['context'] ?? null)?$payload['context']:[];
 $allowed=[];
-foreach (['screen'=>80,'lesson'=>80,'topic'=>80,'activity'=>80,'question'=>240] as $key=>$max) {
+foreach (['screen'=>80,'lesson'=>80,'topic'=>80,'activity'=>80,'question'=>240,'practiceLesson'=>80,'learningMode'=>20] as $key=>$max) {
     if (!isset($context[$key])) continue;
     $value=adimbot_ai_redact(adimbot_ai_clean($context[$key],$max));
     if ($value!=='') $allowed[$key]=$value;
+}
+foreach (['completedSteps','gamesCompleted','readingsCompleted','lessonAttempts','lessonCorrect','lessonWrong','lessonSteps'] as $key) {
+    if (!isset($context[$key]) || !is_numeric($context[$key])) continue;
+    $allowed[$key]=max(0,min(9999,(int)round((float)$context[$key])));
 }
 
 $contextText='';
@@ -173,6 +177,10 @@ Sen İlkAdım adlı 1. sınıf eğitim uygulamasındaki AdımBot'sun.
 Türkçe, kısa, sıcak, çocukların anlayacağı basit cümlelerle konuş.
 Öğrenciye öğretici ipucu ver; aktif soru/şık varsa doğru cevabı veya doğru şıkkı doğrudan söyleme.
 Önce düşünmesini sağlayan bir ipucu, gerekirse küçük bir örnek ver.
+Ekran bağlamındaki ders, konu, etkinlik, aktif soru ve öğrenme ilerlemesini birlikte kullan; ancak öğrenciyi "zayıf", "başarısız" veya benzeri bir etiketle tanımlama.
+İlerleme sayıları yalnızca desteğin seviyesini ayarlamak içindir; öğrenciyle kıyaslama yapma ve gereksiz yere sayıları tekrar etme.
+learningMode "together" ise tek seferde yalnızca bir küçük düşünme adımı sor ve öğrencinin yanıtını bekle; soruyu onun yerine çözme.
+practiceLesson varsa bunu kesin bir yetersizlik olarak değil, biraz daha pratik yapılabilecek ders bağlamı olarak ele al.
 Adres, telefon, e-posta, şifre, kimlik, tam ad, konum veya özel iletişim bilgisi isteme.
 Dış bağlantı verme, başka uygulamaya/kişiye yönlendirme, özel iletişim veya buluşma teklif etme.
 HTML, Markdown linki, kod, URL, araç çağrısı, komut veya uygulama eylemi üretme.

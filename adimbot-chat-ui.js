@@ -107,6 +107,26 @@
   };
 
 
+  const learningContext=()=>{
+    const base={...currentContext()};
+    try{
+      const student=window.AdimBotStudent?.context?.()||{};
+      const difficulty=window.AdimBotStudent?.difficulty?.(base)||{};
+      const lesson=window.AdimBotStudent?.lessonSummary?.(base)||{};
+      const number=value=>Math.max(0,Math.min(9999,Number(value)||0));
+      base.completedSteps=number(student.completedSteps);
+      base.gamesCompleted=number(student.games);
+      base.readingsCompleted=number(student.readings);
+      base.lessonAttempts=number(lesson.attempts);
+      base.lessonCorrect=number(lesson.correct);
+      base.lessonWrong=number(lesson.wrong);
+      base.lessonSteps=number(lesson.steps);
+      if(difficulty?.primary?.lesson)base.practiceLesson=clean(difficulty.primary.lesson).slice(0,80);
+      if(togetherActive())base.learningMode='together';
+    }catch(_){}
+    return base;
+  };
+
   const hintSignature=()=>{
     const context=currentContext();
     return clean([context.screen,context.lesson,context.topic,context.activity,context.question].filter(Boolean).join('|')).slice(0,480);
@@ -441,7 +461,7 @@
         if(!ai||typeof ai.askAndSpeak!=='function'){
           appendMessage(box,'bot','AdımBot yapay zekâ bağlantısı henüz hazır değil.');
         }else{
-          const result=await ai.askAndSpeak(message,currentContext(),historyBefore);
+          const result=await ai.askAndSpeak(message,learningContext(),historyBefore);
           clearTimeout(waitEmotionTimer);
           try{window.AdimBotStudent?.clearEmotion?.();window.AdimBotStudent?.emote?.('surprised',850);}catch(_){}
           const reply=result?.text||'Şu anda yanıt oluşturamadım.';
@@ -543,5 +563,5 @@
   document.addEventListener('DOMContentLoaded',()=>setTimeout(captureContext,80),{once:true});
   setTimeout(captureContext,80);
 
-  window.AdimBotChatUI=Object.freeze({open,close,clearHistory,captureContext,currentContext,history:()=>readHistory().map(item=>({...item}))});
+  window.AdimBotChatUI=Object.freeze({open,close,clearHistory,captureContext,currentContext,learningContext,history:()=>readHistory().map(item=>({...item}))});
 })();

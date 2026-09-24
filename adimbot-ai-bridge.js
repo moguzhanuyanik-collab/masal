@@ -76,12 +76,18 @@
     const source = context && typeof context === 'object' ? context : {};
     const safe = Object.create(null);
 
-    const textFields = ['screen','lesson','topic','activity','question'];
+    const textFields = ['screen','lesson','topic','activity','question','practiceLesson','learningMode'];
     textFields.forEach(key => {
       if (source[key] == null) return;
       const limit = key === 'question' ? 240 : 80;
       const value = truncate(redactPII(source[key]), limit);
       if (value) safe[key] = value;
+    });
+
+    const numberFields=['completedSteps','gamesCompleted','readingsCompleted','lessonAttempts','lessonCorrect','lessonWrong','lessonSteps'];
+    numberFields.forEach(key=>{
+      const value=Number(source[key]);
+      if(Number.isFinite(value))safe[key]=Math.max(0,Math.min(9999,Math.round(value)));
     });
 
     safe.gradeLevel = POLICY.gradeLevel;
@@ -295,7 +301,8 @@
       piiRedacted:pii.ok === true && !pii.request.message.includes('ali@example.com'),
       answerKeyBlocked:answer.blocked === true && answer.reason === 'answer_key',
       commandsIgnored:command.text === 'Harika',
-      identityExcluded:!Object.prototype.hasOwnProperty.call(sanitizeContext({name:'Ali',userId:42,screen:'dersler'}),'name')
+      identityExcluded:!Object.prototype.hasOwnProperty.call(sanitizeContext({name:'Ali',userId:42,screen:'dersler'}),'name'),
+      learningContextAllowed:sanitizeContext({lesson:'Matematik',lessonAttempts:5,lessonWrong:2,practiceLesson:'Matematik'}).lessonWrong===2
     });
   };
 

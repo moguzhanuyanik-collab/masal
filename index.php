@@ -26,8 +26,8 @@ require_student_login();
   <script src="app-runtime.js" defer></script>
   <script src="adimbot-student.js?v=1.1.17" defer></script>
   <script src="global-audio-feedback.js?v=1.1.11" defer></script>
-  <script src="adimbot-ai-bridge.js?v=1.1.17" defer></script>
-  <script src="adimbot-chat-ui.js?v=1.1.17" defer></script>
+  <script src="adimbot-ai-bridge.js?v=1.1.18" defer></script>
+  <script src="adimbot-chat-ui.js?v=1.1.18" defer></script>
   <script src="lesson-ui-fix.js?v=1.0.32" defer></script>
   <script src="settings-account.js" defer></script>
   <script src="profile-update-link.js?v=1.1.3" defer></script>
