@@ -21,6 +21,14 @@ $defaults = [
         'branch' => 'main',
         'token' => '',
     ],
+    'ai' => [
+        'enabled' => true,
+        'provider' => 'openai',
+        'model' => 'gpt-6-astra',
+        'api_key' => '',
+        'timeout_seconds' => 20,
+        'max_requests_per_10_minutes' => 20,
+    ],
     'update' => [
         'preserve' => [
             'config/local.php',

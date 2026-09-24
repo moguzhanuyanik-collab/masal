@@ -1,4 +1,4 @@
-/* İlkAdım V1.0.97 — AdımBot sade arayüz, profil ayarları ve okuma regresyonu */
+/* İlkAdım V1.1.1 — AdımBot AI Chat MVP */
 .adb-student-widget{
   position:fixed;
   right:max(18px,env(safe-area-inset-right));
@@ -155,6 +155,22 @@
   min-width:100px;border:1px solid #dce5ef;border-radius:10px;background:#fff;color:#31435c;
   padding:7px 8px;font:800 11px/1 inherit
 }
+
+.adb-profile-chat{margin-top:14px;padding-top:14px;border-top:1px solid #e7edf5}
+.adb-profile-chat-head strong{display:block;color:#25344b;font-size:13px}
+.adb-profile-chat-head small{display:block;margin-top:4px;color:#74839a;font-size:10px;line-height:1.4}
+.adb-profile-chat-messages{
+  margin-top:10px;max-height:260px;overflow:auto;padding:8px;border-radius:14px;background:#f6f9fc
+}
+.adb-profile-chat-message{max-width:90%;margin:7px 0;padding:9px 10px;border-radius:13px;background:#fff;color:#33455e;box-shadow:0 4px 14px rgba(35,65,100,.06)}
+.adb-profile-chat-message.is-user{margin-left:auto;background:#eaf7ff}
+.adb-profile-chat-message strong{display:block;font-size:10px}
+.adb-profile-chat-message p{margin:3px 0 0;font-size:11px;line-height:1.45}
+.adb-profile-chat-form{display:flex;gap:8px;margin-top:9px}
+.adb-profile-chat-form input{flex:1;min-width:0;border:1px solid #d8e3ef;border-radius:11px;padding:9px 10px;font:700 11px/1.2 inherit;color:#263a52;background:#fff}
+.adb-profile-chat-form button{border:0;border-radius:11px;padding:9px 12px;background:#289ed8;color:#fff;font:900 11px/1 inherit;cursor:pointer}
+.adb-profile-chat-form button:disabled,.adb-profile-chat-form input:disabled{opacity:.6;cursor:default}
+.adb-profile-chat-status{display:block;min-height:14px;margin-top:5px;color:#7d8a9a;font-size:9.5px}
 .adb-pulse{
   position:absolute;z-index:0;left:8px;right:8px;top:18px;height:74px;border-radius:50%;
   background:radial-gradient(circle,rgba(54,203,255,.16),rgba(54,203,255,0) 68%);

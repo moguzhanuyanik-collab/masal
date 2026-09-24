@@ -13,4 +13,10 @@ return [
         'branch' => 'main',
         'token' => '',
     ],
+    'ai' => [
+        'enabled' => true,
+        'provider' => 'openai',
+        'model' => 'gpt-6-astra',
+        'api_key' => 'OPENAI_API_ANAHTARINIZ',
+    ],
 ];

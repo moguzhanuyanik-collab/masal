@@ -3,7 +3,7 @@
   if (window.AdimBotAI) return;
 
   const POLICY = Object.freeze({
-    version: '1.0.99',
+    version: '1.1.1',
     childMode: true,
     gradeLevel: 1,
     maxInputChars: 400,
@@ -163,6 +163,29 @@
     return Object.freeze({ok:false, blocked:true, reason:check.reason, text:fallback});
   };
 
+  const sameOriginProvider = async request => {
+    const response = await fetch('api/adimbot-ai.php',{
+      method:'POST',
+      credentials:'same-origin',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify(request)
+    });
+
+    let payload=null;
+    try{payload=await response.json();}catch(_){}
+
+    if(!payload||typeof payload!=='object'){
+      throw new Error('invalid_response');
+    }
+
+    if(!response.ok){
+      if(typeof payload.text==='string'&&payload.text.trim()!=='')return {text:payload.text};
+      throw new Error(String(payload.reason||payload.message||'provider_error'));
+    }
+
+    return {text:String(payload.text||'')};
+  };
+
   const registerProvider = fn => {
     if (typeof fn !== 'function') return false;
     provider = fn;
@@ -235,6 +258,8 @@
     });
   };
 
+  registerProvider(sameOriginProvider);
+
   window.AdimBotAI = Object.freeze({
     version:POLICY.version,
     policy:()=>({...POLICY}),
@@ -251,6 +276,6 @@
   });
 
   try {
-    window.dispatchEvent(new CustomEvent('adimbot-ai:ready',{detail:{version:POLICY.version,provider:false}}));
+    window.dispatchEvent(new CustomEvent('adimbot-ai:ready',{detail:{version:POLICY.version,provider:true}}));
   } catch (_) {}
 })();
