@@ -15,6 +15,11 @@
   let index=0,timer=0,dragging=false,moved=false,pointerId=null,startX=0,startY=0,startLeft=0,startTop=0;
   let pendingX=0,pendingY=0,frame=0;
 
+  const stopSpeaking=()=>{
+    clearTimeout(timer);
+    root.classList.remove('is-speaking');
+  };
+
   const speak=(message)=>{
     if(!bubble)return;
     bubble.textContent=message;
@@ -61,6 +66,7 @@
 
   stage?.addEventListener('pointerdown',event=>{
     if(event.target.closest('[data-adimbot-close]'))return;
+    stopSpeaking();
     pointerId=event.pointerId;
     dragging=true;
     moved=false;
@@ -113,6 +119,7 @@
   close?.addEventListener('pointerdown',event=>event.stopPropagation());
   close?.addEventListener('click',event=>{
     event.stopPropagation();
+    stopSpeaking();
     root.classList.add('is-hidden');
   });
 
