@@ -69,16 +69,16 @@
   opacity:1;animation:adbMouth .32s cubic-bezier(.45,0,.55,1) infinite alternate
 }
 
-/* Kısa blink katmanı; yüzün rengiyle çok kısa süre gözleri kapatır. */
+/* Göz kapakları: gözün kendi kıvrımına yaklaşan ince maske; kapanırken yüzü örtmez. */
 .adb-lid{
-  position:absolute;z-index:6;top:82px;width:29px;height:22px;
-  background:linear-gradient(180deg,#0a1727 0%,#10283e 78%,#12344d 100%);
-  border-radius:52% 52% 48% 48%;transform:scaleY(0);transform-origin:50% 0;
-  animation:adbBlink 6.2s infinite;pointer-events:none
+  position:absolute;z-index:6;top:84px;width:28px;height:16px;
+  background:linear-gradient(180deg,#0b1a2b 0%,#10283e 72%,#12344d 100%);
+  border-radius:50% 50% 44% 44%;transform:scaleY(0);transform-origin:50% 0;
+  animation:adbBlink 6.2s infinite;pointer-events:none;overflow:hidden
 }
 .adb-lid:after{
-  content:"";position:absolute;left:18%;right:18%;bottom:3px;height:7px;
-  border-bottom:3px solid #4fd7ff;border-radius:0 0 999px 999px;opacity:.95
+  content:"";position:absolute;left:22%;right:22%;bottom:1px;height:4px;
+  border-bottom:2px solid rgba(79,215,255,.82);border-radius:0 0 999px 999px
 }
 .adb-lid-left{left:69px}
 .adb-lid-right{left:124px;animation-delay:.025s}
@@ -156,9 +156,11 @@
   to{transform:rotate(4.1deg)}
 }
 @keyframes adbBlink{
-  0%,57%,60%,100%{transform:scaleY(0)}
-  58%{transform:scaleY(.92)}
-  59%{transform:scaleY(1)}
+  0%,57.2%,59.5%,100%{transform:scaleY(0)}
+  57.65%{transform:scaleY(.62)}
+  58.15%{transform:scaleY(.96)}
+  58.65%{transform:scaleY(.72)}
+  59.05%{transform:scaleY(.18)}
 }
 @keyframes adbMouth{
   from{transform:scale(.97,.78)}
