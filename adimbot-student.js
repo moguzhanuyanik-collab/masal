@@ -3,15 +3,7 @@
   if(!root)return;
   const bubble=root.querySelector('[data-adimbot-bubble]');
   const stage=root.querySelector('[data-adimbot-stage]');
-  const close=root.querySelector('[data-adimbot-close]');
   const help=root.querySelector('[data-adimbot-help]');
-  const settingsButton=root.querySelector('[data-adimbot-settings]');
-  const settingsPanel=root.querySelector('[data-adimbot-settings-panel]');
-  const soundInput=root.querySelector('[data-adimbot-sound]');
-  const rateInput=root.querySelector('[data-adimbot-rate]');
-  const guideInput=root.querySelector('[data-adimbot-guide]');
-  const visibleInput=root.querySelector('[data-adimbot-visible]');
-  const restoreButton=root.querySelector('[data-adimbot-restore]');
   const mouth=root.querySelector('.adb-mouth-open');
   const key='ilkadim.adimbot.student.position.v1';
   const settingsKey='ilkadim.adimbot.settings.v1';
@@ -191,7 +183,7 @@
     clearTimeout(idlePowerTimer);
     if(pageSuspended||preferences.minimized||state.speaking||dragging)return;
     idlePowerTimer=setTimeout(()=>{
-      if(!pageSuspended&&!preferences.minimized&&!state.speaking&&!dragging&&!root.classList.contains('adb-is-settings-open')){
+      if(!pageSuspended&&!preferences.minimized&&!state.speaking&&!dragging){
         root.classList.add('adb-is-idle-power');
       }
     },delay);
@@ -202,21 +194,9 @@
     if(!pageSuspended)scheduleIdlePower();
   };
 
-  const syncSettingsUi=()=>{
-    if(soundInput)soundInput.checked=preferences.sound;
-    if(rateInput)rateInput.value=String(preferences.rate);
-    if(visibleInput)visibleInput.checked=!preferences.minimized;
-    if(guideInput){
-      let active=state.guide===true;
-      try{active=window.AdimBotGuide?.isActive?.()===true||active;}catch(_){}
-      guideInput.checked=active;
-    }
-  };
-
   const setMinimized=(minimized,{save=true}={})=>{
     preferences.minimized=minimized===true;
     root.classList.toggle('adb-is-minimized',preferences.minimized);
-    root.classList.remove('adb-is-settings-open');
     if(preferences.minimized){
       stopSpeaking();
       clearIdlePower();
@@ -225,7 +205,6 @@
     }
     setState({minimized:preferences.minimized,hidden:false});
     if(save)savePreferences();
-    syncSettingsUi();
     return true;
   };
 
@@ -234,7 +213,6 @@
     if(!preferences.sound)stopSpeaking();
     setState({sound:preferences.sound});
     savePreferences();
-    syncSettingsUi();
     return true;
   };
 
@@ -243,7 +221,6 @@
     preferences.rate=Number.isFinite(rate)?Math.min(1.15,Math.max(.75,rate)):.95;
     setState({rate:preferences.rate});
     savePreferences();
-    syncSettingsUi();
     return true;
   };
   const gestureClasses=['adb-gesture-left','adb-gesture-right','adb-gesture-open'];
@@ -604,7 +581,7 @@
   }catch(_){scheduleSafePosition(320);}
 
   stage?.addEventListener('pointerdown',event=>{
-    if(event.target.closest('button,input,select,label,[data-adimbot-settings-panel]'))return;
+    if(event.target.closest('button,input,select,label'))return;
     stopSpeaking();
     pointerId=event.pointerId;
     dragging=true;
@@ -681,7 +658,6 @@
   help?.addEventListener('pointerdown',event=>event.stopPropagation());
   help?.addEventListener('click',event=>{
     event.stopPropagation();
-    root.classList.remove('adb-is-settings-open');
     try{
       const helper=window.AdimBotHelp;
       if(helper&&typeof helper.request==='function'){
@@ -690,44 +666,6 @@
       }
     }catch(error){console.error('AdımBot yardım isteği hatası:',error);}
     react('help');
-  });
-
-  settingsButton?.addEventListener('pointerdown',event=>event.stopPropagation());
-  settingsButton?.addEventListener('click',event=>{
-    event.stopPropagation();
-    wakeAdimBot();
-    root.classList.toggle('adb-is-settings-open');
-    syncSettingsUi();
-    scheduleIdlePower();
-  });
-
-  settingsPanel?.addEventListener('pointerdown',event=>event.stopPropagation());
-  settingsPanel?.addEventListener('click',event=>event.stopPropagation());
-
-  soundInput?.addEventListener('change',()=>setSound(soundInput.checked));
-  rateInput?.addEventListener('change',()=>setRate(rateInput.value));
-  visibleInput?.addEventListener('change',()=>{
-    if(visibleInput.checked)setMinimized(false);
-    else setMinimized(true);
-  });
-  guideInput?.addEventListener('change',()=>{
-    try{
-      if(guideInput.checked)window.AdimBotGuide?.start?.();
-      else window.AdimBotGuide?.stop?.({silent:true});
-    }catch(error){console.error('AdımBot rehber ayarı hatası:',error);}
-    setState({guide:guideInput.checked});
-  });
-
-  restoreButton?.addEventListener('click',event=>{
-    event.stopPropagation();
-    setMinimized(false);
-  });
-
-  close?.addEventListener('pointerdown',event=>event.stopPropagation());
-  close?.addEventListener('click',event=>{
-    event.stopPropagation();
-    root.classList.remove('adb-is-settings-open');
-    setMinimized(true);
   });
 
   window.addEventListener('resize',()=>{
@@ -786,12 +724,6 @@
   const screen=document.querySelector('#screen');
   if(screen)safeObserver.observe(screen,{subtree:true,childList:true,attributes:true,attributeFilter:['class','open']});
 
-  document.addEventListener('click',event=>{
-    if(!root.classList.contains('adb-is-settings-open'))return;
-    if(event.target instanceof Node&&root.contains(event.target))return;
-    root.classList.remove('adb-is-settings-open');
-  });
-
   const react=(type,context={},options={})=>{
     const phrase=chooseCharacterPhrase(type,context);
     if(!phrase)return false;
@@ -828,7 +760,7 @@
     isReady:()=>state.ready===true,
     getState:()=>({...state}),
     setGuideMode:active=>{
-      try{setState({guide:active===true});syncSettingsUi();return true;}
+      try{setState({guide:active===true});return true;}
       catch(error){console.error('AdımBot guide state hatası:',error);return false;}
     },
     help:()=>{
@@ -857,7 +789,6 @@
   });
 
   setMinimized(preferences.minimized,{save:false});
-  syncSettingsUi();
   if(pageSuspended)root.classList.add('adb-is-suspended');
   else scheduleIdlePower(8000);
   setTimeout(()=>speak(chooseCharacterPhrase('greeting'),{voice:false}),550);
