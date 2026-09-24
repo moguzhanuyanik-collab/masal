@@ -232,7 +232,11 @@
   const deliver = result => {
     const safe = sanitizeResponse(result);
     if (safe.text) {
-      try { window.AdimBotStudent?.speak?.(safe.text); } catch (_) {}
+      try {
+        const bot=window.AdimBotStudent;
+        if(typeof bot?.speakLong==='function')bot.speakLong(safe.text);
+        else bot?.speak?.(safe.text);
+      } catch (_) {}
     }
     return safe;
   };

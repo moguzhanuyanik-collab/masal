@@ -170,15 +170,49 @@
     item.append(label,body);
 
     if(role!=='user'&&speakable&&clean(message)){
+      const controls=document.createElement('span');
+      controls.className='adb-chat-voice-controls';
+
       const listen=document.createElement('button');
       listen.type='button';
       listen.className='adb-chat-listen';
       listen.setAttribute('aria-label','AdımBot yanıtını tekrar dinle');
       listen.textContent='🔊 Tekrar dinle';
       listen.addEventListener('click',()=>{
-        try{window.AdimBotStudent?.speak?.(clean(message));}catch(_){}
+        try{
+          const bot=window.AdimBotStudent;
+          if(typeof bot?.speakLong==='function')bot.speakLong(clean(message));
+          else bot?.speak?.(clean(message));
+        }catch(_){}
       });
-      item.appendChild(listen);
+
+      const pause=document.createElement('button');
+      pause.type='button';
+      pause.className='adb-chat-listen';
+      pause.setAttribute('aria-label','AdımBot sesini duraklat veya devam ettir');
+      pause.textContent='⏸ Duraklat';
+      pause.addEventListener('click',()=>{
+        try{
+          const bot=window.AdimBotStudent;
+          if(bot?.isPaused?.()){
+            if(bot.resume?.())pause.textContent='⏸ Duraklat';
+          }else if(bot?.pause?.()){
+            pause.textContent='▶️ Devam';
+          }
+        }catch(_){}
+      });
+
+      const stop=document.createElement('button');
+      stop.type='button';
+      stop.className='adb-chat-listen';
+      stop.setAttribute('aria-label','AdımBot sesini durdur');
+      stop.textContent='⏹ Durdur';
+      stop.addEventListener('click',()=>{
+        try{window.AdimBotStudent?.stop?.();pause.textContent='⏸ Duraklat';}catch(_){}
+      });
+
+      controls.append(listen,pause,stop);
+      item.appendChild(controls);
     }
 
     box.appendChild(item);

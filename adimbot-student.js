@@ -244,7 +244,7 @@
 
   let index=0,timer=0,dragging=false,moved=false,pointerId=null,startX=0,startY=0,startLeft=0,startTop=0,manualPosition=false;
   let pendingX=0,pendingY=0,frame=0,activeUtterance=null;
-  let activeSpeechToken=0,activeOnEnd=null,activeOnStart=null,speechStarted=false;
+  let activeSpeechToken=0,activeOnEnd=null,activeOnStart=null,speechStarted=false,speechPaused=false;
   let gestureLoopTimer=0,gestureReleaseTimer=0,settleTimer=0,gestureIndex=0,lastGestureAt=0;
   let emotionTimer=0;
   let pageSuspended=document.hidden===true,idlePowerTimer=0;
@@ -438,6 +438,7 @@
     activeOnEnd=null;
     activeOnStart=null;
     speechStarted=false;
+    speechPaused=false;
     resetMouthCadence();
     clearSpeechGestures();
     root.classList.remove('adb-is-speaking');
@@ -457,6 +458,7 @@
     if(token!==activeSpeechToken||speechStarted||pageSuspended)return;
     clearIdlePower();
     speechStarted=true;
+    speechPaused=false;
     root.classList.add('adb-is-speaking');
     setState({speaking:true});
     const spokenText=activeUtterance?.text||'';
@@ -481,7 +483,62 @@
       root.classList.remove('adb-is-speaking');
       setState({speaking:false});
     }
+    speechPaused=false;
     try{speech?.cancel();}catch(_){}
+  };
+  const pauseSpeaking=()=>{
+    if(!speech||!state.speaking||speechPaused)return false;
+    try{speech.pause();speechPaused=true;return true;}catch(_){return false;}
+  };
+  const resumeSpeaking=()=>{
+    if(!speech||!speechPaused)return false;
+    try{speech.resume();speechPaused=false;return true;}catch(_){return false;}
+  };
+  const speechChunks=(message,maxLength=180)=>{
+    const text=String(message||'').replace(/\s+/g,' ').trim();
+    if(!text)return [];
+    const sentences=text.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[text];
+    const chunks=[];
+    sentences.forEach(sentence=>{
+      let part=sentence.trim();
+      while(part.length>maxLength){
+        let cut=part.lastIndexOf(' ',maxLength);
+        if(cut<70)cut=maxLength;
+        chunks.push(part.slice(0,cut).trim());
+        part=part.slice(cut).trim();
+      }
+      if(part)chunks.push(part);
+    });
+    return chunks;
+  };
+  const speakLong=(message,options={})=>{
+    const chunks=speechChunks(message);
+    if(!chunks.length)return false;
+    stopSpeaking();
+    const finalOnEnd=typeof options.onEnd==='function'?options.onEnd:null;
+    const firstOnStart=typeof options.onStart==='function'?options.onStart:null;
+    let index=0;
+    const next=()=>{
+      if(index>=chunks.length){
+        if(finalOnEnd){try{finalOnEnd({cancelled:false,chunks:chunks.length});}catch(_){}}
+        return;
+      }
+      const current=index++;
+      speak(chunks[current],{
+        ...options,
+        onStart:current===0?firstOnStart:null,
+        onEnd:({cancelled=false}={})=>{
+          if(cancelled){
+            if(finalOnEnd){try{finalOnEnd({cancelled:true,chunks:chunks.length});}catch(_){}}
+            return;
+          }
+          if(index<chunks.length)setTimeout(next,110);
+          else if(finalOnEnd){try{finalOnEnd({cancelled:false,chunks:chunks.length});}catch(_){}}
+        }
+      });
+    };
+    next();
+    return true;
   };
   const speak=(message,{voice=true,onStart=null,onEnd=null}={})=>{
     if(!bubble)return false;
@@ -873,6 +930,12 @@
     speak:(text,options={})=>{
       try{return speak(text,options);}catch(error){console.error('AdımBot speak hatası:',error);return false;}
     },
+    speakLong:(text,options={})=>{
+      try{return speakLong(text,options);}catch(error){console.error('AdımBot uzun seslendirme hatası:',error);return false;}
+    },
+    pause:()=>{try{return pauseSpeaking();}catch(_){return false;}},
+    resume:()=>{try{return resumeSpeaking();}catch(_){return false;}},
+    isPaused:()=>speechPaused,
     react:(type,context={},options={})=>{
       try{return react(String(type||''),context,options);}catch(error){console.error('AdımBot react hatası:',error);return false;}
     },
