@@ -67,6 +67,9 @@ function ois_icon(string $type): string {
 <link rel="apple-touch-icon" href="ilkadim-logo-192.png">
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="ogretmenim.css?v=1.0.48">
+<link rel="stylesheet" href="adimbot-student.css?v=1.0.82">
+<script src="adimbot-student.js?v=1.0.82" defer></script>
+<script src="global-audio-feedback.js?v=1.0.82" defer></script>
 </head>
 <body>
 <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -188,5 +191,24 @@ function ois_icon(string $type): string {
 <a href="index.php#/profil"><span><svg><use href="#user"/></svg></span>Profil</a>
 </nav>
 </div>
+<div class="adb-student-widget" data-adimbot-student aria-label="AdımBot öğrenci yardımcısı">
+  <div class="adb-bubble" data-adimbot-bubble aria-live="polite">Merhaba! Ben AdımBot 👋</div>
+  <div class="adb-stage" data-adimbot-stage role="button" tabindex="0" aria-label="AdımBot'u sürükle veya konuştur">
+    <button class="adb-close" type="button" data-adimbot-close aria-label="AdımBot'u kapat">×</button>
+    <span class="adb-pulse" aria-hidden="true"></span>
+    <div class="adb-visual" aria-hidden="true">
+      <div class="adb-robot-canvas">
+        <span class="adb-sprite adb-arm-leftview"></span>
+        <span class="adb-sprite adb-arm-rightview"></span>
+        <span class="adb-sprite adb-body"></span>
+        <span class="adb-lid adb-lid-left"></span>
+        <span class="adb-lid adb-lid-right"></span>
+        <span class="adb-sprite adb-mouth-open"></span>
+      </div>
+      <span class="adb-drag-chip">Sürükle</span>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

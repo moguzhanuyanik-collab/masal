@@ -270,5 +270,11 @@
     setPosition(r.left,r.top,true);
   });
 
+  window.AdimBotStudent={
+    speak:text=>{speak(String(text||''));return true;},
+    stop:()=>stopSpeaking(),
+    show:()=>root.classList.remove('is-hidden')
+  };
+
   setTimeout(()=>speak(messages[0],{voice:false}),550);
 })();
