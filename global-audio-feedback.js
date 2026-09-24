@@ -284,9 +284,9 @@
     ? 'Harika, doğru cevap!'
     : 'Olmadı, tekrar deneyelim.';
 
-  const reactToAnswer=state=>{
+  const reactToAnswer=(state,onEnd=null)=>{
     const type=state==='correct'?'success':'retry';
-    return react(type)||speak(defaultFeedback(state));
+    return react(type,{},onEnd)||speak(defaultFeedback(state),null,onEnd);
   };
 
   const queueFeedback=(feedback,state='',answer=null)=>{
@@ -310,8 +310,14 @@
       const previous=announcedFeedback.get(feedback);
       if(previous&&previous.text===signature&&(!item.answer||previous.answer===item.answer))return;
       announcedFeedback.set(feedback,{text:signature,answer:item.answer});
-      if(text)speak(text);
-      else if(item.state)reactToAnswer(item.state);
+      if(item.state){
+        const reacted=reactToAnswer(item.state,({cancelled=false}={})=>{
+          if(!cancelled&&text)setTimeout(()=>speak(text),120);
+        });
+        if(!reacted&&text)speak(text);
+      }else if(text){
+        speak(text);
+      }
     });
   };
 
@@ -337,8 +343,14 @@
     requestAnimationFrame(()=>{
       const feedback=feedbackFor(target);
       const text=clean(feedback?.textContent);
-      if(text)speak(text);
-      else reactToAnswer(state);
+      if(text){
+        const reacted=reactToAnswer(state,({cancelled=false}={})=>{
+          if(!cancelled)setTimeout(()=>speak(text),120);
+        });
+        if(!reacted)speak(text);
+      }else{
+        reactToAnswer(state);
+      }
     });
   };
 
