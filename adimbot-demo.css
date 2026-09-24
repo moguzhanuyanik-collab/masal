@@ -148,12 +148,16 @@
   86%{transform:rotate(.2deg)}
 }
 @keyframes adbArmLeftTalk{
-  from{transform:rotate(-.8deg)}
-  to{transform:rotate(-4.6deg)}
+  0%{transform:rotate(-.8deg)}
+  38%{transform:rotate(-3.1deg)}
+  72%{transform:rotate(-4.6deg)}
+  100%{transform:rotate(-2.4deg)}
 }
 @keyframes adbArmRightTalk{
-  from{transform:rotate(.4deg)}
-  to{transform:rotate(3.6deg)}
+  0%{transform:rotate(.4deg)}
+  33%{transform:rotate(2.5deg)}
+  69%{transform:rotate(3.6deg)}
+  100%{transform:rotate(1.7deg)}
 }
 @keyframes adbBlink{
   0%,57.2%,59.5%,100%{transform:scaleY(0)}
@@ -163,8 +167,10 @@
   59.05%{transform:scaleY(.18)}
 }
 @keyframes adbMouth{
-  from{transform:scale(.97,.78)}
-  to{transform:scale(1.015,1.04)}
+  0%{transform:scale(.98,.78)}
+  32%{transform:scale(1.01,.96)}
+  68%{transform:scale(.99,.86)}
+  100%{transform:scale(1.015,1.04)}
 }
 @keyframes adbPulse{
   0%,100%{transform:scale(.94);opacity:.35}
