@@ -103,6 +103,64 @@
     };
   };
 
+
+  const reviewSuggestion=(context={})=>{
+    const state=readProfileState();
+    const attempts=safeArray(state.attempts)
+      .filter(item=>item&&typeof item==='object'&&String(item.lesson||'').trim())
+      .sort((x,y)=>(Number(y.at)||0)-(Number(x.at)||0))
+      .slice(0,60);
+    const groups=new Map();
+    attempts.forEach(item=>{
+      const key=normalizeLesson(item.lesson);
+      if(!key)return;
+      const group=groups.get(key)||{key,label:lessonLabel(item.lesson),attempts:0,wrong:0,correct:0,recent:[],lastAt:0};
+      group.attempts++;
+      if(item.correct===true)group.correct++;
+      else group.wrong++;
+      if(group.recent.length<6)group.recent.push(item.correct===true);
+      const rawAt=Number(item.at)||0;
+      const at=rawAt>0&&rawAt<1e12?rawAt*1000:rawAt;
+      if(at>group.lastAt)group.lastAt=at;
+      groups.set(key,group);
+    });
+
+    const now=Date.now();
+    const candidates=[...groups.values()].map(group=>{
+      const errorRate=group.attempts?group.wrong/group.attempts:0;
+      const recentWrong=group.recent.filter(value=>value!==true).length;
+      const daysSince=group.lastAt>0?Math.max(0,Math.floor((now-group.lastAt)/86400000)):0;
+      const needed=group.attempts>=3&&group.wrong>=2&&(errorRate>=0.4||recentWrong>=2);
+      const score=(errorRate*100)+(recentWrong*12)+Math.min(daysSince,14);
+      return {...group,errorRate,recentWrong,daysSince,needed,score};
+    }).filter(group=>group.needed)
+      .sort((x,y)=>y.score-x.score||y.wrong-x.wrong||y.attempts-x.attempts);
+
+    const currentKey=normalizeLesson(context.lesson||context.lessonCode||'');
+    const current=candidates.find(group=>group.key===currentKey)||null;
+    const selected=current||candidates[0]||null;
+    if(!selected){
+      return {needed:false,lesson:'',lessonCode:'',attempts:0,wrong:0,correct:0,recentWrong:0,daysSince:0,reason:'',text:''};
+    }
+
+    const reason=selected.recentWrong>=2?'recent_retry':selected.daysSince>=7?'spaced_review':'practice';
+    const text=selected.daysSince>=7
+      ?`${selected.label} dersinde daha önce çalıştığın birkaç noktayı kısa bir tekrar edelim mi?`
+      :`${selected.label} dersinde birkaç soruyu kısa bir tekrar edelim mi?`;
+    return {
+      needed:true,
+      lesson:selected.label,
+      lessonCode:selected.key,
+      attempts:selected.attempts,
+      wrong:selected.wrong,
+      correct:selected.correct,
+      recentWrong:selected.recentWrong,
+      daysSince:selected.daysSince,
+      reason,
+      text
+    };
+  };
+
   const lessonMiniSummary=(context={})=>{
     const state=readProfileState();
     const lessonRaw=String(context.lesson||context.lessonCode||'').trim();
@@ -214,8 +272,11 @@
     }
 
     if(type==='help'){
+      const review=reviewSuggestion(context);
       const difficulty=difficultySummary(context);
-      if(difficulty.primary){
+      if(review.needed){
+        phrase=review.text;
+      }else if(difficulty.primary){
         const topic=String(context.topic||'').trim();
         phrase=topic
           ?`${topic} konusunda biraz daha pratik yapabiliriz. İstersen birlikte küçük bir adımla başlayalım.`
@@ -227,7 +288,12 @@
       phrase=String(personal.coachingPhrase).trim().slice(0,220);
     }
 
-    if(label&&type==='lessonStart')phrase=`${name?name+', ':''}${label} dersine başlayalım. Hazırsan ilk adımı atalım.`;
+    if(label&&type==='lessonStart'){
+      const review=reviewSuggestion({...context,lesson:label});
+      phrase=review.needed
+        ?`${name?name+', ':''}${review.text}`
+        :`${name?name+', ':''}${label} dersine başlayalım. Hazırsan ilk adımı atalım.`;
+    }
     if(label&&type==='lessonEnd'){
       const summary=lessonMiniSummary({...context,lesson:label});
       phrase=`${name?name+', ':''}${summary.text}`;
@@ -944,6 +1010,9 @@
     },
     difficulty:(context={})=>{
       try{return difficultySummary(context);}catch(_){return {hasDifficulty:false,primary:null,lessons:[],currentTopic:''};}
+    },
+    review:(context={})=>{
+      try{return reviewSuggestion(context);}catch(_){return {needed:false,lesson:'',lessonCode:'',attempts:0,wrong:0,correct:0,recentWrong:0,daysSince:0,reason:'',text:''};}
     },
     emote:(type,duration=1400)=>{
       try{return setEmotion(type,duration);}catch(error){console.error('AdımBot emotion hatası:',error);return false;}

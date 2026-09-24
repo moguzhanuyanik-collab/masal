@@ -666,28 +666,84 @@
       .slice(0,240);
   };
 
+  const answerTextFor=answer=>{
+    if(!(answer instanceof Element))return '';
+    const raw=answer.getAttribute('data-adimbot-text')||answer.textContent||'';
+    return stripReadingLabels(raw)
+      .replace(/^[A-Z]\s+şıkkı[.:]?\s*/i,'')
+      .replace(/^\s*[A-Z]\s*[\).:\-]\s*/i,'')
+      .trim()
+      .slice(0,120);
+  };
+
+  const numericValue=value=>{
+    const match=String(value||'').replace(',','.').match(/-?\d+(?:\.\d+)?/);
+    if(!match)return null;
+    const number=Number(match[0]);
+    return Number.isFinite(number)?number:null;
+  };
+
   const coachingPhraseFor=answer=>{
-    const question=questionTextFor(answer).toLocaleLowerCase('tr-TR');
+    const questionRaw=questionTextFor(answer);
+    const question=questionRaw.toLocaleLowerCase('tr-TR');
+    const selected=answerTextFor(answer);
+    const selectedNumber=numericValue(selected);
     if(!question)return 'Bir kez daha düşün. Soruyu yavaşça okuyup önemli kelimelere dikkat et.';
-    if(/[0-9０-９]+\s*[+＋]\s*[0-9０-９]+|topla|toplam|kaç tane|kaç eder/.test(question)){
+
+    const expression=question.match(/(-?\d+)\s*([+＋\-−–])\s*(-?\d+)/);
+    if(/[+＋]|topla|toplam|kaç tane|kaç eder/.test(question)){
+      if(expression&&/[+＋]/.test(expression[2])&&selectedNumber!==null){
+        const first=Number(expression[1]),second=Number(expression[3]),expected=first+second;
+        if(selectedNumber===first||selectedNumber===second){
+          return 'Seçtiğin sayı iki gruptan yalnızca birini gösteriyor olabilir. Toplamada iki grubu birleştirip hepsini yeniden say.';
+        }
+        if(Math.abs(selectedNumber-expected)===1){
+          return 'Çok yaklaşmışsın. Sayarken son adımı yeniden kontrol et ve iki gruptaki nesnelerin hepsini bir kez say.';
+        }
+      }
       return 'Bir daha deneyelim. Sayıları tek tek düşün; istersen parmaklarınla ya da nesneleri sayarak toplama yap.';
     }
-    if(/[0-9０-９]+\s*[-−–]\s*[0-9０-９]+|çıkar|eksil|kaldı|fark/.test(question)){
+    if(/[-−–]|çıkar|eksil|kaldı|fark/.test(question)){
+      if(expression&&/[\-−–]/.test(expression[2])&&selectedNumber!==null){
+        const first=Number(expression[1]),second=Number(expression[3]),expected=first-second;
+        if(selectedNumber===first+second){
+          return 'Toplama yapmış olabilirsin. Bu kez başlangıç sayısından çıkarılan kadar geriye doğru say.';
+        }
+        if(Math.abs(selectedNumber-expected)===1){
+          return 'Çok yaklaşmışsın. Geriye doğru sayarken kaç adım attığını bir kez daha kontrol et.';
+        }
+      }
       return 'Bir daha deneyelim. Önce başlangıçtaki sayıyı düşün, sonra çıkarılan kadarını azaltıp yeniden say.';
     }
     if(/büyük|küçük|fazla|az|karşılaştır|eşit/.test(question)){
+      const numbers=(question.match(/-?\d+/g)||[]).slice(0,2).map(Number);
+      if(numbers.length===2&&numbers[0]!==numbers[1]&&selected.includes('=')){
+        return 'Bu iki sayı aynı değil. Eşit işaretini yeniden düşün ve hangi sayının daha büyük olduğuna bak.';
+      }
+      if(/[<>]/.test(selected)){
+        return 'Seçtiğin karşılaştırma işaretini yeniden kontrol et. İşaretin açık tarafı daha büyük sayıya bakmalı.';
+      }
       return 'Sayıları ya da grupları yeniden karşılaştır. Hangisinin daha büyük, daha küçük veya eşit olduğuna dikkat et.';
     }
     if(/harf|hece|kelime|ses|okuy|cümle/.test(question)){
+      if(selected&&selected.length<=32){
+        return `Seçtiğin "${selected}" seçeneğini sorudaki kelimeyle ses ses karşılaştır. Heceleri yavaşça yeniden oku.`;
+      }
       return 'Kelimeyi ya da cümleyi yavaşça bir kez daha oku. Sesleri ve heceleri sırayla düşün.';
     }
     if(/önce|sonra|sıra|örüntü|devam|hangisi gelir/.test(question)){
-      return 'Sıraya yeniden bak. Önceki adımlarda neyin tekrar ettiğini bulup bir sonraki adımı düşün.';
+      return selected
+        ?'Seçtiğin seçeneği örüntünün tekrar eden bölümüyle karşılaştır. Önceki iki adımda neyin tekrar ettiğine bak.'
+        :'Sıraya yeniden bak. Önceki adımlarda neyin tekrar ettiğini bulup bir sonraki adımı düşün.';
     }
     if(/şekil|renk|üçgen|kare|daire|dikdörtgen/.test(question)){
-      return 'Şeklin özelliklerine dikkat et. Kenarlarını, biçimini veya rengini yeniden karşılaştır.';
+      return selected
+        ?'Seçtiğin şekli soruda istenen özellikle yeniden karşılaştır. Kenar, biçim ve renk ipuçlarına tek tek bak.'
+        :'Şeklin özelliklerine dikkat et. Kenarlarını, biçimini veya rengini yeniden karşılaştır.';
     }
-    return 'Soruyu bir kez daha yavaşça oku. Önemli kelimeyi bul ve seçenekleri onunla karşılaştır.';
+    return selected
+      ?'Seçtiğin seçeneği sorudaki önemli kelimeyle yeniden karşılaştır. Sonra diğer seçeneklere de bir kez bak.'
+      :'Soruyu bir kez daha yavaşça oku. Önemli kelimeyi bul ve seçenekleri onunla karşılaştır.';
   };
 
   const reactToAnswer=(state,answer=null,onEnd=null)=>{

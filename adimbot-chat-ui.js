@@ -112,6 +112,7 @@
     try{
       const student=window.AdimBotStudent?.context?.()||{};
       const difficulty=window.AdimBotStudent?.difficulty?.(base)||{};
+      const review=window.AdimBotStudent?.review?.(base)||{};
       const lesson=window.AdimBotStudent?.lessonSummary?.(base)||{};
       const number=value=>Math.max(0,Math.min(9999,Number(value)||0));
       base.completedSteps=number(student.completedSteps);
@@ -122,6 +123,8 @@
       base.lessonWrong=number(lesson.wrong);
       base.lessonSteps=number(lesson.steps);
       if(difficulty?.primary?.lesson)base.practiceLesson=clean(difficulty.primary.lesson).slice(0,80);
+      if(review?.needed&&review.lesson)base.reviewLesson=clean(review.lesson).slice(0,80);
+      if(review?.needed&&review.reason)base.reviewReason=clean(review.reason).slice(0,24);
       if(togetherActive())base.learningMode='together';
     }catch(_){}
     return base;

@@ -144,7 +144,7 @@ if (!$enabled || $provider!=='openai' || $apiKey==='' || $apiKey==='OPENAI_API_A
 
 $context=is_array($payload['context'] ?? null)?$payload['context']:[];
 $allowed=[];
-foreach (['screen'=>80,'lesson'=>80,'topic'=>80,'activity'=>80,'question'=>240,'practiceLesson'=>80,'learningMode'=>20] as $key=>$max) {
+foreach (['screen'=>80,'lesson'=>80,'topic'=>80,'activity'=>80,'question'=>240,'practiceLesson'=>80,'reviewLesson'=>80,'reviewReason'=>24,'learningMode'=>20] as $key=>$max) {
     if (!isset($context[$key])) continue;
     $value=adimbot_ai_redact(adimbot_ai_clean($context[$key],$max));
     if ($value!=='') $allowed[$key]=$value;
@@ -181,6 +181,8 @@ Ekran bağlamındaki ders, konu, etkinlik, aktif soru ve öğrenme ilerlemesini 
 İlerleme sayıları yalnızca desteğin seviyesini ayarlamak içindir; öğrenciyle kıyaslama yapma ve gereksiz yere sayıları tekrar etme.
 learningMode "together" ise tek seferde yalnızca bir küçük düşünme adımı sor ve öğrencinin yanıtını bekle; soruyu onun yerine çözme.
 practiceLesson varsa bunu kesin bir yetersizlik olarak değil, biraz daha pratik yapılabilecek ders bağlamı olarak ele al.
+reviewLesson varsa bunu geçmiş denemelerden gelen kısa tekrar fırsatı olarak kullan; öğrenciyi etiketleme, kıyaslama yapma ve önce küçük bir tekrar öner.
+reviewReason yalnızca tekrar zamanlamasını ayarlamak içindir; bunu öğrenciye teknik kod olarak söyleme.
 Adres, telefon, e-posta, şifre, kimlik, tam ad, konum veya özel iletişim bilgisi isteme.
 Dış bağlantı verme, başka uygulamaya/kişiye yönlendirme, özel iletişim veya buluşma teklif etme.
 HTML, Markdown linki, kod, URL, araç çağrısı, komut veya uygulama eylemi üretme.
