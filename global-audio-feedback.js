@@ -122,6 +122,7 @@
     'a.mina-card',
     '.daily-tasks > a',
     '.answers .answer',
+    '.teacher-option',
     '.teacher-group > summary',
     '.teacher-lesson > summary',
     '.teacher-topic > summary'
@@ -136,6 +137,43 @@
     '.teacher-explanation'
   ].join(',');
 
+  const optionPrefix=index=>{
+    const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    return letters[index]||String(index+1);
+  };
+
+  const markQuestionReadables=scope=>{
+    const rootScope=scope&&scope.querySelectorAll?scope:document;
+
+    rootScope.querySelectorAll?.('.puzzle-question,.teacher-question > strong').forEach(question=>{
+      if(question.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
+      const text=clean(question.textContent);
+      question.setAttribute('data-adimbot-read','text');
+      if(text)question.setAttribute('data-adimbot-text','Soru: '+text);
+    });
+
+    const answerGroups=[
+      ...rootScope.querySelectorAll?.('.answers')||[]
+    ];
+    answerGroups.forEach(group=>{
+      [...group.querySelectorAll('.answer')].forEach((answer,index)=>{
+        if(answer.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
+        const text=clean(answer.textContent);
+        answer.setAttribute('data-adimbot-read','action');
+        if(text)answer.setAttribute('data-adimbot-text',optionPrefix(index)+' seçeneği: '+text);
+      });
+    });
+
+    rootScope.querySelectorAll?.('.teacher-question form').forEach(form=>{
+      [...form.querySelectorAll('.teacher-option')].forEach((option,index)=>{
+        if(option.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
+        const text=clean(option.querySelector('span')?.textContent||option.textContent);
+        option.setAttribute('data-adimbot-read','action');
+        if(text)option.setAttribute('data-adimbot-text',optionPrefix(index)+' seçeneği: '+text);
+      });
+    });
+  };
+
   const markReadableElements=scope=>{
     const rootScope=scope&&scope.querySelectorAll?scope:document;
     rootScope.querySelectorAll?.(autoActionSelector).forEach(el=>{
@@ -147,6 +185,7 @@
       if(el.closest('[data-adimbot-read="action"]'))return;
       if(!el.hasAttribute('data-adimbot-read'))el.setAttribute('data-adimbot-read','text');
     });
+    markQuestionReadables(rootScope);
   };
 
   const clearArmTimer=()=>{
@@ -189,7 +228,8 @@
 
     const item=target.closest('[data-adimbot-read]');
     if(!item||item.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
-    if(target.closest('input,select,textarea,label'))return;
+    if(target.closest('input,select,textarea'))return;
+    if(target.closest('label')&&item!==target.closest('label'))return;
 
     const mode=item.getAttribute('data-adimbot-read');
 
@@ -317,7 +357,9 @@
         needsDecorate=true;
         const el=mutation.target instanceof HTMLElement ? mutation.target : mutation.target.parentElement;
         const feedback=el?.closest?.('.feedback,.game-feedback');
-        if(feedback && isActivityGame()) requestAnimationFrame(()=>speakFeedbackElement(feedback));
+        if(feedback && isActivityGame() && !pendingFeedback.has(feedback)){
+          requestAnimationFrame(()=>speakFeedbackElement(feedback));
+        }
       }
     }
     if(needsDecorate)requestAnimationFrame(()=>{removeLegacyCardSpeakers(document);decorateActivities();});

@@ -69,7 +69,7 @@ function ois_icon(string $type): string {
 <link rel="stylesheet" href="ogretmenim.css?v=1.0.48">
 <link rel="stylesheet" href="adimbot-student.css?v=1.0.85">
 <script src="adimbot-student.js?v=1.0.86" defer></script>
-<script src="global-audio-feedback.js?v=1.0.86" defer></script>
+<script src="global-audio-feedback.js?v=1.0.87" defer></script>
 </head>
 <body>
 <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
