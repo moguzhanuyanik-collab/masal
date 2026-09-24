@@ -42,15 +42,90 @@
   });
   const reactionCursor=Object.create(null);
 
+  const safeArray=value=>Array.isArray(value)?value:[];
+  const readProfileState=()=>{
+    try{
+      const local=JSON.parse(localStorage.getItem('ilk-adim-profile')||'null');
+      if(local&&typeof local==='object')return local;
+    }catch(_){}
+    return window.ILKADIM_SERVER_STATE&&typeof window.ILKADIM_SERVER_STATE==='object'
+      ?window.ILKADIM_SERVER_STATE
+      :{};
+  };
+
+  const studentContext=()=>{
+    const stateData=readProfileState();
+    const summary=window.ILKADIM_DB_SUMMARY&&typeof window.ILKADIM_DB_SUMMARY==='object'
+      ?window.ILKADIM_DB_SUMMARY
+      :{};
+
+    const fullName=String(
+      window.ILKADIM_CURRENT_USER_NAME
+      ||stateData.name
+      ||stateData.ad_soyad
+      ||''
+    ).trim();
+    const firstName=fullName.split(/\s+/).filter(Boolean)[0]||'';
+
+    const steps=safeArray(stateData.steps);
+    const games=safeArray(stateData.games);
+    const readings=safeArray(stateData.readings);
+    const claimed=safeArray(stateData.claimed);
+
+    const calculatedStars=steps.length+games.length+readings.length+(claimed.length*2);
+    const summaryStars=Number(summary.stars);
+    const summarySteps=Number(summary.completed_steps);
+    const summaryGames=Number(summary.games);
+    const summaryReadings=Number(summary.readings);
+    const summaryBadges=Number(summary.badges);
+
+    return {
+      name:firstName,
+      fullName,
+      stars:Number.isFinite(summaryStars)?Math.max(calculatedStars,summaryStars):calculatedStars,
+      completedSteps:Number.isFinite(summarySteps)?Math.max(steps.length,summarySteps):steps.length,
+      games:Number.isFinite(summaryGames)?Math.max(games.length,summaryGames):games.length,
+      readings:Number.isFinite(summaryReadings)?Math.max(readings.length,summaryReadings):readings.length,
+      badges:Number.isFinite(summaryBadges)?Math.max(0,summaryBadges):0
+    };
+  };
+
   const chooseCharacterPhrase=(type,context={})=>{
     const list=characterPhrases[type];
     if(!Array.isArray(list)||!list.length)return '';
     const cursor=reactionCursor[type]||0;
     reactionCursor[type]=cursor+1;
+
+    const personal={...studentContext(),...context};
+    const name=String(personal.name||'').trim();
+    const label=String(personal.label||'').trim();
+    const stars=Math.max(0,Number(personal.stars)||0);
+    const completedSteps=Math.max(0,Number(personal.completedSteps)||0);
+    const games=Math.max(0,Number(personal.games)||0);
+
     let phrase=list[cursor%list.length];
-    const label=String(context.label||'').trim();
-    if(label&&type==='lessonStart')phrase=`${label} dersine başlayalım. Hazırsan ilk adımı atalım.`;
-    if(label&&type==='lessonEnd')phrase=`${label} çalışmasını tamamladın. Harika ilerledin!`;
+
+    if(type==='greeting'&&name){
+      phrase=cursor%2===0
+        ?`Merhaba ${name}! Ben AdımBot. Birlikte küçük adımlarla ilerleyelim.`
+        :`${name}, hazırsan bugün yeni bir şey öğrenelim.`;
+    }
+
+    if(type==='success'&&name){
+      if(stars>=5&&cursor%3===2)phrase=`${name}, ${stars} yıldızın var. Harika ilerliyorsun!`;
+      else phrase=cursor%2===0?`${name}, harika! Doğru yaptın.`:`Süpersin ${name}! Güzel bir iş çıkardın.`;
+    }
+
+    if(type==='motivation'){
+      const prefix=name?`${name}, `:'';
+      if(completedSteps>=5)phrase=`${prefix}${completedSteps} çalışma adımı tamamladın. Harika ilerliyorsun!`;
+      else if(games>=2)phrase=`${prefix}${games} etkinlik tamamladın. Böyle devam!`;
+      else if(stars>0)phrase=`${prefix}${stars} yıldız topladın. Bir küçük adım daha atalım!`;
+      else if(name)phrase=`${name}, hazırsan birlikte yeni bir adım atalım.`;
+    }
+
+    if(label&&type==='lessonStart')phrase=`${name?name+', ':''}${label} dersine başlayalım. Hazırsan ilk adımı atalım.`;
+    if(label&&type==='lessonEnd')phrase=`${name?name+', ':''}${label} çalışmasını tamamladın. Harika ilerledin!`;
     return phrase;
   };
 
@@ -452,6 +527,14 @@
         if(helper&&typeof helper.request==='function')return helper.request();
         return react('help');
       }catch(error){console.error('AdımBot help API hatası:',error);return false;}
+    },
+    motivate:()=>{
+      try{return react('motivation');}
+      catch(error){console.error('AdımBot motivate API hatası:',error);return false;}
+    },
+    context:()=>{
+      try{return {...studentContext()};}
+      catch(_){return {name:'',fullName:'',stars:0,completedSteps:0,games:0,readings:0,badges:0};}
     },
     characterTypes:()=>Object.keys(characterPhrases)
   });

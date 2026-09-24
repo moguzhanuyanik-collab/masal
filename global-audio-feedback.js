@@ -244,6 +244,27 @@
     return rect.width>0&&rect.height>0&&style.display!=='none'&&style.visibility!=='hidden';
   })||null;
 
+  const personalProgress=()=>{
+    try{
+      const context=botApi()?.context?.();
+      return context&&typeof context==='object'
+        ?context
+        :{name:'',stars:0,completedSteps:0,games:0,readings:0,badges:0};
+    }catch(_){
+      return {name:'',stars:0,completedSteps:0,games:0,readings:0,badges:0};
+    }
+  };
+
+  const progressSentence=()=>{
+    const p=personalProgress();
+    const name=String(p.name||'').trim();
+    const prefix=name?name+', ':'';
+    if((Number(p.completedSteps)||0)>=5)return `${prefix}${Number(p.completedSteps)} çalışma adımı tamamladın ve ${Number(p.stars)||0} yıldızın var. Harika ilerliyorsun!`;
+    if((Number(p.games)||0)>=2)return `${prefix}${Number(p.games)} etkinlik tamamladın. ${Number(p.stars)||0} yıldızın var. Böyle devam!`;
+    if((Number(p.stars)||0)>0)return `${prefix}${Number(p.stars)} yıldızın var. Bir küçük adım daha atalım!`;
+    return name?`${name}, ilk yıldızın için birlikte başlayabiliriz.`:'İlk yıldızın için birlikte başlayabiliriz.';
+  };
+
   const helpForScreen=()=>{
     const path=location.pathname.split('/').pop()||'';
     const hash=location.hash||'#/anasayfa';
@@ -275,11 +296,11 @@
     }
 
     if(hash.startsWith('#/profil')){
-      return 'Burası Profil bölümü. Buradan ilerlemeni, ayarlarını ve sana ait bilgileri görebilirsin. Açmak istediğin bölüme dokunabilirsin.';
+      return 'Burası Profil bölümü. '+progressSentence()+' Buradan ilerlemeni, ayarlarını ve sana ait bilgileri görebilirsin.';
     }
 
     if(hash.startsWith('#/anasayfa')||hash==='#/'||hash==='#'){
-      return 'Burası ana sayfa. Derslere, etkinliklere ve diğer bölümlere buradan ulaşabilirsin. Ne yapacağını bilmiyorsan robota dokunarak sesli rehberi de başlatabilirsin.';
+      return progressSentence()+' Burası ana sayfa. Derslere ve etkinliklere buradan ulaşabilirsin. Ne yapacağını bilmiyorsan robota dokunarak sesli rehberi başlatabilirsin.';
     }
 
     return 'Bu ekranda sana görünen başlıkları ve kartları okuyabilirim. Bir kartı açmadan önce ilk dokunuşta ne olduğunu söyleyebilirim. Robota dokunursan adım adım rehber de başlatabilirim.';

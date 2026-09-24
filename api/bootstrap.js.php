@@ -72,6 +72,7 @@ try {
 $flags=JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES;
 echo 'window.LESSONS='.json_encode($lessons,$flags).";\n";
 echo 'window.ILKADIM_CURRENT_USER_ID='.json_encode((int)$user['id'],$flags).";\n";
+echo 'window.ILKADIM_CURRENT_USER_NAME='.json_encode((string)($user['ad_soyad']??''),$flags).";\n";
 echo 'window.ILKADIM_CURRENT_USER_ROLE='.json_encode((string)$user['ana_rol'],$flags).";\n";
 echo 'window.ILKADIM_CURRENT_USER_ROLES='.json_encode(array_values((array)$user['roles']),$flags).";\n";
 echo 'window.ILKADIM_CURRENT_STUDENT_ID='.json_encode($studentId,$flags).";\n";
