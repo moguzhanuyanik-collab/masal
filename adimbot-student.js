@@ -136,7 +136,7 @@
     characterPhrases.motivation[1]
   ];
 
-  let index=0,timer=0,dragging=false,moved=false,pointerId=null,startX=0,startY=0,startLeft=0,startTop=0;
+  let index=0,timer=0,dragging=false,moved=false,pointerId=null,startX=0,startY=0,startLeft=0,startTop=0,manualPosition=false;
   let pendingX=0,pendingY=0,frame=0,activeUtterance=null;
   let activeSpeechToken=0,activeOnEnd=null,activeOnStart=null,speechStarted=false;
   let gestureLoopTimer=0,gestureReleaseTimer=0,settleTimer=0,gestureIndex=0,lastGestureAt=0;
@@ -435,12 +435,11 @@
   };
 
   const viewportBounds=()=>{
-    const vv=window.visualViewport;
-    const left=Number(vv?.offsetLeft)||0;
-    const top=Number(vv?.offsetTop)||0;
-    const width=Math.max(1,Number(vv?.width)||window.innerWidth||1);
-    const height=Math.max(1,Number(vv?.height)||window.innerHeight||1);
-    return {left,top,right:left+width,bottom:top+height,width,height};
+    const left=0;
+    const top=0;
+    const width=Math.max(1,window.innerWidth||document.documentElement.clientWidth||1);
+    const height=Math.max(1,window.innerHeight||document.documentElement.clientHeight||1);
+    return {left,top,right:width,bottom:height,width,height};
   };
 
   const clamp=(left,top)=>{
@@ -562,7 +561,7 @@
 
   const scheduleSafePosition=(delay=90)=>{
     clearTimeout(safePositionTimer);
-    if(pageSuspended||preferences.minimized)return;
+    if(pageSuspended||preferences.minimized||manualPosition)return;
     safePositionTimer=setTimeout(()=>{
       if(!pageSuspended&&!preferences.minimized)ensureSafePosition({save:true});
     },delay);
@@ -571,9 +570,9 @@
   try{
     const saved=JSON.parse(localStorage.getItem(key)||'null');
     if(saved&&Number.isFinite(saved.left)&&Number.isFinite(saved.top)){
+      manualPosition=true;
       requestAnimationFrame(()=>{
         setPosition(saved.left,saved.top,false);
-        scheduleSafePosition(140);
       });
     }else{
       scheduleSafePosition(320);
@@ -613,8 +612,8 @@
     root.classList.remove('adb-is-dragging');
     if(frame){cancelAnimationFrame(frame);frame=0;setPosition(pendingX,pendingY,false);}
     const r=root.getBoundingClientRect();
+    manualPosition=true;
     setPosition(r.left,r.top,true);
-    scheduleSafePosition(80);
     try{stage.releasePointerCapture?.(pointerId);}catch(_){}
     pointerId=null;
     if(!moved){
@@ -638,8 +637,8 @@
     root.classList.remove('adb-is-dragging');
     if(frame){cancelAnimationFrame(frame);frame=0;setPosition(pendingX,pendingY,false);}
     const r=root.getBoundingClientRect();
+    manualPosition=true;
     setPosition(r.left,r.top,true);
-    scheduleSafePosition(80);
     pointerId=null;
   });
 
@@ -669,13 +668,13 @@
   });
 
   window.addEventListener('resize',()=>{
-    if(root.classList.contains('adb-is-hidden'))return;
+    if(root.classList.contains('adb-is-hidden')||manualPosition)return;
     const r=root.getBoundingClientRect();
-    setPosition(r.left,r.top,true);
+    setPosition(r.left,r.top,false);
     scheduleSafePosition(100);
   });
 
-  window.addEventListener('hashchange',()=>scheduleSafePosition(180));
+  window.addEventListener('hashchange',()=>{if(!manualPosition)scheduleSafePosition(180);});
 
   const suspendAdimBot=()=>{
     if(pageSuspended&&root.classList.contains('adb-is-suspended'))return;
@@ -699,7 +698,7 @@
     root.classList.remove('adb-is-suspended');
     refreshVoices();
     try{speech?.resume?.();}catch(_){}
-    scheduleSafePosition(120);
+    if(!manualPosition)scheduleSafePosition(120);
     scheduleIdlePower(8000);
   };
 
@@ -711,15 +710,19 @@
   window.addEventListener('pageshow',()=>resumeAdimBot());
   window.addEventListener('orientationchange',()=>{
     stopSpeaking();
-    scheduleSafePosition(180);
-    setTimeout(()=>scheduleSafePosition(420),420);
+    setTimeout(()=>{
+      const r=root.getBoundingClientRect();
+      setPosition(r.left,r.top,manualPosition);
+      if(!manualPosition)scheduleSafePosition(180);
+    },180);
   });
 
-  window.visualViewport?.addEventListener?.('resize',()=>scheduleSafePosition(100));
-  window.visualViewport?.addEventListener?.('scroll',()=>scheduleSafePosition(80));
+  window.visualViewport?.addEventListener?.('resize',()=>{
+    if(!manualPosition)scheduleSafePosition(100);
+  });
 
   const safeObserver=new MutationObserver(()=>{
-    if(!dragging&&!preferences.minimized)scheduleSafePosition(160);
+    if(!manualPosition&&!dragging&&!preferences.minimized)scheduleSafePosition(160);
   });
   const screen=document.querySelector('#screen');
   if(screen)safeObserver.observe(screen,{subtree:true,childList:true,attributes:true,attributeFilter:['class','open']});

@@ -24,7 +24,7 @@ require_student_login();
   <script src="api/bootstrap.js.php" defer></script>
   <script src="activities-extra.js?v=1.0.31" defer></script>
   <script src="app-runtime.js" defer></script>
-  <script src="adimbot-student.js?v=1.0.98" defer></script>
+  <script src="adimbot-student.js?v=1.1.8" defer></script>
   <script src="global-audio-feedback.js?v=1.1.1" defer></script>
   <script src="adimbot-ai-bridge.js?v=1.1.4" defer></script>
   <script src="adimbot-chat-ui.js?v=1.1.7" defer></script>
