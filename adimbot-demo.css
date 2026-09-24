@@ -49,14 +49,14 @@
 .adb-arm-leftview{
   left:29px;top:152px;width:53px;height:105px;z-index:2;
   background-size:311.76px 272.79px;background-position:-227.58px 0;
-  transform-origin:82% 10%;animation:adbArmLeftIdle 3.8s ease-in-out infinite
+  transform-origin:82% 10%;animation:adbArmLeftIdle 4.4s cubic-bezier(.45,0,.55,1) infinite
 }
 
 /* İzleyenin sağı: sol kol sprite'ı. */
 .adb-arm-rightview{
   left:136px;top:152px;width:67px;height:104px;z-index:2;
   background-size:311.63px 272.68px;background-position:-157.37px 0;
-  transform-origin:18% 10%;animation:adbArmRightIdle 4.1s ease-in-out infinite
+  transform-origin:18% 10%;animation:adbArmRightIdle 4.7s cubic-bezier(.45,0,.55,1) infinite
 }
 
 /* Açık ağız yalnız konuşurken kapalı ağzın tam üstüne gelir. */
@@ -66,7 +66,7 @@
   opacity:0;transform-origin:50% 20%
 }
 .adb-widget.is-speaking .adb-mouth-open{
-  opacity:1;animation:adbMouth .28s ease-in-out infinite alternate
+  opacity:1;animation:adbMouth .32s cubic-bezier(.45,0,.55,1) infinite alternate
 }
 
 /* Kısa blink katmanı; yüzün rengiyle çok kısa süre gözleri kapatır. */
@@ -74,18 +74,18 @@
   position:absolute;z-index:6;top:82px;width:29px;height:22px;
   background:linear-gradient(180deg,#0a1727 0%,#10283e 78%,#12344d 100%);
   border-radius:52% 52% 48% 48%;transform:scaleY(0);transform-origin:50% 0;
-  animation:adbBlink 5s infinite;pointer-events:none
+  animation:adbBlink 6.2s infinite;pointer-events:none
 }
 .adb-lid:after{
   content:"";position:absolute;left:18%;right:18%;bottom:3px;height:7px;
   border-bottom:3px solid #4fd7ff;border-radius:0 0 999px 999px;opacity:.95
 }
 .adb-lid-left{left:69px}
-.adb-lid-right{left:124px;animation-delay:.04s}
+.adb-lid-right{left:124px;animation-delay:.025s}
 
-/* Konuşurken kollar daha belirgin ama küçük açılarla hareket eder. */
-.adb-widget.is-speaking .adb-arm-leftview{animation:adbArmLeftTalk .52s ease-in-out infinite alternate}
-.adb-widget.is-speaking .adb-arm-rightview{animation:adbArmRightTalk .58s ease-in-out infinite alternate}
+/* Konuşurken kollar küçük, asimetrik jestlerle hareket eder. */
+.adb-widget.is-speaking .adb-arm-leftview{animation:adbArmLeftTalk .78s cubic-bezier(.45,0,.55,1) infinite alternate}
+.adb-widget.is-speaking .adb-arm-rightview{animation:adbArmRightTalk .86s cubic-bezier(.45,0,.55,1) infinite alternate}
 
 .adb-drag-chip{
   position:absolute;z-index:20;left:50%;bottom:0;transform:translateX(-50%);
@@ -109,34 +109,39 @@
 .adb-widget.is-hidden{display:none}
 
 @keyframes adbFloat{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-5px)}
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  28%{transform:translateY(-2px) rotate(-.15deg)}
+  56%{transform:translateY(-4px) rotate(.12deg)}
+  78%{transform:translateY(-1px) rotate(-.08deg)}
 }
 @keyframes adbArmLeftIdle{
   0%,100%{transform:rotate(0deg)}
-  35%{transform:rotate(-2.2deg)}
-  68%{transform:rotate(1.2deg)}
+  30%{transform:rotate(-1.1deg)}
+  62%{transform:rotate(.55deg)}
+  82%{transform:rotate(-.3deg)}
 }
 @keyframes adbArmRightIdle{
   0%,100%{transform:rotate(0deg)}
-  42%{transform:rotate(1.8deg)}
-  75%{transform:rotate(-1deg)}
+  34%{transform:rotate(.9deg)}
+  67%{transform:rotate(-.5deg)}
+  86%{transform:rotate(.25deg)}
 }
 @keyframes adbArmLeftTalk{
-  from{transform:rotate(-2deg)}
-  to{transform:rotate(-8deg)}
+  from{transform:rotate(-1deg)}
+  to{transform:rotate(-5.2deg)}
 }
 @keyframes adbArmRightTalk{
-  from{transform:rotate(1deg)}
-  to{transform:rotate(6deg)}
+  from{transform:rotate(.5deg)}
+  to{transform:rotate(4.1deg)}
 }
 @keyframes adbBlink{
-  0%,44%,47%,100%{transform:scaleY(0)}
-  45%,46%{transform:scaleY(1)}
+  0%,57%,60%,100%{transform:scaleY(0)}
+  58%{transform:scaleY(.92)}
+  59%{transform:scaleY(1)}
 }
 @keyframes adbMouth{
-  from{transform:scale(.95,.72)}
-  to{transform:scale(1.03,1.08)}
+  from{transform:scale(.97,.78)}
+  to{transform:scale(1.015,1.04)}
 }
 @keyframes adbPulse{
   0%,100%{transform:scale(.94);opacity:.35}
