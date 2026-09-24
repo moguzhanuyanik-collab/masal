@@ -229,11 +229,13 @@
     '.audio-speech-icon',
     '.tts-button',
     '.listen-button',
-    '[data-speech-kind]',
-    '[data-speech-action]',
-    '[data-tts]',
-    '[data-action="speak"]',
-    '[data-action="speech"]'
+    '[data-speech-kind="activity-card"]',
+    'button[data-speech-action]',
+    'button[data-tts]',
+    'button[data-action="speak"]',
+    'button[data-action="speech"]',
+    'a[data-action="speak"]',
+    'a[data-action="speech"]'
   ].join(',');
 
   const looksLikeLegacySpeaker=el=>{
@@ -243,17 +245,8 @@
 
     const tag=el.tagName;
     if(tag!=='BUTTON'&&tag!=='A'&&el.getAttribute('role')!=='button')return false;
-
-    const aria=clean(el.getAttribute('aria-label'));
-    const title=clean(el.getAttribute('title'));
-    const text=clean(el.textContent);
     const raw=String(el.textContent||'').trim();
-
-    if(/^[🔊🔈🔉🔇]$/.test(raw))return true;
-    if(/[🔊🔈🔉🔇]/.test(raw)&&raw.length<=24)return true;
-
-    const label=(aria+' '+title+' '+text).toLocaleLowerCase('tr-TR');
-    return /(^|\s)(seslendir|sesli oku|metni oku|dinle|hoparlör|hoparlor|sesi dinle)(\s|$)/i.test(label);
+    return /^[🔊🔈🔉🔇]$/.test(raw);
   };
 
   const removeLegacyCardSpeakers=scope=>{

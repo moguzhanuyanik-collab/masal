@@ -1,6 +1,9 @@
-/* İlkAdım V1.0.93 — AdımBot güvenli konum ve tek seslendirme katmanı */
+/* İlkAdım V1.0.94 — AdımBot mobil/PWA stabilizasyonu ve 1.0.93 arayüz düzeltmesi */
 .adb-student-widget{
-  position:fixed;right:18px;bottom:92px;z-index:70;width:184px;
+  position:fixed;
+  right:max(18px,env(safe-area-inset-right));
+  bottom:max(92px,calc(env(safe-area-inset-bottom) + 76px));
+  z-index:70;width:184px;
   font-family:"Inter","Nunito","Segoe UI",system-ui,-apple-system,sans-serif;
   user-select:none;-webkit-user-select:none
 }
@@ -35,7 +38,7 @@
   transform:scale(.38);transform-origin:0 0;overflow:visible
 }
 .adb-sprite{
-  position:absolute;display:block;background-image:url("adimbot/adimbot-atlas.webp?v=1.0.93");
+  position:absolute;display:block;background-image:url("adimbot/adimbot-atlas.webp?v=1.0.94");
   background-repeat:no-repeat;pointer-events:none
 }
 .adb-body{
@@ -131,7 +134,7 @@
 }
 .adb-arm-leftview:after{right:-3px}
 .adb-arm-rightview:after{left:-3px}
-.adb-stage:hover .adb-drag-chip,.adb-student-widget.is-dragging .adb-close{
+.adb-close{
   position:absolute;right:-1px;top:2px;width:27px;height:27px;border:1px solid #e4e9f1;border-radius:50%;
   background:#fff;color:#6c788c;box-shadow:0 6px 18px rgba(33,52,80,.15);
   font:900 16px/1 inherit;cursor:pointer;z-index:30
@@ -191,11 +194,13 @@
 .audio-speech-icon,
 .tts-button,
 .listen-button,
-[data-speech-kind],
-[data-speech-action],
-[data-tts],
-[data-action="speak"],
-[data-action="speech"]{display:none!important}
+[data-speech-kind="activity-card"],
+button[data-speech-action],
+button[data-tts],
+button[data-action="speak"],
+button[data-action="speech"],
+a[data-action="speak"],
+a[data-action="speech"]{display:none!important}
 
 /* Sesli rehber hedefi: layout ve mevcut transformları bozmadan görünür odak. */
 .adb-guide-target{
@@ -345,14 +350,14 @@
   50%{transform:scale(1.06);opacity:.72}
 }
 @media(min-width:1024px){
-  .adb-student-widget{right:30px;bottom:92px;width:196px}
+  .adb-student-widget{right:max(30px,env(safe-area-inset-right));bottom:max(92px,calc(env(safe-area-inset-bottom) + 76px));width:196px}
   .adb-stage{width:96px;height:128px}
   .adb-visual{width:89px;height:120px}
   .adb-robot-canvas{transform:scale(.40)}
   .adb-bubble{font-size:12px;max-width:250px}
 }
 @media(max-width:390px){
-  .adb-student-widget{right:8px;bottom:88px;width:166px}
+  .adb-student-widget{right:max(8px,env(safe-area-inset-right));bottom:max(88px,calc(env(safe-area-inset-bottom) + 72px));width:166px}
   .adb-stage{width:82px;height:112px}
   .adb-visual{width:77px;height:105px}
   .adb-robot-canvas{transform:scale(.35)}

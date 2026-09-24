@@ -419,6 +419,7 @@
     timer=setTimeout(()=>finishSpeech(token,false),Math.max(3500,text.length*120));
 
     try{
+      try{speech.resume?.();}catch(_){}
       speech.speak(utterance);
       return true;
     }catch(error){
@@ -428,11 +429,24 @@
     }
   };
 
+  const viewportBounds=()=>{
+    const vv=window.visualViewport;
+    const left=Number(vv?.offsetLeft)||0;
+    const top=Number(vv?.offsetTop)||0;
+    const width=Math.max(1,Number(vv?.width)||window.innerWidth||1);
+    const height=Math.max(1,Number(vv?.height)||window.innerHeight||1);
+    return {left,top,right:left+width,bottom:top+height,width,height};
+  };
+
   const clamp=(left,top)=>{
     const r=root.getBoundingClientRect();
+    const viewport=viewportBounds();
+    const margin=6;
+    const maxLeft=Math.max(viewport.left+margin,viewport.right-r.width-margin);
+    const maxTop=Math.max(viewport.top+margin,viewport.bottom-r.height-margin);
     return {
-      left:Math.max(6,Math.min(left,window.innerWidth-r.width-6)),
-      top:Math.max(6,Math.min(top,window.innerHeight-r.height-6))
+      left:Math.max(viewport.left+margin,Math.min(left,maxLeft)),
+      top:Math.max(viewport.top+margin,Math.min(top,maxTop))
     };
   };
 
@@ -479,7 +493,8 @@
     if(style.display==='none'||style.visibility==='hidden'||Number(style.opacity)===0)return null;
     const rect=el.getBoundingClientRect();
     if(rect.width<2||rect.height<2)return null;
-    if(rect.bottom<0||rect.top>innerHeight||rect.right<0||rect.left>innerWidth)return null;
+    const viewport=viewportBounds();
+    if(rect.bottom<viewport.top||rect.top>viewport.bottom||rect.right<viewport.left||rect.left>viewport.right)return null;
     return rect;
   };
 
@@ -507,12 +522,14 @@
     if(currentScore===0)return false;
 
     const navRect=visibleRect(document.querySelector('.app-nav'));
+    const viewport=viewportBounds();
     const margin=10;
-    const topSafe=Math.max(10,Math.min(72,innerHeight*.08));
-    const usableBottom=navRect?Math.max(topSafe+robot.height+10,navRect.top-10):innerHeight-10;
+    const topSafe=Math.max(viewport.top+margin,viewport.top+Math.min(72,viewport.height*.08));
+    const viewportBottom=viewport.bottom-margin;
+    const usableBottom=navRect?Math.max(topSafe+robot.height+10,navRect.top-10):viewportBottom;
     const bottomTop=Math.max(topSafe,usableBottom-robot.height);
-    const rightLeft=Math.max(margin,innerWidth-robot.width-margin);
-    const leftLeft=margin;
+    const rightLeft=Math.max(viewport.left+margin,viewport.right-robot.width-margin);
+    const leftLeft=viewport.left+margin;
 
     const candidates=[
       {left:rightLeft,top:bottomTop},
@@ -688,6 +705,43 @@
   });
 
   window.addEventListener('hashchange',()=>scheduleSafePosition(180));
+
+  let pageSuspended=false;
+  const suspendAdimBot=()=>{
+    if(pageSuspended)return;
+    pageSuspended=true;
+    stopSpeaking();
+    clearTimeout(safePositionTimer);
+    if(frame){cancelAnimationFrame(frame);frame=0;}
+    if(dragging){
+      dragging=false;
+      pointerId=null;
+      setState({dragging:false});
+      root.classList.remove('is-dragging');
+    }
+  };
+
+  const resumeAdimBot=()=>{
+    pageSuspended=false;
+    refreshVoices();
+    try{speech?.resume?.();}catch(_){}
+    scheduleSafePosition(120);
+  };
+
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden)suspendAdimBot();
+    else resumeAdimBot();
+  });
+  window.addEventListener('pagehide',suspendAdimBot);
+  window.addEventListener('pageshow',()=>resumeAdimBot());
+  window.addEventListener('orientationchange',()=>{
+    stopSpeaking();
+    scheduleSafePosition(180);
+    setTimeout(()=>scheduleSafePosition(420),420);
+  });
+
+  window.visualViewport?.addEventListener?.('resize',()=>scheduleSafePosition(100));
+  window.visualViewport?.addEventListener?.('scroll',()=>scheduleSafePosition(80));
 
   const safeObserver=new MutationObserver(()=>{
     if(!dragging&&!preferences.minimized)scheduleSafePosition(160);
