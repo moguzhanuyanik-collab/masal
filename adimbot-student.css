@@ -1,4 +1,4 @@
-/* İlkAdım V1.1.6 — AdımBot sohbet erişilebilirlik ve bağlantı geri bildirimi */
+/* İlkAdım V1.1.7 — AdımBot modal odak ve mobil klavye iyileştirmesi */
 .adb-student-widget{
   position:fixed;
   right:max(18px,env(safe-area-inset-right));
@@ -171,10 +171,11 @@ html.adb-chat-open,html.adb-chat-open body{overflow:hidden}
 .adb-chat-modal{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:18px}
 .adb-chat-backdrop{position:absolute;inset:0;background:rgba(18,35,52,.48);backdrop-filter:blur(5px)}
 .adb-chat-dialog{
-  position:relative;width:min(520px,100%);max-height:min(680px,88vh);display:flex;flex-direction:column;
+  position:relative;width:min(520px,100%);max-height:min(680px,88dvh);display:flex;flex-direction:column;
   overflow:hidden;border:1px solid rgba(255,255,255,.72);border-radius:24px;background:#fff;
   box-shadow:0 26px 80px rgba(12,35,60,.34)
 }
+.adb-chat-modal[aria-busy="true"] .adb-chat-suggestions button{opacity:.55;pointer-events:none}
 .adb-chat-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px 16px 12px;border-bottom:1px solid #e8eef5}
 .adb-chat-dialog-head strong{display:block;color:#21354e;font-size:16px}
 .adb-chat-dialog-head small{display:block;margin-top:4px;color:#758399;font-size:10px;line-height:1.4}
@@ -400,7 +401,7 @@ html.adb-chat-open,html.adb-chat-open body{overflow:hidden}
   .adb-robot-canvas{transform:scale(.35)}
   .adb-settings-page{padding:14px 10px 28px}
   .adb-chat-modal{padding:10px}
-  .adb-chat-dialog{max-height:90vh;border-radius:20px}
+  .adb-chat-dialog{max-height:92dvh;border-radius:20px}
 }
 @media(prefers-reduced-motion:reduce){
   .adb-visual,.adb-pulse,.adb-arm-leftview,.adb-arm-rightview,.adb-lid,.adb-mouth-open,.adb-guide-target{animation:none!important}

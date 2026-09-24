@@ -7,6 +7,7 @@
   const MAX_HISTORY=6;
   let modal=null;
   let chatBusy=false;
+  let lastTrigger=null;
 
   const clean=value=>String(value??'').replace(/\s+/g,' ').trim();
 
@@ -127,9 +128,9 @@
     modal.hidden=true;
     modal.innerHTML=[
       '<div class="adb-chat-backdrop" data-adimbot-chat-close></div>',
-      '<section class="adb-chat-dialog" role="dialog" aria-modal="true" aria-labelledby="adb-chat-title">',
+      '<section class="adb-chat-dialog" role="dialog" aria-modal="true" aria-labelledby="adb-chat-title" aria-describedby="adb-chat-desc">',
       '<header class="adb-chat-dialog-head">',
-      '<div><strong id="adb-chat-title">AdımBot ile Sohbet</strong><small>Dersinle ilgili sor. Birlikte düşünüp keşfedelim.</small></div>',
+      '<div><strong id="adb-chat-title">AdımBot ile Sohbet</strong><small id="adb-chat-desc">Dersinle ilgili sor. Birlikte düşünüp keşfedelim.</small></div>',
       '<div class="adb-chat-head-actions"><button type="button" class="adb-chat-clear" data-adimbot-chat-clear>Temizle</button><button type="button" class="adb-chat-close" data-adimbot-chat-close aria-label="Sohbeti kapat">×</button></div>',
       '</header>',
       '<div class="adb-chat-context" data-adimbot-chat-context hidden></div>',
@@ -216,6 +217,7 @@
       }
 
       chatBusy=true;
+      modal.setAttribute('aria-busy','true');
       input.value='';
       if(counter)counter.textContent='0 / 400';
       input.disabled=true;
@@ -240,6 +242,7 @@
         appendMessage(box,'bot','Şu anda yanıt veremedim. İstersen tekrar deneyebilirsin.');
       }finally{
         chatBusy=false;
+        modal.removeAttribute('aria-busy');
         input.disabled=false;
         if(submit)submit.disabled=false;
         if(status)status.textContent=navigator.onLine?'':'İnternet bağlantısı yok. Bağlantı gelince tekrar deneyebilirsin.';
@@ -250,8 +253,11 @@
     return modal;
   };
 
-  const open=()=>{
+  const focusables=()=>modal?[...modal.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[href],[tabindex]:not([tabindex="-1"])')].filter(el=>!el.hidden):[];
+
+  const open=(trigger=null)=>{
     const dialog=buildModal();
+    lastTrigger=trigger instanceof HTMLElement?trigger:document.activeElement instanceof HTMLElement?document.activeElement:null;
     captureContext();
     const contextBadge=dialog.querySelector('[data-adimbot-chat-context]');
     if(contextBadge){
@@ -269,7 +275,11 @@
   const close=()=>{
     if(!modal)return true;
     modal.hidden=true;
+    modal.removeAttribute('aria-busy');
     document.documentElement.classList.remove('adb-chat-open');
+    const target=lastTrigger;
+    lastTrigger=null;
+    setTimeout(()=>target?.focus?.(),0);
     return true;
   };
 
@@ -278,11 +288,27 @@
     if(!trigger)return;
     event.preventDefault();
     event.stopPropagation();
-    open();
+    open(trigger);
   });
 
   document.addEventListener('keydown',event=>{
-    if(event.key==='Escape'&&modal&&!modal.hidden)close();
+    if(!modal||modal.hidden)return;
+    if(event.key==='Escape'){
+      event.preventDefault();
+      close();
+      return;
+    }
+    if(event.key!=='Tab')return;
+    const items=focusables();
+    if(!items.length)return;
+    const first=items[0],last=items[items.length-1];
+    if(event.shiftKey&&document.activeElement===first){
+      event.preventDefault();
+      last.focus();
+    }else if(!event.shiftKey&&document.activeElement===last){
+      event.preventDefault();
+      first.focus();
+    }
   });
 
   window.addEventListener('hashchange',()=>setTimeout(captureContext,80));
