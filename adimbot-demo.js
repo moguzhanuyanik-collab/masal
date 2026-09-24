@@ -4,6 +4,7 @@
   const bubble=root.querySelector('[data-adimbot-bubble]');
   const stage=root.querySelector('[data-adimbot-stage]');
   const close=root.querySelector('[data-adimbot-close]');
+  const mouth=root.querySelector('.adb-mouth-open');
   const key='ilkadim.adimbot.superadmin.position.v1';
   const messages=[
     'Merhaba! Ben AdımBot 👋 Beni istediğin yere sürükleyebilirsin.',
@@ -14,6 +15,11 @@
 
   let index=0,timer=0,dragging=false,moved=false,pointerId=null,startX=0,startY=0,startLeft=0,startTop=0;
   let pendingX=0,pendingY=0,frame=0,activeUtterance=null;
+
+  const resetMouthCadence=()=>{
+    if(!mouth)return;
+    mouth.style.animationDuration='';
+  };
   const speech=('speechSynthesis' in window&&'SpeechSynthesisUtterance' in window)?window.speechSynthesis:null;
   let voices=[];
 
@@ -36,6 +42,7 @@
   const stopSpeaking=()=>{
     clearTimeout(timer);
     activeUtterance=null;
+    resetMouthCadence();
     try{speech?.cancel();}catch(_){}
     root.classList.remove('is-speaking');
   };
@@ -69,6 +76,7 @@
       if(activeUtterance!==utterance)return;
       clearTimeout(timer);
       activeUtterance=null;
+      resetMouthCadence();
       root.classList.remove('is-speaking');
     };
 
@@ -78,6 +86,15 @@
     };
     utterance.onend=finish;
     utterance.onerror=finish;
+    utterance.onboundary=event=>{
+      if(activeUtterance!==utterance||!mouth)return;
+      const charIndex=Number.isFinite(event.charIndex)?event.charIndex:0;
+      const remaining=utterance.text.slice(charIndex);
+      const word=(remaining.match(/^[^\\s.,!?;:]+/)||[''])[0];
+      const base=word.length>=8?.21:word.length<=3?.30:.25;
+      const variation=(charIndex%3)*.015;
+      mouth.style.animationDuration=(base+variation).toFixed(3)+'s';
+    };
 
     root.classList.add('is-speaking');
     timer=setTimeout(finish,Math.max(3500,message.length*120));

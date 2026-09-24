@@ -181,6 +181,6 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
     </div>
   </div>
 </div>
-<script src="adimbot-demo.js?v=1.0.78" defer></script>
+<script src="adimbot-demo.js?v=1.0.78&rev=2" defer></script>
 </body>
 </html>
