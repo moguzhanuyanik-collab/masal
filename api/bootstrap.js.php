@@ -19,6 +19,7 @@ $dbConnected=false;
 $lessons=[];
 $state=null;
 $summary=null;
+$completedSteps=[];
 $error=null;
 
 try {
@@ -58,6 +59,22 @@ try {
     }
 
     $state=load_student_state($pdo,$studentId);
+
+    // Ders verisini değiştirmeden yalnız tamamlanan adım anahtarlarını yayınla.
+    foreach ((array)($state['steps'] ?? []) as $stepKey) {
+        $stepKey=trim((string)$stepKey);
+        if ($stepKey!=='') $completedSteps[$stepKey]=true;
+    }
+    try {
+        $completedStmt=$pdo->prepare('SELECT ders_kodu,modul_indeksi FROM ogrenci_ilerleme WHERE ogrenci_id=? AND tamamlandi=1');
+        $completedStmt->execute([$studentId]);
+        foreach ($completedStmt->fetchAll() as $completedRow) {
+            $code=trim((string)($completedRow['ders_kodu'] ?? ''));
+            $index=(int)($completedRow['modul_indeksi'] ?? -1);
+            if ($code!=='' && $index>=0) $completedSteps[$code.'-'.$index]=true;
+        }
+    } catch (Throwable) {}
+
     $summary=function_exists('student_database_summary')?student_database_summary($pdo,$studentId):null;
     $dbConnected=true;
 } catch (Throwable $e) {
@@ -80,6 +97,7 @@ echo 'window.ILKADIM_CSRF_TOKEN='.json_encode(csrf_token(),$flags).";\n";
 echo 'window.ILKADIM_DB_CONNECTED='.($dbConnected?'true':'false').";\n";
 echo 'window.ILKADIM_DB_ERROR='.json_encode($error,$flags).";\n";
 echo 'window.ILKADIM_DB_SUMMARY='.json_encode($summary,$flags).";\n";
+echo 'window.ILKADIM_COMPLETED_STEPS='.json_encode(array_values(array_keys($completedSteps)),$flags).";\n";
 
 if ($dbConnected&&is_array($state)) {
     echo 'window.ILKADIM_SERVER_STATE='.json_encode($state,$flags).";\n";
