@@ -22,6 +22,7 @@ require_student_login();
   <link rel="stylesheet" href="ogretmenim.css?v=1.0.48">
   <link rel="stylesheet" href="adimbot-student.css?v=1.1.16">
   <script src="api/bootstrap.js.php" defer></script>
+  <script src="completed-question-guard.js?v=1.1.22" defer></script>
   <script src="activities-extra.js?v=1.0.31" defer></script>
   <script src="app-runtime.js" defer></script>
   <script src="adimbot-student.js?v=1.1.21" defer></script>
