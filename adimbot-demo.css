@@ -87,6 +87,14 @@
 .adb-widget.is-speaking .adb-arm-leftview{animation:adbArmLeftTalk .78s cubic-bezier(.45,0,.55,1) infinite alternate}
 .adb-widget.is-speaking .adb-arm-rightview{animation:adbArmRightTalk .86s cubic-bezier(.45,0,.55,1) infinite alternate}
 
+/* Sürükleme sırasında bütün alt animasyonları dondur: parçalar gövdeden kopmuş gibi görünmez. */
+.adb-widget.is-dragging .adb-arm-leftview,
+.adb-widget.is-dragging .adb-arm-rightview,
+.adb-widget.is-dragging .adb-mouth-open,
+.adb-widget.is-dragging .adb-lid{
+  animation-play-state:paused!important
+}
+
 .adb-drag-chip{
   position:absolute;z-index:20;left:50%;bottom:0;transform:translateX(-50%);
   padding:5px 9px;border-radius:999px;background:rgba(18,34,57,.82);color:#fff;
