@@ -67,10 +67,10 @@ function ois_icon(string $type): string {
 <link rel="apple-touch-icon" href="ilkadim-logo-192.png">
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="ogretmenim.css?v=1.0.48">
-<link rel="stylesheet" href="adimbot-student.css?v=1.0.92">
+<link rel="stylesheet" href="adimbot-student.css?v=1.0.93">
 <script src="api/bootstrap.js.php" defer></script>
-<script src="adimbot-student.js?v=1.0.92" defer></script>
-<script src="global-audio-feedback.js?v=1.0.92" defer></script>
+<script src="adimbot-student.js?v=1.0.93" defer></script>
+<script src="global-audio-feedback.js?v=1.0.93" defer></script>
 </head>
 <body>
 <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -215,7 +215,6 @@ function ois_icon(string $type): string {
         <span class="adb-lid adb-lid-right"></span>
         <span class="adb-sprite adb-mouth-open"></span>
       </div>
-      <span class="adb-drag-chip">Sürükle</span>
     </div>
   </div>
   <button class="adb-minimized" type="button" data-adimbot-restore aria-label="AdımBot'u geri aç">🤖</button>

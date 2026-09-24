@@ -457,12 +457,103 @@
     });
   };
 
+  let safePositionTimer=0;
+  const safeSelectors=[
+    '.app-nav',
+    '#screen .answers',
+    '#screen .teacher-question form',
+    '#screen .teacher-option',
+    '#screen .button.primary',
+    '#screen .button.danger',
+    '#screen button[type="submit"]',
+    '#screen input:not([type="hidden"])',
+    '#screen select',
+    '#screen textarea',
+    'dialog[open]',
+    '.confirm-dialog[open]'
+  ].join(',');
+
+  const visibleRect=el=>{
+    if(!(el instanceof Element)||el.closest('[data-adimbot-student]'))return null;
+    const style=getComputedStyle(el);
+    if(style.display==='none'||style.visibility==='hidden'||Number(style.opacity)===0)return null;
+    const rect=el.getBoundingClientRect();
+    if(rect.width<2||rect.height<2)return null;
+    if(rect.bottom<0||rect.top>innerHeight||rect.right<0||rect.left>innerWidth)return null;
+    return rect;
+  };
+
+  const overlapArea=(a,b)=>{
+    const width=Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left));
+    const height=Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
+    return width*height;
+  };
+
+  const ensureSafePosition=({save=true}={})=>{
+    if(dragging||preferences.minimized||root.classList.contains('is-hidden'))return false;
+    const robot=root.getBoundingClientRect();
+    if(robot.width<2||robot.height<2)return false;
+
+    const obstacles=[...document.querySelectorAll(safeSelectors)]
+      .map(visibleRect)
+      .filter(Boolean);
+    if(!obstacles.length)return false;
+
+    const current={
+      left:robot.left,top:robot.top,right:robot.right,bottom:robot.bottom,
+      width:robot.width,height:robot.height
+    };
+    const currentScore=obstacles.reduce((sum,rect)=>sum+overlapArea(current,rect),0);
+    if(currentScore===0)return false;
+
+    const navRect=visibleRect(document.querySelector('.app-nav'));
+    const margin=10;
+    const topSafe=Math.max(10,Math.min(72,innerHeight*.08));
+    const usableBottom=navRect?Math.max(topSafe+robot.height+10,navRect.top-10):innerHeight-10;
+    const bottomTop=Math.max(topSafe,usableBottom-robot.height);
+    const rightLeft=Math.max(margin,innerWidth-robot.width-margin);
+    const leftLeft=margin;
+
+    const candidates=[
+      {left:rightLeft,top:bottomTop},
+      {left:leftLeft,top:bottomTop},
+      {left:rightLeft,top:topSafe},
+      {left:leftLeft,top:topSafe}
+    ].map(p=>{
+      const clamped=clamp(p.left,p.top);
+      const rect={
+        left:clamped.left,top:clamped.top,
+        right:clamped.left+robot.width,bottom:clamped.top+robot.height,
+        width:robot.width,height:robot.height
+      };
+      return {
+        ...clamped,
+        score:obstacles.reduce((sum,o)=>sum+overlapArea(rect,o),0)
+      };
+    }).sort((a,b)=>a.score-b.score);
+
+    const best=candidates[0];
+    if(!best||best.score>=currentScore)return false;
+    setPosition(best.left,best.top,save);
+    return true;
+  };
+
+  const scheduleSafePosition=(delay=90)=>{
+    clearTimeout(safePositionTimer);
+    safePositionTimer=setTimeout(()=>ensureSafePosition({save:true}),delay);
+  };
+
   try{
     const saved=JSON.parse(localStorage.getItem(key)||'null');
     if(saved&&Number.isFinite(saved.left)&&Number.isFinite(saved.top)){
-      requestAnimationFrame(()=>setPosition(saved.left,saved.top,false));
+      requestAnimationFrame(()=>{
+        setPosition(saved.left,saved.top,false);
+        scheduleSafePosition(140);
+      });
+    }else{
+      scheduleSafePosition(320);
     }
-  }catch(_){}
+  }catch(_){scheduleSafePosition(320);}
 
   stage?.addEventListener('pointerdown',event=>{
     if(event.target.closest('button,input,select,label,[data-adimbot-settings-panel]'))return;
@@ -498,6 +589,7 @@
     if(frame){cancelAnimationFrame(frame);frame=0;setPosition(pendingX,pendingY,false);}
     const r=root.getBoundingClientRect();
     setPosition(r.left,r.top,true);
+    scheduleSafePosition(80);
     try{stage.releasePointerCapture?.(pointerId);}catch(_){}
     pointerId=null;
     if(!moved){
@@ -522,6 +614,7 @@
     if(frame){cancelAnimationFrame(frame);frame=0;setPosition(pendingX,pendingY,false);}
     const r=root.getBoundingClientRect();
     setPosition(r.left,r.top,true);
+    scheduleSafePosition(80);
     pointerId=null;
   });
 
@@ -591,7 +684,16 @@
     if(root.classList.contains('is-hidden'))return;
     const r=root.getBoundingClientRect();
     setPosition(r.left,r.top,true);
+    scheduleSafePosition(100);
   });
+
+  window.addEventListener('hashchange',()=>scheduleSafePosition(180));
+
+  const safeObserver=new MutationObserver(()=>{
+    if(!dragging&&!preferences.minimized)scheduleSafePosition(160);
+  });
+  const screen=document.querySelector('#screen');
+  if(screen)safeObserver.observe(screen,{subtree:true,childList:true,attributes:true,attributeFilter:['class','open']});
 
   document.addEventListener('click',event=>{
     if(!root.classList.contains('is-settings-open'))return;
@@ -631,6 +733,7 @@
     setSound:enabled=>{try{return setSound(enabled);}catch(_){return false;}},
     setRate:value=>{try{return setRate(value);}catch(_){return false;}},
     getSettings:()=>({...preferences}),
+    ensureSafePosition:()=>{try{return ensureSafePosition({save:true});}catch(_){return false;}},
     isReady:()=>state.ready===true,
     getState:()=>({...state}),
     setGuideMode:active=>{

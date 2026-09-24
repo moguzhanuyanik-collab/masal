@@ -222,8 +222,48 @@
     return composed||clean(card.getAttribute?.('aria-label'))||clean(card.textContent);
   };
 
+  const legacySpeakerSelector=[
+    '.activity-speech-icon',
+    '.speech-icon',
+    '.speaker-icon',
+    '.audio-speech-icon',
+    '.tts-button',
+    '.listen-button',
+    '[data-speech-kind]',
+    '[data-speech-action]',
+    '[data-tts]',
+    '[data-action="speak"]',
+    '[data-action="speech"]'
+  ].join(',');
+
+  const looksLikeLegacySpeaker=el=>{
+    if(!(el instanceof Element))return false;
+    if(el.closest('[data-adimbot-student]'))return false;
+    if(el.matches?.(legacySpeakerSelector))return true;
+
+    const tag=el.tagName;
+    if(tag!=='BUTTON'&&tag!=='A'&&el.getAttribute('role')!=='button')return false;
+
+    const aria=clean(el.getAttribute('aria-label'));
+    const title=clean(el.getAttribute('title'));
+    const text=clean(el.textContent);
+    const raw=String(el.textContent||'').trim();
+
+    if(/^[🔊🔈🔉🔇]$/.test(raw))return true;
+    if(/[🔊🔈🔉🔇]/.test(raw)&&raw.length<=24)return true;
+
+    const label=(aria+' '+title+' '+text).toLocaleLowerCase('tr-TR');
+    return /(^|\s)(seslendir|sesli oku|metni oku|dinle|hoparlör|hoparlor|sesi dinle)(\s|$)/i.test(label);
+  };
+
   const removeLegacyCardSpeakers=scope=>{
-    (scope||document).querySelectorAll?.('.activity-speech-icon,[data-speech-kind="activity-card"]').forEach(el=>el.remove());
+    const rootScope=scope&&scope.querySelectorAll?scope:document;
+    rootScope.querySelectorAll?.(legacySpeakerSelector).forEach(el=>{
+      if(!el.closest('[data-adimbot-student]'))el.remove();
+    });
+    rootScope.querySelectorAll?.('button,a,[role="button"]').forEach(el=>{
+      if(looksLikeLegacySpeaker(el))el.remove();
+    });
   };
 
   const clearGuideTarget=()=>{
@@ -561,7 +601,10 @@
         }
       }
     }
-    if(needsDecorate)requestAnimationFrame(()=>{removeLegacyCardSpeakers(document);decorateActivities();});
+    if(needsDecorate)requestAnimationFrame(()=>{
+      removeLegacyCardSpeakers(document);
+      decorateActivities();
+    });
   });
 
   const start=()=>{
