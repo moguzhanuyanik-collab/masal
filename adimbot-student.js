@@ -16,7 +16,7 @@
   let index=0,timer=0,dragging=false,moved=false,pointerId=null,startX=0,startY=0,startLeft=0,startTop=0;
   let pendingX=0,pendingY=0,frame=0,activeUtterance=null;
   let activeSpeechToken=0,activeOnEnd=null,activeOnStart=null,speechStarted=false;
-  let gestureLoopTimer=0,gestureReleaseTimer=0,gestureIndex=0,lastGestureAt=0;
+  let gestureLoopTimer=0,gestureReleaseTimer=0,settleTimer=0,gestureIndex=0,lastGestureAt=0;
   const state={ready:true,speaking:false,dragging:false,hidden:false};
 
   const emitState=()=>{
@@ -35,16 +35,23 @@
   const clearSpeechGestures=()=>{
     clearTimeout(gestureLoopTimer);
     clearTimeout(gestureReleaseTimer);
-    root.classList.remove(...gestureClasses);
+    clearTimeout(settleTimer);
+    root.classList.remove(...gestureClasses,'adb-speech-settle');
   };
 
-  const triggerSpeechGesture=()=>{
+  const triggerSpeechGesture=(preferred='auto',force=false)=>{
     if(dragging||!root.classList.contains('is-speaking'))return;
     const now=performance.now();
-    if(now-lastGestureAt<1050)return;
+    if(!force&&now-lastGestureAt<880)return;
     lastGestureAt=now;
     root.classList.remove(...gestureClasses);
-    const gesture=gestureClasses[gestureIndex%gestureClasses.length];
+
+    let gesture;
+    if(preferred==='left')gesture='adb-gesture-left';
+    else if(preferred==='right')gesture='adb-gesture-right';
+    else if(preferred==='open')gesture='adb-gesture-open';
+    else gesture=gestureClasses[gestureIndex%gestureClasses.length];
+
     gestureIndex++;
     void root.offsetWidth;
     root.classList.add(gesture);
@@ -66,6 +73,25 @@
   const resetMouthCadence=()=>{
     if(!mouth)return;
     mouth.style.animationDuration='';
+    mouth.style.removeProperty('--adb-mouth-open-y');
+    mouth.style.removeProperty('--adb-mouth-mid-y');
+  };
+
+  const tuneMouthForWord=(word,charIndex)=>{
+    if(!mouth||!word)return;
+    const letters=word.replace(/[^A-Za-zÇĞİÖŞÜçğıöşü]/g,'');
+    const length=Math.max(1,letters.length);
+    const vowels=(letters.match(/[aeıioöuüAEIİOÖUÜ]/g)||[]).length;
+    const vowelRatio=vowels/length;
+
+    const base=length>=9?.205:length<=2?.31:length<=4?.275:.24;
+    const variation=(charIndex%4)*.01;
+    const openness=Math.min(1.10,Math.max(.86,.88+(vowelRatio*.18)+(length>=7?.045:0)));
+    const middle=Math.max(.82,openness-.12);
+
+    mouth.style.animationDuration=(base+variation).toFixed(3)+'s';
+    mouth.style.setProperty('--adb-mouth-open-y',openness.toFixed(3));
+    mouth.style.setProperty('--adb-mouth-mid-y',middle.toFixed(3));
   };
   const speech=('speechSynthesis' in window&&'SpeechSynthesisUtterance' in window)?window.speechSynthesis:null;
   let voices=[];
@@ -97,6 +123,10 @@
     resetMouthCadence();
     clearSpeechGestures();
     root.classList.remove('is-speaking');
+    if(!cancelled&&!dragging){
+      root.classList.add('adb-speech-settle');
+      settleTimer=setTimeout(()=>root.classList.remove('adb-speech-settle'),460);
+    }
     setState({speaking:false});
     if(typeof done==='function'){
       try{done({cancelled});}catch(error){console.error('AdımBot onEnd hatası:',error);}
@@ -108,9 +138,11 @@
     speechStarted=true;
     root.classList.add('is-speaking');
     setState({speaking:true});
-    gestureIndex=(activeUtterance?.text?.length||0)%gestureClasses.length;
+    const spokenText=activeUtterance?.text||'';
+    gestureIndex=spokenText.length%gestureClasses.length;
     lastGestureAt=0;
-    triggerSpeechGesture();
+    const openingGesture=/\?$/.test(spokenText)?'open':/!$/.test(spokenText)?'right':'open';
+    triggerSpeechGesture(openingGesture,true);
     if(activeUtterance)scheduleSpeechGestures(activeUtterance);
     if(typeof activeOnStart==='function'){
       try{activeOnStart();}catch(error){console.error('AdımBot onStart hatası:',error);}
@@ -171,11 +203,15 @@
       const charIndex=Number.isFinite(event.charIndex)?event.charIndex:0;
       const remaining=utterance.text.slice(charIndex);
       const word=(remaining.match(/^[^\\s.,!?;:]+/)||[''])[0];
-      const base=word.length>=8?.21:word.length<=3?.30:.25;
-      const variation=(charIndex%3)*.015;
-      mouth.style.animationDuration=(base+variation).toFixed(3)+'s';
-      const afterWord=utterance.text.slice(charIndex+word.length,charIndex+word.length+2);
-      if(word.length>=7||/[,.!?;:]/.test(afterWord))triggerSpeechGesture();
+      if(!word)return;
+
+      tuneMouthForWord(word,charIndex);
+
+      const afterWord=utterance.text.slice(charIndex+word.length,charIndex+word.length+3);
+      if(/\?/.test(afterWord))triggerSpeechGesture('open');
+      else if(/!/.test(afterWord))triggerSpeechGesture(gestureIndex%2?'right':'left');
+      else if(/[,;:]/.test(afterWord))triggerSpeechGesture(gestureIndex%2?'left':'right');
+      else if(word.length>=8)triggerSpeechGesture(gestureIndex%2?'right':'left');
     };
 
     beginSpeech(token);

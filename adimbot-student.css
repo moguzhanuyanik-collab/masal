@@ -1,4 +1,4 @@
-/* İlkAdım V1.0.81 — Öğrenci AdımBot izole konuşma prototipi */
+/* İlkAdım V1.0.85 — AdımBot doğal konuşma ritmi ve vurgu jestleri */
 .adb-student-widget{
   position:fixed;right:18px;bottom:92px;z-index:70;width:184px;
   font-family:"Inter","Nunito","Segoe UI",system-ui,-apple-system,sans-serif;
@@ -35,7 +35,7 @@
   transform:scale(.38);transform-origin:0 0;overflow:visible
 }
 .adb-sprite{
-  position:absolute;display:block;background-image:url("adimbot/adimbot-atlas.webp?v=1.0.81");
+  position:absolute;display:block;background-image:url("adimbot/adimbot-atlas.webp?v=1.0.85");
   background-repeat:no-repeat;pointer-events:none
 }
 .adb-body{
@@ -58,8 +58,10 @@
   opacity:0;transform-origin:50% 20%
 }
 .adb-student-widget.is-speaking .adb-mouth-open{
-  opacity:1;animation:adbMouth .32s cubic-bezier(.45,0,.55,1) infinite alternate
+  opacity:1;animation:adbMouth .32s cubic-bezier(.42,0,.58,1) infinite alternate;
+  will-change:transform
 }
+.adb-student-widget.is-speaking .adb-pulse{animation-duration:1.9s}
 .adb-lid{
   position:absolute;z-index:6;top:84px;width:28px;height:16px;
   background:linear-gradient(180deg,#0b1a2b 0%,#10283e 72%,#12344d 100%);
@@ -80,6 +82,8 @@
 .adb-student-widget.adb-gesture-right .adb-arm-rightview{animation:adbGestureRight .72s cubic-bezier(.22,.75,.25,1) 1 both}
 .adb-student-widget.adb-gesture-open .adb-arm-leftview{animation:adbGestureOpenLeft .76s cubic-bezier(.22,.75,.25,1) 1 both}
 .adb-student-widget.adb-gesture-open .adb-arm-rightview{animation:adbGestureOpenRight .82s cubic-bezier(.22,.75,.25,1) 1 both}
+.adb-student-widget.adb-speech-settle .adb-arm-leftview{animation:adbSpeechSettleLeft .46s cubic-bezier(.2,.7,.25,1) 1 both}
+.adb-student-widget.adb-speech-settle .adb-arm-rightview{animation:adbSpeechSettleRight .46s cubic-bezier(.2,.7,.25,1) 1 both}
 
 .adb-student-widget.is-dragging .adb-arm-leftview,
 .adb-student-widget.is-dragging .adb-arm-rightview,
@@ -175,6 +179,16 @@
   74%{transform:rotate(2.3deg) translateY(-.4px)}
   100%{transform:rotate(.4deg) translateY(0)}
 }
+@keyframes adbSpeechSettleLeft{
+  0%{transform:rotate(-1.25deg) translateY(-.35px)}
+  52%{transform:rotate(.18deg) translateY(.1px)}
+  100%{transform:rotate(0deg) translateY(0)}
+}
+@keyframes adbSpeechSettleRight{
+  0%{transform:rotate(1.15deg) translateY(-.3px)}
+  52%{transform:rotate(-.16deg) translateY(.08px)}
+  100%{transform:rotate(0deg) translateY(0)}
+}
 @keyframes adbBlink{
   0%,57.2%,59.5%,100%{transform:scaleY(0)}
   57.65%{transform:scaleY(.62)}
@@ -183,10 +197,10 @@
   59.05%{transform:scaleY(.18)}
 }
 @keyframes adbMouth{
-  0%{transform:scale(.98,.78)}
-  32%{transform:scale(1.01,.96)}
-  68%{transform:scale(.99,.86)}
-  100%{transform:scale(1.015,1.04)}
+  0%{transform:scale(.98,.72)}
+  30%{transform:scale(1.01,var(--adb-mouth-open-y,1.00))}
+  64%{transform:scale(.995,var(--adb-mouth-mid-y,.88))}
+  100%{transform:scale(1.012,var(--adb-mouth-open-y,1.00))}
 }
 @keyframes adbPulse{
   0%,100%{transform:scale(.94);opacity:.35}
