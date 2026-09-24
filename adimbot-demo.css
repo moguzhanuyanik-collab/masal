@@ -1,4 +1,4 @@
-/* İlkAdım V1.0.76 — AdımBot kompakt Süper Admin prototipi */
+/* İlkAdım V1.0.80 — AdımBot doğal konuşma jestleri prototipi */
 .adb-widget{
   position:fixed;right:18px;bottom:92px;z-index:70;width:184px;
   font-family:"Inter","Nunito","Segoe UI",system-ui,-apple-system,sans-serif;
@@ -83,9 +83,13 @@
 .adb-lid-left{left:69px}
 .adb-lid-right{left:124px;animation-delay:.025s}
 
-/* Konuşurken kollar küçük, asimetrik jestlerle hareket eder. */
-.adb-widget.is-speaking .adb-arm-leftview{animation:adbArmLeftTalk .78s cubic-bezier(.45,0,.55,1) infinite alternate}
-.adb-widget.is-speaking .adb-arm-rightview{animation:adbArmRightTalk .86s cubic-bezier(.45,0,.55,1) infinite alternate}
+/* Konuşurken kollar sürekli sallanmaz; sakin bekler, vurgu anlarında kısa jest yapar. */
+.adb-widget.is-speaking .adb-arm-leftview{animation:adbArmLeftSpeechRest 3.2s ease-in-out infinite}
+.adb-widget.is-speaking .adb-arm-rightview{animation:adbArmRightSpeechRest 3.7s ease-in-out infinite}
+.adb-widget.adb-gesture-left .adb-arm-leftview{animation:adbGestureLeft .72s cubic-bezier(.22,.75,.25,1) 1 both}
+.adb-widget.adb-gesture-right .adb-arm-rightview{animation:adbGestureRight .72s cubic-bezier(.22,.75,.25,1) 1 both}
+.adb-widget.adb-gesture-open .adb-arm-leftview{animation:adbGestureOpenLeft .76s cubic-bezier(.22,.75,.25,1) 1 both}
+.adb-widget.adb-gesture-open .adb-arm-rightview{animation:adbGestureOpenRight .82s cubic-bezier(.22,.75,.25,1) 1 both}
 
 /* Sürükleme sırasında bütün alt animasyonları dondur: parçalar gövdeden kopmuş gibi görünmez. */
 .adb-widget.is-dragging .adb-arm-leftview,
@@ -147,17 +151,37 @@
   67%{transform:rotate(-.4deg)}
   86%{transform:rotate(.2deg)}
 }
-@keyframes adbArmLeftTalk{
-  0%{transform:rotate(-.8deg)}
-  38%{transform:rotate(-3.1deg)}
-  72%{transform:rotate(-4.6deg)}
-  100%{transform:rotate(-2.4deg)}
+@keyframes adbArmLeftSpeechRest{
+  0%,100%{transform:rotate(-.25deg)}
+  52%{transform:rotate(-.9deg)}
 }
-@keyframes adbArmRightTalk{
-  0%{transform:rotate(.4deg)}
-  33%{transform:rotate(2.5deg)}
-  69%{transform:rotate(3.6deg)}
-  100%{transform:rotate(1.7deg)}
+@keyframes adbArmRightSpeechRest{
+  0%,100%{transform:rotate(.2deg)}
+  48%{transform:rotate(.75deg)}
+}
+@keyframes adbGestureLeft{
+  0%{transform:rotate(-.4deg)}
+  32%{transform:rotate(-5.1deg)}
+  60%{transform:rotate(-3.8deg)}
+  100%{transform:rotate(-.55deg)}
+}
+@keyframes adbGestureRight{
+  0%{transform:rotate(.35deg)}
+  34%{transform:rotate(4.7deg)}
+  63%{transform:rotate(3.2deg)}
+  100%{transform:rotate(.45deg)}
+}
+@keyframes adbGestureOpenLeft{
+  0%{transform:rotate(-.3deg)}
+  36%{transform:rotate(-4.2deg)}
+  68%{transform:rotate(-2.7deg)}
+  100%{transform:rotate(-.45deg)}
+}
+@keyframes adbGestureOpenRight{
+  0%{transform:rotate(.25deg)}
+  40%{transform:rotate(3.9deg)}
+  70%{transform:rotate(2.5deg)}
+  100%{transform:rotate(.4deg)}
 }
 @keyframes adbBlink{
   0%,57.2%,59.5%,100%{transform:scaleY(0)}

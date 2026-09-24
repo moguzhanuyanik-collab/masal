@@ -15,6 +15,39 @@
 
   let index=0,timer=0,dragging=false,moved=false,pointerId=null,startX=0,startY=0,startLeft=0,startTop=0;
   let pendingX=0,pendingY=0,frame=0,activeUtterance=null;
+  let gestureLoopTimer=0,gestureReleaseTimer=0,gestureIndex=0,lastGestureAt=0;
+  const gestureClasses=['adb-gesture-left','adb-gesture-right','adb-gesture-open'];
+
+  const clearSpeechGestures=()=>{
+    clearTimeout(gestureLoopTimer);
+    clearTimeout(gestureReleaseTimer);
+    root.classList.remove(...gestureClasses);
+  };
+
+  const triggerSpeechGesture=()=>{
+    if(dragging||!root.classList.contains('is-speaking'))return;
+    const now=performance.now();
+    if(now-lastGestureAt<1050)return;
+    lastGestureAt=now;
+    root.classList.remove(...gestureClasses);
+    const gesture=gestureClasses[gestureIndex%gestureClasses.length];
+    gestureIndex++;
+    void root.offsetWidth;
+    root.classList.add(gesture);
+    clearTimeout(gestureReleaseTimer);
+    gestureReleaseTimer=setTimeout(()=>root.classList.remove(gesture),760);
+  };
+
+  const scheduleSpeechGestures=utterance=>{
+    clearTimeout(gestureLoopTimer);
+    const delays=[1250,1750,1450,2050];
+    const run=()=>{
+      if(activeUtterance!==utterance||dragging)return;
+      triggerSpeechGesture();
+      gestureLoopTimer=setTimeout(run,delays[gestureIndex%delays.length]);
+    };
+    gestureLoopTimer=setTimeout(run,900);
+  };
 
   const resetMouthCadence=()=>{
     if(!mouth)return;
@@ -43,6 +76,7 @@
     clearTimeout(timer);
     activeUtterance=null;
     resetMouthCadence();
+    clearSpeechGestures();
     try{speech?.cancel();}catch(_){}
     root.classList.remove('is-speaking');
   };
@@ -57,7 +91,12 @@
 
     if(!speech){
       root.classList.add('is-speaking');
-      timer=setTimeout(()=>root.classList.remove('is-speaking'),1700);
+      lastGestureAt=0;
+      triggerSpeechGesture();
+      timer=setTimeout(()=>{
+        clearSpeechGestures();
+        root.classList.remove('is-speaking');
+      },1700);
       return;
     }
 
@@ -77,12 +116,17 @@
       clearTimeout(timer);
       activeUtterance=null;
       resetMouthCadence();
+      clearSpeechGestures();
       root.classList.remove('is-speaking');
     };
 
     utterance.onstart=()=>{
       if(activeUtterance!==utterance)return;
+      gestureIndex=utterance.text.length%gestureClasses.length;
+      lastGestureAt=0;
       root.classList.add('is-speaking');
+      triggerSpeechGesture();
+      scheduleSpeechGestures(utterance);
     };
     utterance.onend=finish;
     utterance.onerror=finish;
@@ -94,6 +138,8 @@
       const base=word.length>=8?.21:word.length<=3?.30:.25;
       const variation=(charIndex%3)*.015;
       mouth.style.animationDuration=(base+variation).toFixed(3)+'s';
+      const afterWord=utterance.text.slice(charIndex+word.length,charIndex+word.length+2);
+      if(word.length>=7||/[,.!?;:]/.test(afterWord))triggerSpeechGesture();
     };
 
     root.classList.add('is-speaking');
@@ -105,7 +151,12 @@
       activeUtterance=null;
       clearTimeout(timer);
       root.classList.add('is-speaking');
-      timer=setTimeout(()=>root.classList.remove('is-speaking'),1700);
+      lastGestureAt=0;
+      triggerSpeechGesture();
+      timer=setTimeout(()=>{
+        clearSpeechGestures();
+        root.classList.remove('is-speaking');
+      },1700);
     }
   };
 

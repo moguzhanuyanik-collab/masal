@@ -39,7 +39,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
 <meta name="theme-color" content="#f7f7fb">
 <title>Süper Admin — İlkAdım</title>
 <link rel="stylesheet" href="super-admin.css?v=1.0.72">
-<link rel="stylesheet" href="adimbot-demo.css?v=1.0.78&rev=3">
+<link rel="stylesheet" href="adimbot-demo.css?v=1.0.80&rev=4">
 </head>
 <body class="sa-page">
 <svg class="sa-icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -181,6 +181,6 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
     </div>
   </div>
 </div>
-<script src="adimbot-demo.js?v=1.0.78&rev=2" defer></script>
+<script src="adimbot-demo.js?v=1.0.80&rev=3" defer></script>
 </body>
 </html>
