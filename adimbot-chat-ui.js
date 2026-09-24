@@ -3,6 +3,8 @@
   if (window.AdimBotChatUI) return;
 
   const CONTEXT_KEY='ilkadim.adimbot.chat.context.v1';
+  const HISTORY_KEY='ilkadim.adimbot.chat.history.v1';
+  const MAX_HISTORY=6;
   let modal=null;
   let chatBusy=false;
 
@@ -71,6 +73,37 @@
     box.scrollTop=box.scrollHeight;
   };
 
+  const readHistory=()=>{
+    try{
+      const raw=JSON.parse(sessionStorage.getItem(HISTORY_KEY)||'[]');
+      if(!Array.isArray(raw))return [];
+      return raw
+        .filter(item=>item&&['user','assistant'].includes(item.role)&&clean(item.text))
+        .slice(-MAX_HISTORY)
+        .map(item=>({role:item.role,text:clean(item.text).slice(0,300)}));
+    }catch(_){return [];}
+  };
+
+  const writeHistory=history=>{
+    const safe=(Array.isArray(history)?history:[])
+      .filter(item=>item&&['user','assistant'].includes(item.role)&&clean(item.text))
+      .slice(-MAX_HISTORY)
+      .map(item=>({role:item.role,text:clean(item.text).slice(0,300)}));
+    try{sessionStorage.setItem(HISTORY_KEY,JSON.stringify(safe));}catch(_){}
+    return safe;
+  };
+
+  const remember=(role,text)=>writeHistory([...readHistory(),{role,text}]);
+
+  const clearHistory=()=>{
+    try{sessionStorage.removeItem(HISTORY_KEY);}catch(_){}
+    const box=modal?.querySelector('[data-adimbot-chat-messages]');
+    if(box){
+      box.innerHTML='';
+      appendMessage(box,'bot','Yeni bir sohbet başlattık. Dersinle ilgili merak ettiğin bir şeyi sorabilirsin.');
+    }
+  };
+
   const buildModal=()=>{
     if(modal)return modal;
 
@@ -83,7 +116,7 @@
       '<section class="adb-chat-dialog" role="dialog" aria-modal="true" aria-labelledby="adb-chat-title">',
       '<header class="adb-chat-dialog-head">',
       '<div><strong id="adb-chat-title">AdımBot ile Sohbet</strong><small>Dersinle ilgili sor. Birlikte düşünüp keşfedelim.</small></div>',
-      '<button type="button" class="adb-chat-close" data-adimbot-chat-close aria-label="Sohbeti kapat">×</button>',
+      '<div class="adb-chat-head-actions"><button type="button" class="adb-chat-clear" data-adimbot-chat-clear>Temizle</button><button type="button" class="adb-chat-close" data-adimbot-chat-close aria-label="Sohbeti kapat">×</button></div>',
       '</header>',
       '<div class="adb-chat-messages" data-adimbot-chat-messages aria-live="polite"></div>',
       '<form class="adb-chat-form" data-adimbot-chat-form>',
@@ -101,7 +134,14 @@
     const input=modal.querySelector('[data-adimbot-chat-input]');
     const status=modal.querySelector('[data-adimbot-chat-status]');
 
-    appendMessage(box,'bot','Merhaba! Dersinle ilgili merak ettiğin bir şeyi sorabilirsin.');
+    const savedHistory=readHistory();
+    if(savedHistory.length){
+      savedHistory.forEach(item=>appendMessage(box,item.role==='assistant'?'bot':'user',item.text));
+    }else{
+      appendMessage(box,'bot','Merhaba! Dersinle ilgili merak ettiğin bir şeyi sorabilirsin.');
+    }
+
+    modal.querySelector('[data-adimbot-chat-clear]')?.addEventListener('click',clearHistory);
 
     modal.querySelectorAll('[data-adimbot-chat-close]').forEach(el=>{
       el.addEventListener('click',()=>close());
@@ -120,15 +160,19 @@
       const submit=form.querySelector('button[type="submit"]');
       if(submit)submit.disabled=true;
       if(status)status.textContent='AdımBot düşünüyor...';
+      const historyBefore=readHistory();
       appendMessage(box,'user',message);
+      remember('user',message);
 
       try{
         const ai=window.AdimBotAI;
         if(!ai||typeof ai.askAndSpeak!=='function'){
           appendMessage(box,'bot','AdımBot yapay zekâ bağlantısı henüz hazır değil.');
         }else{
-          const result=await ai.askAndSpeak(message,currentContext());
-          appendMessage(box,'bot',result?.text||'Şu anda yanıt oluşturamadım.');
+          const result=await ai.askAndSpeak(message,currentContext(),historyBefore);
+          const reply=result?.text||'Şu anda yanıt oluşturamadım.';
+          appendMessage(box,'bot',reply);
+          remember('assistant',reply);
         }
       }catch(_){
         appendMessage(box,'bot','Şu anda yanıt veremedim. İstersen tekrar deneyebilirsin.');
@@ -176,5 +220,5 @@
   document.addEventListener('DOMContentLoaded',()=>setTimeout(captureContext,80),{once:true});
   setTimeout(captureContext,80);
 
-  window.AdimBotChatUI=Object.freeze({open,close,captureContext,currentContext});
+  window.AdimBotChatUI=Object.freeze({open,close,clearHistory,captureContext,currentContext,history:()=>readHistory().map(item=>({...item}))});
 })();

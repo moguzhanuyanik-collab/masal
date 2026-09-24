@@ -3,7 +3,7 @@
   if (window.AdimBotAI) return;
 
   const POLICY = Object.freeze({
-    version: '1.1.2',
+    version: '1.1.4',
     childMode: true,
     gradeLevel: 1,
     maxInputChars: 400,
@@ -88,7 +88,20 @@
     return Object.freeze(safe);
   };
 
-  const prepareRequest = (message, context = {}) => {
+  const sanitizeHistory = history => {
+    if(!Array.isArray(history))return Object.freeze([]);
+    const safe=history
+      .filter(item=>item&&['user','assistant'].includes(item.role))
+      .slice(-6)
+      .map(item=>Object.freeze({
+        role:item.role,
+        text:truncate(redactPII(item.text),300)
+      }))
+      .filter(item=>item.text);
+    return Object.freeze(safe);
+  };
+
+  const prepareRequest = (message, context = {}, history = []) => {
     const raw = truncate(message, POLICY.maxInputChars);
     if (!raw) return {ok:false, reason:'empty', text:''};
 
@@ -112,6 +125,7 @@
       request:Object.freeze({
         message:redacted,
         context:sanitizeContext(context),
+        history:sanitizeHistory(history),
         policy:Object.freeze({
           childMode:true,
           gradeLevel:POLICY.gradeLevel,
@@ -223,8 +237,8 @@
     return safe;
   };
 
-  const ask = async (message, context = {}) => {
-    const prepared = prepareRequest(message, context);
+  const ask = async (message, context = {}, history = []) => {
+    const prepared = prepareRequest(message, context, history);
 
     if (!prepared.ok) {
       const local = Object.freeze({
@@ -267,7 +281,7 @@
     }
   };
 
-  const askAndSpeak = async (message, context = {}) => deliver(await ask(message, context));
+  const askAndSpeak = async (message, context = {}, history = []) => deliver(await ask(message, context, history));
 
   const selfTest = () => {
     const pii = prepareRequest('E-postam ali@example.com, bana yardım et', {screen:'dersler'});
@@ -288,6 +302,7 @@
     policy:()=>({...POLICY}),
     prepareRequest,
     sanitizeContext,
+    sanitizeHistory,
     sanitizeResponse,
     ask,
     askAndSpeak,

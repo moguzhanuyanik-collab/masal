@@ -155,6 +155,19 @@ foreach ($allowed as $key=>$value) {
     $contextText.=$key.': '.$value."\n";
 }
 
+$history=is_array($payload['history'] ?? null)?$payload['history']:[];
+$historyLines=[];
+foreach (array_slice($history,-6) as $item) {
+    if (!is_array($item)) continue;
+    $role=(string)($item['role'] ?? '');
+    if (!in_array($role,['user','assistant'],true)) continue;
+    $text=adimbot_ai_redact(adimbot_ai_clean($item['text'] ?? '',300));
+    if ($text==='') continue;
+    if (preg_match('/(?:adres(?:in|ini)?|telefon(?:un|unu|\s*numara)|e[- ]?posta(?:n|nı)?|şifre(?:n|ni)?|tc\s*(?:kimlik)?|kimlik\s*numara|konum(?:un|unu)?)/iu',$text)) continue;
+    $historyLines[]=($role==='user'?'Öğrenci':'AdımBot').': '.$text;
+}
+$historyText=implode("\n",$historyLines);
+
 $instructions=<<<'TXT'
 Sen İlkAdım adlı 1. sınıf eğitim uygulamasındaki AdımBot'sun.
 Türkçe, kısa, sıcak, çocukların anlayacağı basit cümlelerle konuş.
@@ -167,7 +180,11 @@ Yanıtı mümkünse 1-4 kısa cümlede ve en fazla 600 karakterde tut.
 Tehlikeli veya yaşa uygun olmayan bir konuda güvendiği bir yetişkinden yardım istemesini söyle.
 TXT;
 
-$input="Ekran bağlamı:\n".($contextText!==''?$contextText:"Genel öğrenci ekranı\n")."\nÖğrencinin mesajı:\n".$message;
+$input="Ekran bağlamı:\n".($contextText!==''?$contextText:"Genel öğrenci ekranı\n");
+if ($historyText!=='') {
+    $input.="\nKısa sohbet geçmişi:\n".$historyText."\n";
+}
+$input.="\nÖğrencinin yeni mesajı:\n".$message;
 
 $request=[
     'model'=>$model,
