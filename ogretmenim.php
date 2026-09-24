@@ -67,10 +67,10 @@ function ois_icon(string $type): string {
 <link rel="apple-touch-icon" href="ilkadim-logo-192.png">
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="ogretmenim.css?v=1.0.48">
-<link rel="stylesheet" href="adimbot-student.css?v=1.0.90">
+<link rel="stylesheet" href="adimbot-student.css?v=1.0.92">
 <script src="api/bootstrap.js.php" defer></script>
-<script src="adimbot-student.js?v=1.0.91" defer></script>
-<script src="global-audio-feedback.js?v=1.0.91" defer></script>
+<script src="adimbot-student.js?v=1.0.92" defer></script>
+<script src="global-audio-feedback.js?v=1.0.92" defer></script>
 </head>
 <body>
 <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -194,9 +194,17 @@ function ois_icon(string $type): string {
 </div>
 <div class="adb-student-widget" data-adimbot-student aria-label="AdımBot öğrenci yardımcısı">
   <div class="adb-bubble" data-adimbot-bubble aria-live="polite">Merhaba! Ben AdımBot 👋</div>
+  <div class="adb-settings-panel" data-adimbot-settings-panel role="group" aria-label="AdımBot ayarları">
+    <strong>AdımBot Ayarları</strong>
+    <label class="adb-setting-row"><span>Ses</span><input type="checkbox" data-adimbot-sound checked></label>
+    <label class="adb-setting-row"><span>Konuşma hızı</span><select data-adimbot-rate><option value="0.80">Yavaş</option><option value="0.95" selected>Normal</option><option value="1.10">Hızlı</option></select></label>
+    <label class="adb-setting-row"><span>Rehber modu</span><input type="checkbox" data-adimbot-guide></label>
+    <label class="adb-setting-row"><span>Robot görünür</span><input type="checkbox" data-adimbot-visible checked></label>
+  </div>
   <div class="adb-stage" data-adimbot-stage role="button" tabindex="0" aria-label="AdımBot'u sürükle veya konuştur">
     <button class="adb-help" type="button" data-adimbot-help aria-label="Bana yardım et">?</button>
-    <button class="adb-close" type="button" data-adimbot-close aria-label="AdımBot'u kapat">×</button>
+    <button class="adb-settings" type="button" data-adimbot-settings aria-label="AdımBot ayarları">⚙</button>
+    <button class="adb-close" type="button" data-adimbot-close aria-label="AdımBot'u küçült">×</button>
     <span class="adb-pulse" aria-hidden="true"></span>
     <div class="adb-visual" aria-hidden="true">
       <div class="adb-robot-canvas">
@@ -210,6 +218,7 @@ function ois_icon(string $type): string {
       <span class="adb-drag-chip">Sürükle</span>
     </div>
   </div>
+  <button class="adb-minimized" type="button" data-adimbot-restore aria-label="AdımBot'u geri aç">🤖</button>
 </div>
 
 </body>

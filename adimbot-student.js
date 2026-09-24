@@ -5,8 +5,16 @@
   const stage=root.querySelector('[data-adimbot-stage]');
   const close=root.querySelector('[data-adimbot-close]');
   const help=root.querySelector('[data-adimbot-help]');
+  const settingsButton=root.querySelector('[data-adimbot-settings]');
+  const settingsPanel=root.querySelector('[data-adimbot-settings-panel]');
+  const soundInput=root.querySelector('[data-adimbot-sound]');
+  const rateInput=root.querySelector('[data-adimbot-rate]');
+  const guideInput=root.querySelector('[data-adimbot-guide]');
+  const visibleInput=root.querySelector('[data-adimbot-visible]');
+  const restoreButton=root.querySelector('[data-adimbot-restore]');
   const mouth=root.querySelector('.adb-mouth-open');
   const key='ilkadim.adimbot.student.position.v1';
+  const settingsKey='ilkadim.adimbot.settings.v1';
   const characterPhrases=Object.freeze({
     greeting:[
       'Merhaba! Ben AdımBot 👋 Birlikte küçük adımlarla ilerleyelim.',
@@ -140,7 +148,26 @@
   let pendingX=0,pendingY=0,frame=0,activeUtterance=null;
   let activeSpeechToken=0,activeOnEnd=null,activeOnStart=null,speechStarted=false;
   let gestureLoopTimer=0,gestureReleaseTimer=0,settleTimer=0,gestureIndex=0,lastGestureAt=0;
-  const state={ready:true,speaking:false,dragging:false,hidden:false,mood:'idle',guide:false};
+  const defaultSettings=Object.freeze({sound:true,rate:.95,minimized:false});
+  let preferences={...defaultSettings};
+  try{
+    const savedSettings=JSON.parse(localStorage.getItem(settingsKey)||'null');
+    if(savedSettings&&typeof savedSettings==='object'){
+      preferences.sound=savedSettings.sound!==false;
+      const savedRate=Number(savedSettings.rate);
+      preferences.rate=Number.isFinite(savedRate)?Math.min(1.15,Math.max(.75,savedRate)):.95;
+      preferences.minimized=savedSettings.minimized===true;
+    }
+  }catch(_){}
+
+  const savePreferences=()=>{
+    try{localStorage.setItem(settingsKey,JSON.stringify(preferences));}catch(_){}
+  };
+
+  const state={
+    ready:true,speaking:false,dragging:false,hidden:false,mood:'idle',guide:false,
+    sound:preferences.sound,rate:preferences.rate,minimized:preferences.minimized
+  };
 
   const emitState=()=>{
     try{window.dispatchEvent(new CustomEvent('adimbot:statechange',{detail:{...state}}));}catch(_){}
@@ -152,6 +179,46 @@
       if(state[name]!==value){state[name]=value;changed=true;}
     }
     if(changed)emitState();
+  };
+
+  const syncSettingsUi=()=>{
+    if(soundInput)soundInput.checked=preferences.sound;
+    if(rateInput)rateInput.value=String(preferences.rate);
+    if(visibleInput)visibleInput.checked=!preferences.minimized;
+    if(guideInput){
+      let active=state.guide===true;
+      try{active=window.AdimBotGuide?.isActive?.()===true||active;}catch(_){}
+      guideInput.checked=active;
+    }
+  };
+
+  const setMinimized=(minimized,{save=true}={})=>{
+    preferences.minimized=minimized===true;
+    root.classList.toggle('is-minimized',preferences.minimized);
+    root.classList.remove('is-settings-open');
+    if(preferences.minimized)stopSpeaking();
+    setState({minimized:preferences.minimized,hidden:false});
+    if(save)savePreferences();
+    syncSettingsUi();
+    return true;
+  };
+
+  const setSound=enabled=>{
+    preferences.sound=enabled!==false;
+    if(!preferences.sound)stopSpeaking();
+    setState({sound:preferences.sound});
+    savePreferences();
+    syncSettingsUi();
+    return true;
+  };
+
+  const setRate=value=>{
+    const rate=Number(value);
+    preferences.rate=Number.isFinite(rate)?Math.min(1.15,Math.max(.75,rate)):.95;
+    setState({rate:preferences.rate});
+    savePreferences();
+    syncSettingsUi();
+    return true;
   };
   const gestureClasses=['adb-gesture-left','adb-gesture-right','adb-gesture-open'];
 
@@ -295,7 +362,17 @@
     bubble.textContent=text;
     root.classList.add('is-ready');
 
-    if(!voice)return true;
+    if(!voice||!preferences.sound){
+      if(typeof onStart==='function'){
+        try{onStart();}catch(error){console.error('AdımBot sessiz onStart hatası:',error);}
+      }
+      if(typeof onEnd==='function'){
+        setTimeout(()=>{
+          try{onEnd({cancelled:false,silent:true});}catch(error){console.error('AdımBot sessiz onEnd hatası:',error);}
+        },80);
+      }
+      return true;
+    }
 
     const token=++activeSpeechToken;
     activeOnStart=typeof onStart==='function'?onStart:null;
@@ -312,7 +389,7 @@
     const utterance=new SpeechSynthesisUtterance(text.replace('👋','').trim());
     activeUtterance=utterance;
     utterance.lang='tr-TR';
-    utterance.rate=.95;
+    utterance.rate=preferences.rate;
     utterance.pitch=1.04;
     utterance.volume=1;
 
@@ -388,7 +465,7 @@
   }catch(_){}
 
   stage?.addEventListener('pointerdown',event=>{
-    if(event.target.closest('[data-adimbot-close]'))return;
+    if(event.target.closest('button,input,select,label,[data-adimbot-settings-panel]'))return;
     stopSpeaking();
     pointerId=event.pointerId;
     dragging=true;
@@ -463,6 +540,7 @@
   help?.addEventListener('pointerdown',event=>event.stopPropagation());
   help?.addEventListener('click',event=>{
     event.stopPropagation();
+    root.classList.remove('is-settings-open');
     try{
       const helper=window.AdimBotHelp;
       if(helper&&typeof helper.request==='function'){
@@ -473,19 +551,52 @@
     react('help');
   });
 
+  settingsButton?.addEventListener('pointerdown',event=>event.stopPropagation());
+  settingsButton?.addEventListener('click',event=>{
+    event.stopPropagation();
+    root.classList.toggle('is-settings-open');
+    syncSettingsUi();
+  });
+
+  settingsPanel?.addEventListener('pointerdown',event=>event.stopPropagation());
+  settingsPanel?.addEventListener('click',event=>event.stopPropagation());
+
+  soundInput?.addEventListener('change',()=>setSound(soundInput.checked));
+  rateInput?.addEventListener('change',()=>setRate(rateInput.value));
+  visibleInput?.addEventListener('change',()=>{
+    if(visibleInput.checked)setMinimized(false);
+    else setMinimized(true);
+  });
+  guideInput?.addEventListener('change',()=>{
+    try{
+      if(guideInput.checked)window.AdimBotGuide?.start?.();
+      else window.AdimBotGuide?.stop?.({silent:true});
+    }catch(error){console.error('AdımBot rehber ayarı hatası:',error);}
+    setState({guide:guideInput.checked});
+  });
+
+  restoreButton?.addEventListener('click',event=>{
+    event.stopPropagation();
+    setMinimized(false);
+  });
+
   close?.addEventListener('pointerdown',event=>event.stopPropagation());
   close?.addEventListener('click',event=>{
     event.stopPropagation();
-    try{window.AdimBotGuide?.stop?.({silent:true});}catch(_){}
-    stopSpeaking();
-    root.classList.add('is-hidden');
-    setState({hidden:true,guide:false});
+    root.classList.remove('is-settings-open');
+    setMinimized(true);
   });
 
   window.addEventListener('resize',()=>{
     if(root.classList.contains('is-hidden'))return;
     const r=root.getBoundingClientRect();
     setPosition(r.left,r.top,true);
+  });
+
+  document.addEventListener('click',event=>{
+    if(!root.classList.contains('is-settings-open'))return;
+    if(event.target instanceof Node&&root.contains(event.target))return;
+    root.classList.remove('is-settings-open');
   });
 
   const react=(type,context={},options={})=>{
@@ -508,17 +619,22 @@
     },
     stop:()=>{try{stopSpeaking();return true;}catch(error){console.error('AdımBot stop hatası:',error);return false;}},
     show:()=>{
-      try{root.classList.remove('is-hidden');setState({hidden:false});return true;}
+      try{root.classList.remove('is-hidden');setMinimized(false);setState({hidden:false});return true;}
       catch(error){console.error('AdımBot show hatası:',error);return false;}
     },
     hide:()=>{
-      try{stopSpeaking();root.classList.add('is-hidden');setState({hidden:true});return true;}
+      try{return setMinimized(true);}
       catch(error){console.error('AdımBot hide hatası:',error);return false;}
     },
+    minimize:()=>{try{return setMinimized(true);}catch(_){return false;}},
+    restore:()=>{try{return setMinimized(false);}catch(_){return false;}},
+    setSound:enabled=>{try{return setSound(enabled);}catch(_){return false;}},
+    setRate:value=>{try{return setRate(value);}catch(_){return false;}},
+    getSettings:()=>({...preferences}),
     isReady:()=>state.ready===true,
     getState:()=>({...state}),
     setGuideMode:active=>{
-      try{setState({guide:active===true});return true;}
+      try{setState({guide:active===true});syncSettingsUi();return true;}
       catch(error){console.error('AdımBot guide state hatası:',error);return false;}
     },
     help:()=>{
@@ -539,5 +655,7 @@
     characterTypes:()=>Object.keys(characterPhrases)
   });
 
+  setMinimized(preferences.minimized,{save:false});
+  syncSettingsUi();
   setTimeout(()=>speak(chooseCharacterPhrase('greeting'),{voice:false}),550);
 })();
