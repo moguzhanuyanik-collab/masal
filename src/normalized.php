@@ -12,7 +12,7 @@ function normalized_column_exists(PDO $pdo,string $table,string $column):bool{
 function normalized_student_grade(PDO $pdo,int $studentId):int{
     if($studentId<=0||!normalized_column_exists($pdo,'ogrenciler','sinif_seviyesi'))return 1;
     $s=$pdo->prepare('SELECT sinif_seviyesi FROM ogrenciler WHERE id=? LIMIT 1');$s->execute([$studentId]);
-    return max(1,min(12,(int)($s->fetchColumn()?:1)));
+    return max(1,min(8,(int)($s->fetchColumn()?:1)));
 }
 function normalized_datetime(mixed $v):string{
     $ms=is_numeric($v)?(int)$v:(int)(microtime(true)*1000);
@@ -29,7 +29,7 @@ function normalized_badges(PDO $pdo,array $state,int $studentId=0):array{
     $steps=[];foreach(($state['steps']??[]) as $k)if(preg_match('/^([a-z0-9_-]+)-(\\d+)$/i',(string)$k,$m))$steps[$m[1]][(int)$m[2]]=true;
     $grade=normalized_student_grade($pdo,$studentId);$counts=[];
     if(normalized_table_exists($pdo,'sinif_dersleri')&&normalized_column_exists($pdo,'ders_modulleri','sinif_seviyesi')){
-        $q=$pdo->prepare("SELECT d.kod,COUNT(m.id) modul_sayisi FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id AND sd.sinif_seviyesi=? AND sd.aktif=1 LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.sinif_seviyesi=? AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod");
+        $q=$pdo->prepare("SELECT d.kod,COUNT(m.id) modul_sayisi FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id AND sd.kademe_kodu='temel_egitim' AND sd.sinif_seviyesi=? AND sd.aktif=1 LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.kademe_kodu='temel_egitim' AND m.sinif_seviyesi=? AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod");
         $q->execute([$grade,$grade]);$rows=$q->fetchAll();
     }else{
         $rows=$pdo->query("SELECT d.kod,COUNT(m.id) modul_sayisi FROM dersler d LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod")?:[];

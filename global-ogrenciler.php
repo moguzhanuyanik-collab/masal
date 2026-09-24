@@ -32,11 +32,11 @@ $students=ky_global_students($pdo);
 
 <section class="role-section">
 <div class="sa-data-toolbar"><div><span class="eyeline">ÖĞRENCİLER</span><h2>Global Öğrenci Listesi</h2><small><?=count($students)?> kayıt</small></div><div class="sa-data-actions"><a class="sa-secondary-btn" href="global-eslestirme.php">Eşleştirme</a><button class="sa-primary-btn" type="button" data-open-create>+ Yeni Öğrenci</button></div></div>
-<div class="sa-table-card"><div class="sa-table-scroll"><table class="sa-data-table"><thead><tr><th>Öğrenci</th><th>Sınıf</th><th>E-posta</th><th>Veli</th><th>Durum</th><th class="sa-actions-col">İşlemler</th></tr></thead><tbody>
+<div class="sa-table-card"><div class="sa-table-scroll"><table class="sa-data-table"><thead><tr><th>Öğrenci</th><th>Kademe / Sınıf</th><th>E-posta</th><th>Veli</th><th>Durum</th><th class="sa-actions-col">İşlemler</th></tr></thead><tbody>
 <?php if(!$students):?><tr><td colspan="6" class="sa-empty-cell">Henüz global öğrenci yok.</td></tr><?php endif;?>
 <?php foreach($students as $s):?><tr>
 <td><strong><?=ky_h((string)($s['ad']?:$s['ad_soyad']))?></strong></td>
-<td><?=max(1,(int)($s['sinif_seviyesi']??1))?>. sınıf</td>
+<td>Temel Eğitim · <?=min(8,max(1,(int)($s['sinif_seviyesi']??1)))?>. sınıf</td>
 <td><?=ky_h((string)$s['email'])?></td>
 <td><?=ky_h((string)($s['veli_adlari']?:'Bağlı değil'))?></td>
 <td><span class="role-pill ok">Global</span></td>
@@ -50,7 +50,7 @@ $students=ky_global_students($pdo);
 
 <dialog class="sa-data-dialog" id="studentDialog"><form method="post" class="sa-dialog-form" autocomplete="off"><input type="hidden" name="csrf" value="<?=ky_h(csrf_token())?>"><input type="hidden" name="action" id="studentAction" value="create"><input type="hidden" name="kullanici_id" id="studentId" value="0">
 <div class="sa-dialog-head"><div><small id="studentEyeline">YENİ KAYIT</small><h3 id="studentTitle">Global Öğrenci Ekle</h3></div><button type="button" data-close>×</button></div>
-<div class="sa-dialog-body"><label>Ad Soyad</label><input class="role-input" id="studentName" name="ad_soyad" required maxlength="190"><label>Sınıf</label><select class="role-input" id="studentGrade" name="sinif_seviyesi" required><?php for($g=1;$g<=12;$g++):?><option value="<?=$g?>"><?=$g?>. sınıf</option><?php endfor;?></select><label>E-posta</label><input class="role-input" id="studentEmail" type="email" name="email" required><label id="studentPasswordLabel">Geçici Şifre</label><input class="role-input" id="studentPassword" type="password" name="sifre" minlength="8"><p class="little-note" id="studentPasswordNote">Yeni hesap için en az 8 karakter.</p></div>
+<div class="sa-dialog-body"><label>Ad Soyad</label><input class="role-input" id="studentName" name="ad_soyad" required maxlength="190"><label>Sınıf</label><select class="role-input" id="studentGrade" name="sinif_seviyesi" required><?php for($g=1;$g<=8;$g++):?><option value="<?=$g?>"><?=$g?>. sınıf</option><?php endfor;?></select><label>E-posta</label><input class="role-input" id="studentEmail" type="email" name="email" required><label id="studentPasswordLabel">Geçici Şifre</label><input class="role-input" id="studentPassword" type="password" name="sifre" minlength="8"><p class="little-note" id="studentPasswordNote">Yeni hesap için en az 8 karakter.</p></div>
 <div class="sa-dialog-actions"><button type="button" class="sa-secondary-btn" data-close>Vazgeç</button><button type="submit" class="sa-primary-btn">Kaydet</button></div></form></dialog>
 
 <nav class="app-nav"><a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a><a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a><a class="active" href="global.php"><span><svg><use href="#sa-users"/></svg></span>Global</a><a href="yonetici-yetkileri.php"><span><svg><use href="#sa-shield"/></svg></span>Yetkiler</a><a href="super-admin-profil.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a></nav>

@@ -39,7 +39,7 @@ function ky_validate_new_account(string $name,string $email,string $password): a
 
 function ky_student_grade(mixed $value): int {
     $grade=(int)$value;
-    if($grade<1 || $grade>12) throw new RuntimeException('Sınıf seviyesi 1 ile 12 arasında olmalı.');
+    if($grade<1 || $grade>8) throw new RuntimeException('Temel Eğitim sınıf seviyesi 1 ile 8 arasında olmalı.');
     return $grade;
 }
 
@@ -73,8 +73,8 @@ function ky_create_user(PDO $pdo,array $actor,string $role,string $name,string $
 
         if($role==='ogrenci'){
             $grade=ky_student_grade($studentGrade??1);
-            $pdo->prepare("INSERT INTO ogrenciler (kullanici_id,ad,email,sifre_hash,avatar,sinif_seviyesi,aktif) VALUES (?,?,?,?,?,?,1)")
-                ->execute([$userId,$name,$email,$hash,'🌞',$grade]);
+            $pdo->prepare("INSERT INTO ogrenciler (kullanici_id,ad,email,sifre_hash,avatar,egitim_kademesi,sinif_seviyesi,aktif) VALUES (?,?,?,?,?,?,?,1)")
+                ->execute([$userId,$name,$email,$hash,'🌞','temel_egitim',$grade]);
         }elseif($role==='veli'){
             $pdo->prepare('INSERT INTO veliler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')
                 ->execute([$userId,$name]);
@@ -104,7 +104,7 @@ function ky_role_members(PDO $pdo,int $institutionId,string $role): array {
     if($institutionId<=0 || !in_array($role,['yonetici','ogretmen','veli','ogrenci'],true)) return [];
     try{
         if($role==='ogrenci'){
-            $s=$pdo->prepare("SELECT k.id kullanici_id,k.ad_soyad,k.email,k.aktif,o.id ogrenci_id,o.ad,o.sinif_seviyesi
+            $s=$pdo->prepare("SELECT k.id kullanici_id,k.ad_soyad,k.email,k.aktif,o.id ogrenci_id,o.ad,o.egitim_kademesi,o.sinif_seviyesi
                 FROM kurum_kullanicilari kk
                 INNER JOIN kullanicilar k ON k.id=kk.kullanici_id
                 INNER JOIN ogrenciler o ON o.kullanici_id=k.id
@@ -129,7 +129,7 @@ function ky_role_members(PDO $pdo,int $institutionId,string $role): array {
 
 function ky_global_students(PDO $pdo): array {
     try{
-        $s=$pdo->query("SELECT k.id kullanici_id,k.ad_soyad,k.email,k.aktif,o.id ogrenci_id,o.ad,o.sinif_seviyesi,
+        $s=$pdo->query("SELECT k.id kullanici_id,k.ad_soyad,k.email,k.aktif,o.id ogrenci_id,o.ad,o.egitim_kademesi,o.sinif_seviyesi,
           GROUP_CONCAT(DISTINCT pv.ad_soyad ORDER BY pv.ad_soyad SEPARATOR ', ') veli_adlari
           FROM kullanicilar k
           INNER JOIN ogrenciler o ON o.kullanici_id=k.id
@@ -141,7 +141,7 @@ function ky_global_students(PDO $pdo): array {
               SELECT 1 FROM kurum_kullanicilari kk
               WHERE kk.kullanici_id=k.id AND kk.aktif=1
             )
-          GROUP BY k.id,k.ad_soyad,k.email,k.aktif,o.id,o.ad,o.sinif_seviyesi
+          GROUP BY k.id,k.ad_soyad,k.email,k.aktif,o.id,o.ad,o.egitim_kademesi,o.sinif_seviyesi
           ORDER BY o.ad,o.id");
         $rows=$s?$s->fetchAll():[];
         if($s)$s->closeCursor();
@@ -246,8 +246,8 @@ function ky_update_global_user(PDO $pdo,array $actor,string $role,int $userId,st
         }
         if($role==='ogrenci'){
             $grade=ky_student_grade($studentGrade??1);
-            if($hash!==null)$pdo->prepare('UPDATE ogrenciler SET ad=?,email=?,sifre_hash=?,sinif_seviyesi=? WHERE id=?')->execute([$name,$email,$hash,$grade,(int)$row['profil_id']]);
-            else $pdo->prepare('UPDATE ogrenciler SET ad=?,email=?,sinif_seviyesi=? WHERE id=?')->execute([$name,$email,$grade,(int)$row['profil_id']]);
+            if($hash!==null)$pdo->prepare("UPDATE ogrenciler SET ad=?,email=?,sifre_hash=?,egitim_kademesi='temel_egitim',sinif_seviyesi=? WHERE id=?")->execute([$name,$email,$hash,$grade,(int)$row['profil_id']]);
+            else $pdo->prepare("UPDATE ogrenciler SET ad=?,email=?,egitim_kademesi='temel_egitim',sinif_seviyesi=? WHERE id=?")->execute([$name,$email,$grade,(int)$row['profil_id']]);
         }else{
             $pdo->prepare('UPDATE veliler SET ad_soyad=? WHERE id=?')->execute([$name,(int)$row['profil_id']]);
         }

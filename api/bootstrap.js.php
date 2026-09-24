@@ -21,22 +21,26 @@ $state=null;
 $summary=null;
 $completedSteps=[];
 $studentGrade=1;
+$educationStage='temel_egitim';
 $error=null;
 
 try {
     $pdo=db();
 
-    $gradeStmt=$pdo->prepare('SELECT sinif_seviyesi FROM ogrenciler WHERE id=? AND aktif=1 LIMIT 1');
+    $gradeStmt=$pdo->prepare('SELECT egitim_kademesi,sinif_seviyesi FROM ogrenciler WHERE id=? AND aktif=1 LIMIT 1');
     $gradeStmt->execute([$studentId]);
-    $studentGrade=max(1,min(12,(int)($gradeStmt->fetchColumn()?:1)));
+    $studentRow=$gradeStmt->fetch();
+    $educationStage=(string)($studentRow['egitim_kademesi']??'temel_egitim');
+    if($educationStage!=='temel_egitim') $educationStage='temel_egitim';
+    $studentGrade=max(1,min(8,(int)($studentRow['sinif_seviyesi']??1)));
 
-    $lessonStmt=$pdo->prepare('SELECT d.*,sd.haftalik_saat AS sinif_haftalik_saat,sd.sira AS sinif_sira FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id WHERE d.aktif=1 AND sd.aktif=1 AND sd.sinif_seviyesi=? ORDER BY sd.sira,d.id');
-    $lessonStmt->execute([$studentGrade]);
+    $lessonStmt=$pdo->prepare('SELECT d.*,sd.haftalik_saat AS sinif_haftalik_saat,sd.sira AS sinif_sira FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id WHERE d.aktif=1 AND sd.aktif=1 AND sd.kademe_kodu=? AND sd.sinif_seviyesi=? ORDER BY sd.sira,d.id');
+    $lessonStmt->execute([$educationStage,$studentGrade]);
     $rows=$lessonStmt->fetchAll();
-    $moduleStmt=$pdo->prepare('SELECT * FROM ders_modulleri WHERE ders_id=? AND sinif_seviyesi=? AND aktif=1 ORDER BY sira,id');
+    $moduleStmt=$pdo->prepare('SELECT * FROM ders_modulleri WHERE ders_id=? AND kademe_kodu=? AND sinif_seviyesi=? AND aktif=1 ORDER BY sira,id');
 
     foreach ($rows as $row) {
-        $moduleStmt->execute([(int)$row['id'],$studentGrade]);
+        $moduleStmt->execute([(int)$row['id'],$educationStage,$studentGrade]);
         $modules=[];
         foreach ($moduleStmt->fetchAll() as $m) {
             $opts=json_decode((string)$m['secenekler_json'],true);
@@ -132,6 +136,7 @@ echo 'window.ILKADIM_CURRENT_USER_ROLE='.json_encode((string)$user['ana_rol'],$f
 echo 'window.ILKADIM_CURRENT_USER_ROLES='.json_encode(array_values((array)$user['roles']),$flags).";\n";
 echo 'window.ILKADIM_CURRENT_STUDENT_ID='.json_encode($studentId,$flags).";\n";
 echo 'window.ILKADIM_CURRENT_GRADE='.json_encode($studentGrade,$flags).";\n";
+echo 'window.ILKADIM_CURRENT_EDUCATION_STAGE='.json_encode($educationStage,$flags).";\n";
 echo 'window.ILKADIM_CSRF_TOKEN='.json_encode(csrf_token(),$flags).";\n";
 echo 'window.ILKADIM_DB_CONNECTED='.($dbConnected?'true':'false').";\n";
 echo 'window.ILKADIM_DB_ERROR='.json_encode($error,$flags).";\n";

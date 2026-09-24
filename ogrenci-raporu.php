@@ -14,7 +14,7 @@ if ($studentId<=0 || !can_access_student((int)$user['id'],$studentId)) {
     exit;
 }
 
-$stmt=$pdo->prepare('SELECT id,email,sinif_seviyesi FROM ogrenciler WHERE id=? AND aktif=1 LIMIT 1');
+$stmt=$pdo->prepare('SELECT id,email,egitim_kademesi,sinif_seviyesi FROM ogrenciler WHERE id=? AND aktif=1 LIMIT 1');
 $stmt->execute([$studentId]);
 $student=$stmt->fetch();
 if (!is_array($student)) {
@@ -24,9 +24,11 @@ if (!is_array($student)) {
 }
 
 $summary=normalized_summary($pdo,$studentId);
-$studentGrade=max(1,(int)($student['sinif_seviyesi']??1));
-$lessonStmt=$pdo->prepare('SELECT d.kod,d.ad,COUNT(DISTINCT m.id) toplam_modul,(SELECT COUNT(*) FROM ogrenci_ilerleme oi WHERE oi.ogrenci_id=? AND oi.sinif_seviyesi=? AND oi.ders_kodu=d.kod AND oi.tamamlandi=1) tamamlanan_modul FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id AND sd.sinif_seviyesi=? AND sd.aktif=1 LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.sinif_seviyesi=? AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod,d.ad,sd.sira ORDER BY sd.sira,d.id');
-$lessonStmt->execute([$studentId,$studentGrade,$studentGrade,$studentGrade]);
+$studentGrade=min(8,max(1,(int)($student['sinif_seviyesi']??1)));
+$educationStage=(string)($student['egitim_kademesi']??'temel_egitim');
+if($educationStage!=='temel_egitim')$educationStage='temel_egitim';
+$lessonStmt=$pdo->prepare('SELECT d.kod,d.ad,COUNT(DISTINCT m.id) toplam_modul,(SELECT COUNT(*) FROM ogrenci_ilerleme oi WHERE oi.ogrenci_id=? AND oi.sinif_seviyesi=? AND oi.ders_kodu=d.kod AND oi.tamamlandi=1) tamamlanan_modul FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id AND sd.kademe_kodu=? AND sd.sinif_seviyesi=? AND sd.aktif=1 LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.kademe_kodu=? AND m.sinif_seviyesi=? AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod,d.ad,sd.sira ORDER BY sd.sira,d.id');
+$lessonStmt->execute([$studentId,$studentGrade,$educationStage,$studentGrade,$educationStage,$studentGrade]);
 $lessons=$lessonStmt->fetchAll();
 
 $badgeStmt=$pdo->prepare('SELECT r.ad,r.emoji,r.aciklama FROM ogrenci_rozetleri orr INNER JOIN rozetler r ON r.id=orr.rozet_id WHERE orr.ogrenci_id=? ORDER BY r.sira,r.id');
@@ -55,7 +57,7 @@ function h_report(string $v): string { return htmlspecialchars($v,ENT_QUOTES,'UT
 <section class="subpage-intro">
 <span>📊</span>
 <h1><?=h_report((string)($student['email']?:'Öğrenci #'.$studentId))?></h1>
-<p><?=$studentGrade?>. sınıf · Bu rapor yalnızca hesabına yetkilendirilmiş öğrenci için görüntülenebilir.</p>
+<p>Temel Eğitim · <?=$studentGrade?>. sınıf · Bu rapor yalnızca hesabına yetkilendirilmiş öğrenci için görüntülenebilir.</p>
 </section>
 
 <section class="settings-block">
