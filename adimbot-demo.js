@@ -13,6 +13,7 @@
   ];
 
   let index=0,timer=0,dragging=false,moved=false,pointerId=null,startX=0,startY=0,startLeft=0,startTop=0;
+  let pendingX=0,pendingY=0,frame=0;
 
   const speak=(message)=>{
     if(!bubble)return;
@@ -39,6 +40,16 @@
     if(save){
       try{localStorage.setItem(key,JSON.stringify(p));}catch(_){}
     }
+  };
+
+  const queuePosition=(left,top)=>{
+    pendingX=left;
+    pendingY=top;
+    if(frame)return;
+    frame=requestAnimationFrame(()=>{
+      frame=0;
+      setPosition(pendingX,pendingY,false);
+    });
   };
 
   try{
@@ -68,7 +79,7 @@
     const dx=event.clientX-startX;
     const dy=event.clientY-startY;
     if(Math.hypot(dx,dy)>5)moved=true;
-    setPosition(startLeft+dx,startTop+dy,false);
+    queuePosition(startLeft+dx,startTop+dy);
     event.preventDefault();
   });
 
@@ -76,6 +87,7 @@
     if(!dragging||event.pointerId!==pointerId)return;
     dragging=false;
     root.classList.remove('is-dragging');
+    if(frame){cancelAnimationFrame(frame);frame=0;setPosition(pendingX,pendingY,false);}
     const r=root.getBoundingClientRect();
     setPosition(r.left,r.top,true);
     try{stage.releasePointerCapture?.(pointerId);}catch(_){}
