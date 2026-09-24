@@ -22,8 +22,11 @@
   };
 
   const pickTurkishVoice=()=>{
-    return voices.find(voice=>/^tr-TR$/i.test(voice.lang))
-      ||voices.find(voice=>/^tr\b/i.test(voice.lang))
+    const turkish=voices.filter(voice=>/^tr(?:-|$)/i.test(voice.lang));
+    return turkish.find(voice=>/^tr-TR$/i.test(voice.lang)&&voice.localService)
+      ||turkish.find(voice=>voice.localService)
+      ||turkish.find(voice=>/^tr-TR$/i.test(voice.lang))
+      ||turkish[0]
       ||null;
   };
 
