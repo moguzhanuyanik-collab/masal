@@ -1,21 +1,19 @@
-# İlkAdım 6. Sınıf İçerik Hazırlığı — Kısmi
+# İlkAdım 6. Sınıf MEB İçerik Hazırlık Paketi
 
-Bu klasör 6. sınıf çalışmasının ara kayıt noktasıdır. **Canlı migration değildir ve v1.1.34 ile aktive edilmez.**
+2026-2027 eğitim öğretim yılında 6. sınıfta Türkiye Yüzyılı Maarif Modeli uygulanmaktadır.
 
-Hazır olanlar:
-- Sınıf/ders/tema-ünite omurgası
+Yapı: Temel Eğitim → 6. Sınıf → Ders → Tema / Ünite / Öğrenme Alanı → Konu → Soru Havuzu
+
+Hazırlanan içerik:
 - Türkçe: 18 konu / 144 soru
 - Matematik: 20 konu / 307 soru
 - Fen Bilimleri: 15 konu / 120 soru
 - Sosyal Bilgiler: 12 konu / 96 soru
+- İngilizce: 24 konu / 192 soru
+- Din Kültürü ve Ahlak Bilgisi: 10 konu / 80 soru
+- Bilişim Teknolojileri ve Yazılım: 12 konu / 96 soru
+- Görsel Sanatlar + Müzik + Beden Eğitimi ve Spor + Rehberlik: 17 konu / 102 soru
 
-Henüz tamamlanacaklar:
-- İngilizce
-- Din Kültürü ve Ahlak Bilgisi
-- Bilişim Teknolojileri ve Yazılım
-- Görsel Sanatlar
-- Müzik
-- Beden Eğitimi ve Spor
-- Rehberlik ve Yönlendirme
+Toplam: 128 konu / 1137 soru.
 
-6. sınıf tamamlanmadan canlıya alınmayacaktır. Öğrenci HTML/CSS tasarımı, logo/görseller ve AdımBot bu hazırlıktan etkilenmez.
+Bu klasör hazırlık paketidir; otomatik migration değildir. Öğrenci HTML/CSS tasarımını, logo/görselleri, AdımBot'u ve updater arayüzünü değiştirmez.
