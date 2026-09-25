@@ -91,7 +91,45 @@ function ilkadim_topic_icon(string $code,string $fallback='📘'): string {
         'muz2-dil-konu'=>'🎵','muz2-kultur-konu'=>'🎼',
         'be2-hareket-konu'=>'🏃','be2-kural-konu'=>'🎯','be2-ritim-konu'=>'💃','be2-saglik-konu'=>'💪',
     ];
-    return $icons[$code]??($fallback!==''?$fallback:'📘');
+    if(isset($icons[$code])) return $icons[$code];
+
+    // Üst sınıflar için konu kodundan simge eşlemesi; öğrenci HTML/CSS yapısını değiştirmez.
+    $patternIcons=[
+        'mat4-cevre'=>'📏','mat5-cevre'=>'📏',
+        'para'=>'₺','kesir'=>'🍕','yuzde'=>'%','ondalik'=>'0,1',
+        'toplama'=>'➕','cikarma'=>'➖','carpma'=>'✖️','bolme'=>'➗',
+        'esitlik'=>'🟰','denklem'=>'🟰','oran'=>'📊','oruntu'=>'🧩',
+        'olasilik'=>'🎲','veri'=>'📊','istatistik'=>'📊','aci'=>'📐',
+        'alan'=>'◻️','hacim'=>'🧊','uzunluk'=>'📏','kutle'=>'⚖️',
+        'sivi'=>'🥛','zaman'=>'⏰','dogal'=>'🔢','asal'=>'🔢','carpan'=>'🔢',
+        'karsilastir'=>'≷','yuvarlama'=>'🎯',
+        'ana-fikir'=>'💡','cikarim'=>'🧠','ozet'=>'📝','baglam'=>'📚',
+        'deyim'=>'💬','atasoz'=>'💬','noktalama'=>'❗','yazim'=>'✍️',
+        'paragraf'=>'📄','yonerge'=>'📋','kronoloji'=>'🕰️','kaynak'=>'🔎',
+        'iletisim'=>'💬','gorsel'=>'🖼️','lider'=>'🧭',
+        'gunes'=>'☀️','tutulma'=>'🌑','gok'=>'🌌','dunya'=>'🌍',
+        'hucre'=>'🔬','sindirim'=>'🍽️','dolasim'=>'❤️','solunum'=>'🫁',
+        'kuvvet'=>'💪','surtunme'=>'🛞','miknatis'=>'🧲','madde'=>'⚗️',
+        'isi'=>'🌡️','isik'=>'💡','ses'=>'🔊','elektrik'=>'⚡','devre'=>'⚡',
+        'geri-donusum'=>'♻️','cevre'=>'🌿',
+        'harita'=>'🗺️','konum'=>'🧭','hak'=>'⚖️','demokrasi'=>'🗳️',
+        'ekonomi'=>'💰','butce'=>'💰','kultur'=>'🏛️','miras'=>'🏛️',
+        'teknoloji'=>'💻',
+        'classroom'=>'🧑‍🏫','school'=>'🏫','family'=>'👨‍👩‍👧',
+        'weather'=>'🌦️','city'=>'🏙️','space'=>'🚀','future'=>'🔮',
+        'travel'=>'✈️','health'=>'❤️','hobbies'=>'🎯','friend'=>'🤝',
+        'namaz'=>'🕌','kuran'=>'📖','allah'=>'✨','peygamber'=>'🕊️',
+        'ahlak'=>'🤝','cami'=>'🕌',
+        'algoritma'=>'🧩','program'=>'💻','siber'=>'🔐','ai-'=>'🤖',
+        'ag-'=>'🌐','dijital'=>'📱',
+        'ritim'=>'🎵','muzik'=>'🎼','sanat'=>'🎨','hareket'=>'🏃',
+        'zindelik'=>'💪','adil'=>'🤝',
+    ];
+    foreach($patternIcons as $needle=>$icon){
+        if(str_contains($code,$needle)) return $icon;
+    }
+
+    return $fallback!==''?$fallback:'📘';
 }
 
 try {
