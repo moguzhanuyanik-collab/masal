@@ -1,182 +1,542 @@
 SET NAMES utf8mb4;
 
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'d8-kader','Kader ve Kaza','Kader ve Kaza','Kader ve Kaza konusunu bağlam ve uygulamalarla ilişkilendirir.','',10,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-kader' WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'d8-irade','İrade, Sorumluluk ve Tevekkül','İrade, Sorumluluk ve Tevekkül','İrade, Sorumluluk ve Tevekkül konusunu bağlam ve uygulamalarla ilişkilendirir.','',20,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-kader' WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'d8-zekat','Zekât ve İnfak','Zekât ve İnfak','Zekât ve İnfak konusunu bağlam ve uygulamalarla ilişkilendirir.','',30,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-zekat' WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'d8-sadaka','Sadaka ve Yardımlaşma','Sadaka ve Yardımlaşma','Sadaka ve Yardımlaşma konusunu bağlam ve uygulamalarla ilişkilendirir.','',40,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-zekat' WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'d8-din-hayat','Din, Birey ve Toplum','Din, Birey ve Toplum','Din, Birey ve Toplum konusunu bağlam ve uygulamalarla ilişkilendirir.','',50,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-hayat' WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'d8-deger','Temel Değerler ve Sorumluluk','Temel Değerler ve Sorumluluk','Temel Değerler ve Sorumluluk konusunu bağlam ve uygulamalarla ilişkilendirir.','',60,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-hayat' WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'d8-hz-ornek','Hz. Muhammed''in Örnek Davranışları','Hz. Muhammed''in Örnek Davranışları','Hz. Muhammed''in Örnek Davranışları konusunu bağlam ve uygulamalarla ilişkilendirir.','',70,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-ornek' WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'d8-iletisim','Hz. Muhammed''in İletişimi ve Merhameti','Hz. Muhammed''in İletişimi ve Merhameti','Hz. Muhammed''in İletişimi ve Merhameti konusunu bağlam ve uygulamalarla ilişkilendirir.','',80,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-ornek' WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'d8-kuran','Kur''an-ı Kerim''in Temel Özellikleri','Kur''an-ı Kerim''in Temel Özellikleri','Kur''an-ı Kerim''in Temel Özellikleri konusunu bağlam ve uygulamalarla ilişkilendirir.','',90,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-kuran' WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'d8-yorum','Kur''an''ı Anlama ve Yorumlama','Kur''an''ı Anlama ve Yorumlama','Kur''an''ı Anlama ve Yorumlama konusunu bağlam ve uygulamalarla ilişkilendirir.','',100,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-kuran' WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-1','coktan_secmeli','Kader Allah''ın her şeyi bir ölçü ve düzen içinde bilmesiyle ilişkilendirilebilir mi?','["Evet","Hayır","Sadece şans","Sadece insan planı"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,1,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kader' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-2','coktan_secmeli','Kaza kaderde olanın zamanı gelince gerçekleşmesi kavramıyla ilişkilidir mi?','["Hayır","Sadece dua","Evet","Sadece tarih"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,2,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kader' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-3','coktan_secmeli','İnsan seçimlerinden sorumlu mudur?','["Evet","Hayır","Hiç iradesi yoktur","Sadece başkaları sorumludur"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,3,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-irade' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-4','coktan_secmeli','Tevekkül çalışmadan sonucu beklemek midir?','["Evet","Her zaman","Hayır","Sadece şans demektir"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,4,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-irade' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-5','coktan_secmeli','Zekât mali ibadetlerden biri midir?','["Evet","Hayır","Sadece sözlü ibadet","Sadece yolculuk"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,5,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-zekat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-6','coktan_secmeli','Zekât toplumsal dayanışmayı destekleyebilir mi?','["Hayır","Sadece bireysel","Evet","Paylaşmayla ilgisiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,6,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-zekat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-7','coktan_secmeli','Sadaka yalnız para vermekle sınırlı mıdır?','["Hayır","Evet","Her zaman","Sadece zekâttır"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,7,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-sadaka' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-8','coktan_secmeli','Yardımlaşma toplumsal bağları güçlendirebilir mi?','["Hayır","Sadece bireysel","Evet","Toplumla ilgisiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,8,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-sadaka' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-9','coktan_secmeli','Din bireysel ve toplumsal hayatı etkileyebilir mi?','["Evet","Hayır","Sadece tarih","Sadece mimari"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,9,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-din-hayat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-10','coktan_secmeli','Ahlaki ilkeler günlük davranışlarla ilişkili midir?','["Hayır","Sadece teoridir","Evet","Davranışla ilgisiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,10,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-din-hayat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-11','coktan_secmeli','Adalet temel ahlaki değerlerden biri midir?','["Evet","Hayır","Sadece hukuk","Sadece ekonomi"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,11,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-12','coktan_secmeli','Sorumluluk haklarla birlikte düşünülebilir mi?','["Hayır","Sadece hak vardır","Evet","Sadece sorumluluk"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,12,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-13','coktan_secmeli','Hz. Muhammed''in doğruluk ve güvenilirliği örnek özelliklerinden midir?','["Evet","Hayır","Sadece cesaret","Güven önemsiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,13,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-hz-ornek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-14','coktan_secmeli','Adaletli davranmak onun örnekliğinde önemli midir?','["Hayır","Sadece ticarette","Evet","Sadece ailede"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,14,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-hz-ornek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-15','coktan_secmeli','Hz. Muhammed''in insanlarla iletişiminde merhamet önemli midir?','["Evet","Hayır","Sadece sertlik","İletişim kurmamıştır"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,15,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-iletisim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-16','coktan_secmeli','İstişare danışarak karar verme anlamına gelir mi?','["Hayır","Tek başına karar dayatmak","Evet","Susmak"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,16,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-iletisim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-17','coktan_secmeli','Kur''an İslam''ın temel kaynağı mıdır?','["Evet","Hayır","Sadece tarih kitabı","Sadece şiir kitabı"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,17,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kuran' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-18','coktan_secmeli','Kur''an sure ve ayetlerden oluşur mu?','["Hayır","Tek bölüm","Evet","Sadece dua"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,18,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kuran' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-19','coktan_secmeli','Kur''an''ın anlamını doğru kaynaklardan öğrenmek önemli midir?','["Evet","Hayır","Sadece söylenti","Kaynak gerekmez"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,19,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-yorum' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-1-20','coktan_secmeli','Ayetleri bağlamıyla anlamaya çalışmak yararlı mıdır?','["Hayır","Bağlam önemsiz","Evet","Sadece kelime sayısı"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,20,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-yorum' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-1','coktan_secmeli','Kader Allah''ın her şeyi bir ölçü ve düzen içinde bilmesiyle ilişkilendirilebilir mi? Benzer bağlamı düşün.','["Hayır","Evet","Sadece şans","Sadece insan planı"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,101,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kader' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-2','coktan_secmeli','Kaza kaderde olanın zamanı gelince gerçekleşmesi kavramıyla ilişkilidir mi? Benzer bağlamı düşün.','["Hayır","Sadece dua","Sadece tarih","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,102,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kader' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-3','coktan_secmeli','İnsan seçimlerinden sorumlu mudur? Benzer bağlamı düşün.','["Hayır","Evet","Hiç iradesi yoktur","Sadece başkaları sorumludur"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,103,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-irade' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-4','coktan_secmeli','Tevekkül çalışmadan sonucu beklemek midir? Benzer bağlamı düşün.','["Evet","Her zaman","Sadece şans demektir","Hayır"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,104,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-irade' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-5','coktan_secmeli','Zekât mali ibadetlerden biri midir? Benzer bağlamı düşün.','["Hayır","Evet","Sadece sözlü ibadet","Sadece yolculuk"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,105,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-zekat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-6','coktan_secmeli','Zekât toplumsal dayanışmayı destekleyebilir mi? Benzer bağlamı düşün.','["Hayır","Sadece bireysel","Paylaşmayla ilgisiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,106,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-zekat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-7','coktan_secmeli','Sadaka yalnız para vermekle sınırlı mıdır? Benzer bağlamı düşün.','["Evet","Hayır","Her zaman","Sadece zekâttır"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,107,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-sadaka' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-8','coktan_secmeli','Yardımlaşma toplumsal bağları güçlendirebilir mi? Benzer bağlamı düşün.','["Hayır","Sadece bireysel","Toplumla ilgisiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,108,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-sadaka' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-9','coktan_secmeli','Din bireysel ve toplumsal hayatı etkileyebilir mi? Benzer bağlamı düşün.','["Hayır","Evet","Sadece tarih","Sadece mimari"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,109,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-din-hayat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-10','coktan_secmeli','Ahlaki ilkeler günlük davranışlarla ilişkili midir? Benzer bağlamı düşün.','["Hayır","Sadece teoridir","Davranışla ilgisiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,110,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-din-hayat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-11','coktan_secmeli','Adalet temel ahlaki değerlerden biri midir? Benzer bağlamı düşün.','["Hayır","Evet","Sadece hukuk","Sadece ekonomi"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,111,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-12','coktan_secmeli','Sorumluluk haklarla birlikte düşünülebilir mi? Benzer bağlamı düşün.','["Hayır","Sadece hak vardır","Sadece sorumluluk","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,112,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-13','coktan_secmeli','Hz. Muhammed''in doğruluk ve güvenilirliği örnek özelliklerinden midir? Benzer bağlamı düşün.','["Hayır","Evet","Sadece cesaret","Güven önemsiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,113,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-hz-ornek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-14','coktan_secmeli','Adaletli davranmak onun örnekliğinde önemli midir? Benzer bağlamı düşün.','["Hayır","Sadece ticarette","Sadece ailede","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,114,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-hz-ornek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-15','coktan_secmeli','Hz. Muhammed''in insanlarla iletişiminde merhamet önemli midir? Benzer bağlamı düşün.','["Hayır","Evet","Sadece sertlik","İletişim kurmamıştır"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,115,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-iletisim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-16','coktan_secmeli','İstişare danışarak karar verme anlamına gelir mi? Benzer bağlamı düşün.','["Hayır","Tek başına karar dayatmak","Susmak","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,116,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-iletisim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-17','coktan_secmeli','Kur''an İslam''ın temel kaynağı mıdır? Benzer bağlamı düşün.','["Hayır","Evet","Sadece tarih kitabı","Sadece şiir kitabı"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,117,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kuran' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-18','coktan_secmeli','Kur''an sure ve ayetlerden oluşur mu? Benzer bağlamı düşün.','["Hayır","Tek bölüm","Sadece dua","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,118,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kuran' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-19','coktan_secmeli','Kur''an''ın anlamını doğru kaynaklardan öğrenmek önemli midir? Benzer bağlamı düşün.','["Hayır","Evet","Sadece söylenti","Kaynak gerekmez"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,119,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-yorum' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-2-20','coktan_secmeli','Ayetleri bağlamıyla anlamaya çalışmak yararlı mıdır? Benzer bağlamı düşün.','["Hayır","Bağlam önemsiz","Sadece kelime sayısı","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,120,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-yorum' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-1','coktan_secmeli','Kader Allah''ın her şeyi bir ölçü ve düzen içinde bilmesiyle ilişkilendirilebilir mi? Yeni bir örneğe uygula.','["Hayır","Sadece şans","Evet","Sadece insan planı"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,201,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kader' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-2','coktan_secmeli','Kaza kaderde olanın zamanı gelince gerçekleşmesi kavramıyla ilişkilidir mi? Yeni bir örneğe uygula.','["Evet","Hayır","Sadece dua","Sadece tarih"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,202,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kader' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-3','coktan_secmeli','İnsan seçimlerinden sorumlu mudur? Yeni bir örneğe uygula.','["Hayır","Hiç iradesi yoktur","Evet","Sadece başkaları sorumludur"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,203,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-irade' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-4','coktan_secmeli','Tevekkül çalışmadan sonucu beklemek midir? Yeni bir örneğe uygula.','["Hayır","Evet","Her zaman","Sadece şans demektir"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,204,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-irade' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-5','coktan_secmeli','Zekât mali ibadetlerden biri midir? Yeni bir örneğe uygula.','["Hayır","Sadece sözlü ibadet","Evet","Sadece yolculuk"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,205,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-zekat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-6','coktan_secmeli','Zekât toplumsal dayanışmayı destekleyebilir mi? Yeni bir örneğe uygula.','["Evet","Hayır","Sadece bireysel","Paylaşmayla ilgisiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,206,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-zekat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-7','coktan_secmeli','Sadaka yalnız para vermekle sınırlı mıdır? Yeni bir örneğe uygula.','["Evet","Her zaman","Hayır","Sadece zekâttır"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,207,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-sadaka' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-8','coktan_secmeli','Yardımlaşma toplumsal bağları güçlendirebilir mi? Yeni bir örneğe uygula.','["Evet","Hayır","Sadece bireysel","Toplumla ilgisiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,208,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-sadaka' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-9','coktan_secmeli','Din bireysel ve toplumsal hayatı etkileyebilir mi? Yeni bir örneğe uygula.','["Hayır","Sadece tarih","Evet","Sadece mimari"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,209,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-din-hayat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-10','coktan_secmeli','Ahlaki ilkeler günlük davranışlarla ilişkili midir? Yeni bir örneğe uygula.','["Evet","Hayır","Sadece teoridir","Davranışla ilgisiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,210,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-din-hayat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-11','coktan_secmeli','Adalet temel ahlaki değerlerden biri midir? Yeni bir örneğe uygula.','["Hayır","Sadece hukuk","Evet","Sadece ekonomi"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,211,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-12','coktan_secmeli','Sorumluluk haklarla birlikte düşünülebilir mi? Yeni bir örneğe uygula.','["Evet","Hayır","Sadece hak vardır","Sadece sorumluluk"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,212,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-13','coktan_secmeli','Hz. Muhammed''in doğruluk ve güvenilirliği örnek özelliklerinden midir? Yeni bir örneğe uygula.','["Hayır","Sadece cesaret","Evet","Güven önemsiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,213,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-hz-ornek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-14','coktan_secmeli','Adaletli davranmak onun örnekliğinde önemli midir? Yeni bir örneğe uygula.','["Evet","Hayır","Sadece ticarette","Sadece ailede"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,214,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-hz-ornek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-15','coktan_secmeli','Hz. Muhammed''in insanlarla iletişiminde merhamet önemli midir? Yeni bir örneğe uygula.','["Hayır","Sadece sertlik","Evet","İletişim kurmamıştır"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,215,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-iletisim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-16','coktan_secmeli','İstişare danışarak karar verme anlamına gelir mi? Yeni bir örneğe uygula.','["Evet","Hayır","Tek başına karar dayatmak","Susmak"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,216,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-iletisim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-17','coktan_secmeli','Kur''an İslam''ın temel kaynağı mıdır? Yeni bir örneğe uygula.','["Hayır","Sadece tarih kitabı","Evet","Sadece şiir kitabı"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,217,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kuran' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-18','coktan_secmeli','Kur''an sure ve ayetlerden oluşur mu? Yeni bir örneğe uygula.','["Evet","Hayır","Tek bölüm","Sadece dua"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,218,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kuran' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-19','coktan_secmeli','Kur''an''ın anlamını doğru kaynaklardan öğrenmek önemli midir? Yeni bir örneğe uygula.','["Hayır","Sadece söylenti","Evet","Kaynak gerekmez"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,219,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-yorum' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-3-20','coktan_secmeli','Ayetleri bağlamıyla anlamaya çalışmak yararlı mıdır? Yeni bir örneğe uygula.','["Evet","Hayır","Bağlam önemsiz","Sadece kelime sayısı"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,220,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-yorum' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-1','coktan_secmeli','Kader Allah''ın her şeyi bir ölçü ve düzen içinde bilmesiyle ilişkilendirilebilir mi? En uygun seçeneği belirle.','["Hayır","Sadece şans","Sadece insan planı","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,301,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kader' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-2','coktan_secmeli','Kaza kaderde olanın zamanı gelince gerçekleşmesi kavramıyla ilişkilidir mi? En uygun seçeneği belirle.','["Hayır","Evet","Sadece dua","Sadece tarih"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,302,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kader' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-3','coktan_secmeli','İnsan seçimlerinden sorumlu mudur? En uygun seçeneği belirle.','["Hayır","Hiç iradesi yoktur","Sadece başkaları sorumludur","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,303,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-irade' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-4','coktan_secmeli','Tevekkül çalışmadan sonucu beklemek midir? En uygun seçeneği belirle.','["Evet","Hayır","Her zaman","Sadece şans demektir"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,304,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-irade' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-5','coktan_secmeli','Zekât mali ibadetlerden biri midir? En uygun seçeneği belirle.','["Hayır","Sadece sözlü ibadet","Sadece yolculuk","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,305,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-zekat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-6','coktan_secmeli','Zekât toplumsal dayanışmayı destekleyebilir mi? En uygun seçeneği belirle.','["Hayır","Evet","Sadece bireysel","Paylaşmayla ilgisiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,306,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-zekat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-7','coktan_secmeli','Sadaka yalnız para vermekle sınırlı mıdır? En uygun seçeneği belirle.','["Evet","Her zaman","Sadece zekâttır","Hayır"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,307,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-sadaka' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-8','coktan_secmeli','Yardımlaşma toplumsal bağları güçlendirebilir mi? En uygun seçeneği belirle.','["Hayır","Evet","Sadece bireysel","Toplumla ilgisiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,308,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-sadaka' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-9','coktan_secmeli','Din bireysel ve toplumsal hayatı etkileyebilir mi? En uygun seçeneği belirle.','["Hayır","Sadece tarih","Sadece mimari","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,309,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-din-hayat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-10','coktan_secmeli','Ahlaki ilkeler günlük davranışlarla ilişkili midir? En uygun seçeneği belirle.','["Hayır","Evet","Sadece teoridir","Davranışla ilgisiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,310,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-din-hayat' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-11','coktan_secmeli','Adalet temel ahlaki değerlerden biri midir? En uygun seçeneği belirle.','["Hayır","Sadece hukuk","Sadece ekonomi","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,311,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-12','coktan_secmeli','Sorumluluk haklarla birlikte düşünülebilir mi? En uygun seçeneği belirle.','["Hayır","Evet","Sadece hak vardır","Sadece sorumluluk"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,312,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-13','coktan_secmeli','Hz. Muhammed''in doğruluk ve güvenilirliği örnek özelliklerinden midir? En uygun seçeneği belirle.','["Hayır","Sadece cesaret","Güven önemsiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,313,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-hz-ornek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-14','coktan_secmeli','Adaletli davranmak onun örnekliğinde önemli midir? En uygun seçeneği belirle.','["Hayır","Evet","Sadece ticarette","Sadece ailede"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,314,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-hz-ornek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-15','coktan_secmeli','Hz. Muhammed''in insanlarla iletişiminde merhamet önemli midir? En uygun seçeneği belirle.','["Hayır","Sadece sertlik","İletişim kurmamıştır","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,315,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-iletisim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-16','coktan_secmeli','İstişare danışarak karar verme anlamına gelir mi? En uygun seçeneği belirle.','["Hayır","Evet","Tek başına karar dayatmak","Susmak"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,316,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-iletisim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-17','coktan_secmeli','Kur''an İslam''ın temel kaynağı mıdır? En uygun seçeneği belirle.','["Hayır","Sadece tarih kitabı","Sadece şiir kitabı","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,317,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kuran' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-18','coktan_secmeli','Kur''an sure ve ayetlerden oluşur mu? En uygun seçeneği belirle.','["Hayır","Evet","Tek bölüm","Sadece dua"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,318,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-kuran' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-19','coktan_secmeli','Kur''an''ın anlamını doğru kaynaklardan öğrenmek önemli midir? En uygun seçeneği belirle.','["Hayır","Sadece söylenti","Kaynak gerekmez","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,319,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-yorum' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8d-4-20','coktan_secmeli','Ayetleri bağlamıyla anlamaya çalışmak yararlı mıdır? En uygun seçeneği belirle.','["Hayır","Evet","Bağlam önemsiz","Sadece kelime sayısı"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,320,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='d8-yorum' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'din8-kader-kavram','Kader, Kaza ve İrade','Kader, Kaza ve İrade','Kader, Kaza ve İrade kavramlarını anlam, değer ve günlük yaşam açısından değerlendirir.','',10,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-kader'
+WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-1-1','coktan_secmeli','Kader kavramı genel olarak neyi ifade eder?','["Allah''ın evrendeki ölçü ve düzeni bilip takdir etmesini","İnsanın hiçbir seçimi olmamasını","Sadece şansı","Sadece geçmiş olayları"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kader-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-1-2','coktan_secmeli','Kaza neyi ifade eder?','["Sadece insan planını","Sadece doğa yasasını","Takdir edilen olayların zamanı geldiğinde gerçekleşmesini","Sadece dua etmeyi"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kader-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-1-3','coktan_secmeli','İnsan irade sahibi midir?','["Evet","Hayır","Hiç seçim yapamaz","Sadece çocukken"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kader-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-1-4','coktan_secmeli','İnsanın seçimlerinden sorumlu olması irade ile ilişkili midir?','["Hayır","Sorumluluk yoktur","Evet","Sadece kader belirler"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kader-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-1-5','coktan_secmeli','Doğa yasaları evrendeki düzenle ilişkilendirilebilir mi?','["Evet","Hayır","Düzen yoktur","Sadece insanlar için"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kader-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-1-6','coktan_secmeli','Kader inancı tembelliği haklı çıkarır mı?','["Evet","Her zaman","Hayır","Çalışmak gereksizdir"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kader-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-1-7','coktan_secmeli','İnsan sonucu kontrol edemese de elinden geleni yapmakla sorumlu mudur?','["Evet","Hayır","Hiç çaba gerekmez","Sadece başkaları sorumludur"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kader-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-1-8','coktan_secmeli','Özgür irade sınırsız mıdır?','["Evet, doğa yasalarını da değiştirebilir","Hiç irade yoktur","Hayır, insanın imkân ve koşulları içinde seçim yapması söz konusudur.","Sadece yetişkinlerde vardır"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kader-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'din8-emek','Emek, Rızık, Tevekkül ve Sorumluluk','Emek, Rızık, Tevekkül ve Sorumluluk','Emek, Rızık, Tevekkül ve Sorumluluk kavramlarını anlam, değer ve günlük yaşam açısından değerlendirir.','',20,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-kader'
+WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-2-1','coktan_secmeli','Tevekkül neyi ifade eder?','["Hiç çalışmadan beklemeyi","Gerekli çabayı gösterdikten sonra Allah''a güvenmeyi","Sorumluluktan kaçmayı","Plan yapmamayı"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-emek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-2-2','coktan_secmeli','Rızık kavramı neyle ilişkilidir?','["Sadece parayla","Sadece sınav notuyla","Sadece şansla","Canlıların yararlanacağı nimet ve imkânlarla"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-emek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-2-3','coktan_secmeli','Emek vermek sorumluluk bilinciyle ilişkili midir?','["Hayır","Evet","Çalışmak gereksizdir","Sadece yetişkinler için"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-emek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-2-4','coktan_secmeli','Bir öğrenci çalışmadan “kaderimde varsa olur” derse bu tevekkül anlayışıyla uyumlu mudur?','["Evet","Tam örnektir","Çalışmak tevekküle aykırıdır","Hayır"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-emek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-2-5','coktan_secmeli','Tedbir almak tevekkülle çelişir mi?','["Evet","Hayır","Tedbir güvensizliktir","Sadece dua yeterlidir"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-emek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-2-6','coktan_secmeli','Başarı için plan ve çaba göstermek önemli midir?','["Hayır","Sadece sonuç önemlidir","Emek gereksizdir","Evet"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-emek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-2-7','coktan_secmeli','İnsan seçimlerinin sonuçlarını dikkate almalı mıdır?','["Hayır","Evet","Sonuçlar önemsizdir","Sorumluluk yoktur"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-emek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-2-8','coktan_secmeli','Sağlık için önlem almak ve tedavi olmak kader inancıyla çelişir mi?','["Evet","Tedavi yasaktır","Önlem gereksizdir","Hayır"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-emek' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'din8-zekat-kavram','Zekât, Sadaka ve İnfak','Zekât, Sadaka ve İnfak','Zekât, Sadaka ve İnfak kavramlarını anlam, değer ve günlük yaşam açısından değerlendirir.','',30,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-zekat'
+WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-3-1','coktan_secmeli','Zekât İslam''da mali ibadetlerden biri midir?','["Hayır","Sadece gelenek","Evet","Sadece dua"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-zekat-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-3-2','coktan_secmeli','Sadaka yalnız para vermek midir?','["Hayır","Evet","Sadece zenginler verir","Sadece bayramda"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-zekat-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-3-3','coktan_secmeli','İnfak neyi ifade eder?','["Sadece alışveriş yapmayı","Borç almayı","Allah rızası için mal ve imkânlardan paylaşmayı","Mal biriktirmeyi"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-zekat-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-3-4','coktan_secmeli','Zekâtın toplumsal dayanışmaya katkısı olabilir mi?','["Evet","Hayır","Toplumu ayırır","Sadece bireyseldir"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-zekat-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-3-5','coktan_secmeli','Zekât için belirli mali şartlar aranır mı?','["Hayır","Herkes aynı miktarı verir","Evet","Sadece çocuklar verir"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-zekat-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-3-6','coktan_secmeli','Sadaka-i cariye kalıcı yarar sağlayan hayırlarla ilişkilendirilebilir mi?','["Evet","Hayır","Sadece bir günlük yardımdır","Hayır kavramı yoktur"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-zekat-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-3-7','coktan_secmeli','Yardımın gösteriş için yapılması ahlaki açıdan uygun mudur?','["Evet","Her zaman","Hayır","Niyet önemli değildir"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-zekat-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-3-8','coktan_secmeli','İhtiyaç sahibinin onurunu korumak yardımda önemli midir?','["Evet","Hayır","Yardım alan küçümsenebilir","Sadece miktar önemlidir"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-zekat-kavram' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'din8-yardim','Yardımlaşma ve Paylaşma','Yardımlaşma ve Paylaşma','Yardımlaşma ve Paylaşma kavramlarını anlam, değer ve günlük yaşam açısından değerlendirir.','',40,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-zekat'
+WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-4-1','coktan_secmeli','Yardımlaşma toplumsal bağları güçlendirebilir mi?','["Hayır","Toplumu böler","Sadece aile içinde","Evet"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-yardim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-4-2','coktan_secmeli','Paylaşmak yalnız maddi şeylerle mi sınırlıdır?','["Evet","Hayır","Sadece para paylaşılır","Bilgi ve zaman paylaşılmaz"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-yardim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-4-3','coktan_secmeli','Gönüllü yardım faaliyetleri toplumsal dayanışmaya katkı sağlar mı?','["Hayır","Sadece devlet yapar","Gönüllülük gereksizdir","Evet"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-yardim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-4-4','coktan_secmeli','İhtiyaç sahibini rencide etmeden yardım etmek önemli midir?','["Hayır","Evet","Yardımda nezaket gerekmez","Sadece miktar önemlidir"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-yardim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-4-5','coktan_secmeli','Komşuluk ilişkilerinde yardımlaşma teşvik edilir mi?','["Hayır","Komşuluk önemsizdir","Sadece akraba önemlidir","Evet"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-yardim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-4-6','coktan_secmeli','İsrafı azaltmak paylaşmaya kaynak ayırmayı kolaylaştırabilir mi?','["Hayır","Evet","İsraf yararlıdır","Paylaşmayla ilgisizdir"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-yardim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-4-7','coktan_secmeli','Afet zamanlarında dayanışma önemli midir?','["Hayır","Sadece bireysel hareket edilir","Yardım zararlıdır","Evet"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-yardim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-4-8','coktan_secmeli','Yardım ederken güvenilir kurumları kullanmak uygun olabilir mi?','["Hayır","Evet","Kurumlar kullanılmamalı","Kaynak kontrolü gerekmez"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-yardim' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'din8-din-birey','Din, Birey ve Toplum','Din, Birey ve Toplum','Din, Birey ve Toplum kavramlarını anlam, değer ve günlük yaşam açısından değerlendirir.','',50,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-hayat'
+WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-5-1','coktan_secmeli','Din bireyin anlam arayışına cevaplar sunabilir mi?','["Evet","Hayır","Sadece ekonomiyle ilgilidir","Bireyle ilgisizdir"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-din-birey' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-5-2','coktan_secmeli','Din toplumsal değer ve davranışları etkileyebilir mi?','["Hayır","Toplumla ilgisi yoktur","Evet","Sadece özel alandır"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-din-birey' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-5-3','coktan_secmeli','İslam''da canın korunması önemli bir değer midir?','["Evet","Hayır","Sadece mal önemlidir","Canın değeri yoktur"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-din-birey' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-5-4','coktan_secmeli','Aklın korunması temel değerlerle ilişkilendirilebilir mi?','["Hayır","Akıl önemsizdir","Evet","Sadece beden önemlidir"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-din-birey' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-5-5','coktan_secmeli','Neslin ve ailenin korunması toplumsal hayatla ilişkili midir?','["Evet","Hayır","Sadece bireyseldir","Aile önemsizdir"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-din-birey' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-5-6','coktan_secmeli','Malın korunması hak ve sorumluluklarla ilişkili midir?','["Hayır","Mülkiyet kavramı yoktur","Evet","Sadece devlet malı korunur"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-din-birey' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-5-7','coktan_secmeli','Din özgürlüğü başkalarının inançlarına saygıyı gerektirir mi?','["Evet","Hayır","Sadece kendi inancı önemlidir","Saygı gerekmez"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-din-birey' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-5-8','coktan_secmeli','Toplumsal barışta adalet ve merhametin rolü olabilir mi?','["Hayır","Sadece güç önemlidir","Evet","Değerler etkisizdir"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-din-birey' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'din8-deger','Temel Değerler ve Güzel Ahlak','Temel Değerler ve Güzel Ahlak','Temel Değerler ve Güzel Ahlak kavramlarını anlam, değer ve günlük yaşam açısından değerlendirir.','',60,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-hayat'
+WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-6-1','coktan_secmeli','Doğruluk güzel ahlakın bir parçası mıdır?','["Hayır","Evet","Sadece okul kuralıdır","Sadece ticarette"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-6-2','coktan_secmeli','Adalet neyi gerektirir?','["Kayırmayı","Hileyi","Ayrımcılığı","Hak ve hakkaniyeti gözetmeyi"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-6-3','coktan_secmeli','Sabır pasif biçimde hiçbir şey yapmamak mıdır?','["Evet","Hayır","Her zaman","Çaba sabra aykırıdır"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-6-4','coktan_secmeli','Şükür nimetlerin değerini bilmekle ilişkilendirilebilir mi?','["Hayır","Sadece söz söylemektir","İsrafla ilgilidir","Evet"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-6-5','coktan_secmeli','Emanete riayet güvenilirlikle ilişkili midir?','["Hayır","Evet","Emanet önemsizdir","Sadece maddi şeylerde"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-6-6','coktan_secmeli','Kul hakkını gözetmek başkalarının haklarına saygıyla ilişkili midir?','["Hayır","Sadece kişinin kendi hakkı önemlidir","Hak kavramı yoktur","Evet"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-6-7','coktan_secmeli','Affetmek her durumda haksızlığı onaylamak mıdır?','["Evet","Hayır","Affetmek adaleti kaldırır","Sadece zayıflıktır"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-6-8','coktan_secmeli','Güzel ahlak söz ve davranış bütünlüğünü gerektirir mi?','["Hayır","Sadece söz yeterlidir","Davranış önemli değildir","Evet"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-deger' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'din8-hz-muhammed','Hz. Muhammed''in Doğruluğu ve Güvenilirliği','Hz. Muhammed''in Doğruluğu ve Güvenilirliği','Hz. Muhammed''in Doğruluğu ve Güvenilirliği kavramlarını anlam, değer ve günlük yaşam açısından değerlendirir.','',70,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-ornek'
+WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-7-1','coktan_secmeli','Hz. Muhammed''in güvenilirliğini ifade eden lakap?','["el-Kebir","el-Melik","el-Emin","el-Katip"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-hz-muhammed' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-7-2','coktan_secmeli','Doğruluk Hz. Muhammed''in örnek davranışlarından biri midir?','["Evet","Hayır","Sadece ticarette","Doğruluk önemli değildir"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-hz-muhammed' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-7-3','coktan_secmeli','Verdiği sözü tutmak güvenilirlikle ilişkili midir?','["Hayır","Sözler önemli değildir","Evet","Sadece yazılı söz geçerlidir"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-hz-muhammed' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-7-4','coktan_secmeli','Hz. Muhammed insanlara karşı adaletli davranmayı önemsemiş midir?','["Evet","Hayır","Sadece yakınlarına","Adaletle ilgilenmemiştir"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-hz-muhammed' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-7-5','coktan_secmeli','İnsanlara değer vermek onun örnekliğinde yer alır mı?','["Hayır","Sadece belirli gruplara","Evet","İnsan ilişkileri önemsizdir"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-hz-muhammed' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-7-6','coktan_secmeli','İstişare etmek karar öncesi görüş almaktır. Hz. Muhammed''in uygulamalarında görülür mü?','["Evet","Hayır","Hiç danışmamıştır","İstişare yasaktır"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-hz-muhammed' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-7-7','coktan_secmeli','Merhametli davranışlar onun örnekliğinin parçası mıdır?','["Hayır","Merhamet önemsizdir","Evet","Sadece çocuklara"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-hz-muhammed' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-7-8','coktan_secmeli','Hz. Muhammed''in söz ve davranışları Müslümanlar için örnek kabul edilir mi?','["Evet","Hayır","Sadece tarihsel bilgi sayılır","Davranışları bilinmez"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-hz-muhammed' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'din8-merhamet','Merhamet, İstişare ve Hakkı Gözetme','Merhamet, İstişare ve Hakkı Gözetme','Merhamet, İstişare ve Hakkı Gözetme kavramlarını anlam, değer ve günlük yaşam açısından değerlendirir.','',80,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-ornek'
+WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-8-1','coktan_secmeli','İstişare ne demektir?','["Tek başına karar dayatmak","Susmak","Emir vermek","Danışmak ve görüş alışverişi yapmak"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-merhamet' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-8-2','coktan_secmeli','Merhamet yalnız acımak mıdır?','["Evet","Hayır; yardım, anlayış ve zarar vermemeyi de içerir.","Sadece üzülmektir","Sadece hayvanlara yöneliktir"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-merhamet' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-8-3','coktan_secmeli','Hakkı gözetmek adaletle ilişkili midir?','["Hayır","Sadece güçle","Hak önemsizdir","Evet"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-merhamet' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-8-4','coktan_secmeli','Bir anlaşmazlıkta karşı tarafı dinlemek yapıcı bir davranış mıdır?','["Hayır","Evet","Söz kesmek gerekir","Dinlemek zayıflıktır"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-merhamet' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-8-5','coktan_secmeli','Affedicilik merhametle ilişkilendirilebilir mi?','["Hayır","Sadece korkudur","Merhametle ilgisizdir","Evet"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-merhamet' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-8-6','coktan_secmeli','Danışarak karar almak ortak sorumluluğu güçlendirebilir mi?','["Hayır","Evet","Sadece zamanı uzatır","Kararı zayıflatır"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-merhamet' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-8-7','coktan_secmeli','Güçlü olanın zayıfın hakkını koruması adaletle uyumlu mudur?','["Hayır","Güçlü olan her şeyi yapabilir","Hak sadece güçlüye aittir","Evet"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-merhamet' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-8-8','coktan_secmeli','Merhamet ve adalet birlikte gözetilebilir mi?','["Hayır","Evet","Birbirine zıttır","Sadece biri seçilir"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-merhamet' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'din8-kuran-yapi','Kur''an-ı Kerim''in Temel Özellikleri','Kur''an-ı Kerim''in Temel Özellikleri','Kur''an-ı Kerim''in Temel Özellikleri kavramlarını anlam, değer ve günlük yaşam açısından değerlendirir.','',90,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-kuran'
+WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-9-1','coktan_secmeli','Kur''an-ı Kerim kaç sureden oluşur?','["114","99","120","40"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-yapi' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-9-2','coktan_secmeli','Kur''an''ın bölümlerine ne denir?','["Cüz sadece bölüm adı değildir","Mihrap","Sure","Minare"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-yapi' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-9-3','coktan_secmeli','Sureleri oluşturan vahiy cümlelerine ne denir?','["Ayet","Hadis","Dua","Hutbe"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-yapi' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-9-4','coktan_secmeli','Kur''an''ın ilk suresi hangisidir?','["Nas","Bakara","Fâtiha","Yasin"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-yapi' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-9-5','coktan_secmeli','Kur''an''ın son suresi hangisidir?','["Nas","Fâtiha","Bakara","Kehf"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-yapi' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-9-6','coktan_secmeli','Kur''an Arapça indirilmiş midir?','["Hayır","Türkçe indirildi","Evet","Farsça indirildi"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-yapi' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-9-7','coktan_secmeli','Kur''an''ın anlaşılması için meal ve tefsir çalışmalarından yararlanılabilir mi?','["Evet","Hayır","Anlamaya çalışmak gerekmez","Sadece ezber yeterlidir"]',0,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-yapi' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-9-8','coktan_secmeli','Kur''an''a saygılı davranmak Müslümanların önem verdiği bir tutum mudur?','["Hayır","Sadece tarih kitabıdır","Evet","Saygıyla ilgisi yoktur"]',2,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-yapi' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'din8-kuran-mesaj','Kur''an''ın Ana Konuları ve Mesajları','Kur''an''ın Ana Konuları ve Mesajları','Kur''an''ın Ana Konuları ve Mesajları kavramlarını anlam, değer ve günlük yaşam açısından değerlendirir.','',100,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='din8-kuran'
+WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-10-1','coktan_secmeli','Kur''an''ın ana konularından biri inanç mıdır?','["Hayır","Evet","Sadece tarih","Sadece coğrafya"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-mesaj' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-10-2','coktan_secmeli','İbadetler Kur''an''ın ele aldığı konulardan mıdır?','["Hayır","Sadece ekonomi","Sadece savaş","Evet"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-mesaj' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-10-3','coktan_secmeli','Ahlaki değerler Kur''an''ın mesajlarında yer alır mı?','["Hayır","Evet","Ahlakla ilgilenmez","Sadece ibadet anlatır"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-mesaj' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-10-4','coktan_secmeli','Kur''an adaleti teşvik eder mi?','["Hayır","Adalet önemsizdir","Sadece bireysel konular vardır","Evet"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-mesaj' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-10-5','coktan_secmeli','Kur''an insanı düşünmeye ve aklını kullanmaya yönelten ifadeler içerir mi?','["Hayır","Evet","Düşünmeyi yasaklar","Sadece ezberi ister"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-mesaj' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-10-6','coktan_secmeli','Peygamber kıssaları Kur''an''da ibret ve ders amacıyla yer alır mı?','["Hayır","Sadece tarih listesi","Kıssa yoktur","Evet"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-mesaj' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-10-7','coktan_secmeli','Kur''an insan ve toplum hayatına ilişkin ilkeler sunar mı?','["Hayır","Evet","Sadece bireysel dua","Toplumla ilgisizdir"]',1,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-mesaj' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8d-10-8','coktan_secmeli','Kur''an''ın mesajlarını bağlam ve bütünlük içinde anlamaya çalışmak önemli midir?','["Hayır","Tek cümle yeter","Bağlam gereksizdir","Evet"]',3,'Din kültürü ve ahlak bilgisi kavramı doğru bağlamda değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='din8-kuran-mesaj' AND (d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 

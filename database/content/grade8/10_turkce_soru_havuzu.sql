@@ -1,326 +1,974 @@
 SET NAMES utf8mb4;
 
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-ana','Ana Fikir, Yardımcı Fikir ve Konu','Ana Fikir, Yardımcı Fikir ve Konu','Ana Fikir, Yardımcı Fikir ve Konu becerilerini uygular.','',10,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-anlama' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-cikarim','Çıkarım, Yorum ve Tahmin','Çıkarım, Yorum ve Tahmin','Çıkarım, Yorum ve Tahmin becerilerini uygular.','',20,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-anlama' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-metin','Metin Türleri ve Yapı','Metin Türleri ve Yapı','Metin Türleri ve Yapı becerilerini uygular.','',30,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-anlama' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-baglam','Bağlamdan Sözcük Anlamı','Bağlamdan Sözcük Anlamı','Bağlamdan Sözcük Anlamı becerilerini uygular.','',40,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-soz' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-deyim','Deyim, Atasözü ve Mecaz','Deyim, Atasözü ve Mecaz','Deyim, Atasözü ve Mecaz becerilerini uygular.','',50,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-soz' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-soz-iliski','Sözcükler Arası Anlam İlişkileri','Sözcükler Arası Anlam İlişkileri','Sözcükler Arası Anlam İlişkileri becerilerini uygular.','',60,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-soz' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-fiilimsi','Fiilimsiler','Fiilimsiler','Fiilimsiler becerilerini uygular.','',70,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-dil' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-cumle','Cümlenin Ögeleri','Cümlenin Ögeleri','Cümlenin Ögeleri becerilerini uygular.','',80,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-dil' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-cumle-tur','Cümle Türleri ve Anlam İlişkileri','Cümle Türleri ve Anlam İlişkileri','Cümle Türleri ve Anlam İlişkileri becerilerini uygular.','',90,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-dil' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-yazim','Yazım Kuralları','Yazım Kuralları','Yazım Kuralları becerilerini uygular.','',100,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-yazim' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-noktalama','Noktalama İşaretleri','Noktalama İşaretleri','Noktalama İşaretleri becerilerini uygular.','',110,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-yazim' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-anlatim-bozuk','Anlatım Bozukluğu Farkındalığı','Anlatım Bozukluğu Farkındalığı','Anlatım Bozukluğu Farkındalığı becerilerini uygular.','',120,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-yazim' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-paragraf','Paragraf Yapısı ve Akış','Paragraf Yapısı ve Akış','Paragraf Yapısı ve Akış becerilerini uygular.','',130,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-anlatim' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-yazma','Planlı Yazma ve Metin Oluşturma','Planlı Yazma ve Metin Oluşturma','Planlı Yazma ve Metin Oluşturma becerilerini uygular.','',140,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-anlatim' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-tartisma','Görüş, Gerekçe ve Kanıt','Görüş, Gerekçe ve Kanıt','Görüş, Gerekçe ve Kanıt becerilerini uygular.','',150,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-anlatim' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-gorsel','Görsel, Grafik ve Tablo Okuma','Görsel, Grafik ve Tablo Okuma','Görsel, Grafik ve Tablo Okuma becerilerini uygular.','',160,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-medya' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-medya','Medya Metinleri ve Eleştirel Okuma','Medya Metinleri ve Eleştirel Okuma','Medya Metinleri ve Eleştirel Okuma becerilerini uygular.','',170,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-medya' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'t8-kaynak','Kaynak Güvenilirliği ve Dijital Okuryazarlık','Kaynak Güvenilirliği ve Dijital Okuryazarlık','Kaynak Güvenilirliği ve Dijital Okuryazarlık becerilerini uygular.','',180,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-medya' WHERE d.kod='turkce' OR d.ad='Türkçe' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-1','coktan_secmeli','Ana fikir metnin temel iletisini verir mi?','["Evet","Hayır","Sadece başlığı","Sadece ayrıntıyı"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,1,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-ana' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-2','coktan_secmeli','Yardımcı fikirler ana fikri destekleyebilir mi?','["Hayır","Her zaman karşıttır","Evet","Metinle ilgisizdir"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,2,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-ana' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-3','coktan_secmeli','Çıkarım metindeki ipuçlarına dayanmalı mıdır?','["Evet","Hayır","Rastgele olmalı","Sadece görsele"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,3,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-4','coktan_secmeli','Tahmin ile kesin bilgi aynı mıdır?','["Evet","Her zaman","Hayır","Sadece hikâyede"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,4,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-5','coktan_secmeli','Bilgilendirici metnin amacı bilgi vermek olabilir mi?','["Evet","Hayır","Sadece olay anlatır","Sadece şiirdir"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,5,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-metin' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-6','coktan_secmeli','Hikâye edici metinde olay, kişi, yer ve zaman bulunabilir mi?','["Hayır","Sadece tabloda","Evet","Sadece açıklamada"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,6,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-metin' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-7','coktan_secmeli','Bilinmeyen sözcüğün anlamı cümle bağlamından tahmin edilebilir mi?','["Evet","Hayır","Sadece sözlük","Tahmin yapılamaz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,7,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-8','coktan_secmeli','Aynı sözcük farklı bağlamlarda farklı anlam taşıyabilir mi?','["Hayır","Anlam sabittir","Evet","Sadece özel adlarda"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,8,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-9','coktan_secmeli','Deyimler çoğu zaman kalıplaşmış ve mecazlı mıdır?','["Evet","Hayır","Sadece gerçek anlam","Sadece sayı"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,9,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-10','coktan_secmeli','Atasözleri toplumsal deneyim aktarabilir mi?','["Hayır","Sadece isim","Evet","Sadece tarih"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,10,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-11','coktan_secmeli','Eş anlamlı sözcükler yakın anlam taşır mı?','["Evet","Hayır","Zıt anlam taşır","Sadece ses benzerliği"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,11,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-soz-iliski' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-12','coktan_secmeli','Sesteş sözcüklerin yazılışları aynı, anlamları farklı olabilir mi?','["Hayır","Anlamları aynıdır","Evet","Yazılışları farklıdır"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,12,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-soz-iliski' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-13','coktan_secmeli','Fiilimsi fiilden türeyip cümlede isim, sıfat veya zarf görevi alabilir mi?','["Evet","Hayır","Sadece yüklem olur","Fiilimsi yoktur"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,13,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-14','coktan_secmeli','“-mek/-mak” mastar eki isim-fiil oluşturabilir mi?','["Hayır","Sadece sıfat-fiil","Evet","Sadece zarf-fiil"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,14,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-15','coktan_secmeli','Yüklem cümlenin temel ögelerinden biri midir?','["Evet","Hayır","Sadece noktalama","Sadece bağlaç"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,15,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-16','coktan_secmeli','Özne işi yapan veya durumda bulunan öge olabilir mi?','["Hayır","Her zaman nesnedir","Evet","Özne olmaz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,16,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-17','coktan_secmeli','“Çalışırsan başarırsın.” koşul anlamı taşır mı?','["Evet","Hayır","Sadece neden","Sadece karşılaştırma"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,17,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-18','coktan_secmeli','“Yağmur yağdığı için maç ertelendi.” neden-sonuç mudur?','["Hayır","Koşul","Evet","Amaç-sonuç"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,18,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-19','coktan_secmeli','Bağlaç olan “de” ayrı yazılır mı?','["Evet","Hayır","Her zaman bitişik","Kesmeyle"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,19,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-20','coktan_secmeli','Özel adlara gelen bazı ekler kesmeyle ayrılır mı?','["Hayır","Virgülle ayrılır","Evet","Hiç ayrılmaz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,20,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-21','coktan_secmeli','Soru cümlesinin sonunda soru işareti kullanılabilir mi?','["Evet","Hayır","Sadece nokta","Sadece iki nokta"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,21,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-noktalama' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-22','coktan_secmeli','Alıntı cümlelerde tırnak işareti kullanılabilir mi?','["Hayır","Sadece virgül","Evet","Sadece kesme"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,22,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-noktalama' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-23','coktan_secmeli','Gereksiz sözcük kullanımı anlatım bozukluğu oluşturabilir mi?','["Evet","Hayır","Her zaman anlatımı güçlendirir","Sadece şiirde"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,23,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-anlatim-bozuk' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-24','coktan_secmeli','Özne-yüklem uyumsuzluğu anlatım sorununa yol açabilir mi?','["Hayır","Sadece yazım hatası","Evet","Uyum önemli değildir"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,24,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-anlatim-bozuk' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-25','coktan_secmeli','Paragraftaki cümleler konu bütünlüğü göstermeli midir?','["Evet","Hayır","Tamamen ilgisiz olabilir","Sadece uzunluk önemlidir"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,25,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-26','coktan_secmeli','Geçiş ifadeleri paragraf akışını destekler mi?','["Hayır","Sadece başlık","Evet","Akışla ilgisiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,26,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-27','coktan_secmeli','Yazıya başlamadan plan yapmak yararlı mıdır?','["Evet","Hayır","Sadece sonuç yazılır","Plan gereksiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,27,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-28','coktan_secmeli','Taslak metin gözden geçirilip geliştirilebilir mi?','["Hayır","İlk taslak değişmez","Evet","Düzeltme yasaktır"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,28,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-29','coktan_secmeli','Bir görüşü desteklemek için kanıt ve gerekçe gerekir mi?','["Evet","Hayır","Yüksek ses yeter","Tekrar yeter"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,29,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-tartisma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-30','coktan_secmeli','Karşı görüşe saygı tartışmanın parçası mıdır?','["Hayır","Kişiye saldırmak gerekir","Evet","Dinleme gerekmez"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,30,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-tartisma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-31','coktan_secmeli','Grafikte eksen ve ölçek doğru yorum için önemli midir?','["Evet","Hayır","Sadece renk","Sadece başlık"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,31,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-gorsel' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-32','coktan_secmeli','Tablodaki veriler karşılaştırılabilir mi?','["Hayır","Sadece okunur","Evet","Veri karşılaştırılmaz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,32,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-gorsel' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-33','coktan_secmeli','Medya başlığı yanıltıcı olabilir mi?','["Evet","Hayır","Başlık her zaman kanıttır","Sadece televizyonda"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,33,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-medya' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-34','coktan_secmeli','Reklam metninin ikna amacı olabilir mi?','["Hayır","Sadece bilgi","Evet","Amaç yoktur"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,34,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-medya' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-35','coktan_secmeli','Kaynağın yazarı ve yayımlanma tarihi güvenilirlikte önemli midir?','["Evet","Hayır","Sadece renk","Sadece uzunluk"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,35,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-kaynak' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-1-36','coktan_secmeli','Bir bilgi birden fazla güvenilir kaynaktan doğrulanabilir mi?','["Hayır","Tek kaynak zorunlu","Evet","Kaynak gerekmez"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,36,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-kaynak' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-1','coktan_secmeli','Ana fikir metnin temel iletisini verir mi? Benzer bir örneği düşün.','["Hayır","Evet","Sadece başlığı","Sadece ayrıntıyı"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,101,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-ana' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-2','coktan_secmeli','Yardımcı fikirler ana fikri destekleyebilir mi? Benzer bir örneği düşün.','["Hayır","Her zaman karşıttır","Metinle ilgisizdir","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,102,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-ana' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-3','coktan_secmeli','Çıkarım metindeki ipuçlarına dayanmalı mıdır? Benzer bir örneği düşün.','["Hayır","Evet","Rastgele olmalı","Sadece görsele"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,103,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-4','coktan_secmeli','Tahmin ile kesin bilgi aynı mıdır? Benzer bir örneği düşün.','["Evet","Her zaman","Sadece hikâyede","Hayır"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,104,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-5','coktan_secmeli','Bilgilendirici metnin amacı bilgi vermek olabilir mi? Benzer bir örneği düşün.','["Hayır","Evet","Sadece olay anlatır","Sadece şiirdir"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,105,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-metin' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-6','coktan_secmeli','Hikâye edici metinde olay, kişi, yer ve zaman bulunabilir mi? Benzer bir örneği düşün.','["Hayır","Sadece tabloda","Sadece açıklamada","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,106,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-metin' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-7','coktan_secmeli','Bilinmeyen sözcüğün anlamı cümle bağlamından tahmin edilebilir mi? Benzer bir örneği düşün.','["Hayır","Evet","Sadece sözlük","Tahmin yapılamaz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,107,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-8','coktan_secmeli','Aynı sözcük farklı bağlamlarda farklı anlam taşıyabilir mi? Benzer bir örneği düşün.','["Hayır","Anlam sabittir","Sadece özel adlarda","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,108,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-9','coktan_secmeli','Deyimler çoğu zaman kalıplaşmış ve mecazlı mıdır? Benzer bir örneği düşün.','["Hayır","Evet","Sadece gerçek anlam","Sadece sayı"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,109,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-10','coktan_secmeli','Atasözleri toplumsal deneyim aktarabilir mi? Benzer bir örneği düşün.','["Hayır","Sadece isim","Sadece tarih","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,110,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-11','coktan_secmeli','Eş anlamlı sözcükler yakın anlam taşır mı? Benzer bir örneği düşün.','["Hayır","Evet","Zıt anlam taşır","Sadece ses benzerliği"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,111,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-soz-iliski' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-12','coktan_secmeli','Sesteş sözcüklerin yazılışları aynı, anlamları farklı olabilir mi? Benzer bir örneği düşün.','["Hayır","Anlamları aynıdır","Yazılışları farklıdır","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,112,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-soz-iliski' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-13','coktan_secmeli','Fiilimsi fiilden türeyip cümlede isim, sıfat veya zarf görevi alabilir mi? Benzer bir örneği düşün.','["Hayır","Evet","Sadece yüklem olur","Fiilimsi yoktur"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,113,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-14','coktan_secmeli','“-mek/-mak” mastar eki isim-fiil oluşturabilir mi? Benzer bir örneği düşün.','["Hayır","Sadece sıfat-fiil","Sadece zarf-fiil","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,114,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-15','coktan_secmeli','Yüklem cümlenin temel ögelerinden biri midir? Benzer bir örneği düşün.','["Hayır","Evet","Sadece noktalama","Sadece bağlaç"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,115,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-16','coktan_secmeli','Özne işi yapan veya durumda bulunan öge olabilir mi? Benzer bir örneği düşün.','["Hayır","Her zaman nesnedir","Özne olmaz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,116,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-17','coktan_secmeli','“Çalışırsan başarırsın.” koşul anlamı taşır mı? Benzer bir örneği düşün.','["Hayır","Evet","Sadece neden","Sadece karşılaştırma"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,117,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-18','coktan_secmeli','“Yağmur yağdığı için maç ertelendi.” neden-sonuç mudur? Benzer bir örneği düşün.','["Hayır","Koşul","Amaç-sonuç","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,118,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-19','coktan_secmeli','Bağlaç olan “de” ayrı yazılır mı? Benzer bir örneği düşün.','["Hayır","Evet","Her zaman bitişik","Kesmeyle"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,119,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-20','coktan_secmeli','Özel adlara gelen bazı ekler kesmeyle ayrılır mı? Benzer bir örneği düşün.','["Hayır","Virgülle ayrılır","Hiç ayrılmaz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,120,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-21','coktan_secmeli','Soru cümlesinin sonunda soru işareti kullanılabilir mi? Benzer bir örneği düşün.','["Hayır","Evet","Sadece nokta","Sadece iki nokta"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,121,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-noktalama' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-22','coktan_secmeli','Alıntı cümlelerde tırnak işareti kullanılabilir mi? Benzer bir örneği düşün.','["Hayır","Sadece virgül","Sadece kesme","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,122,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-noktalama' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-23','coktan_secmeli','Gereksiz sözcük kullanımı anlatım bozukluğu oluşturabilir mi? Benzer bir örneği düşün.','["Hayır","Evet","Her zaman anlatımı güçlendirir","Sadece şiirde"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,123,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-anlatim-bozuk' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-24','coktan_secmeli','Özne-yüklem uyumsuzluğu anlatım sorununa yol açabilir mi? Benzer bir örneği düşün.','["Hayır","Sadece yazım hatası","Uyum önemli değildir","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,124,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-anlatim-bozuk' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-25','coktan_secmeli','Paragraftaki cümleler konu bütünlüğü göstermeli midir? Benzer bir örneği düşün.','["Hayır","Evet","Tamamen ilgisiz olabilir","Sadece uzunluk önemlidir"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,125,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-26','coktan_secmeli','Geçiş ifadeleri paragraf akışını destekler mi? Benzer bir örneği düşün.','["Hayır","Sadece başlık","Akışla ilgisiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,126,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-27','coktan_secmeli','Yazıya başlamadan plan yapmak yararlı mıdır? Benzer bir örneği düşün.','["Hayır","Evet","Sadece sonuç yazılır","Plan gereksiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,127,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-28','coktan_secmeli','Taslak metin gözden geçirilip geliştirilebilir mi? Benzer bir örneği düşün.','["Hayır","İlk taslak değişmez","Düzeltme yasaktır","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,128,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-29','coktan_secmeli','Bir görüşü desteklemek için kanıt ve gerekçe gerekir mi? Benzer bir örneği düşün.','["Hayır","Evet","Yüksek ses yeter","Tekrar yeter"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,129,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-tartisma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-30','coktan_secmeli','Karşı görüşe saygı tartışmanın parçası mıdır? Benzer bir örneği düşün.','["Hayır","Kişiye saldırmak gerekir","Dinleme gerekmez","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,130,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-tartisma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-31','coktan_secmeli','Grafikte eksen ve ölçek doğru yorum için önemli midir? Benzer bir örneği düşün.','["Hayır","Evet","Sadece renk","Sadece başlık"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,131,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-gorsel' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-32','coktan_secmeli','Tablodaki veriler karşılaştırılabilir mi? Benzer bir örneği düşün.','["Hayır","Sadece okunur","Veri karşılaştırılmaz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,132,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-gorsel' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-33','coktan_secmeli','Medya başlığı yanıltıcı olabilir mi? Benzer bir örneği düşün.','["Hayır","Evet","Başlık her zaman kanıttır","Sadece televizyonda"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,133,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-medya' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-34','coktan_secmeli','Reklam metninin ikna amacı olabilir mi? Benzer bir örneği düşün.','["Hayır","Sadece bilgi","Amaç yoktur","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,134,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-medya' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-35','coktan_secmeli','Kaynağın yazarı ve yayımlanma tarihi güvenilirlikte önemli midir? Benzer bir örneği düşün.','["Hayır","Evet","Sadece renk","Sadece uzunluk"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,135,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-kaynak' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-2-36','coktan_secmeli','Bir bilgi birden fazla güvenilir kaynaktan doğrulanabilir mi? Benzer bir örneği düşün.','["Hayır","Tek kaynak zorunlu","Kaynak gerekmez","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,136,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-kaynak' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-1','coktan_secmeli','Ana fikir metnin temel iletisini verir mi? Yeni bir bağlama uygula.','["Hayır","Sadece başlığı","Evet","Sadece ayrıntıyı"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,201,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-ana' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-2','coktan_secmeli','Yardımcı fikirler ana fikri destekleyebilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Her zaman karşıttır","Metinle ilgisizdir"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,202,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-ana' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-3','coktan_secmeli','Çıkarım metindeki ipuçlarına dayanmalı mıdır? Yeni bir bağlama uygula.','["Hayır","Rastgele olmalı","Evet","Sadece görsele"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,203,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-4','coktan_secmeli','Tahmin ile kesin bilgi aynı mıdır? Yeni bir bağlama uygula.','["Hayır","Evet","Her zaman","Sadece hikâyede"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,204,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-5','coktan_secmeli','Bilgilendirici metnin amacı bilgi vermek olabilir mi? Yeni bir bağlama uygula.','["Hayır","Sadece olay anlatır","Evet","Sadece şiirdir"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,205,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-metin' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-6','coktan_secmeli','Hikâye edici metinde olay, kişi, yer ve zaman bulunabilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Sadece tabloda","Sadece açıklamada"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,206,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-metin' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-7','coktan_secmeli','Bilinmeyen sözcüğün anlamı cümle bağlamından tahmin edilebilir mi? Yeni bir bağlama uygula.','["Hayır","Sadece sözlük","Evet","Tahmin yapılamaz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,207,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-8','coktan_secmeli','Aynı sözcük farklı bağlamlarda farklı anlam taşıyabilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Anlam sabittir","Sadece özel adlarda"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,208,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-9','coktan_secmeli','Deyimler çoğu zaman kalıplaşmış ve mecazlı mıdır? Yeni bir bağlama uygula.','["Hayır","Sadece gerçek anlam","Evet","Sadece sayı"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,209,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-10','coktan_secmeli','Atasözleri toplumsal deneyim aktarabilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Sadece isim","Sadece tarih"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,210,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-11','coktan_secmeli','Eş anlamlı sözcükler yakın anlam taşır mı? Yeni bir bağlama uygula.','["Hayır","Zıt anlam taşır","Evet","Sadece ses benzerliği"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,211,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-soz-iliski' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-12','coktan_secmeli','Sesteş sözcüklerin yazılışları aynı, anlamları farklı olabilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Anlamları aynıdır","Yazılışları farklıdır"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,212,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-soz-iliski' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-13','coktan_secmeli','Fiilimsi fiilden türeyip cümlede isim, sıfat veya zarf görevi alabilir mi? Yeni bir bağlama uygula.','["Hayır","Sadece yüklem olur","Evet","Fiilimsi yoktur"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,213,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-14','coktan_secmeli','“-mek/-mak” mastar eki isim-fiil oluşturabilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Sadece sıfat-fiil","Sadece zarf-fiil"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,214,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-15','coktan_secmeli','Yüklem cümlenin temel ögelerinden biri midir? Yeni bir bağlama uygula.','["Hayır","Sadece noktalama","Evet","Sadece bağlaç"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,215,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-16','coktan_secmeli','Özne işi yapan veya durumda bulunan öge olabilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Her zaman nesnedir","Özne olmaz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,216,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-17','coktan_secmeli','“Çalışırsan başarırsın.” koşul anlamı taşır mı? Yeni bir bağlama uygula.','["Hayır","Sadece neden","Evet","Sadece karşılaştırma"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,217,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-18','coktan_secmeli','“Yağmur yağdığı için maç ertelendi.” neden-sonuç mudur? Yeni bir bağlama uygula.','["Evet","Hayır","Koşul","Amaç-sonuç"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,218,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-19','coktan_secmeli','Bağlaç olan “de” ayrı yazılır mı? Yeni bir bağlama uygula.','["Hayır","Her zaman bitişik","Evet","Kesmeyle"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,219,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-20','coktan_secmeli','Özel adlara gelen bazı ekler kesmeyle ayrılır mı? Yeni bir bağlama uygula.','["Evet","Hayır","Virgülle ayrılır","Hiç ayrılmaz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,220,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-21','coktan_secmeli','Soru cümlesinin sonunda soru işareti kullanılabilir mi? Yeni bir bağlama uygula.','["Hayır","Sadece nokta","Evet","Sadece iki nokta"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,221,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-noktalama' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-22','coktan_secmeli','Alıntı cümlelerde tırnak işareti kullanılabilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Sadece virgül","Sadece kesme"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,222,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-noktalama' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-23','coktan_secmeli','Gereksiz sözcük kullanımı anlatım bozukluğu oluşturabilir mi? Yeni bir bağlama uygula.','["Hayır","Her zaman anlatımı güçlendirir","Evet","Sadece şiirde"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,223,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-anlatim-bozuk' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-24','coktan_secmeli','Özne-yüklem uyumsuzluğu anlatım sorununa yol açabilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Sadece yazım hatası","Uyum önemli değildir"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,224,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-anlatim-bozuk' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-25','coktan_secmeli','Paragraftaki cümleler konu bütünlüğü göstermeli midir? Yeni bir bağlama uygula.','["Hayır","Tamamen ilgisiz olabilir","Evet","Sadece uzunluk önemlidir"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,225,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-26','coktan_secmeli','Geçiş ifadeleri paragraf akışını destekler mi? Yeni bir bağlama uygula.','["Evet","Hayır","Sadece başlık","Akışla ilgisiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,226,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-27','coktan_secmeli','Yazıya başlamadan plan yapmak yararlı mıdır? Yeni bir bağlama uygula.','["Hayır","Sadece sonuç yazılır","Evet","Plan gereksiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,227,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-28','coktan_secmeli','Taslak metin gözden geçirilip geliştirilebilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","İlk taslak değişmez","Düzeltme yasaktır"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,228,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-29','coktan_secmeli','Bir görüşü desteklemek için kanıt ve gerekçe gerekir mi? Yeni bir bağlama uygula.','["Hayır","Yüksek ses yeter","Evet","Tekrar yeter"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,229,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-tartisma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-30','coktan_secmeli','Karşı görüşe saygı tartışmanın parçası mıdır? Yeni bir bağlama uygula.','["Evet","Hayır","Kişiye saldırmak gerekir","Dinleme gerekmez"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,230,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-tartisma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-31','coktan_secmeli','Grafikte eksen ve ölçek doğru yorum için önemli midir? Yeni bir bağlama uygula.','["Hayır","Sadece renk","Evet","Sadece başlık"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,231,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-gorsel' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-32','coktan_secmeli','Tablodaki veriler karşılaştırılabilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Sadece okunur","Veri karşılaştırılmaz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,232,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-gorsel' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-33','coktan_secmeli','Medya başlığı yanıltıcı olabilir mi? Yeni bir bağlama uygula.','["Hayır","Başlık her zaman kanıttır","Evet","Sadece televizyonda"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,233,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-medya' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-34','coktan_secmeli','Reklam metninin ikna amacı olabilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Sadece bilgi","Amaç yoktur"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,234,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-medya' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-35','coktan_secmeli','Kaynağın yazarı ve yayımlanma tarihi güvenilirlikte önemli midir? Yeni bir bağlama uygula.','["Hayır","Sadece renk","Evet","Sadece uzunluk"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,235,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-kaynak' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-3-36','coktan_secmeli','Bir bilgi birden fazla güvenilir kaynaktan doğrulanabilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Tek kaynak zorunlu","Kaynak gerekmez"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,236,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-kaynak' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-1','coktan_secmeli','Ana fikir metnin temel iletisini verir mi? En uygun açıklamayı seç.','["Hayır","Sadece başlığı","Sadece ayrıntıyı","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,301,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-ana' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-2','coktan_secmeli','Yardımcı fikirler ana fikri destekleyebilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Her zaman karşıttır","Metinle ilgisizdir"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,302,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-ana' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-3','coktan_secmeli','Çıkarım metindeki ipuçlarına dayanmalı mıdır? En uygun açıklamayı seç.','["Hayır","Rastgele olmalı","Sadece görsele","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,303,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-4','coktan_secmeli','Tahmin ile kesin bilgi aynı mıdır? En uygun açıklamayı seç.','["Evet","Hayır","Her zaman","Sadece hikâyede"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,304,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-5','coktan_secmeli','Bilgilendirici metnin amacı bilgi vermek olabilir mi? En uygun açıklamayı seç.','["Hayır","Sadece olay anlatır","Sadece şiirdir","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,305,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-metin' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-6','coktan_secmeli','Hikâye edici metinde olay, kişi, yer ve zaman bulunabilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Sadece tabloda","Sadece açıklamada"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,306,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-metin' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-7','coktan_secmeli','Bilinmeyen sözcüğün anlamı cümle bağlamından tahmin edilebilir mi? En uygun açıklamayı seç.','["Hayır","Sadece sözlük","Tahmin yapılamaz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,307,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-8','coktan_secmeli','Aynı sözcük farklı bağlamlarda farklı anlam taşıyabilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Anlam sabittir","Sadece özel adlarda"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,308,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-9','coktan_secmeli','Deyimler çoğu zaman kalıplaşmış ve mecazlı mıdır? En uygun açıklamayı seç.','["Hayır","Sadece gerçek anlam","Sadece sayı","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,309,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-10','coktan_secmeli','Atasözleri toplumsal deneyim aktarabilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Sadece isim","Sadece tarih"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,310,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-11','coktan_secmeli','Eş anlamlı sözcükler yakın anlam taşır mı? En uygun açıklamayı seç.','["Hayır","Zıt anlam taşır","Sadece ses benzerliği","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,311,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-soz-iliski' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-12','coktan_secmeli','Sesteş sözcüklerin yazılışları aynı, anlamları farklı olabilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Anlamları aynıdır","Yazılışları farklıdır"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,312,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-soz-iliski' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-13','coktan_secmeli','Fiilimsi fiilden türeyip cümlede isim, sıfat veya zarf görevi alabilir mi? En uygun açıklamayı seç.','["Hayır","Sadece yüklem olur","Fiilimsi yoktur","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,313,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-14','coktan_secmeli','“-mek/-mak” mastar eki isim-fiil oluşturabilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Sadece sıfat-fiil","Sadece zarf-fiil"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,314,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-15','coktan_secmeli','Yüklem cümlenin temel ögelerinden biri midir? En uygun açıklamayı seç.','["Hayır","Sadece noktalama","Sadece bağlaç","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,315,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-16','coktan_secmeli','Özne işi yapan veya durumda bulunan öge olabilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Her zaman nesnedir","Özne olmaz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,316,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-17','coktan_secmeli','“Çalışırsan başarırsın.” koşul anlamı taşır mı? En uygun açıklamayı seç.','["Hayır","Sadece neden","Sadece karşılaştırma","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,317,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-18','coktan_secmeli','“Yağmur yağdığı için maç ertelendi.” neden-sonuç mudur? En uygun açıklamayı seç.','["Hayır","Evet","Koşul","Amaç-sonuç"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,318,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-19','coktan_secmeli','Bağlaç olan “de” ayrı yazılır mı? En uygun açıklamayı seç.','["Hayır","Her zaman bitişik","Kesmeyle","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,319,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-20','coktan_secmeli','Özel adlara gelen bazı ekler kesmeyle ayrılır mı? En uygun açıklamayı seç.','["Hayır","Evet","Virgülle ayrılır","Hiç ayrılmaz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,320,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-21','coktan_secmeli','Soru cümlesinin sonunda soru işareti kullanılabilir mi? En uygun açıklamayı seç.','["Hayır","Sadece nokta","Sadece iki nokta","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,321,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-noktalama' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-22','coktan_secmeli','Alıntı cümlelerde tırnak işareti kullanılabilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Sadece virgül","Sadece kesme"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,322,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-noktalama' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-23','coktan_secmeli','Gereksiz sözcük kullanımı anlatım bozukluğu oluşturabilir mi? En uygun açıklamayı seç.','["Hayır","Her zaman anlatımı güçlendirir","Sadece şiirde","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,323,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-anlatim-bozuk' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-24','coktan_secmeli','Özne-yüklem uyumsuzluğu anlatım sorununa yol açabilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Sadece yazım hatası","Uyum önemli değildir"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,324,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-anlatim-bozuk' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-25','coktan_secmeli','Paragraftaki cümleler konu bütünlüğü göstermeli midir? En uygun açıklamayı seç.','["Hayır","Tamamen ilgisiz olabilir","Sadece uzunluk önemlidir","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,325,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-26','coktan_secmeli','Geçiş ifadeleri paragraf akışını destekler mi? En uygun açıklamayı seç.','["Hayır","Evet","Sadece başlık","Akışla ilgisiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,326,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-27','coktan_secmeli','Yazıya başlamadan plan yapmak yararlı mıdır? En uygun açıklamayı seç.','["Hayır","Sadece sonuç yazılır","Plan gereksiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,327,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-28','coktan_secmeli','Taslak metin gözden geçirilip geliştirilebilir mi? En uygun açıklamayı seç.','["Hayır","Evet","İlk taslak değişmez","Düzeltme yasaktır"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,328,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-yazma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-29','coktan_secmeli','Bir görüşü desteklemek için kanıt ve gerekçe gerekir mi? En uygun açıklamayı seç.','["Hayır","Yüksek ses yeter","Tekrar yeter","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,329,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-tartisma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-30','coktan_secmeli','Karşı görüşe saygı tartışmanın parçası mıdır? En uygun açıklamayı seç.','["Hayır","Evet","Kişiye saldırmak gerekir","Dinleme gerekmez"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,330,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-tartisma' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-31','coktan_secmeli','Grafikte eksen ve ölçek doğru yorum için önemli midir? En uygun açıklamayı seç.','["Hayır","Sadece renk","Sadece başlık","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,331,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-gorsel' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-32','coktan_secmeli','Tablodaki veriler karşılaştırılabilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Sadece okunur","Veri karşılaştırılmaz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,332,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-gorsel' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-33','coktan_secmeli','Medya başlığı yanıltıcı olabilir mi? En uygun açıklamayı seç.','["Hayır","Başlık her zaman kanıttır","Sadece televizyonda","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,333,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-medya' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-34','coktan_secmeli','Reklam metninin ikna amacı olabilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Sadece bilgi","Amaç yoktur"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,334,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-medya' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-35','coktan_secmeli','Kaynağın yazarı ve yayımlanma tarihi güvenilirlikte önemli midir? En uygun açıklamayı seç.','["Hayır","Sadece renk","Sadece uzunluk","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,335,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-kaynak' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8t-4-36','coktan_secmeli','Bir bilgi birden fazla güvenilir kaynaktan doğrulanabilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Tek kaynak zorunlu","Kaynak gerekmez"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,336,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='t8-kaynak' AND (d.kod='turkce' OR d.ad='Türkçe') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-ana','Ana Fikir, Konu ve Başlık','Ana Fikir, Konu ve Başlık','Ana Fikir, Konu ve Başlık becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',10,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-anlama'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-1-1','coktan_secmeli','“Kentte bisiklet yollarının artması, kısa mesafelerde otomobil kullanımını azaltmış; hava kalitesi de iyileşmiştir.” Ana fikir?','["Bisiklet altyapısı çevre ve ulaşım açısından yarar sağlayabilir.","Otomobiller tamamen yasaklanmalıdır.","Bisiklet yalnız spor içindir.","Kentte hava hiç kirlenmez."]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-ana' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-1-2','coktan_secmeli','“Bir işi küçük adımlara bölmek, başlamayı kolaylaştırır ve ilerlemeyi görünür kılar.” En uygun başlık?','["Plansız Çalışmak","Zamanı Durdurmak","Küçük Adımlarla İlerlemek","Başarıdan Kaçmak"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-ana' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-1-3','coktan_secmeli','Bir metnin konusu ile ana fikri arasındaki fark nedir?','["Konu ne anlatıldığını, ana fikir ne mesaj verildiğini gösterir.","İkisi her zaman aynıdır.","Konu sadece başlıktır.","Ana fikir kişi adıdır."]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-ana' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-1-4','coktan_secmeli','“Kütüphanede sessizlik yalnız bireysel rahatlık için değil, ortak çalışma hakkına saygı için de gereklidir.” Ana fikir?','["Kütüphaneler sadece yetişkinler içindir.","Sessizlik öğrenmeyi engeller.","Ortak alan kuralları başkalarının haklarını da korur.","Kurallar gereksizdir."]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-ana' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-1-5','coktan_secmeli','Bir paragrafta örnekler aynı düşünceyi destekliyorsa ana fikir nasıl bulunur?','["Örneklerin ortak olarak desteklediği düşünce belirlenir.","En uzun örnek seçilir.","İlk sözcük alınır.","Noktalama sayılır."]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-ana' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-1-6','coktan_secmeli','Başlık seçiminde en önemli ölçüt?','["En uzun olması","Yabancı sözcük içermesi","Metnin temel konusu ve mesajıyla uyum","Sadece şaşırtıcı olması"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-ana' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-1-7','coktan_secmeli','“Teknolojiyi bilinçli kullanmak, ondan vazgeçmek değil; amaç ve süreyi yönetmektir.” Ana fikir?','["Bilinçli teknoloji kullanımı denge gerektirir.","Teknoloji tamamen bırakılmalıdır.","Süre önemli değildir.","Teknoloji yalnız eğlencedir."]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-ana' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-1-8','coktan_secmeli','Bir metnin ana fikri hangi bölümde olabilir?','["Sadece ilk cümlede","Sadece son cümlede","Metnin herhangi bir bölümünde açık ya da örtük olabilir.","Sadece başlıkta"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-ana' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-cikarim','Çıkarım, Tahmin ve Yorum','Çıkarım, Tahmin ve Yorum','Çıkarım, Tahmin ve Yorum becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',20,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-anlama'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-2-1','coktan_secmeli','Ayşe, toplantıda hiç konuşmadı ama herkes çıktıktan sonra önerilerini yazılı olarak gönderdi. Ne çıkarılabilir?','["Hiç düşüncesi yoktur.","Düşüncelerini farklı bir iletişim yoluyla ifade etmeyi tercih etmiş olabilir.","Toplantıya katılmamıştır.","Yazmayı bilmiyordur."]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-2-2','coktan_secmeli','Bir yazar aynı olayı iki karakterin gözünden farklı anlatıyorsa ne vurgulanabilir?','["Gerçeğin yok olduğu","Olayın hiç yaşanmadığı","Karakterlerin aynı düşündüğü","Bakış açısının yorumu etkileyebileceği"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-2-3','coktan_secmeli','Metinde “Henüz erken ama sonuçlar umut verici.” deniyorsa yazarın tutumu?','["Kesin reddetme","Temkinli iyimserlik","Tam umutsuzluk","Kayıtsızlık"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-2-4','coktan_secmeli','Bir öğrenci kaynakların yayın tarihlerini ve kurumlarını karşılaştırıyor. Amacı?','["Metni uzatmak","Kaynağı gizlemek","Sadece yazım kontrolü yapmak","Bilginin güvenilirlik ve güncelliğini değerlendirmek"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-2-5','coktan_secmeli','“Sokaklar ıslaktı, insanlar şemsiyelerini kapatıyordu.” Ne çıkarılabilir?','["Kar yağıyor kesin.","Yağmur yeni durmuş olabilir.","Hava çok sıcak kesin.","Gece yarısıdır kesin."]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-2-6','coktan_secmeli','Bir karakter hatasından sonra özür dileyip zararı telafi etmeye çalışıyor. Hangi özellik öne çıkar?','["Umursamazlık","Kibir","Duyarsızlık","Sorumluluk alma"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-2-7','coktan_secmeli','Metindeki verilere aykırı bir sonuç çıkarılabilir mi?','["Evet, her çıkarım doğrudur.","Hayır, çıkarım metin kanıtlarıyla uyumlu olmalıdır.","Sadece başlığa göre olur.","Kanıt gerekmez."]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-2-8','coktan_secmeli','Bir metnin sonunda çözülmeyen sorun bırakılması ne oluşturabilir?','["Kesin bilgi","Tanım","Sayısal veri","Merak ve devam beklentisi"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cikarim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-yapi','Metnin Yapısı ve Paragraf Akışı','Metnin Yapısı ve Paragraf Akışı','Metnin Yapısı ve Paragraf Akışı becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',30,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-anlama'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-3-1','coktan_secmeli','Paragrafın giriş cümlesi genellikle ne yapar?','["Sonucu mutlaka verir.","Kaynakçayı gösterir.","Konuyu açar ve sonraki düşüncelere zemin hazırlar.","Sadece örnek sıralar."]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yapi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-3-2','coktan_secmeli','Bir cümle paragrafın ana düşüncesiyle ilgisizse neyi bozar?','["Anlam bütünlüğünü","Yazı puntosunu","Kâğıt boyunu","Sözcük kökünü"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yapi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-3-3','coktan_secmeli','“Öncelikle... Bunun yanında... Sonuç olarak...” ifadeleri ne sağlar?','["Sözcükleri eş anlamlı yapar.","Cümleyi soru yapar.","Düşünceler arasında geçiş ve düzen","Metni şiire çevirir."]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yapi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-3-4','coktan_secmeli','Paragrafta neden-sonuç sırasının ters verilmesi her zaman yanlış mıdır?','["Hayır, anlatım amacına göre sonuç önce verilebilir.","Evet, daima yanlıştır.","Sadece şiirde olur.","Neden-sonuç kullanılamaz."]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yapi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-3-5','coktan_secmeli','Bir paragraf iki farklı ana düşünceye dağılıyorsa ne yapılabilir?','["Noktalama kaldırılır.","Başlık silinir.","İki paragrafa ayrılabilir.","Tüm cümleler birleştirilir."]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yapi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-3-6','coktan_secmeli','Bağlantı ifadeleri neye yardım eder?','["Cümleler ve fikirler arasındaki ilişkiyi göstermeye","Yazarın yaşını bulmaya","Sadece yazımı uzatmaya","Sayıları toplamaya"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yapi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-3-7','coktan_secmeli','Sonuç cümlesi önceki düşüncelerle ilişkili olmalı mıdır?','["Hayır","Sadece yeni konu açmalıdır.","Evet","Paragrafla ilgisiz olabilir."]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yapi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-3-8','coktan_secmeli','Paragraf akışında zaman sırası kullanılan metin türüne örnek?','["Olay anlatımı","Sadece sözlük maddesi","Sadece formül listesi","Sadece adres"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yapi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-baglam','Bağlamda Sözcük Anlamı','Bağlamda Sözcük Anlamı','Bağlamda Sözcük Anlamı becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',40,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-soz'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-4-1','coktan_secmeli','“Projenin kapsamı giderek genişledi.” kapsam ne demektir?','["Sadece süresi","Sadece rengi","Sadece maliyeti","İçerdiği alan ve sınırlar"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-4-2','coktan_secmeli','“Eleştirisini yapıcı bir dille sundu.” yapıcı ne demektir?','["Kırıcı","Geliştirmeye katkı sağlayan","Belirsiz","İlgisiz"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-4-3','coktan_secmeli','“Bu iddia yeterli kanıtla desteklenmiyor.” iddia ne demektir?','["Sadece soru","Kesin yasa","Kişi adı","Doğruluğu savunulan görüş"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-4-4','coktan_secmeli','“Sorunu kökten çözmek için kalıcı önlem gerekir.” kalıcı ne demektir?','["Geçici","Uzun süre etkisini sürdüren","Rastgele","Gizli"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-4-5','coktan_secmeli','“Yazar, olayları yalın bir dille aktarmış.” yalın ne demektir?','["Karmaşık","Süslü zorunlu","Eksik","Sade ve anlaşılır"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-4-6','coktan_secmeli','“Veriler birbirini doğruluyor.” doğrulamak ne demektir?','["Gizlemek","Gerçekliğini desteklemek","Değiştirmek","Silmek"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-4-7','coktan_secmeli','“Bu karar toplumda yankı uyandırdı.” yankı uyandırmak ne anlatır?','["Sesin fiziksel yansıması zorunlu","Hiç fark edilmemek","Kararı geri almak","Geniş ilgi ve tepki oluşturmak"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-4-8','coktan_secmeli','Bağlam, bilinmeyen sözcüğün anlamını bulmada nasıl kullanılır?','["Sadece harf sayılır.","Çevresindeki cümle ve sözcüklerin verdiği ipuçları incelenir.","Sözcük atlanır.","Rastgele anlam seçilir."]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-baglam' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-deyim','Deyim, Atasözü ve Söz Sanatları','Deyim, Atasözü ve Söz Sanatları','Deyim, Atasözü ve Söz Sanatları becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',50,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-soz'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-5-1','coktan_secmeli','“İğneyle kuyu kazmak” neyi anlatır?','["Çok zor ve sabır isteyen işle uğraşmayı","Hızlı sonuç almayı","Kuyuda çalışmayı zorunlu","İşi bırakmayı"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-5-2','coktan_secmeli','“Acele işe şeytan karışır.” neyi öğütler?','["Her işi ertelemeyi","Hiç başlamamayı","İşleri düşünmeden acele yapmamayı","Sadece hızlı çalışmayı"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-5-3','coktan_secmeli','“Söz gümüşse sükût altındır.” hangi düşünceyi vurgular?','["Bazı durumlarda susmanın daha değerli olabileceğini","Konuşmanın daima yanlış olduğunu","Altının gümüşten pahalı olduğunu sadece","Söz vermemeyi"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-5-4','coktan_secmeli','“Dağ gibi sorun” ifadesinde hangi sanat vardır?','["Kişileştirme","Konuşturma","Benzetme","Abartma yoktur"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-5-5','coktan_secmeli','“Rüzgâr pencerede öfkeyle bağırıyordu.” hangi sanat?','["Kişileştirme","Sadece gerçek anlam","Karşılaştırma","Tanım"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-5-6','coktan_secmeli','“Dünyalar kadar işim var.” hangi anlatım?','["Benzetme zorunlu","Tanım","Abartma","Nesnel veri"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-5-7','coktan_secmeli','Atasözü ile deyim arasındaki temel farklardan biri?','["Atasözü çoğu zaman yargı/öğüt bildirir; deyim bir durumu kalıplaşmış biçimde anlatır.","İkisi tamamen aynıdır.","Deyim mutlaka cümledir.","Atasözü anlam taşımaz."]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-5-8','coktan_secmeli','Söz sanatları metne ne katabilir?','["Sadece uzunluk","Sadece noktalama","Anlatım gücü ve çağrışım","Yazarın adresi"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-deyim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-anlam-iliski','Sözcükler Arası Anlam İlişkileri','Sözcükler Arası Anlam İlişkileri','Sözcükler Arası Anlam İlişkileri becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',60,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-soz'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-6-1','coktan_secmeli','“olasılık” sözcüğüne yakın anlamlı?','["kesinlik","ihtimal","engel","sonuç"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-anlam-iliski' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-6-2','coktan_secmeli','“artmak” sözcüğünün zıt anlamlısı?','["çoğalmak","yükselmek","gelişmek","azalmak"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-anlam-iliski' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-6-3','coktan_secmeli','“ince” hangi cümlede farklı anlamda kullanılmıştır?','["İnce ip kolay koptu.","İnce bir davranışla herkesi rahatlattı.","İnce dal eğildi.","İnce kâğıt yırtıldı."]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-anlam-iliski' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-6-4','coktan_secmeli','“yüz” sözcüğü sesteş midir?','["Hayır","Sadece sayıdır","Sadece organ adıdır","Evet; sayı, çehre ve yüzmek fiiliyle farklı anlamlarda kullanılabilir."]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-anlam-iliski' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-6-5','coktan_secmeli','Genel anlamlı sözcüğe örnek?','["serçe","canlı","çam ağacı","tekir kedi"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-anlam-iliski' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-6-6','coktan_secmeli','Özel anlamlı sözcüğe örnek?','["şehir","ülke","yer","Ankara"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-anlam-iliski' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-6-7','coktan_secmeli','“Taşıt” ile “otobüs” arasında nasıl ilişki vardır?','["Eş anlamlıdır.","Taşıt genel, otobüs daha özel anlamlıdır.","Zıt anlamlıdır.","Sesteştir."]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-anlam-iliski' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-6-8','coktan_secmeli','“sert” sözcüğü “sert eleştiri” ifadesinde hangi anlamdadır?','["Sadece fiziksel sertlik","Terim anlam","Özel ad","Mecaz anlam"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-anlam-iliski' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-fiilimsi','Fiilimsiler','Fiilimsiler','Fiilimsiler becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',70,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-dil'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-7-1','coktan_secmeli','“Koşarak eve geldi.” fiilimsi hangisidir?','["eve","geldi","koşarak","o"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-7-2','coktan_secmeli','“Okumak insanı geliştirir.” fiilimsi?','["okumak","insanı","geliştirir","o"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-7-3','coktan_secmeli','“Gülen çocuk bize baktı.” fiilimsi?','["çocuk","bize","gülen","baktı"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-7-4','coktan_secmeli','İsim-fiil eklerinden biri?','["-mak/-mek","-dı/-di","-yor","-acak sadece kip"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-7-5','coktan_secmeli','Sıfat-fiil bir ismi niteleyebilir mi?','["Hayır","Sadece yüklem olur","Evet","İsimle ilişkisi yoktur"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-7-6','coktan_secmeli','Zarf-fiil cümlede eylemin nasıl/ne zaman yapıldığını bildirebilir mi?','["Evet","Hayır","Sadece isimdir","Sadece özne olur"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-7-7','coktan_secmeli','“Ders bitince eve gideceğiz.” fiilimsi?','["ders","eve","bitince","gideceğiz"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-7-8','coktan_secmeli','Fiilimsi çekimli fiil midir?','["Hayır","Evet","Her zaman yüklemdir","Kip eki almak zorundadır"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-fiilimsi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-cumle-ogeleri','Cümlenin Ögeleri','Cümlenin Ögeleri','Cümlenin Ögeleri becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',80,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-dil'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-8-1','coktan_secmeli','“Öğrenciler sabah kütüphanede kitap okudu.” özne?','["sabah","kütüphanede","kitap","Öğrenciler"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-ogeleri' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-8-2','coktan_secmeli','Aynı cümlede yüklem?','["Öğrenciler","okudu","kitap","sabah"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-ogeleri' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-8-3','coktan_secmeli','“Ayşe arkadaşına güzel bir hediye verdi.” nesne?','["Ayşe","arkadaşına","verdi","güzel bir hediye"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-ogeleri' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-8-4','coktan_secmeli','“Toplantı yarın okul salonunda yapılacak.” yer tamlayıcısı?','["yarın","okul salonunda","toplantı","yapılacak"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-ogeleri' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-8-5','coktan_secmeli','“Çocuk soruyu dikkatlice çözdü.” zarf tamlayıcısı?','["çocuk","soruyu","çözdü","dikkatlice"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-ogeleri' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-8-6','coktan_secmeli','Gizli özne cümlede açıkça yazılmayabilir mi?','["Hayır","Evet","Özne her zaman yazılır","Gizli özne yoktur"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-ogeleri' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-8-7','coktan_secmeli','“Akşam bize gelecekler.” gizli özne?','["biz","akşam","bize","onlar"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-ogeleri' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-8-8','coktan_secmeli','Cümlenin temel ögeleri hangileridir?','["Nesne ve zarf","Özne ve yüklem","Yer tamlayıcısı ve nesne","Sadece nesne"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-ogeleri' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-cumle-tur','Cümle Türleri ve Anlam İlişkileri','Cümle Türleri ve Anlam İlişkileri','Cümle Türleri ve Anlam İlişkileri becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',90,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-dil'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-9-1','coktan_secmeli','“Çalışırsan başarırsın.” hangi anlam ilişkisi?','["Koşul-sonuç","Neden-sonuç","Karşılaştırma","Tanım"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-9-2','coktan_secmeli','“Yağmur yağdığı için maç ertelendi.” ilişki?','["Koşul","Amaç-sonuç","Neden-sonuç","Karşılaştırma"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-9-3','coktan_secmeli','“Kitap almak için kırtasiyeye gitti.” ilişki?','["Amaç-sonuç","Neden-sonuç","Koşul","Tanım"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-9-4','coktan_secmeli','“Bu yol ötekinden daha kısa.” ilişki?','["Koşul","Neden","Karşılaştırma","Amaç"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-9-5','coktan_secmeli','“Keşke bizimle gelseydin.” hangi anlam?','["Hayıflanma/istek","Kesinlik","Emir","Tanım"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-9-6','coktan_secmeli','“Sanırım bugün yağmur yağacak.” ne bildirir?','["Kesinlik","Emir","Olasılık/tahmin","Neden"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-9-7','coktan_secmeli','“Bunu mutlaka bitireceğim.” ne bildirir?','["Kararlılık","Pişmanlık","Olasılık","Şaşkınlık"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-9-8','coktan_secmeli','Olumlu bir cümle biçimce olumsuz sözcük içermeden olumsuz anlam taşıyabilir mi?','["Hayır","Sadece soruda","Evet, anlam ve bağlama göre.","Cümlede anlam yoktur"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-cumle-tur' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-hikaye','Hikâye Edici Metin','Hikâye Edici Metin','Hikâye Edici Metin becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',100,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-metin'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-10-1','coktan_secmeli','Hikâyede çatışma neyi ifade eder?','["Sadece kavga etmeyi","Kişiler, amaçlar veya durumlar arasındaki temel karşıtlığı","Başlığı","Yazarın hayatını"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-hikaye' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-10-2','coktan_secmeli','Anlatıcı ile yazar aynı olmak zorunda mıdır?','["Evet her zaman","Sadece romanda farklıdır","Anlatıcı yoktur","Hayır"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-hikaye' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-10-3','coktan_secmeli','Birinci kişi anlatımında hangi zamir sık görülür?','["o","ben","siz","onlar"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-hikaye' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-10-4','coktan_secmeli','Mekân anlatım atmosferini etkileyebilir mi?','["Hayır","Sadece zamanı etkiler","Mekân önemli değildir","Evet"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-hikaye' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-10-5','coktan_secmeli','Geriye dönüş tekniği ne yapar?','["Geleceği kesin söyler.","Anlatıyı geçmişteki bir olaya götürür.","Metni bitirir.","Karakteri siler."]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-hikaye' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-10-6','coktan_secmeli','Karakterin iç konuşması neyi gösterebilir?','["Sadece dış görünüşünü","Yazarın adresini","Sayfa sayısını","Düşünce ve duygularını"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-hikaye' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-10-7','coktan_secmeli','Hikâyede düğüm bölümü neyi artırabilir?','["Kaynakçayı","Merak ve çatışmayı","Sadece kişi sayısını","Yazım kuralını"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-hikaye' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-10-8','coktan_secmeli','Çözüm bölümü her sorunu tamamen çözmek zorunda mıdır?','["Evet her zaman","Sadece masalda","Hikâyede çözüm olmaz","Hayır"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-hikaye' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-bilgi','Bilgilendirici ve Tartışmacı Metin','Bilgilendirici ve Tartışmacı Metin','Bilgilendirici ve Tartışmacı Metin becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',110,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-metin'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-11-1','coktan_secmeli','Bilgilendirici metinde kanıt kullanmak ne sağlar?','["Sadece metni uzatır.","Başlığı değiştirir.","İddianın güvenilirliğini destekler.","Duyguyu yok eder."]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-bilgi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-11-2','coktan_secmeli','Tartışmacı metinde karşı görüşe yer verilebilir mi?','["Evet","Hayır","Sadece kendi görüşü olur","Karşı görüş yasaktır"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-bilgi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-11-3','coktan_secmeli','Nesnel ifade hangisidir?','["Bu film harika.","En güzel şehir burası.","Su deniz seviyesinde yaklaşık 100°C''de kaynar.","Bu kitap sıkıcı."]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-bilgi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-11-4','coktan_secmeli','Bir yazıda kaynak gösterilmesi neden önemlidir?','["Bilginin dayanağını ve izlenebilirliğini artırır.","Metni gizler.","Yazarı anonim yapar.","Sadece biçim verir."]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-bilgi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-11-5','coktan_secmeli','Tanımlama ne yapar?','["Olay sıralar.","Sadece duygu bildirir.","Bir kavramın ne olduğunu açıklar.","Soru sorar."]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-bilgi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-11-6','coktan_secmeli','Örneklendirme ne işe yarar?','["Soyut düşünceyi somutlaştırmaya yardım eder.","Ana fikri gizler.","Kaynağı siler.","Cümleyi anlamsızlaştırır."]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-bilgi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-11-7','coktan_secmeli','Sayısal veri hangi metinlerde kanıt olarak kullanılabilir?','["Sadece şiirde","Hiçbir metinde","Bilgilendirici ve tartışmacı metinlerde","Sadece masalda"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-bilgi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-11-8','coktan_secmeli','Görüş ile olgu ayrımı neden önemlidir?','["Kanıtlanabilir bilgi ile kişisel değerlendirmeyi ayırmaya yardım eder.","Metni uzatır.","Başlığı seçer.","Noktalama belirler."]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-bilgi' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-siir','Şiir ve Edebi Sanatlar','Şiir ve Edebi Sanatlar','Şiir ve Edebi Sanatlar becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',120,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-metin'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-12-1','coktan_secmeli','Şiirde “gece beni dinledi” ifadesi hangi sanat?','["Tanım","Nesnel anlatım","Sadece benzetme","Kişileştirme"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-siir' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-12-2','coktan_secmeli','“Aslan gibi cesur” hangi sanat?','["Kişileştirme","Benzetme","Konuşturma","Abartma"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-siir' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-12-3','coktan_secmeli','Şiirde imge ne sağlar?','["Sadece bilgi listesi","Sadece tarih","Sadece kaynakça","Çağrışım ve özgün anlatım"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-siir' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-12-4','coktan_secmeli','Dize nedir?','["Paragraf","Şiirin satırlarından her biri","Başlık","Bölüm sonu"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-siir' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-12-5','coktan_secmeli','Kafiye şiirde ses benzerliği sağlayabilir mi?','["Hayır","Sadece düz yazıda","Şiirde ses yoktur","Evet"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-siir' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-12-6','coktan_secmeli','Şiirin teması neyi gösterir?','["Yazarın adresini","İşlenen temel duygu veya düşünceyi","Sadece ölçüyü","Sayfa sayısını"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-siir' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-12-7','coktan_secmeli','Serbest şiirde ölçü zorunlu mudur?','["Evet her zaman","Sadece 8''li hece","Şiir ölçüsüz olamaz","Hayır"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-siir' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-12-8','coktan_secmeli','Şiiri yorumlarken sözcüklerin çağrışımı dikkate alınmalı mıdır?','["Hayır","Evet","Sadece sözlük anlamı","Sadece başlık"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-siir' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-grafik','Grafik, Tablo ve İnfografik Okuma','Grafik, Tablo ve İnfografik Okuma','Grafik, Tablo ve İnfografik Okuma becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',130,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-gorsel'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-13-1','coktan_secmeli','Bir grafikte eksenlerin farklı ölçek kullanması yorumu etkileyebilir mi?','["Evet","Hayır","Ölçek önemsiz","Sadece renk etkiler"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-grafik' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-13-2','coktan_secmeli','Sütun grafiğinde en yüksek sütun neyi gösterir?','["En küçük değeri","Ortalamayı zorunlu","En büyük değeri","Kaynağı"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-grafik' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-13-3','coktan_secmeli','Tabloda 2024=120, 2025=150 ise artış kaçtır?','["30","270","25","120"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-grafik' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-13-4','coktan_secmeli','Bir grafiğin kaynağı neden önemlidir?','["Rengi seçmek için","Başlığı kısaltmak için","Verinin nereden geldiğini değerlendirmek için","Sütunu büyütmek için"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-grafik' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-13-5','coktan_secmeli','Yüzde grafiğinde toplam genellikle kaçtır?','["%100","%50","%10","%360"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-grafik' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-13-6','coktan_secmeli','Aynı veriyi farklı grafiklerle göstermek mümkün müdür?','["Hayır","Tek grafik türü vardır","Evet","Sadece tablo olur"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-grafik' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-13-7','coktan_secmeli','Grafikte kesik eksen kullanılması algıyı değiştirebilir mi?','["Evet","Hayır","Eksen görünmez","Veri aynı diye algı değişmez"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-grafik' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-13-8','coktan_secmeli','İnfografikte simgeler ve kısa metin birlikte kullanılabilir mi?','["Hayır","Sadece uzun paragraf","Evet","Sadece sayı"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-grafik' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-medya','Medya Metni, Reklam ve Güvenilirlik','Medya Metni, Reklam ve Güvenilirlik','Medya Metni, Reklam ve Güvenilirlik becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',140,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-gorsel'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-14-1','coktan_secmeli','Bir haber başlığının aşırı iddialı olması tek başına haberin doğru olduğunu gösterir mi?','["Evet","Hayır","Başlık büyükse doğrudur","Çok paylaşılmışsa doğrudur"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-medya' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-14-2','coktan_secmeli','Reklamın amacı ürün veya fikre yönelik tutumu etkilemek olabilir mi?','["Hayır","Sadece bilgi verir","Reklamın amacı yoktur","Evet"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-medya' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-14-3','coktan_secmeli','Kaynağı olmayan istatistik paylaşımı nasıl değerlendirilmelidir?','["Kesin doğru","Temkinli; kaynak doğrulanmalıdır.","Kesin yanlış","Sadece beğeni sayısına göre"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-medya' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-14-4','coktan_secmeli','Sponsorlu içerik ile bağımsız haber aynı şey midir?','["Evet","Her zaman","Sadece sosyal medyada","Hayır"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-medya' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-14-5','coktan_secmeli','Medya metninde kullanılan görsel seçimi algıyı etkileyebilir mi?','["Hayır","Evet","Sadece yazı etkiler","Görsel önemsiz"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-medya' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-14-6','coktan_secmeli','Bir bilginin farklı güvenilir kaynaklarda doğrulanması ne sağlar?','["Bilgiyi gereksiz yapar.","Kaynağı siler.","Yazarı değiştirir.","Güvenilirlik değerlendirmesini güçlendirir."]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-medya' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-14-7','coktan_secmeli','Başlık ile içerik uyuşmuyorsa ne yapılmalıdır?','["Sadece başlığa inanılmalıdır.","İçerik ve kaynak ayrıntılı incelenmelidir.","Hemen paylaşılmalıdır.","Kaynak kapatılmalıdır."]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-medya' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-14-8','coktan_secmeli','Manipülatif dil ne yapabilir?','["Her zaman nesneldir.","Sadece yazım hatasıdır.","Anlam taşımaz.","Okuyucunun duygu ve yargısını yönlendirmeye çalışabilir."]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-medya' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-coklu','Çoklu Ortam ve Görsel Yorumlama','Çoklu Ortam ve Görsel Yorumlama','Çoklu Ortam ve Görsel Yorumlama becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',150,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-gorsel'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-15-1','coktan_secmeli','Bir videoda söz, görüntü ve müzik birlikte mesaj oluşturabilir mi?','["Hayır","Sadece söz önemlidir","Evet","Sadece müzik"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-coklu' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-15-2','coktan_secmeli','Görseldeki bir ayrıntı metindeki bilgiyi tamamlayabilir mi?','["Evet","Hayır","Görsel ve metin ilgisizdir","Sadece süs olur"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-coklu' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-15-3','coktan_secmeli','Bir afişte büyük puntolu ifade genellikle neyi amaçlar?','["Kaynağı gizlemeyi","Metni uzatmayı","Dikkati ana mesaja çekmeyi","Sadece boşluk doldurmayı"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-coklu' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-15-4','coktan_secmeli','Renk seçimi duygu ve vurgu oluşturabilir mi?','["Evet","Hayır","Renk yalnız baskı maliyetidir","Mesajı etkilemez"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-coklu' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-15-5','coktan_secmeli','Altyazı videonun erişilebilirliğini artırabilir mi?','["Hayır","Sadece görüntüyü küçültür","Evet","Sadece müzik için"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-coklu' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-15-6','coktan_secmeli','Bir görselin kırpılması bağlamı değiştirebilir mi?','["Evet","Hayır","Görsel her durumda aynı anlamdadır","Kırpma sadece boyut etkiler"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-coklu' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-15-7','coktan_secmeli','Harita üzerindeki lejant ne işe yarar?','["Yönleri siler.","Haritayı büyütür.","Sembol ve renklerin anlamını açıklar.","Kaynağı değiştirir."]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-coklu' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-15-8','coktan_secmeli','Çoklu ortam içeriğini değerlendirirken tüm bileşenler birlikte incelenmeli midir?','["Evet","Hayır","Sadece başlık","Sadece ses"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-coklu' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-paragraf','Paragraf Bütünlüğü ve Metin Oluşturma','Paragraf Bütünlüğü ve Metin Oluşturma','Paragraf Bütünlüğü ve Metin Oluşturma becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',160,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-yazma'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-16-1','coktan_secmeli','Paragrafta konu dışı cümle neyi bozar?','["Yazı tipini","Sayfa boyunu","Sözcük kökünü","Anlam bütünlüğünü"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-16-2','coktan_secmeli','Bir metnin girişinde ayrıntılı sonuç verilmesi her zaman gerekli midir?','["Evet","Hayır","Sadece şiirde","Sonuç girişte zorunludur"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-16-3','coktan_secmeli','Geçiş ifadeleri paragraflar arası ilişkiyi güçlendirir mi?','["Hayır","Sadece noktalama","Metni böler","Evet"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-16-4','coktan_secmeli','Taslak oluşturmak yazma sürecini kolaylaştırabilir mi?','["Hayır","Evet","Yazmayı yavaşlatır sadece","Taslak gereksizdir"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-16-5','coktan_secmeli','Paragraftaki her cümle ana düşünceyi doğrudan tekrar etmeli midir?','["Evet aynı cümle olmalı","Cümleler ilgisiz olmalı","Ana düşünce kullanılmaz","Hayır, açıklama ve örneklerle destekleyebilir."]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-16-6','coktan_secmeli','Sonuç paragrafında ana düşünce toparlanabilir mi?','["Hayır","Evet","Sadece yeni konu açılır","Sonuç yazılmaz"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-16-7','coktan_secmeli','Metin oluştururken hedef okuyucu düşünülmeli midir?','["Hayır","Okuyucu önemsiz","Sadece yazar önemlidir","Evet"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-16-8','coktan_secmeli','Yazı bittikten sonra gereksiz tekrarlar çıkarılabilir mi?','["Hayır","Evet","İlk metin değişmez","Tekrarlar zorunludur"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-paragraf' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-yazim','Yazım ve Noktalama','Yazım ve Noktalama','Yazım ve Noktalama becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',170,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-yazma'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-17-1','coktan_secmeli','Bağlaç olan “de” nasıl yazılır?','["Ayrı","Her zaman bitişik","Kesmeyle","Tireyle"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-17-2','coktan_secmeli','Bağlaç olan “ki” çoğunlukla nasıl yazılır?','["Her zaman bitişik","Kesmeyle","Ayrı","Rakamla"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-17-3','coktan_secmeli','Soru eki “mi” nasıl yazılır?','["Ayrı","Her zaman bitişik","Kesmeyle","Tireyle"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-17-4','coktan_secmeli','Özel ada gelen çekim eki çoğu durumda nasıl ayrılır?','["Virgülle","Noktayla","Kesme işaretiyle","Ayrılmaz"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-17-5','coktan_secmeli','Açıklama veya örnek sıralanacaksa hangi işaret kullanılabilir?','[":","?","!","''"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-17-6','coktan_secmeli','Ara sözleri ayırmak için virgül kullanılabilir mi?','["Hayır","Sadece nokta","Evet","Ara söz yoktur"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-17-7','coktan_secmeli','Doğrudan aktarılan sözlerde tırnak işareti kullanılabilir mi?','["Evet","Hayır","Sadece kesme","Sadece iki nokta yeter"]',0,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-17-8','coktan_secmeli','Yazım kılavuzu tereddüt edilen sözcüklerde başvurulacak kaynak mıdır?','["Hayır","Sadece sözlü anlatım","Evet","Yazım kaynak gerektirmez"]',2,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-yazim' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tr8-sunum','Sunum, Tartışma ve Görüş Geliştirme','Sunum, Tartışma ve Görüş Geliştirme','Sunum, Tartışma ve Görüş Geliştirme becerilerini LGS düzeyinde metin ve bağlamlarla uygular.','',180,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tr8-yazma'
+WHERE d.kod='turkce' OR d.ad='Türkçe'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-18-1','coktan_secmeli','Sunumda ana mesajın açık olması neden önemlidir?','["Slaytı uzatır.","Dinleyicinin içeriği izlemesini kolaylaştırır.","Kaynağı gizler.","Sadece süreyi artırır."]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-sunum' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-18-2','coktan_secmeli','Bir görüşü savunurken kanıt kullanmak gerekir mi?','["Hayır","Ses yüksekliği yeter","Tekrar yeter","Evet"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-sunum' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-18-3','coktan_secmeli','Karşı görüşü çarpıtmadan aktarmak neden önemlidir?','["Tartışmayı uzatmak için","Adil ve sağlıklı tartışma için","Rakibi küçümsemek için","Kaynağı gizlemek için"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-sunum' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-18-4','coktan_secmeli','Sunumda slaytları metinle aşırı doldurmak uygun mudur?','["Evet her zaman","Sadece küçük puntoyla","Görsel kullanılmamalı","Genellikle hayır"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-sunum' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-18-5','coktan_secmeli','Dinleyici sorularına yanıt verirken ne yapılmalıdır?','["Soruyu görmezden gelmek","Soruyu anlayıp açık ve saygılı cevap vermek","Kişiye saldırmak","Konuyu değiştirmek"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-sunum' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-18-6','coktan_secmeli','Kaynakların sunum sonunda belirtilmesi doğru mudur?','["Hayır","Kaynak gizlenmeli","Sadece görsellerde","Evet"]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-sunum' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-18-7','coktan_secmeli','Beden dili ve ses tonu sunumu etkiler mi?','["Hayır","Evet","Sadece slayt önemlidir","Konuşmacı önemli değildir"]',1,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-sunum' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8t-18-8','coktan_secmeli','Tartışmada fikir değiştirmek başarısızlık mıdır?','["Evet her zaman","Fikir değişmez","Kanıt önemsiz","Hayır; güçlü kanıt karşısında görüş güncellenebilir."]',3,'Metin, dil bilgisi veya bağlam ipuçları kullanılarak cevaplanır.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tr8-sunum' AND (d.kod='turkce' OR d.ad='Türkçe')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 

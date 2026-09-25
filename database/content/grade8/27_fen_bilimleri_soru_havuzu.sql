@@ -1,254 +1,758 @@
 SET NAMES utf8mb4;
 
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'f8-mevsim','Mevsimlerin Oluşumu','Mevsimlerin Oluşumu','Mevsimlerin Oluşumu becerilerini uygular.','',10,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-mevsim' WHERE d.kod='fen' OR d.ad='Fen Bilimleri' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'f8-iklim','İklim ve Hava Olayları','İklim ve Hava Olayları','İklim ve Hava Olayları becerilerini uygular.','',20,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-mevsim' WHERE d.kod='fen' OR d.ad='Fen Bilimleri' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'f8-dna','DNA ve Genetik Kod','DNA ve Genetik Kod','DNA ve Genetik Kod becerilerini uygular.','',30,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-dna' WHERE d.kod='fen' OR d.ad='Fen Bilimleri' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'f8-kalitim','Kalıtım, Mutasyon ve Modifikasyon','Kalıtım, Mutasyon ve Modifikasyon','Kalıtım, Mutasyon ve Modifikasyon becerilerini uygular.','',40,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-dna' WHERE d.kod='fen' OR d.ad='Fen Bilimleri' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'f8-kati-basinc','Katı Basıncı','Katı Basıncı','Katı Basıncı becerilerini uygular.','',50,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-basinc' WHERE d.kod='fen' OR d.ad='Fen Bilimleri' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'f8-sivi-gaz','Sıvı ve Gaz Basıncı','Sıvı ve Gaz Basıncı','Sıvı ve Gaz Basıncı becerilerini uygular.','',60,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-basinc' WHERE d.kod='fen' OR d.ad='Fen Bilimleri' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'f8-periyodik','Periyodik Sistem ve Elementler','Periyodik Sistem ve Elementler','Periyodik Sistem ve Elementler becerilerini uygular.','',70,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-madde' WHERE d.kod='fen' OR d.ad='Fen Bilimleri' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'f8-tepkime','Fiziksel-Kimyasal Değişim ve Tepkimeler','Fiziksel-Kimyasal Değişim ve Tepkimeler','Fiziksel-Kimyasal Değişim ve Tepkimeler becerilerini uygular.','',80,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-madde' WHERE d.kod='fen' OR d.ad='Fen Bilimleri' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'f8-basit-makine','Basit Makineler','Basit Makineler','Basit Makineler becerilerini uygular.','',90,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-makine' WHERE d.kod='fen' OR d.ad='Fen Bilimleri' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'f8-mekanik-avantaj','Kuvvet Kazancı ve İş','Kuvvet Kazancı ve İş','Kuvvet Kazancı ve İş becerilerini uygular.','',100,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-makine' WHERE d.kod='fen' OR d.ad='Fen Bilimleri' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'f8-besin-zincir','Besin Zinciri ve Enerji Akışı','Besin Zinciri ve Enerji Akışı','Besin Zinciri ve Enerji Akışı becerilerini uygular.','',110,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-enerji' WHERE d.kod='fen' OR d.ad='Fen Bilimleri' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'f8-cevre','Enerji Dönüşümleri ve Çevre','Enerji Dönüşümleri ve Çevre','Enerji Dönüşümleri ve Çevre becerilerini uygular.','',120,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-enerji' WHERE d.kod='fen' OR d.ad='Fen Bilimleri' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'f8-yuk','Elektrik Yükleri ve Elektriklenme','Elektrik Yükleri ve Elektriklenme','Elektrik Yükleri ve Elektriklenme becerilerini uygular.','',130,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-elektrik' WHERE d.kod='fen' OR d.ad='Fen Bilimleri' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'f8-enerji','Elektrik Enerjisinin Dönüşümü','Elektrik Enerjisinin Dönüşümü','Elektrik Enerjisinin Dönüşümü becerilerini uygular.','',140,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-elektrik' WHERE d.kod='fen' OR d.ad='Fen Bilimleri' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-1','coktan_secmeli','Mevsimlerin oluşumunda Dünya''nın eksen eğikliği etkili midir?','["Evet","Hayır","Sadece Ay","Sadece günlük dönüş"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,1,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-2','coktan_secmeli','Dünya''nın Güneş etrafında dolanması mevsimlerle ilişkili midir?','["Hayır","Sadece gece-gündüz","Evet","Sadece Ay evreleri"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,2,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-3','coktan_secmeli','İklim uzun yılların hava koşullarını ifade eder mi?','["Evet","Hayır","Sadece günlük hava","Sadece sıcaklık"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,3,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-iklim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-4','coktan_secmeli','Hava olayı kısa süreli değişebilir mi?','["Hayır","Yıllarca aynı","Evet","İklimle aynıdır"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,4,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-iklim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-5','coktan_secmeli','DNA kalıtsal bilgiyi taşır mı?','["Evet","Hayır","Sadece enerji","Sadece su"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,5,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-dna' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-6','coktan_secmeli','Gen DNA''nın belirli bir bölgesi olarak düşünülebilir mi?','["Hayır","Sadece hücre zarı","Evet","Sadece protein"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,6,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-dna' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-7','coktan_secmeli','Mutasyon DNA''da değişim oluşturabilir mi?','["Evet","Hayır","Sadece davranış değişir","DNA etkilenmez"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,7,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-8','coktan_secmeli','Modifikasyon çevre etkisiyle ortaya çıkabilir mi?','["Hayır","Her zaman kalıtsaldır","Evet","Çevre etkisiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,8,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-9','coktan_secmeli','Katı basıncı kuvvet arttıkça artabilir mi?','["Evet","Hayır","Her zaman azalır","Kuvvet etkilemez"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,9,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-10','coktan_secmeli','Temas alanı arttıkça aynı kuvvette basınç azalabilir mi?','["Hayır","Artar","Evet","Alan etkilemez"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,10,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-11','coktan_secmeli','Sıvı basıncı derinlikle artar mı?','["Evet","Hayır","Azalır","Derinlik etkilemez"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,11,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-12','coktan_secmeli','Açık hava basıncı atmosferle ilişkili midir?','["Hayır","Sadece su","Evet","Sadece toprak"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,12,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-13','coktan_secmeli','Periyodik tabloda elementler belirli düzene göre sıralanır mı?','["Evet","Hayır","Rastgele","Sadece renge göre"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,13,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-14','coktan_secmeli','Metaller ve ametaller farklı özellikler gösterebilir mi?','["Hayır","Hepsi aynıdır","Evet","Sadece renk farkı"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,14,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-15','coktan_secmeli','Kimyasal değişimde yeni maddeler oluşabilir mi?','["Evet","Hayır","Sadece şekil değişir","Madde aynı kalır zorunlu"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,15,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-tepkime' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-16','coktan_secmeli','Fiziksel değişimde maddenin kimliği genellikle korunur mu?','["Hayır","Her zaman yeni madde","Evet","Kimlik yoktur"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,16,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-tepkime' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-17','coktan_secmeli','Basit makineler işten kazanç sağlar mı?','["Hayır","Evet her zaman","Enerji üretir","İşi yok eder"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,17,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-18','coktan_secmeli','Kaldıraç kuvvetin yönünü veya büyüklüğünü değiştirebilir mi?','["Hayır","Sadece ses üretir","Evet","Sadece ısıtır"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,18,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-19','coktan_secmeli','Kuvvetten kazanç varsa yoldan kayıp olabilir mi?','["Evet","Hayır","Her ikisinden kazanç olur","Yol önemsiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,19,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mekanik-avantaj' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-20','coktan_secmeli','İdeal basit makinede iş korunur mu?','["Hayır","İş artar","Evet","İş yok olur"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,20,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mekanik-avantaj' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-21','coktan_secmeli','Üreticiler besin zincirinin temelinde bulunabilir mi?','["Evet","Hayır","Sadece tüketiciler","Üretici yoktur"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,21,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-besin-zincir' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-22','coktan_secmeli','Enerji besin zincirinde üst basamaklara aktarılırken azalabilir mi?','["Hayır","Artar","Evet","Aynı kalır zorunlu"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,22,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-besin-zincir' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-23','coktan_secmeli','Fotosentez ışık enerjisini kimyasal enerjiye dönüştürür mü?','["Evet","Hayır","Sadece ısı","Sadece hareket"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,23,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-cevre' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-24','coktan_secmeli','Sera gazları iklim değişikliğiyle ilişkili midir?','["Hayır","Sadece toprak","Evet","Sadece ses"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,24,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-cevre' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-25','coktan_secmeli','Aynı cins elektrik yükleri birbirini iter mi?','["Evet","Hayır","Çeker","Etkileşmez"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,25,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-26','coktan_secmeli','Topraklama fazla elektrik yükünü aktarabilir mi?','["Hayır","Yükü artırır","Evet","Sadece ışık verir"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,26,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-27','coktan_secmeli','Elektrik enerjisi ısı enerjisine dönüşebilir mi?','["Evet","Hayır","Sadece ışık","Enerji dönüşmez"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,27,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-1-28','coktan_secmeli','Elektriksel güç enerji kullanım hızıyla ilişkili midir?','["Hayır","Sadece direnç","Evet","Sadece renk"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,28,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-1','coktan_secmeli','Mevsimlerin oluşumunda Dünya''nın eksen eğikliği etkili midir? Benzer bir örneği düşün.','["Hayır","Evet","Sadece Ay","Sadece günlük dönüş"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,101,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-2','coktan_secmeli','Dünya''nın Güneş etrafında dolanması mevsimlerle ilişkili midir? Benzer bir örneği düşün.','["Hayır","Sadece gece-gündüz","Sadece Ay evreleri","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,102,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-3','coktan_secmeli','İklim uzun yılların hava koşullarını ifade eder mi? Benzer bir örneği düşün.','["Hayır","Evet","Sadece günlük hava","Sadece sıcaklık"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,103,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-iklim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-4','coktan_secmeli','Hava olayı kısa süreli değişebilir mi? Benzer bir örneği düşün.','["Hayır","Yıllarca aynı","İklimle aynıdır","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,104,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-iklim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-5','coktan_secmeli','DNA kalıtsal bilgiyi taşır mı? Benzer bir örneği düşün.','["Hayır","Evet","Sadece enerji","Sadece su"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,105,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-dna' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-6','coktan_secmeli','Gen DNA''nın belirli bir bölgesi olarak düşünülebilir mi? Benzer bir örneği düşün.','["Hayır","Sadece hücre zarı","Sadece protein","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,106,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-dna' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-7','coktan_secmeli','Mutasyon DNA''da değişim oluşturabilir mi? Benzer bir örneği düşün.','["Hayır","Evet","Sadece davranış değişir","DNA etkilenmez"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,107,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-8','coktan_secmeli','Modifikasyon çevre etkisiyle ortaya çıkabilir mi? Benzer bir örneği düşün.','["Hayır","Her zaman kalıtsaldır","Çevre etkisiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,108,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-9','coktan_secmeli','Katı basıncı kuvvet arttıkça artabilir mi? Benzer bir örneği düşün.','["Hayır","Evet","Her zaman azalır","Kuvvet etkilemez"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,109,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-10','coktan_secmeli','Temas alanı arttıkça aynı kuvvette basınç azalabilir mi? Benzer bir örneği düşün.','["Hayır","Artar","Alan etkilemez","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,110,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-11','coktan_secmeli','Sıvı basıncı derinlikle artar mı? Benzer bir örneği düşün.','["Hayır","Evet","Azalır","Derinlik etkilemez"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,111,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-12','coktan_secmeli','Açık hava basıncı atmosferle ilişkili midir? Benzer bir örneği düşün.','["Hayır","Sadece su","Sadece toprak","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,112,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-13','coktan_secmeli','Periyodik tabloda elementler belirli düzene göre sıralanır mı? Benzer bir örneği düşün.','["Hayır","Evet","Rastgele","Sadece renge göre"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,113,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-14','coktan_secmeli','Metaller ve ametaller farklı özellikler gösterebilir mi? Benzer bir örneği düşün.','["Hayır","Hepsi aynıdır","Sadece renk farkı","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,114,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-15','coktan_secmeli','Kimyasal değişimde yeni maddeler oluşabilir mi? Benzer bir örneği düşün.','["Hayır","Evet","Sadece şekil değişir","Madde aynı kalır zorunlu"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,115,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-tepkime' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-16','coktan_secmeli','Fiziksel değişimde maddenin kimliği genellikle korunur mu? Benzer bir örneği düşün.','["Hayır","Her zaman yeni madde","Kimlik yoktur","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,116,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-tepkime' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-17','coktan_secmeli','Basit makineler işten kazanç sağlar mı? Benzer bir örneği düşün.','["Evet her zaman","Hayır","Enerji üretir","İşi yok eder"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,117,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-18','coktan_secmeli','Kaldıraç kuvvetin yönünü veya büyüklüğünü değiştirebilir mi? Benzer bir örneği düşün.','["Hayır","Sadece ses üretir","Sadece ısıtır","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,118,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-19','coktan_secmeli','Kuvvetten kazanç varsa yoldan kayıp olabilir mi? Benzer bir örneği düşün.','["Hayır","Evet","Her ikisinden kazanç olur","Yol önemsiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,119,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mekanik-avantaj' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-20','coktan_secmeli','İdeal basit makinede iş korunur mu? Benzer bir örneği düşün.','["Hayır","İş artar","İş yok olur","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,120,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mekanik-avantaj' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-21','coktan_secmeli','Üreticiler besin zincirinin temelinde bulunabilir mi? Benzer bir örneği düşün.','["Hayır","Evet","Sadece tüketiciler","Üretici yoktur"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,121,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-besin-zincir' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-22','coktan_secmeli','Enerji besin zincirinde üst basamaklara aktarılırken azalabilir mi? Benzer bir örneği düşün.','["Hayır","Artar","Aynı kalır zorunlu","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,122,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-besin-zincir' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-23','coktan_secmeli','Fotosentez ışık enerjisini kimyasal enerjiye dönüştürür mü? Benzer bir örneği düşün.','["Hayır","Evet","Sadece ısı","Sadece hareket"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,123,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-cevre' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-24','coktan_secmeli','Sera gazları iklim değişikliğiyle ilişkili midir? Benzer bir örneği düşün.','["Hayır","Sadece toprak","Sadece ses","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,124,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-cevre' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-25','coktan_secmeli','Aynı cins elektrik yükleri birbirini iter mi? Benzer bir örneği düşün.','["Hayır","Evet","Çeker","Etkileşmez"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,125,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-26','coktan_secmeli','Topraklama fazla elektrik yükünü aktarabilir mi? Benzer bir örneği düşün.','["Hayır","Yükü artırır","Sadece ışık verir","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,126,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-27','coktan_secmeli','Elektrik enerjisi ısı enerjisine dönüşebilir mi? Benzer bir örneği düşün.','["Hayır","Evet","Sadece ışık","Enerji dönüşmez"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,127,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-2-28','coktan_secmeli','Elektriksel güç enerji kullanım hızıyla ilişkili midir? Benzer bir örneği düşün.','["Hayır","Sadece direnç","Sadece renk","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,128,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-1','coktan_secmeli','Mevsimlerin oluşumunda Dünya''nın eksen eğikliği etkili midir? Yeni bir bağlama uygula.','["Hayır","Sadece Ay","Evet","Sadece günlük dönüş"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,201,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-2','coktan_secmeli','Dünya''nın Güneş etrafında dolanması mevsimlerle ilişkili midir? Yeni bir bağlama uygula.','["Evet","Hayır","Sadece gece-gündüz","Sadece Ay evreleri"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,202,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-3','coktan_secmeli','İklim uzun yılların hava koşullarını ifade eder mi? Yeni bir bağlama uygula.','["Hayır","Sadece günlük hava","Evet","Sadece sıcaklık"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,203,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-iklim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-4','coktan_secmeli','Hava olayı kısa süreli değişebilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Yıllarca aynı","İklimle aynıdır"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,204,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-iklim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-5','coktan_secmeli','DNA kalıtsal bilgiyi taşır mı? Yeni bir bağlama uygula.','["Hayır","Sadece enerji","Evet","Sadece su"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,205,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-dna' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-6','coktan_secmeli','Gen DNA''nın belirli bir bölgesi olarak düşünülebilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Sadece hücre zarı","Sadece protein"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,206,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-dna' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-7','coktan_secmeli','Mutasyon DNA''da değişim oluşturabilir mi? Yeni bir bağlama uygula.','["Hayır","Sadece davranış değişir","Evet","DNA etkilenmez"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,207,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-8','coktan_secmeli','Modifikasyon çevre etkisiyle ortaya çıkabilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Her zaman kalıtsaldır","Çevre etkisiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,208,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-9','coktan_secmeli','Katı basıncı kuvvet arttıkça artabilir mi? Yeni bir bağlama uygula.','["Hayır","Her zaman azalır","Evet","Kuvvet etkilemez"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,209,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-10','coktan_secmeli','Temas alanı arttıkça aynı kuvvette basınç azalabilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Artar","Alan etkilemez"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,210,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-11','coktan_secmeli','Sıvı basıncı derinlikle artar mı? Yeni bir bağlama uygula.','["Hayır","Azalır","Evet","Derinlik etkilemez"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,211,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-12','coktan_secmeli','Açık hava basıncı atmosferle ilişkili midir? Yeni bir bağlama uygula.','["Evet","Hayır","Sadece su","Sadece toprak"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,212,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-13','coktan_secmeli','Periyodik tabloda elementler belirli düzene göre sıralanır mı? Yeni bir bağlama uygula.','["Hayır","Rastgele","Evet","Sadece renge göre"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,213,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-14','coktan_secmeli','Metaller ve ametaller farklı özellikler gösterebilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Hepsi aynıdır","Sadece renk farkı"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,214,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-15','coktan_secmeli','Kimyasal değişimde yeni maddeler oluşabilir mi? Yeni bir bağlama uygula.','["Hayır","Sadece şekil değişir","Evet","Madde aynı kalır zorunlu"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,215,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-tepkime' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-16','coktan_secmeli','Fiziksel değişimde maddenin kimliği genellikle korunur mu? Yeni bir bağlama uygula.','["Evet","Hayır","Her zaman yeni madde","Kimlik yoktur"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,216,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-tepkime' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-17','coktan_secmeli','Basit makineler işten kazanç sağlar mı? Yeni bir bağlama uygula.','["Evet her zaman","Enerji üretir","Hayır","İşi yok eder"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,217,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-18','coktan_secmeli','Kaldıraç kuvvetin yönünü veya büyüklüğünü değiştirebilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Sadece ses üretir","Sadece ısıtır"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,218,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-19','coktan_secmeli','Kuvvetten kazanç varsa yoldan kayıp olabilir mi? Yeni bir bağlama uygula.','["Hayır","Her ikisinden kazanç olur","Evet","Yol önemsiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,219,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mekanik-avantaj' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-20','coktan_secmeli','İdeal basit makinede iş korunur mu? Yeni bir bağlama uygula.','["Evet","Hayır","İş artar","İş yok olur"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,220,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mekanik-avantaj' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-21','coktan_secmeli','Üreticiler besin zincirinin temelinde bulunabilir mi? Yeni bir bağlama uygula.','["Hayır","Sadece tüketiciler","Evet","Üretici yoktur"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,221,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-besin-zincir' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-22','coktan_secmeli','Enerji besin zincirinde üst basamaklara aktarılırken azalabilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Artar","Aynı kalır zorunlu"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,222,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-besin-zincir' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-23','coktan_secmeli','Fotosentez ışık enerjisini kimyasal enerjiye dönüştürür mü? Yeni bir bağlama uygula.','["Hayır","Sadece ısı","Evet","Sadece hareket"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,223,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-cevre' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-24','coktan_secmeli','Sera gazları iklim değişikliğiyle ilişkili midir? Yeni bir bağlama uygula.','["Evet","Hayır","Sadece toprak","Sadece ses"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,224,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-cevre' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-25','coktan_secmeli','Aynı cins elektrik yükleri birbirini iter mi? Yeni bir bağlama uygula.','["Hayır","Çeker","Evet","Etkileşmez"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,225,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-26','coktan_secmeli','Topraklama fazla elektrik yükünü aktarabilir mi? Yeni bir bağlama uygula.','["Evet","Hayır","Yükü artırır","Sadece ışık verir"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,226,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-27','coktan_secmeli','Elektrik enerjisi ısı enerjisine dönüşebilir mi? Yeni bir bağlama uygula.','["Hayır","Sadece ışık","Evet","Enerji dönüşmez"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,227,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-3-28','coktan_secmeli','Elektriksel güç enerji kullanım hızıyla ilişkili midir? Yeni bir bağlama uygula.','["Evet","Hayır","Sadece direnç","Sadece renk"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,228,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-1','coktan_secmeli','Mevsimlerin oluşumunda Dünya''nın eksen eğikliği etkili midir? En uygun açıklamayı seç.','["Hayır","Sadece Ay","Sadece günlük dönüş","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,301,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-2','coktan_secmeli','Dünya''nın Güneş etrafında dolanması mevsimlerle ilişkili midir? En uygun açıklamayı seç.','["Hayır","Evet","Sadece gece-gündüz","Sadece Ay evreleri"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,302,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-3','coktan_secmeli','İklim uzun yılların hava koşullarını ifade eder mi? En uygun açıklamayı seç.','["Hayır","Sadece günlük hava","Sadece sıcaklık","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,303,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-iklim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-4','coktan_secmeli','Hava olayı kısa süreli değişebilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Yıllarca aynı","İklimle aynıdır"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,304,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-iklim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-5','coktan_secmeli','DNA kalıtsal bilgiyi taşır mı? En uygun açıklamayı seç.','["Hayır","Sadece enerji","Sadece su","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,305,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-dna' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-6','coktan_secmeli','Gen DNA''nın belirli bir bölgesi olarak düşünülebilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Sadece hücre zarı","Sadece protein"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,306,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-dna' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-7','coktan_secmeli','Mutasyon DNA''da değişim oluşturabilir mi? En uygun açıklamayı seç.','["Hayır","Sadece davranış değişir","DNA etkilenmez","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,307,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-8','coktan_secmeli','Modifikasyon çevre etkisiyle ortaya çıkabilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Her zaman kalıtsaldır","Çevre etkisiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,308,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-9','coktan_secmeli','Katı basıncı kuvvet arttıkça artabilir mi? En uygun açıklamayı seç.','["Hayır","Her zaman azalır","Kuvvet etkilemez","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,309,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-10','coktan_secmeli','Temas alanı arttıkça aynı kuvvette basınç azalabilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Artar","Alan etkilemez"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,310,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-11','coktan_secmeli','Sıvı basıncı derinlikle artar mı? En uygun açıklamayı seç.','["Hayır","Azalır","Derinlik etkilemez","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,311,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-12','coktan_secmeli','Açık hava basıncı atmosferle ilişkili midir? En uygun açıklamayı seç.','["Hayır","Evet","Sadece su","Sadece toprak"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,312,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-13','coktan_secmeli','Periyodik tabloda elementler belirli düzene göre sıralanır mı? En uygun açıklamayı seç.','["Hayır","Rastgele","Sadece renge göre","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,313,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-14','coktan_secmeli','Metaller ve ametaller farklı özellikler gösterebilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Hepsi aynıdır","Sadece renk farkı"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,314,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-15','coktan_secmeli','Kimyasal değişimde yeni maddeler oluşabilir mi? En uygun açıklamayı seç.','["Hayır","Sadece şekil değişir","Madde aynı kalır zorunlu","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,315,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-tepkime' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-16','coktan_secmeli','Fiziksel değişimde maddenin kimliği genellikle korunur mu? En uygun açıklamayı seç.','["Hayır","Evet","Her zaman yeni madde","Kimlik yoktur"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,316,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-tepkime' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-17','coktan_secmeli','Basit makineler işten kazanç sağlar mı? En uygun açıklamayı seç.','["Evet her zaman","Enerji üretir","İşi yok eder","Hayır"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,317,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-18','coktan_secmeli','Kaldıraç kuvvetin yönünü veya büyüklüğünü değiştirebilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Sadece ses üretir","Sadece ısıtır"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,318,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-19','coktan_secmeli','Kuvvetten kazanç varsa yoldan kayıp olabilir mi? En uygun açıklamayı seç.','["Hayır","Her ikisinden kazanç olur","Yol önemsiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,319,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mekanik-avantaj' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-20','coktan_secmeli','İdeal basit makinede iş korunur mu? En uygun açıklamayı seç.','["Hayır","Evet","İş artar","İş yok olur"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,320,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-mekanik-avantaj' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-21','coktan_secmeli','Üreticiler besin zincirinin temelinde bulunabilir mi? En uygun açıklamayı seç.','["Hayır","Sadece tüketiciler","Üretici yoktur","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,321,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-besin-zincir' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-22','coktan_secmeli','Enerji besin zincirinde üst basamaklara aktarılırken azalabilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Artar","Aynı kalır zorunlu"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,322,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-besin-zincir' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-23','coktan_secmeli','Fotosentez ışık enerjisini kimyasal enerjiye dönüştürür mü? En uygun açıklamayı seç.','["Hayır","Sadece ısı","Sadece hareket","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,323,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-cevre' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-24','coktan_secmeli','Sera gazları iklim değişikliğiyle ilişkili midir? En uygun açıklamayı seç.','["Hayır","Evet","Sadece toprak","Sadece ses"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,324,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-cevre' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-25','coktan_secmeli','Aynı cins elektrik yükleri birbirini iter mi? En uygun açıklamayı seç.','["Hayır","Çeker","Etkileşmez","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,325,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-26','coktan_secmeli','Topraklama fazla elektrik yükünü aktarabilir mi? En uygun açıklamayı seç.','["Hayır","Evet","Yükü artırır","Sadece ışık verir"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,326,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-27','coktan_secmeli','Elektrik enerjisi ısı enerjisine dönüşebilir mi? En uygun açıklamayı seç.','["Hayır","Sadece ışık","Enerji dönüşmez","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,327,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8f-4-28','coktan_secmeli','Elektriksel güç enerji kullanım hızıyla ilişkili midir? En uygun açıklamayı seç.','["Hayır","Evet","Sadece direnç","Sadece renk"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,328,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='f8-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'fen8-mevsim','Mevsimlerin Oluşumu','Mevsimlerin Oluşumu','Mevsimlerin Oluşumu konusunu deney, model ve günlük yaşamla ilişkilendirir.','',10,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-iklim'
+WHERE d.kod='fen' OR d.ad='Fen Bilimleri'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-1-1','coktan_secmeli','Mevsimlerin oluşmasının temel nedeni nedir?','["Dünya''nın eksen eğikliği ve Güneş etrafındaki dolanması","Dünya-Güneş uzaklığının ay boyunca değişmesi","Ay''ın evreleri","Güneş''in Dünya etrafında dönmesi"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-1-2','coktan_secmeli','Kuzey Yarım Küre yaz yaşarken Güney Yarım Küre genellikle hangi mevsimi yaşar?','["Yaz","İlkbahar zorunlu","Kış","Aynı mevsim"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-1-3','coktan_secmeli','21 Haziran civarında Kuzey Yarım Küre''de gündüz süresi nasıldır?','["Yılın en uzun gündüzlerinden biridir.","Yılın en kısa gündüzüdür.","Gece-gündüz mutlaka eşittir.","24 saat gece olur."]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-1-4','coktan_secmeli','Ekinoks tarihlerinde gece ve gündüz süreleri yaklaşık nasıldır?','["Gece iki kat uzundur.","Gündüz iki kat uzundur.","Eşittir.","Mevsime göre ölçülemez."]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-1-5','coktan_secmeli','Dünya''nın eksen eğikliği olmasaydı mevsim farklılıkları bugünkü gibi olur muydu?','["Hayır","Evet aynen olurdu","Sadece geceler değişirdi","Ay belirlerdi"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-1-6','coktan_secmeli','Güneş ışınlarının daha dik gelmesi yüzeyde birim alana düşen enerjiyi nasıl etkiler?','["Azaltır","Değiştirmez","Artırır","Sıfırlar"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-1-7','coktan_secmeli','Dünya Güneş''e en yakınken her yerde yaz olur mu?','["Hayır","Evet","Sadece kuzeyde","Sadece ekvatorda"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-1-8','coktan_secmeli','Mevsim oluşumunu açıklarken hangi iki hareket/özellik birlikte ele alınır?','["Günlük dönme ve Ay''ın dolanması","Bulutlanma ve rüzgâr","Eksen eğikliği ve yıllık dolanma","Gelgit ve Ay evresi"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-mevsim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'fen8-iklim-hava','İklim ve Hava Olayları','İklim ve Hava Olayları','İklim ve Hava Olayları konusunu deney, model ve günlük yaşamla ilişkilendirir.','',20,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-iklim'
+WHERE d.kod='fen' OR d.ad='Fen Bilimleri'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-2-1','coktan_secmeli','Hava olayı hangi zaman ölçeğinde incelenir?','["Yüzlerce yıllık ortalama zorunlu","Kısa süreli atmosfer koşulları","Jeolojik çağ","Sadece mevsim adı"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-iklim-hava' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-2-2','coktan_secmeli','İklim neyi ifade eder?','["Bir günlük sıcaklığı","Saatlik rüzgârı","Tek yağmur olayını","Bir bölgenin uzun yıllar boyunca gözlenen hava koşullarının genel karakterini"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-iklim-hava' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-2-3','coktan_secmeli','Hava tahminiyle ilgilenen bilim dalı?','["Genetik","Meteoroloji","Astronomi","Jeoloji"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-iklim-hava' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-2-4','coktan_secmeli','İklim bilimi?','["Meteoroloji sadece","Fizik tedavi","Paleontoloji","Klimatoloji"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-iklim-hava' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-2-5','coktan_secmeli','“Konya bugün yağmurlu.” ifadesi iklim mi hava olayı mı?','["İklim","Hava olayı","Mevsim tanımı","Küresel ısınma"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-iklim-hava' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-2-6','coktan_secmeli','“Akdeniz yazları sıcak ve kuraktır.” ifadesi neyi anlatır?','["Günlük hava tahminini","Saatlik basıncı","Tek fırtınayı","İklim özelliğini"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-iklim-hava' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-2-7','coktan_secmeli','İklim değişikliği uzun dönemli sıcaklık ve yağış düzenlerini etkileyebilir mi?','["Hayır","Evet","Sadece saatlik hava değişir","İklim değişmez"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-iklim-hava' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-2-8','coktan_secmeli','Tek bir soğuk gün küresel iklim eğilimini tek başına çürütür mü?','["Evet","Her zaman","Sadece kışın","Hayır"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-iklim-hava' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'fen8-dna-yapi','DNA, Gen ve Kromozom','DNA, Gen ve Kromozom','DNA, Gen ve Kromozom konusunu deney, model ve günlük yaşamla ilişkilendirir.','',30,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-dna'
+WHERE d.kod='fen' OR d.ad='Fen Bilimleri'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-3-1','coktan_secmeli','DNA''nın yapı birimi nedir?','["Amino asit","Hücre","Nükleotit","Organ"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-dna-yapi' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-3-2','coktan_secmeli','Nükleotitte hangisi bulunur?','["Şeker, fosfat ve organik baz","Protein, yağ ve su","Sadece baz","Sadece şeker"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-dna-yapi' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-3-3','coktan_secmeli','Gen nedir?','["Tüm hücrenin adı","Bir organ","DNA üzerinde belirli bir özelliğe ilişkin bilgi taşıyan bölüm","Sadece kromozom sayısı"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-dna-yapi' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-3-4','coktan_secmeli','Kromozom ne içerir?','["DNA ve protein yapıları","Sadece su","Sadece yağ","Sadece mineral"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-dna-yapi' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-3-5','coktan_secmeli','Adenin DNA''da hangi bazla eşleşir?','["Guanin","Sitozin","Timin","Urasil"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-dna-yapi' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-3-6','coktan_secmeli','Guanin hangi bazla eşleşir?','["Sitozin","Adenin","Timin","Urasil"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-dna-yapi' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-3-7','coktan_secmeli','DNA kendini eşleyebilir mi?','["Hayır","Sadece protein eşlenir","Evet","Sadece hücre zarı eşlenir"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-dna-yapi' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-3-8','coktan_secmeli','Aynı türün sağlıklı bireylerinde kromozom sayısı genellikle aynı mıdır?','["Evet","Hayır","Her bireyde rastgele","Yaşa göre sürekli değişir"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-dna-yapi' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'fen8-kalitim','Kalıtım, Mutasyon ve Modifikasyon','Kalıtım, Mutasyon ve Modifikasyon','Kalıtım, Mutasyon ve Modifikasyon konusunu deney, model ve günlük yaşamla ilişkilendirir.','',40,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-dna'
+WHERE d.kod='fen' OR d.ad='Fen Bilimleri'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-4-1','coktan_secmeli','Baskın alel hangi durumda fenotipte görülebilir?','["Sadece iki çekinik alelle","Hiçbir zaman","Sadece çevre etkisiyle","Tek kopya bulunsa bile"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-4-2','coktan_secmeli','Çekinik özellik genellikle hangi durumda fenotipte ortaya çıkar?','["Bir baskın alel varken her zaman","İki çekinik alel birlikte olduğunda","Sadece yaşla","Sadece beslenmeyle"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-4-3','coktan_secmeli','Mutasyon DNA''da değişiklik oluşturabilir mi?','["Hayır","Sadece davranışı değiştirir","DNA sabittir","Evet"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-4-4','coktan_secmeli','Modifikasyon kalıtsal DNA dizisini değiştirmek zorunda mıdır?','["Evet her zaman","Hayır","Sadece kromozom sayısını değiştirir","Genleri yok eder"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-4-5','coktan_secmeli','Güneşte bronzlaşma modifikasyona örnek olabilir mi?','["Hayır, mutlaka mutasyondur","Sadece adaptasyondur","Kalıtsal olmak zorundadır","Evet"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-4-6','coktan_secmeli','Adaptasyon nedir?','["Bireyin kısa süreli alışkanlığı","Canlının yaşama ve üreme başarısını artıran kalıtsal özellik","Her çevresel değişim","Sadece öğrenilmiş davranış"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-4-7','coktan_secmeli','Akraba evliliği bazı çekinik kalıtsal hastalıkların görülme olasılığını artırabilir mi?','["Hayır","Her zaman azaltır","Genetikle ilgisizdir","Evet"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-4-8','coktan_secmeli','Genotip neyi ifade eder?','["Sadece dış görünüşünü","Canlının genetik yapısını","Sadece yaşadığı ortamı","Sadece beslenmesini"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kalitim' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'fen8-kati-basinc','Katı Basıncı','Katı Basıncı','Katı Basıncı konusunu deney, model ve günlük yaşamla ilişkilendirir.','',50,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-basinc'
+WHERE d.kod='fen' OR d.ad='Fen Bilimleri'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-5-1','coktan_secmeli','Katı basıncı hangi iki büyüklüğe bağlıdır?','["Kuvvet ve temas yüzey alanı","Sıcaklık ve renk","Hacim ve sıcaklık","Sadece kütle"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-5-2','coktan_secmeli','Aynı ağırlıktaki cismin temas alanı azalırsa basınç ne olur?','["Azalır","Değişmez","Artar","Sıfır olur"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-5-3','coktan_secmeli','Kar ayakkabılarının geniş yapılmasının nedeni?','["Temas alanını artırıp basıncı azaltmak","Basıncı artırmak","Ağırlığı artırmak","Sürtünmeyi sıfırlamak"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-5-4','coktan_secmeli','Keskin bıçağın kolay kesmesi hangi ilkeyle ilişkilidir?','["Büyük alanda küçük basınç","Sıvı basıncı","Küçük alanda daha büyük basınç","Gaz basıncı"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-5-5','coktan_secmeli','Cismin ağırlığı artarsa aynı yüzeyde katı basıncı ne olur?','["Artar","Azalır","Değişmez","Önce azalır"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-5-6','coktan_secmeli','Basınç birimi nedir?','["Newton","Joule","Pascal","Watt"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-5-7','coktan_secmeli','Aynı kuvvetle 2 cm² yerine 4 cm² yüzeye basılırsa basınç?','["Azalır","Artar","Aynı kalır","İki kat kesin artar"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-5-8','coktan_secmeli','Katı basıncı yüzey alanıyla ters orantılı mıdır?','["Hayır","Her zaman doğru orantılı","Evet, kuvvet sabitken.","Alan etkisizdir"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kati-basinc' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'fen8-sivi-gaz','Sıvı ve Gaz Basıncı','Sıvı ve Gaz Basıncı','Sıvı ve Gaz Basıncı konusunu deney, model ve günlük yaşamla ilişkilendirir.','',60,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-basinc'
+WHERE d.kod='fen' OR d.ad='Fen Bilimleri'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-6-1','coktan_secmeli','Sıvı basıncı derinlikle nasıl değişir?','["Azalır","Derinlik arttıkça artar.","Değişmez","Sıfırlanır"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-6-2','coktan_secmeli','Sıvı basıncı sıvının yoğunluğuna bağlı mıdır?','["Hayır","Sadece renge","Sadece kaba","Evet"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-6-3','coktan_secmeli','Aynı sıvıda aynı derinlikte basınç kap şekline bağlı mıdır?','["Evet","Hayır","Sadece geniş kapta","Sadece dar kapta"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-6-4','coktan_secmeli','Pascal prensibi hangi sistemlerde kullanılabilir?','["Sadece elektrik devresinde","Sadece aynalarda","Sadece mıknatısta","Hidrolik sistemlerde"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-6-5','coktan_secmeli','Atmosfer basıncı var mıdır?','["Hayır","Evet","Sadece suda","Sadece uzayda"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-6-6','coktan_secmeli','Yükseklere çıkıldıkça açık hava basıncı genellikle ne olur?','["Artar","Değişmez","İki kat olur","Azalır"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-6-7','coktan_secmeli','Pipetle sıvı içmede açık hava basıncı rol oynar mı?','["Hayır","Evet","Sadece yerçekimi","Sadece sıcaklık"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-6-8','coktan_secmeli','Barometre ne ölçer?','["Sıcaklığı","Nem dışında hiçbir şeyi","Elektrik akımını","Açık hava basıncını"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-sivi-gaz' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'fen8-periyodik','Periyodik Sistem ve Elementler','Periyodik Sistem ve Elementler','Periyodik Sistem ve Elementler konusunu deney, model ve günlük yaşamla ilişkilendirir.','',70,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-madde'
+WHERE d.kod='fen' OR d.ad='Fen Bilimleri'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-7-1','coktan_secmeli','Periyodik tabloda yatay sıralara ne denir?','["Grup","Blok","Periyot","Katman"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-7-2','coktan_secmeli','Dikey sütunlara ne denir?','["Grup","Periyot","Yörünge","Kabuk"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-7-3','coktan_secmeli','Metaller genellikle elektrik iletkeni midir?','["Hayır","Sadece ametaller","Evet","İletkenlik yoktur"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-7-4','coktan_secmeli','Ametallerin çoğu parlak metalik görünüm gösterir mi?','["Hayır","Evet her zaman","Sadece gazlar","Tüm elementler aynıdır"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-7-5','coktan_secmeli','Yarı metaller bazı özellikleri bakımından metal ve ametaller arasında olabilir mi?','["Hayır","Sadece metaldir","Evet","Sadece ametaldir"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-7-6','coktan_secmeli','Elementler atom numarasına göre sıralanır mı?','["Evet","Hayır","Sadece kütleye göre","Renge göre"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-7-7','coktan_secmeli','Aynı gruptaki elementler benzer kimyasal özellik gösterebilir mi?','["Hayır","Grup etkisiz","Evet","Sadece periyot önemlidir"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-7-8','coktan_secmeli','Soy gazlar periyodik tabloda bir grup oluşturur mu?','["Evet","Hayır","Element değildir","Sadece metal grubudur"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-periyodik' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'fen8-kimyasal','Fiziksel-Kimyasal Değişim, Asit ve Baz','Fiziksel-Kimyasal Değişim, Asit ve Baz','Fiziksel-Kimyasal Değişim, Asit ve Baz konusunu deney, model ve günlük yaşamla ilişkilendirir.','',80,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-madde'
+WHERE d.kod='fen' OR d.ad='Fen Bilimleri'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-8-1','coktan_secmeli','Fiziksel değişimde maddenin kimliği değişir mi?','["Evet her zaman","Sadece katıda","Sadece gazda","Hayır"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kimyasal' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-8-2','coktan_secmeli','Kimyasal değişimde yeni maddeler oluşabilir mi?','["Hayır","Evet","Sadece şekil değişir","Sadece hâl değişir"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kimyasal' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-8-3','coktan_secmeli','Demirin paslanması hangi değişimdir?','["Fiziksel","Sadece hâl değişimi","Geri dönüşümsüz olduğu için fiziksel","Kimyasal"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kimyasal' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-8-4','coktan_secmeli','Buzun erimesi?','["Kimyasal değişim","Fiziksel değişim","Nükleer değişim","Tepkime zorunlu"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kimyasal' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-8-5','coktan_secmeli','Asitlerin pH değeri genellikle 7''den küçük müdür?','["Hayır","Her zaman 7","Her zaman 14","Evet"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kimyasal' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-8-6','coktan_secmeli','Bazların pH değeri genellikle 7''den büyük müdür?','["Hayır","Evet","Her zaman 0","Her zaman 7"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kimyasal' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-8-7','coktan_secmeli','Asit ve baz tepkimesi nötralleşmeye yol açabilir mi?','["Hayır","Sadece donma olur","Sadece buharlaşma olur","Evet"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kimyasal' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-8-8','coktan_secmeli','Kimyasal tepkimelerde toplam kütle korunur mu?','["Hayır","Kapalı sistemde evet","Her zaman yarıya iner","Kütle kavramı yoktur"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-kimyasal' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'fen8-basit-makine','Basit Makineler ve İş Kolaylığı','Basit Makineler ve İş Kolaylığı','Basit Makineler ve İş Kolaylığı konusunu deney, model ve günlük yaşamla ilişkilendirir.','',90,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-makine'
+WHERE d.kod='fen' OR d.ad='Fen Bilimleri'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-9-1','coktan_secmeli','Basit makineler işten kazanç sağlar mı?','["Hayır, ideal durumda iş korunur.","Evet, her zaman","İşi sıfırlar","Enerji üretir"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-9-2','coktan_secmeli','Basit makineler kuvvetten kazanç sağlayabilir mi?','["Hayır","Sadece hızdan","Evet","Sadece zamandan"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-9-3','coktan_secmeli','Kaldıraçta destek noktası ne işe yarar?','["Dönme ekseni oluşturur.","Enerji üretir","Kütleyi değiştirir","Sürtünmeyi yok eder"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-9-4','coktan_secmeli','Sabit makara kuvvetin yönünü değiştirebilir mi?','["Hayır","Kuvveti her zaman ikiye böler","Evet","İp gerektirmez"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-9-5','coktan_secmeli','Hareketli makara kuvvetten kazanç sağlayabilir mi?','["Evet","Hayır","Sadece yön değiştirir","Yükü artırır"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-9-6','coktan_secmeli','Eğik düzlem kuvveti azaltırken yolu artırabilir mi?','["Hayır","Yolu azaltır","Evet","İş oluşturur"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-9-7','coktan_secmeli','Vida hangi basit makineyle ilişkilendirilebilir?','["Eğik düzlem","Makara","Kaldıraç","Çıkrık değildir"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-9-8','coktan_secmeli','Dişli çarklar hareket yönü ve hızını değiştirebilir mi?','["Hayır","Sadece kütleyi değiştirir","Evet","Enerji üretir"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-basit-makine' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'fen8-makine-sistem','Basit Makine Sistemleri','Basit Makine Sistemleri','Basit Makine Sistemleri konusunu deney, model ve günlük yaşamla ilişkilendirir.','',100,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-makine'
+WHERE d.kod='fen' OR d.ad='Fen Bilimleri'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-10-1','coktan_secmeli','Bisiklette hangi basit makine örnekleri bulunabilir?','["Sadece makara","Dişli ve tekerlek-mil","Sadece eğik düzlem","Hiçbiri"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-makine-sistem' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-10-2','coktan_secmeli','Makas hangi basit makineyle ilişkilidir?','["Sabit makara","Vida sadece","Eğik düzlem değil","Kaldıraç"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-makine-sistem' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-10-3','coktan_secmeli','Kriko kuvvet kazancı sağlayabilir mi?','["Hayır","Evet","Sadece hız artırır","Yükü hafifletmez"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-makine-sistem' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-10-4','coktan_secmeli','Kapı kolu tekerlek-mil sistemine örnek olabilir mi?','["Hayır","Sadece kaldıraç değildir","Basit makine değildir","Evet"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-makine-sistem' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-10-5','coktan_secmeli','Birden fazla basit makine birleşerek bileşik makine oluşturabilir mi?','["Hayır","Evet","Sadece tek makine kullanılabilir","Birleşince çalışmaz"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-makine-sistem' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-10-6','coktan_secmeli','Kuvvet kazancı arttıkça yol kaybı görülebilir mi?','["Hayır","Her şeyden kazanç olur","Yol etkilenmez","Evet"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-makine-sistem' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-10-7','coktan_secmeli','İdeal basit makinede enerji korunumu geçerli midir?','["Hayır","Evet","Enerji üretilir","Enerji yok olur"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-makine-sistem' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-10-8','coktan_secmeli','Sürtünme gerçek makinelerde verimi azaltabilir mi?','["Hayır","Verimi her zaman artırır","Sürtünme yoktur","Evet"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-makine-sistem' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'fen8-besin-zinciri','Besin Zinciri, Enerji Akışı ve Madde Döngüleri','Besin Zinciri, Enerji Akışı ve Madde Döngüleri','Besin Zinciri, Enerji Akışı ve Madde Döngüleri konusunu deney, model ve günlük yaşamla ilişkilendirir.','',110,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-enerji'
+WHERE d.kod='fen' OR d.ad='Fen Bilimleri'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-11-1','coktan_secmeli','Üreticiler enerjiyi genellikle nereden alır?','["Tüketicilerden","Topraktan enerji olarak","Güneş''ten","Sadece sudan"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-besin-zinciri' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-11-2','coktan_secmeli','Besin zincirinde enerji üst basamaklara aktarılırken azalır mı?','["Evet","Hayır","Artar","Aynı kalır"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-besin-zinciri' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-11-3','coktan_secmeli','Ayrıştırıcılar madde döngüsüne katkı sağlar mı?','["Hayır","Sadece tüketicidir","Evet","Maddeyi sistemden çıkarır"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-besin-zinciri' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-11-4','coktan_secmeli','Karbon döngüsünde fotosentez rol oynar mı?','["Evet","Hayır","Sadece yanma","Sadece solunum"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-besin-zinciri' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-11-5','coktan_secmeli','Su döngüsünde buharlaşma var mıdır?','["Hayır","Sadece donma","Evet","Sadece yağış"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-besin-zinciri' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-11-6','coktan_secmeli','Azot döngüsü canlılar için önemli midir?','["Evet","Hayır","Sadece taşlar için","Azot canlılarda kullanılmaz"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-besin-zinciri' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-11-7','coktan_secmeli','Bir besin ağındaki türlerden biri azalırsa diğerleri etkilenebilir mi?','["Hayır","Türler bağımsızdır","Evet","Sadece üretici etkilenir"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-besin-zinciri' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-11-8','coktan_secmeli','Enerji akışı döngüsel midir?','["Hayır, enerji ekosistemde tek yönlü akar.","Evet madde gibi","Sadece geceleri","Enerji yoktur"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-besin-zinciri' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'fen8-surdur','Sürdürülebilir Kalkınma ve Çevre','Sürdürülebilir Kalkınma ve Çevre','Sürdürülebilir Kalkınma ve Çevre konusunu deney, model ve günlük yaşamla ilişkilendirir.','',120,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-enerji'
+WHERE d.kod='fen' OR d.ad='Fen Bilimleri'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-12-1','coktan_secmeli','Ekolojik ayak izi neyi ifade eder?','["Ayak ölçüsünü","Sadece karbon gazını","Sadece suyu","Tüketimimizin doğa üzerindeki kaynak ve atık baskısını"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-surdur' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-12-2','coktan_secmeli','Yenilenebilir enerji kaynaklarına örnek?','["Kömür","Güneş enerjisi","Petrol","Doğal gaz"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-surdur' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-12-3','coktan_secmeli','Geri dönüşüm ham madde kullanımını azaltabilir mi?','["Hayır","Her zaman artırır","Sadece kâğıtta","Evet"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-surdur' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-12-4','coktan_secmeli','Sürdürülebilir kalkınma neyi gözetir?','["Sadece bugünkü tüketimi","Bugünün ihtiyaçlarını karşılarken geleceğin kaynaklarını korumayı","Sınırsız kaynak kullanımını","Yalnız ekonomik büyümeyi"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-surdur' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-12-5','coktan_secmeli','Enerji verimli cihazlar tüketimi azaltabilir mi?','["Hayır","Her zaman artırır","Verim enerjiyle ilgisiz","Evet"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-surdur' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-12-6','coktan_secmeli','Biyoçeşitliliğin korunması ekosistem dayanıklılığına katkı sağlayabilir mi?','["Hayır","Evet","Tür sayısı önemsiz","Sadece tarımı etkiler"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-surdur' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-12-7','coktan_secmeli','Tek kullanımlık ürünleri azaltmak atığı azaltabilir mi?','["Hayır","Atığı artırır","İlgisiz","Evet"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-surdur' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-12-8','coktan_secmeli','Su tasarrufu sürdürülebilir yaşamın parçası mıdır?','["Hayır","Evet","Su sınırsızdır","Sadece faturayla ilgilidir"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-surdur' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'fen8-elektrik-yuk','Elektrik Yükleri ve Elektriklenme','Elektrik Yükleri ve Elektriklenme','Elektrik Yükleri ve Elektriklenme konusunu deney, model ve günlük yaşamla ilişkilendirir.','',130,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-elektrik'
+WHERE d.kod='fen' OR d.ad='Fen Bilimleri'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-13-1','coktan_secmeli','Aynı cins elektrik yükleri birbirini nasıl etkiler?','["İter","Çeker","Etkilemez her zaman","Nötrler"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-13-2','coktan_secmeli','Zıt cins yükler?','["İter","Etkilemez","Çeker","Yok olur"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-13-3','coktan_secmeli','Elektron alan cisim hangi yükle yüklenebilir?','["Negatif","Pozitif","Nötr kesin","Yüksüz"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-13-4','coktan_secmeli','Elektron veren cisim?','["Negatif kesin","Nötr kesin","Pozitif yüklenebilir","Yük kavramı yok"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-13-5','coktan_secmeli','Sürtünme ile elektriklenme elektron aktarımıyla açıklanabilir mi?','["Evet","Hayır","Protonlar cisimler arası geçer zorunlu","Yük oluşmaz"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-13-6','coktan_secmeli','Topraklama fazla yüklerin Dünya''ya aktarılmasına yardım eder mi?','["Hayır","Sadece ısıtır","Evet","Sadece yalıtır"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-13-7','coktan_secmeli','Elektroskop elektrik yükünü gözlemlemek için kullanılabilir mi?','["Evet","Hayır","Sadece sıcaklık ölçer","Sadece basınç"]',0,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-13-8','coktan_secmeli','Nötr cisimde toplam pozitif ve negatif yük miktarı dengede midir?','["Hayır","Pozitif yoktur","Evet","Negatif yoktur"]',2,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-yuk' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'fen8-elektrik-enerji','Elektrik Enerjisinin Dönüşümü ve Güvenlik','Elektrik Enerjisinin Dönüşümü ve Güvenlik','Elektrik Enerjisinin Dönüşümü ve Güvenlik konusunu deney, model ve günlük yaşamla ilişkilendirir.','',140,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='fen8-elektrik'
+WHERE d.kod='fen' OR d.ad='Fen Bilimleri'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-14-1','coktan_secmeli','Elektrik enerjisi ampulde hangi enerjiye dönüşebilir?','["Sadece kimyasal","Işık ve ısı enerjisine","Sadece çekim","Sadece nükleer"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-14-2','coktan_secmeli','Elektrik motoru elektrik enerjisini neye dönüştürür?','["Sadece ışığa","Sadece potansiyele","Maddeye","Hareket enerjisine"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-14-3','coktan_secmeli','Jeneratör hareket enerjisinden elektrik enerjisi üretebilir mi?','["Hayır","Evet","Sadece pil üretir","Elektrik dönüşmez"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',1,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-14-4','coktan_secmeli','Sigorta/devre kesici ne sağlar?','["Akımı sınırsız artırır","Enerji üretir","Kabloyu ısıtır","Aşırı akıma karşı güvenlik"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-14-5','coktan_secmeli','Islak elle priz veya elektrikli cihazla temas güvenli midir?','["Evet","Hayır","Sadece düşük ışıkta","Sadece evde"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-14-6','coktan_secmeli','Elektrik enerjisinin bilinçli kullanımı enerji tasarrufu sağlar mı?','["Hayır","Tüketimi artırır","Enerji sınırsızdır","Evet"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',2,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-14-7','coktan_secmeli','Fosil yakıtla elektrik üretimi sera gazı salımına yol açabilir mi?','["Hayır","Evet","Sadece su üretir","Çevreyi etkilemez"]',1,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,7,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8f-14-8','coktan_secmeli','Yenilenebilir kaynaklardan elektrik üretimi çevresel etkiyi azaltmaya yardımcı olabilir mi?','["Hayır","Her zaman daha kirleticidir","Elektrik üretilemez","Evet"]',3,'Fen bilimleri kavramı deney, model, veri veya günlük yaşam bağlamında değerlendirilir.',3,8,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='fen8-elektrik-enerji' AND (d.kod='fen' OR d.ad='Fen Bilimleri')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 

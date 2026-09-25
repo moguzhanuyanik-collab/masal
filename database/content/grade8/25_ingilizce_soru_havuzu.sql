@@ -1,362 +1,842 @@
 SET NAMES utf8mb4;
 
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-friends','Friendship Qualities','Friendship Qualities','Friendship Qualities konusunu bağlam ve uygulamalarla ilişkilendirir.','',10,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-friendship' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-invite','Invitations and Plans','Invitations and Plans','Invitations and Plans konusunu bağlam ve uygulamalarla ilişkilendirir.','',20,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-friendship' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-routine','Teen Routines','Teen Routines','Teen Routines konusunu bağlam ve uygulamalarla ilişkilendirir.','',30,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-teen' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-preference','Preferences and Free Time','Preferences and Free Time','Preferences and Free Time konusunu bağlam ve uygulamalarla ilişkilendirir.','',40,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-teen' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-recipe','Recipes and Instructions','Recipes and Instructions','Recipes and Instructions konusunu bağlam ve uygulamalarla ilişkilendirir.','',50,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-kitchen' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-cooking','Cooking Methods and Ingredients','Cooking Methods and Ingredients','Cooking Methods and Ingredients konusunu bağlam ve uygulamalarla ilişkilendirir.','',60,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-kitchen' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-phone','Phone Conversations','Phone Conversations','Phone Conversations konusunu bağlam ve uygulamalarla ilişkilendirir.','',70,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-phone' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-message','Messages and Communication','Messages and Communication','Messages and Communication konusunu bağlam ve uygulamalarla ilişkilendirir.','',80,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-phone' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-net','Internet Habits','Internet Habits','Internet Habits konusunu bağlam ve uygulamalarla ilişkilendirir.','',90,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-internet' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-safety','Online Safety','Online Safety','Online Safety konusunu bağlam ve uygulamalarla ilişkilendirir.','',100,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-internet' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-adventure','Adventure Activities','Adventure Activities','Adventure Activities konusunu bağlam ve uygulamalarla ilişkilendirir.','',110,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-adventure' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-risk','Risk and Safety','Risk and Safety','Risk and Safety konusunu bağlam ve uygulamalarla ilişkilendirir.','',120,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-adventure' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-tourism','Tourism and Destinations','Tourism and Destinations','Tourism and Destinations konusunu bağlam ve uygulamalarla ilişkilendirir.','',130,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-tourism' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-experience','Travel Experiences','Travel Experiences','Travel Experiences konusunu bağlam ve uygulamalarla ilişkilendirir.','',140,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-tourism' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-chores','Household Chores','Household Chores','Household Chores konusunu bağlam ve uygulamalarla ilişkilendirir.','',150,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-chores' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-responsibility','Responsibilities','Responsibilities','Responsibilities konusunu bağlam ve uygulamalarla ilişkilendirir.','',160,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-chores' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-science','Science and Inventions','Science and Inventions','Science and Inventions konusunu bağlam ve uygulamalarla ilişkilendirir.','',170,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-science' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-process','Scientific Process','Scientific Process','Scientific Process konusunu bağlam ve uygulamalarla ilişkilendirir.','',180,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-science' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-disaster','Natural Disasters','Natural Disasters','Natural Disasters konusunu bağlam ve uygulamalarla ilişkilendirir.','',190,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-forces' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'e8-prepared','Disaster Preparedness','Disaster Preparedness','Disaster Preparedness konusunu bağlam ve uygulamalarla ilişkilendirir.','',200,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-forces' WHERE d.kod='ingilizce' OR d.ad='İngilizce' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-1','coktan_secmeli','A true friend should be __.','["honest and supportive","rude","selfish always","unreliable"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,1,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-friends' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-2','coktan_secmeli','“count on someone” ne demektir?','["birinden kaçmak","birini aramak","birine güvenebilmek","birini taklit etmek"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,2,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-friends' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-3','coktan_secmeli','“Would you like to come to my party?” ne için kullanılır?','["Davet etmek","Özür dilemek","Adres sormak","Hava sormak"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,3,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-invite' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-4','coktan_secmeli','“I''d love to, thanks.” ne anlatır?','["Daveti reddetmeyi","Şikâyeti","Daveti kabul etmeyi","Emri"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,4,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-invite' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-5','coktan_secmeli','“I usually hang out with friends after school.” ne anlatır?','["Günlük alışkanlığı","Geçmişte tek olay","Gelecek tahmini","Emri"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,5,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-routine' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-6','coktan_secmeli','“rarely” ne demektir?','["her zaman","genellikle","nadiren","asla zorunlu"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,6,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-routine' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-7','coktan_secmeli','“I prefer reading to watching TV.” ne anlatır?','["Okumayı TV izlemeye tercih etmeyi","TV izlemeyi tercih etmeyi","İkisini sevmemeyi","Okuyamamayı"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,7,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-preference' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-8','coktan_secmeli','Which expresses preference?','["Open the door.","It is rainy.","I''d rather stay home.","I am fourteen."]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,8,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-preference' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-9','coktan_secmeli','“First, chop the onions.” ne demektir?','["Önce soğanları doğra.","Soğanları yıka.","Soğanları pişirme.","Yemeği servis et."]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,9,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-recipe' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-10','coktan_secmeli','Sequencing words help __.','["describe weather","tell age","order recipe steps","ask directions"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,10,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-recipe' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-11','coktan_secmeli','“boil” ne demektir?','["kaynatmak","kızartmak","doğramak","dondurmak"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,11,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-cooking' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-12','coktan_secmeli','Which is an ingredient?','["frying pan","oven","flour","knife"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,12,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-cooking' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-13','coktan_secmeli','“Can I speak to Alex, please?” ne için kullanılır?','["Telefonda birini istemek","Yemek siparişi","Hava sormak","Yol tarifi"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,13,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-phone' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-14','coktan_secmeli','“Hold on, please.” ne demektir?','["Telefonu kapatın.","Dışarı çıkın.","Lütfen bekleyin.","Tekrar aramayın."]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,14,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-phone' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-15','coktan_secmeli','“leave a message” ne demektir?','["mesaj bırakmak","mesaj silmek","numara değiştirmek","telefonu satmak"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,15,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-message' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-16','coktan_secmeli','Clear phone messages should include __.','["random words","no name ever","important details","only emojis"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,16,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-message' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-17','coktan_secmeli','“browse the web” ne demektir?','["internette gezinmek","telefon etmek","kitap basmak","yemek yapmak"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,17,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-net' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-18','coktan_secmeli','A browser is used to __.','["cook food","measure weight","access web pages","play only offline music"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,18,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-net' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-19','coktan_secmeli','A strong password should be __.','["hard to guess","123456","your name only","shared with friends"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,19,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-safety' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-20','coktan_secmeli','Personal information should be shared __.','["with everyone","publicly always","carefully","without thinking"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,20,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-safety' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-21','coktan_secmeli','“go rafting” ne demektir?','["rafting yapmak","kayak yapmak","dalış yapmak","kamp kurmak"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,21,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-adventure' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-22','coktan_secmeli','Adventure sports may require __.','["no rules","no training","safety equipment","only luck"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,22,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-adventure' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-23','coktan_secmeli','Before a risky activity, you should __.','["check safety conditions","ignore rules","go alone always","remove equipment"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,23,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-risk' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-24','coktan_secmeli','A helmet can reduce __.','["weather","distance","injury risk","ticket price"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,24,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-risk' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-25','coktan_secmeli','A historical site attracts __.','["tourists","only doctors","only pilots","only teachers"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,25,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-tourism' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-26','coktan_secmeli','“destination” ne demektir?','["başlangıç saati","bilet fiyatı","varış yeri","yemek tarifi"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,26,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-tourism' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-27','coktan_secmeli','“I have visited Cappadocia.” ne anlatır?','["Seyahat deneyimini","Gelecek emrini","Hava durumunu","Telefon konuşmasını"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,27,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-experience' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-28','coktan_secmeli','Travel experiences can teach us about __.','["only maths","only chores","different cultures","only weather"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,28,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-experience' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-29','coktan_secmeli','“do the laundry” ne demektir?','["çamaşır yıkamak","bulaşık yıkamak","yemek yapmak","alışveriş yapmak"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,29,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-chores' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-30','coktan_secmeli','Which is a chore?','["watching a film","playing a game","vacuuming the floor","traveling"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,30,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-chores' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-31','coktan_secmeli','Sharing chores makes home life more __.','["fair","unfair","dangerous","confusing"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,31,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-responsibility' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-32','coktan_secmeli','“responsible for” ne demektir?','["-den korkan","-e geç kalan","-den sorumlu","-i sevmeyen"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,32,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-responsibility' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-33','coktan_secmeli','An invention is __.','["a new device or method","a natural disaster","a family member","a city"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,33,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-science' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-34','coktan_secmeli','Scientists use evidence to __.','["hide results","avoid questions","support explanations","guess only"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,34,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-science' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-35','coktan_secmeli','A hypothesis is __.','["a testable explanation or prediction","a final truth always","a school rule","a travel plan"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,35,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-process' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-36','coktan_secmeli','Experiments should be __.','["random and unsafe","without records","safe and controlled","secret"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,36,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-process' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-37','coktan_secmeli','An earthquake is a __.','["natural disaster","school event","household chore","recipe"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,37,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-disaster' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-38','coktan_secmeli','A flood involves __.','["no water","only wind","too much water","only fire"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,38,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-disaster' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-39','coktan_secmeli','An emergency kit may include __.','["water and basic supplies","heavy furniture","glass decoration","random toys only"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,39,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-prepared' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-1-40','coktan_secmeli','During disasters, official instructions should be __.','["ignored","changed randomly","followed","hidden"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,40,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-prepared' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-1','coktan_secmeli','A true friend should be __. Benzer bağlamı düşün.','["rude","honest and supportive","selfish always","unreliable"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,101,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-friends' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-2','coktan_secmeli','“count on someone” ne demektir? Benzer bağlamı düşün.','["birinden kaçmak","birini aramak","birini taklit etmek","birine güvenebilmek"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,102,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-friends' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-3','coktan_secmeli','“Would you like to come to my party?” ne için kullanılır? Benzer bağlamı düşün.','["Özür dilemek","Davet etmek","Adres sormak","Hava sormak"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,103,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-invite' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-4','coktan_secmeli','“I''d love to, thanks.” ne anlatır? Benzer bağlamı düşün.','["Daveti reddetmeyi","Şikâyeti","Emri","Daveti kabul etmeyi"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,104,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-invite' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-5','coktan_secmeli','“I usually hang out with friends after school.” ne anlatır? Benzer bağlamı düşün.','["Geçmişte tek olay","Günlük alışkanlığı","Gelecek tahmini","Emri"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,105,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-routine' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-6','coktan_secmeli','“rarely” ne demektir? Benzer bağlamı düşün.','["her zaman","genellikle","asla zorunlu","nadiren"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,106,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-routine' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-7','coktan_secmeli','“I prefer reading to watching TV.” ne anlatır? Benzer bağlamı düşün.','["TV izlemeyi tercih etmeyi","Okumayı TV izlemeye tercih etmeyi","İkisini sevmemeyi","Okuyamamayı"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,107,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-preference' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-8','coktan_secmeli','Which expresses preference? Benzer bağlamı düşün.','["Open the door.","It is rainy.","I am fourteen.","I''d rather stay home."]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,108,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-preference' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-9','coktan_secmeli','“First, chop the onions.” ne demektir? Benzer bağlamı düşün.','["Soğanları yıka.","Önce soğanları doğra.","Soğanları pişirme.","Yemeği servis et."]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,109,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-recipe' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-10','coktan_secmeli','Sequencing words help __. Benzer bağlamı düşün.','["describe weather","tell age","ask directions","order recipe steps"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,110,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-recipe' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-11','coktan_secmeli','“boil” ne demektir? Benzer bağlamı düşün.','["kızartmak","kaynatmak","doğramak","dondurmak"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,111,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-cooking' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-12','coktan_secmeli','Which is an ingredient? Benzer bağlamı düşün.','["frying pan","oven","knife","flour"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,112,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-cooking' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-13','coktan_secmeli','“Can I speak to Alex, please?” ne için kullanılır? Benzer bağlamı düşün.','["Yemek siparişi","Telefonda birini istemek","Hava sormak","Yol tarifi"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,113,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-phone' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-14','coktan_secmeli','“Hold on, please.” ne demektir? Benzer bağlamı düşün.','["Telefonu kapatın.","Dışarı çıkın.","Tekrar aramayın.","Lütfen bekleyin."]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,114,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-phone' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-15','coktan_secmeli','“leave a message” ne demektir? Benzer bağlamı düşün.','["mesaj silmek","mesaj bırakmak","numara değiştirmek","telefonu satmak"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,115,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-message' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-16','coktan_secmeli','Clear phone messages should include __. Benzer bağlamı düşün.','["random words","no name ever","only emojis","important details"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,116,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-message' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-17','coktan_secmeli','“browse the web” ne demektir? Benzer bağlamı düşün.','["telefon etmek","internette gezinmek","kitap basmak","yemek yapmak"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,117,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-net' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-18','coktan_secmeli','A browser is used to __. Benzer bağlamı düşün.','["cook food","measure weight","play only offline music","access web pages"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,118,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-net' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-19','coktan_secmeli','A strong password should be __. Benzer bağlamı düşün.','["123456","hard to guess","your name only","shared with friends"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,119,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-safety' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-20','coktan_secmeli','Personal information should be shared __. Benzer bağlamı düşün.','["with everyone","publicly always","without thinking","carefully"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,120,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-safety' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-21','coktan_secmeli','“go rafting” ne demektir? Benzer bağlamı düşün.','["kayak yapmak","rafting yapmak","dalış yapmak","kamp kurmak"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,121,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-adventure' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-22','coktan_secmeli','Adventure sports may require __. Benzer bağlamı düşün.','["no rules","no training","only luck","safety equipment"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,122,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-adventure' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-23','coktan_secmeli','Before a risky activity, you should __. Benzer bağlamı düşün.','["ignore rules","check safety conditions","go alone always","remove equipment"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,123,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-risk' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-24','coktan_secmeli','A helmet can reduce __. Benzer bağlamı düşün.','["weather","distance","ticket price","injury risk"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,124,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-risk' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-25','coktan_secmeli','A historical site attracts __. Benzer bağlamı düşün.','["only doctors","tourists","only pilots","only teachers"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,125,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-tourism' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-26','coktan_secmeli','“destination” ne demektir? Benzer bağlamı düşün.','["başlangıç saati","bilet fiyatı","yemek tarifi","varış yeri"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,126,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-tourism' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-27','coktan_secmeli','“I have visited Cappadocia.” ne anlatır? Benzer bağlamı düşün.','["Gelecek emrini","Seyahat deneyimini","Hava durumunu","Telefon konuşmasını"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,127,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-experience' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-28','coktan_secmeli','Travel experiences can teach us about __. Benzer bağlamı düşün.','["only maths","only chores","only weather","different cultures"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,128,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-experience' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-29','coktan_secmeli','“do the laundry” ne demektir? Benzer bağlamı düşün.','["bulaşık yıkamak","çamaşır yıkamak","yemek yapmak","alışveriş yapmak"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,129,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-chores' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-30','coktan_secmeli','Which is a chore? Benzer bağlamı düşün.','["watching a film","playing a game","traveling","vacuuming the floor"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,130,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-chores' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-31','coktan_secmeli','Sharing chores makes home life more __. Benzer bağlamı düşün.','["unfair","fair","dangerous","confusing"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,131,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-responsibility' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-32','coktan_secmeli','“responsible for” ne demektir? Benzer bağlamı düşün.','["-den korkan","-e geç kalan","-i sevmeyen","-den sorumlu"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,132,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-responsibility' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-33','coktan_secmeli','An invention is __. Benzer bağlamı düşün.','["a natural disaster","a new device or method","a family member","a city"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,133,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-science' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-34','coktan_secmeli','Scientists use evidence to __. Benzer bağlamı düşün.','["hide results","avoid questions","guess only","support explanations"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,134,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-science' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-35','coktan_secmeli','A hypothesis is __. Benzer bağlamı düşün.','["a final truth always","a testable explanation or prediction","a school rule","a travel plan"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,135,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-process' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-36','coktan_secmeli','Experiments should be __. Benzer bağlamı düşün.','["random and unsafe","without records","secret","safe and controlled"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,136,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-process' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-37','coktan_secmeli','An earthquake is a __. Benzer bağlamı düşün.','["school event","natural disaster","household chore","recipe"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,137,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-disaster' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-38','coktan_secmeli','A flood involves __. Benzer bağlamı düşün.','["no water","only wind","only fire","too much water"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,138,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-disaster' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-39','coktan_secmeli','An emergency kit may include __. Benzer bağlamı düşün.','["heavy furniture","water and basic supplies","glass decoration","random toys only"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,139,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-prepared' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-2-40','coktan_secmeli','During disasters, official instructions should be __. Benzer bağlamı düşün.','["ignored","changed randomly","hidden","followed"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,140,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-prepared' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-1','coktan_secmeli','A true friend should be __. Yeni bir örneğe uygula.','["rude","selfish always","honest and supportive","unreliable"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,201,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-friends' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-2','coktan_secmeli','“count on someone” ne demektir? Yeni bir örneğe uygula.','["birine güvenebilmek","birinden kaçmak","birini aramak","birini taklit etmek"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,202,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-friends' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-3','coktan_secmeli','“Would you like to come to my party?” ne için kullanılır? Yeni bir örneğe uygula.','["Özür dilemek","Adres sormak","Davet etmek","Hava sormak"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,203,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-invite' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-4','coktan_secmeli','“I''d love to, thanks.” ne anlatır? Yeni bir örneğe uygula.','["Daveti kabul etmeyi","Daveti reddetmeyi","Şikâyeti","Emri"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,204,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-invite' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-5','coktan_secmeli','“I usually hang out with friends after school.” ne anlatır? Yeni bir örneğe uygula.','["Geçmişte tek olay","Gelecek tahmini","Günlük alışkanlığı","Emri"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,205,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-routine' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-6','coktan_secmeli','“rarely” ne demektir? Yeni bir örneğe uygula.','["nadiren","her zaman","genellikle","asla zorunlu"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,206,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-routine' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-7','coktan_secmeli','“I prefer reading to watching TV.” ne anlatır? Yeni bir örneğe uygula.','["TV izlemeyi tercih etmeyi","İkisini sevmemeyi","Okumayı TV izlemeye tercih etmeyi","Okuyamamayı"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,207,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-preference' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-8','coktan_secmeli','Which expresses preference? Yeni bir örneğe uygula.','["I''d rather stay home.","Open the door.","It is rainy.","I am fourteen."]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,208,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-preference' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-9','coktan_secmeli','“First, chop the onions.” ne demektir? Yeni bir örneğe uygula.','["Soğanları yıka.","Soğanları pişirme.","Önce soğanları doğra.","Yemeği servis et."]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,209,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-recipe' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-10','coktan_secmeli','Sequencing words help __. Yeni bir örneğe uygula.','["order recipe steps","describe weather","tell age","ask directions"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,210,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-recipe' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-11','coktan_secmeli','“boil” ne demektir? Yeni bir örneğe uygula.','["kızartmak","doğramak","kaynatmak","dondurmak"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,211,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-cooking' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-12','coktan_secmeli','Which is an ingredient? Yeni bir örneğe uygula.','["flour","frying pan","oven","knife"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,212,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-cooking' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-13','coktan_secmeli','“Can I speak to Alex, please?” ne için kullanılır? Yeni bir örneğe uygula.','["Yemek siparişi","Hava sormak","Telefonda birini istemek","Yol tarifi"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,213,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-phone' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-14','coktan_secmeli','“Hold on, please.” ne demektir? Yeni bir örneğe uygula.','["Lütfen bekleyin.","Telefonu kapatın.","Dışarı çıkın.","Tekrar aramayın."]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,214,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-phone' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-15','coktan_secmeli','“leave a message” ne demektir? Yeni bir örneğe uygula.','["mesaj silmek","numara değiştirmek","mesaj bırakmak","telefonu satmak"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,215,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-message' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-16','coktan_secmeli','Clear phone messages should include __. Yeni bir örneğe uygula.','["important details","random words","no name ever","only emojis"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,216,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-message' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-17','coktan_secmeli','“browse the web” ne demektir? Yeni bir örneğe uygula.','["telefon etmek","kitap basmak","internette gezinmek","yemek yapmak"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,217,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-net' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-18','coktan_secmeli','A browser is used to __. Yeni bir örneğe uygula.','["access web pages","cook food","measure weight","play only offline music"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,218,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-net' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-19','coktan_secmeli','A strong password should be __. Yeni bir örneğe uygula.','["123456","your name only","hard to guess","shared with friends"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,219,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-safety' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-20','coktan_secmeli','Personal information should be shared __. Yeni bir örneğe uygula.','["carefully","with everyone","publicly always","without thinking"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,220,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-safety' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-21','coktan_secmeli','“go rafting” ne demektir? Yeni bir örneğe uygula.','["kayak yapmak","dalış yapmak","rafting yapmak","kamp kurmak"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,221,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-adventure' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-22','coktan_secmeli','Adventure sports may require __. Yeni bir örneğe uygula.','["safety equipment","no rules","no training","only luck"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,222,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-adventure' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-23','coktan_secmeli','Before a risky activity, you should __. Yeni bir örneğe uygula.','["ignore rules","go alone always","check safety conditions","remove equipment"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,223,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-risk' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-24','coktan_secmeli','A helmet can reduce __. Yeni bir örneğe uygula.','["injury risk","weather","distance","ticket price"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,224,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-risk' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-25','coktan_secmeli','A historical site attracts __. Yeni bir örneğe uygula.','["only doctors","only pilots","tourists","only teachers"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,225,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-tourism' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-26','coktan_secmeli','“destination” ne demektir? Yeni bir örneğe uygula.','["varış yeri","başlangıç saati","bilet fiyatı","yemek tarifi"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,226,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-tourism' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-27','coktan_secmeli','“I have visited Cappadocia.” ne anlatır? Yeni bir örneğe uygula.','["Gelecek emrini","Hava durumunu","Seyahat deneyimini","Telefon konuşmasını"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,227,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-experience' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-28','coktan_secmeli','Travel experiences can teach us about __. Yeni bir örneğe uygula.','["different cultures","only maths","only chores","only weather"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,228,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-experience' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-29','coktan_secmeli','“do the laundry” ne demektir? Yeni bir örneğe uygula.','["bulaşık yıkamak","yemek yapmak","çamaşır yıkamak","alışveriş yapmak"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,229,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-chores' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-30','coktan_secmeli','Which is a chore? Yeni bir örneğe uygula.','["vacuuming the floor","watching a film","playing a game","traveling"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,230,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-chores' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-31','coktan_secmeli','Sharing chores makes home life more __. Yeni bir örneğe uygula.','["unfair","dangerous","fair","confusing"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,231,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-responsibility' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-32','coktan_secmeli','“responsible for” ne demektir? Yeni bir örneğe uygula.','["-den sorumlu","-den korkan","-e geç kalan","-i sevmeyen"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,232,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-responsibility' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-33','coktan_secmeli','An invention is __. Yeni bir örneğe uygula.','["a natural disaster","a family member","a new device or method","a city"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,233,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-science' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-34','coktan_secmeli','Scientists use evidence to __. Yeni bir örneğe uygula.','["support explanations","hide results","avoid questions","guess only"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,234,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-science' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-35','coktan_secmeli','A hypothesis is __. Yeni bir örneğe uygula.','["a final truth always","a school rule","a testable explanation or prediction","a travel plan"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,235,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-process' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-36','coktan_secmeli','Experiments should be __. Yeni bir örneğe uygula.','["safe and controlled","random and unsafe","without records","secret"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,236,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-process' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-37','coktan_secmeli','An earthquake is a __. Yeni bir örneğe uygula.','["school event","household chore","natural disaster","recipe"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,237,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-disaster' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-38','coktan_secmeli','A flood involves __. Yeni bir örneğe uygula.','["too much water","no water","only wind","only fire"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,238,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-disaster' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-39','coktan_secmeli','An emergency kit may include __. Yeni bir örneğe uygula.','["heavy furniture","glass decoration","water and basic supplies","random toys only"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,239,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-prepared' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-3-40','coktan_secmeli','During disasters, official instructions should be __. Yeni bir örneğe uygula.','["followed","ignored","changed randomly","hidden"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,240,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-prepared' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-1','coktan_secmeli','A true friend should be __. En uygun seçeneği belirle.','["rude","selfish always","unreliable","honest and supportive"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,301,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-friends' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-2','coktan_secmeli','“count on someone” ne demektir? En uygun seçeneği belirle.','["birinden kaçmak","birine güvenebilmek","birini aramak","birini taklit etmek"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,302,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-friends' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-3','coktan_secmeli','“Would you like to come to my party?” ne için kullanılır? En uygun seçeneği belirle.','["Özür dilemek","Adres sormak","Hava sormak","Davet etmek"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,303,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-invite' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-4','coktan_secmeli','“I''d love to, thanks.” ne anlatır? En uygun seçeneği belirle.','["Daveti reddetmeyi","Daveti kabul etmeyi","Şikâyeti","Emri"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,304,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-invite' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-5','coktan_secmeli','“I usually hang out with friends after school.” ne anlatır? En uygun seçeneği belirle.','["Geçmişte tek olay","Gelecek tahmini","Emri","Günlük alışkanlığı"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,305,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-routine' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-6','coktan_secmeli','“rarely” ne demektir? En uygun seçeneği belirle.','["her zaman","nadiren","genellikle","asla zorunlu"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,306,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-routine' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-7','coktan_secmeli','“I prefer reading to watching TV.” ne anlatır? En uygun seçeneği belirle.','["TV izlemeyi tercih etmeyi","İkisini sevmemeyi","Okuyamamayı","Okumayı TV izlemeye tercih etmeyi"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,307,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-preference' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-8','coktan_secmeli','Which expresses preference? En uygun seçeneği belirle.','["Open the door.","I''d rather stay home.","It is rainy.","I am fourteen."]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,308,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-preference' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-9','coktan_secmeli','“First, chop the onions.” ne demektir? En uygun seçeneği belirle.','["Soğanları yıka.","Soğanları pişirme.","Yemeği servis et.","Önce soğanları doğra."]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,309,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-recipe' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-10','coktan_secmeli','Sequencing words help __. En uygun seçeneği belirle.','["describe weather","order recipe steps","tell age","ask directions"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,310,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-recipe' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-11','coktan_secmeli','“boil” ne demektir? En uygun seçeneği belirle.','["kızartmak","doğramak","dondurmak","kaynatmak"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,311,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-cooking' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-12','coktan_secmeli','Which is an ingredient? En uygun seçeneği belirle.','["frying pan","flour","oven","knife"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,312,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-cooking' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-13','coktan_secmeli','“Can I speak to Alex, please?” ne için kullanılır? En uygun seçeneği belirle.','["Yemek siparişi","Hava sormak","Yol tarifi","Telefonda birini istemek"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,313,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-phone' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-14','coktan_secmeli','“Hold on, please.” ne demektir? En uygun seçeneği belirle.','["Telefonu kapatın.","Lütfen bekleyin.","Dışarı çıkın.","Tekrar aramayın."]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,314,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-phone' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-15','coktan_secmeli','“leave a message” ne demektir? En uygun seçeneği belirle.','["mesaj silmek","numara değiştirmek","telefonu satmak","mesaj bırakmak"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,315,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-message' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-16','coktan_secmeli','Clear phone messages should include __. En uygun seçeneği belirle.','["random words","important details","no name ever","only emojis"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,316,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-message' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-17','coktan_secmeli','“browse the web” ne demektir? En uygun seçeneği belirle.','["telefon etmek","kitap basmak","yemek yapmak","internette gezinmek"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,317,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-net' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-18','coktan_secmeli','A browser is used to __. En uygun seçeneği belirle.','["cook food","access web pages","measure weight","play only offline music"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,318,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-net' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-19','coktan_secmeli','A strong password should be __. En uygun seçeneği belirle.','["123456","your name only","shared with friends","hard to guess"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,319,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-safety' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-20','coktan_secmeli','Personal information should be shared __. En uygun seçeneği belirle.','["with everyone","carefully","publicly always","without thinking"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,320,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-safety' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-21','coktan_secmeli','“go rafting” ne demektir? En uygun seçeneği belirle.','["kayak yapmak","dalış yapmak","kamp kurmak","rafting yapmak"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,321,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-adventure' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-22','coktan_secmeli','Adventure sports may require __. En uygun seçeneği belirle.','["no rules","safety equipment","no training","only luck"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,322,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-adventure' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-23','coktan_secmeli','Before a risky activity, you should __. En uygun seçeneği belirle.','["ignore rules","go alone always","remove equipment","check safety conditions"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,323,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-risk' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-24','coktan_secmeli','A helmet can reduce __. En uygun seçeneği belirle.','["weather","injury risk","distance","ticket price"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,324,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-risk' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-25','coktan_secmeli','A historical site attracts __. En uygun seçeneği belirle.','["only doctors","only pilots","only teachers","tourists"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,325,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-tourism' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-26','coktan_secmeli','“destination” ne demektir? En uygun seçeneği belirle.','["başlangıç saati","varış yeri","bilet fiyatı","yemek tarifi"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,326,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-tourism' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-27','coktan_secmeli','“I have visited Cappadocia.” ne anlatır? En uygun seçeneği belirle.','["Gelecek emrini","Hava durumunu","Telefon konuşmasını","Seyahat deneyimini"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,327,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-experience' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-28','coktan_secmeli','Travel experiences can teach us about __. En uygun seçeneği belirle.','["only maths","different cultures","only chores","only weather"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,328,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-experience' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-29','coktan_secmeli','“do the laundry” ne demektir? En uygun seçeneği belirle.','["bulaşık yıkamak","yemek yapmak","alışveriş yapmak","çamaşır yıkamak"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,329,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-chores' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-30','coktan_secmeli','Which is a chore? En uygun seçeneği belirle.','["watching a film","vacuuming the floor","playing a game","traveling"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,330,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-chores' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-31','coktan_secmeli','Sharing chores makes home life more __. En uygun seçeneği belirle.','["unfair","dangerous","confusing","fair"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,331,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-responsibility' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-32','coktan_secmeli','“responsible for” ne demektir? En uygun seçeneği belirle.','["-den korkan","-den sorumlu","-e geç kalan","-i sevmeyen"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,332,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-responsibility' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-33','coktan_secmeli','An invention is __. En uygun seçeneği belirle.','["a natural disaster","a family member","a city","a new device or method"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,333,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-science' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-34','coktan_secmeli','Scientists use evidence to __. En uygun seçeneği belirle.','["hide results","support explanations","avoid questions","guess only"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,334,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-science' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-35','coktan_secmeli','A hypothesis is __. En uygun seçeneği belirle.','["a final truth always","a school rule","a travel plan","a testable explanation or prediction"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,335,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-process' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-36','coktan_secmeli','Experiments should be __. En uygun seçeneği belirle.','["random and unsafe","safe and controlled","without records","secret"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,336,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-process' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-37','coktan_secmeli','An earthquake is a __. En uygun seçeneği belirle.','["school event","household chore","recipe","natural disaster"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,337,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-disaster' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-38','coktan_secmeli','A flood involves __. En uygun seçeneği belirle.','["no water","too much water","only wind","only fire"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,338,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-disaster' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-39','coktan_secmeli','An emergency kit may include __. En uygun seçeneği belirle.','["heavy furniture","glass decoration","random toys only","water and basic supplies"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,339,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-prepared' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8e-4-40','coktan_secmeli','During disasters, official instructions should be __. En uygun seçeneği belirle.','["ignored","followed","changed randomly","hidden"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,340,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='e8-prepared' AND (d.kod='ingilizce' OR d.ad='İngilizce') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-invitation','Invitations and Making Plans','Invitations and Making Plans','Invitations and Making Plans bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',10,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-friendship'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-1-1','coktan_secmeli','“Would you like to come to my birthday party?” is an __.','["invitation","apology","warning","complaint"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-invitation' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-1-2','coktan_secmeli','Which response politely accepts an invitation?','["No way!","I don''t care.","Sure, I''d love to.","Never ask me again."]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-invitation' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-1-3','coktan_secmeli','Which response politely refuses?','["I''m sorry, I can''t. I have plans.","Of course, see you there.","Great idea!","I''d love to."]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-invitation' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-1-4','coktan_secmeli','“How about going to the cinema?” ne ifade eder?','["Bir özür","Bir yasak","Bir öneri","Bir hava tahmini"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-invitation' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-1-5','coktan_secmeli','“Are you free on Saturday?” neyi öğrenmek için sorulur?','["Müsait olup olmadığını","Yaşını","Adresini","Boyunu"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-invitation' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-1-6','coktan_secmeli','Which sentence suggests a plan?','["I met her yesterday.","The café is closed.","Let''s meet at the café at three.","I dislike coffee."]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-invitation' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-friend-quality','Friendship Qualities and Preferences','Friendship Qualities and Preferences','Friendship Qualities and Preferences bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',20,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-friendship'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-2-1','coktan_secmeli','A true friend should be __.','["dishonest","selfish","rude","trustworthy"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-friend-quality' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-2-2','coktan_secmeli','“I can count on her.” ne demektir?','["Onu sayabilirim.","Ona güvenebilirim.","Onu arayamam.","Onu tanımıyorum."]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-friend-quality' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-2-3','coktan_secmeli','Which quality means “dürüst”?','["jealous","lazy","stubborn","honest"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-friend-quality' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-2-4','coktan_secmeli','“We have a lot in common.” ne demektir?','["Hiç görüşmüyoruz.","Birçok ortak yönümüz var.","Aynı evde yaşıyoruz.","Akrabayız."]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-friend-quality' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-2-5','coktan_secmeli','Which behaviour damages friendship?','["listening","supporting","being honest","breaking promises repeatedly"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-friend-quality' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-2-6','coktan_secmeli','“She always backs me up.” ne anlatır?','["Beni engellediğini","Beni desteklediğini","Beni aramadığını","Beni unuttuğunu"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-friend-quality' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-routine','Teen Routines and Activities','Teen Routines and Activities','Teen Routines and Activities bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',30,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-teen'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-3-1','coktan_secmeli','“I usually hang out with my friends after school.” ne demektir?','["Okuldan sonra uyurum.","Arkadaşlarımla çalışmam.","Okuldan sonra genellikle arkadaşlarımla vakit geçiririm.","Okula gitmem."]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-routine' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-3-2','coktan_secmeli','Which is a leisure activity?','["going to a concert","taking an exam","doing compulsory paperwork","repairing a road"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-routine' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-3-3','coktan_secmeli','“once a week” ne demektir?','["günde bir","ayda iki","haftada bir","yılda bir"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-routine' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-3-4','coktan_secmeli','Which question asks about frequency?','["How often do you play basketball?","Where do you live?","How old are you?","What is your name?"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-routine' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-3-5','coktan_secmeli','“I rarely watch TV.” ne anlatır?','["Her gün izlediğini","Hiç televizyonu olmadığını","Televizyonu seyrek izlediğini","Sadece sabah izlediğini"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-routine' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-3-6','coktan_secmeli','Which adverb means “her zaman”?','["always","never","sometimes","rarely"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-routine' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-pref','Likes, Dislikes and Preferences','Likes, Dislikes and Preferences','Likes, Dislikes and Preferences bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',40,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-teen'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-4-1','coktan_secmeli','“I prefer reading to watching TV.” ne demektir?','["İkisini de sevmem.","Televizyon izlemektense okumayı tercih ederim.","Sadece TV izlerim.","Okuyamam."]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-pref' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-4-2','coktan_secmeli','Which sentence expresses dislike?','["I''m fond of music.","I enjoy cycling.","I love books.","I can''t stand crowded places."]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-pref' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-4-3','coktan_secmeli','“I''m keen on science fiction.” ne anlatır?','["Bilim kurgudan nefret ettiğini","Bilim kurguya ilgi duyduğunu","Bilim dersinden kaldığını","Film izlemediğini"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-pref' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-4-4','coktan_secmeli','“I would rather stay home.” ne ifade eder?','["Kesin evden çıkacağım.","Evde kalamam.","Ev yok.","Evde kalmayı tercih ederim."]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-pref' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-4-5','coktan_secmeli','Which sentence expresses preference?','["Chess is on the table.","I''d rather play chess than video games.","I played yesterday.","Open the game."]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-pref' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-4-6','coktan_secmeli','“I''m not into extreme sports.” ne demektir?','["Ekstrem spor uzmanıyım.","Her gün yaparım.","Sadece kışın yaparım.","Ekstrem sporlara ilgi duymuyorum."]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-pref' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-recipe','Recipes and Sequencing','Recipes and Sequencing','Recipes and Sequencing bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',50,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-kitchen'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-5-1','coktan_secmeli','Which sequencing word comes first in a recipe?','["First","Finally","After that","Then only"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-recipe' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-5-2','coktan_secmeli','“Then add two eggs.” ne demektir?','["Önce iki yumurta çıkar.","Yumurtaları at.","Sonra iki yumurta ekle.","İki yumurta satın al."]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-recipe' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-5-3','coktan_secmeli','“Finally, bake it for 30 minutes.” ne anlatır?','["Son adımda 30 dakika pişirmeyi","İlk adımda dondurmayı","30 dakika beklememeyi","Malzemeyi çıkarmayı"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-recipe' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-5-4','coktan_secmeli','A recipe usually includes __.','["weather forecast","map coordinates","ingredients and instructions","school rules"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-recipe' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-5-5','coktan_secmeli','“How much flour do we need?” neyi sorar?','["Un miktarını","Unun rengini","Unun markasını","Fırının yerini"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-recipe' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-5-6','coktan_secmeli','Which word means “malzemeler”?','["directions","appliances","ingredients","appointments"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-recipe' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-cooking','Cooking Methods and Kitchen Vocabulary','Cooking Methods and Kitchen Vocabulary','Cooking Methods and Kitchen Vocabulary bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',60,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-kitchen'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-6-1','coktan_secmeli','“boil” ne demektir?','["kızartmak","doğramak","karıştırmak","kaynatmak"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-cooking' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-6-2','coktan_secmeli','“fry” ne demektir?','["haşlamak","kızartmak","dilimlemek","soğutmak"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-cooking' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-6-3','coktan_secmeli','Which tool is used to bake a cake?','["kettle","phone","printer","oven"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-cooking' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-6-4','coktan_secmeli','“chop the onions” ne demektir?','["Soğanları kaynat.","Soğanları doğra.","Soğanları iç.","Soğanları dondur."]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-cooking' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-6-5','coktan_secmeli','“stir the soup” ne demektir?','["Çorbayı dök.","Çorbayı kes.","Çorbayı kızart.","Çorbayı karıştır."]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-cooking' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-6-6','coktan_secmeli','Which method cooks food in hot water?','["grilling","boiling","frying","baking"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-cooking' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-call','Phone Conversations','Phone Conversations','Phone Conversations bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',70,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-phone'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-7-1','coktan_secmeli','“May I speak to Jane, please?” hangi durumda kullanılır?','["Yol tarif ederken","Yemek sipariş ederken","Telefonda biriyle görüşmek isterken","Hava sorarken"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-call' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-7-2','coktan_secmeli','“Hold on, please.” ne demektir?','["Lütfen hatta bekleyin.","Telefonu kapatın.","Dışarı çıkın.","Beni aramayın."]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-call' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-7-3','coktan_secmeli','“The line is busy.” ne demektir?','["Telefon kapalı.","İnternet hızlı.","Hat meşgul.","Numara değişti."]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-call' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-7-4','coktan_secmeli','“Who is calling?” neyi sorar?','["Arayan kişinin kim olduğunu","Saat kaç olduğunu","Adresini","Mesleğini"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-call' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-7-5','coktan_secmeli','“I''ll call you back.” ne demektir?','["Seni engelleyeceğim.","Telefonu satacağım.","Seni geri arayacağım.","Sana mesaj atmayacağım."]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-call' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-7-6','coktan_secmeli','Which is a polite phone opening?','["Hello, this is Ali speaking.","What do you want?","Don''t call me.","Who cares?"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-call' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-message','Leaving and Taking Messages','Leaving and Taking Messages','Leaving and Taking Messages bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',80,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-phone'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-8-1','coktan_secmeli','“Can I take a message?” ne demektir?','["Mesajı silebilir miyim?","Mesajınızı alabilir miyim?","Telefonu alabilir miyim?","Numarayı değiştirebilir miyim?"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-message' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-8-2','coktan_secmeli','“Please tell him to call me.” ne demektir?','["Ona beni aramamasını söyle.","Telefonu kapat.","Mesajı sil.","Lütfen ona beni aramasını söyle."]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-message' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-8-3','coktan_secmeli','Which information is useful in a phone message?','["shoe size only","caller name and reason","favourite colour only","weather only"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-message' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-8-4','coktan_secmeli','“She isn''t available right now.” ne demektir?','["Şu anda burada ve konuşuyor.","Telefonu yok.","Her zaman müsait.","Şu anda müsait değil."]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-message' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-8-5','coktan_secmeli','“Could you repeat that?” ne zaman kullanılır?','["Konuşmayı bitirirken","Söyleneni tekrar duymak istediğimizde","Yemek isterken","Adres vermemek için"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-message' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-8-6','coktan_secmeli','A clear message should be __.','["confusing","incomplete","rude","brief and accurate"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-message' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-online','Internet Habits and Vocabulary','Internet Habits and Vocabulary','Internet Habits and Vocabulary bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',90,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-internet'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-9-1','coktan_secmeli','“upload a photo” ne demektir?','["fotoğraf yüklemek","fotoğraf silmek","fotoğraf basmak","fotoğraf çizmek"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-online' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-9-2','coktan_secmeli','“download a file” ne demektir?','["dosya yüklemek","dosya silmek","dosya indirmek","dosyayı yazmak"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-online' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-9-3','coktan_secmeli','A search engine helps users __.','["find information online","cook food","measure temperature","drive a car"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-online' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-9-4','coktan_secmeli','“browse the web” ne demektir?','["kitap basmak","telefonu kapatmak","internette gezinmek","alışveriş merkezinde yürümek"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-online' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-9-5','coktan_secmeli','Which device can access the Internet?','["smartphone","paper notebook","wooden ruler","eraser"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-online' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-9-6','coktan_secmeli','“I use social media twice a day.” ne anlatır?','["Şifreyi","Konumu","Kullanım sıklığını","Yaşı"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-online' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-safety','Online Safety and Responsible Use','Online Safety and Responsible Use','Online Safety and Responsible Use bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',100,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-internet'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-10-1','coktan_secmeli','A strong password should be __.','["123456","your first name","the same everywhere","hard to guess and unique"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-safety' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-10-2','coktan_secmeli','Should you share your password with strangers?','["Yes","No","Always","Only online"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-safety' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-10-3','coktan_secmeli','“privacy settings” ne için kullanılır?','["Telefonu şarj etmek için","Yemek sipariş etmek için","Hava tahmini için","Kimlerin bilgi ve içerikleri görebileceğini yönetmek için"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-safety' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-10-4','coktan_secmeli','A suspicious link should be __.','["opened immediately","checked before clicking","shared with everyone","given your password"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-safety' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-10-5','coktan_secmeli','Cyberbullying should be reported to __.','["nobody","the bully only","random users","a trusted adult or platform"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-safety' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-10-6','coktan_secmeli','Personal information such as home address should be shared publicly?','["Yes","No","Always","Only with unknown accounts"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-safety' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-adventure','Adventure Activities','Adventure Activities','Adventure Activities bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',110,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-adventures'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-11-1','coktan_secmeli','Which is an adventure sport?','["reading quietly","watching TV","rafting","drawing at home"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-adventure' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-11-2','coktan_secmeli','“go skydiving” ne demektir?','["paraşütle atlamak","kayak yapmak","yüzmek","kamp yapmak"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-adventure' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-11-3','coktan_secmeli','“equipment” ne demektir?','["hava","bilet","ekipman","yemek"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-adventure' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-11-4','coktan_secmeli','Safety gear is important in adventure sports?','["Yes","No","Only for beginners","Only indoors"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-adventure' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-11-5','coktan_secmeli','“climb a mountain” ne demektir?','["dağı çizmek","dağdan kaçmak","dağa tırmanmak","dağı ölçmek"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-adventure' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-11-6','coktan_secmeli','Which activity happens on a river?','["rafting","paragliding","rock climbing","skydiving"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-adventure' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-comparison','Comparing Experiences and Risks','Comparing Experiences and Risks','Comparing Experiences and Risks bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',120,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-adventures'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-12-1','coktan_secmeli','“Rafting is more exciting than hiking.” ne anlatır?','["Geçmiş zaman","İki etkinliği karşılaştırır.","Telefon konuşması","Tarif"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-comparison' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-12-2','coktan_secmeli','Which adjective means “tehlikeli”?','["safe","boring","cheap","dangerous"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-comparison' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-12-3','coktan_secmeli','“I think bungee jumping is too risky.” ne ifade eder?','["Kesin bilimsel yasa","Bir görüş","Adres","Tarif"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-comparison' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-12-4','coktan_secmeli','Which activity may require a parachute?','["cycling","swimming","hiking","skydiving"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-comparison' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-12-5','coktan_secmeli','“less dangerous” ne demektir?','["daha tehlikeli","daha az tehlikeli","eşit tehlikeli","tehlikesiz kesin"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-comparison' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-12-6','coktan_secmeli','When comparing risks, what should be considered?','["only colour","only price","only time of day","safety conditions and equipment"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-comparison' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-travel','Travel and Accommodation','Travel and Accommodation','Travel and Accommodation bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',130,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-tourism'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-13-1','coktan_secmeli','“book a room” ne demektir?','["oda ayırtmak","oda temizlemek","oda satmak","oda çizmek"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-travel' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-13-2','coktan_secmeli','A place where tourists stay is a __.','["factory","laboratory","hotel","classroom"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-travel' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-13-3','coktan_secmeli','“single room” ne demektir?','["tek kişilik oda","çift kişilik oda","toplantı salonu","mutfak"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-travel' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-13-4','coktan_secmeli','“How long will you stay?” neyi sorar?','["Yaşı","Mesleği","Kalış süresini","Yemek tercihini"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-travel' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-13-5','coktan_secmeli','A boarding pass is related to __.','["air travel","cooking","school club","housework"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-travel' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-13-6','coktan_secmeli','“check in” at a hotel means __.','["leaving permanently","cooking","registering your arrival","cleaning the room"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-travel' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-attraction','Tourist Attractions and Experiences','Tourist Attractions and Experiences','Tourist Attractions and Experiences bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',140,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-tourism'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-14-1','coktan_secmeli','“historical site” ne demektir?','["alışveriş listesi","telefon hattı","ev işi","tarihî yer"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-attraction' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-14-2','coktan_secmeli','Which place displays historical objects?','["bakery","museum","garage","pharmacy"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-attraction' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-14-3','coktan_secmeli','“The city is famous for its ancient ruins.” ne demektir?','["Şehir yeni fabrikalarıyla ünlüdür.","Şehir denizsizdir.","Şehir kapalıdır.","Şehir antik kalıntılarıyla ünlüdür."]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-attraction' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-14-4','coktan_secmeli','“I have visited Cappadocia twice.” ne anlatır?','["Gelecek tahmini","Geçmiş deneyimi","Tarif","Kural"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-attraction' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-14-5','coktan_secmeli','A guide can help tourists __.','["repair a phone","cook at home","do homework","learn about a place"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-attraction' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-14-6','coktan_secmeli','“local cuisine” ne demektir?','["yerel ulaşım","yerel mutfak","yerel okul","yerel hava"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-attraction' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-housework','Household Chores','Household Chores','Household Chores bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',150,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-chores'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-15-1','coktan_secmeli','“do the laundry” ne demektir?','["bulaşık yıkamak","yemek yapmak","çamaşır yıkamak","odayı boyamak"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-housework' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-15-2','coktan_secmeli','“set the table” ne demektir?','["sofrayı kurmak","sofrayı kaldırmak","masayı satın almak","odayı temizlemek"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-housework' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-15-3','coktan_secmeli','Which is a chore?','["watching a film","playing chess","vacuuming the floor","listening to music"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-housework' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-15-4','coktan_secmeli','“take out the rubbish” ne demektir?','["çöpü dışarı çıkarmak","çöpü eve getirmek","alışveriş yapmak","yemek hazırlamak"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-housework' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-15-5','coktan_secmeli','“wash the dishes” ne demektir?','["çamaşır yıkamak","evi süpürmek","bulaşıkları yıkamak","yatağı toplamak"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-housework' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-15-6','coktan_secmeli','Household chores should be shared fairly?','["Yes","No","Only one person should do all","Children can never help"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-housework' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-responsibility','Responsibilities and Requests','Responsibilities and Requests','Responsibilities and Requests bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',160,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-chores'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-16-1','coktan_secmeli','“It''s your responsibility to tidy your room.” ne demektir?','["Odanı toplama.","Odanı toplamak senin sorumluluğun.","Odan başkasının.","Odayı sat."]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-responsibility' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-16-2','coktan_secmeli','“Could you help me with the dishes?” is a __.','["warning","prediction","invitation to travel","request"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-responsibility' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-16-3','coktan_secmeli','A polite response to a request?','["Never!","Sure, no problem.","Do it yourself!","I don''t care."]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-responsibility' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-16-4','coktan_secmeli','“I have to clean my desk.” ne anlatır?','["Bir tercih","Bir tahmin","Bir geçmiş deneyim","Bir zorunluluk"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-responsibility' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-16-5','coktan_secmeli','“You don''t have to cook today.” ne demektir?','["Bugün yemek yapmalısın.","Bugün yemek yapmak zorunda değilsin.","Yemek yapamazsın.","Yemek yok."]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-responsibility' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-16-6','coktan_secmeli','Being responsible means __.','["avoiding every task","blaming others","breaking promises","doing your duties reliably"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-responsibility' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-invention','Inventions and Discoveries','Inventions and Discoveries','Inventions and Discoveries bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',170,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-science'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-17-1','coktan_secmeli','An invention is __.','["a newly created device or method","a weather event","a family member","a school subject"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-invention' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-17-2','coktan_secmeli','Who invents or develops new things?','["tourists only","chefs only","inventors and researchers","drivers only"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-invention' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-17-3','coktan_secmeli','“discovery” ne demektir?','["keşif","tarif","davet","ev işi"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-invention' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-17-4','coktan_secmeli','Vaccines are related to advances in __.','["tourism","housework","science and medicine","phone etiquette"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-invention' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-17-5','coktan_secmeli','The telephone changed __.','["communication","gravity","seasons","DNA structure"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-invention' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-17-6','coktan_secmeli','Scientific inventions can have both benefits and risks?','["No","They are always perfect","Yes","They never affect society"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-invention' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-process','Scientific Processes and Technology','Scientific Processes and Technology','Scientific Processes and Technology bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',180,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-science'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-18-1','coktan_secmeli','“conduct an experiment” ne demektir?','["deneyi silmek","telefon etmek","seyahat etmek","deney yapmak"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-process' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-18-2','coktan_secmeli','A scientist should record __.','["random rumours","observations and results","passwords","unrelated opinions only"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-process' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-18-3','coktan_secmeli','“hypothesis” ne demektir?','["kesin yasa","telefon mesajı","yemek tarifi","test edilebilir açıklama/tahmin"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-process' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-18-4','coktan_secmeli','Experiments should be repeated when possible?','["No","Yes","One result is always enough","Data should not be checked"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-process' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-18-5','coktan_secmeli','Technology can help scientists __ data.','["hide","ignore","delete automatically","collect and analyse"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-process' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-18-6','coktan_secmeli','Reliable science depends on __.','["rumours","evidence","likes","advertising"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-process' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-disaster','Natural Disasters','Natural Disasters','Natural Disasters bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',190,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-natural'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-19-1','coktan_secmeli','“earthquake” ne demektir?','["sel","kasırga","deprem","kuraklık"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-disaster' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-19-2','coktan_secmeli','“flood” ne demektir?','["sel","deprem","çığ","yangın"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-disaster' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-19-3','coktan_secmeli','“drought” ne demektir?','["fırtına","deprem","kuraklık","heyelan"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-disaster' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-19-4','coktan_secmeli','A hurricane is a type of __.','["powerful storm","earthquake","drought","volcano only"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-disaster' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-19-5','coktan_secmeli','“landslide” ne demektir?','["sel","kuraklık","heyelan","şimşek"]',2,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-disaster' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-19-6','coktan_secmeli','Natural disasters can affect communities and infrastructure?','["Yes","No","Only animals","Only weather stations"]',0,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-disaster' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'eng8-preparedness','Preparedness and Environmental Action','Preparedness and Environmental Action','Preparedness and Environmental Action bağlamında kelime, okuma ve iletişim becerilerini kullanır.','',200,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='eng8-natural'
+WHERE d.kod='ingilizce' OR d.ad='İngilizce'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-20-1','coktan_secmeli','An emergency kit should include __.','["only toys","water and basic supplies","only books","nothing"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-preparedness' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-20-2','coktan_secmeli','During an earthquake, following official safety guidance is important?','["No","Rumours are better","Safety plans are unnecessary","Yes"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-preparedness' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-20-3','coktan_secmeli','“evacuation” ne demektir?','["kutlama","tahliye","tarif","telefon görüşmesi"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-preparedness' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-20-4','coktan_secmeli','After a disaster, reliable information should come from __.','["anonymous rumours","random comments","unverified posts","official and trusted sources"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-preparedness' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-20-5','coktan_secmeli','Planting trees can help reduce some environmental risks?','["No","Yes","Trees always increase risk","Environment is unrelated"]',1,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-preparedness' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8e-20-6','coktan_secmeli','Communities can prepare for disasters through __.','["ignoring warnings","spreading rumours","removing emergency exits","plans and drills"]',3,'İngilizce ifade ve işlev bağlama göre değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='eng8-preparedness' AND (d.kod='ingilizce' OR d.ad='İngilizce')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 

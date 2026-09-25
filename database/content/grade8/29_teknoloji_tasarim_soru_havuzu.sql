@@ -1,218 +1,590 @@
 SET NAMES utf8mb4;
 
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'tt8-problem','Problem Tanımlama ve Araştırma','Problem Tanımlama ve Araştırma','Problem Tanımlama ve Araştırma konusunu bağlam ve uygulamalarla ilişkilendirir.','',10,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-surec' WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'tt8-tasarim','Tasarım Odaklı Düşünme','Tasarım Odaklı Düşünme','Tasarım Odaklı Düşünme konusunu bağlam ve uygulamalarla ilişkilendirir.','',20,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-surec' WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'tt8-inovasyon-konu','İnovasyon','İnovasyon','İnovasyon konusunu bağlam ve uygulamalarla ilişkilendirir.','',30,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-inovasyon' WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'tt8-girisim','Girişimcilik ve Ürün Sunumu','Girişimcilik ve Ürün Sunumu','Girişimcilik ve Ürün Sunumu konusunu bağlam ve uygulamalarla ilişkilendirir.','',40,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-inovasyon' WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'tt8-mimari','Mimari ve Yapısal Tasarım','Mimari ve Yapısal Tasarım','Mimari ve Yapısal Tasarım konusunu bağlam ve uygulamalarla ilişkilendirir.','',50,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-yapi' WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'tt8-malzeme','Malzeme ve Dayanıklılık','Malzeme ve Dayanıklılık','Malzeme ve Dayanıklılık konusunu bağlam ve uygulamalarla ilişkilendirir.','',60,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-yapi' WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'tt8-ulasim-konu','Ulaşım Sistemleri','Ulaşım Sistemleri','Ulaşım Sistemleri konusunu bağlam ve uygulamalarla ilişkilendirir.','',70,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-ulasim' WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'tt8-mekanizma','Mekanizma ve Hareket','Mekanizma ve Hareket','Mekanizma ve Hareket konusunu bağlam ve uygulamalarla ilişkilendirir.','',80,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-ulasim' WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'tt8-verim','Enerji Verimliliği','Enerji Verimliliği','Enerji Verimliliği konusunu bağlam ve uygulamalarla ilişkilendirir.','',90,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-enerji' WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'tt8-surdur','Sürdürülebilir Tasarım','Sürdürülebilir Tasarım','Sürdürülebilir Tasarım konusunu bağlam ve uygulamalarla ilişkilendirir.','',100,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-enerji' WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'tt8-akilli-konu','Akıllı Ürün Fikri','Akıllı Ürün Fikri','Akıllı Ürün Fikri konusunu bağlam ve uygulamalarla ilişkilendirir.','',110,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-akilli' WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif) SELECT d.id,b.id,'temel_egitim',8,'tt8-prototip','Prototip, Test ve İyileştirme','Prototip, Test ve İyileştirme','Prototip, Test ve İyileştirme konusunu bağlam ve uygulamalarla ilişkilendirir.','',120,1 FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-akilli' WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım' ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-1','coktan_secmeli','Tasarım problemi kullanıcı ihtiyacına dayanabilir mi?','["Evet","Hayır","Sadece renk","Sadece satış"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,1,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-problem' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-2','coktan_secmeli','Araştırma mevcut çözümleri anlamaya yardım eder mi?','["Hayır","Sadece kopya","Evet","Araştırma gereksiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,2,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-problem' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-3','coktan_secmeli','Birden fazla fikir üretmek çözüm kalitesini artırabilir mi?','["Evet","Hayır","Tek fikir zorunlu","Fikir üretmek gereksiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,3,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-tasarim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-4','coktan_secmeli','Ölçütler tasarımları karşılaştırmaya yardım eder mi?','["Hayır","Sadece fiyat","Evet","Ölçüt kullanılmaz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,4,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-tasarim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-5','coktan_secmeli','İnovasyon mevcut ürünü daha yararlı hâle getirmeyi içerebilir mi?','["Evet","Hayır","Sadece tamamen yeni icat","Sadece reklam"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,5,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-inovasyon-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-6','coktan_secmeli','Yenilik gerçek bir probleme çözüm sunmalı mıdır?','["Hayır","Sorun gerekmez","Evet","Sadece görünüş"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,6,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-inovasyon-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-7','coktan_secmeli','Hedef kitle ürün sunumunda önemli midir?','["Evet","Hayır","Sadece maliyet","Kitle önemsiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,7,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-girisim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-8','coktan_secmeli','Maliyet ve değer önerisi girişimcilikle ilişkili midir?','["Hayır","Sadece logo","Evet","Sadece renk"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,8,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-girisim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-9','coktan_secmeli','Yapısal tasarımda yük dağılımı önemli midir?','["Evet","Hayır","Sadece renk","Yük etkisiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,9,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mimari' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-10','coktan_secmeli','Üçgen taşıyıcı biçimler dayanıklılık sağlayabilir mi?','["Hayır","Sadece daire","Evet","Geometri etkisiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,10,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mimari' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-11','coktan_secmeli','Malzemenin dayanıklılığı kullanım amacına göre seçilmeli midir?','["Evet","Hayır","Sadece ucuzluk","Malzeme önemsiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,11,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-malzeme' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-12','coktan_secmeli','Geri dönüştürülebilir malzeme çevresel etkiyi azaltabilir mi?','["Hayır","Her zaman artırır","Evet","Çevreyle ilgisiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,12,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-malzeme' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-13','coktan_secmeli','Ulaşım tasarımında güvenlik önemli midir?','["Evet","Hayır","Sadece hız","Sadece görünüş"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,13,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-ulasim-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-14','coktan_secmeli','Aerodinamik bazı araçların enerji verimliliğini etkileyebilir mi?','["Hayır","Sadece renk","Evet","Enerjiyle ilgisiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,14,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-ulasim-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-15','coktan_secmeli','Dişli sistemleri hareket ve kuvvet aktarabilir mi?','["Evet","Hayır","Sadece ses","Sadece ısı"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,15,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mekanizma' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-16','coktan_secmeli','Mekanizma hareket türünü değiştirebilir mi?','["Hayır","Hareket değişmez","Evet","Sadece malzeme değişir"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,16,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mekanizma' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-17','coktan_secmeli','Enerji verimli tasarım daha az enerji tüketebilir mi?','["Evet","Hayır","Her zaman daha çok","Enerji önemli değildir"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,17,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-verim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-18','coktan_secmeli','Yalıtım enerji kaybını azaltabilir mi?','["Hayır","Sadece ses","Evet","Enerjiyle ilgisiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,18,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-verim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-19','coktan_secmeli','Ürünün onarılabilir olması sürdürülebilirliği destekler mi?','["Evet","Hayır","Atığı artırır","Ömür önemsiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,19,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-surdur' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-20','coktan_secmeli','Yaşam döngüsü boyunca çevresel etki düşünülmeli midir?','["Hayır","Sadece satış","Evet","Sadece tasarım rengi"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,20,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-surdur' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-21','coktan_secmeli','Sensör akıllı ürünün çevreden veri almasına yardım edebilir mi?','["Evet","Hayır","Sadece motor","Sadece pil"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,21,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-akilli-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-22','coktan_secmeli','Akıllı ürünlerde kullanıcı mahremiyeti önemli midir?','["Hayır","Veri herkese açık olmalı","Evet","Mahremiyet yoktur"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,22,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-akilli-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-23','coktan_secmeli','Prototip gerçek üründen önce test edilebilir mi?','["Evet","Hayır","Prototip son üründür","Test edilmez"]',0,'Konu bilgisi bağlama göre değerlendirilir.',1,23,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-prototip' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-1-24','coktan_secmeli','Test sonuçlarına göre tasarım geliştirilebilir mi?','["Hayır","İlk tasarım değişmez","Evet","Geri bildirim kullanılmaz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',1,24,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-prototip' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-1','coktan_secmeli','Tasarım problemi kullanıcı ihtiyacına dayanabilir mi? Benzer bağlamı düşün.','["Hayır","Evet","Sadece renk","Sadece satış"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,101,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-problem' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-2','coktan_secmeli','Araştırma mevcut çözümleri anlamaya yardım eder mi? Benzer bağlamı düşün.','["Hayır","Sadece kopya","Araştırma gereksiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,102,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-problem' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-3','coktan_secmeli','Birden fazla fikir üretmek çözüm kalitesini artırabilir mi? Benzer bağlamı düşün.','["Hayır","Evet","Tek fikir zorunlu","Fikir üretmek gereksiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,103,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-tasarim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-4','coktan_secmeli','Ölçütler tasarımları karşılaştırmaya yardım eder mi? Benzer bağlamı düşün.','["Hayır","Sadece fiyat","Ölçüt kullanılmaz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,104,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-tasarim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-5','coktan_secmeli','İnovasyon mevcut ürünü daha yararlı hâle getirmeyi içerebilir mi? Benzer bağlamı düşün.','["Hayır","Evet","Sadece tamamen yeni icat","Sadece reklam"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,105,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-inovasyon-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-6','coktan_secmeli','Yenilik gerçek bir probleme çözüm sunmalı mıdır? Benzer bağlamı düşün.','["Hayır","Sorun gerekmez","Sadece görünüş","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,106,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-inovasyon-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-7','coktan_secmeli','Hedef kitle ürün sunumunda önemli midir? Benzer bağlamı düşün.','["Hayır","Evet","Sadece maliyet","Kitle önemsiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,107,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-girisim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-8','coktan_secmeli','Maliyet ve değer önerisi girişimcilikle ilişkili midir? Benzer bağlamı düşün.','["Hayır","Sadece logo","Sadece renk","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,108,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-girisim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-9','coktan_secmeli','Yapısal tasarımda yük dağılımı önemli midir? Benzer bağlamı düşün.','["Hayır","Evet","Sadece renk","Yük etkisiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,109,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mimari' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-10','coktan_secmeli','Üçgen taşıyıcı biçimler dayanıklılık sağlayabilir mi? Benzer bağlamı düşün.','["Hayır","Sadece daire","Geometri etkisiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,110,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mimari' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-11','coktan_secmeli','Malzemenin dayanıklılığı kullanım amacına göre seçilmeli midir? Benzer bağlamı düşün.','["Hayır","Evet","Sadece ucuzluk","Malzeme önemsiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,111,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-malzeme' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-12','coktan_secmeli','Geri dönüştürülebilir malzeme çevresel etkiyi azaltabilir mi? Benzer bağlamı düşün.','["Hayır","Her zaman artırır","Çevreyle ilgisiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,112,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-malzeme' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-13','coktan_secmeli','Ulaşım tasarımında güvenlik önemli midir? Benzer bağlamı düşün.','["Hayır","Evet","Sadece hız","Sadece görünüş"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,113,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-ulasim-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-14','coktan_secmeli','Aerodinamik bazı araçların enerji verimliliğini etkileyebilir mi? Benzer bağlamı düşün.','["Hayır","Sadece renk","Enerjiyle ilgisiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,114,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-ulasim-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-15','coktan_secmeli','Dişli sistemleri hareket ve kuvvet aktarabilir mi? Benzer bağlamı düşün.','["Hayır","Evet","Sadece ses","Sadece ısı"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,115,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mekanizma' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-16','coktan_secmeli','Mekanizma hareket türünü değiştirebilir mi? Benzer bağlamı düşün.','["Hayır","Hareket değişmez","Sadece malzeme değişir","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,116,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mekanizma' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-17','coktan_secmeli','Enerji verimli tasarım daha az enerji tüketebilir mi? Benzer bağlamı düşün.','["Hayır","Evet","Her zaman daha çok","Enerji önemli değildir"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,117,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-verim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-18','coktan_secmeli','Yalıtım enerji kaybını azaltabilir mi? Benzer bağlamı düşün.','["Hayır","Sadece ses","Enerjiyle ilgisiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,118,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-verim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-19','coktan_secmeli','Ürünün onarılabilir olması sürdürülebilirliği destekler mi? Benzer bağlamı düşün.','["Hayır","Evet","Atığı artırır","Ömür önemsiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,119,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-surdur' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-20','coktan_secmeli','Yaşam döngüsü boyunca çevresel etki düşünülmeli midir? Benzer bağlamı düşün.','["Hayır","Sadece satış","Sadece tasarım rengi","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,120,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-surdur' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-21','coktan_secmeli','Sensör akıllı ürünün çevreden veri almasına yardım edebilir mi? Benzer bağlamı düşün.','["Hayır","Evet","Sadece motor","Sadece pil"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,121,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-akilli-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-22','coktan_secmeli','Akıllı ürünlerde kullanıcı mahremiyeti önemli midir? Benzer bağlamı düşün.','["Hayır","Veri herkese açık olmalı","Mahremiyet yoktur","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,122,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-akilli-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-23','coktan_secmeli','Prototip gerçek üründen önce test edilebilir mi? Benzer bağlamı düşün.','["Hayır","Evet","Prototip son üründür","Test edilmez"]',1,'Konu bilgisi bağlama göre değerlendirilir.',1,123,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-prototip' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-2-24','coktan_secmeli','Test sonuçlarına göre tasarım geliştirilebilir mi? Benzer bağlamı düşün.','["Hayır","İlk tasarım değişmez","Geri bildirim kullanılmaz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',1,124,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-prototip' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-1','coktan_secmeli','Tasarım problemi kullanıcı ihtiyacına dayanabilir mi? Yeni bir örneğe uygula.','["Hayır","Sadece renk","Evet","Sadece satış"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,201,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-problem' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-2','coktan_secmeli','Araştırma mevcut çözümleri anlamaya yardım eder mi? Yeni bir örneğe uygula.','["Evet","Hayır","Sadece kopya","Araştırma gereksiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,202,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-problem' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-3','coktan_secmeli','Birden fazla fikir üretmek çözüm kalitesini artırabilir mi? Yeni bir örneğe uygula.','["Hayır","Tek fikir zorunlu","Evet","Fikir üretmek gereksiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,203,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-tasarim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-4','coktan_secmeli','Ölçütler tasarımları karşılaştırmaya yardım eder mi? Yeni bir örneğe uygula.','["Evet","Hayır","Sadece fiyat","Ölçüt kullanılmaz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,204,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-tasarim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-5','coktan_secmeli','İnovasyon mevcut ürünü daha yararlı hâle getirmeyi içerebilir mi? Yeni bir örneğe uygula.','["Hayır","Sadece tamamen yeni icat","Evet","Sadece reklam"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,205,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-inovasyon-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-6','coktan_secmeli','Yenilik gerçek bir probleme çözüm sunmalı mıdır? Yeni bir örneğe uygula.','["Evet","Hayır","Sorun gerekmez","Sadece görünüş"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,206,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-inovasyon-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-7','coktan_secmeli','Hedef kitle ürün sunumunda önemli midir? Yeni bir örneğe uygula.','["Hayır","Sadece maliyet","Evet","Kitle önemsiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,207,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-girisim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-8','coktan_secmeli','Maliyet ve değer önerisi girişimcilikle ilişkili midir? Yeni bir örneğe uygula.','["Evet","Hayır","Sadece logo","Sadece renk"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,208,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-girisim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-9','coktan_secmeli','Yapısal tasarımda yük dağılımı önemli midir? Yeni bir örneğe uygula.','["Hayır","Sadece renk","Evet","Yük etkisiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,209,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mimari' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-10','coktan_secmeli','Üçgen taşıyıcı biçimler dayanıklılık sağlayabilir mi? Yeni bir örneğe uygula.','["Evet","Hayır","Sadece daire","Geometri etkisiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,210,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mimari' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-11','coktan_secmeli','Malzemenin dayanıklılığı kullanım amacına göre seçilmeli midir? Yeni bir örneğe uygula.','["Hayır","Sadece ucuzluk","Evet","Malzeme önemsiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,211,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-malzeme' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-12','coktan_secmeli','Geri dönüştürülebilir malzeme çevresel etkiyi azaltabilir mi? Yeni bir örneğe uygula.','["Evet","Hayır","Her zaman artırır","Çevreyle ilgisiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,212,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-malzeme' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-13','coktan_secmeli','Ulaşım tasarımında güvenlik önemli midir? Yeni bir örneğe uygula.','["Hayır","Sadece hız","Evet","Sadece görünüş"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,213,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-ulasim-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-14','coktan_secmeli','Aerodinamik bazı araçların enerji verimliliğini etkileyebilir mi? Yeni bir örneğe uygula.','["Evet","Hayır","Sadece renk","Enerjiyle ilgisiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,214,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-ulasim-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-15','coktan_secmeli','Dişli sistemleri hareket ve kuvvet aktarabilir mi? Yeni bir örneğe uygula.','["Hayır","Sadece ses","Evet","Sadece ısı"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,215,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mekanizma' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-16','coktan_secmeli','Mekanizma hareket türünü değiştirebilir mi? Yeni bir örneğe uygula.','["Evet","Hayır","Hareket değişmez","Sadece malzeme değişir"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,216,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mekanizma' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-17','coktan_secmeli','Enerji verimli tasarım daha az enerji tüketebilir mi? Yeni bir örneğe uygula.','["Hayır","Her zaman daha çok","Evet","Enerji önemli değildir"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,217,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-verim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-18','coktan_secmeli','Yalıtım enerji kaybını azaltabilir mi? Yeni bir örneğe uygula.','["Evet","Hayır","Sadece ses","Enerjiyle ilgisiz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,218,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-verim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-19','coktan_secmeli','Ürünün onarılabilir olması sürdürülebilirliği destekler mi? Yeni bir örneğe uygula.','["Hayır","Atığı artırır","Evet","Ömür önemsiz"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,219,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-surdur' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-20','coktan_secmeli','Yaşam döngüsü boyunca çevresel etki düşünülmeli midir? Yeni bir örneğe uygula.','["Evet","Hayır","Sadece satış","Sadece tasarım rengi"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,220,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-surdur' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-21','coktan_secmeli','Sensör akıllı ürünün çevreden veri almasına yardım edebilir mi? Yeni bir örneğe uygula.','["Hayır","Sadece motor","Evet","Sadece pil"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,221,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-akilli-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-22','coktan_secmeli','Akıllı ürünlerde kullanıcı mahremiyeti önemli midir? Yeni bir örneğe uygula.','["Evet","Hayır","Veri herkese açık olmalı","Mahremiyet yoktur"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,222,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-akilli-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-23','coktan_secmeli','Prototip gerçek üründen önce test edilebilir mi? Yeni bir örneğe uygula.','["Hayır","Prototip son üründür","Evet","Test edilmez"]',2,'Konu bilgisi bağlama göre değerlendirilir.',2,223,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-prototip' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-3-24','coktan_secmeli','Test sonuçlarına göre tasarım geliştirilebilir mi? Yeni bir örneğe uygula.','["Evet","Hayır","İlk tasarım değişmez","Geri bildirim kullanılmaz"]',0,'Konu bilgisi bağlama göre değerlendirilir.',2,224,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-prototip' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-1','coktan_secmeli','Tasarım problemi kullanıcı ihtiyacına dayanabilir mi? En uygun seçeneği belirle.','["Hayır","Sadece renk","Sadece satış","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,301,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-problem' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-2','coktan_secmeli','Araştırma mevcut çözümleri anlamaya yardım eder mi? En uygun seçeneği belirle.','["Hayır","Evet","Sadece kopya","Araştırma gereksiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,302,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-problem' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-3','coktan_secmeli','Birden fazla fikir üretmek çözüm kalitesini artırabilir mi? En uygun seçeneği belirle.','["Hayır","Tek fikir zorunlu","Fikir üretmek gereksiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,303,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-tasarim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-4','coktan_secmeli','Ölçütler tasarımları karşılaştırmaya yardım eder mi? En uygun seçeneği belirle.','["Hayır","Evet","Sadece fiyat","Ölçüt kullanılmaz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,304,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-tasarim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-5','coktan_secmeli','İnovasyon mevcut ürünü daha yararlı hâle getirmeyi içerebilir mi? En uygun seçeneği belirle.','["Hayır","Sadece tamamen yeni icat","Sadece reklam","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,305,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-inovasyon-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-6','coktan_secmeli','Yenilik gerçek bir probleme çözüm sunmalı mıdır? En uygun seçeneği belirle.','["Hayır","Evet","Sorun gerekmez","Sadece görünüş"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,306,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-inovasyon-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-7','coktan_secmeli','Hedef kitle ürün sunumunda önemli midir? En uygun seçeneği belirle.','["Hayır","Sadece maliyet","Kitle önemsiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,307,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-girisim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-8','coktan_secmeli','Maliyet ve değer önerisi girişimcilikle ilişkili midir? En uygun seçeneği belirle.','["Hayır","Evet","Sadece logo","Sadece renk"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,308,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-girisim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-9','coktan_secmeli','Yapısal tasarımda yük dağılımı önemli midir? En uygun seçeneği belirle.','["Hayır","Sadece renk","Yük etkisiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,309,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mimari' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-10','coktan_secmeli','Üçgen taşıyıcı biçimler dayanıklılık sağlayabilir mi? En uygun seçeneği belirle.','["Hayır","Evet","Sadece daire","Geometri etkisiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,310,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mimari' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-11','coktan_secmeli','Malzemenin dayanıklılığı kullanım amacına göre seçilmeli midir? En uygun seçeneği belirle.','["Hayır","Sadece ucuzluk","Malzeme önemsiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,311,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-malzeme' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-12','coktan_secmeli','Geri dönüştürülebilir malzeme çevresel etkiyi azaltabilir mi? En uygun seçeneği belirle.','["Hayır","Evet","Her zaman artırır","Çevreyle ilgisiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,312,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-malzeme' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-13','coktan_secmeli','Ulaşım tasarımında güvenlik önemli midir? En uygun seçeneği belirle.','["Hayır","Sadece hız","Sadece görünüş","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,313,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-ulasim-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-14','coktan_secmeli','Aerodinamik bazı araçların enerji verimliliğini etkileyebilir mi? En uygun seçeneği belirle.','["Hayır","Evet","Sadece renk","Enerjiyle ilgisiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,314,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-ulasim-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-15','coktan_secmeli','Dişli sistemleri hareket ve kuvvet aktarabilir mi? En uygun seçeneği belirle.','["Hayır","Sadece ses","Sadece ısı","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,315,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mekanizma' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-16','coktan_secmeli','Mekanizma hareket türünü değiştirebilir mi? En uygun seçeneği belirle.','["Hayır","Evet","Hareket değişmez","Sadece malzeme değişir"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,316,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-mekanizma' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-17','coktan_secmeli','Enerji verimli tasarım daha az enerji tüketebilir mi? En uygun seçeneği belirle.','["Hayır","Her zaman daha çok","Enerji önemli değildir","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,317,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-verim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-18','coktan_secmeli','Yalıtım enerji kaybını azaltabilir mi? En uygun seçeneği belirle.','["Hayır","Evet","Sadece ses","Enerjiyle ilgisiz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,318,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-verim' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-19','coktan_secmeli','Ürünün onarılabilir olması sürdürülebilirliği destekler mi? En uygun seçeneği belirle.','["Hayır","Atığı artırır","Ömür önemsiz","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,319,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-surdur' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-20','coktan_secmeli','Yaşam döngüsü boyunca çevresel etki düşünülmeli midir? En uygun seçeneği belirle.','["Hayır","Evet","Sadece satış","Sadece tasarım rengi"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,320,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-surdur' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-21','coktan_secmeli','Sensör akıllı ürünün çevreden veri almasına yardım edebilir mi? En uygun seçeneği belirle.','["Hayır","Sadece motor","Sadece pil","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,321,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-akilli-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-22','coktan_secmeli','Akıllı ürünlerde kullanıcı mahremiyeti önemli midir? En uygun seçeneği belirle.','["Hayır","Evet","Veri herkese açık olmalı","Mahremiyet yoktur"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,322,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-akilli-konu' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-23','coktan_secmeli','Prototip gerçek üründen önce test edilebilir mi? En uygun seçeneği belirle.','["Hayır","Prototip son üründür","Test edilmez","Evet"]',3,'Konu bilgisi bağlama göre değerlendirilir.',2,323,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-prototip' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
-
-INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif) SELECT k.id,'g8tt-4-24','coktan_secmeli','Test sonuçlarına göre tasarım geliştirilebilir mi? En uygun seçeneği belirle.','["Hayır","Evet","İlk tasarım değişmez","Geri bildirim kullanılmaz"]',1,'Konu bilgisi bağlama göre değerlendirilir.',2,324,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-prototip' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım') ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tt8-problem','Problem Belirleme ve İnovatif Fikir','Problem Belirleme ve İnovatif Fikir','Problem Belirleme ve İnovatif Fikir becerilerini kullanıcı, güvenlik ve sürdürülebilirlik odaklı uygular.','',10,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-inovasyon'
+WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-1-1','coktan_secmeli','Tasarım sürecinin ilk adımlarından biri nedir?','["İhtiyaç veya problemi belirlemek","Rastgele üretime başlamak","Sadece renk seçmek","Ürünü satışa çıkarmak"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-problem' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-1-2','coktan_secmeli','İyi tanımlanmış problem ne sağlar?','["Tasarımı gereksiz yapar.","Kullanıcıyı gizler.","Çözüm geliştirmeyi kolaylaştırır.","Maliyeti sıfırlar."]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-problem' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-1-3','coktan_secmeli','Beyin fırtınasında ilk aşamada çok sayıda fikir üretmek yararlı mıdır?','["Evet","Hayır","Tek fikir yeter","Fikirler hemen elenmelidir"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-problem' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-1-4','coktan_secmeli','İnovasyon yalnız tamamen yeni ürün icat etmek midir?','["Evet","Sadece patent almak demektir","Hayır, mevcut ürün veya süreci geliştirmek de olabilir.","Sadece reklamdır"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-problem' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-1-5','coktan_secmeli','Kullanıcının ihtiyacını gözlemlemek tasarıma katkı sağlar mı?','["Evet","Hayır","Kullanıcı önemli değildir","Sadece tasarımcı fikri önemlidir"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-problem' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-1-6','coktan_secmeli','Tasarım kısıtları zaman, maliyet ve malzeme gibi etkenleri içerebilir mi?','["Hayır","Kısıt olmaz","Evet","Sadece renk kısıttır"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-problem' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tt8-fikri-hak','Fikrî Haklar, Patent ve Tasarım Tescili','Fikrî Haklar, Patent ve Tasarım Tescili','Fikrî Haklar, Patent ve Tasarım Tescili becerilerini kullanıcı, güvenlik ve sürdürülebilirlik odaklı uygular.','',20,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-inovasyon'
+WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-2-1','coktan_secmeli','Patent neyi korumaya yönelik bir hak türüdür?','["Sadece şiirleri","Sadece şirket adlarını","Sadece resimleri","Buluşları"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-fikri-hak' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-2-2','coktan_secmeli','Marka tescili neyi korumaya yardım eder?','["Sadece teknik buluşu","Mal veya hizmetleri ayırt eden işaretleri","Sadece bina planını","Sadece ders notunu"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-fikri-hak' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-2-3','coktan_secmeli','Endüstriyel tasarım tescili ürünün hangi yönüyle ilgilidir?','["Sadece kimyasal yapısıyla","Sadece satış fiyatıyla","Sadece üretim adediyle","Görsel tasarım özellikleriyle"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-fikri-hak' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-2-4','coktan_secmeli','Başkasının tasarımını izinsiz kopyalamak etik midir?','["Evet","Hayır","Sadece internetteyse","Kaynak yoksa"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-fikri-hak' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-2-5','coktan_secmeli','Kaynak belirtmek fikrî emeğe saygının parçası mıdır?','["Hayır","Sadece öğretmenler için","Kaynak gereksizdir","Evet"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-fikri-hak' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-2-6','coktan_secmeli','Fikrî haklar üreticiyi ve yeniliği teşvik edebilir mi?','["Hayır","Evet","Yeniliği her zaman engeller","Sadece tüketiciyle ilgilidir"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-fikri-hak' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tt8-cad','Bilgisayar Destekli Tasarım','Bilgisayar Destekli Tasarım','Bilgisayar Destekli Tasarım becerilerini kullanıcı, güvenlik ve sürdürülebilirlik odaklı uygular.','',30,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-bilgisayar'
+WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-3-1','coktan_secmeli','CAD kısaltması neyle ilişkilidir?','["Sadece muhasebe","Telefon görüşmesi","Bilgisayar destekli tasarım","Müzik kaydı"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-cad' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-3-2','coktan_secmeli','3B modelleme ürünün farklı açılardan incelenmesini sağlar mı?','["Evet","Hayır","Sadece metin üretir","Sadece ses verir"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-cad' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-3-3','coktan_secmeli','Ölçülendirme teknik çizimde önemli midir?','["Hayır","Sadece renk önemlidir","Evet","Boyut belirtilmez"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-cad' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-3-4','coktan_secmeli','Dijital model üretim öncesi hataları fark etmeye yardım edebilir mi?','["Evet","Hayır","Hataları gizler","Üretim sonrası kullanılır sadece"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-cad' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-3-5','coktan_secmeli','Teknik çizimde ölçek kullanılabilir mi?','["Hayır","Sadece haritada","Evet","Tasarımda ölçek yoktur"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-cad' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-3-6','coktan_secmeli','Dosya sürümlerini düzenli kaydetmek tasarım sürecinde yararlı mıdır?','["Evet","Hayır","Eski sürüm gereksizdir","Dosya kaydedilmez"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-cad' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tt8-akilli','Akıllı Ürünler ve Sensör Mantığı','Akıllı Ürünler ve Sensör Mantığı','Akıllı Ürünler ve Sensör Mantığı becerilerini kullanıcı, güvenlik ve sürdürülebilirlik odaklı uygular.','',40,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-bilgisayar'
+WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-4-1','coktan_secmeli','Sensör ne yapar?','["Sadece enerji üretir","Çevreden veri algılar.","Sadece görüntü çizer","Sadece depolama yapar"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-akilli' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-4-2','coktan_secmeli','Akıllı üründe kontrol birimi sensör verisini işleyebilir mi?','["Hayır","Sadece kablo yapar","Veri kullanılmaz","Evet"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-akilli' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-4-3','coktan_secmeli','Hareket sensörlü lamba neye göre açılabilir?','["Sadece saate zorunlu","Algılanan harekete","Renge","Kullanıcının boyuna"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-akilli' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-4-4','coktan_secmeli','Akıllı ürün tasarımında gizlilik önemli midir?','["Hayır","Veri her zaman paylaşılmalıdır","Gizlilik tasarımla ilgisizdir","Evet"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-akilli' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-4-5','coktan_secmeli','Sensör verisi yanlışsa ürünün kararı etkilenebilir mi?','["Hayır","Evet","Sensör sonucu önemli değildir","Akıllı ürün veri kullanmaz"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-akilli' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-4-6','coktan_secmeli','Akıllı sistemlerde kullanıcıya manuel kontrol seçeneği yararlı olabilir mi?','["Hayır","Kullanıcı kontrol etmemelidir","Sadece üretici kullanır","Evet"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-akilli' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tt8-hedef','Hedef Kitle ve Ürün Konumlandırma','Hedef Kitle ve Ürün Konumlandırma','Hedef Kitle ve Ürün Konumlandırma becerilerini kullanıcı, güvenlik ve sürdürülebilirlik odaklı uygular.','',50,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-tanitim'
+WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-5-1','coktan_secmeli','Hedef kitle neyi ifade eder?','["Ürünün ulaşmak istediği kullanıcı grubunu","Sadece üretim ekibini","Rakip firmayı","Sadece satıcıyı"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-hedef' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-5-2','coktan_secmeli','Aynı ürün her kullanıcı için aynı ihtiyaçları karşılar mı?','["Her zaman","Kullanıcı farkı yoktur","Her zaman değil","Sadece renk değişir"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-hedef' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-5-3','coktan_secmeli','Kullanıcı araştırması ürün kararlarını geliştirebilir mi?','["Evet","Hayır","Sadece reklam için","Ürünü etkilemez"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-hedef' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-5-4','coktan_secmeli','Ürünün faydasını açık anlatmak konumlandırmaya yardım eder mi?','["Hayır","Sadece fiyat yazılır","Evet","Fayda önemli değildir"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-hedef' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-5-5','coktan_secmeli','Hedef kitle belirlerken yaş, kullanım ortamı ve ihtiyaçlar dikkate alınabilir mi?','["Evet","Hayır","Sadece isim","Sadece şehir"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-hedef' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-5-6','coktan_secmeli','Kullanıcı geri bildirimi ürün geliştirmeye katkı sağlar mı?','["Hayır","Ürün hiç değişmez","Evet","Geri bildirim gereksizdir"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-hedef' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tt8-pazarlama','Tanıtım, Marka ve Pazarlama','Tanıtım, Marka ve Pazarlama','Tanıtım, Marka ve Pazarlama becerilerini kullanıcı, güvenlik ve sürdürülebilirlik odaklı uygular.','',60,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-tanitim'
+WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-6-1','coktan_secmeli','Marka kimliği hangi ögeleri içerebilir?','["Sadece fiyat","Sadece üretim makinesi","Sadece depo","İsim, logo ve görsel dil"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-pazarlama' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-6-2','coktan_secmeli','Tanıtım mesajı ürünün gerçek özellikleriyle uyumlu olmalı mıdır?','["Hayır","Evet","Abartı her zaman uygundur","Gerçek bilgi gerekmez"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-pazarlama' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-6-3','coktan_secmeli','Pazarlamada etik neyi gerektirir?','["Rakibi karalamayı","Gerçeği gizlemeyi","Sahte yorum üretmeyi","Yanıltıcı bilgi vermemeyi"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-pazarlama' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-6-4','coktan_secmeli','Ürünün ambalajı iletişim aracı olabilir mi?','["Hayır","Evet","Sadece koruma sağlar","Yazı içeremez"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-pazarlama' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-6-5','coktan_secmeli','Farklı tanıtım kanalları farklı hedef kitlelere ulaşabilir mi?','["Hayır","Tek kanal vardır","Hedef kitle önemli değildir","Evet"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-pazarlama' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-6-6','coktan_secmeli','Müşteri geri bildirimi marka güvenini etkileyebilir mi?','["Hayır","Evet","Güven sadece logoya bağlıdır","Geri bildirim okunmaz"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-pazarlama' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tt8-gorsel-dil','Görsel İletişim İlkeleri','Görsel İletişim İlkeleri','Görsel İletişim İlkeleri becerilerini kullanıcı, güvenlik ve sürdürülebilirlik odaklı uygular.','',70,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-gorsel'
+WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-7-1','coktan_secmeli','Kontrast ne sağlar?','["Her şeyi aynı gösterir","Sadece ses verir","Ögeler arasında fark ve vurgu","Metni siler"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-gorsel-dil' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-7-2','coktan_secmeli','Hiyerarşi görsel tasarımda ne işe yarar?','["Bilginin önem sırasını göstermeye","Renkleri kaldırmaya","Dosyayı küçültmeye","Sadece kenarlık oluşturmaya"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-gorsel-dil' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-7-3','coktan_secmeli','Okunabilirlik için yazı boyutu ve zemin kontrastı önemli midir?','["Hayır","Sadece font adı","Evet","Metin görünmese de olur"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-gorsel-dil' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-7-4','coktan_secmeli','Boşluk kullanımı tasarımın anlaşılmasını kolaylaştırabilir mi?','["Evet","Hayır","Her yer doldurulmalıdır","Boşluk hata demektir"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-gorsel-dil' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-7-5','coktan_secmeli','Renklerin anlamı bağlama ve kültüre göre değişebilir mi?','["Hayır","Her yerde aynıdır","Evet","Rengin anlamı yoktur"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-gorsel-dil' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-7-6','coktan_secmeli','Görsel iletişimde tutarlılık kullanıcı deneyimini destekler mi?','["Evet","Hayır","Her sayfa tamamen farklı olmalı","Tutarlılık sıkıcı olduğu için yanlıştır"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-gorsel-dil' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tt8-afis','Afiş, Logo ve Dijital Sunum','Afiş, Logo ve Dijital Sunum','Afiş, Logo ve Dijital Sunum becerilerini kullanıcı, güvenlik ve sürdürülebilirlik odaklı uygular.','',80,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-gorsel'
+WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-8-1','coktan_secmeli','Afişte ana mesaj kısa ve görünür olmalı mıdır?','["Hayır","Evet","Sadece uzun paragraf","Mesaj gizli olmalıdır"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-afis' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-8-2','coktan_secmeli','Logo karmaşık olmak zorunda mıdır?','["Evet","Ne kadar ayrıntılı o kadar iyi","Sadece fotoğraf olmalıdır","Hayır"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-afis' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-8-3','coktan_secmeli','Dijital sunumda her slayta çok fazla metin koymak uygun mudur?','["Evet her zaman","Genellikle hayır","Yazı okunmasa da olur","Görsel kullanılmamalı"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-afis' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-8-4','coktan_secmeli','Afişte hedef kitleye uygun dil seçilmeli midir?','["Hayır","Herkese aynı ton zorunlu","Dil önemli değildir","Evet"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-afis' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-8-5','coktan_secmeli','Telifli görseller izinsiz kullanılmamalı mıdır?','["Hayır","Evet","İnternetteki her görsel serbesttir","Kaynak gereksizdir"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-afis' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-8-6','coktan_secmeli','Bir tasarım farklı ekran boyutlarında okunabilir olmalı mıdır?','["Hayır","Sadece tek cihaz","Mobil önemli değildir","Evet"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-afis' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tt8-prototip','Prototip ve Test','Prototip ve Test','Prototip ve Test becerilerini kullanıcı, güvenlik ve sürdürülebilirlik odaklı uygular.','',90,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-urun'
+WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-9-1','coktan_secmeli','Prototip nedir?','["Ürünün test amaçlı erken örneği","Bitmiş satış ürünü zorunlu","Sadece reklam","Patent belgesi"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-prototip' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-9-2','coktan_secmeli','Prototip neden test edilir?','["Ürünü değiştirmemek için","Sadece fotoğraf çekmek için","Sorunları ve geliştirme alanlarını görmek için","Fiyatı artırmak için"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-prototip' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-9-3','coktan_secmeli','Kâğıt model de prototip olabilir mi?','["Evet","Hayır","Sadece elektronik prototip olur","Sadece 3B yazıcı gerekir"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-prototip' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-9-4','coktan_secmeli','Test sonucunda tasarım değiştirilebilir mi?','["Hayır","İlk tasarım değişmez","Evet","Test sadece onay içindir"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-prototip' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-9-5','coktan_secmeli','Farklı kullanıcılarla test yapmak yararlı mıdır?','["Evet","Hayır","Tek kişi yeter her zaman","Kullanıcı testi gereksizdir"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-prototip' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-9-6','coktan_secmeli','Başarısız prototip süreç için tamamen değersiz midir?','["Evet","Hemen atılmalıdır","Hayır; öğrenme sağlar.","Test sonucu kullanılmaz"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-prototip' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tt8-ergonomi','Ergonomi, Malzeme ve Kullanıcı Deneyimi','Ergonomi, Malzeme ve Kullanıcı Deneyimi','Ergonomi, Malzeme ve Kullanıcı Deneyimi becerilerini kullanıcı, güvenlik ve sürdürülebilirlik odaklı uygular.','',100,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-urun'
+WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-10-1','coktan_secmeli','Ergonomi neyle ilgilidir?','["Sadece fiyatına","Sadece rengine","Sadece reklamına","Ürünün insana uygun, rahat ve güvenli kullanımına"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-ergonomi' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-10-2','coktan_secmeli','Bir sandalye tasarımında oturma yüksekliği ergonomiyi etkiler mi?','["Hayır","Evet","Sadece renk","Sandalye ölçüsü önemsizdir"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-ergonomi' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-10-3','coktan_secmeli','Malzeme seçerken dayanıklılık ve kullanım koşulları düşünülmeli midir?','["Hayır","Sadece görünüş","Malzeme fark etmez","Evet"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-ergonomi' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-10-4','coktan_secmeli','Keskin kenarları azaltmak ürün güvenliğini artırabilir mi?','["Hayır","Evet","Sadece estetik","Güvenlikle ilgisiz"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-ergonomi' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-10-5','coktan_secmeli','Kullanıcı deneyimi ürünün kolay anlaşılmasıyla ilişkili midir?','["Hayır","Sadece ambalaj","Kullanıcı öğrenmek zorundadır","Evet"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-ergonomi' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-10-6','coktan_secmeli','Sürdürülebilir malzeme seçimi çevresel etkiyi azaltabilir mi?','["Hayır","Evet","Malzeme çevreyi etkilemez","Sadece fiyatı etkiler"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-ergonomi' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tt8-enerji-donusum','Enerji Dönüşümü ve Verimlilik','Enerji Dönüşümü ve Verimlilik','Enerji Dönüşümü ve Verimlilik becerilerini kullanıcı, güvenlik ve sürdürülebilirlik odaklı uygular.','',110,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-enerji'
+WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-11-1','coktan_secmeli','Güneş paneli hangi enerjiyi elektriğe dönüştürür?','["Sadece ses","Kimyasal enerjiyi zorunlu","Güneş ışınım enerjisini","Kütleyi"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-enerji-donusum' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-11-2','coktan_secmeli','Elektrik motoru elektrik enerjisini neye dönüştürür?','["Hareket enerjisine","Sadece ışığa","Maddeye","Yerçekimine"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-enerji-donusum' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-11-3','coktan_secmeli','Enerji dönüşümünde verim neden önemlidir?','["Enerji üretmek için","Kütleyi değiştirmek için","Kayıpları azaltmak için","Sadece fiyat için"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-enerji-donusum' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-11-4','coktan_secmeli','Yalıtım enerji tüketimini azaltabilir mi?','["Evet","Hayır","Sadece sesi artırır","Enerjiyle ilgisiz"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-enerji-donusum' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-11-5','coktan_secmeli','LED aydınlatma aynı ışık için daha az enerji tüketebilir mi?','["Hayır","Her zaman daha çok tüketir","Evet","Işık vermez"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-enerji-donusum' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-11-6','coktan_secmeli','Tasarımda enerji kaynağının güvenliği düşünülmeli midir?','["Evet","Hayır","Sadece güç önemli","Güvenlik sonradan eklenir"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-enerji-donusum' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tt8-yenilenebilir','Yenilenebilir Enerji Tasarımları','Yenilenebilir Enerji Tasarımları','Yenilenebilir Enerji Tasarımları becerilerini kullanıcı, güvenlik ve sürdürülebilirlik odaklı uygular.','',120,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-enerji'
+WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-12-1','coktan_secmeli','Güneş enerjisi yenilenebilir kaynak mıdır?','["Hayır","Evet","Fosil yakıttır","Nükleer yakıttır"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-yenilenebilir' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-12-2','coktan_secmeli','Rüzgâr türbini ne üretmek için kullanılabilir?','["Sadece su","Sadece ısı zorunlu","Petrol","Elektrik enerjisi"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-yenilenebilir' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-12-3','coktan_secmeli','Yenilenebilir enerji sistemi tasarlarken yerel koşullar önemli midir?','["Hayır","Evet","Her yer aynıdır","Sadece renk önemlidir"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-yenilenebilir' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-12-4','coktan_secmeli','Güneş panelinin yönü ve gölgelenmesi performansı etkileyebilir mi?','["Hayır","Panel her durumda aynı","Sadece sıcaklık etkiler","Evet"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-yenilenebilir' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-12-5','coktan_secmeli','Enerji depolama yenilenebilir kaynakların değişken üretimini dengelemeye yardım edebilir mi?','["Hayır","Evet","Depolama gereksiz","Enerji saklanamaz hiçbir biçimde"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-yenilenebilir' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-12-6','coktan_secmeli','Yenilenebilir enerji de çevresel etkiler açısından değerlendirilmelidir mi?','["Hayır","Hiç etkisi olmaz","Değerlendirme gereksizdir","Evet"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-yenilenebilir' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tt8-erisilebilirlik','Erişilebilirlik ve Evrensel Tasarım','Erişilebilirlik ve Evrensel Tasarım','Erişilebilirlik ve Evrensel Tasarım becerilerini kullanıcı, güvenlik ve sürdürülebilirlik odaklı uygular.','',130,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-engelsiz'
+WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-13-1','coktan_secmeli','Evrensel tasarımın amacı nedir?','["Mümkün olduğunca çok kişinin ürünü kullanabilmesini sağlamak","Sadece tek kullanıcıya uygunluk","Sadece estetik","Sadece düşük maliyet"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-erisilebilirlik' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-13-2','coktan_secmeli','Rampa hareket kısıtlılığı olan bireyler için erişilebilirliği artırabilir mi?','["Hayır","Sadece bisiklet için","Evet","Erişilebilirlikle ilgisiz"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-erisilebilirlik' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-13-3','coktan_secmeli','Yüksek kontrast görme güçlüğü yaşayan bazı kullanıcılar için yararlı olabilir mi?','["Evet","Hayır","Kontrast her zaman azaltılmalı","Sadece baskıda"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-erisilebilirlik' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-13-4','coktan_secmeli','Altyazı işitme güçlüğü yaşayan kullanıcıların videoya erişimini artırabilir mi?','["Hayır","Sadece yabancı dil için","Evet","Sesle ilgisiz"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-erisilebilirlik' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-13-5','coktan_secmeli','Erişilebilirlik sonradan eklenen bir özellik olmak zorunda mıdır?','["Hayır; baştan tasarlanabilir.","Evet her zaman","Ürün bittikten sonra düşünülür","Erişilebilirlik tasarım değildir"]',0,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-erisilebilirlik' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-13-6','coktan_secmeli','Kullanıcı çeşitliliğini testlere dahil etmek yararlı mıdır?','["Hayır","Tek kullanıcı yeter","Evet","Farklı ihtiyaçlar önemli değildir"]',2,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-erisilebilirlik' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_konulari (ders_id,bolum_id,kademe_kodu,sinif_seviyesi,konu_kodu,ad,aciklama,anlatim,ornek_metni,sira,aktif)
+SELECT d.id,b.id,'temel_egitim',8,'tt8-yardimci','Yardımcı Teknolojiler ve Engelsiz Ürün','Yardımcı Teknolojiler ve Engelsiz Ürün','Yardımcı Teknolojiler ve Engelsiz Ürün becerilerini kullanıcı, güvenlik ve sürdürülebilirlik odaklı uygular.','',140,1
+FROM dersler d INNER JOIN ders_bolumleri b ON b.ders_id=d.id AND b.kademe_kodu='temel_egitim' AND b.sinif_seviyesi=8 AND b.kod='tt8-engelsiz'
+WHERE d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım'
+ON DUPLICATE KEY UPDATE bolum_id=VALUES(bolum_id),ad=VALUES(ad),anlatim=VALUES(anlatim),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-14-1','coktan_secmeli','Ekran okuyucu neye yardımcı olur?','["Ekranı büyütmeden kapatmaya","Sadece oyun oynamaya","Sadece yazıcıya","Görsel arayüzdeki metin ve ögeleri sesli/erişilebilir biçimde sunmaya"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,1,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-yardimci' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-14-2','coktan_secmeli','Protez veya yardımcı cihazlar günlük yaşam bağımsızlığını artırabilir mi?','["Hayır","Evet","Sadece spor içindir","Bağımsızlığı azaltır"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',1,2,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-yardimci' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-14-3','coktan_secmeli','Sesle kontrol hareket kısıtlılığı olan bazı kullanıcılar için yararlı olabilir mi?','["Hayır","Sadece müzik içindir","Kontrol sağlamaz","Evet"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,3,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-yardimci' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-14-4','coktan_secmeli','Yardımcı teknoloji tasarımında kişiselleştirme önemli olabilir mi?','["Hayır","Evet","Herkesin ihtiyacı aynıdır","Ayarlanabilirlik gereksizdir"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,4,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-yardimci' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-14-5','coktan_secmeli','Kullanıcı mahremiyeti yardımcı teknolojilerde de korunmalı mıdır?','["Hayır","Sağlık/kişisel veri serbestçe paylaşılır","Mahremiyet yoktur","Evet"]',3,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',2,5,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-yardimci' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
+
+INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
+SELECT k.id,'g8tt-14-6','coktan_secmeli','Engelsiz ürün tasarımında kullanıcıyla birlikte geliştirme yapmak yararlı mıdır?','["Hayır","Evet","Kullanıcı görüşü alınmamalı","Sadece tasarımcı karar verir"]',1,'Tasarım problemi kullanıcı ihtiyacı, güvenlik, etik ve sürdürülebilirlik açısından değerlendirilir.',3,6,1
+FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id
+WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=8 AND k.konu_kodu='tt8-yardimci' AND (d.kod='teknoloji_tasarim' OR d.ad='Teknoloji ve Tasarım')
+ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
