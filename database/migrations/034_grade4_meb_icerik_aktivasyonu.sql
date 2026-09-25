@@ -99,7 +99,7 @@ SELECT d.id,'temel_egitim',4,'ogrenme_alani','mat4-veri','Veri İşleme','4. sı
 WHERE d.kod='matematik' OR d.ad='Matematik'
 ON DUPLICATE KEY UPDATE ad=VALUES(ad),aciklama=VALUES(aciklama),sira=VALUES(sira),aktif=1;
 INSERT INTO ders_bolumleri (ders_id,kademe_kodu,sinif_seviyesi,tur,kod,ad,aciklama,sira,aktif)
-SELECT d.id,'temel_egitim',4,'unite','fen4-yer','Yer Kabuğu ve Dünya'mızın Hareketleri','4. sınıf Yer Kabuğu ve Dünya'mızın Hareketleri içeriği.',10,1 FROM dersler d
+SELECT d.id,'temel_egitim',4,'unite','fen4-yer','Yer Kabuğu ve Dünya''mızın Hareketleri','4. sınıf Yer Kabuğu ve Dünya''mızın Hareketleri içeriği.',10,1 FROM dersler d
 WHERE d.kod='fen' OR d.ad='Fen Bilimleri'
 ON DUPLICATE KEY UPDATE ad=VALUES(ad),aciklama=VALUES(aciklama),sira=VALUES(sira),aktif=1;
 INSERT INTO ders_bolumleri (ders_id,kademe_kodu,sinif_seviyesi,tur,kod,ad,aciklama,sira,aktif)
@@ -199,7 +199,7 @@ SELECT d.id,'temel_egitim',4,'unite','din4-ifadeler','Günlük Hayattaki Dinî �
 WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi'
 ON DUPLICATE KEY UPDATE ad=VALUES(ad),aciklama=VALUES(aciklama),sira=VALUES(sira),aktif=1;
 INSERT INTO ders_bolumleri (ders_id,kademe_kodu,sinif_seviyesi,tur,kod,ad,aciklama,sira,aktif)
-SELECT d.id,'temel_egitim',4,'unite','din4-islam','İslam'ı Tanıyalım','4. sınıf İslam'ı Tanıyalım içeriği.',20,1 FROM dersler d
+SELECT d.id,'temel_egitim',4,'unite','din4-islam','İslam''ı Tanıyalım','4. sınıf İslam''ı Tanıyalım içeriği.',20,1 FROM dersler d
 WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi'
 ON DUPLICATE KEY UPDATE ad=VALUES(ad),aciklama=VALUES(aciklama),sira=VALUES(sira),aktif=1;
 INSERT INTO ders_bolumleri (ders_id,kademe_kodu,sinif_seviyesi,tur,kod,ad,aciklama,sira,aktif)
@@ -207,7 +207,7 @@ SELECT d.id,'temel_egitim',4,'unite','din4-ahlak','Güzel Ahlak','4. sınıf Gü
 WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi'
 ON DUPLICATE KEY UPDATE ad=VALUES(ad),aciklama=VALUES(aciklama),sira=VALUES(sira),aktif=1;
 INSERT INTO ders_bolumleri (ders_id,kademe_kodu,sinif_seviyesi,tur,kod,ad,aciklama,sira,aktif)
-SELECT d.id,'temel_egitim',4,'unite','din4-hz-muhammed','Hz. Muhammed'i Tanıyalım','4. sınıf Hz. Muhammed'i Tanıyalım içeriği.',40,1 FROM dersler d
+SELECT d.id,'temel_egitim',4,'unite','din4-hz-muhammed','Hz. Muhammed''i Tanıyalım','4. sınıf Hz. Muhammed''i Tanıyalım içeriği.',40,1 FROM dersler d
 WHERE d.kod='din' OR d.ad='Din Kültürü ve Ahlak Bilgisi'
 ON DUPLICATE KEY UPDATE ad=VALUES(ad),aciklama=VALUES(aciklama),sira=VALUES(sira),aktif=1;
 INSERT INTO ders_bolumleri (ders_id,kademe_kodu,sinif_seviyesi,tur,kod,ad,aciklama,sira,aktif)
