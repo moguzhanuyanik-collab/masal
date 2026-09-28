@@ -49,6 +49,25 @@ function adimbot_ai_extract_chat_text(array $response): string {
     return '';
 }
 
+function adimbot_ai_input_safety(string $text): ?array {
+    if (preg_match('/(?:intihar|kendimi\s+öldür|canıma\s+kıy|kendime\s+zarar|yaşamak\s+istemiyorum)/iu',$text)) {
+        return ['reason'=>'self_harm','text'=>'Bunu tek başına taşıma. Hemen yanında güvendiğin bir yetişkine, ailenden birine veya öğretmenine haber ver.'];
+    }
+    if (preg_match('/(?:adres(?:in|ini)?|telefon(?:un|unu|\s*numara)|e[- ]?posta(?:n|nı)?|şifre(?:n|ni)?|tc\s*(?:kimlik)?|kimlik\s*numara|konum(?:un|unu)?)/iu',$text)) {
+        return ['reason'=>'privacy','text'=>'Kişisel bilgilerini paylaşmana gerek yok. Adres, telefon, e-posta, şifre veya kimlik bilgisi istemeden devam edelim.'];
+    }
+    if (preg_match('/(?:whatsapp|instagram|telegram|discord|snapchat|buluş(?:alım|mak)|görüşelim|beni\s+ara|seni\s+arayayım|özelden\s+yaz)/iu',$text)) {
+        return ['reason'=>'contact','text'=>'Seni başka bir uygulamaya, kişiye veya buluşmaya yönlendirmeyeceğim. Burada dersine yardımcı olabilirim.'];
+    }
+    if (preg_match('/(?:doğru\s+cevap|cevabı\s+(?:söyle|ver)|hangi\s+şık|cevap\s+ne|doğru\s+şık|şık\s+hangisi)/iu',$text)) {
+        return ['reason'=>'answer_key','text'=>'Cevabı doğrudan söylemeyeyim. Sorudaki önemli kelimeleri bulalım ve seçenekleri birlikte eleyelim.'];
+    }
+    if (preg_match('/(?:uyuşturucu|silah\s+yap|bomba\s+yap|birini\s+öldür|cinsel\s+ilişki|çıplak\s+foto)/iu',$text)) {
+        return ['reason'=>'unsafe','text'=>'Bu konu için yanında güvendiğin bir yetişkinden yardım istemen daha doğru olur. İstersen dersine geri dönelim.'];
+    }
+    return null;
+}
+
 function adimbot_ai_safe_output(string $text): array {
     $value=adimbot_ai_redact(adimbot_ai_clean($text,600));
     if ($value==='') return ['ok'=>false,'text'=>'Şu anda yanıt oluşturamadım. İstersen soruyu başka türlü soralım.','reason'=>'empty'];
@@ -111,11 +130,8 @@ if ($message==='') {
     adimbot_ai_json(['ok'=>false,'message'=>'Bir soru yazmalısın.'],400);
 }
 
-if (preg_match('/(?:doğru\s+cevap|cevabı\s+(?:söyle|ver)|hangi\s+şık|cevap\s+ne|doğru\s+şık|şık\s+hangisi)/iu',$message)) {
-    adimbot_ai_json(['ok'=>true,'blocked'=>true,'reason'=>'answer_key','text'=>'Cevabı doğrudan söylemeyeyim. Sorudaki önemli kelimeleri bulalım ve seçenekleri birlikte eleyelim.']);
-}
-if (preg_match('/(?:adres(?:in|ini)?|telefon(?:un|unu|\s*numara)|e[- ]?posta(?:n|nı)?|şifre(?:n|ni)?|tc\s*(?:kimlik)?|kimlik\s*numara|konum(?:un|unu)?)/iu',$message)) {
-    adimbot_ai_json(['ok'=>true,'blocked'=>true,'reason'=>'privacy','text'=>'Kişisel bilgilerini paylaşmana gerek yok. Adres, telefon, e-posta, şifre veya kimlik bilgisi istemeden devam edelim.']);
+if (($blocked=adimbot_ai_input_safety($message))!==null) {
+    adimbot_ai_json(['ok'=>true,'blocked'=>true,'reason'=>$blocked['reason'],'text'=>$blocked['text']]);
 }
 
 $now=time();
@@ -175,7 +191,7 @@ foreach (array_slice($history,-6) as $item) {
     if (!in_array($role,['user','assistant'],true)) continue;
     $text=adimbot_ai_redact(adimbot_ai_clean($item['text'] ?? '',300));
     if ($text==='') continue;
-    if (preg_match('/(?:adres(?:in|ini)?|telefon(?:un|unu|\s*numara)|e[- ]?posta(?:n|nı)?|şifre(?:n|ni)?|tc\s*(?:kimlik)?|kimlik\s*numara|konum(?:un|unu)?)/iu',$text)) continue;
+    if (adimbot_ai_input_safety($text)!==null) continue;
     $historyLines[]=($role==='user'?'Öğrenci':'AdımBot').': '.$text;
 }
 $historyText=implode("\n",$historyLines);
