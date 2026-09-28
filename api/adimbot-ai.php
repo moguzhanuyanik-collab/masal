@@ -69,7 +69,7 @@ function adimbot_ai_input_safety(string $text): ?array {
 }
 
 function adimbot_ai_safe_output(string $text): array {
-    $value=adimbot_ai_redact(adimbot_ai_clean($text,600));
+    $value=adimbot_ai_clean($text,600);
     if ($value==='') return ['ok'=>false,'text'=>'Şu anda yanıt oluşturamadım. İstersen soruyu başka türlü soralım.','reason'=>'empty'];
 
     if (preg_match('/(?:telefon(?:unu| numaranı)|adres(?:ini|ini söyle)|e[- ]?posta(?:nı| adresini)|şifre(?:ni)?|tc\s*(?:kimlik)?)/iu',$value)) {
@@ -81,7 +81,7 @@ function adimbot_ai_safe_output(string $text): array {
     if (preg_match('/(?:doğru\s+(?:cevap|şık)|cevap\s+[A-D]\s*şıkkı|cevap\s*[:\-]\s*[A-D])/iu',$value)) {
         return ['ok'=>false,'text'=>'Cevabı doğrudan söylemeyeyim. Bir ipucu vereyim ve birlikte düşünelim.','reason'=>'answer_key'];
     }
-    return ['ok'=>true,'text'=>$value,'reason'=>'ok'];
+    return ['ok'=>true,'text'=>adimbot_ai_redact($value),'reason'=>'ok'];
 }
 
 app_session_start();
