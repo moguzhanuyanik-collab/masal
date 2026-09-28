@@ -74,7 +74,7 @@ $isSuper=auth_user_has_role($user,'super_admin');
 <div class="role-list">
 <div class="role-row"><span>📚</span><div><strong>Dersler / İçerikler</strong><small>Kuruma özel içerik yönetimini daha sonra ayrı modül yapacağız.</small></div><span class="role-pill off">Sonra</span></div>
 <div class="role-row"><span>🏷️</span><div><strong>Sınıflar / Gruplar</strong><small>Kurum sınıf ve grup yapısını daha sonra ekleyeceğiz.</small></div><span class="role-pill off">Sonra</span></div>
-<div class="role-row"><span>📊</span><div><strong>Raporlar</strong><small>Kuruma özel toplu raporları daha sonra ayrı bölüm yapacağız.</small></div><span class="role-pill off">Sonra</span></div>
+<a class="role-row" href="kurum-raporlari.php?kurum_id=<?=$institutionId?>"><span>📊</span><div><strong>Raporlar</strong><small>Sınıf ve tarihe göre öğrenci yanıt özeti.</small></div><span class="role-pill ok">Aç</span></a>
 </div>
 </section>
 </main>
