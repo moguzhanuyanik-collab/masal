@@ -10,43 +10,27 @@ require __DIR__ . '/src/bootstrap.php';
 require __DIR__ . '/src/updater.php';
 require __DIR__ . '/src/auth.php';
 
-try {
-    $authPdo=db();
-    $superAdminReady=false;
-    if (auth_runtime_table_exists($authPdo,'kullanicilar') && auth_runtime_table_exists($authPdo,'kullanici_rolleri')) {
-        $superAdminStmt=$authPdo->query("SELECT COUNT(DISTINCT k.id)
-            FROM kullanicilar k
-            INNER JOIN kullanici_rolleri r ON r.kullanici_id=k.id AND r.rol='super_admin'
-            WHERE k.aktif=1");
-        $superAdminReady=(int)($superAdminStmt?$superAdminStmt->fetchColumn():0)>0;
-        if($superAdminStmt)$superAdminStmt->closeCursor();
+$updateUser=authenticated_user();
+if (!$updateUser) {
+    if ($isAjax) {
+        if (ob_get_level()>0) ob_clean();
+        http_response_code(401);
+        header('Content-Type: application/json; charset=UTF-8');
+        echo json_encode(['ok'=>false,'message'=>'Güncelleme merkezi için giriş yapmalısın.'],JSON_UNESCAPED_UNICODE);
+        exit;
     }
-    if ($superAdminReady) {
-        $updateUser=authenticated_user();
-        if (!$updateUser) {
-            if ($isAjax) {
-                if (ob_get_level()>0) ob_clean();
-                http_response_code(401);
-                header('Content-Type: application/json; charset=UTF-8');
-                echo json_encode(['ok'=>false,'message'=>'Güncelleme merkezi için giriş yapmalısın.'],JSON_UNESCAPED_UNICODE);
-                exit;
-            }
-            header('Location: login.php');
-            exit;
-        }
-        if (auth_effective_role($updateUser)!=='super_admin') {
-            if ($isAjax) {
-                if (ob_get_level()>0) ob_clean();
-                http_response_code(403);
-                header('Content-Type: application/json; charset=UTF-8');
-                echo json_encode(['ok'=>false,'message'=>'Güncelleme yalnızca Süper Admin tarafından kurulabilir.'],JSON_UNESCAPED_UNICODE);
-                exit;
-            }
-            auth_redirect_to_role_home($updateUser);
-        }
+    header('Location: login.php');
+    exit;
+}
+if (auth_effective_role($updateUser)!=='super_admin') {
+    if ($isAjax) {
+        if (ob_get_level()>0) ob_clean();
+        http_response_code(403);
+        header('Content-Type: application/json; charset=UTF-8');
+        echo json_encode(['ok'=>false,'message'=>'Güncelleme yalnızca Süper Admin tarafından kurulabilir.'],JSON_UNESCAPED_UNICODE);
+        exit;
     }
-} catch (Throwable) {
-    // İlk yetkilendirme migrationi uygulanmadan önce mevcut güncelleme akışı korunur.
+    auth_redirect_to_role_home($updateUser);
 }
 
 function h(string $v): string {
