@@ -139,7 +139,19 @@ function next_remote_version_info(array $gh,string $localVersion): array {
         return $next;
     }
 
-    return remote_version_info($gh);
+    $latest=remote_version_info($gh);
+    $latestVersion=trim((string)($latest['version']??''));
+
+    if($latestVersion===''||version_compare($latestVersion,$localVersion,'<=')){
+        return $latest;
+    }
+
+    // Sürüm geçmişinden güvenli ara sürüm belirlenemiyorsa en son main sürümüne atlama.
+    // Böylece eksik bir ara paket yüzünden güncelleme zinciri bozulmaz.
+    throw new RuntimeException(
+        'Siradaki guncelleme guvenli bicimde belirlenemedi. '
+        .'En son surume atlanmadi; ara surum zinciri kontrol edilmeli.'
+    );
 }
 
 function path_is_preserved(string $relative,array $preserve): bool {

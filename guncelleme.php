@@ -129,22 +129,30 @@ if ($isAjax) {
             );
 
             $newLocal = read_app_version();
-            $remote = $result['remote'] ?? $remoteBefore;
+
+            // Kurulumdan sonra zincirde bir sonraki sürümü tekrar kontrol et.
+            // Örn. 1.1.5 kurulduysa ve 1.1.6 varsa ekran hemen 1.1.6'yı sunar.
+            $remote = next_remote_version_info($gh,$newLocal);
+            $hasNext = version_compare(
+                (string)($remote['version'] ?? '0.0.0'),
+                $newLocal,
+                '>'
+            );
+            $message = (string)($result['message'] ?? 'Güncelleme başarıyla kuruldu.');
+            if ($hasNext) {
+                $message .= ' Sıradaki sürüm '.(string)$remote['version'].' kuruluma hazır.';
+            }
 
             ajax_response([
                 'ok' => true,
                 'action' => 'install',
-                'message' => (string)($result['message'] ?? 'Güncelleme başarıyla kuruldu.'),
+                'message' => $message,
                 'backup' => (string)($result['backup'] ?? ''),
                 'local_version' => $newLocal,
                 'remote_version' => (string)($remote['version'] ?? ''),
                 'remote_name' => (string)($remote['name'] ?? ''),
                 'commit' => (string)($remote['commit'] ?? ''),
-                'update_available' => version_compare(
-                    (string)($remote['version'] ?? '0.0.0'),
-                    $newLocal,
-                    '>'
-                ),
+                'update_available' => $hasNext,
             ]);
         }
 
