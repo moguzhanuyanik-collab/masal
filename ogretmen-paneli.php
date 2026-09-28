@@ -24,6 +24,7 @@ try{
 <section class="role-hero"><span class="eyeline">ÖĞRETMEN ALANI</span><h1>Öğrencilerini takip et.</h1><p><?=tp_h((string)$user['ad_soyad'])?> · <?=count($institutionNames)?> kurum · <?=count($students)?> öğrenci</p><span class="role-hero-art">📚</span></section>
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">ÖĞRETMENİM</span><h2>Özel İçerikler</h2></div></div>
 <div class="role-modules"><a class="role-module" href="ogretmen-icerikleri.php"><span>⭐</span><div><strong>İçeriklerim</strong><small>Ders ve konu seçerek soru, tekrar, ödev veya not yayınla. Yalnızca sana bağlı öğrenciler görür.</small></div><b>→</b></a></div></section>
+<section class="role-section"><div class="role-section-head"><div><span class="eyeline">ÖDEVLERİM</span><h2>Ödev Listesi</h2></div></div><div class="role-modules"><a class="role-module" href="ogretmen-odevleri.php"><span>📝</span><div><strong>Ödevlerim</strong><small>Yayınladığın ödevleri kurum ve duruma göre gör.</small></div><b>→</b></a></div></section>
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">KURUMLARIM</span><h2>Bağlı Kurumlar</h2></div></div><div class="role-list">
 <?php if(!$institutionNames):?><div class="role-empty"><span>🏫</span>Henüz kuruma bağlanmadın.</div><?php else:foreach($institutionNames as $k):?><div class="role-row"><span>🏫</span><div><strong><?=tp_h((string)$k['ad'])?></strong><small>Öğretmen üyeliği</small></div><span class="role-pill ok">Aktif</span></div><?php endforeach;endif;?>
 </div></section>
