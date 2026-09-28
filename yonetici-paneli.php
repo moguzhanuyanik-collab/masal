@@ -22,6 +22,11 @@ function yp_count(PDO $pdo,string $role,int $institutionId):int{
 $stats=['ogrenci'=>0,'veli'=>0,'ogretmen'=>0,'yonetici'=>0];
 if($institutionId>0)foreach(array_keys($stats) as $r)$stats[$r]=yp_count($pdo,$r,$institutionId);
 $canView=yy_can($pdo,$user,'kurum_goruntule');
+$canManageTeachers=yy_can($pdo,$user,'ogretmen_yonet');
+$canManageParents=yy_can($pdo,$user,'veli_yonet');
+$canManageStudents=yy_can($pdo,$user,'ogrenci_yonet');
+$hasInstitution=$institutionId>0 && is_array($institution);
+
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Yönetici Paneli — İlkAdım</title>
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="yonetici.css?v=1.0.42"></head>
 <body class="role-page"><div class="role-shell">
@@ -44,11 +49,14 @@ $canView=yy_can($pdo,$user,'kurum_goruntule');
 </div></section><?php endif;?>
 
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">HIZLI ERİŞİM</span><h2>Yönetim İşlemleri</h2></div></div><div class="role-modules">
-<?php if($canView):?><a class="role-module" href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>🏫</span><div><strong>Kurum Yönetimi</strong><small>İzin verilen kurum bölümlerini görüntüle.</small></div><b>→</b></a><?php endif;?>
+<?php if($canView && $hasInstitution):?><a class="role-module" href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>🏫</span><div><strong>Kurum Yönetimi</strong><small>İzin verilen kurum bölümlerini görüntüle.</small></div><b>→</b></a><?php endif;?>
+<?php if($hasInstitution && $canManageTeachers):?><a class="role-module" href="kurum-ogretmenleri.php?kurum_id=<?=$institutionId?>"><span>👩‍🏫</span><div><strong>Öğretmenler</strong><small>Kurum öğretmenlerini görüntüle ve ekle.</small></div><b>→</b></a><?php endif;?>
+<?php if($hasInstitution && $canManageParents):?><a class="role-module" href="kurum-velileri.php?kurum_id=<?=$institutionId?>"><span>👪</span><div><strong>Veliler</strong><small>Kurum velilerini görüntüle ve ekle.</small></div><b>→</b></a><?php endif;?>
+<?php if($hasInstitution && $canManageStudents):?><a class="role-module" href="kurum-ogrencileri.php?kurum_id=<?=$institutionId?>"><span>🎒</span><div><strong>Öğrenciler</strong><small>Kurum öğrencilerini görüntüle ve ekle.</small></div><b>→</b></a><?php endif;?>
 <a class="role-module" href="hesap-guvenligi.php"><span>🔐</span><div><strong>Hesap Güvenliği</strong><small>E-posta ve şifre ayarlarını düzenle.</small></div><b>→</b></a>
 </div></section>
 
 <div class="role-note"><span>💡</span><p><?=($institution['icerik_kaynagi']??'sistem')==='sistem'?'Bu kurum İlkAdım sistem içeriklerini kullanır. Doğrudan/okulsuz öğrenciler için uygundur.':'Bu kurumun özel içerik kaynağı daha sonra öğretmen içerikleriyle etkinleştirilecek.'?></p></div>
 </main>
-<nav class="role-bottom"><a class="active" href="yonetici-paneli.php?kurum_id=<?=$institutionId?>"><span>⌂</span>Panel</a><?php if($canView):?><a href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>👥</span>Kullanıcılar</a><?php endif;?><a href="hesap-guvenligi.php"><span>⚙️</span>Hesap</a><a href="logout.php"><span>🚪</span>Çıkış</a></nav>
+<nav class="role-bottom"><a class="active" href="yonetici-paneli.php?kurum_id=<?=$institutionId?>"><span>⌂</span>Panel</a><?php if($canView && $hasInstitution):?><a href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>👥</span>Kullanıcılar</a><?php endif;?><a href="hesap-guvenligi.php"><span>⚙️</span>Hesap</a><a href="logout.php"><span>🚪</span>Çıkış</a></nav>
 </div></body></html>
