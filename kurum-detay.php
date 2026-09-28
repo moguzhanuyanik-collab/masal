@@ -67,6 +67,8 @@ $isSuper=auth_user_has_role($user,'super_admin');
 </div>
 </section>
 
+<?php if(!$isSuper && yy_can($pdo,$user,'ogrenci_yonet') && yy_can($pdo,$user,'veli_yonet') && yy_can($pdo,$user,'ogretmen_yonet')):?><section class="role-section"><div class="role-section-head"><div><span class="eyeline">BAĞLANTILAR</span><h2>Öğrenci Eşleştirmeleri</h2></div></div><div class="role-modules"><a class="role-module" href="kurum-eslestirmeleri.php?kurum_id=<?=$institutionId?>"><span>🔗</span><div><strong>Veli ve öğretmenleri bağla</strong><small>Bu kurumdaki öğrenci eşleştirmelerini yönet.</small></div><b>→</b></a></div></section><?php endif;?>
+
 <section class="role-section">
 <div class="role-section-head"><div><span class="eyeline">KURUMA AİT BÖLÜMLER</span><h2>Sonraki Aşama</h2></div></div>
 <div class="role-list">
