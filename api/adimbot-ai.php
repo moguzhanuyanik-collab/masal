@@ -235,8 +235,14 @@ $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
 curl_close($ch);
 
 if (!is_string($responseBody) || $responseBody==='' || $status<200 || $status>=300) {
-    if ($provider==='groq' && $status===429) {
+    if ($status===429) {
         adimbot_ai_json(['ok'=>false,'message'=>'AdımBot kullanım sınırına ulaştı. Biraz sonra tekrar dene.','reason'=>'provider_rate_limit'],429);
+    }
+    if ($status===401 || $status===403) {
+        adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ erişim ayarları kontrol edilmeli.','reason'=>'provider_auth_error'],502);
+    }
+    if ($status===400 || $status===404) {
+        adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ model ayarları kontrol edilmeli.','reason'=>'provider_config_error'],502);
     }
     adimbot_ai_json([
         'ok'=>false,

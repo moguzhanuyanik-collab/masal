@@ -211,8 +211,7 @@
       }
 
       if(!response.ok){
-        if(typeof payload.text==='string'&&payload.text.trim()!=='')return {text:payload.text};
-        throw new Error(String(payload.reason||payload.message||'provider_error'));
+        throw new Error(String(payload.reason||'provider_error'));
       }
 
       return {text:String(payload.text||'')};
@@ -281,6 +280,9 @@
       if(reason==='timeout')text='AdımBot yanıtı biraz gecikti. İstersen tekrar deneyebilirsin.';
       else if(reason==='csrf'||reason==='csrf_missing')text='Oturum doğrulaması yenilenmeli. Sayfayı yenileyip tekrar deneyebilirsin.';
       else if(reason==='rate_limit')text='AdımBot biraz dinlensin. Birkaç dakika sonra tekrar deneyebilirsin.';
+      else if(reason==='provider_rate_limit')text='AdımBot kullanım sınırına ulaştı. Biraz sonra tekrar deneyebilirsin.';
+      else if(reason==='provider_disabled')text=SAFE_MESSAGES.unavailable;
+      else if(reason==='provider_auth_error'||reason==='provider_config_error')text='AdımBot ayarlarında bir sorun var. Lütfen yöneticine haber ver.';
       return Object.freeze({
         ok:false,
         blocked:false,

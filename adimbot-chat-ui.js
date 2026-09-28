@@ -469,7 +469,7 @@
           try{window.AdimBotStudent?.clearEmotion?.();window.AdimBotStudent?.emote?.('surprised',850);}catch(_){}
           const reply=result?.text||'Şu anda yanıt oluşturamadım.';
           appendMessage(box,'bot',reply);
-          remember('assistant',reply);
+          if(result?.ok||result?.blocked)remember('assistant',reply);
         }
       }catch(_){
         appendMessage(box,'bot','Şu anda yanıt veremedim. İstersen tekrar deneyebilirsin.');
