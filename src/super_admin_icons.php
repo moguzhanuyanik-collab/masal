@@ -16,6 +16,7 @@
   <symbol id="sa-device" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M10 18h4"/></symbol>
   <symbol id="sa-cloud" viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 .7-7.94A6 6 0 0 0 6.3 8.4 4.5 4.5 0 0 0 7 18Z"/></symbol>
   <symbol id="sa-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
+  <symbol id="sa-settings" viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM19 13.5l2-1.5-2-1.5-.6-2 1-2.3-2.3-2.3-2.3 1-2-.6L12 2 10.5 4.3l-2 .6-2.3-1-2.3 2.3 1 2.3-.6 2L2 12l2.3 1.5.6 2-1 2.3 2.3 2.3 2.3-1 2 .6L12 22l1.5-2.3 2-.6 2.3 1 2.3-2.3-1-2.3z"/></symbol>
   <symbol id="sa-code" viewBox="0 0 24 24"><path d="m8 9-4 3 4 3M16 9l4 3-4 3M14 5l-4 14"/></symbol>
   <symbol id="sa-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></symbol>
   <symbol id="sa-arrow" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>

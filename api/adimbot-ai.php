@@ -43,6 +43,12 @@ function adimbot_ai_extract_text(array $response): string {
     return adimbot_ai_clean(implode(' ',$parts),600);
 }
 
+function adimbot_ai_extract_chat_text(array $response): string {
+    $message=$response['choices'][0]['message']['content'] ?? '';
+    if (is_string($message)) return adimbot_ai_clean($message,600);
+    return '';
+}
+
 function adimbot_ai_safe_output(string $text): array {
     $value=adimbot_ai_redact(adimbot_ai_clean($text,600));
     if ($value==='') return ['ok'=>false,'text'=>'Şu anda yanıt oluşturamadım. İstersen soruyu başka türlü soralım.','reason'=>'empty'];
@@ -129,11 +135,13 @@ $_SESSION['adimbot_ai_requests']=$requests;
 
 $enabled=($ai['enabled'] ?? true)!==false;
 $provider=strtolower(trim((string)($ai['provider'] ?? 'openai')));
-$apiKey=trim((string)(getenv('OPENAI_API_KEY') ?: ($ai['api_key'] ?? '')));
+$apiKey=$provider==='groq'
+    ?trim((string)(getenv('GROQ_API_KEY') ?: ($ai['groq_api_key'] ?? '')))
+    :trim((string)(getenv('OPENAI_API_KEY') ?: ($ai['api_key'] ?? '')));
 $model=trim((string)($ai['model'] ?? 'gpt-6-astra'));
 $timeout=max(5,min(40,(int)($ai['timeout_seconds'] ?? 20)));
 
-if (!$enabled || $provider!=='openai' || $apiKey==='' || $apiKey==='OPENAI_API_ANAHTARINIZ') {
+if (!$enabled || !in_array($provider,['openai','groq'],true) || $model==='' || $apiKey==='' || $apiKey==='OPENAI_API_ANAHTARINIZ') {
     adimbot_ai_json([
         'ok'=>false,
         'configured'=>false,
@@ -196,18 +204,20 @@ if ($historyText!=='') {
 }
 $input.="\nÖğrencinin yeni mesajı:\n".$message;
 
-$request=[
-    'model'=>$model,
-    'instructions'=>$instructions,
-    'input'=>$input,
-    'max_output_tokens'=>220,
-];
+$request=$provider==='groq'
+    ?['model'=>$model,'messages'=>[
+        ['role'=>'system','content'=>$instructions],
+        ['role'=>'user','content'=>$input],
+    ],'max_tokens'=>220]
+    :['model'=>$model,'instructions'=>$instructions,'input'=>$input,'max_output_tokens'=>220];
 
 if (!function_exists('curl_init')) {
     adimbot_ai_json(['ok'=>false,'message'=>'Sunucuda yapay zekâ bağlantısı için cURL etkin değil.','reason'=>'curl_missing'],500);
 }
 
-$ch=curl_init('https://api.openai.com/v1/responses');
+$ch=curl_init($provider==='groq'
+    ?'https://api.groq.com/openai/v1/chat/completions'
+    :'https://api.openai.com/v1/responses');
 curl_setopt_array($ch,[
     CURLOPT_POST=>true,
     CURLOPT_RETURNTRANSFER=>true,
@@ -225,6 +235,9 @@ $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
 curl_close($ch);
 
 if (!is_string($responseBody) || $responseBody==='' || $status<200 || $status>=300) {
+    if ($provider==='groq' && $status===429) {
+        adimbot_ai_json(['ok'=>false,'message'=>'AdımBot kullanım sınırına ulaştı. Biraz sonra tekrar dene.','reason'=>'provider_rate_limit'],429);
+    }
     adimbot_ai_json([
         'ok'=>false,
         'message'=>'AdımBot şu anda yapay zekâ yanıtına ulaşamadı.',
@@ -238,7 +251,7 @@ if (!is_array($decoded)) {
     adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ yanıtı okunamadı.','reason'=>'invalid_provider_response'],502);
 }
 
-$text=adimbot_ai_extract_text($decoded);
+$text=$provider==='groq'?adimbot_ai_extract_chat_text($decoded):adimbot_ai_extract_text($decoded);
 $safe=adimbot_ai_safe_output($text);
 
 adimbot_ai_json([

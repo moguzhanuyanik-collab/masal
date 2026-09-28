@@ -73,6 +73,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
   <p class="sa-sidebar-label">YETKİLENDİRME</p>
   <a href="yonetici-yetkileri.php"><svg><use href="#sa-shield"/></svg>Yönetici Yetkileri</a>
   <p class="sa-sidebar-label">SİSTEM</p>
+  <a href="adimbot-ayarlari.php"><svg><use href="#sa-settings"/></svg>AdımBot AI Ayarları</a>
   <a href="sistem-durum.php"><svg><use href="#sa-database"/></svg>Sistem Durumu</a>
   <a href="guncelleme.php"><svg><use href="#sa-refresh"/></svg>Güncellemeler</a>
   <a href="super-admin-profil.php"><svg><use href="#sa-user"/></svg>Profilim</a>

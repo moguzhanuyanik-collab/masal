@@ -29,8 +29,10 @@ $ai=is_array($config['ai']??null)?$config['ai']:[];
 $aiEnabled=(bool)($ai['enabled']??false);
 $aiProvider=trim((string)($ai['provider']??''));
 $aiModel=trim((string)($ai['model']??''));
-$aiKey=trim((string)($ai['api_key']??''));
-$aiOk=$aiEnabled && $aiProvider!=='' && $aiModel!=='' && $aiKey!=='';
+$aiKey=$aiProvider==='groq'
+    ?trim((string)(getenv('GROQ_API_KEY')?:($ai['groq_api_key']??'')))
+    :trim((string)(getenv('OPENAI_API_KEY')?:($ai['api_key']??'')));
+$aiOk=$aiEnabled && in_array($aiProvider,['openai','groq'],true) && $aiModel!=='' && $aiKey!=='';
 
 $checks=[
     ['name'=>'Veritabanı','detail'=>'MySQL bağlantısı ve basit sorgu','status'=>sd_status($databaseOk,'Hazır','Bağlantı kurulamadı')],
@@ -64,7 +66,7 @@ if(is_file($versionFile)){
 <div><span class="sa-status-icon"><svg><use href="<?=$status['ok']?'#sa-shield':'#sa-settings'?>"/></svg></span><p><strong><?=sd_h((string)$check['name'])?></strong><small><?=sd_h((string)$check['detail'])?></small></p><?php if($status['ok']):?><b><i></i><?=sd_h((string)$status['label'])?></b><?php else:?><em><?=sd_h((string)$status['label'])?></em><?php endif;?></div>
 <?php endforeach; ?>
 </div></section>
-<p class="little-note">Bu ekran yalnız durum okur; ayarları, veritabanını veya dosyaları değiştirmez.</p>
+<p class="little-note">Bu ekran yalnız durum okur; ayarları, veritabanını veya dosyaları değiştirmez. <a href="adimbot-ayarlari.php">AdımBot ayarlarını aç</a>.</p>
 </div></main>
 <nav class="app-nav" aria-label="Süper Admin menüsü"><a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a><a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a><a href="global.php"><span><svg><use href="#sa-users"/></svg></span>Global</a><a href="guncelleme.php"><span><svg><use href="#sa-refresh"/></svg></span>Güncelle</a><a class="active" href="sistem-durum.php"><span><svg><use href="#sa-database"/></svg></span>Durum</a></nav>
 </div></body></html>

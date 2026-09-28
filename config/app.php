@@ -26,6 +26,7 @@ $defaults = [
         'provider' => 'openai',
         'model' => 'gpt-5.6-luna',
         'api_key' => '',
+        'groq_api_key' => '',
         'timeout_seconds' => 20,
         'max_requests_per_10_minutes' => 20,
     ],
@@ -47,6 +48,14 @@ if (is_file($localFile)) {
     $local = require $localFile;
     if (is_array($local)) {
         $defaults = array_replace_recursive($defaults, $local);
+    }
+}
+
+$adimbotSettingsFile = dirname(__DIR__) . '/storage/adimbot-ai.php';
+if (is_file($adimbotSettingsFile)) {
+    $adimbotSettings = require $adimbotSettingsFile;
+    if (is_array($adimbotSettings)) {
+        $defaults['ai'] = array_replace($defaults['ai'], $adimbotSettings);
     }
 }
 
