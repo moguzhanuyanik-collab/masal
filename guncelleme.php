@@ -78,7 +78,7 @@ if ($isAjax) {
         $local = read_app_version();
 
         if ($action === 'check') {
-            $remote = remote_version_info($gh);
+            $remote = next_remote_version_info($gh,$local);
 
             ajax_response([
                 'ok' => true,
@@ -103,7 +103,7 @@ if ($isAjax) {
                 ], 405);
             }
 
-            $remoteBefore = remote_version_info($gh);
+            $remoteBefore = next_remote_version_info($gh,$local);
 
             if (!version_compare(
                 (string)($remoteBefore['version'] ?? '0.0.0'),

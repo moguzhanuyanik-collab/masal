@@ -63,17 +63,83 @@ function updater_http(string $url,array $gh,?string $target=null): string|array 
     return (string)$body;
 }
 
-function remote_version_info(array $gh): array {
+function remote_version_info_at_ref(array $gh,string $ref): array {
     [$owner,$repo,$branch]=github_repo_info($gh);
+    $ref=trim($ref);
+    if($ref==='') throw new RuntimeException('GitHub surum referansi bos olamaz.');
+    if(!preg_match('/^[A-Za-z0-9_.\/-]+$/',$ref)) throw new RuntimeException('GitHub surum referansi gecersiz.');
+
     $cacheBuster=(string)round(microtime(true)*1000);
-    $url='https://raw.githubusercontent.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/'.rawurlencode($branch).'/version.json?cb='.$cacheBuster;
+    $url='https://raw.githubusercontent.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/'.rawurlencode($ref).'/version.json?cb='.$cacheBuster;
     $data=json_decode((string)updater_http($url,$gh),true);
     if(!is_array($data)||empty($data['version'])) throw new RuntimeException('GitHub version.json okunamadi veya gecersiz.');
+
     return [
         'version'=>(string)$data['version'],
         'name'=>(string)($data['name']??''),
-        'commit'=>(string)($data['commit']??$branch),
+        'commit'=>$ref,
     ];
+}
+
+function remote_version_info(array $gh): array {
+    [,,$branch]=github_repo_info($gh);
+    return remote_version_info_at_ref($gh,$branch);
+}
+
+function next_remote_version_info(array $gh,string $localVersion): array {
+    [$owner,$repo,$branch]=github_repo_info($gh);
+    $localVersion=trim($localVersion);
+    if($localVersion==='') $localVersion='0.0.0';
+
+    $next=null;
+    $page=1;
+    $maxPages=20;
+
+    while($page<=$maxPages){
+        $url='https://api.github.com/repos/'.rawurlencode($owner).'/'.rawurlencode($repo)
+            .'/commits?sha='.rawurlencode($branch)
+            .'&path=version.json&per_page=100&page='.$page
+            .'&cb='.(string)round(microtime(true)*1000);
+
+        $rows=json_decode((string)updater_http($url,$gh),true);
+        if(!is_array($rows)) throw new RuntimeException('GitHub surum gecmisi okunamadi.');
+        if($rows===[]) break;
+
+        $reachedInstalledOrOlder=false;
+
+        foreach($rows as $row){
+            $sha=trim((string)($row['sha']??''));
+            if(!preg_match('/^[a-f0-9]{40}$/i',$sha)) continue;
+
+            try{
+                $info=remote_version_info_at_ref($gh,$sha);
+            }catch(Throwable $ignored){
+                continue;
+            }
+
+            $candidateVersion=trim((string)($info['version']??''));
+            if($candidateVersion==='') continue;
+
+            if(version_compare($candidateVersion,$localVersion,'>')){
+                if($next===null||version_compare($candidateVersion,(string)$next['version'],'<')){
+                    $next=$info;
+                }
+                continue;
+            }
+
+            $reachedInstalledOrOlder=true;
+            break;
+        }
+
+        if($reachedInstalledOrOlder||count($rows)<100) break;
+        $page++;
+    }
+
+    if($next!==null){
+        return $next;
+    }
+
+    return remote_version_info($gh);
 }
 
 function path_is_preserved(string $relative,array $preserve): bool {
@@ -418,9 +484,14 @@ function detect_update_root(string $extractDir): string {
 
 function install_github_update(string $root,array $gh,array $preserve): array {
     [$owner,$repo,$branch]=github_repo_info($gh);
-    $remote=remote_version_info($gh);
     $localVersion=read_app_version();
+    $remote=next_remote_version_info($gh,$localVersion);
     if(version_compare($remote['version'],$localVersion,'<=')) return ['updated'=>false,'message'=>'Zaten guncel surum kullaniliyor.','remote'=>$remote,'local'=>$localVersion,'migrations'=>[]];
+
+    $targetCommit=trim((string)($remote['commit']??''));
+    if(!preg_match('/^[a-f0-9]{40}$/i',$targetCommit)){
+        throw new RuntimeException('Siradaki surumun GitHub commit bilgisi gecersiz.');
+    }
 
     $storage=$root.'/storage';
     @mkdir($storage.'/updates',0775,true); @mkdir($storage.'/backups',0775,true);
@@ -435,7 +506,8 @@ function install_github_update(string $root,array $gh,array $preserve): array {
 
     try{
         $backupName=create_single_previous_backup($root);
-        $downloadUrl='https://codeload.github.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/zip/refs/heads/'.rawurlencode($branch).'?cb='.(string)round(microtime(true)*1000);
+        // En son main paketini degil, siradaki surumun sabit commit paketini indir.
+        $downloadUrl='https://codeload.github.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/zip/'.rawurlencode($targetCommit).'?cb='.(string)round(microtime(true)*1000);
         updater_http($downloadUrl,$gh,$zipPath);
 
         if(!class_exists('ZipArchive')) throw new RuntimeException('PHP ZipArchive eklentisi gerekli.');
@@ -446,6 +518,18 @@ function install_github_update(string $root,array $gh,array $preserve): array {
         $zip->close();
 
         $sourceRoot=detect_update_root($extractDir);
+
+        $packageVersionFile=$sourceRoot.'/version.json';
+        $packageVersionData=is_file($packageVersionFile)
+            ? json_decode((string)file_get_contents($packageVersionFile),true)
+            : null;
+        $packageVersion=is_array($packageVersionData)?trim((string)($packageVersionData['version']??'')):'';
+        if($packageVersion===''||$packageVersion!==(string)$remote['version']){
+            throw new RuntimeException(
+                'Indirilen guncelleme paketi beklenen surumle eslesmiyor. Beklenen: '
+                .(string)$remote['version'].' / Paket: '.($packageVersion!==''?$packageVersion:'bilinmiyor')
+            );
+        }
 
         // Migration'lar önce staging paketinden uygulanır.
         // DB dönüşümü başarısızsa yeni uygulama dosyaları canlıya kopyalanmaz.
