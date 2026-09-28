@@ -41,11 +41,11 @@ $hasInstitution=$institutionId>0 && is_array($institution);
 <a class="role-row" href="yonetici-paneli.php?kurum_id=<?=$id?>"><span>🏫</span><div><strong><?=yp_h($name)?></strong><small>Kurum panelini aç</small></div><?=($id===$institutionId?'<span class="role-pill ok">Seçili</span>':'')?></a>
 <?php endforeach;?></div></section><?php endif;?>
 
-<?php if($canView):?><section class="role-section"><div class="role-section-head"><div><span class="eyeline">GENEL BAKIŞ</span><h2>Kurum Özeti</h2></div></div><div class="role-stats">
-<div class="role-stat"><span>🎒</span><strong><?=$stats['ogrenci']?></strong><small>Öğrenci</small></div>
-<div class="role-stat"><span>👪</span><strong><?=$stats['veli']?></strong><small>Veli</small></div>
-<div class="role-stat"><span>👩‍🏫</span><strong><?=$stats['ogretmen']?></strong><small>Öğretmen</small></div>
-<div class="role-stat"><span>🧑‍💼</span><strong><?=$stats['yonetici']?></strong><small>Yönetici</small></div>
+<?php if($canView && $hasInstitution):?><section class="role-section"><div class="role-section-head"><div><span class="eyeline">GENEL BAKIŞ</span><h2>Kurum Özeti</h2></div></div><div class="role-stats">
+<?php if($canManageStudents):?><a class="role-stat" href="kurum-ogrencileri.php?kurum_id=<?=$institutionId?>"><span>🎒</span><strong><?=$stats['ogrenci']?></strong><small>Öğrencileri aç →</small></a><?php endif;?>
+<?php if($canManageParents):?><a class="role-stat" href="kurum-velileri.php?kurum_id=<?=$institutionId?>"><span>👪</span><strong><?=$stats['veli']?></strong><small>Velileri aç →</small></a><?php endif;?>
+<?php if($canManageTeachers):?><a class="role-stat" href="kurum-ogretmenleri.php?kurum_id=<?=$institutionId?>"><span>👩‍🏫</span><strong><?=$stats['ogretmen']?></strong><small>Öğretmenleri aç →</small></a><?php endif;?>
+<a class="role-stat" href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>🏫</span><strong><?=$stats['yonetici']?></strong><small>Kurum bölümlerini aç →</small></a>
 </div></section><?php endif;?>
 
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">HIZLI ERİŞİM</span><h2>Yönetim İşlemleri</h2></div></div><div class="role-modules">
