@@ -311,6 +311,7 @@
       else if(reason==='provider_unavailable')text='AdımBot yapay zekâ hizmeti şu anda meşgul. Biraz sonra tekrar deneyebilirsin.';
       else if(reason==='provider_incomplete')text='AdımBot yanıtı tamamlanmadan kesildi. Sorunu yeniden gönderebilirsin.';
       else if(reason==='invalid_provider_response'||reason==='invalid_response')text='AdımBot yanıtı okunamadı. Biraz sonra tekrar deneyebilirsin.';
+      else if(reason==='invalid_request')text='AdımBot isteği hazırlanamadı. Sayfayı yenileyip tekrar deneyebilirsin.';
       else if(reason==='curl_missing')text='AdımBot bağlantısı sunucuda hazır değil. Lütfen yöneticine haber ver.';
       else if(reason==='csrf'||reason==='csrf_missing'||reason==='auth')text='Oturum doğrulaması yenilenmeli. Sayfayı yenileyip tekrar deneyebilirsin.';
       else if(reason==='origin')text='AdımBot güvenlik doğrulaması yenilenmeli. Sayfayı yenileyip tekrar deneyebilirsin.';

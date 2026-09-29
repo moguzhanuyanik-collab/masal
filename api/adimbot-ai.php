@@ -142,6 +142,9 @@ function adimbot_ai_safe_output(string $text, bool $hasActiveQuestion=false): ar
     if ($hasActiveQuestion && preg_match('/(?:\b[A-D]\s+seçeneği\s+doğru\b|\byanıt\s*[:\-]?\s*[A-D](?:[’\x27]?(?:dır|dir|dur|dür))?\b)/iu',$value)) {
         return ['ok'=>false,'text'=>'Yanıtı doğrudan vermeyeyim. Sorudaki ipucunu kullanarak doğru seçeneği birlikte bulalım.','reason'=>'answer_key'];
     }
+    if ($hasActiveQuestion && preg_match('/^\s*(?:[A-D]|\d+(?:[.,]\d+)?|bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on)\s*[.!]?\s*$/iu',$value)) {
+        return ['ok'=>false,'text'=>'Sonucu doğrudan söylemeyeyim. Önce soruda verilen bilgileri birlikte bulalım.','reason'=>'answer_key'];
+    }
     return ['ok'=>true,'text'=>adimbot_ai_redact($value),'reason'=>'ok'];
 }
 
@@ -184,6 +187,20 @@ function adimbot_ai_provider_error(int $status, int $curlErrno): never {
         adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ sağlayıcısı geçici olarak yanıt veremiyor.','reason'=>'provider_unavailable'],503);
     }
     adimbot_ai_json(['ok'=>false,'message'=>'AdımBot şu anda yapay zekâ yanıtına ulaşamadı.','reason'=>'provider_error'],502);
+}
+
+function adimbot_ai_embedded_error(array $error): never {
+    $code=strtoupper((string)($error['code'] ?? $error['status'] ?? $error['type'] ?? ''));
+    if (in_array($code,['402','429'],true) || preg_match('/(?:RESOURCE_EXHAUSTED|RATE_LIMIT|QUOTA|TOO_MANY_REQUESTS)/',$code)) {
+        adimbot_ai_json(['ok'=>false,'message'=>'AdımBot kullanım sınırına ulaştı. Biraz sonra tekrar dene.','reason'=>'provider_rate_limit'],429);
+    }
+    if (in_array($code,['401','403'],true) || preg_match('/(?:UNAUTHENTICATED|PERMISSION_DENIED|INVALID_API_KEY|AUTH)/',$code)) {
+        adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ erişim anahtarı sağlayıcı tarafından reddedildi.','reason'=>'provider_auth_error'],502);
+    }
+    if (in_array($code,['400','404','422'],true) || preg_match('/(?:INVALID_ARGUMENT|NOT_FOUND|MODEL|BAD_REQUEST)/',$code)) {
+        adimbot_ai_json(['ok'=>false,'message'=>'Seçilen yapay zekâ modeli veya istek ayarı kabul edilmedi.','reason'=>'provider_config_error'],502);
+    }
+    adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ sağlayıcısı isteği tamamlayamadı.','reason'=>'provider_error'],502);
 }
 
 app_session_start();
@@ -355,7 +372,15 @@ $endpoint=match ($provider) {
     default=>'https://api.openai.com/v1/responses',
 };
 $ch=curl_init($endpoint);
-curl_setopt_array($ch,[
+if ($ch===false) {
+    adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ bağlantısı başlatılamadı.','reason'=>'provider_connection_error'],502);
+}
+$encodedRequest=json_encode($request,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+if (!is_string($encodedRequest)) {
+    curl_close($ch);
+    adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ isteği hazırlanamadı.','reason'=>'invalid_request'],500);
+}
+if (!curl_setopt_array($ch,[
     CURLOPT_POST=>true,
     CURLOPT_RETURNTRANSFER=>true,
     CURLOPT_CONNECTTIMEOUT=>8,
@@ -363,8 +388,11 @@ curl_setopt_array($ch,[
     CURLOPT_HTTPHEADER=>$provider==='gemini'
         ?['x-goog-api-key: '.$apiKey,'Content-Type: application/json']
         :['Authorization: Bearer '.$apiKey,'Content-Type: application/json'],
-    CURLOPT_POSTFIELDS=>json_encode($request,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),
-]);
+    CURLOPT_POSTFIELDS=>$encodedRequest,
+])) {
+    curl_close($ch);
+    adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ bağlantısı hazırlanamadı.','reason'=>'provider_connection_error'],502);
+}
 $responseBody=curl_exec($ch);
 $curlErrno=curl_errno($ch);
 $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
@@ -378,9 +406,7 @@ $decoded=json_decode($responseBody,true);
 if (!is_array($decoded)) {
     adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ yanıtı okunamadı.','reason'=>'invalid_provider_response'],502);
 }
-if (isset($decoded['error'])) {
-    adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ sağlayıcısı isteği tamamlayamadı.','reason'=>'provider_error'],502);
-}
+if (is_array($decoded['error'] ?? null)) adimbot_ai_embedded_error($decoded['error']);
 
 $providerBlocked=($provider==='gemini' && (
         trim((string)($decoded['promptFeedback']['blockReason'] ?? ''))!==''

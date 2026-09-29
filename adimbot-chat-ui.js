@@ -303,6 +303,7 @@
       const pause=document.createElement('button');
       pause.type='button';
       pause.className='adb-chat-listen';
+      pause.setAttribute('data-adimbot-speech-pause','1');
       pause.setAttribute('aria-label','AdımBot sesini duraklat veya devam ettir');
       pause.textContent='⏸ Duraklat';
       pause.addEventListener('click',()=>{
@@ -441,6 +442,9 @@
     };
     window.addEventListener('adimbot:speech-error',speechErrorHandler);
     window.addEventListener('adimbot:speech-start',()=>{if(status){delete status.dataset.adimbotSpeechError;status.textContent='';}});
+    window.addEventListener('adimbot:speech-end',()=>{
+      modal?.querySelectorAll('[data-adimbot-speech-pause]').forEach(button=>{button.textContent='⏸ Duraklat';});
+    });
     const voiceConfig=window.ADIMBOT_VOICE_CONFIG||{enabled:false,input:'browser'};
     if(mic)mic.hidden=!voiceConfig.enabled;
     if(voiceConfig.enabled)mic.title=voiceConfig.input==='browser'?'Tarayıcı ses tanımayı kullanır':'Ses kaydı seçilen yapay zekâ sağlayıcısına gönderilir';
@@ -527,7 +531,7 @@
         },15000);
         voiceSession=permissionSession;
         status.textContent='Mikrofon izni bekleniyor…';
-        stream=await navigator.mediaDevices.getUserMedia({audio:true});
+        stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
         if(generation!==voiceGeneration||modal.hidden||voiceSession!==permissionSession){stream.getTracks().forEach(track=>track.stop());return;}
         clearTimeout(permissionSession.timer);
         const supportsMime=typeof MediaRecorder.isTypeSupported==='function'
@@ -537,7 +541,7 @@
         const recorder=preferredMime?new MediaRecorder(stream,{mimeType:preferredMime}):new MediaRecorder(stream);
         const mime=recorder.mimeType||preferredMime||'audio/webm';
         const chunks=[];
-        const recordingSession={recorder,stream,startedAt:Date.now(),detectedSpeech:null,deviceEnded:false};
+        const recordingSession={recorder,stream,startedAt:Date.now(),detectedSpeech:null,deviceEnded:false,deviceMuted:false};
         const AudioContextClass=window.AudioContext||window.webkitAudioContext;
         if(AudioContextClass){
           try{
@@ -571,6 +575,11 @@
           recordingSession.deviceEnded=true;
           stopVoice();
         },{once:true}));
+        stream.getAudioTracks().forEach(track=>track.addEventListener('mute',()=>{
+          if(voiceSession!==recordingSession)return;
+          recordingSession.deviceMuted=true;
+          stopVoice();
+        },{once:true}));
         mic.textContent='⏹';mic.setAttribute('aria-label','Konuşmayı bitir');mic.setAttribute('aria-pressed','true');
         status.textContent='Dinliyorum… Bitirince kare düğmeye dokun.';
         recorder.ondataavailable=event=>{if(event.data.size)chunks.push(event.data);};
@@ -579,6 +588,7 @@
           stream.getTracks().forEach(track=>track.stop());
           if(generation!==voiceGeneration||modal.hidden)return;
           if(recordingSession.deviceEnded){status.textContent='Mikrofon bağlantısı kesildi. Cihazı kontrol edip tekrar dene.';return;}
+          if(recordingSession.deviceMuted){status.textContent='Mikrofonun ses kanalı kapandı. Cihazı kontrol edip tekrar dene.';return;}
           if(Date.now()-recordingSession.startedAt<700){status.textContent='Kayıt çok kısa. Mikrofona dokunup en az bir saniye konuş.';return;}
           if(recordingSession.detectedSpeech===false){status.textContent='Konuşma sesi algılanmadı. Mikrofona daha yakın konuşup tekrar dene.';return;}
           const blob=new Blob(chunks,{type:mime});
@@ -608,7 +618,10 @@
 
     const syncConnection=()=>{
       if(!status)return;
-      if(!navigator.onLine)status.textContent='İnternet bağlantısı yok. Bağlantı gelince tekrar deneyebilirsin.';
+      if(!navigator.onLine){
+        if(voiceSession)stopVoice(true);
+        status.textContent='İnternet bağlantısı yok. Ses kaydı durduruldu; bağlantı gelince tekrar deneyebilirsin.';
+      }
       else if(!chatBusy&&!status.dataset.adimbotSpeechError&&!status.dataset.adimbotRetry)status.textContent='';
     };
 
@@ -617,6 +630,10 @@
     });
     window.addEventListener('online',syncConnection);
     window.addEventListener('offline',syncConnection);
+    document.addEventListener('visibilitychange',()=>{
+      if(document.hidden&&voiceSession){stopVoice(true);status.textContent='Sayfa arka plana geçtiği için mikrofon durduruldu.';}
+    });
+    window.addEventListener('pagehide',()=>{if(voiceSession)stopVoice(true);});
     syncConnection();
 
     const savedHistory=readHistory();

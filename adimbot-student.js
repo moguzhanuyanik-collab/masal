@@ -540,6 +540,7 @@
     }
     if(root.dataset.adimbotMood)delete root.dataset.adimbotMood;
     setState({speaking:false,mood:'idle'});
+    try{window.dispatchEvent(new CustomEvent('adimbot:speech-end',{detail:{cancelled}}));}catch(_){}
     scheduleIdlePower();
     if(typeof done==='function'){
       try{done({cancelled});}catch(error){console.error('AdımBot onEnd hatası:',error);}

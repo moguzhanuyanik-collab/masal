@@ -21,6 +21,13 @@ function voice_resolve_key(mixed $configured, string $environment): string {
     $fallback=trim((string)(getenv($environment) ?: ''));
     return $fallback!=='' && !voice_placeholder_key($fallback) ? $fallback : '';
 }
+function voice_embedded_error(array $error): never {
+    $code=strtoupper((string)($error['code'] ?? $error['status'] ?? $error['type'] ?? ''));
+    if (in_array($code,['402','429'],true) || preg_match('/(?:RESOURCE_EXHAUSTED|RATE_LIMIT|QUOTA|TOO_MANY_REQUESTS)/',$code)) voice_result(['ok'=>false,'reason'=>'provider_rate_limit'],429);
+    if (in_array($code,['401','403'],true) || preg_match('/(?:UNAUTHENTICATED|PERMISSION_DENIED|INVALID_API_KEY|AUTH)/',$code)) voice_result(['ok'=>false,'reason'=>'provider_auth_error'],502);
+    if (in_array($code,['400','404','422'],true) || preg_match('/(?:INVALID_ARGUMENT|NOT_FOUND|MODEL|BAD_REQUEST)/',$code)) voice_result(['ok'=>false,'reason'=>'provider_config_error'],502);
+    voice_result(['ok'=>false,'reason'=>'provider_error'],502);
+}
 app_session_start();
 if ($_SERVER['REQUEST_METHOD']!=='POST') voice_result(['ok'=>false,'reason'=>'method'],405);
 if (($_SESSION['aktif_rol'] ?? '')!=='ogrenci' || (int)($_SESSION['ogrenci_id'] ?? 0)<1 || (int)($_SESSION['kullanici_id'] ?? 0)<1) voice_result(['ok'=>false,'reason'=>'auth'],403);
@@ -81,7 +88,11 @@ if ($provider==='groq') {
     ]]]]],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 }
 $ch=curl_init($url);
-curl_setopt_array($ch,[CURLOPT_POST=>true,CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>8,CURLOPT_TIMEOUT=>$timeout,CURLOPT_HTTPHEADER=>$headers,CURLOPT_POSTFIELDS=>$request]);
+if ($ch===false) voice_result(['ok'=>false,'reason'=>'provider_connection_error'],502);
+if (!curl_setopt_array($ch,[CURLOPT_POST=>true,CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>8,CURLOPT_TIMEOUT=>$timeout,CURLOPT_HTTPHEADER=>$headers,CURLOPT_POSTFIELDS=>$request])) {
+    curl_close($ch);
+    voice_result(['ok'=>false,'reason'=>'provider_connection_error'],502);
+}
 $body=curl_exec($ch);
 $curlErrno=curl_errno($ch);
 $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
@@ -95,7 +106,7 @@ if ($status>=500) voice_result(['ok'=>false,'reason'=>'provider_unavailable'],50
 if ($status<200 || $status>=300 || !is_string($body)) voice_result(['ok'=>false,'reason'=>'provider_error'],502);
 $decoded=json_decode($body,true);
 if (!is_array($decoded)) voice_result(['ok'=>false,'reason'=>'invalid_provider_response'],502);
-if (isset($decoded['error'])) voice_result(['ok'=>false,'reason'=>'provider_error'],502);
+if (is_array($decoded['error'] ?? null)) voice_embedded_error($decoded['error']);
 $providerBlocked=$provider==='gemini' && (trim((string)($decoded['promptFeedback']['blockReason'] ?? ''))!=='' || in_array((string)($decoded['candidates'][0]['finishReason'] ?? ''),['SAFETY','PROHIBITED_CONTENT','BLOCKLIST'],true));
 if ($providerBlocked) voice_result(['ok'=>false,'reason'=>'provider_safety'],422);
 $geminiFinish=$provider==='gemini' ? (string)($decoded['candidates'][0]['finishReason'] ?? '') : '';
