@@ -19,6 +19,12 @@ function adimbot_ai_clean(mixed $value, int $max=400): string {
     return trim($text);
 }
 
+function adimbot_ai_placeholder_key(string $value): bool {
+    $normalized=strtoupper(trim($value," \t\n\r\0\x0B<>[]{}'\""));
+    return preg_match('/^(?:(?:GROQ|GEMINI|OPENAI)[_ -]?)?API[_ -]?(?:KEY|ANAHTARI|ANAHTARINIZ)$/D',$normalized)===1
+        || preg_match('/^(?:YOUR[_ -]?API[_ -]?KEY|CHANGE[_ -]?ME|ANAHTARI[_ -]?BURAYA[_ -]?YAZ)$/D',$normalized)===1;
+}
+
 function adimbot_ai_redact(string $text): string {
     $text=preg_replace('/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/iu','[e-posta gizlendi]',$text) ?? $text;
     $text=preg_replace('/(?:https?:\/\/|www\.)\S+/iu','[bağlantı gizlendi]',$text) ?? $text;
@@ -146,13 +152,13 @@ function adimbot_ai_provider_error(int $status, int $curlErrno): never {
     if ($curlErrno!==0) {
         adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ sağlayıcısına bağlantı kurulamadı.','reason'=>'provider_connection_error'],502);
     }
-    if ($status===429) {
+    if ($status===402 || $status===429) {
         adimbot_ai_json(['ok'=>false,'message'=>'AdımBot kullanım sınırına ulaştı. Biraz sonra tekrar dene.','reason'=>'provider_rate_limit'],429);
     }
     if ($status===401 || $status===403) {
         adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ erişim anahtarı sağlayıcı tarafından reddedildi.','reason'=>'provider_auth_error'],502);
     }
-    if ($status===400 || $status===404) {
+    if ($status===400 || $status===404 || $status===422) {
         adimbot_ai_json(['ok'=>false,'message'=>'Seçilen yapay zekâ modeli veya istek ayarı sağlayıcı tarafından kabul edilmedi.','reason'=>'provider_config_error'],502);
     }
     if ($status>=500) {
@@ -224,7 +230,7 @@ $apiKey=match ($provider) {
 $model=trim((string)($ai['model'] ?? 'gpt-6-astra'));
 $timeout=max(5,min(40,(int)($ai['timeout_seconds'] ?? 20)));
 
-if (!$enabled || !in_array($provider,['openai','groq','gemini'],true) || $model==='' || $apiKey==='' || $apiKey==='OPENAI_API_ANAHTARINIZ') {
+if (!$enabled || !in_array($provider,['openai','groq','gemini'],true) || $model==='' || $apiKey==='' || adimbot_ai_placeholder_key($apiKey)) {
     adimbot_ai_json([
         'ok'=>false,
         'configured'=>false,

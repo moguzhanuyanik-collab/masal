@@ -5,6 +5,16 @@ require __DIR__.'/src/auth.php';
 
 $user=require_role('super_admin');
 function aa_h(string $value): string { return htmlspecialchars($value,ENT_QUOTES,'UTF-8'); }
+function aa_placeholder_key(string $value): bool {
+    $normalized=strtoupper(trim($value," \t\n\r\0\x0B<>[]{}'\""));
+    return preg_match('/^(?:(?:GROQ|GEMINI|OPENAI)[_ -]?)?API[_ -]?(?:KEY|ANAHTARI|ANAHTARINIZ)$/D',$normalized)===1
+        || preg_match('/^(?:YOUR[_ -]?API[_ -]?KEY|CHANGE[_ -]?ME|ANAHTARI[_ -]?BURAYA[_ -]?YAZ)$/D',$normalized)===1;
+}
+function aa_settings_fingerprint(string $file): string {
+    if(!is_file($file)) return '';
+    $hash=hash_file('sha256',$file);
+    return is_string($hash)?$hash:'';
+}
 function aa_provider_test_text(string $provider,array $decoded): string {
     if($provider==='groq') return trim((string)($decoded['choices'][0]['message']['content']??''));
     if($provider==='gemini'){
@@ -24,8 +34,8 @@ function aa_provider_test_text(string $provider,array $decoded): string {
     return trim(implode(' ',$parts));
 }
 function aa_test_provider(string $provider,string $model,string $apiKey): string {
-    if(!function_exists('curl_init')) throw new RuntimeException('Ayarlar kaydedildi ancak sunucuda cURL kapalı olduğu için bağlantı test edilemedi.');
-    if($apiKey==='') throw new RuntimeException('Ayarlar kaydedildi ancak seçilen sağlayıcının API anahtarı bulunamadı.');
+    if(!function_exists('curl_init')) throw new RuntimeException('Aday ayarlar uygulanmadı: sunucuda cURL kapalı olduğu için bağlantı test edilemedi.');
+    if($apiKey==='') throw new RuntimeException('Aday ayarlar uygulanmadı: seçilen sağlayıcının API anahtarı bulunamadı.');
     $prompt='Yalnızca TAMAM yaz.';
     if($provider==='gemini'){
         $url='https://generativelanguage.googleapis.com/v1beta/models/'.rawurlencode($model).':generateContent';
@@ -41,56 +51,61 @@ function aa_test_provider(string $provider,string $model,string $apiKey): string
         $payload=['model'=>$model,'input'=>$prompt,'max_output_tokens'=>8];
     }
     $ch=curl_init($url);
+    if($ch===false) throw new RuntimeException('Aday ayarlar uygulanmadı: bağlantı testi başlatılamadı.');
     curl_setopt_array($ch,[CURLOPT_POST=>true,CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>6,CURLOPT_TIMEOUT=>15,CURLOPT_HTTPHEADER=>$headers,CURLOPT_POSTFIELDS=>json_encode($payload,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)]);
     $body=curl_exec($ch);
     $errno=curl_errno($ch);
     $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
     curl_close($ch);
-    if($errno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) throw new RuntimeException('Ayarlar kaydedildi ancak bağlantı testi zaman aşımına uğradı.');
-    if($errno!==0) throw new RuntimeException('Ayarlar kaydedildi ancak sağlayıcıya ağ bağlantısı kurulamadı.');
-    if($status===401 || $status===403) throw new RuntimeException('Ayarlar kaydedildi ancak API anahtarı sağlayıcı tarafından reddedildi.');
-    if($status===400 || $status===404) throw new RuntimeException('Ayarlar kaydedildi ancak model kimliği veya istek ayarı sağlayıcı tarafından kabul edilmedi.');
-    if($status===429) throw new RuntimeException('Ayarlar kaydedildi ancak sağlayıcı kotası veya istek sınırı bağlantı testini engelledi.');
-    if($status<200 || $status>=300) throw new RuntimeException('Ayarlar kaydedildi ancak sağlayıcı geçici olarak yanıt veremedi.');
+    if($errno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) throw new RuntimeException('Aday ayarlar uygulanmadı: bağlantı testi zaman aşımına uğradı; önceki ayarlar korundu.');
+    if($errno!==0) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcıya ağ bağlantısı kurulamadı; önceki ayarlar korundu.');
+    if($status===401 || $status===403) throw new RuntimeException('Aday ayarlar uygulanmadı: API anahtarı sağlayıcı tarafından reddedildi; önceki ayarlar korundu.');
+    if($status===402 || $status===429) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcı kotası, bakiyesi veya istek sınırı testi engelledi; önceki ayarlar korundu.');
+    if($status===400 || $status===404 || $status===422) throw new RuntimeException('Aday ayarlar uygulanmadı: model kimliği veya istek ayarı sağlayıcı tarafından kabul edilmedi; önceki ayarlar korundu.');
+    if($status<200 || $status>=300) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcı geçici olarak yanıt veremedi; önceki ayarlar korundu.');
     $decoded=is_string($body)?json_decode($body,true):null;
     unset($body);
-    if(!is_array($decoded) || aa_provider_test_text($provider,$decoded)==='') throw new RuntimeException('Ayarlar kaydedildi ancak sağlayıcı geçerli bir sohbet yanıtı üretmedi.');
+    if(!is_array($decoded) || aa_provider_test_text($provider,$decoded)==='') throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcı geçerli bir sohbet yanıtı üretmedi; önceki ayarlar korundu.');
     return 'Bağlantı testi başarılı: '.strtoupper($provider).' anahtarı ve '.$model.' modeli doğrulandı.';
 }
 function aa_test_voice_provider(string $provider,string $model,string $apiKey): string {
-    if(!function_exists('curl_init')) throw new RuntimeException('Ses ayarları kaydedildi ancak sunucuda cURL kapalı olduğu için konuşma modeli test edilemedi.');
-    if($apiKey==='') throw new RuntimeException('Ses ayarları kaydedildi ancak konuşma sağlayıcısının API anahtarı bulunamadı.');
+    if(!function_exists('curl_init')) throw new RuntimeException('Aday ses ayarları uygulanmadı: sunucuda cURL kapalı olduğu için konuşma modeli test edilemedi.');
+    if($apiKey==='') throw new RuntimeException('Aday ses ayarları uygulanmadı: konuşma sağlayıcısının API anahtarı bulunamadı.');
     $sampleRate=8000;
     $audio=str_repeat("\0\0",$sampleRate);
     $wav='RIFF'.pack('V',36+strlen($audio)).'WAVEfmt '.pack('VvvVVvv',16,1,1,$sampleRate,$sampleRate*2,2,16).'data'.pack('V',strlen($audio)).$audio;
     $temp=null;
-    if($provider==='groq'){
-        $temp=tempnam(sys_get_temp_dir(),'adimbot_voice_');
-        if($temp===false || file_put_contents($temp,$wav)!==strlen($wav)) throw new RuntimeException('Konuşma testi için geçici ses kaydı oluşturulamadı.');
-        $url='https://api.groq.com/openai/v1/audio/transcriptions';
-        $headers=['Authorization: Bearer '.$apiKey];
-        $payload=['file'=>new CURLFile($temp,'audio/wav','adimbot-test.wav'),'model'=>$model,'language'=>'tr','response_format'=>'json'];
-    }else{
-        $url='https://generativelanguage.googleapis.com/v1beta/models/'.rawurlencode($model).':generateContent';
-        $headers=['x-goog-api-key: '.$apiKey,'Content-Type: application/json'];
-        $payload=json_encode(['contents'=>[['parts'=>[
-            ['text'=>'Bu test sesini yalnızca yazıya çevir; konuşma yoksa boş bırak.'],
-            ['inline_data'=>['mime_type'=>'audio/wav','data'=>base64_encode($wav)]],
-        ]]]]],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+    try{
+        if($provider==='groq'){
+            $temp=tempnam(sys_get_temp_dir(),'adimbot_voice_');
+            if($temp===false || file_put_contents($temp,$wav)!==strlen($wav)) throw new RuntimeException('Konuşma testi için geçici ses kaydı oluşturulamadı.');
+            $url='https://api.groq.com/openai/v1/audio/transcriptions';
+            $headers=['Authorization: Bearer '.$apiKey];
+            $payload=['file'=>new CURLFile($temp,'audio/wav','adimbot-test.wav'),'model'=>$model,'language'=>'tr','response_format'=>'json'];
+        }else{
+            $url='https://generativelanguage.googleapis.com/v1beta/models/'.rawurlencode($model).':generateContent';
+            $headers=['x-goog-api-key: '.$apiKey,'Content-Type: application/json'];
+            $payload=json_encode(['contents'=>[['parts'=>[
+                ['text'=>'Bu test sesini yalnızca yazıya çevir; konuşma yoksa boş bırak.'],
+                ['inline_data'=>['mime_type'=>'audio/wav','data'=>base64_encode($wav)]],
+            ]]]]],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+        }
+        $ch=curl_init($url);
+        if($ch===false) throw new RuntimeException('Konuşma sağlayıcısı testi başlatılamadı.');
+        curl_setopt_array($ch,[CURLOPT_POST=>true,CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>6,CURLOPT_TIMEOUT=>20,CURLOPT_HTTPHEADER=>$headers,CURLOPT_POSTFIELDS=>$payload]);
+        $body=curl_exec($ch);
+        $errno=curl_errno($ch);
+        $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
+        curl_close($ch);
+    }finally{
+        if(is_string($temp) && is_file($temp)) @unlink($temp);
     }
-    $ch=curl_init($url);
-    curl_setopt_array($ch,[CURLOPT_POST=>true,CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>6,CURLOPT_TIMEOUT=>20,CURLOPT_HTTPHEADER=>$headers,CURLOPT_POSTFIELDS=>$payload]);
-    $body=curl_exec($ch);
-    $errno=curl_errno($ch);
-    $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
-    curl_close($ch);
-    if(is_string($temp) && is_file($temp)) @unlink($temp);
-    if($errno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma modeli testi zaman aşımına uğradı.');
-    if($errno!==0) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma sağlayıcısına ağ bağlantısı kurulamadı.');
-    if($status===401 || $status===403) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma sağlayıcısının API anahtarı reddedildi.');
-    if($status===400 || $status===404) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak seçilen konuşma modeli bulunamadı.');
-    if($status===429) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma sağlayıcısının kotası testi engelledi.');
-    if($status<200 || $status>=300) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma sağlayıcısı geçici olarak yanıt veremedi.');
+    if($errno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma modeli testi zaman aşımına uğradı; aday ayarlar uygulanmadı.');
+    if($errno!==0) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma sağlayıcısına ağ bağlantısı kurulamadı; aday ayarlar uygulanmadı.');
+    if($status===401 || $status===403) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma sağlayıcısının API anahtarı reddedildi; aday ayarlar uygulanmadı.');
+    if($status===402 || $status===429) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma sağlayıcısının kotası veya bakiyesi testi engelledi; aday ayarlar uygulanmadı.');
+    if($status===400 || $status===404 || $status===422) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak seçilen konuşma modeli veya istek ayarı kabul edilmedi; aday ayarlar uygulanmadı.');
+    if($status<200 || $status>=300) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma sağlayıcısı geçici olarak yanıt veremedi; aday ayarlar uygulanmadı.');
     $decoded=is_string($body)?json_decode($body,true):null;
     unset($body);
     if(!is_array($decoded)) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma modeli yanıtı okunamadı.');
@@ -124,6 +139,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         if($provider==='openai' && (str_starts_with($model,'gemini-') || str_starts_with($model,'llama-'))) throw new RuntimeException('OpenAI için OpenAI model kimliğini seçin.');
         if($newKey!=='' && (strlen($newKey)>512 || preg_match('/\s/',$newKey))) throw new RuntimeException('API anahtarını kontrol edin.');
         if($newGeminiKey!=='' && (strlen($newGeminiKey)>512 || preg_match('/\s/',$newGeminiKey))) throw new RuntimeException('Gemini API anahtarını kontrol edin.');
+        if($newKey!=='' && aa_placeholder_key($newKey)) throw new RuntimeException('Örnek Groq anahtarı kaydedilemez; sağlayıcı panelindeki gerçek anahtarı girin.');
+        if($newGeminiKey!=='' && aa_placeholder_key($newGeminiKey)) throw new RuntimeException('Örnek Gemini anahtarı kaydedilemez; sağlayıcı panelindeki gerçek anahtarı girin.');
         if(!in_array($voiceInput,['browser','groq','gemini'],true)) throw new RuntimeException('Mikrofon yöntemi geçersiz.');
         if(!in_array($transcriptionModel,['whisper-large-v3-turbo','whisper-large-v3'],true)) throw new RuntimeException('Groq konuşma modeli geçersiz.');
         if(!preg_match('/^gemini-[A-Za-z0-9._-]+$/D',$geminiVoiceModel)) throw new RuntimeException('Gemini konuşma modeli geçersiz.');
@@ -137,6 +154,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         try{
             $saved=is_file($settingsFile)?require $settingsFile:[];
             if(!is_array($saved)) throw new RuntimeException('Mevcut ayarlar okunamadı.');
+            $settingsFingerprint=aa_settings_fingerprint($settingsFile);
             $groqKey=$newKey!==''?$newKey:trim((string)($saved['groq_api_key']??($ai['groq_api_key']??'')));
             if(isset($_POST['clear_groq_key'])) $groqKey='';
             $geminiKey=$newGeminiKey!==''?$newGeminiKey:trim((string)($saved['gemini_api_key']??($ai['gemini_api_key']??'')));
@@ -149,25 +167,18 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             }
             if($voiceEnabled && $voiceInput==='groq' && $groqKey==='' && trim((string)(getenv('GROQ_API_KEY')?:''))==='') throw new RuntimeException('Groq konuşma tanıma için Groq anahtarı gerekli.');
             if($voiceEnabled && $voiceInput==='gemini' && $geminiKey==='' && trim((string)(getenv('GEMINI_API_KEY')?:''))==='') throw new RuntimeException('Gemini konuşma tanıma için Gemini anahtarı gerekli.');
-            $saved['provider']=$provider;
-            $saved['model']=$model;
-            $saved['enabled']=$enabled;
-            $saved['max_requests_per_10_minutes']=$limit;
-            $saved['groq_api_key']=$groqKey;
-            $saved['gemini_api_key']=$geminiKey;
-            $saved['voice_enabled']=$voiceEnabled;
-            $saved['voice_input']=$voiceInput;
-            $saved['voice_transcription_model']=$transcriptionModel;
-            $saved['voice_gemini_model']=$geminiVoiceModel;
-            $saved['timeout_seconds']=$timeoutSeconds;
-            $temp=tempnam($dir,'adimbot_');
-            if($temp===false) throw new RuntimeException('Ayar dosyası oluşturulamadı.');
-            $contents="<?php\ndeclare(strict_types=1);\nreturn ".var_export($saved,true).";\n";
-            if(file_put_contents($temp,$contents)!==strlen($contents) || !chmod($temp,0600) || !rename($temp,$settingsFile)){
-                @unlink($temp);
-                throw new RuntimeException('Ayarlar kaydedilemedi.');
-            }
-            $message='AdımBot ayarları kaydedildi.';
+            $candidate=$saved;
+            $candidate['provider']=$provider;
+            $candidate['model']=$model;
+            $candidate['enabled']=$enabled;
+            $candidate['max_requests_per_10_minutes']=$limit;
+            $candidate['groq_api_key']=$groqKey;
+            $candidate['gemini_api_key']=$geminiKey;
+            $candidate['voice_enabled']=$voiceEnabled;
+            $candidate['voice_input']=$voiceInput;
+            $candidate['voice_transcription_model']=$transcriptionModel;
+            $candidate['voice_gemini_model']=$geminiVoiceModel;
+            $candidate['timeout_seconds']=$timeoutSeconds;
         }finally{
             flock($lock,LOCK_UN);
             fclose($lock);
@@ -178,15 +189,37 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                 'gemini'=>trim((string)($geminiKey!==''?$geminiKey:getenv('GEMINI_API_KEY'))),
                 default=>trim((string)(getenv('OPENAI_API_KEY')?:($ai['api_key']??''))),
             };
-            $message.=' '.aa_test_provider($provider,$model,$testKey);
+            $testMessage=aa_test_provider($provider,$model,$testKey);
             if($voiceEnabled && $voiceInput!=='browser'){
                 $voiceModel=$voiceInput==='groq'?$transcriptionModel:$geminiVoiceModel;
                 $voiceKey=$voiceInput==='groq'
                     ?trim((string)($groqKey!==''?$groqKey:getenv('GROQ_API_KEY')))
                     :trim((string)($geminiKey!==''?$geminiKey:getenv('GEMINI_API_KEY')));
-                $message.=' '.aa_test_voice_provider($voiceInput,$voiceModel,$voiceKey);
+                $voiceTestMessage=aa_test_voice_provider($voiceInput,$voiceModel,$voiceKey);
             }
         }
+        $lock=fopen($dir.'/adimbot-ai.lock','c');
+        if($lock===false || !flock($lock,LOCK_EX)) throw new RuntimeException('Ayar dosyası kilitlenemedi.');
+        $temp=null;
+        try{
+            if(!hash_equals($settingsFingerprint,aa_settings_fingerprint($settingsFile))){
+                throw new RuntimeException('Ayarlar test sırasında başka bir yönetici tarafından değiştirildi. Yeni değerleri görüp işlemi yeniden deneyin.');
+            }
+            $temp=tempnam($dir,'adimbot_');
+            if($temp===false) throw new RuntimeException('Ayar dosyası oluşturulamadı.');
+            $contents="<?php\ndeclare(strict_types=1);\nreturn ".var_export($candidate,true).";\n";
+            if(file_put_contents($temp,$contents)!==strlen($contents) || !chmod($temp,0600) || !rename($temp,$settingsFile)){
+                throw new RuntimeException('Ayarlar kaydedilemedi.');
+            }
+            $temp=null;
+        }finally{
+            if(is_string($temp) && is_file($temp)) @unlink($temp);
+            flock($lock,LOCK_UN);
+            fclose($lock);
+        }
+        $message='AdımBot ayarları kaydedildi.';
+        if(isset($testMessage)) $message.=' '.$testMessage;
+        if(isset($voiceTestMessage)) $message.=' '.$voiceTestMessage;
         $config=require __DIR__.'/config/app.php';
         $ai=is_array($config['ai']??null)?$config['ai']:[];
     }catch(Throwable $e){
@@ -197,8 +230,18 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 }
 
 $provider=(string)($ai['provider']??'openai');
-$keySet=trim((string)(($ai['groq_api_key']??'')?:getenv('GROQ_API_KEY')))!=='';
-$geminiKeySet=trim((string)(($ai['gemini_api_key']??'')?:getenv('GEMINI_API_KEY')))!=='';
+$displaySaved=is_file($settingsFile)?require $settingsFile:[];
+if(!is_array($displaySaved)) $displaySaved=[];
+$groqStored=trim((string)($displaySaved['groq_api_key']??''))!=='';
+$groqLocal=!$groqStored && trim((string)($ai['groq_api_key']??''))!=='';
+$groqEnvironment=trim((string)(getenv('GROQ_API_KEY')?:''))!=='';
+$geminiStored=trim((string)($displaySaved['gemini_api_key']??''))!=='';
+$geminiLocal=!$geminiStored && trim((string)($ai['gemini_api_key']??''))!=='';
+$geminiEnvironment=trim((string)(getenv('GEMINI_API_KEY')?:''))!=='';
+$keySet=$groqStored || $groqLocal || $groqEnvironment;
+$geminiKeySet=$geminiStored || $geminiLocal || $geminiEnvironment;
+$groqKeySource=$groqStored?'panelde korumalı ayar dosyasında kayıtlı':($groqLocal?'sunucu yerel yapılandırmasında tanımlı':($groqEnvironment?'sunucu ortam değişkeninde tanımlı':'henüz tanımlı değil'));
+$geminiKeySource=$geminiStored?'panelde korumalı ayar dosyasında kayıtlı':($geminiLocal?'sunucu yerel yapılandırmasında tanımlı':($geminiEnvironment?'sunucu ortam değişkeninde tanımlı':'henüz tanımlı değil'));
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>AdımBot Yapay Zekâ Ayarları — İlkAdım</title><link rel="stylesheet" href="super-admin-pages.css?v=1.0.72"></head>
 <body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -211,10 +254,10 @@ $geminiKeySet=trim((string)(($ai['gemini_api_key']??'')?:getenv('GEMINI_API_KEY'
 <label class="field-label" for="model">Model kimliği</label><input class="text-input" id="model" name="model" list="ai-models" maxlength="100" required value="<?=aa_h((string)($ai['model']??''))?>"><datalist id="ai-models"><option value="llama-3.1-8b-instant"><option value="llama-3.3-70b-versatile"><option value="gemini-3.5-flash-lite"><option value="gemini-3.8-flash"></datalist>
 <p class="little-note">Ücretsiz katman hesabınıza ve seçilen modele bağlıdır. Geçerli kota ve ücretleri sağlayıcının panelinden kontrol edin.</p>
 <label class="field-label" for="groq-key">Groq API anahtarı</label><input class="text-input" id="groq-key" type="password" name="groq_api_key" maxlength="512" placeholder="<?=($keySet?'Anahtar kayıtlı — değiştirmek için yenisini girin':'Groq anahtarınızı girin')?>" autocomplete="new-password">
-<p class="little-note">Anahtar: <?=$keySet?'kayıtlı veya ortam değişkeninde tanımlı':'henüz tanımlı değil'?>. Boş bırakılırsa mevcut anahtar korunur. Ücretsiz planın istek ve token sınırları Groq hesabınıza bağlıdır.</p>
+<p class="little-note">Anahtar: <?=aa_h($groqKeySource)?>. Boş bırakılırsa mevcut panel anahtarı korunur. Ücretsiz planın istek ve token sınırları Groq hesabınıza bağlıdır.</p>
 <label class="field-label"><input type="checkbox" name="clear_groq_key" value="1"> Kayıtlı Groq anahtarını kaldır</label>
 <label class="field-label" for="gemini-key">Gemini API anahtarı</label><input class="text-input" id="gemini-key" type="password" name="gemini_api_key" maxlength="512" placeholder="<?=$geminiKeySet?'Anahtar kayıtlı — değiştirmek için yenisini girin':'Gemini anahtarınızı girin'?>" autocomplete="new-password">
-<p class="little-note">Gemini anahtarı: <?=$geminiKeySet?'kayıtlı veya ortam değişkeninde tanımlı':'henüz tanımlı değil'?>. Boş bırakılırsa mevcut anahtar korunur.</p>
+<p class="little-note">Gemini anahtarı: <?=aa_h($geminiKeySource)?>. Boş bırakılırsa mevcut panel anahtarı korunur.</p>
 <label class="field-label"><input type="checkbox" name="clear_gemini_key" value="1"> Kayıtlı Gemini anahtarını kaldır</label>
 <label class="field-label"><input type="checkbox" name="enabled" value="1" <?=($ai['enabled']??true)?'checked':''?>> AdımBot AI yanıtları açık</label>
 <label class="field-label"><input type="checkbox" name="voice_enabled" value="1" <?=($ai['voice_enabled']??true)?'checked':''?>> Öğrencinin mikrofonla sohbeti açık</label>

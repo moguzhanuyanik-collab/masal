@@ -3,7 +3,7 @@
   if (window.AdimBotAI) return;
 
   const POLICY = Object.freeze({
-    version: '1.1.5',
+    version: '1.1.6',
     childMode: true,
     gradeLevel: 1,
     maxInputChars: 400,
@@ -189,9 +189,12 @@
     return Object.freeze({ok:false, blocked:true, reason:check.reason, text:fallback});
   };
 
-  const sameOriginProvider = async request => {
+  const sameOriginProvider = async (request,{signal}={}) => {
     const controller=new AbortController();
     const timeout=setTimeout(()=>controller.abort(),45000);
+    const cancel=()=>controller.abort();
+    signal?.addEventListener('abort',cancel,{once:true});
+    if(signal?.aborted)controller.abort();
 
     try{
       const csrf=String(window.ILKADIM_CSRF_TOKEN||'');
@@ -226,11 +229,12 @@
 
       return {text:String(payload.text||'')};
     }catch(error){
-      if(error?.name==='AbortError')throw new Error('timeout');
+      if(error?.name==='AbortError')throw new Error(signal?.aborted?'cancelled':'timeout');
       if(error instanceof TypeError||navigator.onLine===false)throw new Error('provider_connection_error');
       throw error;
     }finally{
       clearTimeout(timeout);
+      signal?.removeEventListener('abort',cancel);
     }
   };
 
@@ -257,7 +261,7 @@
     return safe;
   };
 
-  const ask = async (message, context = {}, history = []) => {
+  const ask = async (message, context = {}, history = [], options = {}) => {
     const prepared = prepareRequest(message, context, history);
 
     if (!prepared.ok) {
@@ -282,13 +286,14 @@
     }
 
     try {
-      const providerResult = await provider(prepared.request);
+      const providerResult = await provider(prepared.request,options);
       const safe = sanitizeResponse(providerResult);
       return Object.freeze({...safe, local:false});
     } catch (error) {
-      const reason=String(error?.message||'provider_error');
+      const reason=(error?.name==='AbortError'||options?.signal?.aborted)?'cancelled':String(error?.message||'provider_error');
       let text='Şu anda yapay zekâ yanıtına ulaşamadım. Dersine devam edebiliriz.';
-      if(reason==='timeout')text='AdımBot yanıtı biraz gecikti. İstersen tekrar deneyebilirsin.';
+      if(reason==='cancelled')text='İstek durduruldu.';
+      else if(reason==='timeout')text='AdımBot yanıtı biraz gecikti. İstersen tekrar deneyebilirsin.';
       else if(reason==='provider_timeout')text='AdımBot yanıtı zamanında gelmedi. Biraz sonra tekrar deneyebilirsin.';
       else if(reason==='provider_connection_error')text='AdımBot yapay zekâ hizmetine bağlanamadı. İnternet bağlantısını kontrol edip tekrar deneyebilirsin.';
       else if(reason==='provider_unavailable')text='AdımBot yapay zekâ hizmeti şu anda meşgul. Biraz sonra tekrar deneyebilirsin.';
@@ -310,7 +315,10 @@
     }
   };
 
-  const askAndSpeak = async (message, context = {}, history = []) => deliver(await ask(message, context, history));
+  const askAndSpeak = async (message, context = {}, history = [], options = {}) => {
+    const result=await ask(message,context,history,options);
+    return result.ok||result.blocked?deliver(result):result;
+  };
 
   const selfTest = () => {
     const pii = prepareRequest('E-postam ali@example.com, bana yardım et', {screen:'dersler'});

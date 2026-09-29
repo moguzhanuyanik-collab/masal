@@ -10,6 +10,11 @@ function voice_result(array $data, int $status=200): never {
     echo json_encode($data,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
     exit;
 }
+function voice_placeholder_key(string $value): bool {
+    $normalized=strtoupper(trim($value," \t\n\r\0\x0B<>[]{}'\""));
+    return preg_match('/^(?:(?:GROQ|GEMINI|OPENAI)[_ -]?)?API[_ -]?(?:KEY|ANAHTARI|ANAHTARINIZ)$/D',$normalized)===1
+        || preg_match('/^(?:YOUR[_ -]?API[_ -]?KEY|CHANGE[_ -]?ME|ANAHTARI[_ -]?BURAYA[_ -]?YAZ)$/D',$normalized)===1;
+}
 app_session_start();
 if ($_SERVER['REQUEST_METHOD']!=='POST') voice_result(['ok'=>false,'reason'=>'method'],405);
 if (($_SESSION['aktif_rol'] ?? '')!=='ogrenci' || (int)($_SESSION['ogrenci_id'] ?? 0)<1 || (int)($_SESSION['kullanici_id'] ?? 0)<1) voice_result(['ok'=>false,'reason'=>'auth'],403);
@@ -44,7 +49,7 @@ if (!is_string($detected) || !isset($mimes[$detected])) {
 if (!is_string($detected) || !isset($mimes[$detected])) voice_result(['ok'=>false,'reason'=>'format'],415);
 if (!function_exists('curl_init')) voice_result(['ok'=>false,'reason'=>'curl_missing'],500);
 $key=$provider==='groq' ? trim((string)(($ai['groq_api_key'] ?? '') ?: getenv('GROQ_API_KEY'))) : trim((string)(($ai['gemini_api_key'] ?? '') ?: getenv('GEMINI_API_KEY')));
-if ($key==='') voice_result(['ok'=>false,'reason'=>'provider_disabled'],503);
+if ($key==='' || voice_placeholder_key($key)) voice_result(['ok'=>false,'reason'=>'provider_disabled'],503);
 $groqModel=trim((string)($ai['voice_transcription_model'] ?? 'whisper-large-v3-turbo'));
 $geminiModel=trim((string)($ai['voice_gemini_model'] ?? 'gemini-3.5-flash-lite'));
 if ($provider==='groq' && !in_array($groqModel,['whisper-large-v3-turbo','whisper-large-v3'],true)) voice_result(['ok'=>false,'reason'=>'provider_config_error'],500);
@@ -76,9 +81,9 @@ $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
 curl_close($ch);
 if ($curlErrno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) voice_result(['ok'=>false,'reason'=>'provider_timeout'],504);
 if ($curlErrno!==0) voice_result(['ok'=>false,'reason'=>'provider_connection_error'],502);
-if ($status===429) voice_result(['ok'=>false,'reason'=>'provider_rate_limit'],429);
+if ($status===402 || $status===429) voice_result(['ok'=>false,'reason'=>'provider_rate_limit'],429);
 if ($status===401 || $status===403) voice_result(['ok'=>false,'reason'=>'provider_auth_error'],502);
-if ($status===400 || $status===404) voice_result(['ok'=>false,'reason'=>'provider_config_error'],502);
+if ($status===400 || $status===404 || $status===422) voice_result(['ok'=>false,'reason'=>'provider_config_error'],502);
 if ($status>=500) voice_result(['ok'=>false,'reason'=>'provider_unavailable'],503);
 if ($status<200 || $status>=300 || !is_string($body)) voice_result(['ok'=>false,'reason'=>'provider_error'],502);
 $decoded=json_decode($body,true);

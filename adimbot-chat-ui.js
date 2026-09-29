@@ -18,6 +18,29 @@
   let voiceGeneration=0;
   let voiceRequestController=null;
   let retryMessage='';
+  let chatRequest=null;
+  let chatGeneration=0;
+
+  const cancelChat=(restore=false)=>{
+    const pending=chatRequest;
+    if(!pending)return;
+    chatGeneration++;
+    chatRequest=null;
+    pending.controller.abort();
+    if(restore){
+      rollbackPendingUser(pending.message);
+      retryMessage=pending.message;
+      const input=modal?.querySelector('[data-adimbot-chat-input]');
+      if(input){input.value=pending.message;input.dispatchEvent(new Event('input',{bubbles:true}));}
+    }
+    chatBusy=false;
+    const form=modal?.querySelector('[data-adimbot-chat-form]');
+    const input=modal?.querySelector('[data-adimbot-chat-input]');
+    if(input)input.disabled=false;
+    const submit=form?.querySelector('button[type="submit"]');
+    if(submit)submit.disabled=false;
+    modal?.removeAttribute('aria-busy');
+  };
 
   const stopVoice=(discard=false)=>{
     const session=voiceSession;
@@ -342,6 +365,8 @@
   };
 
   const clearHistory=()=>{
+    cancelChat();
+    stopVoice(true);
     try{sessionStorage.removeItem(scopedKey(HISTORY_KEY));}catch(_){}
     retryMessage='';
     resetHintState();
@@ -687,6 +712,9 @@
       }
 
       chatBusy=true;
+      const requestGeneration=++chatGeneration;
+      const controller=new AbortController();
+      chatRequest={controller,message};
       const retrying=retryMessage!==''&&retryMessage===message;
       retryMessage='';
       if(status)delete status.dataset.adimbotSpeechError;
@@ -708,10 +736,13 @@
 
       try{
         const ai=window.AdimBotAI;
-        if(!ai||typeof ai.askAndSpeak!=='function'){
+        if(!ai||typeof ai.ask!=='function'||typeof ai.deliver!=='function'){
           appendMessage(box,'bot','AdımBot yapay zekâ bağlantısı henüz hazır değil.');
+          rollbackPendingUser(message);
         }else{
-          const result=await ai.askAndSpeak(message,learningContext(),historyBefore);
+          const answer=await ai.ask(message,learningContext(),historyBefore,{signal:controller.signal});
+          if(requestGeneration!==chatGeneration)return;
+          const result=answer.ok||answer.blocked?ai.deliver(answer):answer;
           clearTimeout(waitEmotionTimer);
           try{window.AdimBotStudent?.clearEmotion?.();window.AdimBotStudent?.emote?.('surprised',850);}catch(_){}
           const reply=result?.text||'Şu anda yanıt oluşturamadım.';
@@ -726,6 +757,7 @@
           }
         }
       }catch(_){
+        if(requestGeneration!==chatGeneration)return;
         appendMessage(box,'bot','Şu anda yanıt veremedim. İstersen tekrar deneyebilirsin.');
         rollbackPendingUser(message);
         retryMessage=message;
@@ -734,6 +766,8 @@
         if(status){status.dataset.adimbotRetry='1';status.textContent='Sorun kaybolmadı. Gönder düğmesine yeniden dokunabilirsin.';}
       }finally{
         clearTimeout(waitEmotionTimer);
+        if(requestGeneration!==chatGeneration)return;
+        chatRequest=null;
         chatBusy=false;
         modal.removeAttribute('aria-busy');
         input.disabled=false;
@@ -784,6 +818,7 @@
 
   const close=()=>{
     if(!modal)return true;
+    cancelChat(true);
     stopVoice(true);
     modal.hidden=true;
     modal.removeAttribute('aria-busy');
