@@ -4,7 +4,6 @@
 
   const CONTEXT_KEY='ilkadim.adimbot.chat.context.v1';
   const HISTORY_KEY='ilkadim.adimbot.chat.history.v1';
-  const HINT_KEY='ilkadim.adimbot.chat.hint.v1';
   const TOGETHER_KEY='ilkadim.adimbot.chat.together.v1';
   const scopedKey=base=>{
     const studentId=Number(window.ILKADIM_CURRENT_STUDENT_ID||0);
@@ -226,27 +225,6 @@
     return clean([context.screen,context.lesson,context.topic,context.activity,context.question].filter(Boolean).join('|')).slice(0,480);
   };
 
-  const readHintState=()=>{
-    const signature=hintSignature();
-    try{
-      const saved=JSON.parse(sessionStorage.getItem(scopedKey(HINT_KEY))||'null');
-      if(saved&&saved.signature===signature){
-        return {signature,level:Math.max(0,Math.min(3,Number(saved.level)||0))};
-      }
-    }catch(_){}
-    return {signature,level:0};
-  };
-
-  const writeHintLevel=level=>{
-    const state={signature:hintSignature(),level:Math.max(0,Math.min(3,Number(level)||0))};
-    try{sessionStorage.setItem(scopedKey(HINT_KEY),JSON.stringify(state));}catch(_){}
-    return state;
-  };
-
-  const resetHintState=()=>{
-    try{sessionStorage.removeItem(scopedKey(HINT_KEY));}catch(_){}
-  };
-
   const togetherActive=()=>{
     const signature=hintSignature();
     try{
@@ -260,15 +238,6 @@
       if(active)sessionStorage.setItem(scopedKey(TOGETHER_KEY),JSON.stringify({signature:hintSignature(),active:true}));
       else sessionStorage.removeItem(scopedKey(TOGETHER_KEY));
     }catch(_){}
-  };
-
-  const hintStep=()=>{
-    const current=readHintState();
-    const level=Math.min(3,current.level+1);
-    writeHintLevel(level);
-    if(level===1)return 'Bu sorunun cevabını söylemeden yalnızca ilk küçük ipucunu ver. Çocuğun kendisinin düşünmesini sağla.';
-    if(level===2)return 'İlk ipucundan biraz daha açıklayıcı ikinci bir ipucu ver. Doğru cevabı veya doğru şıkkı yine söyleme.';
-    return 'Bu soruyu 1. sınıf öğrencisinin anlayacağı şekilde adım adım açıkla. Sonucu veya doğru şıkkı doğrudan söyleme; son adımı öğrencinin bulmasına bırak.';
   };
 
   const appendMessage=(box,role,message,{speakable=true}={})=>{
@@ -371,13 +340,7 @@
     stopVoice(true);
     try{sessionStorage.removeItem(scopedKey(HISTORY_KEY));}catch(_){}
     retryMessage='';
-    resetHintState();
     setTogetherActive(false);
-    const hintButton=modal?.querySelector('[data-adimbot-hint]');
-    if(hintButton){
-      hintButton.textContent='💡 1. ipucu';
-      hintButton.setAttribute('aria-label','Birinci ipucunu iste');
-    }
     const box=modal?.querySelector('[data-adimbot-chat-messages]');
     if(box){
       box.innerHTML='';
@@ -403,7 +366,6 @@
       '<div class="adb-chat-messages" data-adimbot-chat-messages aria-live="polite"></div>',
       '<div class="adb-chat-suggestions" data-adimbot-chat-suggestions aria-label="AdımBot hızlı yardım seçenekleri">',
       '<button type="button" data-adimbot-suggestion="Bunu bana daha basit anlatır mısın?">✨ Basit anlat</button>',
-      '<button type="button" data-adimbot-hint>💡 1. ipucu</button>',
       '<button type="button" data-adimbot-suggestion="Bununla ilgili kolay bir örnek verir misin?">🧩 Örnek ver</button>',
       '<button type="button" data-adimbot-together aria-pressed="false">🤝 Birlikte çözelim</button>',
       '<button type="button" data-adimbot-summary>📋 Ders özeti</button>',
@@ -705,24 +667,6 @@
       input?.focus();
     });
 
-    const hintButton=modal.querySelector('[data-adimbot-hint]');
-    const refreshHintButton=()=>{
-      if(!hintButton)return;
-      const level=readHintState().level;
-      hintButton.textContent=level===0?'💡 1. ipucu':level===1?'💡 2. ipucu':'🧠 Birlikte açıkla';
-      hintButton.setAttribute('aria-label',level===0?'Birinci ipucunu iste':level===1?'İkinci ipucunu iste':'Soruyu birlikte açıklayalım');
-    };
-    refreshHintButton();
-
-    hintButton?.addEventListener('click',()=>{
-      if(chatBusy||!input)return;
-      input.value=hintStep();
-      if(counter)counter.textContent=String(input.value.length)+' / 400';
-      refreshHintButton();
-      input.focus();
-      if(typeof form?.requestSubmit==='function')form.requestSubmit();
-    });
-
     modal.querySelectorAll('[data-adimbot-suggestion]').forEach(button=>{
       button.addEventListener('click',()=>{
         if(chatBusy||!input)return;
@@ -847,12 +791,6 @@
       const active=togetherActive();
       togetherButton.textContent=active?'🤝 Birlikte çözüyoruz':'🤝 Birlikte çözelim';
       togetherButton.setAttribute('aria-pressed',active?'true':'false');
-    }
-    const hintButton=dialog.querySelector('[data-adimbot-hint]');
-    if(hintButton){
-      const level=readHintState().level;
-      hintButton.textContent=level===0?'💡 1. ipucu':level===1?'💡 2. ipucu':'🧠 Birlikte açıkla';
-      hintButton.setAttribute('aria-label',level===0?'Birinci ipucunu iste':level===1?'İkinci ipucunu iste':'Soruyu birlikte açıklayalım');
     }
     dialog.hidden=false;
     document.documentElement.classList.add('adb-chat-open');

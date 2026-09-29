@@ -169,7 +169,7 @@
 
   const questionSpeechText=question=>{
     if(!(question instanceof Element))return '';
-    const directSelector='[data-question-text],.question-text,.question-title,.question-prompt,.question-stem,.puzzle-question,.prompt';
+    const directSelector='[data-question-text],.question-text,.question-title,.question-prompt,.question-stem,.prompt';
     const direct=question.matches?.(directSelector)?question:question.querySelector?.(directSelector);
     if(direct){
       const value=stripReadingLabels(direct.textContent);
@@ -177,7 +177,7 @@
     }
 
     const clone=question.cloneNode(true);
-    clone.querySelectorAll?.('.answers,.teacher-option,.feedback,.game-feedback,form,button,input,select,textarea,svg').forEach(el=>el.remove());
+    clone.querySelectorAll?.('.answers,.teacher-option,.feedback,.game-feedback,.hint-card,.hint-box,.tip-card,.tip-box,.question-hint,[data-hint],form,button,input,select,textarea,svg').forEach(el=>el.remove());
     return stripReadingLabels(clone.textContent);
   };
 
@@ -340,7 +340,8 @@
       if(question.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
       const questionText=questionSpeechText(question);
       question.setAttribute('data-adimbot-read','text');
-      if(questionText)question.setAttribute('data-adimbot-text','Soru. '+questionText);
+      question.setAttribute('data-adimbot-question-read','1');
+      if(questionText)question.setAttribute('data-adimbot-text',questionText);
     });
 
     rootScope.querySelectorAll?.('.question-card,.quiz-question,.exercise-question,.question-block').forEach(card=>{
@@ -348,7 +349,8 @@
       const questionText=questionSpeechText(card);
       if(!questionText)return;
       card.setAttribute('data-adimbot-read','text');
-      card.setAttribute('data-adimbot-text','Soru. '+questionText);
+      card.setAttribute('data-adimbot-question-read','1');
+      card.setAttribute('data-adimbot-text',questionText);
     });
 
     const answerGroups=[...rootScope.querySelectorAll?.('.answers')||[]];
@@ -645,6 +647,15 @@
   const handleReadableClick=e=>{
     const target=e.target;
     if(!(target instanceof Element)||!canSpeak())return;
+
+    const question=target.closest('[data-adimbot-question-read]');
+    if(question&&!target.closest('button,input,select,textarea,label,.answers,.teacher-option,form,.feedback,.game-feedback,[data-adimbot-hint-trigger]')){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      const text=stripReadingLabels(question.getAttribute('data-adimbot-text'))||questionSpeechText(question);
+      if(text)speak(text,question);
+      return;
+    }
 
     const item=target.closest('[data-adimbot-read]');
     if(!item||item.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;

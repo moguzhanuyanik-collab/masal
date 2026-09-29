@@ -70,7 +70,7 @@ function ois_icon(string $type): string {
 <link rel="stylesheet" href="adimbot-student.css?v=1.1.56">
 <script src="api/bootstrap.js.php?v=1.1.56" defer></script>
 <script src="adimbot-student.js?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-student.js'),0,16)?>" defer></script>
-<script src="global-audio-feedback.js?v=1.1.55" defer></script>
+<script src="global-audio-feedback.js?v=1.1.75" defer></script>
 <script src="adimbot-ai-bridge.js?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-ai-bridge.js'),0,16)?>" defer></script>
 <script src="adimbot-chat-ui.js?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-chat-ui.js'),0,16)?>" defer></script>
 </head>
