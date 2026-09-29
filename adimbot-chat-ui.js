@@ -404,6 +404,8 @@
       status.dataset.adimbotSpeechError='1';
       status.textContent=reason==='unsupported'
         ?'Bu cihazda Türkçe sesli okuma desteklenmiyor; yanıtı ekrandan okuyabilirsin.'
+        :reason==='not-allowed'||reason==='start_timeout'
+          ?'Cihaz sesli okumayı başlatmadı. Tekrar dinle düğmesine dokunup ses iznini kontrol edebilirsin.'
         :reason==='timeout'
           ?'Sesli okuma takıldı ve güvenli biçimde durduruldu. Tekrar dinle düğmesini deneyebilirsin.'
           :reason==='turkish_voice_missing'

@@ -27,6 +27,14 @@ function adimbot_ai_redact(string $text): string {
     return $text;
 }
 
+function adimbot_ai_privacy_request(string $text): bool {
+    if (preg_match('/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/iu',$text) || preg_match('/(?<!\d)\d{11}(?!\d)/u',$text) || preg_match('/(?<!\d)(?:\+?90[\s.\-]?)?(?:0?[2-5]\d{2})[\s.\-]?\d{3}[\s.\-]?\d{2}[\s.\-]?\d{2}(?!\d)/u',$text)) return true;
+    if (preg_match('/(?:ne\s+demek|ne\s+anlama\s+gelir|mucidi|nasıl\s+çalışır|konusu(?:nu)?|hakkında)/iu',$text)) return false;
+    $sensitive=preg_match('/(?:adres(?:in|ini|im|imiz)?|telefon\s*numara(?:nı|sı|m)?|e[- ]?posta(?:\s*adres)?(?:nı|m)?|şifre(?:ni|niz|m)?|tc\s*(?:kimlik)?\s*numara(?:nı|sı|m)?|konum(?:un|unu|um)?)/iu',$text)===1;
+    $disclosure=preg_match('/(?:öğrenmek|bilmek)\s+istiyorum/iu',$text)===1 || preg_match('/(?:^|[^\p{L}])(?:söyle(?:r\s+misin)?|ver(?:ir\s+misin)?|yaz(?:ar\s+mısın)?|paylaş(?:ır\s+mısın)?|gönder(?:ir\s+misin)?|nedir|ne|kaç|lazım)(?:$|[^\p{L}])/iu',$text)===1;
+    return $sensitive && $disclosure;
+}
+
 function adimbot_ai_extract_text(array $response): string {
     if (isset($response['output_text']) && is_string($response['output_text'])) {
         return adimbot_ai_clean($response['output_text'],600);
@@ -63,7 +71,7 @@ function adimbot_ai_input_safety(string $text): ?array {
     if (preg_match('/(?:intihar|kendimi\s+öldür|canıma\s+kıy|kendime\s+zarar|yaşamak\s+istemiyorum)/iu',$text)) {
         return ['reason'=>'self_harm','text'=>'Bunu tek başına taşıma. Hemen yanında güvendiğin bir yetişkine, ailenden birine veya öğretmenine haber ver.'];
     }
-    if (preg_match('/(?:adres(?:in|ini)?|telefon(?:un|unu|\s*numara)|e[- ]?posta(?:n|nı)?|şifre(?:n|ni)?|tc\s*(?:kimlik)?|kimlik\s*numara|konum(?:un|unu)?)/iu',$text)) {
+    if (adimbot_ai_privacy_request($text)) {
         return ['reason'=>'privacy','text'=>'Kişisel bilgilerini paylaşmana gerek yok. Adres, telefon, e-posta, şifre veya kimlik bilgisi istemeden devam edelim.'];
     }
     if (preg_match('/(?:whatsapp|instagram|telegram|discord|snapchat|buluş(?:alım|mak)|görüşelim|beni\s+ara|seni\s+arayayım|özelden\s+yaz)/iu',$text)) {
@@ -94,7 +102,7 @@ function adimbot_ai_safe_output(string $text, bool $hasActiveQuestion=false): ar
     $value=adimbot_ai_readable_output($text);
     if ($value==='') return ['ok'=>false,'text'=>'Şu anda yanıt oluşturamadım. İstersen soruyu başka türlü soralım.','reason'=>'empty'];
 
-    if (preg_match('/(?:telefon(?:unu| numaranı)|adres(?:ini|ini söyle)|e[- ]?posta(?:nı| adresini)|şifre(?:ni)?|tc\s*(?:kimlik)?)/iu',$value)) {
+    if (adimbot_ai_privacy_request($value)) {
         return ['ok'=>false,'text'=>'Kişisel bilgilerini paylaşmana gerek yok. Dersine güvenli şekilde devam edelim.','reason'=>'privacy'];
     }
     if (preg_match('/(?:https?:\/\/|www\.|whatsapp|instagram|telegram|discord|snapchat|özelden\s+yaz|buluşalım)/iu',$value)) {
@@ -191,14 +199,15 @@ if (!is_array($payload)) {
     adimbot_ai_json(['ok'=>false,'message'=>'Geçersiz JSON.'],400);
 }
 
-$message=adimbot_ai_redact(adimbot_ai_clean($payload['message'] ?? '',400));
-if ($message==='') {
+$messageRaw=adimbot_ai_clean($payload['message'] ?? '',400);
+if ($messageRaw==='') {
     adimbot_ai_json(['ok'=>false,'message'=>'Bir soru yazmalısın.'],400);
 }
 
-if (($blocked=adimbot_ai_input_safety($message))!==null) {
+if (($blocked=adimbot_ai_input_safety($messageRaw))!==null) {
     adimbot_ai_json(['ok'=>true,'blocked'=>true,'reason'=>$blocked['reason'],'text'=>$blocked['text']]);
 }
+$message=adimbot_ai_redact($messageRaw);
 
 $config=require dirname(__DIR__) . '/config/app.php';
 $ai=is_array($config['ai'] ?? null)?$config['ai']:[];
@@ -340,6 +349,21 @@ if (!is_string($responseBody) || $responseBody==='' || $status<200 || $status>=3
 $decoded=json_decode($responseBody,true);
 if (!is_array($decoded)) {
     adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ yanıtı okunamadı.','reason'=>'invalid_provider_response'],502);
+}
+
+$providerBlocked=($provider==='gemini' && (
+        trim((string)($decoded['promptFeedback']['blockReason'] ?? ''))!==''
+        || in_array((string)($decoded['candidates'][0]['finishReason'] ?? ''),['SAFETY','PROHIBITED_CONTENT','BLOCKLIST'],true)
+    ))
+    || ($provider==='groq' && (string)($decoded['choices'][0]['finish_reason'] ?? '')==='content_filter');
+if ($providerBlocked) {
+    adimbot_ai_json([
+        'ok'=>true,
+        'configured'=>true,
+        'blocked'=>true,
+        'reason'=>'provider_safety',
+        'text'=>'Bu konuya güvenli biçimde yanıt veremem. İstersen dersine uygun başka bir soruyu birlikte düşünelim.'
+    ]);
 }
 
 $text=match ($provider) {

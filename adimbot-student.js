@@ -312,6 +312,7 @@
   let pendingX=0,pendingY=0,frame=0,activeUtterance=null;
   let activeSpeechToken=0,activeOnEnd=null,activeOnStart=null,speechStarted=false,speechPaused=false;
   let longSpeechToken=0,longSpeechTimer=0;
+  let speechTimeoutRemaining=0,speechTimeoutStartedAt=0;
   let gestureLoopTimer=0,gestureReleaseTimer=0,settleTimer=0,gestureIndex=0,lastGestureAt=0;
   let emotionTimer=0;
   let pageSuspended=document.hidden===true,idlePowerTimer=0;
@@ -505,9 +506,25 @@
   setTimeout(refreshVoices,250);
   setTimeout(refreshVoices,1000);
 
+  const armSpeechWatchdog=(token,duration,reason='timeout')=>{
+    clearTimeout(timer);
+    speechTimeoutRemaining=Math.max(500,Number(duration)||500);
+    speechTimeoutStartedAt=performance.now();
+    timer=setTimeout(()=>{
+      if(token!==activeSpeechToken||speechPaused)return;
+      const message=reason==='start_timeout'?'Seslendirme motoru sesi başlatmadı.':'Seslendirme zamanında tamamlanamadı.';
+      reportSpeechError(reason,message);
+      try{speech?.cancel();}catch(_){}
+      finishSpeech(token,true);
+    },speechTimeoutRemaining);
+  };
+
   const finishSpeech=(token,cancelled=false)=>{
     if(token!==activeSpeechToken)return;
     clearTimeout(timer);
+    activeSpeechToken++;
+    speechTimeoutRemaining=0;
+    speechTimeoutStartedAt=0;
     const done=activeOnEnd;
     activeUtterance=null;
     activeOnEnd=null;
@@ -569,11 +586,22 @@
   };
   const pauseSpeaking=()=>{
     if(!speech||!state.speaking||speechPaused)return false;
-    try{speech.pause();speechPaused=true;return true;}catch(_){return false;}
+    try{
+      speech.pause();
+      speechTimeoutRemaining=Math.max(500,speechTimeoutRemaining-(performance.now()-speechTimeoutStartedAt));
+      clearTimeout(timer);
+      speechPaused=true;
+      return true;
+    }catch(_){return false;}
   };
   const resumeSpeaking=()=>{
     if(!speech||!speechPaused)return false;
-    try{speech.resume();speechPaused=false;return true;}catch(_){return false;}
+    try{
+      speech.resume();
+      speechPaused=false;
+      armSpeechWatchdog(activeSpeechToken,speechTimeoutRemaining,'timeout');
+      return true;
+    }catch(_){return false;}
   };
   const speechChunks=(message,maxLength=180)=>{
     const text=String(message||'').replace(/\s+/g,' ').trim();
@@ -676,6 +704,7 @@
       lastSpeechError='';
       try{window.dispatchEvent(new CustomEvent('adimbot:speech-start'));}catch(_){}
       beginSpeech(token);
+      armSpeechWatchdog(token,Math.max(5000,text.length*160),'timeout');
     };
     utterance.onend=()=>finishSpeech(token,false);
     utterance.onerror=event=>{
@@ -699,15 +728,9 @@
       else if(word.length>=8)triggerSpeechGesture(gestureIndex%2?'right':'left');
     };
 
-    beginSpeech(token);
-    timer=setTimeout(()=>{
-      try{speech.cancel();}catch(_){}
-      reportSpeechError('timeout','Seslendirme zamanında tamamlanamadı.');
-      finishSpeech(token,true);
-    },Math.max(5000,text.length*160));
-
     try{
       try{speech.resume?.();}catch(_){}
+      armSpeechWatchdog(token,6000,'start_timeout');
       speech.speak(utterance);
       return true;
     }catch(error){

@@ -50,8 +50,14 @@
   const asksForAnswerKey = text =>
     /(?:doğru\s+cevap|cevabı\s+(?:söyle|ver)|hangi\s+şık|cevap\s+ne|doğru\s+şık|şık\s+hangisi)/i.test(text);
 
-  const privacyRequest = text =>
-    /(?:adres(?:in|ini)?|telefon(?:un|unu|\s*numara)|e[- ]?posta(?:n|nı)?|şifre(?:n|ni)?|tc\s*(?:kimlik)?|kimlik\s*numara|konum(?:un|unu)?)/i.test(text);
+  const privacyRequest = text => {
+    const value=cleanText(text);
+    if(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i.test(value)||/(?<!\d)\d{11}(?!\d)/.test(value)||/(?<!\d)(?:\+?90[\s.-]?)?(?:0?[2-5]\d{2})[\s.-]?\d{3}[\s.-]?\d{2}[\s.-]?\d{2}(?!\d)/.test(value))return true;
+    if(/(?:ne\s+demek|ne\s+anlama\s+gelir|mucidi|nasıl\s+çalışır|konusu(?:nu)?|hakkında)/i.test(value))return false;
+    const sensitive=/(?:adres(?:in|ini|im|imiz)?|telefon\s*numara(?:nı|sı|m)?|e[- ]?posta(?:\s*adres)?(?:nı|m)?|şifre(?:ni|niz|m)?|tc\s*(?:kimlik)?\s*numara(?:nı|sı|m)?|konum(?:un|unu|um)?)/i.test(value);
+    const disclosure=/(?:öğrenmek|bilmek)\s+istiyorum/i.test(value)||/(?:^|[^\p{L}])(?:söyle(?:r\s+misin)?|ver(?:ir\s+misin)?|yaz(?:ar\s+mısın)?|paylaş(?:ır\s+mısın)?|gönder(?:ir\s+misin)?|nedir|ne|kaç|lazım)(?:$|[^\p{L}])/iu.test(value);
+    return sensitive&&disclosure;
+  };
 
   const contactRequest = text =>
     /(?:whatsapp|instagram|telegram|discord|snapchat|buluş(?:alım|mak)|görüşelim|beni\s+ara|seni\s+arayayım|özelden\s+yaz)/i.test(text);
@@ -147,7 +153,7 @@
   const responseViolatesPolicy = text => {
     const value = cleanText(text);
     if (!value) return {blocked:true, reason:'empty'};
-    if (/(?:telefon(?:unu| numaranı)|adres(?:ini|ini söyle)|e[- ]?posta(?:nı| adresini)|şifre(?:ni)?|tc\s*(?:kimlik)?)/i.test(value)) {
+    if (privacyRequest(value)) {
       return {blocked:true, reason:'privacy'};
     }
     if (contactRequest(value)) return {blocked:true, reason:'contact'};

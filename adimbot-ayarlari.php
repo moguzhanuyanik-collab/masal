@@ -5,6 +5,24 @@ require __DIR__.'/src/auth.php';
 
 $user=require_role('super_admin');
 function aa_h(string $value): string { return htmlspecialchars($value,ENT_QUOTES,'UTF-8'); }
+function aa_provider_test_text(string $provider,array $decoded): string {
+    if($provider==='groq') return trim((string)($decoded['choices'][0]['message']['content']??''));
+    if($provider==='gemini'){
+        $parts=[];
+        foreach((array)($decoded['candidates'][0]['content']['parts']??[]) as $part){
+            if(is_array($part) && empty($part['thought']) && is_string($part['text']??null)) $parts[]=$part['text'];
+        }
+        return trim(implode(' ',$parts));
+    }
+    if(is_string($decoded['output_text']??null)) return trim($decoded['output_text']);
+    $parts=[];
+    foreach((array)($decoded['output']??[]) as $item){
+        foreach((array)($item['content']??[]) as $content){
+            if(is_string($content['text']??null)) $parts[]=$content['text'];
+        }
+    }
+    return trim(implode(' ',$parts));
+}
 function aa_test_provider(string $provider,string $model,string $apiKey): string {
     if(!function_exists('curl_init')) throw new RuntimeException('Ayarlar kaydedildi ancak sunucuda cURL kapalı olduğu için bağlantı test edilemedi.');
     if($apiKey==='') throw new RuntimeException('Ayarlar kaydedildi ancak seçilen sağlayıcının API anahtarı bulunamadı.');
@@ -28,28 +46,45 @@ function aa_test_provider(string $provider,string $model,string $apiKey): string
     $errno=curl_errno($ch);
     $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
     curl_close($ch);
-    unset($body);
     if($errno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) throw new RuntimeException('Ayarlar kaydedildi ancak bağlantı testi zaman aşımına uğradı.');
     if($errno!==0) throw new RuntimeException('Ayarlar kaydedildi ancak sağlayıcıya ağ bağlantısı kurulamadı.');
     if($status===401 || $status===403) throw new RuntimeException('Ayarlar kaydedildi ancak API anahtarı sağlayıcı tarafından reddedildi.');
     if($status===400 || $status===404) throw new RuntimeException('Ayarlar kaydedildi ancak model kimliği veya istek ayarı sağlayıcı tarafından kabul edilmedi.');
     if($status===429) throw new RuntimeException('Ayarlar kaydedildi ancak sağlayıcı kotası veya istek sınırı bağlantı testini engelledi.');
     if($status<200 || $status>=300) throw new RuntimeException('Ayarlar kaydedildi ancak sağlayıcı geçici olarak yanıt veremedi.');
+    $decoded=is_string($body)?json_decode($body,true):null;
+    unset($body);
+    if(!is_array($decoded) || aa_provider_test_text($provider,$decoded)==='') throw new RuntimeException('Ayarlar kaydedildi ancak sağlayıcı geçerli bir sohbet yanıtı üretmedi.');
     return 'Bağlantı testi başarılı: '.strtoupper($provider).' anahtarı ve '.$model.' modeli doğrulandı.';
 }
 function aa_test_voice_provider(string $provider,string $model,string $apiKey): string {
     if(!function_exists('curl_init')) throw new RuntimeException('Ses ayarları kaydedildi ancak sunucuda cURL kapalı olduğu için konuşma modeli test edilemedi.');
     if($apiKey==='') throw new RuntimeException('Ses ayarları kaydedildi ancak konuşma sağlayıcısının API anahtarı bulunamadı.');
-    $url=$provider==='groq'
-        ?'https://api.groq.com/openai/v1/models/'.rawurlencode($model)
-        :'https://generativelanguage.googleapis.com/v1beta/models/'.rawurlencode($model);
-    $headers=$provider==='groq'?['Authorization: Bearer '.$apiKey]:['x-goog-api-key: '.$apiKey];
+    $sampleRate=8000;
+    $audio=str_repeat("\0\0",$sampleRate);
+    $wav='RIFF'.pack('V',36+strlen($audio)).'WAVEfmt '.pack('VvvVVvv',16,1,1,$sampleRate,$sampleRate*2,2,16).'data'.pack('V',strlen($audio)).$audio;
+    $temp=null;
+    if($provider==='groq'){
+        $temp=tempnam(sys_get_temp_dir(),'adimbot_voice_');
+        if($temp===false || file_put_contents($temp,$wav)!==strlen($wav)) throw new RuntimeException('Konuşma testi için geçici ses kaydı oluşturulamadı.');
+        $url='https://api.groq.com/openai/v1/audio/transcriptions';
+        $headers=['Authorization: Bearer '.$apiKey];
+        $payload=['file'=>new CURLFile($temp,'audio/wav','adimbot-test.wav'),'model'=>$model,'language'=>'tr','response_format'=>'json'];
+    }else{
+        $url='https://generativelanguage.googleapis.com/v1beta/models/'.rawurlencode($model).':generateContent';
+        $headers=['x-goog-api-key: '.$apiKey,'Content-Type: application/json'];
+        $payload=json_encode(['contents'=>[['parts'=>[
+            ['text'=>'Bu test sesini yalnızca yazıya çevir; konuşma yoksa boş bırak.'],
+            ['inline_data'=>['mime_type'=>'audio/wav','data'=>base64_encode($wav)]],
+        ]]]]],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+    }
     $ch=curl_init($url);
-    curl_setopt_array($ch,[CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>6,CURLOPT_TIMEOUT=>15,CURLOPT_HTTPHEADER=>$headers]);
+    curl_setopt_array($ch,[CURLOPT_POST=>true,CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>6,CURLOPT_TIMEOUT=>20,CURLOPT_HTTPHEADER=>$headers,CURLOPT_POSTFIELDS=>$payload]);
     $body=curl_exec($ch);
     $errno=curl_errno($ch);
     $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
     curl_close($ch);
+    if(is_string($temp) && is_file($temp)) @unlink($temp);
     if($errno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma modeli testi zaman aşımına uğradı.');
     if($errno!==0) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma sağlayıcısına ağ bağlantısı kurulamadı.');
     if($status===401 || $status===403) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma sağlayıcısının API anahtarı reddedildi.');
@@ -59,9 +94,8 @@ function aa_test_voice_provider(string $provider,string $model,string $apiKey): 
     $decoded=is_string($body)?json_decode($body,true):null;
     unset($body);
     if(!is_array($decoded)) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma modeli yanıtı okunamadı.');
-    if($provider==='groq' && !hash_equals($model,(string)($decoded['id']??''))) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak Groq farklı bir konuşma modeli döndürdü.');
-    if($provider==='gemini' && !in_array('generateContent',(array)($decoded['supportedGenerationMethods']??[]),true)) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak Gemini modeli ses çözümleme isteğini desteklemiyor.');
-    return 'Konuşma modeli doğrulandı: '.strtoupper($provider).' '.$model.'.';
+    if(isset($decoded['error'])) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma sağlayıcısı test kaydını reddetti.');
+    return 'Konuşma uç noktası gerçek test kaydıyla doğrulandı: '.strtoupper($provider).' '.$model.'.';
 }
 $message='';
 $error='';
