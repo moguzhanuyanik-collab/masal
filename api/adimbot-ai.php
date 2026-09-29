@@ -162,8 +162,8 @@ $_SESSION['adimbot_ai_requests']=$requests;
 $enabled=($ai['enabled'] ?? true)!==false;
 $provider=strtolower(trim((string)($ai['provider'] ?? 'openai')));
 $apiKey=match ($provider) {
-    'groq'=>trim((string)(getenv('GROQ_API_KEY') ?: ($ai['groq_api_key'] ?? ''))),
-    'gemini'=>trim((string)(getenv('GEMINI_API_KEY') ?: ($ai['gemini_api_key'] ?? ''))),
+    'groq'=>trim((string)(($ai['groq_api_key'] ?? '') ?: getenv('GROQ_API_KEY'))),
+    'gemini'=>trim((string)(($ai['gemini_api_key'] ?? '') ?: getenv('GEMINI_API_KEY'))),
     default=>trim((string)(getenv('OPENAI_API_KEY') ?: ($ai['api_key'] ?? ''))),
 };
 $model=trim((string)($ai['model'] ?? 'gpt-6-astra'));

@@ -41,7 +41,7 @@ $_SESSION['adimbot_voice_requests']=$times;
 session_write_close();
 if (!function_exists('curl_init')) voice_result(['ok'=>false,'reason'=>'curl_missing'],500);
 
-$key=$provider==='groq' ? trim((string)(getenv('GROQ_API_KEY') ?: ($ai['groq_api_key'] ?? ''))) : trim((string)(getenv('GEMINI_API_KEY') ?: ($ai['gemini_api_key'] ?? '')));
+$key=$provider==='groq' ? trim((string)(($ai['groq_api_key'] ?? '') ?: getenv('GROQ_API_KEY'))) : trim((string)(($ai['gemini_api_key'] ?? '') ?: getenv('GEMINI_API_KEY')));
 if ($key==='') voice_result(['ok'=>false,'reason'=>'provider_disabled'],503);
 $timeout=max(10,min(45,(int)($ai['timeout_seconds'] ?? 20)));
 if ($provider==='groq') {

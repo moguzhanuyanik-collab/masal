@@ -81,8 +81,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 }
 
 $provider=(string)($ai['provider']??'openai');
-$keySet=trim((string)(getenv('GROQ_API_KEY')?:($ai['groq_api_key']??'')))!=='';
-$geminiKeySet=trim((string)(getenv('GEMINI_API_KEY')?:($ai['gemini_api_key']??'')))!=='';
+$keySet=trim((string)(($ai['groq_api_key']??'')?:getenv('GROQ_API_KEY')))!=='';
+$geminiKeySet=trim((string)(($ai['gemini_api_key']??'')?:getenv('GEMINI_API_KEY')))!=='';
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>AdımBot Yapay Zekâ Ayarları — İlkAdım</title><link rel="stylesheet" href="super-admin-pages.css?v=1.0.72"></head>
 <body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?>
