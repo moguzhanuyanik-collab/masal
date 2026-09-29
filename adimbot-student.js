@@ -479,6 +479,12 @@
   };
   const speech=('speechSynthesis' in window&&'SpeechSynthesisUtterance' in window)?window.speechSynthesis:null;
   let voices=[];
+  let lastSpeechError='';
+
+  const reportSpeechError=(reason,message)=>{
+    lastSpeechError=String(reason||'speech_error');
+    try{window.dispatchEvent(new CustomEvent('adimbot:speech-error',{detail:{reason:lastSpeechError,message:String(message||'')}}));}catch(_){}
+  };
 
   const refreshVoices=()=>{
     voices=speech?.getVoices?.()||[];
@@ -495,6 +501,8 @@
 
   refreshVoices();
   speech?.addEventListener?.('voiceschanged',refreshVoices);
+  setTimeout(refreshVoices,250);
+  setTimeout(refreshVoices,1000);
 
   const finishSpeech=(token,cancelled=false)=>{
     if(token!==activeSpeechToken)return;
@@ -633,9 +641,9 @@
     speechStarted=false;
 
     if(!speech){
-      beginSpeech(token);
-      timer=setTimeout(()=>finishSpeech(token,false),1700);
-      return true;
+      reportSpeechError('unsupported','Bu cihazda sesli okuma desteklenmiyor.');
+      finishSpeech(token,true);
+      return false;
     }
 
     refreshVoices();
@@ -648,10 +656,19 @@
 
     const selectedVoice=pickTurkishVoice();
     if(selectedVoice)utterance.voice=selectedVoice;
+    else if(voices.length)reportSpeechError('turkish_voice_missing','Cihazda Türkçe ses bulunamadı.');
 
-    utterance.onstart=()=>beginSpeech(token);
+    utterance.onstart=()=>{
+      lastSpeechError='';
+      try{window.dispatchEvent(new CustomEvent('adimbot:speech-start'));}catch(_){}
+      beginSpeech(token);
+    };
     utterance.onend=()=>finishSpeech(token,false);
-    utterance.onerror=()=>finishSpeech(token,false);
+    utterance.onerror=event=>{
+      const reason=String(event?.error||'speech_error');
+      if(reason!=='canceled'&&reason!=='interrupted')reportSpeechError(reason,'Türkçe seslendirme başlatılamadı.');
+      finishSpeech(token,reason==='canceled'||reason==='interrupted');
+    };
     utterance.onboundary=event=>{
       if(activeSpeechToken!==token||activeUtterance!==utterance||!mouth)return;
       const charIndex=Number.isFinite(event.charIndex)?event.charIndex:0;
@@ -669,7 +686,11 @@
     };
 
     beginSpeech(token);
-    timer=setTimeout(()=>finishSpeech(token,false),Math.max(3500,text.length*120));
+    timer=setTimeout(()=>{
+      try{speech.cancel();}catch(_){}
+      reportSpeechError('timeout','Seslendirme zamanında tamamlanamadı.');
+      finishSpeech(token,true);
+    },Math.max(5000,text.length*160));
 
     try{
       try{speech.resume?.();}catch(_){}
@@ -677,6 +698,7 @@
       return true;
     }catch(error){
       console.error('AdımBot seslendirme başlatılamadı:',error);
+      reportSpeechError('start_failed','Seslendirme motoru başlatılamadı.');
       finishSpeech(token,true);
       return false;
     }
@@ -1002,6 +1024,7 @@
     pause:()=>{try{return pauseSpeaking();}catch(_){return false;}},
     resume:()=>{try{return resumeSpeaking();}catch(_){return false;}},
     isPaused:()=>speechPaused,
+    voiceStatus:()=>Object.freeze({supported:Boolean(speech),turkishVoice:Boolean(pickTurkishVoice()),lastError:lastSpeechError}),
     react:(type,context={},options={})=>{
       try{return react(String(type||''),context,options);}catch(error){console.error('AdımBot react hatası:',error);return false;}
     },

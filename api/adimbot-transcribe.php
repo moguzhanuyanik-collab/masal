@@ -51,7 +51,9 @@ if ($provider==='groq') {
     $url='https://api.groq.com/openai/v1/audio/transcriptions';
     $headers=['Authorization: Bearer '.$key];
 } else {
-    $url='https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent';
+    $geminiModel=trim((string)($ai['voice_gemini_model'] ?? 'gemini-3.5-flash-lite'));
+    if (!preg_match('/^gemini-[A-Za-z0-9._-]+$/D',$geminiModel)) voice_result(['ok'=>false,'reason'=>'provider_config_error'],500);
+    $url='https://generativelanguage.googleapis.com/v1beta/models/'.rawurlencode($geminiModel).':generateContent';
     $headers=['x-goog-api-key: '.$key,'Content-Type: application/json'];
     $request=json_encode(['contents'=>[['parts'=>[
         ['text'=>'Bu Türkçe ses kaydını yalnızca yazıya çevir. Yorum, yanıt veya ek açıklama yazma.'],

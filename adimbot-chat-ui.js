@@ -365,6 +365,20 @@
     const counter=modal.querySelector('[data-adimbot-chat-counter]');
     const mic=modal.querySelector('[data-adimbot-microphone]');
     const contextBadge=modal.querySelector('[data-adimbot-chat-context]');
+    const speechErrorHandler=event=>{
+      if(modal.hidden||!status)return;
+      const reason=String(event?.detail?.reason||'');
+      status.dataset.adimbotSpeechError='1';
+      status.textContent=reason==='unsupported'
+        ?'Bu cihazda Türkçe sesli okuma desteklenmiyor; yanıtı ekrandan okuyabilirsin.'
+        :reason==='timeout'
+          ?'Sesli okuma takıldı ve güvenli biçimde durduruldu. Tekrar dinle düğmesini deneyebilirsin.'
+          :reason==='turkish_voice_missing'
+            ?'Cihazda Türkçe ses bulunamadı; varsayılan cihaz sesi kullanılacak.'
+          :'Sesli okuma başlatılamadı. Cihazın ses ayarlarını kontrol edebilirsin.';
+    };
+    window.addEventListener('adimbot:speech-error',speechErrorHandler);
+    window.addEventListener('adimbot:speech-start',()=>{if(status){delete status.dataset.adimbotSpeechError;status.textContent='';}});
     const voiceConfig=window.ADIMBOT_VOICE_CONFIG||{enabled:false,input:'browser'};
     if(mic)mic.hidden=!voiceConfig.enabled;
     if(voiceConfig.enabled)mic.title=voiceConfig.input==='browser'?'Tarayıcı ses tanımayı kullanır':'Ses kaydı seçilen yapay zekâ sağlayıcısına gönderilir';
@@ -458,7 +472,7 @@
     const syncConnection=()=>{
       if(!status)return;
       if(!navigator.onLine)status.textContent='İnternet bağlantısı yok. Bağlantı gelince tekrar deneyebilirsin.';
-      else if(!chatBusy)status.textContent='';
+      else if(!chatBusy&&!status.dataset.adimbotSpeechError)status.textContent='';
     };
 
     input?.addEventListener('input',()=>{
@@ -577,6 +591,7 @@
       }
 
       chatBusy=true;
+      if(status)delete status.dataset.adimbotSpeechError;
       modal.setAttribute('aria-busy','true');
       try{window.AdimBotStudent?.emote?.('think',1600);}catch(_){}
       const waitEmotionTimer=setTimeout(()=>{
@@ -612,7 +627,7 @@
         modal.removeAttribute('aria-busy');
         input.disabled=false;
         if(submit)submit.disabled=false;
-        if(status)status.textContent=navigator.onLine?'':'İnternet bağlantısı yok. Bağlantı gelince tekrar deneyebilirsin.';
+        if(status&&!status.dataset.adimbotSpeechError)status.textContent=navigator.onLine?'':'İnternet bağlantısı yok. Bağlantı gelince tekrar deneyebilirsin.';
         if(!modal.hidden)input.focus();
       }
     });
