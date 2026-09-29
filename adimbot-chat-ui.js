@@ -94,7 +94,7 @@
     return 'provider_error';
   };
 
-  const retryableChatReasons=new Set(['timeout','provider_timeout','provider_connection_error','provider_unavailable','provider_incomplete','provider_error','invalid_provider_response','invalid_response']);
+  const retryableChatReasons=new Set(['timeout','provider_timeout','provider_connection_error','provider_unavailable','provider_incomplete','provider_rate_limit','rate_limit','provider_error','invalid_provider_response','invalid_response']);
 
   const microphoneStartMessage=error=>{
     const name=String(error?.name||'');
@@ -619,8 +619,11 @@
     const syncConnection=()=>{
       if(!status)return;
       if(!navigator.onLine){
-        if(voiceSession)stopVoice(true);
-        status.textContent='İnternet bağlantısı yok. Ses kaydı durduruldu; bağlantı gelince tekrar deneyebilirsin.';
+        const hadVoice=Boolean(voiceSession);
+        if(hadVoice)stopVoice(true);
+        status.textContent=hadVoice
+          ?'İnternet bağlantısı yok. Ses kaydı durduruldu; bağlantı gelince tekrar deneyebilirsin.'
+          :'İnternet bağlantısı yok. Bağlantı gelince tekrar deneyebilirsin.';
       }
       else if(!chatBusy&&!status.dataset.adimbotSpeechError&&!status.dataset.adimbotRetry)status.textContent='';
     };
@@ -781,12 +784,20 @@
           const reply=result?.text||'Şu anda yanıt oluşturamadım.';
           appendMessage(box,'bot',reply,{speakable:Boolean(result?.ok||result?.blocked)});
           if(result?.ok||result?.blocked)remember('assistant',reply);
-          else if(retryableChatReasons.has(String(result?.reason||''))){
+          else{
             rollbackPendingUser(message);
-            retryMessage=message;
-            input.value=message;
-            if(counter)counter.textContent=String(message.length)+' / 400';
-            if(status){status.dataset.adimbotRetry='1';status.textContent='Sorun kaybolmadı. Bağlantı düzeldiğinde Gönder düğmesine yeniden dokunabilirsin.';}
+            const reason=String(result?.reason||'');
+            if(retryableChatReasons.has(reason)){
+              retryMessage=message;
+              input.value=message;
+              if(counter)counter.textContent=String(message.length)+' / 400';
+              if(status){
+                status.dataset.adimbotRetry='1';
+                status.textContent=reason==='provider_rate_limit'||reason==='rate_limit'
+                  ?'Kullanım sınırı dolu. Birkaç dakika bekleyip Gönder düğmesine yeniden dokunabilirsin.'
+                  :'Sorun kaybolmadı. Bağlantı düzeldiğinde Gönder düğmesine yeniden dokunabilirsin.';
+              }
+            }
           }
         }
       }catch(_){

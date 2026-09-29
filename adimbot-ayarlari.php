@@ -4,6 +4,9 @@ require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
 
 $user=require_role('super_admin');
+header('Cache-Control: no-store, max-age=0');
+header('Pragma: no-cache');
+header('X-Content-Type-Options: nosniff');
 function aa_h(string $value): string { return htmlspecialchars($value,ENT_QUOTES,'UTF-8'); }
 function aa_placeholder_key(string $value): bool {
     $normalized=strtoupper(trim($value," \t\n\r\0\x0B<>[]{}'\""));
@@ -32,6 +35,15 @@ function aa_provider_test_text(string $provider,array $decoded): string {
         }
     }
     return trim(implode(' ',$parts));
+}
+function aa_embedded_error_message(mixed $error): string {
+    if($error===null) return '';
+    if(!is_array($error)) return 'sağlayıcı geçerli bir hata yanıtı döndürmedi';
+    $code=strtoupper((string)($error['code']??$error['status']??$error['type']??''));
+    if(in_array($code,['402','429'],true)||preg_match('/(?:RESOURCE_EXHAUSTED|RATE_LIMIT|QUOTA|TOO_MANY_REQUESTS)/',$code)) return 'sağlayıcı kotası, bakiyesi veya istek sınırı testi engelledi';
+    if(in_array($code,['401','403'],true)||preg_match('/(?:UNAUTHENTICATED|PERMISSION_DENIED|INVALID_API_KEY|AUTH)/',$code)) return 'API anahtarı sağlayıcı tarafından reddedildi';
+    if(in_array($code,['400','404','422'],true)||preg_match('/(?:INVALID_ARGUMENT|NOT_FOUND|MODEL|BAD_REQUEST)/',$code)) return 'model kimliği veya istek ayarı sağlayıcı tarafından kabul edilmedi';
+    return 'sağlayıcı isteği tamamlayamadı';
 }
 function aa_test_provider(string $provider,string $model,string $apiKey): string {
     if(!function_exists('curl_init')) throw new RuntimeException('Aday ayarlar uygulanmadı: sunucuda cURL kapalı olduğu için bağlantı test edilemedi.');
@@ -65,7 +77,9 @@ function aa_test_provider(string $provider,string $model,string $apiKey): string
     if($status<200 || $status>=300) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcı geçici olarak yanıt veremedi; önceki ayarlar korundu.');
     $decoded=is_string($body)?json_decode($body,true):null;
     unset($body);
-    if(!is_array($decoded) || isset($decoded['error'])) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcı geçerli bir sohbet yanıtı üretmedi; önceki ayarlar korundu.');
+    if(!is_array($decoded)) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcı geçerli bir sohbet yanıtı üretmedi; önceki ayarlar korundu.');
+    $embeddedError=aa_embedded_error_message($decoded['error']??null);
+    if($embeddedError!=='') throw new RuntimeException('Aday ayarlar uygulanmadı: '.$embeddedError.'; önceki ayarlar korundu.');
     $incomplete=($provider==='groq' && (string)($decoded['choices'][0]['finish_reason']??'')==='length')
         || ($provider==='gemini' && (string)($decoded['candidates'][0]['finishReason']??'')==='MAX_TOKENS')
         || ($provider==='openai' && ((string)($decoded['status']??'')==='incomplete' || isset($decoded['incomplete_details'])));
@@ -114,7 +128,8 @@ function aa_test_voice_provider(string $provider,string $model,string $apiKey): 
     $decoded=is_string($body)?json_decode($body,true):null;
     unset($body);
     if(!is_array($decoded)) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma modeli yanıtı okunamadı.');
-    if(isset($decoded['error'])) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma sağlayıcısı test kaydını reddetti.');
+    $embeddedError=aa_embedded_error_message($decoded['error']??null);
+    if($embeddedError!=='') throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak '.$embeddedError.'; aday ayarlar uygulanmadı.');
     return 'Konuşma uç noktası gerçek test kaydıyla doğrulandı: '.strtoupper($provider).' '.$model.'.';
 }
 $message='';

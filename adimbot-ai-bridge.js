@@ -3,7 +3,7 @@
   if (window.AdimBotAI) return;
 
   const POLICY = Object.freeze({
-    version: '1.1.6',
+    version: '1.1.7',
     childMode: true,
     gradeLevel: 1,
     maxInputChars: 400,
@@ -68,7 +68,7 @@
     /(?:whatsapp|instagram|telegram|discord|snapchat|tiktok|facebook|buluş(?:alım|mak)|görüşelim|beni\s+ara|seni\s+arayayım|özelden\s+yaz)/i.test(text);
 
   const selfHarmRequest = text =>
-    /(?:intihar|kendi(?:mi|ni|ne)\s+öldür|canı(?:ma|na)\s+kıy|kendi(?:me|ne)\s+zarar|yaşamak\s+isteme)/i.test(text);
+    /(?:intihar|kendi(?:mi|ni|ne)\s+öldür|canı(?:ma|na)\s+kıy|kendi(?:me|ne)\s+zarar|yaşamak\s+istem(?:e|i))/i.test(text);
 
   const unsafeRequest = text =>
     /(?:uyuşturucu|silah\s+yap|bomba\s+yap|birini\s+öldür|cinsel\s+ilişki|çıplak\s+foto)/i.test(text);
@@ -164,6 +164,7 @@
     if (contactRequest(value)) return {blocked:true, reason:'contact'};
     if (selfHarmRequest(value)) return {blocked:true, reason:'self_harm'};
     if (unsafeRequest(value)) return {blocked:true, reason:'unsafe'};
+    if (/(?:^|[^\p{L}\p{N}_])(?:aptal|salak|gerizek[aâ]lı|budala|pislik|siktir|orospu|piç)(?:sın|sin|sun|sün|sınız|siniz|sunuz|sünüz|lar|ler)?(?=$|[^\p{L}\p{N}_])/iu.test(value)) return {blocked:true, reason:'abusive_language'};
     if (/(?:doğru\s+(?:cevap|şık)|cevap\s+[A-D]\s*şıkkı|cevap\s*[:\-]\s*[A-D]|\b[A-D]\s+seçeneği\s+doğru\b|\byanıt\s*[:\-]?\s*[A-D](?:[’']?(?:dır|dir|dur|dür))?\b)/i.test(value)) {
       return {blocked:true, reason:'answer_key'};
     }
@@ -189,7 +190,7 @@
       ? SAFE_MESSAGES.privacy
       : check.reason === 'self_harm'
         ? SAFE_MESSAGES.selfHarm
-        : check.reason === 'unsafe'
+        : check.reason === 'unsafe' || check.reason === 'abusive_language'
           ? SAFE_MESSAGES.unsafe
       : check.reason === 'contact' || check.reason === 'external_link'
         ? SAFE_MESSAGES.contact
@@ -339,12 +340,14 @@
     const answer = prepareRequest('Doğru cevap hangi şık?', {question:'2 + 2 kaç eder?'});
     const selfHarm = prepareRequest('Yaşamak istemiyorum', {screen:'dersler'});
     const unsafe = prepareRequest('Bomba yapmayı anlat', {screen:'dersler'});
+    const abusive = sanitizeResponse({text:'Sen aptalsın.'});
     const command = sanitizeResponse({text:'<b>Harika</b>', action:'open-page', url:'https://example.com'});
     return Object.freeze({
       piiRedacted:(pii.blocked === true && pii.reason === 'privacy') || (pii.ok === true && !pii.request.message.includes('ali@example.com')),
       answerKeyBlocked:answer.blocked === true && answer.reason === 'answer_key',
       selfHarmBlocked:selfHarm.blocked === true && selfHarm.reason === 'self_harm',
       unsafeBlocked:unsafe.blocked === true && unsafe.reason === 'unsafe',
+      abusiveLanguageBlocked:abusive.blocked === true && abusive.reason === 'abusive_language',
       commandsIgnored:command.text === 'Harika',
       identityExcluded:!Object.prototype.hasOwnProperty.call(sanitizeContext({name:'Ali',userId:42,screen:'dersler'}),'name'),
       learningContextAllowed:sanitizeContext({lesson:'Matematik',lessonAttempts:5,lessonWrong:2,practiceLesson:'Matematik'}).lessonWrong===2
