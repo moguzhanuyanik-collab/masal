@@ -312,6 +312,7 @@
   let pendingX=0,pendingY=0,frame=0,activeUtterance=null;
   let activeSpeechToken=0,activeOnEnd=null,activeOnStart=null,speechStarted=false,speechPaused=false;
   let longSpeechToken=0,longSpeechTimer=0;
+  let speechLaunchTimer=0;
   let speechTimeoutRemaining=0,speechTimeoutStartedAt=0;
   let gestureLoopTimer=0,gestureReleaseTimer=0,settleTimer=0,gestureIndex=0,lastGestureAt=0;
   let emotionTimer=0;
@@ -522,6 +523,8 @@
   const finishSpeech=(token,cancelled=false)=>{
     if(token!==activeSpeechToken)return;
     clearTimeout(timer);
+    clearTimeout(speechLaunchTimer);
+    speechLaunchTimer=0;
     activeSpeechToken++;
     speechTimeoutRemaining=0;
     speechTimeoutStartedAt=0;
@@ -699,7 +702,6 @@
 
     const selectedVoice=pickTurkishVoice();
     if(selectedVoice)utterance.voice=selectedVoice;
-    else if(voices.length)reportSpeechError('turkish_voice_missing','Cihazda Türkçe ses bulunamadı.');
 
     utterance.onstart=()=>{
       lastSpeechError='';
@@ -729,17 +731,29 @@
       else if(word.length>=8)triggerSpeechGesture(gestureIndex%2?'right':'left');
     };
 
-    try{
-      try{speech.resume?.();}catch(_){}
-      armSpeechWatchdog(token,6000,'start_timeout');
-      speech.speak(utterance);
-      return true;
-    }catch(error){
-      console.error('AdımBot seslendirme başlatılamadı:',error);
-      reportSpeechError('start_failed','Seslendirme motoru başlatılamadı.');
-      finishSpeech(token,true);
-      return false;
-    }
+    const launchSpeech=()=>{
+      speechLaunchTimer=0;
+      if(token!==activeSpeechToken||activeUtterance!==utterance||pageSuspended)return;
+      try{
+        refreshVoices();
+        if(!utterance.voice){
+          const lateTurkishVoice=pickTurkishVoice();
+          if(lateTurkishVoice)utterance.voice=lateTurkishVoice;
+          else if(voices.length)reportSpeechError('turkish_voice_missing','Cihazda Türkçe ses bulunamadı.');
+        }
+        try{speech.resume?.();}catch(_){}
+        armSpeechWatchdog(token,6000,'start_timeout');
+        speech.speak(utterance);
+      }catch(error){
+        console.error('AdımBot seslendirme başlatılamadı:',error);
+        reportSpeechError('start_failed','Seslendirme motoru başlatılamadı.');
+        finishSpeech(token,true);
+      }
+    };
+
+    if(voices.length===0)speechLaunchTimer=setTimeout(launchSpeech,180);
+    else launchSpeech();
+    return true;
   };
 
   const viewportBounds=()=>{

@@ -149,6 +149,9 @@ function adimbot_ai_safe_output(string $text, bool $hasActiveQuestion=false): ar
     if ($hasActiveQuestion && preg_match('/(?:\d+\s*[-+×x÷\/:]\s*\d+\s*=\s*\d+|(?:\d+(?:[.,]\d+)?|bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on)\s+(?:eder|olur)\b)/iu',$value)) {
         return ['ok'=>false,'text'=>'İşlemin sonucunu doğrudan söylemeyeyim. Önce hangi işlemi yapacağımızı birlikte bulalım.','reason'=>'answer_key'];
     }
+    if ($hasActiveQuestion && preg_match('/\b(?:cevap|yanıt|sonuç|doğru\s+olan)\s*[:\-]?\s*(?:\d+(?:[.,]\d+)?|bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on)(?:[’\x27]?(?:dır|dir|dur|dür|tır|tir|tur|tür))?\b/iu',$value)) {
+        return ['ok'=>false,'text'=>'Sonucu doğrudan söylemeyeyim. Sorudaki bilgileri kullanarak birlikte bulalım.','reason'=>'answer_key'];
+    }
     if ($hasActiveQuestion && preg_match('/^\s*(?:[A-D]|\d+(?:[.,]\d+)?|bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on)\s*[.!]?\s*$/iu',$value)) {
         return ['ok'=>false,'text'=>'Sonucu doğrudan söylemeyeyim. Önce soruda verilen bilgileri birlikte bulalım.','reason'=>'answer_key'];
     }
@@ -286,7 +289,9 @@ $requests=array_values(array_filter(array_map('intval',$requests),static fn(int 
 $limit=max(3,min(60,(int)($ai['max_requests_per_10_minutes'] ?? 20)));
 if (count($requests)>=$limit) {
     $_SESSION['adimbot_ai_requests']=$requests;
-    adimbot_ai_json(['ok'=>false,'message'=>'AdımBot biraz dinlensin. Birkaç dakika sonra tekrar deneyebilirsin.','reason'=>'rate_limit'],429);
+    $retryAfter=max(1,min($window,$requests[0]+$window-$now));
+    header('Retry-After: '.$retryAfter);
+    adimbot_ai_json(['ok'=>false,'message'=>'AdımBot biraz dinlensin. Birkaç dakika sonra tekrar deneyebilirsin.','reason'=>'rate_limit','retry_after'=>$retryAfter],429);
 }
 $requests[]=$now;
 $_SESSION['adimbot_ai_requests']=$requests;

@@ -49,4 +49,7 @@ check(adimbot_provider_reason(200,['error'=>['code'=>403]])==='provider_permissi
 check(adimbot_provider_reason(200,['error'=>['code'=>'model_deprecated']])==='provider_model_retired','Embedded retired model classification');
 check(adimbot_provider_reason(200,['error'=>['code'=>'model_not_found']])==='provider_model_unavailable','Embedded unavailable model classification');
 check(adimbot_provider_reason(200,['error'=>['status'=>'INVALID_ARGUMENT']])==='provider_config_error','Embedded configuration classification');
+check(adimbot_provider_reason(404,'{}')==='provider_model_unavailable','HTTP 404 model classification');
+check(adimbot_provider_reason(200,['error'=>['status'=>'DEADLINE_EXCEEDED']])==='provider_timeout','Embedded timeout classification');
+check(adimbot_provider_reason(200,['error'=>['status'=>'UNAVAILABLE']])==='provider_unavailable','Embedded outage classification');
 echo "PASS: Groq model migration, payload, deadline, retry boundaries and error classification\n";

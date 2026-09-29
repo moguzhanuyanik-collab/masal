@@ -3,7 +3,7 @@
   if (window.AdimBotAI) return;
 
   const POLICY = Object.freeze({
-    version: '1.1.78',
+    version: '1.1.79',
     childMode: true,
     gradeLevel: 1,
     maxInputChars: 400,
@@ -155,7 +155,7 @@
     };
   };
 
-  const responseViolatesPolicy = text => {
+  const responseViolatesPolicy = (text, activeQuestion=false) => {
     const value = cleanText(text);
     if (!value) return {blocked:true, reason:'empty'};
     if (privacyRequest(value)) {
@@ -168,11 +168,14 @@
     if (/(?:doğru\s+(?:cevap|şık)|cevap\s+[A-D]\s*şıkkı|cevap\s*[:\-]\s*[A-D]|\b[A-D]\s+seçeneği\s+doğru\b|\byanıt\s*[:\-]?\s*[A-D](?:[’']?(?:dır|dir|dur|dür))?\b)/i.test(value)) {
       return {blocked:true, reason:'answer_key'};
     }
+    if (activeQuestion && /(?:\b(?:cevap|yanıt|sonuç|doğru\s+olan)\s*[:\-]?\s*(?:\d+(?:[.,]\d+)?|bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on)(?:[’']?(?:dır|dir|dur|dür|tır|tir|tur|tür))?\b|\d+\s*[-+×x÷\/:]\s*\d+\s*=\s*\d+)/iu.test(value)) {
+      return {blocked:true, reason:'answer_key'};
+    }
     if (/(?:https?:\/\/|www\.|\b[\p{L}\p{N}-]+\.(?:com|net|org|edu|gov|io|app|tr)\b)/iu.test(value)) return {blocked:true, reason:'external_link'};
     return {blocked:false, reason:'ok'};
   };
 
-  const sanitizeResponse = value => {
+  const sanitizeResponse = (value, activeQuestion=false) => {
     const raw = typeof value === 'string'
       ? value
       : value && typeof value === 'object'
@@ -180,7 +183,7 @@
         : '';
 
     const readable = truncate(childLength(stripMarkup(raw)), POLICY.maxOutputChars);
-    const check = responseViolatesPolicy(readable);
+    const check = responseViolatesPolicy(readable,activeQuestion);
     const text = truncate(redactPII(readable), POLICY.maxOutputChars);
 
     if (!check.blocked) {
@@ -200,6 +203,11 @@
           : SAFE_MESSAGES.generic;
 
     return Object.freeze({ok:false, blocked:true, reason:check.reason, text:fallback});
+  };
+
+  const retryAfterValue=value=>{
+    const seconds=Math.ceil(Number(value));
+    return Number.isFinite(seconds)?Math.max(0,Math.min(600,seconds)):0;
   };
 
   const sameOriginProvider = async (request,{signal}={}) => {
@@ -237,10 +245,16 @@
       }
 
       if(!response.ok){
-        throw new Error(String(payload.reason||'provider_error'));
+        const failure=new Error(String(payload.reason||'provider_error'));
+        failure.retryAfter=retryAfterValue(payload.retry_after||response.headers.get('Retry-After'));
+        throw failure;
       }
 
-      if(payload.ok===false)throw new Error(String(payload.reason||'provider_error'));
+      if(payload.ok===false){
+        const failure=new Error(String(payload.reason||'provider_error'));
+        failure.retryAfter=retryAfterValue(payload.retry_after||response.headers.get('Retry-After'));
+        throw failure;
+      }
       return {text:String(payload.text||''),blocked:payload.blocked===true,reason:String(payload.reason||'ok')};
     }catch(error){
       if(error?.name==='AbortError')throw new Error(signal?.aborted?'cancelled':'timeout');
@@ -301,10 +315,11 @@
 
     try {
       const providerResult = await provider(prepared.request,options);
-      const safe = sanitizeResponse(providerResult);
+      const safe = sanitizeResponse(providerResult,Boolean(prepared.request.context.question));
       return Object.freeze({...safe,blocked:safe.blocked||providerResult?.blocked===true,reason:safe.blocked?safe.reason:String(providerResult?.reason||'ok'),local:false});
     } catch (error) {
       const reason=(error?.name==='AbortError'||options?.signal?.aborted)?'cancelled':String(error?.message||'provider_error');
+      const retryAfter=retryAfterValue(error?.retryAfter);
       let text='Şu anda yapay zekâ yanıtına ulaşamadım. Dersine devam edebiliriz.';
       if(reason==='cancelled')text='İstek durduruldu.';
       else if(reason==='timeout')text='AdımBot yanıtı biraz gecikti. İstersen tekrar deneyebilirsin.';
@@ -333,6 +348,7 @@
         blocked:false,
         local:true,
         reason,
+        retryAfter,
         text
       });
     }
@@ -351,6 +367,7 @@
     const abusive = sanitizeResponse({text:'Sen aptalsın.'});
     const linked = sanitizeResponse({text:'Devam etmek için https://example.com adresine git.'});
     const personal = sanitizeResponse({text:'Bana 0555 111 22 33 numarasından ulaş.'});
+    const numericAnswer = sanitizeResponse({text:'Cevap 4’tür.'},true);
     const command = sanitizeResponse({text:'<b>Harika</b>', action:'open-page', url:'https://example.com'});
     return Object.freeze({
       piiRedacted:(pii.blocked === true && pii.reason === 'privacy') || (pii.ok === true && !pii.request.message.includes('ali@example.com')),
@@ -360,6 +377,7 @@
       abusiveLanguageBlocked:abusive.blocked === true && abusive.reason === 'abusive_language',
       externalLinkBlocked:linked.blocked === true && linked.reason === 'external_link',
       responsePiiBlocked:personal.blocked === true && personal.reason === 'privacy',
+      numericAnswerBlocked:numericAnswer.blocked === true && numericAnswer.reason === 'answer_key',
       commandsIgnored:command.text === 'Harika',
       identityExcluded:!Object.prototype.hasOwnProperty.call(sanitizeContext({name:'Ali',userId:42,screen:'dersler'}),'name'),
       learningContextAllowed:sanitizeContext({lesson:'Matematik',lessonAttempts:5,lessonWrong:2,practiceLesson:'Matematik'}).lessonWrong===2

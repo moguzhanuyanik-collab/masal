@@ -42,14 +42,19 @@ function aa_provider_test_text(string $provider,array $decoded): string {
     }
     return trim(implode(' ',$parts));
 }
-function aa_embedded_error_message(mixed $error): string {
-    if($error===null) return '';
-    if(!is_array($error)) return 'sağlayıcı geçerli bir hata yanıtı döndürmedi';
-    $code=strtoupper((string)($error['code']??$error['status']??$error['type']??''));
-    if(in_array($code,['402','429'],true)||preg_match('/(?:RESOURCE_EXHAUSTED|RATE_LIMIT|QUOTA|TOO_MANY_REQUESTS)/',$code)) return 'sağlayıcı kotası, bakiyesi veya istek sınırı testi engelledi';
-    if(in_array($code,['401','403'],true)||preg_match('/(?:UNAUTHENTICATED|PERMISSION_DENIED|INVALID_API_KEY|AUTH)/',$code)) return 'API anahtarı sağlayıcı tarafından reddedildi';
-    if(in_array($code,['400','404','422'],true)||preg_match('/(?:INVALID_ARGUMENT|NOT_FOUND|MODEL|BAD_REQUEST)/',$code)) return 'model kimliği veya istek ayarı sağlayıcı tarafından kabul edilmedi';
-    return 'sağlayıcı isteği tamamlayamadı';
+function aa_provider_failure_message(int $status,mixed $body): string {
+    $reason=adimbot_provider_reason($status,$body);
+    return match($reason){
+        'provider_timeout'=>'bağlantı testi zaman aşımına uğradı',
+        'provider_rate_limit'=>'sağlayıcı kotası, bakiyesi veya istek sınırı testi engelledi',
+        'provider_auth_error'=>'API anahtarı sağlayıcı tarafından reddedildi',
+        'provider_permission_error'=>'sağlayıcı bu hesap veya proje için erişim izni vermedi',
+        'provider_model_retired'=>'seçilen model sağlayıcı tarafından kullanımdan kaldırıldı',
+        'provider_model_unavailable'=>'seçilen model bulunamadı veya bu hesapta kullanılamıyor',
+        'provider_config_error'=>'model kimliği veya istek ayarı sağlayıcı tarafından kabul edilmedi',
+        'provider_unavailable'=>'sağlayıcı geçici olarak yanıt veremiyor',
+        default=>'sağlayıcı isteği tamamlayamadı',
+    };
 }
 function aa_test_provider(string $provider,string &$model,string $apiKey): string {
     if(!function_exists('curl_init')) throw new RuntimeException('Aday ayarlar uygulanmadı: sunucuda cURL kapalı olduğu için bağlantı test edilemedi.');
@@ -88,22 +93,11 @@ function aa_test_provider(string $provider,string &$model,string $apiKey): strin
     }
     if($errno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) throw new RuntimeException('Aday ayarlar uygulanmadı: bağlantı testi zaman aşımına uğradı; önceki ayarlar korundu.');
     if($errno!==0) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcıya ağ bağlantısı kurulamadı ('.aa_curl_failure_message($errno).'); önceki ayarlar korundu.');
-    $reason=adimbot_provider_reason($status,$body);
-    $specificErrors=[
-        'provider_model_retired'=>'Seçilen model sağlayıcı tarafından kullanımdan kaldırılmış. Güncel model seçin.',
-        'provider_model_unavailable'=>'Model bulunamadı veya bu hesabın modele erişimi yok.',
-        'provider_permission_error'=>'Sağlayıcı erişim izni vermedi. Hesap/proje ve model izinlerini kontrol edin.',
-        'provider_auth_error'=>'API anahtarı sağlayıcı tarafından reddedildi.',
-    ];
-    if($status>=400 && isset($specificErrors[$reason])) throw new RuntimeException('Aday ayarlar uygulanmadı: '.$specificErrors[$reason].' (HTTP '.$status.'); önceki ayarlar korundu.');
-    if($status===402 || $status===429) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcı kotası, bakiyesi veya istek sınırı testi engelledi (HTTP '.$status.'); önceki ayarlar korundu.');
-    if($status===400 || $status===404 || $status===422) throw new RuntimeException('Aday ayarlar uygulanmadı: model kimliği veya istek ayarı sağlayıcı tarafından kabul edilmedi (HTTP '.$status.'); önceki ayarlar korundu.');
-    if($status<200 || $status>=300) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcı geçici olarak yanıt veremedi (HTTP '.$status.'); önceki ayarlar korundu.');
+    if($status<200 || $status>=300) throw new RuntimeException('Aday ayarlar uygulanmadı: '.aa_provider_failure_message($status,$body).' (HTTP '.$status.'); önceki ayarlar korundu.');
     $decoded=is_string($body)?json_decode($body,true):null;
     unset($body);
     if(!is_array($decoded)) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcı geçerli bir sohbet yanıtı üretmedi; önceki ayarlar korundu.');
-    $embeddedError=aa_embedded_error_message($decoded['error']??null);
-    if($embeddedError!=='') throw new RuntimeException('Aday ayarlar uygulanmadı: '.$embeddedError.'; önceki ayarlar korundu.');
+    if(array_key_exists('error',$decoded)) throw new RuntimeException('Aday ayarlar uygulanmadı: '.aa_provider_failure_message($status,$decoded).'; önceki ayarlar korundu.');
     $incomplete=($provider==='groq' && (string)($decoded['choices'][0]['finish_reason']??'')==='length')
         || ($provider==='gemini' && (string)($decoded['candidates'][0]['finishReason']??'')==='MAX_TOKENS')
         || ($provider==='openai' && ((string)($decoded['status']??'')==='incomplete' || isset($decoded['incomplete_details'])));
@@ -145,15 +139,11 @@ function aa_test_voice_provider(string $provider,string $model,string $apiKey): 
     }
     if($errno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma modeli testi zaman aşımına uğradı; aday ayarlar uygulanmadı.');
     if($errno!==0) throw new RuntimeException('Konuşma testi başarısız: sağlayıcıya ağ bağlantısı kurulamadı ('.aa_curl_failure_message($errno).'); aday ayarlar uygulanmadı.');
-    if($status===401 || $status===403) throw new RuntimeException('Konuşma testi başarısız: konuşma sağlayıcısının API anahtarı veya erişim izni reddedildi (HTTP '.$status.'); aday ayarlar uygulanmadı.');
-    if($status===402 || $status===429) throw new RuntimeException('Konuşma testi başarısız: sağlayıcının kotası veya bakiyesi testi engelledi (HTTP '.$status.'); aday ayarlar uygulanmadı.');
-    if($status===400 || $status===404 || $status===422) throw new RuntimeException('Konuşma testi başarısız: seçilen model veya istek ayarı kabul edilmedi (HTTP '.$status.'); aday ayarlar uygulanmadı.');
-    if($status<200 || $status>=300) throw new RuntimeException('Konuşma testi başarısız: sağlayıcı geçici olarak yanıt veremedi (HTTP '.$status.'); aday ayarlar uygulanmadı.');
+    if($status<200 || $status>=300) throw new RuntimeException('Konuşma testi başarısız: '.aa_provider_failure_message($status,$body).' (HTTP '.$status.'); aday ayarlar uygulanmadı.');
     $decoded=is_string($body)?json_decode($body,true):null;
     unset($body);
     if(!is_array($decoded)) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak konuşma modeli yanıtı okunamadı.');
-    $embeddedError=aa_embedded_error_message($decoded['error']??null);
-    if($embeddedError!=='') throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak '.$embeddedError.'; aday ayarlar uygulanmadı.');
+    if(array_key_exists('error',$decoded)) throw new RuntimeException('Sohbet bağlantısı doğrulandı ancak '.aa_provider_failure_message($status,$decoded).'; aday ayarlar uygulanmadı.');
     return 'Konuşma uç noktası gerçek test kaydıyla doğrulandı: '.strtoupper($provider).' '.$model.'.';
 }
 $message='';

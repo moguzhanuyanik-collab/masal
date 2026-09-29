@@ -68,9 +68,15 @@ $geminiModel=trim((string)($ai['voice_gemini_model'] ?? 'gemini-3.5-flash-lite')
 if ($provider==='groq' && !in_array($groqModel,['whisper-large-v3-turbo','whisper-large-v3'],true)) voice_result(['ok'=>false,'reason'=>'provider_config_error'],500);
 if ($provider==='gemini' && !preg_match('/^gemini-[A-Za-z0-9._-]+$/D',$geminiModel)) voice_result(['ok'=>false,'reason'=>'provider_config_error'],500);
 $times=is_array($_SESSION['adimbot_voice_requests'] ?? null)?$_SESSION['adimbot_voice_requests']:[];
-$times=array_values(array_filter(array_map('intval',$times),static fn(int $t):bool=>$t>time()-600));
-if (count($times)>=max(3,min(30,(int)($ai['max_requests_per_10_minutes'] ?? 20)))) voice_result(['ok'=>false,'reason'=>'rate_limit'],429);
-$times[]=time();
+$voiceNow=time();
+$voiceWindow=600;
+$times=array_values(array_filter(array_map('intval',$times),static fn(int $t):bool=>$t>$voiceNow-$voiceWindow));
+if (count($times)>=max(3,min(30,(int)($ai['max_requests_per_10_minutes'] ?? 20)))) {
+    $retryAfter=max(1,min($voiceWindow,$times[0]+$voiceWindow-$voiceNow));
+    header('Retry-After: '.$retryAfter);
+    voice_result(['ok'=>false,'reason'=>'rate_limit','retry_after'=>$retryAfter],429);
+}
+$times[]=$voiceNow;
 $_SESSION['adimbot_voice_requests']=$times;
 session_write_close();
 $timeout=max(10,min(45,(int)($ai['timeout_seconds'] ?? 20)));
