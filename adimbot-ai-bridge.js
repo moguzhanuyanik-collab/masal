@@ -206,7 +206,8 @@
   };
 
   const retryAfterValue=value=>{
-    const seconds=Math.ceil(Number(value));
+    const raw=String(value??'').trim();
+    const seconds=/^\d+(?:\.\d+)?$/.test(raw)?Math.ceil(Number(raw)):Math.ceil((Date.parse(raw)-Date.now())/1000);
     return Number.isFinite(seconds)?Math.max(0,Math.min(600,seconds)):0;
   };
 
@@ -234,11 +235,18 @@
       });
 
       let payload=null;
-      try{payload=await response.json();}catch(_){}
+      try{payload=await response.json();}catch(error){
+        if(controller.signal.aborted||error?.name==='AbortError')throw Object.assign(new Error('timeout'),{name:'AbortError'});
+      }
+      if(controller.signal.aborted)throw Object.assign(new Error('cancelled'),{name:'AbortError'});
 
       if(!payload||typeof payload!=='object'){
         if(response.status===408||response.status===504)throw new Error('provider_timeout');
-        if(response.status===429)throw new Error('provider_rate_limit');
+        if(response.status===429){
+          const error=new Error('provider_rate_limit');
+          error.retryAfter=retryAfterValue(response.headers.get('Retry-After'));
+          throw error;
+        }
         if(response.status===401||response.status===403)throw new Error('auth');
         if(response.status>=500)throw new Error('provider_unavailable');
         throw new Error('invalid_response');
@@ -255,7 +263,8 @@
         failure.retryAfter=retryAfterValue(payload.retry_after||response.headers.get('Retry-After'));
         throw failure;
       }
-      return {text:String(payload.text||''),blocked:payload.blocked===true,reason:String(payload.reason||'ok')};
+      if(typeof payload.text!=='string'||!payload.text.trim()||Array.isArray(payload))throw new Error('invalid_response');
+      return {text:payload.text,blocked:payload.blocked===true,reason:String(payload.reason||'ok')};
     }catch(error){
       if(error?.name==='AbortError')throw new Error(signal?.aborted?'cancelled':'timeout');
       if(error instanceof TypeError||navigator.onLine===false)throw new Error('provider_connection_error');
@@ -406,3 +415,4 @@
     window.dispatchEvent(new CustomEvent('adimbot-ai:ready',{detail:{version:POLICY.version,provider:true}}));
   } catch (_) {}
 })();
+

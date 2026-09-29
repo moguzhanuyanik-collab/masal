@@ -445,14 +445,19 @@
     else gesture=gestureClasses[gestureIndex%gestureClasses.length];
 
     gestureIndex++;
-    void root.offsetWidth;
     root.classList.add(gesture);
+    const selectors=gesture==='adb-gesture-left'?['.adb-arm-leftview']:gesture==='adb-gesture-right'?['.adb-arm-rightview']:['.adb-arm-leftview','.adb-arm-rightview'];
+    for(const selector of selectors){
+      const arm=root.querySelector(selector);
+      try{arm?.getAnimations?.().forEach(animation=>{animation.currentTime=0;});}catch(_){}
+    }
     clearTimeout(gestureReleaseTimer);
     gestureReleaseTimer=setTimeout(()=>root.classList.remove(gesture),760);
   };
 
   const scheduleSpeechGestures=utterance=>{
     clearTimeout(gestureLoopTimer);
+    if(motionPreference?.matches)return;
     const delays=[1250,1750,1450,2050];
     const run=()=>{
       if(activeUtterance!==utterance||speechPaused||dragging||pageSuspended||preferences.minimized)return;
@@ -476,7 +481,7 @@
 
   const tuneMouthForWord=(word,charIndex)=>{
     if(!mouth||!word)return;
-    const letters=word.replace(/[^A-Za-zÇĞİÖŞÜçğıöşü]/g,'');
+    const letters=word.normalize('NFC').replace(/[^A-Za-zÇĞİÖŞÜçğıöşü]/g,'');
     const length=Math.max(1,letters.length);
     const vowels=(letters.match(/[aeıioöuüAEIİOÖUÜ]/g)||[]).length;
     const vowelRatio=vowels/length;
@@ -624,7 +629,7 @@
     try{window.dispatchEvent(new CustomEvent('adimbot:speech-pause',{detail:{paused:value}}));}catch(_){}
   };
   const pauseSpeaking=()=>{
-    if(!speech||speechPaused||(!state.speaking&&!nextSpeechChunk&&!pendingSpeechLaunch))return false;
+    if(!speech||speechPaused||(!state.speaking&&!nextSpeechChunk&&!pendingSpeechLaunch&&!activeUtterance))return false;
     try{
       if(pendingSpeechLaunch){
         clearTimeout(speechLaunchTimer);speechLaunchTimer=0;
@@ -653,6 +658,7 @@
       }else{
         speech.resume();
         setSpeechPaused(false);
+        if(activeUtterance?.adbStartDeferred){activeUtterance.adbStartDeferred=false;beginSpeech(activeSpeechToken);}
         armSpeechWatchdog(activeSpeechToken,speechTimeoutRemaining,'timeout');
         if(activeUtterance)scheduleSpeechGestures(activeUtterance);
       }
@@ -660,6 +666,8 @@
     }catch(_){return false;}
   };
   const prepareSpeechText=message=>String(message||'')
+    .normalize('NFC')
+    .replace(/\[([^\]]+)\]\((?:https?:\/\/|www\.)[^\s)]+\)/gi,'$1')
     .replace(/\*\*([^*]+)\*\*|__([^_]+)__/g,(_,a,b)=>a||b)
     .replace(/`([^`]+)`/g,'$1')
     .replace(/^\s*#{1,6}\s+/gm,'')
@@ -669,6 +677,7 @@
     .replace(/(\d)\s*[÷/]\s*(?=\d)/g,'$1 bölü ')
     .replace(/(\d)\s*[−-]\s*(?=\d)/g,'$1 eksi ')
     .replace(/(\d)\s*=\s*(?=\d)/g,'$1 eşittir ')
+    .replace(/(\d)\s*(≥|≤|≠|>|<)\s*(?=\d)/g,(_,n,op)=>n+' '+({'≥':'büyük veya eşittir','≤':'küçük veya eşittir','≠':'eşit değildir','>':'büyüktür','<':'küçüktür'}[op])+' ')
     .replace(/\s+/g,' ').trim();
   const speechChunks=(message,maxLength=180)=>{
     const text=String(message||'').replace(/\s+/g,' ').trim();
@@ -715,7 +724,10 @@
   };
   const speakLong=(message,options={})=>{
     const chunks=speechChunks(prepareSpeechText(message));
-    if(!chunks.length)return false;
+    if(!chunks.length){
+      if(!String(message||'').trim())return false;
+      return speak(message,options);
+    }
     stopSpeaking();
     const sequence=longSpeechToken;
     const finalOnEnd=typeof options.onEnd==='function'?options.onEnd:null;
@@ -810,9 +822,11 @@
 
     utterance.onstart=()=>{
       if(token!==activeSpeechToken||activeUtterance!==utterance)return;
+      if(speechPaused){utterance.adbStartDeferred=true;try{speech.pause();}catch(_){}return;}
       lastSpeechError='';
       try{window.dispatchEvent(new CustomEvent('adimbot:speech-start'));}catch(_){}
       beginSpeech(token);
+      if(token!==activeSpeechToken||activeUtterance!==utterance)return;
       armSpeechWatchdog(token,Math.max(5000,utterance.text.length*160/utterance.rate),'timeout');
     };
     utterance.onend=()=>finishSpeech(token,false);

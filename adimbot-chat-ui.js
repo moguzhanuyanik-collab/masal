@@ -727,6 +727,7 @@
     const syncConnection=()=>{
       if(!status)return;
       if(!navigator.onLine){
+        if(chatRequest)cancelChat(true);
         const hadVoice=Boolean(voiceSession||voiceRequestController);
         if(hadVoice)stopVoice(true);
         status.textContent=hadVoice
@@ -749,7 +750,10 @@
     document.addEventListener('visibilitychange',()=>{
       if(document.hidden&&(voiceSession||voiceRequestController)){stopVoice(true);status.textContent='Sayfa arka plana geçtiği için mikrofon durduruldu.';}
     });
-    window.addEventListener('pagehide',()=>{if(voiceSession||voiceRequestController)stopVoice(true);});
+    window.addEventListener('pagehide',()=>{
+      cancelChat(true);
+      if(voiceSession||voiceRequestController)stopVoice(true);
+    });
     syncConnection();
 
     const savedHistory=readHistory();
