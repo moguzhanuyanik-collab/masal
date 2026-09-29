@@ -12,11 +12,13 @@
   let lastTrigger=null;
   let voiceSession=null;
   let voiceGeneration=0;
+  let voiceRequestController=null;
 
   const stopVoice=(discard=false)=>{
     const session=voiceSession;
     voiceSession=null;
     if(discard)voiceGeneration++;
+    if(discard&&voiceRequestController){voiceRequestController.abort();voiceRequestController=null;}
     if(!session)return;
     clearTimeout(session.timer);
     try{session.recognition?.stop();}catch(_){}
@@ -27,6 +29,30 @@
   };
 
   const clean=value=>String(value??'').replace(/\s+/g,' ').trim();
+
+  const voiceErrorMessage=reason=>({
+    provider_rate_limit:'Sesli kullanım sınırına ulaşıldı. Biraz sonra tekrar dene.',
+    rate_limit:'Sesli kullanım sınırına ulaşıldı. Biraz sonra tekrar dene.',
+    provider_auth_error:'Ses sağlayıcısının API anahtarı reddedildi. Lütfen yöneticine haber ver.',
+    provider_config_error:'Ses sağlayıcısının model ayarı geçersiz. Lütfen yöneticine haber ver.',
+    provider_disabled:'Sesli konuşma bağlantısı henüz ayarlanmamış. Sorunu yazarak gönderebilirsin.',
+    provider_timeout:'Sesin yazıya çevrilmesi uzun sürdü. Tekrar deneyebilirsin.',
+    provider_connection_error:'Ses sağlayıcısına bağlanılamadı. İnternet bağlantısını kontrol et.',
+    provider_unavailable:'Ses sağlayıcısı şu anda meşgul. Biraz sonra tekrar dene.',
+    format:'Bu cihazın ses kayıt biçimi desteklenmedi. Tarayıcı yöntemini seçebilir veya yazabilirsin.',
+    size:'Kayıt çok kısa veya büyük. En fazla 15 saniye konuş.',
+    empty:'Ses anlaşılmadı. Mikrofona daha yakın konuşup tekrar dene.',
+    csrf:'Oturum doğrulaması yenilenmeli. Sayfayı yenileyip tekrar dene.',
+    curl_missing:'Sunucudaki ses bağlantısı hazır değil. Lütfen yöneticine haber ver.'
+  }[String(reason||'')]||'Ses yazıya çevrilemedi. Biraz sonra tekrar deneyebilirsin.');
+
+  const microphoneStartMessage=error=>{
+    const name=String(error?.name||'');
+    if(name==='NotAllowedError'||name==='SecurityError')return 'Mikrofon izni kapalı. Tarayıcı ayarlarından mikrofon iznini açıp tekrar dene.';
+    if(name==='NotFoundError'||name==='DevicesNotFoundError')return 'Bu cihazda kullanılabilir mikrofon bulunamadı.';
+    if(name==='NotReadableError'||name==='TrackStartError')return 'Mikrofon başka bir uygulama tarafından kullanılıyor olabilir. Kapatıp tekrar dene.';
+    return 'Mikrofon başlatılamadı. İzni ve cihaz desteğini kontrol et.';
+  };
 
   const isVisible=el=>{
     if(!(el instanceof Element)||el.closest('[data-adimbot-student],[data-adimbot-chat-modal]'))return false;
@@ -380,7 +406,7 @@
             const transcript=event.results?.[0]?.[0]?.transcript||'';
             stopVoice();recognized(transcript);
           };
-          recognition.onerror=()=>{if(generation===voiceGeneration){stopVoice();status.textContent='Mikrofon dinleyemedi. İzinleri kontrol edip tekrar dene.';}};
+          recognition.onerror=event=>{if(generation===voiceGeneration){const reason=String(event?.error||'');stopVoice();status.textContent=reason==='not-allowed'||reason==='service-not-allowed'?'Mikrofon izni kapalı. Tarayıcı ayarlarından izin verip tekrar dene.':reason==='no-speech'?'Ses algılanmadı. Mikrofona daha yakın konuşup tekrar dene.':'Mikrofon dinleyemedi. İzinleri kontrol edip tekrar dene.';}};
           recognition.onend=()=>{
             if(generation!==voiceGeneration||voiceSession?.recognition!==recognition)return;
             stopVoice();
@@ -395,14 +421,15 @@
       try{
         stream=await navigator.mediaDevices.getUserMedia({audio:true});
         if(generation!==voiceGeneration||modal.hidden){stream.getTracks().forEach(track=>track.stop());return;}
-        const mime=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].find(type=>MediaRecorder.isTypeSupported(type));
-        if(!mime)throw new Error('format');
-        const recorder=new MediaRecorder(stream,{mimeType:mime});
+        const preferredMime=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].find(type=>MediaRecorder.isTypeSupported(type));
+        const recorder=preferredMime?new MediaRecorder(stream,{mimeType:preferredMime}):new MediaRecorder(stream);
+        const mime=recorder.mimeType||preferredMime||'audio/webm';
         const chunks=[];
         voiceSession={recorder,stream,timer:setTimeout(()=>stopVoice(),15000)};
         mic.textContent='⏹';mic.setAttribute('aria-label','Konuşmayı bitir');mic.setAttribute('aria-pressed','true');
         status.textContent='Dinliyorum… Bitirince kare düğmeye dokun.';
         recorder.ondataavailable=event=>{if(event.data.size)chunks.push(event.data);};
+        recorder.onerror=()=>{if(generation===voiceGeneration&&!modal.hidden){stopVoice(true);status.textContent='Ses kaydı tamamlanamadı. Mikrofona yeniden dokunup dene.';}};
         recorder.onstop=async()=>{
           stream.getTracks().forEach(track=>track.stop());
           if(generation!==voiceGeneration||modal.hidden)return;
@@ -411,17 +438,21 @@
           status.textContent='Konuşman yazıya çevriliyor…';
           try{
             const data=new FormData();data.append('audio',blob,'speech.'+(mime.includes('mp4')?'m4a':mime.includes('ogg')?'ogg':'webm'));
-            const response=await fetch('api/adimbot-transcribe.php',{method:'POST',credentials:'same-origin',headers:{'X-CSRF-Token':String(window.ILKADIM_CSRF_TOKEN||'')},body:data});
+            const controller=new AbortController();voiceRequestController=controller;
+            const requestTimer=setTimeout(()=>controller.abort(),30000);
+            let response;
+            try{response=await fetch('api/adimbot-transcribe.php',{method:'POST',credentials:'same-origin',signal:controller.signal,headers:{'X-CSRF-Token':String(window.ILKADIM_CSRF_TOKEN||'')},body:data});}
+            finally{clearTimeout(requestTimer);if(voiceRequestController===controller)voiceRequestController=null;}
             const result=await response.json();
             if(generation!==voiceGeneration||modal.hidden)return;
             if(!response.ok||!result.ok)throw new Error(result.reason||'provider_error');
             recognized(result.text);
           }catch(error){
-            if(generation===voiceGeneration&&!modal.hidden)status.textContent=error.message==='provider_rate_limit'||error.message==='rate_limit'?'Sesli kullanım sınırına ulaşıldı. Biraz sonra tekrar dene.':'Ses yazıya çevrilemedi. Mikrofon ve sağlayıcı ayarlarını kontrol edin.';
+            if(generation===voiceGeneration&&!modal.hidden)status.textContent=error?.name==='AbortError'?'Sesin yazıya çevrilmesi uzun sürdü. Tekrar deneyebilirsin.':voiceErrorMessage(error?.message);
           }
         };
-        recorder.start();
-      }catch(_){stream?.getTracks().forEach(track=>track.stop());stopVoice(true);status.textContent='Mikrofon başlatılamadı. İzni ve cihaz desteğini kontrol et.';}
+        recorder.start(1000);
+      }catch(error){stream?.getTracks().forEach(track=>track.stop());stopVoice(true);status.textContent=microphoneStartMessage(error);}
     });
 
     const syncConnection=()=>{

@@ -94,6 +94,33 @@ function adimbot_ai_safe_output(string $text): array {
     return ['ok'=>true,'text'=>adimbot_ai_redact($value),'reason'=>'ok'];
 }
 
+function adimbot_ai_normalize_repeat(string $text): string {
+    $value=mb_strtolower(adimbot_ai_clean($text,600),'UTF-8');
+    return preg_replace('/[^\pL\pN]+/u','',$value) ?? $value;
+}
+
+function adimbot_ai_provider_error(int $status, int $curlErrno): never {
+    if ($curlErrno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) {
+        adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ yanıtı zamanında gelmedi.','reason'=>'provider_timeout'],504);
+    }
+    if ($curlErrno!==0) {
+        adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ sağlayıcısına bağlantı kurulamadı.','reason'=>'provider_connection_error'],502);
+    }
+    if ($status===429) {
+        adimbot_ai_json(['ok'=>false,'message'=>'AdımBot kullanım sınırına ulaştı. Biraz sonra tekrar dene.','reason'=>'provider_rate_limit'],429);
+    }
+    if ($status===401 || $status===403) {
+        adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ erişim anahtarı sağlayıcı tarafından reddedildi.','reason'=>'provider_auth_error'],502);
+    }
+    if ($status===400 || $status===404) {
+        adimbot_ai_json(['ok'=>false,'message'=>'Seçilen yapay zekâ modeli veya istek ayarı sağlayıcı tarafından kabul edilmedi.','reason'=>'provider_config_error'],502);
+    }
+    if ($status>=500) {
+        adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ sağlayıcısı geçici olarak yanıt veremiyor.','reason'=>'provider_unavailable'],503);
+    }
+    adimbot_ai_json(['ok'=>false,'message'=>'AdımBot şu anda yapay zekâ yanıtına ulaşamadı.','reason'=>'provider_error'],502);
+}
+
 app_session_start();
 
 if ($_SERVER['REQUEST_METHOD']!=='POST') {
@@ -197,6 +224,7 @@ foreach ($allowed as $key=>$value) {
 
 $history=is_array($payload['history'] ?? null)?$payload['history']:[];
 $historyLines=[];
+$previousAssistantReplies=[];
 foreach (array_slice($history,-6) as $item) {
     if (!is_array($item)) continue;
     $role=(string)($item['role'] ?? '');
@@ -204,6 +232,7 @@ foreach (array_slice($history,-6) as $item) {
     $text=adimbot_ai_redact(adimbot_ai_clean($item['text'] ?? '',300));
     if ($text==='') continue;
     if (adimbot_ai_input_safety($text)!==null) continue;
+    if ($role==='assistant') $previousAssistantReplies[]=$text;
     $historyLines[]=($role==='user'?'Öğrenci':'AdımBot').': '.$text;
 }
 $historyText=implode("\n",$historyLines);
@@ -211,6 +240,8 @@ $historyText=implode("\n",$historyLines);
 $instructions=<<<'TXT'
 Sen İlkAdım adlı 1. sınıf eğitim uygulamasındaki AdımBot'sun.
 Türkçe, kısa, sıcak, çocukların anlayacağı basit cümlelerle konuş.
+Yeni mesaja doğrudan karşılık ver. Bağlamda olmayan ders, kişi, başarı veya olay uydurma; yeterli bilgi yoksa tek bir kısa soru sor.
+Önceki AdımBot yanıtını aynen veya küçük değişikliklerle tekrarlama. Her yanıta aynı selam, övgü ya da başlangıç kalıbıyla başlama.
 Öğrenciye öğretici ipucu ver; aktif soru/şık varsa doğru cevabı veya doğru şıkkı doğrudan söyleme.
 Önce düşünmesini sağlayan bir ipucu, gerekirse küçük bir örnek ver.
 Ekran bağlamındaki ders, konu, etkinlik, aktif soru ve öğrenme ilerlemesini birlikte kullan; ancak öğrenciyi "zayıf", "başarısız" veya benzeri bir etiketle tanımlama.
@@ -264,26 +295,12 @@ curl_setopt_array($ch,[
     CURLOPT_POSTFIELDS=>json_encode($request,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),
 ]);
 $responseBody=curl_exec($ch);
-$curlError=curl_error($ch);
+$curlErrno=curl_errno($ch);
 $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
 curl_close($ch);
 
 if (!is_string($responseBody) || $responseBody==='' || $status<200 || $status>=300) {
-    if ($status===429) {
-        adimbot_ai_json(['ok'=>false,'message'=>'AdımBot kullanım sınırına ulaştı. Biraz sonra tekrar dene.','reason'=>'provider_rate_limit'],429);
-    }
-    if ($status===401 || $status===403) {
-        adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ erişim ayarları kontrol edilmeli.','reason'=>'provider_auth_error'],502);
-    }
-    if ($status===400 || $status===404) {
-        adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ model ayarları kontrol edilmeli.','reason'=>'provider_config_error'],502);
-    }
-    adimbot_ai_json([
-        'ok'=>false,
-        'message'=>'AdımBot şu anda yapay zekâ yanıtına ulaşamadı.',
-        'reason'=>'provider_error',
-        'detail'=>$status>0?'HTTP '.$status:($curlError!==''?'connection_error':'empty_response')
-    ],502);
+    adimbot_ai_provider_error($status,$curlErrno);
 }
 
 $decoded=json_decode($responseBody,true);
@@ -297,6 +314,10 @@ $text=match ($provider) {
     default=>adimbot_ai_extract_text($decoded),
 };
 $safe=adimbot_ai_safe_output($text);
+$normalizedReply=adimbot_ai_normalize_repeat($safe['text']);
+if ($safe['ok'] && $normalizedReply!=='' && in_array($normalizedReply,array_map('adimbot_ai_normalize_repeat',$previousAssistantReplies),true)) {
+    $safe=['ok'=>false,'text'=>'Aynı şeyi tekrarlamak istemiyorum. Takıldığın kısmı bir cümleyle söyler misin?','reason'=>'repeated_response'];
+}
 
 adimbot_ai_json([
     'ok'=>true,

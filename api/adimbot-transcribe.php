@@ -61,10 +61,15 @@ if ($provider==='groq') {
 $ch=curl_init($url);
 curl_setopt_array($ch,[CURLOPT_POST=>true,CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>8,CURLOPT_TIMEOUT=>$timeout,CURLOPT_HTTPHEADER=>$headers,CURLOPT_POSTFIELDS=>$request]);
 $body=curl_exec($ch);
+$curlErrno=curl_errno($ch);
 $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
 curl_close($ch);
+if ($curlErrno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) voice_result(['ok'=>false,'reason'=>'provider_timeout'],504);
+if ($curlErrno!==0) voice_result(['ok'=>false,'reason'=>'provider_connection_error'],502);
 if ($status===429) voice_result(['ok'=>false,'reason'=>'provider_rate_limit'],429);
 if ($status===401 || $status===403) voice_result(['ok'=>false,'reason'=>'provider_auth_error'],502);
+if ($status===400 || $status===404) voice_result(['ok'=>false,'reason'=>'provider_config_error'],502);
+if ($status>=500) voice_result(['ok'=>false,'reason'=>'provider_unavailable'],503);
 if ($status<200 || $status>=300 || !is_string($body)) voice_result(['ok'=>false,'reason'=>'provider_error'],502);
 $decoded=json_decode($body,true);
 if (!is_array($decoded)) voice_result(['ok'=>false,'reason'=>'provider_error'],502);

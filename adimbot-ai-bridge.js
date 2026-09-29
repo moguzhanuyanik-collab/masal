@@ -3,7 +3,7 @@
   if (window.AdimBotAI) return;
 
   const POLICY = Object.freeze({
-    version: '1.1.4',
+    version: '1.1.5',
     childMode: true,
     gradeLevel: 1,
     maxInputChars: 400,
@@ -278,6 +278,11 @@
       const reason=String(error?.message||'provider_error');
       let text='Şu anda yapay zekâ yanıtına ulaşamadım. Dersine devam edebiliriz.';
       if(reason==='timeout')text='AdımBot yanıtı biraz gecikti. İstersen tekrar deneyebilirsin.';
+      else if(reason==='provider_timeout')text='AdımBot yanıtı zamanında gelmedi. Biraz sonra tekrar deneyebilirsin.';
+      else if(reason==='provider_connection_error')text='AdımBot yapay zekâ hizmetine bağlanamadı. İnternet bağlantısını kontrol edip tekrar deneyebilirsin.';
+      else if(reason==='provider_unavailable')text='AdımBot yapay zekâ hizmeti şu anda meşgul. Biraz sonra tekrar deneyebilirsin.';
+      else if(reason==='invalid_provider_response'||reason==='invalid_response')text='AdımBot yanıtı okunamadı. Biraz sonra tekrar deneyebilirsin.';
+      else if(reason==='curl_missing')text='AdımBot bağlantısı sunucuda hazır değil. Lütfen yöneticine haber ver.';
       else if(reason==='csrf'||reason==='csrf_missing')text='Oturum doğrulaması yenilenmeli. Sayfayı yenileyip tekrar deneyebilirsin.';
       else if(reason==='rate_limit')text='AdımBot biraz dinlensin. Birkaç dakika sonra tekrar deneyebilirsin.';
       else if(reason==='provider_rate_limit')text='AdımBot kullanım sınırına ulaştı. Biraz sonra tekrar deneyebilirsin.';
