@@ -1,0 +1,45 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const s=fs.readFileSync(__dirname+'/../adimbot-chat-ui.js','utf8'),source=fs.readFileSync(__dirname+'/../adimbot-student.js','utf8');
+const old=fs.readFileSync(__dirname+'/adimbot-voice-83.cjs','utf8');const create=vm.runInNewContext(old.slice(old.indexOf('function create(){'),old.indexOf('async function run(){'))+'create',{s,fs,vm,assert,console,Blob,FormData,AbortController,Date,setTimeout,clearTimeout});
+function record(h,type='audio/webm'){const session={recorder:{state:'inactive'},stream:h.stream,chunks:[new Blob(['a'.repeat(200)],{type})],startedAt:Date.now()-1000};h.c.voiceSession=session;h.installRecorder(session);return session;}
+function recognizedHarness(){let sent=0,focused=0;const c={modal:{hidden:false},chatBusy:false,input:{value:'',dispatchEvent(){},focus(){focused++;}},status:{textContent:''},form:{requestSubmit(){sent++;}},Event:class{},clean:v=>String(v??'').normalize('NFC').replace(/\s+/g,' ').trim(),voiceErrorMessage:()=> 'Yanıt okunamadı'};vm.createContext(c);vm.runInContext(s.slice(s.indexOf('    const recognized='),s.indexOf("    mic?.addEventListener('click'"))+'this.recognized=recognized;',c);return {c,sent:()=>sent,focused:()=>focused};}
+async function run(){
+// 1: malformed transcript payloads are rejected without sending object text.
+for(const text of [{secret:'hidden'},['soru'],3,null,'']){const h=create(),r=record(h);h.c.fetch=async()=>({ok:true,json:async()=>({ok:true,text})});await r.recorder.onstop();assert.equal(h.c.transcript,undefined);assert.match(h.status.textContent,/yanıtı okunamadı/);assert.equal(h.mic.disabled,false);}
+// 2: cancellation wins even when parsing resolves a late success.
+{const h=create(),r=record(h);let resolve;h.c.fetch=async()=>({ok:true,json:()=>new Promise(done=>resolve=done)});const p=r.recorder.onstop();await new Promise(setImmediate);h.c.voiceRequestController.abort();resolve({ok:true,text:'Geç soru'});await p;assert.equal(h.c.transcript,undefined);assert.match(h.status.textContent,/uzun sürdü/);}
+// 3: malformed quota JSON retains numeric and date cooldown headers.
+for(const value of ['23',new Date(Date.now()+30000).toUTCString()]){const h=create(),r=record(h);h.c.fetch=async()=>({ok:false,status:429,headers:{get:()=>value},json:async()=>{throw Error('invalid');}});await r.recorder.onstop();assert.ok(h.c.voiceRetryUntil>Date.now()+20000);assert.match(h.status.textContent,/saniye sonra/);}
+// 4: an authentication error's retry header never disguises it as quota.
+{const h=create(),r=record(h);h.c.fetch=async()=>({ok:false,status:401,headers:{get:()=> '30'},json:async()=>({ok:false,reason:'auth'})});await r.recorder.onstop();assert.equal(h.c.voiceRetryUntil,0);assert.match(h.status.textContent,/Oturum/);}
+// 5: long recognized text is visible for editing, never silently auto-submitted.
+{const h=recognizedHarness();h.c.recognized('kelime '.repeat(70));assert.ok(h.c.input.value.length>400);assert.equal(h.sent(),0);assert.equal(h.focused(),1);assert.match(h.c.status.textContent,/kısalt/);}
+// Actual submit guard prevents the same text being silently truncated by manual submit.
+{let focused=0;const c={input:{value:'a'.repeat(401),focus(){focused++;}},status:{textContent:''},clean:v=>v};vm.createContext(c);const a=s.indexOf('      const message=clean(input?.value);'),b=s.indexOf('      if(!message||!input||!box)return;',a);vm.runInContext('this.submit=()=>{'+s.slice(a,b)+'return true;}',c);assert.equal(c.submit(),undefined);assert.equal(focused,1);}
+// 6: noise markers and punctuation are not sent, legitimate single-word/music queries are.
+{const h=recognizedHarness();for(const text of ['[sessizlik]','(müzik)','[noise]','Konuşma yok','...'])h.c.recognized(text);assert.equal(h.sent(),0);h.c.recognized('Müzik');h.c.recognized('A');assert.equal(h.sent(),2);}
+// 7: manually stopping recognition gets a bounded, owned completion timer.
+{const h=create();h.c.voiceSession={recognition:{stop(){}},timer:0,countdownTimer:0};h.c.voiceGeneration=5;const a=s.indexOf('      if(voiceSession){',s.indexOf("    mic?.addEventListener('click'")),b=s.indexOf('      if(!navigator.onLine)',a);vm.runInContext('this.finish=()=>{'+s.slice(a,b)+'}',h.c);h.c.finish();const timer=[...h.jobs.values()].find(x=>x.ms===2500);assert.ok(timer);timer.f();assert.equal(h.c.voiceSession,null);assert.match(h.status.textContent,/tamamlamadı/);}
+// Stale completion timer cannot close a replacement session.
+{const h=create();h.c.voiceSession={recognition:{stop(){}}};const a=s.indexOf('      if(voiceSession){',s.indexOf("    mic?.addEventListener('click'")),b=s.indexOf('      if(!navigator.onLine)',a);vm.runInContext('this.finish=()=>{'+s.slice(a,b)+'}',h.c);h.c.finish();const timer=[...h.jobs.values()].find(x=>x.ms===2500);const fresh={recognition:{}};h.c.voiceSession=fresh;h.c.voiceGeneration++;timer.f();assert.equal(h.c.voiceSession,fresh);}
+// 8: recognition language errors have a specific, fixed Turkish explanation.
+{const h=create();const a=s.indexOf('  const browserRecognitionMessage='),b=s.indexOf('  const createAudioRecorder=',a);vm.runInContext(s.slice(a,b)+'this.message=browserRecognitionMessage;',h.c);assert.match(h.c.message('language-not-supported'),/Türkçeyi desteklemiyor/);}
+// 9: a real mp4 chunk determines content type and upload extension despite an empty recorder MIME.
+{const h=create(),r=record(h,'audio/mp4');h.c.fetch=async(_,options)=>{const file=options.body.get('audio');assert.equal(file.name,'speech.m4a');assert.equal(file.type,'audio/mp4');return {ok:true,json:async()=>({ok:true,text:'Merhaba'})};};await r.recorder.onstop();assert.equal(h.c.transcript,'Merhaba');}
+{const h=create(),r=record(h,'application/octet-stream');h.c.fetch=()=>{throw Error('should not upload');};await r.recorder.onstop();assert.match(h.status.textContent,/biçimi desteklenmedi/);}
+// 10: recorder error after the session has ended cannot abort an active transcription.
+{const h=create(),r=record(h);h.c.voiceSession=null;const ctl=new AbortController();h.c.voiceRequestController=ctl;h.status.textContent='Yazıya çevriliyor';r.recorder.onerror();assert.equal(ctl.signal.aborted,false);assert.equal(h.status.textContent,'Yazıya çevriliyor');}
+// 11: partial AudioContext setup releases the resource and falls back to no meter.
+{const h=create();let closed=0;h.c.recordingSession={};h.c.stream=h.stream;h.c.window.AudioContext=class{createAnalyser(){throw Error('unavailable');}close(){closed++;return Promise.resolve();}};const a=s.indexOf('        const AudioContextClass='),b=s.indexOf('        recordingSession.timer=',a);vm.runInContext(s.slice(a,b),h.c);assert.equal(closed,1);assert.equal(h.c.recordingSession.audioContext,null);assert.equal(h.c.recordingSession.detectedSpeech,null);}
+// 12: empty/ended/disabled audio streams are rejected, live tracks are accepted.
+{const a=s.indexOf('        const audioTracks=stream.getAudioTracks();'),b=s.indexOf('        const recorder=createAudioRecorder(stream);',a);for(const tracks of [[],[{readyState:'ended'}],[{readyState:'live',enabled:false}]]){const c={stream:{getAudioTracks:()=>tracks}};vm.createContext(c);assert.throws(()=>vm.runInContext(s.slice(a,b),c),e=>e.name==='NotFoundError');}const c={stream:{getAudioTracks:()=>[{readyState:'live',enabled:true}]}};vm.createContext(c);vm.runInContext(s.slice(a,b),c);}
+const speechOld=fs.readFileSync(__dirname+'/adimbot-lifecycle-82.cjs','utf8');const harness=vm.runInNewContext(speechOld.slice(speechOld.indexOf('function harness(){'),speechOld.indexOf('// 1:'))+'harness',{source,vm,console});
+// 13: malformed voice entries do not break Turkish selection or speech launch.
+{const h=harness();h.engine.getVoices=()=>[null,{},3,{lang:5},{lang:' tr-TR ',localService:true}];assert.equal(h.api.speak('Merhaba'),true);assert.equal(h.calls.length,1);assert.equal(h.calls[0].voice.lang,' tr-TR ');}
+// 14: deferred onStart callbacks can replace speech without losing the new startup deadline.
+{const h=harness();h.api.speak('Eski',{onStart(){h.api.speak('Yeni');}});h.api.pauseSpeaking();h.calls[0].onstart();h.api.resumeSpeaking();assert.equal(h.c.activeUtterance,h.calls[1]);assert.equal([...h.jobs.values()].filter(j=>j.ms===6000).length,1);h.tick(6000);assert.equal(h.events.find(e=>e.type==='adimbot:speech-error').detail.reason,'start_timeout');}
+// 15: comma boundaries rest the mouth and suppress extra gestures until the next word.
+{const h=harness();h.api.speak('Merhaba, arkadaşım');const u=h.calls[0];u.onstart();u.onboundary({name:'word',charIndex:0});h.tick(650);assert.equal(h.classes.has('adb-mouth-rest'),true);h.api.triggerSpeechGesture('left');assert.equal(h.classes.has('adb-gesture-left'),false);u.onboundary({name:'word',charIndex:9});assert.equal(h.classes.has('adb-mouth-rest'),false);}
+console.log('PASS: 15 transcription, microphone, voice selection, resume ownership and mouth-rest scenarios; synthetic devices only.');
+}
+run().catch(e=>{console.error(e);process.exitCode=1;});

@@ -434,6 +434,7 @@
 
   const triggerSpeechGesture=(preferred='auto',force=false)=>{
     if(dragging||speechPaused||motionPreference?.matches||!root.classList.contains('adb-is-speaking'))return;
+    if(!force&&root.classList.contains('adb-mouth-rest'))return;
     const now=performance.now();
     if(!force&&now-lastGestureAt<(gentleSpeech?2100:880))return;
     lastGestureAt=now;
@@ -507,15 +508,15 @@
   };
 
   const refreshVoices=()=>{
-    try{voices=Array.from(speech?.getVoices?.()||[]);}catch(_){voices=[];}
+    try{voices=Array.from(speech?.getVoices?.()||[]).filter(voice=>voice&&typeof voice==='object'&&typeof voice.lang==='string'&&voice.lang.trim());}catch(_){voices=[];}
   };
 
   const pickTurkishVoice=()=>{
-    const turkish=voices.filter(voice=>/^tr(?:-|$)/i.test(voice.lang));
-    return turkish.find(voice=>/^tr-TR$/i.test(voice.lang)&&voice.default)
-      ||turkish.find(voice=>/^tr-TR$/i.test(voice.lang)&&voice.localService)
+    const turkish=voices.filter(voice=>voice&&typeof voice.lang==='string'&&/^tr(?:-|$)/i.test(voice.lang.trim()));
+    return turkish.find(voice=>/^tr-TR$/i.test(voice.lang.trim())&&voice.default)
+      ||turkish.find(voice=>/^tr-TR$/i.test(voice.lang.trim())&&voice.localService)
       ||turkish.find(voice=>voice.localService)
-      ||turkish.find(voice=>/^tr-TR$/i.test(voice.lang))
+      ||turkish.find(voice=>/^tr-TR$/i.test(voice.lang.trim()))
       ||turkish[0]
       ||null;
   };
@@ -659,11 +660,16 @@
         setSpeechPaused(false);
         queueSpeechChunk(nextSpeechChunk,gapRemaining);
       }else{
+        const token=activeSpeechToken,utterance=activeUtterance;
         speech.resume();
+        if(token!==activeSpeechToken||utterance!==activeUtterance)return true;
         setSpeechPaused(false);
-        if(activeUtterance?.adbStartDeferred){activeUtterance.adbStartDeferred=false;beginSpeech(activeSpeechToken);}
-        armSpeechWatchdog(activeSpeechToken,speechTimeoutRemaining,'timeout');
-        if(activeUtterance)scheduleSpeechGestures(activeUtterance);
+        const deferred=utterance?.adbStartDeferred===true;
+        if(deferred){utterance.adbStartDeferred=false;beginSpeech(token);}
+        if(token!==activeSpeechToken||utterance!==activeUtterance)return true;
+        const remaining=deferred?Math.max(5000,utterance.text.length*160/utterance.rate):speechTimeoutRemaining;
+        armSpeechWatchdog(token,remaining,speechStarted?'timeout':'start_timeout');
+        if(utterance)scheduleSpeechGestures(utterance);
       }
       return true;
     }catch(_){return false;}
@@ -862,7 +868,7 @@
       clearTimeout(mouthRestTimer);
       root.classList.remove('adb-mouth-rest');
       tuneMouthForWord(word,charIndex);
-      const punctuation=utterance.text.slice(charIndex+word.length).match(/^[\s]*[.!?…]/);
+      const punctuation=utterance.text.slice(charIndex+word.length).match(/^[\s]*[.!?…,:;]/);
       if(punctuation){
         mouthRestTimer=setTimeout(()=>{
           if(token===activeSpeechToken&&!speechPaused)root.classList.add('adb-mouth-rest');

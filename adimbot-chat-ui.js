@@ -162,6 +162,7 @@
     if(reason==='not-allowed'||reason==='service-not-allowed')return 'Mikrofon izni kapalı. Tarayıcı ayarlarından izin verip tekrar dene.';
     if(reason==='no-speech'||(reason==='aborted'&&stopping))return 'Ses algılanmadı. Mikrofona daha yakın konuşup tekrar dene.';
     if(reason==='audio-capture')return 'Tarayıcı mikrofondan ses alamadı. Mikrofonu kullanan başka uygulamaları kapatıp tekrar dene.';
+    if(reason==='language-not-supported')return 'Bu tarayıcının ses tanıma hizmeti Türkçeyi desteklemiyor. Sorunu yazarak gönderebilir veya yöneticinden kayıt yöntemini değiştirmesini isteyebilirsin.';
     if(reason==='network')return 'Tarayıcının ses tanıma hizmetine bağlanılamadı. İnternet bağlantısını kontrol et.';
     return 'Mikrofon dinleyemedi. İzinleri kontrol edip tekrar dene.';
   };
@@ -512,10 +513,17 @@
     }
     const recognized=text=>{
       if(modal.hidden||chatBusy)return;
-      input.value=clean(text).slice(0,400);
+      if(typeof text!=='string'){if(status)status.textContent=voiceErrorMessage('invalid_provider_response');return;}
+      const transcript=clean(text);
+      const noise=/^(?:[\[(](?:sessizlik|gürültü|müzik|alkış|silence|noise|music|applause|anlaşılmayan\s+ses|konuşma\s+yok|no\s+speech)[\])]|anlaşılmayan\s+ses|konuşma\s+yok|no\s+speech)$/u.test(transcript.toLocaleLowerCase('tr-TR'));
+      if(!/[\p{L}\p{N}]/u.test(transcript)||noise){if(status)status.textContent='Ses anlaşılmadı. Tekrar deneyebilirsin.';return;}
+      input.value=transcript;
       input.dispatchEvent(new Event('input',{bubbles:true}));
-      if(input.value)form.requestSubmit();
-      else if(status)status.textContent='Ses anlaşılmadı. Tekrar deneyebilirsin.';
+      if(transcript.length>400){
+        if(status)status.textContent='Konuşman uzun geldi. Göndermeden önce aşağıdaki metni 400 karaktere kadar kısalt.';
+        input.focus();return;
+      }
+      form.requestSubmit();
     };
     mic?.addEventListener('click',async()=>{
       if(!voiceConfig.enabled||chatBusy)return;
@@ -532,9 +540,14 @@
         if(voiceSession.pending){stopVoice(true);status.textContent='Mikrofon isteği iptal edildi.';}
         else if(voiceSession.recognition){
           if(voiceSession.stopping)return;
+          const recognitionToStop=voiceSession.recognition,stopGeneration=voiceGeneration;
           voiceSession.stopping=true;
           clearTimeout(voiceSession.timer);
           clearInterval(voiceSession.countdownTimer);
+          voiceSession.timer=setTimeout(()=>{
+            if(stopGeneration!==voiceGeneration||voiceSession?.recognition!==recognitionToStop)return;
+            stopVoice(true);status.textContent='Tarayıcı dinlemeyi tamamlamadı. Mikrofona dokunup tekrar deneyebilirsin.';
+          },2500);
           status.textContent='Konuşman tamamlanıyor…';
           try{voiceSession.recognition.stop();}
           catch(_){stopVoice(true);status.textContent='Mikrofon durdurulamadı. Tekrar deneyebilirsin.';}
@@ -604,14 +617,16 @@
         stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
         if(generation!==voiceGeneration||modal.hidden||voiceSession!==permissionSession){stopTracks(stream);return;}
         clearTimeout(permissionSession.timer);
+        const audioTracks=stream.getAudioTracks();
+        if(!audioTracks.some(track=>track.readyState!=='ended'&&track.enabled!==false))throw Object.assign(new Error('no_audio_track'),{name:'NotFoundError'});
         const recorder=createAudioRecorder(stream);
-        const mime=recorder.mimeType||'audio/webm';
         const chunks=[];
         const recordingSession={recorder,stream,chunks,bytes:0,tooLarge:false,startedAt:Date.now(),detectedSpeech:null,deviceEnded:false,deviceMuted:false};
         const AudioContextClass=window.AudioContext||window.webkitAudioContext;
         if(AudioContextClass){
           try{
             const audioContext=new AudioContextClass();
+            recordingSession.audioContext=audioContext;
             const analyser=audioContext.createAnalyser();
             analyser.fftSize=256;
             audioContext.createMediaStreamSource(stream).connect(analyser);
@@ -627,7 +642,7 @@
               for(const sample of samples)peak=Math.max(peak,Math.abs(sample-128));
               if(peak>=7)recordingSession.detectedSpeech=true;
             },160);
-          }catch(_){recordingSession.detectedSpeech=null;}
+          }catch(_){releaseAudioContext(recordingSession.audioContext);recordingSession.audioContext=null;recordingSession.detectedSpeech=null;}
         }
         recordingSession.timer=setTimeout(()=>stopVoice(),15000);
         recordingSession.countdownTimer=setInterval(()=>{
@@ -665,7 +680,7 @@
           }
           chunks.push(event.data);
         };
-        recorder.onerror=()=>{if(generation===voiceGeneration&&!modal.hidden){stopVoice(true);status.textContent='Ses kaydı tamamlanamadı. Mikrofona yeniden dokunup dene.';}};
+        recorder.onerror=()=>{if(generation===voiceGeneration&&voiceSession===recordingSession&&!modal.hidden){stopVoice(true);status.textContent='Ses kaydı tamamlanamadı. Mikrofona yeniden dokunup dene.';}};
         recorder.onstop=async()=>{
           if(voiceSession===recordingSession)stopVoice();
           else stopTracks(stream);
@@ -675,14 +690,18 @@
           if(recordingSession.deviceMuted){chunks.length=0;status.textContent='Mikrofonun ses kanalı kapandı. Cihazı kontrol edip tekrar dene.';return;}
           if(Date.now()-recordingSession.startedAt<700){chunks.length=0;status.textContent='Kayıt çok kısa. Mikrofona dokunup en az bir saniye konuş.';return;}
           if(recordingSession.detectedSpeech===false){chunks.length=0;status.textContent='Konuşma sesi algılanmadı. Mikrofona daha yakın konuşup tekrar dene.';return;}
-          const blob=new Blob(chunks,{type:mime});
+          const actualMime=chunks.find(chunk=>typeof chunk.type==='string'&&chunk.type.trim())?.type||recorder.mimeType||'audio/webm';
+          const mediaType=actualMime.split(';')[0].trim().toLowerCase();
+          const extension=({'audio/webm':'webm','video/webm':'webm','audio/mp4':'m4a','video/mp4':'m4a','audio/ogg':'ogg','application/ogg':'ogg','audio/wav':'wav','audio/x-wav':'wav','audio/mpeg':'mp3'})[mediaType];
+          if(!extension){chunks.length=0;status.textContent=voiceErrorMessage('format');return;}
+          const blob=new Blob(chunks,{type:actualMime});
           chunks.length=0;
           if(blob.size<100||blob.size>1600000){status.textContent='Kayıt çok kısa veya büyük. En fazla 15 saniye konuş.';return;}
           status.textContent='Konuşman yazıya çevriliyor…';
           showVoiceEmotion('transcribe');
           let requestTimer=0,controller=null,emotionRefresh=0;
           try{
-            const data=new FormData();data.append('audio',blob,'speech.'+(mime.includes('mp4')?'m4a':mime.includes('ogg')?'ogg':'webm'));
+            const data=new FormData();data.append('audio',blob,'speech.'+extension);
             controller=new AbortController();voiceRequestController=controller;
             mic.disabled=true;
             mic.setAttribute('aria-label','Konuşma yazıya çevriliyor');
@@ -695,21 +714,25 @@
             try{result=await response.json();}
             catch(error){
               if(controller.signal.aborted||error?.name==='AbortError')throw Object.assign(new Error('timeout'),{name:'AbortError'});
-              throw new Error(response.ok?'invalid_provider_response':voiceHttpReason(response.status));
-            }
-            if(generation!==voiceGeneration||modal.hidden)return;
-            if(!response.ok||!result?.ok){
-              const failure=new Error(result?.reason||voiceHttpReason(response.status));
-              failure.retryAfter=retryAfterSeconds(result?.retry_after||response.headers.get('Retry-After'));
+              const failure=new Error(response.ok?'invalid_provider_response':voiceHttpReason(response.status));
+              failure.retryAfter=retryAfterSeconds(response.headers?.get?.('Retry-After'));
               throw failure;
             }
+            if(controller.signal.aborted)throw Object.assign(new Error('timeout'),{name:'AbortError'});
+            if(generation!==voiceGeneration||modal.hidden)return;
+            if(!response.ok||!result?.ok){
+              const failure=new Error(response.status===429?'provider_rate_limit':result?.reason||voiceHttpReason(response.status));
+              failure.retryAfter=retryAfterSeconds(result?.retry_after||response.headers?.get?.('Retry-After'));
+              throw failure;
+            }
+            if(typeof result.text!=='string'||!result.text.trim())throw new Error('invalid_provider_response');
             voiceRetryUntil=0;
             releaseVoiceRequest(controller,generation);
             recognized(result.text);
           }catch(error){
             if(generation!==voiceGeneration||modal.hidden)return;
             const reason=error?.name==='AbortError'?'provider_timeout':error instanceof TypeError||navigator.onLine===false?'provider_connection_error':error?.message;
-            const retryAfter=retryAfterSeconds(error?.retryAfter);
+            const retryAfter=['rate_limit','provider_rate_limit'].includes(reason)?retryAfterSeconds(error?.retryAfter):0;
             if(retryAfter>0)voiceRetryUntil=Date.now()+(retryAfter*1000);
             if(generation===voiceGeneration&&!modal.hidden)status.textContent=retryAfter>0
               ?'Sesli kullanım sınırı dolu. '+retryAfter+' saniye sonra tekrar deneyebilirsin.'
@@ -846,7 +869,8 @@
 
       refreshTogetherButton();
       refreshContextBadge();
-      const message=clean(input?.value).slice(0,400);
+      const message=clean(input?.value);
+      if(message.length>400){if(status)status.textContent='Göndermeden önce sorunu 400 karaktere kadar kısalt.';input?.focus();return;}
       if(!message||!input||!box)return;
       if(!navigator.onLine){
         if(status)status.textContent='İnternet bağlantısı yok. Bağlantı gelince tekrar deneyebilirsin.';
