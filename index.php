@@ -28,7 +28,7 @@ require_student_login();
   <script src="curriculum-menu-bridge.js?v=1.1.31" defer></script>
   <script src="completed-step-skip.js?v=1.1.30" defer></script>
   <script src="adimbot-student.js?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-student.js'),0,16)?>" defer></script>
-  <script src="global-audio-feedback.js?v=1.1.75" defer></script>
+  <script src="global-audio-feedback.js?v=1.1.77" defer></script>
   <script src="adimbot-ai-bridge.js?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-ai-bridge.js'),0,16)?>" defer></script>
   <script src="adimbot-chat-ui.js?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-chat-ui.js'),0,16)?>" defer></script>
   <script src="lesson-ui-fix.js?v=1.0.32" defer></script>

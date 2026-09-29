@@ -166,17 +166,34 @@
     '.hint-content','.hint-text','.tip-content','.question-hint-content',
     '.teacher-hint','.teacher-explanation','.lesson-hint','.lesson-tip',
     '[data-hint]','[data-hint-content]','[data-role="hint"]',
-    '[class*="ipucu" i]','[id*="ipucu" i]'
+    '[class*="hint" i]','[class*="ipucu" i]',
+    '[id*="hint" i]','[id*="ipucu" i]','[aria-label*="ipucu" i]'
   ].join(',');
+
+  const hintLabel=/^(?:(?:mina\s+)?öğretmen(?:im)?\s+)?(?:bir\s+)?ipucu(?:\s+\d+)?(?:\s*[:.!?–—-]|\s+(?:ver|verir|verebilir|göster|gösterir|gösterebilir)\b)|^düşünme\s+ipucu(?:\s*[:.!?–—-]|\s+\d+\s*[:.!?–—-])/i;
+
+  const directTextOf=element=>[...element.childNodes]
+    .filter(node=>node.nodeType===Node.TEXT_NODE)
+    .map(node=>node.textContent||'')
+    .join(' ')
+    .trim();
+
+  const isHintLabel=value=>hintLabel.test(clean(value).toLocaleLowerCase('tr-TR'));
 
   const removeHintContent=clone=>{
     if(!(clone instanceof Element))return clone;
+    if(clone.matches?.(hintContentSelector)){
+      clone.textContent='';
+      return clone;
+    }
     clone.querySelectorAll?.(hintContentSelector).forEach(el=>el.remove());
-    const hintLabel=/^(?:(?:mina(?:\s+öğretmen(?:im)?)?\s+)?(?:bir\s+)?ipucu|düşünme\s+ipucu)\s*[:.!?–—-]?\s*/i;
-    clone.querySelectorAll?.('*').forEach(el=>{
-      if(!clone.contains(el))return;
-      if(hintLabel.test(clean(el.textContent)))el.remove();
+    clone.querySelectorAll?.('p,li,blockquote,aside,figcaption,summary').forEach(el=>{
+      if(isHintLabel(el.textContent))el.remove();
     });
+    clone.querySelectorAll?.('*').forEach(el=>{
+      if(isHintLabel(directTextOf(el)))el.remove();
+    });
+    if(isHintLabel(directTextOf(clone)))clone.textContent='';
     return clone;
   };
 
@@ -251,7 +268,7 @@
 
   const discoverySpeechText=(heading,card)=>{
     if(!(card instanceof Element))return '';
-    const clone=card.cloneNode(true);
+    const clone=removeHintContent(card.cloneNode(true));
     clone.querySelectorAll?.(
       '.answers,.teacher-option,.feedback,.game-feedback,form,button,input,select,textarea,svg,'+
       '[data-question-text],.question-text,.question-title,.question-prompt,.question-stem,.puzzle-question,.prompt'
@@ -353,6 +370,16 @@
       if(hint.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
       const value=stripReadingLabels(hint.textContent);
       if(!value)return;
+      hint.setAttribute('data-adimbot-read','text');
+      hint.setAttribute('data-adimbot-text',value);
+    });
+
+    rootScope.querySelectorAll?.('p,li,blockquote,aside,figcaption,summary').forEach(hint=>{
+      if(hint.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
+      if(!isHintLabel(hint.textContent))return;
+      const value=stripReadingLabels(hint.textContent);
+      if(!value)return;
+      hint.setAttribute('data-adimbot-hint-text','1');
       hint.setAttribute('data-adimbot-read','text');
       hint.setAttribute('data-adimbot-text',value);
     });
@@ -686,7 +713,7 @@
     // Hint controls have their own reader. Do not also read the enclosing
     // lesson/question card when the student taps a hint or its text.
     if(target.closest('[data-adimbot-hint-trigger]'))return;
-    const hintContent=target.closest(hintContentSelector);
+    const hintContent=target.closest(hintContentSelector+', [data-adimbot-hint-text]');
     if(hintContent){
       const hintReadable=target.closest('[data-adimbot-read]');
       if(!hintReadable||!hintContent.contains(hintReadable))return;
