@@ -93,7 +93,7 @@
     if(mic){mic.textContent='🎤';mic.setAttribute('aria-label','Mikrofonla sor');mic.setAttribute('aria-pressed','false');}
   };
 
-  const clean=value=>String(value??'').replace(/\s+/g,' ').trim();
+  const clean=value=>String(value??'').normalize('NFC').replace(/[\u200B-\u200F\u202A-\u202E\u2060-\u206F\uFEFF]/g,'').replace(/\s+/g,' ').trim();
 
   const retryAfterSeconds=value=>{
     const raw=String(value??'').trim();
@@ -106,9 +106,10 @@
   const cooldownRemaining=until=>Math.max(0,Math.ceil((until-Date.now())/1000));
 
   const privacySafeText=value=>clean(value)
+    .replace(/((?:ş[iİı]frem|parolam|ş[iİı]fre|parola|ap[iİı][ _-]?(?:key|anahtar[ıiİ]|anahtar[ıiİ]m))\s*[:=]\s*)\S+/giu,'$1[gizlendi]')
     .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,'[e-posta gizlendi]')
     .replace(/(?:https?:\/\/|www\.)\S+/gi,'[bağlantı gizlendi]')
-    .replace(/(?<!\d)(?:\+?90[\s.-]?)?(?:0?[2-5]\d{2})[\s.-]?\d{3}[\s.-]?\d{2}[\s.-]?\d{2}(?!\d)/g,'[telefon gizlendi]')
+    .replace(/(?<!\d)(?:\+?90[\s.-]?)?\(?0?[2-5]\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{2}[\s.-]?\d{2}(?!\d)/g,'[telefon gizlendi]')
     .replace(/(?<!\d)\d{11}(?!\d)/g,'[kimlik bilgisi gizlendi]');
 
   const voiceErrorMessage=reason=>({
@@ -886,7 +887,7 @@
           const answer=await ai.ask(message,learningContext(),historyBefore,{signal:controller.signal});
           if(requestGeneration!==chatGeneration)return;
           if(answer?.ok||answer?.blocked)chatRetryUntil=0;
-          const result=answer.ok||answer.blocked?ai.deliver(answer):answer;
+          const result=answer.ok||answer.blocked?ai.deliver(answer,{activeQuestion:Boolean(currentContext().question)}):answer;
           clearTimeout(waitEmotionTimer);
           replyDelivered=Boolean(result?.ok||result?.blocked);
           try{

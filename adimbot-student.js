@@ -422,6 +422,7 @@
     savePreferences();
     return true;
   };
+  let gentleSpeech=false;
   const gestureClasses=['adb-gesture-left','adb-gesture-right','adb-gesture-open'];
 
   const clearSpeechGestures=()=>{
@@ -434,12 +435,13 @@
   const triggerSpeechGesture=(preferred='auto',force=false)=>{
     if(dragging||speechPaused||motionPreference?.matches||!root.classList.contains('adb-is-speaking'))return;
     const now=performance.now();
-    if(!force&&now-lastGestureAt<880)return;
+    if(!force&&now-lastGestureAt<(gentleSpeech?2100:880))return;
     lastGestureAt=now;
     root.classList.remove(...gestureClasses);
 
     let gesture;
-    if(preferred==='left')gesture='adb-gesture-left';
+    if(gentleSpeech)gesture='adb-gesture-open';
+    else if(preferred==='left')gesture='adb-gesture-left';
     else if(preferred==='right')gesture='adb-gesture-right';
     else if(preferred==='open')gesture='adb-gesture-open';
     else gesture=gestureClasses[gestureIndex%gestureClasses.length];
@@ -458,13 +460,13 @@
   const scheduleSpeechGestures=utterance=>{
     clearTimeout(gestureLoopTimer);
     if(motionPreference?.matches)return;
-    const delays=[1250,1750,1450,2050];
+    const delays=gentleSpeech?[2800,3400,3100,3700]:[1250,1750,1450,2050];
     const run=()=>{
       if(activeUtterance!==utterance||speechPaused||dragging||pageSuspended||preferences.minimized)return;
       triggerSpeechGesture();
       gestureLoopTimer=setTimeout(run,delays[gestureIndex%delays.length]);
     };
-    if(!pageSuspended&&!preferences.minimized)gestureLoopTimer=setTimeout(run,900);
+    if(!pageSuspended&&!preferences.minimized)gestureLoopTimer=setTimeout(run,gentleSpeech?1600:900);
   };
 
   motionPreference?.addEventListener?.('change',event=>{
@@ -562,6 +564,7 @@
     resetMouthCadence();
     clearSpeechGestures();
     root.classList.remove('adb-is-speaking');
+    gentleSpeech=false;
     if(!cancelled&&!dragging){
       root.classList.add('adb-speech-settle');
       settleTimer=setTimeout(()=>root.classList.remove('adb-speech-settle'),460);
@@ -764,7 +767,7 @@
     next();
     return true;
   };
-  const speak=(message,{voice=true,onStart=null,onEnd=null,continuationToken=null,displayText=null}={})=>{
+  const speak=(message,{voice=true,onStart=null,onEnd=null,continuationToken=null,displayText=null,gentle=false}={})=>{
     if(!bubble)return false;
     const text=String(message||'').trim();
     if(!text)return false;
@@ -774,6 +777,7 @@
       if(continuationToken!==longSpeechToken)return false;
       stopCurrentSpeech();
     }
+    gentleSpeech=gentle===true;
     bubble.textContent=displayText===null?text:String(displayText);
     root.classList.add('adb-is-ready');
 

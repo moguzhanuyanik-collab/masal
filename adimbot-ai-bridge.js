@@ -27,16 +27,22 @@
   let provider = null;
 
   const cleanText = value => String(value ?? '')
+    .normalize('NFC')
+    .replace(/[\u200B-\u200F\u202A-\u202E\u2060-\u206F\uFEFF]/g, '')
     .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
+
+  const safetyText = value => cleanText(value).toLocaleLowerCase('tr-TR');
+  const phonePattern = /(?<!\d)(?:\+?90[\s.-]?)?\(?0?[2-5]\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{2}[\s.-]?\d{2}(?!\d)/g;
+  const hideSecrets = value => value.replace(/((?:ş[iİı]frem|parolam|ş[iİı]fre|parola|ap[iİı][ _-]?(?:key|anahtar[ıiİ]|anahtar[ıiİ]m))\s*[:=]\s*)\S+/giu, '$1[gizlendi]');
 
   const truncate = (value, limit) => {
     const text = cleanText(value);
     return text.length <= limit ? text : text.slice(0, limit).trim();
   };
 
-  const stripMarkup = value => cleanText(String(value ?? '').replace(/<[^>]*>/g, ' '));
+  const stripMarkup = value => cleanText(String(value ?? '').replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, ' ').replace(/<[^>]*>/g, ' '));
 
   const childLength = value => {
     const sentences=cleanText(value).split(/(?<=[.!?])\s+/u).filter(Boolean);
@@ -44,34 +50,35 @@
   };
 
   const redactPII = value => {
-    let text = cleanText(value);
+    let text = hideSecrets(cleanText(value));
     text = text.replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, '[e-posta gizlendi]');
     text = text.replace(/(?:https?:\/\/|www\.)\S+/gi, '[bağlantı gizlendi]');
-    text = text.replace(/(?<!\d)(?:\+?90[\s.-]?)?(?:0?[2-5]\d{2})[\s.-]?\d{3}[\s.-]?\d{2}[\s.-]?\d{2}(?!\d)/g, '[telefon gizlendi]');
+    text = text.replace(phonePattern, '[telefon gizlendi]');
     text = text.replace(/(?<!\d)\d{11}(?!\d)/g, '[kimlik bilgisi gizlendi]');
     return text;
   };
 
   const asksForAnswerKey = text =>
-    /(?:doğru\s+cevap|cevabı\s+(?:söyle|ver)|hangi\s+şık|cevap\s+ne|doğru\s+şık|şık\s+hangisi)/i.test(text);
+    /(?:doğru\s+cevap|cevabı\s+(?:söyle|ver)|hangi\s+şık|cevap\s+ne|doğru\s+şık|şık\s+hangisi)/i.test(safetyText(text));
 
   const privacyRequest = text => {
-    const value=cleanText(text);
-    if(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i.test(value)||/(?<!\d)\d{11}(?!\d)/.test(value)||/(?<!\d)(?:\+?90[\s.-]?)?(?:0?[2-5]\d{2})[\s.-]?\d{3}[\s.-]?\d{2}[\s.-]?\d{2}(?!\d)/.test(value))return true;
+    const value=safetyText(text);
+    if(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i.test(value)||/(?<!\d)\d{11}(?!\d)/.test(value)||new RegExp(phonePattern.source).test(value))return true;
+    const sensitive=/(?:^|[^\p{L}])(?:adres(?:in|ini|im|imiz)?|telefon\s*numara(?:nı|sı|m)?|e[- ]?posta(?:\s*adres)?(?:nı|m)?|şifre(?:ni|niz|m)?|tc\s*(?:kimlik)?\s*numara(?:nı|sı|m)?|konum(?:un|unu|um)?)(?=$|[^\p{L}])/iu.test(value);
+    const explicit=/(?:öğrenmek|bilmek)\s+istiyorum/i.test(value)||/(?:^|[^\p{L}])(?:söyle(?:r\s+misin)?|ver(?:ir\s+misin)?|yaz(?:ar\s+mısın)?|paylaş(?:ır\s+mısın)?|gönder(?:ir\s+misin)?|lazım)(?:$|[^\p{L}])/iu.test(value);
+    if(sensitive&&explicit)return true;
     if(/(?:ne\s+demek|ne\s+anlama\s+gelir|mucidi|nasıl\s+çalışır|konusu(?:nu)?|hakkında)/i.test(value))return false;
-    const sensitive=/(?:adres(?:in|ini|im|imiz)?|telefon\s*numara(?:nı|sı|m)?|e[- ]?posta(?:\s*adres)?(?:nı|m)?|şifre(?:ni|niz|m)?|tc\s*(?:kimlik)?\s*numara(?:nı|sı|m)?|konum(?:un|unu|um)?)/i.test(value);
-    const disclosure=/(?:öğrenmek|bilmek)\s+istiyorum/i.test(value)||/(?:^|[^\p{L}])(?:söyle(?:r\s+misin)?|ver(?:ir\s+misin)?|yaz(?:ar\s+mısın)?|paylaş(?:ır\s+mısın)?|gönder(?:ir\s+misin)?|nedir|ne|kaç|lazım)(?:$|[^\p{L}])/iu.test(value);
-    return sensitive&&disclosure;
+    return sensitive&&/(?:^|[^\p{L}])(?:nedir|ne|kaç)(?:$|[^\p{L}])/iu.test(value);
   };
 
   const contactRequest = text =>
-    /(?:whatsapp|instagram|telegram|discord|snapchat|tiktok|facebook|buluş(?:alım|mak)|görüşelim|beni\s+ara|seni\s+arayayım|özelden\s+yaz)/i.test(text);
+    /(?:whatsapp|instagram|telegram|discord|snapchat|tiktok|facebook|buluş(?:alım|mak)|görüşelim|beni\s+ara|seni\s+arayayım|özelden\s+yaz)/i.test(safetyText(text));
 
   const selfHarmRequest = text =>
-    /(?:intihar|kendi(?:mi|ni|ne)\s+öldür|canı(?:ma|na)\s+kıy|kendi(?:me|ne)\s+zarar|yaşamak\s+istem(?:e|i))/i.test(text);
+    /(?:intihar|kendi(?:mi|ni|ne)\s+öldür|canı(?:ma|na)\s+kıy|kendi(?:me|ne)\s+zarar|yaşamak\s+istem(?:e|i))/i.test(safetyText(text));
 
   const unsafeRequest = text =>
-    /(?:uyuşturucu|silah\s+yap|bomba\s+yap|birini\s+öldür|cinsel\s+ilişki|çıplak\s+foto)/i.test(text);
+    /(?:uyuşturucu|silah\s+yap|bomba\s+yap|birini\s+öldür|cinsel\s+ilişki|çıplak\s+foto|pornografi|porno|seks\s+(?:yap|anlat|foto|video)|erotik\s+(?:hik[aâ]ye|foto|video))/i.test(safetyText(text));
 
   const classifySafety = input => {
     const text = cleanText(input);
@@ -89,7 +96,7 @@
 
     const textFields = ['screen','lesson','topic','activity','question','practiceLesson','reviewLesson','reviewReason','learningMode'];
     textFields.forEach(key => {
-      if (source[key] == null) return;
+      if (typeof source[key] !== 'string') return;
       const limit = key === 'question' ? 240 : key === 'reviewReason' ? 24 : 80;
       const value = truncate(redactPII(source[key]), limit);
       if (value) safe[key] = value;
@@ -114,12 +121,13 @@
         role:item.role,
         text:truncate(redactPII(item.text),300)
       }))
-      .filter(item=>item.text);
+      .filter(item=>item.text&&!classifySafety(item.text).blocked&&(item.role!=='assistant'||!responseViolatesPolicy(item.text).blocked));
     return Object.freeze(safe);
   };
 
   const prepareRequest = (message, context = {}, history = []) => {
-    const raw = truncate(message, POLICY.maxInputChars);
+    const raw = typeof message === 'string' ? cleanText(message) : '';
+    if(raw.length>POLICY.maxInputChars)return {ok:false, reason:'input_too_long', text:'Sorunu daha kısa yazabilir misin? Bir seferde en fazla 400 karakter kullanabilirsin.'};
     if (!raw) return {ok:false, reason:'empty', text:''};
 
     const safety = classifySafety(raw);
@@ -156,7 +164,7 @@
   };
 
   const responseViolatesPolicy = (text, activeQuestion=false) => {
-    const value = cleanText(text);
+    const value = safetyText(text);
     if (!value) return {blocked:true, reason:'empty'};
     if (privacyRequest(value)) {
       return {blocked:true, reason:'privacy'};
@@ -168,6 +176,7 @@
     if (/(?:doğru\s+(?:cevap|şık)|cevap\s+[A-D]\s*şıkkı|cevap\s*[:\-]\s*[A-D]|\b[A-D]\s+seçeneği\s+doğru\b|\byanıt\s*[:\-]?\s*[A-D](?:[’']?(?:dır|dir|dur|dür))?\b)/i.test(value)) {
       return {blocked:true, reason:'answer_key'};
     }
+    if(activeQuestion&&/(?:^|[^\p{L}])(?:birinci|ikinci|üçüncü|dördüncü|[1-4]\.)\s+(?:seçene(?:k|ği)|şıkkı|kartı)\s*(?:işaretle|seç|doğru|cevap)/iu.test(value))return {blocked:true,reason:'answer_key'};
     if (activeQuestion && /(?:\b(?:cevap|yanıt|sonuç|doğru\s+olan)\s*[:\-]?\s*(?:\d+(?:[.,]\d+)?|bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on)(?:[’']?(?:dır|dir|dur|dür|tır|tir|tur|tür))?\b|\d+\s*[-+×x÷\/:]\s*\d+\s*=\s*\d+)/iu.test(value)) {
       return {blocked:true, reason:'answer_key'};
     }
@@ -179,12 +188,14 @@
     const raw = typeof value === 'string'
       ? value
       : value && typeof value === 'object'
-        ? String(value.text ?? value.message ?? '')
+        ? (typeof (value.text ?? value.message) === 'string' ? (value.text ?? value.message) : '')
         : '';
 
-    const readable = truncate(childLength(stripMarkup(raw)), POLICY.maxOutputChars);
-    const check = responseViolatesPolicy(readable,activeQuestion);
-    const text = truncate(redactPII(readable), POLICY.maxOutputChars);
+    const complete = childLength(stripMarkup(raw));
+    const readable = complete.length<=POLICY.maxOutputChars ? complete : complete.slice(0,POLICY.maxOutputChars+1).replace(/\s+\S*$/, '').slice(0,POLICY.maxOutputChars);
+    const bounded = complete.length>POLICY.maxOutputChars && !complete.slice(0,POLICY.maxOutputChars+1).includes(' ') ? '' : readable;
+    const check = responseViolatesPolicy(bounded,activeQuestion);
+    const text = truncate(redactPII(bounded), POLICY.maxOutputChars);
 
     if (!check.blocked) {
       return Object.freeze({ok:true, blocked:false, reason:'ok', text});
@@ -286,13 +297,14 @@
     return true;
   };
 
-  const deliver = result => {
-    const safe = sanitizeResponse(result);
+  const deliver = (result, options={}) => {
+    const safe = sanitizeResponse(result, options.activeQuestion===true);
+    const gentle = safe.blocked||result?.blocked===true;
     if (safe.text) {
       try {
         const bot=window.AdimBotStudent;
-        if(typeof bot?.speakLong==='function')bot.speakLong(safe.text);
-        else bot?.speak?.(safe.text);
+        if(typeof bot?.speakLong==='function')bot.speakLong(safe.text,{gentle});
+        else bot?.speak?.(safe.text,{gentle});
       } catch (_) {}
     }
     return Object.freeze({...safe,blocked:safe.blocked||result?.blocked===true,reason:safe.blocked?safe.reason:String(result?.reason||'ok')});
@@ -365,7 +377,7 @@
 
   const askAndSpeak = async (message, context = {}, history = [], options = {}) => {
     const result=await ask(message,context,history,options);
-    return result.ok||result.blocked?deliver(result):result;
+    return result.ok||result.blocked?deliver(result,{activeQuestion:Boolean(sanitizeContext(context).question)}):result;
   };
 
   const selfTest = () => {
