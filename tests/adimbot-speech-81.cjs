@@ -1,7 +1,7 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const s=fs.readFileSync(__dirname+'/../adimbot-student.js','utf8');
 let pending=new Map(),clock=100,id=0,spoken=[];
-const ctx={longSpeechToken:0,longSpeechTimer:0,nextSpeechChunk:null,gapRemaining:0,gapStartedAt:0,speechPaused:false,state:{speaking:false},activeUtterance:null,activeSpeechToken:1,speechTimeoutRemaining:5000,speechTimeoutStartedAt:0,timer:0,performance:{now:()=>clock},root:{classList:{toggle(){}}},setState(v){Object.assign(ctx.state,v)},window:{dispatchEvent(){}},CustomEvent:function(){},clearSpeechGestures(){},scheduleSpeechGestures(){},armSpeechWatchdog(){},speech:{pause(){},resume(){}},setTimeout(fn,ms){pending.set(++id,{fn,ms});return id},clearTimeout(i){pending.delete(i)}};
+const ctx={activeSequenceDone:null,pendingSpeechLaunch:null,longSpeechToken:0,longSpeechTimer:0,nextSpeechChunk:null,gapRemaining:0,gapStartedAt:0,speechPaused:false,state:{speaking:false},activeUtterance:null,activeSpeechToken:1,speechTimeoutRemaining:5000,speechTimeoutStartedAt:0,timer:0,performance:{now:()=>clock},root:{classList:{toggle(){}}},setState(v){Object.assign(ctx.state,v)},window:{dispatchEvent(){}},CustomEvent:function(){},clearSpeechGestures(){},scheduleSpeechGestures(){},armSpeechWatchdog(){},speech:{pause(){},resume(){}},setTimeout(fn,ms){pending.set(++id,{fn,ms});return id},clearTimeout(i){pending.delete(i)}};
 ctx.stopSpeaking=()=>{ctx.longSpeechToken++;ctx.clearTimeout(ctx.longSpeechTimer);ctx.nextSpeechChunk=null;ctx.speechPaused=false;ctx.state.speaking=false;};
 ctx.speak=(text,options)=>spoken.push({text,options});
 vm.createContext(ctx);
@@ -37,14 +37,15 @@ const onerror=s.slice(s.indexOf('    utterance.onerror=event=>{'),s.indexOf('   
 ctx.reportSpeechError=()=>{};ctx.finishSpeech=(token,cancelled)=>{ctx.cancelled=cancelled;};
 vm.runInContext(onerror,ctx);ctx.utterance.onerror({error:'network'});assert.equal(ctx.cancelled,undefined);
 ctx.token=ctx.activeSpeechToken;ctx.activeUtterance=ctx.utterance;ctx.utterance.onerror({error:'network'});assert.equal(ctx.cancelled,true);
-ctx.preferences={rate:.75};ctx.utterance.text='a'.repeat(100);
+ctx.preferences={rate:.75};ctx.utterance.rate=.75;ctx.utterance.text='a'.repeat(100);
 ctx.beginSpeech=()=>{};ctx.armSpeechWatchdog=(t,d)=>ctx.deadline=d;
 vm.runInContext(onstart,ctx);ctx.utterance.onstart();assert.equal(ctx.deadline,100*160/.75);
-ctx.preferences.rate=1.15;ctx.utterance.onstart();assert.equal(ctx.deadline,100*160/1.15);
+ctx.preferences.rate=1.15;ctx.utterance.rate=1.15;ctx.utterance.onstart();assert.equal(ctx.deadline,100*160/1.15);
 const css=fs.readFileSync(__dirname+'/../adimbot-student.css','utf8');
 assert.equal((css.match(/{/g)||[]).length,(css.match(/}/g)||[]).length);
 assert.match(css,/adb-is-speech-paused \.adb-mouth-open\{opacity:0/);
 assert.match(s,/motionPreference\?\.matches\|\|!root\.classList/);
-assert.match(s,/\(base\+variation\)\/preferences\.rate/);
+assert.match(s,/\(base\+variation\)\/activeSpeechRate/);
 assert.match(css,/adbBlink var\(--adb-blink-period/);
 console.log('PASS: text preparation, decimals, abbreviations, Unicode, Turkish voice, pause/resume gap, cancellation, stale callbacks, speech errors, rate-aware deadline, CSS and animation guards.');
+

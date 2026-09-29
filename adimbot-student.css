@@ -533,3 +533,11 @@ html.adb-chat-open,html.adb-chat-open body{overflow:hidden}
 .adb-student-widget.adb-is-speech-paused .adb-arm-leftview,
 .adb-student-widget.adb-is-speech-paused .adb-arm-rightview,
 .adb-student-widget.adb-is-speech-paused .adb-pulse{animation-play-state:paused!important}
+
+
+/* Word boundary timing is approximate; no phoneme synchronization is claimed. */
+.adb-mouth-open{transition:opacity 100ms ease-out}
+.adb-student-widget.adb-mouth-rest .adb-mouth-open{opacity:0}
+.adb-student-widget.adb-is-speech-paused .adb-visual,
+.adb-student-widget.adb-is-speech-paused .adb-lid{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){.adb-mouth-open{transition:none}}
