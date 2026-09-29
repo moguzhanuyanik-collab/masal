@@ -15,6 +15,12 @@ function voice_placeholder_key(string $value): bool {
     return preg_match('/^(?:(?:GROQ|GEMINI|OPENAI)[_ -]?)?API[_ -]?(?:KEY|ANAHTARI|ANAHTARINIZ)$/D',$normalized)===1
         || preg_match('/^(?:YOUR[_ -]?API[_ -]?KEY|CHANGE[_ -]?ME|ANAHTARI[_ -]?BURAYA[_ -]?YAZ)$/D',$normalized)===1;
 }
+function voice_resolve_key(mixed $configured, string $environment): string {
+    $saved=trim((string)$configured);
+    if ($saved!=='' && !voice_placeholder_key($saved)) return $saved;
+    $fallback=trim((string)(getenv($environment) ?: ''));
+    return $fallback!=='' && !voice_placeholder_key($fallback) ? $fallback : '';
+}
 app_session_start();
 if ($_SERVER['REQUEST_METHOD']!=='POST') voice_result(['ok'=>false,'reason'=>'method'],405);
 if (($_SESSION['aktif_rol'] ?? '')!=='ogrenci' || (int)($_SESSION['ogrenci_id'] ?? 0)<1 || (int)($_SESSION['kullanici_id'] ?? 0)<1) voice_result(['ok'=>false,'reason'=>'auth'],403);
@@ -47,8 +53,10 @@ elseif (str_starts_with($header,'RIFF') && substr($header,8,4)==='WAVE') $detect
 elseif (str_starts_with($header,'ID3') || (strlen($header)>=2 && ord($header[0])===0xFF && (ord($header[1])&0xE0)===0xE0)) $detected='audio/mpeg';
 if ($detected==='' || (is_string($reported) && isset($mimes[$reported]) && $mimes[$reported]!==$mimes[$detected])) voice_result(['ok'=>false,'reason'=>'format'],415);
 if (!function_exists('curl_init')) voice_result(['ok'=>false,'reason'=>'curl_missing'],500);
-$key=$provider==='groq' ? trim((string)(($ai['groq_api_key'] ?? '') ?: getenv('GROQ_API_KEY'))) : trim((string)(($ai['gemini_api_key'] ?? '') ?: getenv('GEMINI_API_KEY')));
-if ($key==='' || voice_placeholder_key($key)) voice_result(['ok'=>false,'reason'=>'provider_disabled'],503);
+$key=$provider==='groq'
+    ? voice_resolve_key($ai['groq_api_key'] ?? '', 'GROQ_API_KEY')
+    : voice_resolve_key($ai['gemini_api_key'] ?? '', 'GEMINI_API_KEY');
+if ($key==='') voice_result(['ok'=>false,'reason'=>'provider_disabled'],503);
 $groqModel=trim((string)($ai['voice_transcription_model'] ?? 'whisper-large-v3-turbo'));
 $geminiModel=trim((string)($ai['voice_gemini_model'] ?? 'gemini-3.5-flash-lite'));
 if ($provider==='groq' && !in_array($groqModel,['whisper-large-v3-turbo','whisper-large-v3'],true)) voice_result(['ok'=>false,'reason'=>'provider_config_error'],500);

@@ -25,6 +25,16 @@ function adimbot_ai_placeholder_key(string $value): bool {
         || preg_match('/^(?:YOUR[_ -]?API[_ -]?KEY|CHANGE[_ -]?ME|ANAHTARI[_ -]?BURAYA[_ -]?YAZ)$/D',$normalized)===1;
 }
 
+function adimbot_ai_resolve_key(mixed $configured, string $environment, bool $environmentFirst=false): string {
+    $saved=trim((string)$configured);
+    $fallback=trim((string)(getenv($environment) ?: ''));
+    $candidates=$environmentFirst ? [$fallback,$saved] : [$saved,$fallback];
+    foreach ($candidates as $candidate) {
+        if ($candidate!=='' && !adimbot_ai_placeholder_key($candidate)) return $candidate;
+    }
+    return '';
+}
+
 function adimbot_ai_redact(string $text): string {
     $text=preg_replace('/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/iu','[e-posta gizlendi]',$text) ?? $text;
     $text=preg_replace('/(?:https?:\/\/|www\.)\S+/iu','[bağlantı gizlendi]',$text) ?? $text;
@@ -111,7 +121,7 @@ function adimbot_ai_safe_output(string $text, bool $hasActiveQuestion=false): ar
     if (adimbot_ai_privacy_request($value)) {
         return ['ok'=>false,'text'=>'Kişisel bilgilerini paylaşmana gerek yok. Dersine güvenli şekilde devam edelim.','reason'=>'privacy'];
     }
-    if (preg_match('/(?:https?:\/\/|www\.|whatsapp|instagram|telegram|discord|snapchat|özelden\s+yaz|buluşalım)/iu',$value)) {
+    if (preg_match('/(?:https?:\/\/|www\.|\b[\pL\pN-]+\.(?:com|net|org|edu|gov|io|app|tr)\b|whatsapp|instagram|telegram|discord|snapchat|tiktok|facebook|özelden\s+yaz|buluşalım)/iu',$value)) {
         return ['ok'=>false,'text'=>'Seni başka bir uygulamaya veya kişiye yönlendirmeyeceğim. Burada dersine yardımcı olabilirim.','reason'=>'external_contact'];
     }
     if (preg_match('/(?:intihar|kendi(?:mi|ni|ne)\s+öldür|canı(?:ma|na)\s+kıy|kendi(?:me|ne)\s+zarar|yaşamak\s+isteme)/iu',$value)) {
@@ -128,6 +138,9 @@ function adimbot_ai_safe_output(string $text, bool $hasActiveQuestion=false): ar
     }
     if ($hasActiveQuestion && preg_match('/(?:doğru\s+olan\s+[A-D]\b|seçmen\s+gereken\s+[A-D]\b|[A-D]\s*şıkkını\s+seç|^\s*[A-D]\s*(?:şıkkı|seçeneği)(?:dır|dir|dur|dür)?[.!]?\s*$)/iu',$value)) {
         return ['ok'=>false,'text'=>'Doğru seçeneği doğrudan söylemeyeyim. Önce seçeneklerden hangisinin sorudaki ipucuyla eşleştiğini bulalım.','reason'=>'answer_key'];
+    }
+    if ($hasActiveQuestion && preg_match('/(?:\b[A-D]\s+seçeneği\s+doğru\b|\byanıt\s*[:\-]?\s*[A-D](?:[’\x27]?(?:dır|dir|dur|dür))?\b)/iu',$value)) {
+        return ['ok'=>false,'text'=>'Yanıtı doğrudan vermeyeyim. Sorudaki ipucunu kullanarak doğru seçeneği birlikte bulalım.','reason'=>'answer_key'];
     }
     return ['ok'=>true,'text'=>adimbot_ai_redact($value),'reason'=>'ok'];
 }
@@ -229,9 +242,9 @@ $ai=is_array($config['ai'] ?? null)?$config['ai']:[];
 $enabled=($ai['enabled'] ?? true)!==false;
 $provider=strtolower(trim((string)($ai['provider'] ?? 'openai')));
 $apiKey=match ($provider) {
-    'groq'=>trim((string)(($ai['groq_api_key'] ?? '') ?: getenv('GROQ_API_KEY'))),
-    'gemini'=>trim((string)(($ai['gemini_api_key'] ?? '') ?: getenv('GEMINI_API_KEY'))),
-    default=>trim((string)(getenv('OPENAI_API_KEY') ?: ($ai['api_key'] ?? ''))),
+    'groq'=>adimbot_ai_resolve_key($ai['groq_api_key'] ?? '', 'GROQ_API_KEY'),
+    'gemini'=>adimbot_ai_resolve_key($ai['gemini_api_key'] ?? '', 'GEMINI_API_KEY'),
+    default=>adimbot_ai_resolve_key($ai['api_key'] ?? '', 'OPENAI_API_KEY', true),
 };
 $model=trim((string)($ai['model'] ?? 'gpt-6-astra'));
 $timeout=max(5,min(40,(int)($ai['timeout_seconds'] ?? 20)));

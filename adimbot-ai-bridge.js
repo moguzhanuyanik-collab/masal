@@ -65,7 +65,7 @@
   };
 
   const contactRequest = text =>
-    /(?:whatsapp|instagram|telegram|discord|snapchat|buluş(?:alım|mak)|görüşelim|beni\s+ara|seni\s+arayayım|özelden\s+yaz)/i.test(text);
+    /(?:whatsapp|instagram|telegram|discord|snapchat|tiktok|facebook|buluş(?:alım|mak)|görüşelim|beni\s+ara|seni\s+arayayım|özelden\s+yaz)/i.test(text);
 
   const selfHarmRequest = text =>
     /(?:intihar|kendi(?:mi|ni|ne)\s+öldür|canı(?:ma|na)\s+kıy|kendi(?:me|ne)\s+zarar|yaşamak\s+isteme)/i.test(text);
@@ -164,10 +164,10 @@
     if (contactRequest(value)) return {blocked:true, reason:'contact'};
     if (selfHarmRequest(value)) return {blocked:true, reason:'self_harm'};
     if (unsafeRequest(value)) return {blocked:true, reason:'unsafe'};
-    if (/(?:doğru\s+(?:cevap|şık)|cevap\s+[A-D]\s*şıkkı|cevap\s*[:\-]\s*[A-D])/i.test(value)) {
+    if (/(?:doğru\s+(?:cevap|şık)|cevap\s+[A-D]\s*şıkkı|cevap\s*[:\-]\s*[A-D]|\b[A-D]\s+seçeneği\s+doğru\b|\byanıt\s*[:\-]?\s*[A-D](?:[’']?(?:dır|dir|dur|dür))?\b)/i.test(value)) {
       return {blocked:true, reason:'answer_key'};
     }
-    if (/(?:https?:\/\/|www\.)/i.test(value)) return {blocked:true, reason:'external_link'};
+    if (/(?:https?:\/\/|www\.|\b[\p{L}\p{N}-]+\.(?:com|net|org|edu|gov|io|app|tr)\b)/iu.test(value)) return {blocked:true, reason:'external_link'};
     return {blocked:false, reason:'ok'};
   };
 

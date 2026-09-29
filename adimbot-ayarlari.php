@@ -164,6 +164,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             if(isset($_POST['clear_groq_key'])) $groqKey='';
             $geminiKey=$newGeminiKey!==''?$newGeminiKey:trim((string)($saved['gemini_api_key']??($ai['gemini_api_key']??'')));
             if(isset($_POST['clear_gemini_key'])) $geminiKey='';
+            if(aa_placeholder_key($groqKey)) $groqKey='';
+            if(aa_placeholder_key($geminiKey)) $geminiKey='';
             if($provider==='groq' && $enabled && $groqKey==='' && trim((string)(getenv('GROQ_API_KEY')?:''))==='') {
                 throw new RuntimeException('Groq için API anahtarı girin veya sunucuda GROQ_API_KEY tanımlayın.');
             }
@@ -237,12 +239,12 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 $provider=(string)($ai['provider']??'openai');
 $displaySaved=is_file($settingsFile)?require $settingsFile:[];
 if(!is_array($displaySaved)) $displaySaved=[];
-$groqStored=trim((string)($displaySaved['groq_api_key']??''))!=='';
-$groqLocal=!$groqStored && trim((string)($ai['groq_api_key']??''))!=='';
-$groqEnvironment=trim((string)(getenv('GROQ_API_KEY')?:''))!=='';
-$geminiStored=trim((string)($displaySaved['gemini_api_key']??''))!=='';
-$geminiLocal=!$geminiStored && trim((string)($ai['gemini_api_key']??''))!=='';
-$geminiEnvironment=trim((string)(getenv('GEMINI_API_KEY')?:''))!=='';
+$groqStored=trim((string)($displaySaved['groq_api_key']??''))!=='' && !aa_placeholder_key((string)$displaySaved['groq_api_key']);
+$groqLocal=!$groqStored && trim((string)($ai['groq_api_key']??''))!=='' && !aa_placeholder_key((string)$ai['groq_api_key']);
+$groqEnvironment=trim((string)(getenv('GROQ_API_KEY')?:''))!=='' && !aa_placeholder_key((string)getenv('GROQ_API_KEY'));
+$geminiStored=trim((string)($displaySaved['gemini_api_key']??''))!=='' && !aa_placeholder_key((string)$displaySaved['gemini_api_key']);
+$geminiLocal=!$geminiStored && trim((string)($ai['gemini_api_key']??''))!=='' && !aa_placeholder_key((string)$ai['gemini_api_key']);
+$geminiEnvironment=trim((string)(getenv('GEMINI_API_KEY')?:''))!=='' && !aa_placeholder_key((string)getenv('GEMINI_API_KEY'));
 $keySet=$groqStored || $groqLocal || $groqEnvironment;
 $geminiKeySet=$geminiStored || $geminiLocal || $geminiEnvironment;
 $groqKeySource=$groqStored?'panelde korumalı ayar dosyasında kayıtlı':($groqLocal?'sunucu yerel yapılandırmasında tanımlı':($groqEnvironment?'sunucu ortam değişkeninde tanımlı':'henüz tanımlı değil'));

@@ -498,7 +498,12 @@
           status.textContent='Dinliyorum… Konuşunca sorunu göndereceğim.';
           recognition.onresult=event=>{
             if(generation!==voiceGeneration)return;
-            const transcript=event.results?.[0]?.[0]?.transcript||'';
+            const parts=[];
+            for(let i=0;i<(event.results?.length||0);i++){
+              const value=event.results?.[i]?.[0]?.transcript;
+              if(typeof value==='string'&&value.trim())parts.push(value.trim());
+            }
+            const transcript=parts.join(' ');
             stopVoice();recognized(transcript);
           };
           recognition.onerror=event=>{if(generation===voiceGeneration&&voiceSession===browserSession){const reason=String(event?.error||'');stopVoice();status.textContent=reason==='not-allowed'||reason==='service-not-allowed'?'Mikrofon izni kapalı. Tarayıcı ayarlarından izin verip tekrar dene.':reason==='no-speech'||(reason==='aborted'&&browserSession.stopping)?'Ses algılanmadı. Mikrofona daha yakın konuşup tekrar dene.':'Mikrofon dinleyemedi. İzinleri kontrol edip tekrar dene.';}};
@@ -525,7 +530,10 @@
         stream=await navigator.mediaDevices.getUserMedia({audio:true});
         if(generation!==voiceGeneration||modal.hidden||voiceSession!==permissionSession){stream.getTracks().forEach(track=>track.stop());return;}
         clearTimeout(permissionSession.timer);
-        const preferredMime=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].find(type=>MediaRecorder.isTypeSupported(type));
+        const supportsMime=typeof MediaRecorder.isTypeSupported==='function'
+          ?type=>MediaRecorder.isTypeSupported(type)
+          :()=>false;
+        const preferredMime=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].find(supportsMime);
         const recorder=preferredMime?new MediaRecorder(stream,{mimeType:preferredMime}):new MediaRecorder(stream);
         const mime=recorder.mimeType||preferredMime||'audio/webm';
         const chunks=[];
@@ -745,7 +753,7 @@
       try{
         const ai=window.AdimBotAI;
         if(!ai||typeof ai.ask!=='function'||typeof ai.deliver!=='function'){
-          appendMessage(box,'bot','AdımBot yapay zekâ bağlantısı henüz hazır değil.');
+          appendMessage(box,'bot','AdımBot yapay zekâ bağlantısı henüz hazır değil.',{speakable:false});
           rollbackPendingUser(message);
         }else{
           const answer=await ai.ask(message,learningContext(),historyBefore,{signal:controller.signal});
@@ -754,7 +762,7 @@
           clearTimeout(waitEmotionTimer);
           try{window.AdimBotStudent?.clearEmotion?.();window.AdimBotStudent?.emote?.('surprised',850);}catch(_){}
           const reply=result?.text||'Şu anda yanıt oluşturamadım.';
-          appendMessage(box,'bot',reply);
+          appendMessage(box,'bot',reply,{speakable:Boolean(result?.ok||result?.blocked)});
           if(result?.ok||result?.blocked)remember('assistant',reply);
           else if(retryableChatReasons.has(String(result?.reason||''))){
             rollbackPendingUser(message);
@@ -766,7 +774,7 @@
         }
       }catch(_){
         if(requestGeneration!==chatGeneration)return;
-        appendMessage(box,'bot','Şu anda yanıt veremedim. İstersen tekrar deneyebilirsin.');
+        appendMessage(box,'bot','Şu anda yanıt veremedim. İstersen tekrar deneyebilirsin.',{speakable:false});
         rollbackPendingUser(message);
         retryMessage=message;
         input.value=message;
