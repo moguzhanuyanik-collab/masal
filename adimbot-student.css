@@ -552,3 +552,12 @@ html.adb-chat-open,html.adb-chat-open body{overflow:hidden}
   0%,100%{transform:translateY(0) rotate(-.7deg)}
   48%{transform:translateY(-1px) rotate(-1.3deg)}
 }
+
+/* Thoughtfulness uses a small tilt and a held rest, without continuous swaying. */
+.adb-student-widget[data-adimbot-emotion="think"]:not(.adb-is-dragging) .adb-visual{animation:adbThoughtfulRest 3.6s ease-in-out infinite}
+@keyframes adbThoughtfulRest{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  18%{transform:translateY(-.7px) rotate(-.9deg)}
+  28%,76%{transform:translateY(-.7px) rotate(-.9deg)}
+  90%{transform:translateY(-.15px) rotate(-.2deg)}
+}

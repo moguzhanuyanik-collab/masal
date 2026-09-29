@@ -21,6 +21,7 @@
   let chatGeneration=0;
   let chatRetryUntil=0;
   let voiceRetryUntil=0;
+  let focusGeneration=0,inputComposing=false;
 
   const cancelChat=(restore=false)=>{
     const pending=chatRequest;
@@ -28,6 +29,8 @@
     chatGeneration++;
     chatRequest=null;
     pending.controller.abort();
+    clearTimeout(pending.emotionTimer);
+    try{window.AdimBotStudent?.clearEmotion?.();}catch(_){}
     if(restore){
       rollbackPendingUser(pending.message);
       retryMessage=pending.message;
@@ -311,6 +314,7 @@
   };
 
   const appendMessage=(box,role,message,{speakable=true}={})=>{
+    const nearBottom=box.scrollHeight-box.scrollTop-box.clientHeight<48;
     const item=document.createElement('div');
     item.className='adb-chat-message '+(role==='user'?'adb-chat-user':'adb-chat-bot');
 
@@ -372,7 +376,7 @@
     box.appendChild(item);
 
     while(box.children.length>12)box.firstElementChild?.remove();
-    box.scrollTop=box.scrollHeight;
+    if(role==='user'||nearBottom)box.scrollTop=box.scrollHeight;
     return item;
   };
 
@@ -410,6 +414,10 @@
   const clearHistory=()=>{
     cancelChat();
     stopVoice(true);
+    try{window.AdimBotStudent?.stop?.();window.AdimBotStudent?.clearEmotion?.();}catch(_){}
+    const input=modal?.querySelector('[data-adimbot-chat-input]');
+    if(input){input.value='';input.dispatchEvent(new Event('input',{bubbles:true}));}
+    inputComposing=false;
     try{sessionStorage.removeItem(scopedKey(HISTORY_KEY));}catch(_){}
     retryMessage='';
     setTogetherActive(false);
@@ -429,7 +437,7 @@
     modal.hidden=true;
     modal.innerHTML=[
       '<div class="adb-chat-backdrop" data-adimbot-chat-close></div>',
-      '<section class="adb-chat-dialog" role="dialog" aria-modal="true" aria-labelledby="adb-chat-title" aria-describedby="adb-chat-desc">',
+      '<section class="adb-chat-dialog" role="dialog" aria-modal="true" aria-labelledby="adb-chat-title" aria-describedby="adb-chat-desc" tabindex="-1">',
       '<header class="adb-chat-dialog-head">',
       '<div><strong id="adb-chat-title">AdımBot ile Sohbet</strong><small id="adb-chat-desc">Dersinle ilgili sor. Birlikte düşünüp keşfedelim.</small></div>',
       '<div class="adb-chat-head-actions"><button type="button" class="adb-chat-clear" data-adimbot-chat-clear>Temizle</button><button type="button" class="adb-chat-close" data-adimbot-chat-close aria-label="Sohbeti kapat">×</button></div>',
@@ -443,7 +451,7 @@
       '<button type="button" data-adimbot-summary>📋 Ders özeti</button>',
       '</div>',
       '<form class="adb-chat-form" data-adimbot-chat-form>',
-      '<input type="text" maxlength="400" autocomplete="off" enterkeyhint="send" placeholder="AdımBot’a bir şey sor..." data-adimbot-chat-input>',
+      '<input type="text" maxlength="400" autocomplete="off" enterkeyhint="send" placeholder="AdımBot’a bir şey sor..." aria-label="AdımBot’a soracağın soru" data-adimbot-chat-input>',
       '<button type="button" class="adb-chat-microphone" data-adimbot-microphone aria-label="Mikrofonla sor" aria-pressed="false">🎤</button>',
       '<button type="submit">Gönder</button>',
       '</form>',
@@ -483,9 +491,15 @@
     };
     window.addEventListener('adimbot:speech-error',speechErrorHandler);
     window.addEventListener('adimbot:speech-start',()=>{if(status){delete status.dataset.adimbotSpeechError;status.textContent='';}});
-    window.addEventListener('adimbot:speech-end',()=>{
-      modal?.querySelectorAll('[data-adimbot-speech-pause]').forEach(button=>{button.textContent='⏸ Duraklat';});
-    });
+    const syncPauseControls=()=>{
+      const paused=window.AdimBotStudent?.isPaused?.()===true;
+      modal?.querySelectorAll('[data-adimbot-speech-pause]').forEach(button=>{
+        button.textContent=paused?'▶️ Devam':'⏸ Duraklat';
+        button.setAttribute('aria-label',paused?'AdımBot sesini devam ettir':'AdımBot sesini duraklat');
+      });
+    };
+    window.addEventListener('adimbot:speech-end',syncPauseControls);
+    window.addEventListener('adimbot:speech-pause',syncPauseControls);
     const voiceConfig=window.ADIMBOT_VOICE_CONFIG||{enabled:false,input:'browser'};
     if(mic)mic.hidden=!voiceConfig.enabled;
     if(voiceConfig.enabled)mic.title=voiceConfig.input==='browser'?'Tarayıcı ses tanımayı kullanır':'Ses kaydı seçilen yapay zekâ sağlayıcısına gönderilir';
@@ -722,6 +736,11 @@
       else if(!chatBusy&&!status.dataset.adimbotSpeechError&&!status.dataset.adimbotRetry)status.textContent='';
     };
 
+    input?.addEventListener('compositionstart',()=>{inputComposing=true;});
+    input?.addEventListener('compositionend',()=>{inputComposing=false;});
+    input?.addEventListener('keydown',event=>{
+      if(event.key==='Enter'&&(inputComposing||event.isComposing||event.keyCode===229))event.preventDefault();
+    });
     input?.addEventListener('input',()=>{
       if(counter)counter.textContent=String(input.value.length)+' / 400';
     });
@@ -811,6 +830,7 @@
 
     form?.addEventListener('submit',async event=>{
       event.preventDefault();
+      if(inputComposing)return;
       if(voiceSession||voiceRequestController)stopVoice(true);
       if(chatBusy)return;
       const chatWait=cooldownRemaining(chatRetryUntil);
@@ -838,9 +858,11 @@
       if(status)delete status.dataset.adimbotRetry;
       modal.setAttribute('aria-busy','true');
       try{window.AdimBotStudent?.emote?.('think',1600);}catch(_){}
+      let replyDelivered=false;
       const waitEmotionTimer=setTimeout(()=>{
-        if(chatBusy){try{window.AdimBotStudent?.emote?.('wait',5000);}catch(_){}}
+        if(chatBusy&&requestGeneration===chatGeneration){try{window.AdimBotStudent?.emote?.('wait',5000);}catch(_){}}
       },1500);
+      chatRequest.emotionTimer=waitEmotionTimer;
       input.value='';
       if(counter)counter.textContent='0 / 400';
       input.disabled=true;
@@ -862,7 +884,11 @@
           if(answer?.ok||answer?.blocked)chatRetryUntil=0;
           const result=answer.ok||answer.blocked?ai.deliver(answer):answer;
           clearTimeout(waitEmotionTimer);
-          try{window.AdimBotStudent?.clearEmotion?.();window.AdimBotStudent?.emote?.('surprised',850);}catch(_){}
+          replyDelivered=Boolean(result?.ok||result?.blocked);
+          try{
+            window.AdimBotStudent?.clearEmotion?.();
+            if(replyDelivered)window.AdimBotStudent?.emote?.(result?.blocked?'encourage':'surprised',850);
+          }catch(_){}
           const reply=result?.text||'Şu anda yanıt oluşturamadım.';
           appendMessage(box,'bot',reply,{speakable:Boolean(result?.ok||result?.blocked)});
           if(result?.ok||result?.blocked)remember('assistant',reply);
@@ -895,6 +921,7 @@
       }finally{
         clearTimeout(waitEmotionTimer);
         if(requestGeneration!==chatGeneration)return;
+        if(!replyDelivered){try{window.AdimBotStudent?.clearEmotion?.();}catch(_){}}
         chatRequest=null;
         chatBusy=false;
         modal.removeAttribute('aria-busy');
@@ -908,10 +935,15 @@
     return modal;
   };
 
-  const focusables=()=>modal?[...modal.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[href],[tabindex]:not([tabindex="-1"])')].filter(el=>!el.hidden):[];
+  const focusables=()=>modal?[...modal.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[href],[tabindex]:not([tabindex="-1"])')].filter(el=>{
+    if(el.disabled||el.tabIndex<0||el.closest('[hidden],[inert],[aria-hidden="true"]'))return false;
+    const style=getComputedStyle(el);
+    return style.display!=='none'&&style.visibility!=='hidden'&&style.visibility!=='collapse'&&el.getClientRects().length>0;
+  }):[];
 
   const open=(trigger=null)=>{
     const dialog=buildModal();
+    const focusToken=++focusGeneration;
     lastTrigger=trigger instanceof HTMLElement?trigger:document.activeElement instanceof HTMLElement?document.activeElement:null;
     captureContext();
     const contextBadge=dialog.querySelector('[data-adimbot-chat-context]');
@@ -934,20 +966,29 @@
     }
     dialog.hidden=false;
     document.documentElement.classList.add('adb-chat-open');
-    setTimeout(()=>dialog.querySelector('[data-adimbot-chat-input]')?.focus(),40);
+    setTimeout(()=>{
+      if(focusToken!==focusGeneration||dialog.hidden)return;
+      const input=dialog.querySelector('[data-adimbot-chat-input]');
+      (input&&!input.disabled?input:dialog.querySelector('.adb-chat-dialog'))?.focus?.();
+    },40);
     return true;
   };
 
   const close=()=>{
     if(!modal)return true;
+    const focusToken=++focusGeneration;
+    inputComposing=false;
     cancelChat(true);
     stopVoice(true);
+    try{window.AdimBotStudent?.stop?.();window.AdimBotStudent?.clearEmotion?.();}catch(_){}
     modal.hidden=true;
     modal.removeAttribute('aria-busy');
     document.documentElement.classList.remove('adb-chat-open');
     const target=lastTrigger;
     lastTrigger=null;
-    setTimeout(()=>target?.focus?.(),0);
+    setTimeout(()=>{
+      if(focusToken===focusGeneration&&modal.hidden&&target?.isConnected)target.focus?.();
+    },0);
     return true;
   };
 
@@ -968,9 +1009,13 @@
     }
     if(event.key!=='Tab')return;
     const items=focusables();
-    if(!items.length)return;
+    if(!items.length){
+      event.preventDefault();modal.querySelector('.adb-chat-dialog')?.focus();return;
+    }
     const first=items[0],last=items[items.length-1];
-    if(event.shiftKey&&document.activeElement===first){
+    if(!items.includes(document.activeElement)){
+      event.preventDefault();(event.shiftKey?last:first).focus();
+    }else if(event.shiftKey&&document.activeElement===first){
       event.preventDefault();
       last.focus();
     }else if(!event.shiftKey&&document.activeElement===last){
