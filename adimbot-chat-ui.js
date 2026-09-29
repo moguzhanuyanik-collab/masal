@@ -513,10 +513,17 @@
       if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){status.textContent='Bu cihazda ses kaydı desteklenmiyor. Tarayıcı yöntemini seçebilir veya sorunu yazabilirsin.';return;}
       let stream;
       try{
-        voiceSession={pending:true};
+        const permissionSession={pending:true};
+        permissionSession.timer=setTimeout(()=>{
+          if(generation!==voiceGeneration||voiceSession!==permissionSession)return;
+          stopVoice(true);
+          status.textContent='Mikrofon izni 15 saniye içinde verilmedi. İzni kontrol edip tekrar dene.';
+        },15000);
+        voiceSession=permissionSession;
         status.textContent='Mikrofon izni bekleniyor…';
         stream=await navigator.mediaDevices.getUserMedia({audio:true});
-        if(generation!==voiceGeneration||modal.hidden||!voiceSession?.pending){stream.getTracks().forEach(track=>track.stop());return;}
+        if(generation!==voiceGeneration||modal.hidden||voiceSession!==permissionSession){stream.getTracks().forEach(track=>track.stop());return;}
+        clearTimeout(permissionSession.timer);
         const preferredMime=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].find(type=>MediaRecorder.isTypeSupported(type));
         const recorder=preferredMime?new MediaRecorder(stream,{mimeType:preferredMime}):new MediaRecorder(stream);
         const mime=recorder.mimeType||preferredMime||'audio/webm';
@@ -571,7 +578,7 @@
           try{
             const data=new FormData();data.append('audio',blob,'speech.'+(mime.includes('mp4')?'m4a':mime.includes('ogg')?'ogg':'webm'));
             const controller=new AbortController();voiceRequestController=controller;
-            const requestTimer=setTimeout(()=>controller.abort(),30000);
+            const requestTimer=setTimeout(()=>controller.abort(),50000);
             let response;
             try{response=await fetch('api/adimbot-transcribe.php',{method:'POST',credentials:'same-origin',signal:controller.signal,headers:{'X-CSRF-Token':String(window.ILKADIM_CSRF_TOKEN||'')},body:data});}
             finally{clearTimeout(requestTimer);if(voiceRequestController===controller)voiceRequestController=null;}
@@ -587,7 +594,7 @@
           }
         };
         recorder.start(1000);
-      }catch(error){stream?.getTracks().forEach(track=>track.stop());stopVoice(true);status.textContent=microphoneStartMessage(error);}
+      }catch(error){stream?.getTracks().forEach(track=>track.stop());if(generation!==voiceGeneration)return;stopVoice(true);status.textContent=microphoneStartMessage(error);}
     });
 
     const syncConnection=()=>{

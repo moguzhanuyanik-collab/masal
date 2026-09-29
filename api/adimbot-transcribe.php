@@ -37,16 +37,15 @@ if ($size<100 || $size>1600000) voice_result(['ok'=>false,'reason'=>'size'],413)
 $mimes=['audio/webm'=>'webm','video/webm'=>'webm','audio/ogg'=>'ogg','application/ogg'=>'ogg','audio/mp4'=>'m4a','video/mp4'=>'m4a','audio/x-m4a'=>'m4a','audio/mpeg'=>'mp3','audio/wav'=>'wav','audio/x-wav'=>'wav'];
 $audioBytes=file_get_contents($file['tmp_name']);
 if (!is_string($audioBytes) || strlen($audioBytes)!==$size) voice_result(['ok'=>false,'reason'=>'upload'],400);
-$detected=class_exists(finfo::class)?(new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']):'';
-if (!is_string($detected) || !isset($mimes[$detected])) {
-    $header=substr($audioBytes,0,16);
-    if (strlen($header)>=8 && substr($header,4,4)==='ftyp') $detected='audio/mp4';
-    elseif (str_starts_with($header,"\x1A\x45\xDF\xA3")) $detected='audio/webm';
-    elseif (str_starts_with($header,'OggS')) $detected='audio/ogg';
-    elseif (str_starts_with($header,'RIFF') && substr($header,8,4)==='WAVE') $detected='audio/wav';
-    elseif (str_starts_with($header,'ID3') || (strlen($header)>=2 && ord($header[0])===0xFF && (ord($header[1])&0xE0)===0xE0)) $detected='audio/mpeg';
-}
-if (!is_string($detected) || !isset($mimes[$detected])) voice_result(['ok'=>false,'reason'=>'format'],415);
+$reported=class_exists(finfo::class)?(new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']):'';
+$header=substr($audioBytes,0,16);
+$detected='';
+if (strlen($header)>=8 && substr($header,4,4)==='ftyp') $detected='audio/mp4';
+elseif (str_starts_with($header,"\x1A\x45\xDF\xA3")) $detected='audio/webm';
+elseif (str_starts_with($header,'OggS')) $detected='audio/ogg';
+elseif (str_starts_with($header,'RIFF') && substr($header,8,4)==='WAVE') $detected='audio/wav';
+elseif (str_starts_with($header,'ID3') || (strlen($header)>=2 && ord($header[0])===0xFF && (ord($header[1])&0xE0)===0xE0)) $detected='audio/mpeg';
+if ($detected==='' || (is_string($reported) && isset($mimes[$reported]) && $mimes[$reported]!==$mimes[$detected])) voice_result(['ok'=>false,'reason'=>'format'],415);
 if (!function_exists('curl_init')) voice_result(['ok'=>false,'reason'=>'curl_missing'],500);
 $key=$provider==='groq' ? trim((string)(($ai['groq_api_key'] ?? '') ?: getenv('GROQ_API_KEY'))) : trim((string)(($ai['gemini_api_key'] ?? '') ?: getenv('GEMINI_API_KEY')));
 if ($key==='' || voice_placeholder_key($key)) voice_result(['ok'=>false,'reason'=>'provider_disabled'],503);
@@ -90,7 +89,14 @@ $decoded=json_decode($body,true);
 if (!is_array($decoded)) voice_result(['ok'=>false,'reason'=>'invalid_provider_response'],502);
 $providerBlocked=$provider==='gemini' && (trim((string)($decoded['promptFeedback']['blockReason'] ?? ''))!=='' || in_array((string)($decoded['candidates'][0]['finishReason'] ?? ''),['SAFETY','PROHIBITED_CONTENT','BLOCKLIST'],true));
 if ($providerBlocked) voice_result(['ok'=>false,'reason'=>'provider_safety'],422);
-$text=$provider==='groq' ? ($decoded['text'] ?? '') : ($decoded['candidates'][0]['content']['parts'][0]['text'] ?? '');
+$text=$decoded['text'] ?? '';
+if ($provider==='gemini') {
+    $parts=$decoded['candidates'][0]['content']['parts'] ?? [];
+    $text='';
+    if (is_array($parts)) foreach ($parts as $part) {
+        if (is_array($part) && empty($part['thought']) && is_string($part['text'] ?? null)) $text.=' '.$part['text'];
+    }
+}
 if (!is_string($text)) $text='';
 $text=trim(preg_replace('/\s+/u',' ',strip_tags($text)) ?? '');
 $text=preg_replace('/^(?:transkripsiyon|deşifre|metin)\s*[:\-]\s*/iu','',$text) ?? $text;

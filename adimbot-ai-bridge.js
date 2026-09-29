@@ -82,10 +82,10 @@
     const source = context && typeof context === 'object' ? context : {};
     const safe = Object.create(null);
 
-    const textFields = ['screen','lesson','topic','activity','question','practiceLesson','learningMode'];
+    const textFields = ['screen','lesson','topic','activity','question','practiceLesson','reviewLesson','reviewReason','learningMode'];
     textFields.forEach(key => {
       if (source[key] == null) return;
-      const limit = key === 'question' ? 240 : 80;
+      const limit = key === 'question' ? 240 : key === 'reviewReason' ? 24 : 80;
       const value = truncate(redactPII(source[key]), limit);
       if (value) safe[key] = value;
     });
@@ -227,7 +227,8 @@
         throw new Error(String(payload.reason||'provider_error'));
       }
 
-      return {text:String(payload.text||'')};
+      if(payload.ok===false)throw new Error(String(payload.reason||'provider_error'));
+      return {text:String(payload.text||''),blocked:payload.blocked===true,reason:String(payload.reason||'ok')};
     }catch(error){
       if(error?.name==='AbortError')throw new Error(signal?.aborted?'cancelled':'timeout');
       if(error instanceof TypeError||navigator.onLine===false)throw new Error('provider_connection_error');
@@ -258,7 +259,7 @@
         else bot?.speak?.(safe.text);
       } catch (_) {}
     }
-    return safe;
+    return Object.freeze({...safe,blocked:safe.blocked||result?.blocked===true,reason:safe.blocked?safe.reason:String(result?.reason||'ok')});
   };
 
   const ask = async (message, context = {}, history = [], options = {}) => {
@@ -288,7 +289,7 @@
     try {
       const providerResult = await provider(prepared.request,options);
       const safe = sanitizeResponse(providerResult);
-      return Object.freeze({...safe, local:false});
+      return Object.freeze({...safe,blocked:safe.blocked||providerResult?.blocked===true,reason:safe.blocked?safe.reason:String(providerResult?.reason||'ok'),local:false});
     } catch (error) {
       const reason=(error?.name==='AbortError'||options?.signal?.aborted)?'cancelled':String(error?.message||'provider_error');
       let text='Şu anda yapay zekâ yanıtına ulaşamadım. Dersine devam edebiliriz.';
