@@ -313,6 +313,8 @@
   let activeSpeechToken=0,activeOnEnd=null,activeOnStart=null,speechStarted=false,speechPaused=false;
   let longSpeechToken=0,longSpeechTimer=0;
   let speechLaunchTimer=0;
+  let nextSpeechChunk=null,gapRemaining=0,gapStartedAt=0;
+  const motionPreference=window.matchMedia?.('(prefers-reduced-motion: reduce)');
   let speechTimeoutRemaining=0,speechTimeoutStartedAt=0;
   let gestureLoopTimer=0,gestureReleaseTimer=0,settleTimer=0,gestureIndex=0,lastGestureAt=0;
   let emotionTimer=0;
@@ -334,7 +336,7 @@
   };
 
   const state={
-    ready:true,speaking:false,dragging:false,hidden:false,mood:'idle',emotion:'idle',guide:false,
+    ready:true,speaking:false,paused:false,dragging:false,hidden:false,mood:'idle',emotion:'idle',guide:false,
     sound:preferences.sound,rate:preferences.rate,minimized:preferences.minimized
   };
 
@@ -427,7 +429,7 @@
   };
 
   const triggerSpeechGesture=(preferred='auto',force=false)=>{
-    if(dragging||!root.classList.contains('adb-is-speaking'))return;
+    if(dragging||speechPaused||motionPreference?.matches||!root.classList.contains('adb-is-speaking'))return;
     const now=performance.now();
     if(!force&&now-lastGestureAt<880)return;
     lastGestureAt=now;
@@ -450,7 +452,7 @@
     clearTimeout(gestureLoopTimer);
     const delays=[1250,1750,1450,2050];
     const run=()=>{
-      if(activeUtterance!==utterance||dragging||pageSuspended||preferences.minimized)return;
+      if(activeUtterance!==utterance||speechPaused||dragging||pageSuspended||preferences.minimized)return;
       triggerSpeechGesture();
       gestureLoopTimer=setTimeout(run,delays[gestureIndex%delays.length]);
     };
@@ -476,7 +478,7 @@
     const openness=Math.min(1.10,Math.max(.86,.88+(vowelRatio*.18)+(length>=7?.045:0)));
     const middle=Math.max(.82,openness-.12);
 
-    mouth.style.animationDuration=(base+variation).toFixed(3)+'s';
+    mouth.style.animationDuration=((base+variation)/preferences.rate).toFixed(3)+'s';
     mouth.style.setProperty('--adb-mouth-open-y',openness.toFixed(3));
     mouth.style.setProperty('--adb-mouth-mid-y',middle.toFixed(3));
   };
@@ -495,13 +497,19 @@
 
   const pickTurkishVoice=()=>{
     const turkish=voices.filter(voice=>/^tr(?:-|$)/i.test(voice.lang));
-    return turkish.find(voice=>/^tr-TR$/i.test(voice.lang)&&voice.localService)
+    return turkish.find(voice=>/^tr-TR$/i.test(voice.lang)&&voice.default)
+      ||turkish.find(voice=>/^tr-TR$/i.test(voice.lang)&&voice.localService)
       ||turkish.find(voice=>voice.localService)
       ||turkish.find(voice=>/^tr-TR$/i.test(voice.lang))
       ||turkish[0]
       ||null;
   };
 
+  const blinkLid=root.querySelector('.adb-lid-left');
+  blinkLid?.addEventListener('animationiteration',event=>{
+    if(event.animationName!=='adbBlink'||pageSuspended||preferences.minimized||motionPreference?.matches)return;
+    root.style.setProperty('--adb-blink-period',(4.5+Math.random()*3).toFixed(2)+'s');
+  });
   refreshVoices();
   speech?.addEventListener?.('voiceschanged',refreshVoices);
   setTimeout(refreshVoices,250);
@@ -542,7 +550,8 @@
       settleTimer=setTimeout(()=>root.classList.remove('adb-speech-settle'),460);
     }
     if(root.dataset.adimbotMood)delete root.dataset.adimbotMood;
-    setState({speaking:false,mood:'idle'});
+    root.classList.remove('adb-is-speech-paused');
+    setState({speaking:false,paused:false,mood:'idle'});
     try{window.dispatchEvent(new CustomEvent('adimbot:speech-end',{detail:{cancelled}}));}catch(_){}
     scheduleIdlePower();
     if(typeof done==='function'){
@@ -556,7 +565,7 @@
     speechStarted=true;
     speechPaused=false;
     root.classList.add('adb-is-speaking');
-    setState({speaking:true});
+    setState({speaking:true,paused:false});
     const spokenText=activeUtterance?.text||'';
     gestureIndex=spokenText.length%gestureClasses.length;
     lastGestureAt=0;
@@ -586,41 +595,87 @@
     longSpeechToken++;
     clearTimeout(longSpeechTimer);
     longSpeechTimer=0;
+    nextSpeechChunk=null;
+    gapRemaining=0;
     stopCurrentSpeech();
+    root.classList.remove('adb-is-speech-paused');
+    setState({paused:false});
+  };
+  const setSpeechPaused=value=>{
+    speechPaused=value;
+    root.classList.toggle('adb-is-speech-paused',value);
+    setState({paused:value});
+    try{window.dispatchEvent(new CustomEvent('adimbot:speech-pause',{detail:{paused:value}}));}catch(_){}
   };
   const pauseSpeaking=()=>{
-    if(!speech||!state.speaking||speechPaused)return false;
+    if(!speech||speechPaused||(!state.speaking&&!nextSpeechChunk))return false;
     try{
-      speech.pause();
-      speechTimeoutRemaining=Math.max(500,speechTimeoutRemaining-(performance.now()-speechTimeoutStartedAt));
-      clearTimeout(timer);
-      speechPaused=true;
+      if(nextSpeechChunk){
+        gapRemaining=Math.max(0,gapRemaining-(performance.now()-gapStartedAt));
+        clearTimeout(longSpeechTimer);longSpeechTimer=0;
+      }else{
+        speech.pause();
+        speechTimeoutRemaining=Math.max(500,speechTimeoutRemaining-(performance.now()-speechTimeoutStartedAt));
+        clearTimeout(timer);
+      }
+      clearSpeechGestures();
+      setSpeechPaused(true);
       return true;
     }catch(_){return false;}
   };
   const resumeSpeaking=()=>{
     if(!speech||!speechPaused)return false;
     try{
-      speech.resume();
-      speechPaused=false;
-      armSpeechWatchdog(activeSpeechToken,speechTimeoutRemaining,'timeout');
+      if(nextSpeechChunk){
+        setSpeechPaused(false);
+        queueSpeechChunk(nextSpeechChunk,gapRemaining);
+      }else{
+        speech.resume();
+        setSpeechPaused(false);
+        armSpeechWatchdog(activeSpeechToken,speechTimeoutRemaining,'timeout');
+        if(activeUtterance)scheduleSpeechGestures(activeUtterance);
+      }
       return true;
     }catch(_){return false;}
   };
+  const prepareSpeechText=message=>String(message||'')
+    .replace(/\*\*([^*]+)\*\*|__([^_]+)__/g,(_,a,b)=>a||b)
+    .replace(/`([^`]+)`/g,'$1')
+    .replace(/^\s*#{1,6}\s+/gm,'')
+    .replace(/[\p{Extended_Pictographic}\uFE0F\u200D]/gu,'')
+    .replace(/(\d)\s*\+\s*(?=\d)/g,'$1 artı ')
+    .replace(/(\d)\s*[×*]\s*(?=\d)/g,'$1 çarpı ')
+    .replace(/(\d)\s*[÷/]\s*(?=\d)/g,'$1 bölü ')
+    .replace(/(\d)\s*[−-]\s*(?=\d)/g,'$1 eksi ')
+    .replace(/(\d)\s*=\s*(?=\d)/g,'$1 eşittir ')
+    .replace(/\s+/g,' ').trim();
   const speechChunks=(message,maxLength=180)=>{
     const text=String(message||'').replace(/\s+/g,' ').trim();
     if(!text)return [];
-    const sentences=text.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[text];
+    const sentences=[];
+    let begin=0;
+    for(let i=0;i<text.length;i++){
+      if(!/[.!?…]/.test(text[i]))continue;
+      if(text[i]==='.'&&/\d/.test(text[i-1]||'')&&/\d/.test(text[i+1]||''))continue;
+      if(text[i]==='.'&&/(?:Dr|Prof|Doç|Sn|Mr|Mrs|vb|vs)\.$/i.test(text.slice(begin,i+1)))continue;
+      if(/[.!?…]/.test(text[i+1]||''))continue;
+      let end=i+1;
+      while(/[”’"')\]]/.test(text[end]||'')&&end<text.length)end++;
+      if(end<text.length&&!/\s/.test(text[end]))continue;
+      sentences.push(text.slice(begin,end).trim());begin=end;i=end-1;
+    }
+    if(begin<text.length)sentences.push(text.slice(begin).trim());
     const chunks=[];
     sentences.forEach(sentence=>{
-      let part=sentence.trim();
-      while(part.length>maxLength){
-        let cut=part.lastIndexOf(' ',maxLength);
+      // Code points keep surrogate pairs intact when a long word is split.
+      let points=Array.from(sentence);
+      while(points.length>maxLength){
+        let cut=points.slice(0,maxLength+1).lastIndexOf(' ');
         if(cut<70)cut=maxLength;
-        chunks.push(part.slice(0,cut).trim());
-        part=part.slice(cut).trim();
+        chunks.push(points.slice(0,cut).join('').trim());
+        points=points.slice(cut);while(points[0]===' ')points.shift();
       }
-      if(part)chunks.push(part);
+      if(points.length)chunks.push(points.join(''));
     });
     return chunks;
   };
@@ -630,6 +685,12 @@
     if(/[.!?…][”’"')\]]*$/.test(ending))return 240;
     if(/[,;:][”’"')\]]*$/.test(ending))return 140;
     return 60;
+  };
+  const queueSpeechChunk=(next,delay)=>{
+    nextSpeechChunk=next;gapRemaining=delay;gapStartedAt=performance.now();
+    longSpeechTimer=setTimeout(()=>{
+      longSpeechTimer=0;nextSpeechChunk=null;gapRemaining=0;next();
+    },delay);
   };
   const speakLong=(message,options={})=>{
     const chunks=speechChunks(message);
@@ -655,7 +716,7 @@
             if(finalOnEnd){try{finalOnEnd({cancelled:true,chunks:chunks.length});}catch(_){}}
             return;
           }
-          if(index<chunks.length)longSpeechTimer=setTimeout(next,speechPauseAfter(chunks[current]));
+          if(index<chunks.length)queueSpeechChunk(next,speechPauseAfter(chunks[current]));
           else if(finalOnEnd){try{finalOnEnd({cancelled:false,chunks:chunks.length});}catch(_){}}
         }
       });
@@ -700,7 +761,9 @@
     }
 
     refreshVoices();
-    const utterance=new SpeechSynthesisUtterance(text.replace('👋','').trim());
+    const spokenText=prepareSpeechText(text);
+    if(!spokenText){finishSpeech(token,false);return true;}
+    const utterance=new SpeechSynthesisUtterance(spokenText);
     activeUtterance=utterance;
     utterance.lang='tr-TR';
     utterance.rate=preferences.rate;
@@ -712,19 +775,21 @@
     if(selectedVoice)utterance.voice=selectedVoice;
 
     utterance.onstart=()=>{
+      if(token!==activeSpeechToken||activeUtterance!==utterance)return;
       lastSpeechError='';
       try{window.dispatchEvent(new CustomEvent('adimbot:speech-start'));}catch(_){}
       beginSpeech(token);
-      armSpeechWatchdog(token,Math.max(5000,text.length*160),'timeout');
+      armSpeechWatchdog(token,Math.max(5000,utterance.text.length*160/preferences.rate),'timeout');
     };
     utterance.onend=()=>finishSpeech(token,false);
     utterance.onerror=event=>{
+      if(token!==activeSpeechToken||activeUtterance!==utterance)return;
       const reason=String(event?.error||'speech_error');
       if(reason!=='canceled'&&reason!=='interrupted')reportSpeechError(reason,'Türkçe seslendirme başlatılamadı.');
-      finishSpeech(token,reason==='canceled'||reason==='interrupted');
+      finishSpeech(token,true);
     };
     utterance.onboundary=event=>{
-      if(activeSpeechToken!==token||activeUtterance!==utterance||!mouth)return;
+      if(activeSpeechToken!==token||activeUtterance!==utterance||speechPaused||!mouth)return;
       const charIndex=Number.isFinite(event.charIndex)?event.charIndex:0;
       const remaining=utterance.text.slice(charIndex);
       const word=(remaining.match(/^[^\s.,!?;:]+/)||[''])[0];

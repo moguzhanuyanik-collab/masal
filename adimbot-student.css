@@ -62,7 +62,7 @@
   position:absolute;z-index:6;top:84px;width:28px;height:16px;
   background:linear-gradient(180deg,#0b1a2b 0%,#10283e 72%,#12344d 100%);
   border-radius:50% 50% 44% 44%;transform:scaleY(0);transform-origin:50% 0;
-  animation:adbBlink 6.2s infinite;pointer-events:none;overflow:hidden
+  animation:adbBlink var(--adb-blink-period,6.2s) infinite;pointer-events:none;overflow:hidden
 }
 .adb-lid:after{
   content:"";position:absolute;left:22%;right:22%;bottom:1px;height:4px;
@@ -527,3 +527,9 @@ html.adb-chat-open,html.adb-chat-open body{overflow:hidden}
   .adb-visual,.adb-pulse,.adb-arm-leftview,.adb-arm-rightview,.adb-lid,.adb-mouth-open,.adb-guide-target{animation:none!important}
   .adb-help,.adb-chat-trigger{transition:none!important}
 }
+
+/* Pausing speech also pauses the character, without moving the viewport. */
+.adb-student-widget.adb-is-speech-paused .adb-mouth-open{opacity:0;animation-play-state:paused!important}
+.adb-student-widget.adb-is-speech-paused .adb-arm-leftview,
+.adb-student-widget.adb-is-speech-paused .adb-arm-rightview,
+.adb-student-widget.adb-is-speech-paused .adb-pulse{animation-play-state:paused!important}

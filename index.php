@@ -20,7 +20,7 @@ require_student_login();
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="v4-features.css?v=1.0.34">
   <link rel="stylesheet" href="ogretmenim.css?v=1.0.48">
-  <link rel="stylesheet" href="adimbot-student.css?v=1.1.56">
+  <link rel="stylesheet" href="adimbot-student.css?v=1.1.81">
   <script src="api/bootstrap.js.php?v=1.1.56" defer></script>
   <script src="test-progress-reset.js?v=1.1.32" defer></script>
   <script src="activities-extra.js?v=1.0.31" defer></script>
