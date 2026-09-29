@@ -21,7 +21,47 @@
   let chatGeneration=0;
   let chatRetryUntil=0;
   let voiceRetryUntil=0;
-  let focusGeneration=0,inputComposing=false;
+  let focusGeneration=0,inputComposing=false,failedReplyBubble=null;
+  const chatCooldownSeconds=(reason,value)=>quotaChatReasons.has(reason)?retryAfterSeconds(value):0;
+  const isUnclearTranscript=value=>{
+    if(typeof value!=='string')return true;
+    const text=clean(value);
+    if(!/[\p{L}\p{N}]/u.test(text))return true;
+    return /^(?:[\[(](?:sessizlik|gürültü|müzik|alkış|silence|noise|music|applause|blank[_ ]audio|no[_ ]speech|anlaşılmayan\s+ses|konuşma\s+yok|no\s+speech)[\])]|blank[_ ]audio|no[_ ]speech|anlaşılmayan\s+ses|konuşma\s+yok|no\s+speech)$/u.test(text.toLocaleLowerCase('tr-TR').replace(/ı/g,'i'));
+  };
+  const mergeRecognizedDraft=(draft,spoken)=>{
+    const typed=clean(draft),voice=clean(spoken);
+    if(!typed)return voice;if(!voice)return typed;
+    if(typed.toLocaleLowerCase('tr-TR')===voice.toLocaleLowerCase('tr-TR'))return typed;
+    return typed+' '+voice;
+  };
+  const answerEmotion=(result,text)=>result?.blocked?'encourage':/^(?:Harika|Süper|Güzel|Aferin)\b/i.test(String(text||''))?'happy':'think';
+  const setChatControlsBusy=(busy,input,submit,mic)=>{
+    const disabled=busy===true;
+    if(input)input.disabled=disabled;
+    if(submit)submit.disabled=disabled;
+    if(mic){mic.disabled=disabled;mic.setAttribute('aria-label',disabled?'AdımBot yanıt verirken mikrofon kapalı':'Mikrofonla sor');}
+  };
+  const appendFailureReply=(box,text,retrying)=>{
+    if(retrying&&failedReplyBubble?.isConnected){
+      const nearBottom=box.scrollHeight-box.scrollTop-box.clientHeight<48;
+      const body=failedReplyBubble.querySelector('p');
+      if(body)body.textContent=String(text||'');
+      if(nearBottom)box.scrollTop=box.scrollHeight;
+      return failedReplyBubble;
+    }
+    failedReplyBubble=appendMessage(box,'bot',text,{speakable:false});
+    return failedReplyBubble;
+  };
+  const requestRecognizedSubmit=(form,status)=>{
+    try{
+      if(typeof form?.requestSubmit==='function'){form.requestSubmit();return true;}
+      const button=form?.querySelector?.('button[type=\"submit\"]');
+      if(button){button.click();return true;}
+    }catch(_){}
+    if(status)status.textContent='Soru gönderilemedi. Gönder düğmesine dokunup tekrar deneyebilirsin.';
+    return false;
+  };
 
   const cancelChat=(restore=false)=>{
     const pending=chatRequest;
@@ -43,6 +83,8 @@
     if(input)input.disabled=false;
     const submit=form?.querySelector('button[type="submit"]');
     if(submit)submit.disabled=false;
+    const mic=modal?.querySelector('[data-adimbot-microphone]');
+    if(mic){mic.disabled=false;mic.setAttribute('aria-label','Mikrofonla sor');}
     modal?.removeAttribute('aria-busy');
   };
 
@@ -148,7 +190,20 @@
     return 'provider_error';
   };
 
-  const retryableChatReasons=new Set(['timeout','provider_timeout','provider_connection_error','provider_unavailable','provider_incomplete','provider_rate_limit','rate_limit','provider_error','invalid_provider_response','invalid_response']);
+  const retryableChatReasons=new Set(['timeout','provider_timeout','provider_connection_error','provider_unavailable','provider_incomplete','provider_rate_limit','rate_limit','provider_error','invalid_provider_response','invalid_response','provider_auth_error','provider_permission_error','api_key_missing','model_missing','provider_model_retired','provider_model_unavailable','provider_config_error','provider_disabled','ai_disabled','curl_missing']);
+  const quotaChatReasons=new Set(['provider_rate_limit','rate_limit']);
+  const retryHint=reason=>({
+    provider_auth_error:'AdımBot bağlantısı şu an yanıt veremedi. Biraz sonra sorunu yeniden deneyebilirsin.',
+    provider_permission_error:'AdımBot bağlantısı şu an yanıt veremedi. Biraz sonra sorunu yeniden deneyebilirsin.',
+    api_key_missing:'AdımBot bağlantısı şu an hazır değil. Biraz sonra sorunu yeniden deneyebilirsin.',
+    model_missing:'AdımBot bağlantısı şu an hazır değil. Biraz sonra sorunu yeniden deneyebilirsin.',
+    provider_model_retired:'AdımBot bağlantısı şu an yanıt veremedi. Biraz sonra sorunu yeniden deneyebilirsin.',
+    provider_model_unavailable:'AdımBot bağlantısı şu an yanıt veremedi. Biraz sonra sorunu yeniden deneyebilirsin.',
+    provider_config_error:'AdımBot bağlantısı şu an yanıt veremedi. Biraz sonra sorunu yeniden deneyebilirsin.',
+    provider_disabled:'AdımBot bağlantısı şu an hazır değil. Biraz sonra sorunu yeniden deneyebilirsin.',
+    ai_disabled:'AdımBot sohbeti şu an kullanılamıyor. Biraz sonra sorunu yeniden deneyebilirsin.',
+    curl_missing:'AdımBot bağlantısı şu an hazır değil. Biraz sonra sorunu yeniden deneyebilirsin.'
+  }[reason]||'Sorun kaybolmadı. Bağlantı düzeldiğinde Gönder düğmesine yeniden dokunabilirsin.');
 
   const microphoneStartMessage=error=>{
     const name=String(error?.name||'');
@@ -414,6 +469,7 @@
   };
 
   const clearHistory=()=>{
+    failedReplyBubble=null;
     cancelChat();
     stopVoice(true);
     try{window.AdimBotStudent?.stop?.();window.AdimBotStudent?.clearEmotion?.();}catch(_){}
@@ -515,15 +571,15 @@
       if(modal.hidden||chatBusy)return;
       if(typeof text!=='string'){if(status)status.textContent=voiceErrorMessage('invalid_provider_response');return;}
       const transcript=clean(text);
-      const noise=/^(?:[\[(](?:sessizlik|gürültü|müzik|alkış|silence|noise|music|applause|anlaşılmayan\s+ses|konuşma\s+yok|no\s+speech)[\])]|anlaşılmayan\s+ses|konuşma\s+yok|no\s+speech)$/u.test(transcript.toLocaleLowerCase('tr-TR'));
-      if(!/[\p{L}\p{N}]/u.test(transcript)||noise){if(status)status.textContent='Ses anlaşılmadı. Tekrar deneyebilirsin.';return;}
-      input.value=transcript;
+      if(isUnclearTranscript(transcript)){if(status)status.textContent='Ses anlaşılmadı. Tekrar deneyebilirsin.';return;}
+      const merged=mergeRecognizedDraft(input.value,transcript);
+      input.value=merged;
       input.dispatchEvent(new Event('input',{bubbles:true}));
-      if(transcript.length>400){
+      if(merged.length>400){
         if(status)status.textContent='Konuşman uzun geldi. Göndermeden önce aşağıdaki metni 400 karaktere kadar kısalt.';
         input.focus();return;
       }
-      form.requestSubmit();
+      requestRecognizedSubmit(form,status);
     };
     mic?.addEventListener('click',async()=>{
       if(!voiceConfig.enabled||chatBusy)return;
@@ -894,11 +950,11 @@
       chatRequest.emotionTimer=waitEmotionTimer;
       input.value='';
       if(counter)counter.textContent='0 / 400';
-      input.disabled=true;
       const submit=form.querySelector('button[type="submit"]');
-      if(submit)submit.disabled=true;
+      setChatControlsBusy(true,input,submit,mic);
       if(status)status.textContent='AdımBot düşünüyor...';
       const historyBefore=readHistory();
+      const requestContext=learningContext();
       if(!retrying)appendMessage(box,'user',message);
       remember('user',message);
 
@@ -908,23 +964,24 @@
           appendMessage(box,'bot','AdımBot yapay zekâ bağlantısı henüz hazır değil.',{speakable:false});
           rollbackPendingUser(message);
         }else{
-          const answer=await ai.ask(message,learningContext(),historyBefore,{signal:controller.signal});
+          const answer=await ai.ask(message,requestContext,historyBefore,{signal:controller.signal});
           if(requestGeneration!==chatGeneration)return;
           if(answer?.ok||answer?.blocked)chatRetryUntil=0;
-          const result=answer.ok||answer.blocked?ai.deliver(answer,{activeQuestion:Boolean(currentContext().question)}):answer;
+          const result=answer.ok||answer.blocked?ai.deliver(answer,{activeQuestion:Boolean(requestContext.question)}):answer;
           clearTimeout(waitEmotionTimer);
           replyDelivered=Boolean(result?.ok||result?.blocked);
+          const reply=result?.text||'Şu anda yanıt oluşturamadım.';
           try{
             window.AdimBotStudent?.clearEmotion?.();
-            if(replyDelivered)window.AdimBotStudent?.emote?.(result?.blocked?'encourage':'surprised',850);
+            if(replyDelivered)window.AdimBotStudent?.emote?.(answerEmotion(result,reply),1500);
           }catch(_){}
-          const reply=result?.text||'Şu anda yanıt oluşturamadım.';
-          appendMessage(box,'bot',reply,{speakable:Boolean(result?.ok||result?.blocked)});
+          if(result?.ok||result?.blocked){failedReplyBubble=null;appendMessage(box,'bot',reply,{speakable:true});}
+          else appendFailureReply(box,reply,retrying);
           if(result?.ok||result?.blocked)remember('assistant',reply);
           else{
             rollbackPendingUser(message);
             const reason=String(result?.reason||'');
-            const retryAfter=retryAfterSeconds(result?.retryAfter);
+            const retryAfter=chatCooldownSeconds(reason,result?.retryAfter);
             if(retryAfter>0)chatRetryUntil=Date.now()+(retryAfter*1000);
             if(retryableChatReasons.has(reason)){
               retryMessage=message;
@@ -932,16 +989,16 @@
               if(counter)counter.textContent=String(message.length)+' / 400';
               if(status){
                 status.dataset.adimbotRetry='1';
-                status.textContent=reason==='provider_rate_limit'||reason==='rate_limit'
+                status.textContent=quotaChatReasons.has(reason)
                   ?(retryAfter>0?'Kullanım sınırı dolu. '+retryAfter+' saniye sonra yeniden gönderebilirsin.':'Kullanım sınırı dolu. Birkaç dakika bekleyip Gönder düğmesine yeniden dokunabilirsin.')
-                  :'Sorun kaybolmadı. Bağlantı düzeldiğinde Gönder düğmesine yeniden dokunabilirsin.';
+                  :retryHint(reason);
               }
             }
           }
         }
       }catch(_){
         if(requestGeneration!==chatGeneration)return;
-        appendMessage(box,'bot','Şu anda yanıt veremedim. İstersen tekrar deneyebilirsin.',{speakable:false});
+        appendFailureReply(box,'Şu anda yanıt veremedim. İstersen tekrar deneyebilirsin.',retrying);
         rollbackPendingUser(message);
         retryMessage=message;
         input.value=message;
@@ -954,8 +1011,7 @@
         chatRequest=null;
         chatBusy=false;
         modal.removeAttribute('aria-busy');
-        input.disabled=false;
-        if(submit)submit.disabled=false;
+        setChatControlsBusy(false,input,submit,mic);
         if(status&&!status.dataset.adimbotSpeechError&&!status.dataset.adimbotRetry)status.textContent=navigator.onLine?'':'İnternet bağlantısı yok. Bağlantı gelince tekrar deneyebilirsin.';
         if(!modal.hidden)input.focus();
       }
@@ -995,6 +1051,9 @@
     }
     dialog.hidden=false;
     document.documentElement.classList.add('adb-chat-open');
+    const messages=dialog.querySelector('[data-adimbot-chat-messages]');
+    const alignHistory=()=>{if(focusToken===focusGeneration&&!dialog.hidden&&messages)messages.scrollTop=messages.scrollHeight;};
+    if(typeof window.requestAnimationFrame==='function')window.requestAnimationFrame(alignHistory);else setTimeout(alignHistory,0);
     setTimeout(()=>{
       if(focusToken!==focusGeneration||dialog.hidden)return;
       const input=dialog.querySelector('[data-adimbot-chat-input]');
@@ -1058,6 +1117,6 @@
   document.addEventListener('DOMContentLoaded',()=>setTimeout(captureContext,80),{once:true});
   setTimeout(captureContext,80);
 
-  window.AdimBotChatUI=Object.freeze({open,close,clearHistory,captureContext,currentContext,learningContext,history:()=>readHistory().map(item=>({...item}))});
+  window.AdimBotChatUI=Object.freeze({open,close,clearHistory,captureContext,currentContext,learningContext,history:()=>readHistory().map(item=>({...item})),diagnostics:Object.freeze({chatCooldownSeconds,isUnclearTranscript,mergeRecognizedDraft,answerEmotion,setChatControlsBusy,requestRecognizedSubmit})});
 })();
 

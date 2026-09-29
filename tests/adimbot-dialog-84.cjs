@@ -16,14 +16,15 @@ class El{
 }
 function h(){
  let id=0,jobs=new Map(),stops=0,clears=0,emotions=[];
- const input=new El(),panel=new El(),box=new El(),status=new El(),counter=new El(),submit=new El(),form=new El(),pauseA=new El(),pauseB=new El();
+ const input=new El(),panel=new El(),box=new El(),status=new El(),counter=new El(),submit=new El(),mic=new El(),form=new El(),pauseA=new El(),pauseB=new El();
  form.querySelector=()=>submit;
- const modal=new El();modal.hidden=false;modal.querySelector=q=>({'[data-adimbot-chat-input]':input,'.adb-chat-dialog':panel,'[data-adimbot-chat-messages]':box,'[data-adimbot-chat-form]':form,'[data-adimbot-chat-status]':status}[q]||null);modal.querySelectorAll=()=>[];
+ const modal=new El();modal.hidden=false;modal.querySelector=q=>({'[data-adimbot-chat-input]':input,'.adb-chat-dialog':panel,'[data-adimbot-chat-messages]':box,'[data-adimbot-chat-form]':form,'[data-adimbot-chat-status]':status,'[data-adimbot-microphone]':mic}[q]||null);modal.querySelectorAll=()=>[];
  const bot={stop(){stops++;},clearEmotion(){clears++;},emote(t){emotions.push(t);},isPaused(){return c.paused||false;}};
- const c={modal,input,box,status,counter,form,chatRequest:null,chatGeneration:0,chatBusy:false,focusGeneration:0,lastTrigger:null,inputComposing:false,retryMessage:'',chatRetryUntil:0,voiceSession:null,voiceRequestController:null,window:{AdimBotStudent:bot,addEventListener(){}},document:{activeElement:null,documentElement:{classList:{add(){},remove(){}}},createElement:()=>new El()},Element:El,HTMLElement:El,Event:class{constructor(type){this.type=type;}},AbortController,console,navigator:{onLine:true},getComputedStyle:el=>({display:el.display||'block',visibility:el.visibility||'visible'}),setTimeout(f,ms){jobs.set(++id,{f,ms});return id;},clearTimeout(i){jobs.delete(i);},stopVoice(){},rollbackPendingUser(){},sessionStorage:{removeItem(){}},scopedKey:x=>x,HISTORY_KEY:'history',setTogetherActive(){},clean:x=>String(x||'').trim(),buildModal:()=>modal,captureContext(){},currentContext:()=>({}),togetherActive:()=>false};
+ const c={modal,input,box,status,counter,mic,form,chatRequest:null,chatGeneration:0,chatBusy:false,focusGeneration:0,lastTrigger:null,inputComposing:false,retryMessage:'',chatRetryUntil:0,voiceSession:null,voiceRequestController:null,window:{AdimBotStudent:bot,addEventListener(){}},document:{activeElement:null,documentElement:{classList:{add(){},remove(){}}},createElement:()=>new El()},Element:El,HTMLElement:El,Event:class{constructor(type){this.type=type;}},AbortController,console,navigator:{onLine:true},getComputedStyle:el=>({display:el.display||'block',visibility:el.visibility||'visible'}),setTimeout(f,ms){jobs.set(++id,{f,ms});return id;},clearTimeout(i){jobs.delete(i);},stopVoice(){},rollbackPendingUser(){},sessionStorage:{removeItem(){}},scopedKey:x=>x,HISTORY_KEY:'history',setTogetherActive(){},clean:x=>String(x||'').trim(),buildModal:()=>modal,captureContext(){},currentContext:()=>({}),togetherActive:()=>false};
  vm.createContext(c);
  vm.runInContext(s.slice(s.indexOf('  const cancelChat='),s.indexOf('  const stopTracks='))+'this.cancel=cancelChat;',c);
  vm.runInContext(s.slice(s.indexOf('  const appendMessage='),s.indexOf('  const readHistory='))+'this.append=appendMessage;',c);
+ vm.runInContext('let failedReplyBubble=null;'+s.slice(s.indexOf('  const answerEmotion='),s.indexOf('  const cancelChat=')),c);
  vm.runInContext(s.slice(s.indexOf('  const clearHistory='),s.indexOf('  const buildModal='))+'this.clear=clearHistory;',c);
  vm.runInContext(s.slice(s.indexOf('  const focusables='),s.indexOf("  document.addEventListener('click'"))+'this.api={open,close,focusables};',c);
  function tick(){const tasks=[...jobs];jobs.clear();for(const [,t] of tasks)t.f();}

@@ -165,7 +165,7 @@
 
   const responseViolatesPolicy = (text, activeQuestion=false) => {
     const value = safetyText(text);
-    if (!value) return {blocked:true, reason:'empty'};
+    if (!value||!/[\p{L}\p{N}]/u.test(value)) return {blocked:true, reason:'empty'};
     if (privacyRequest(value)) {
       return {blocked:true, reason:'privacy'};
     }
@@ -335,7 +335,20 @@
     }
 
     try {
-      const providerResult = await provider(prepared.request,options);
+      const signal=options?.signal;
+      let abortListener=null;
+      let providerResult;
+      try{
+        const pending=Promise.resolve().then(()=>provider(prepared.request,options));
+        if(signal){
+          const cancelled=new Promise((_,reject)=>{
+            abortListener=()=>reject(Object.assign(new Error('cancelled'),{name:'AbortError'}));
+            if(signal.aborted)abortListener();else signal.addEventListener('abort',abortListener,{once:true});
+          });
+          providerResult=await Promise.race([pending,cancelled]);
+        }else providerResult=await pending;
+      }finally{if(abortListener)signal?.removeEventListener('abort',abortListener);}
+      if(signal?.aborted)throw Object.assign(new Error('cancelled'),{name:'AbortError'});
       const safe = sanitizeResponse(providerResult,Boolean(prepared.request.context.question));
       return Object.freeze({...safe,blocked:safe.blocked||providerResult?.blocked===true,reason:safe.blocked?safe.reason:String(providerResult?.reason||'ok'),local:false});
     } catch (error) {
