@@ -66,16 +66,17 @@ function adimbot_groq_request(array $payload, string $key, int $timeout, ?callab
 
 // Only allowlisted classifications leave the server; never forward raw provider messages.
 function adimbot_provider_reason(int $status, mixed $body): string {
-    $data=is_string($body)?json_decode($body,true):null;
+    $data=is_array($body)?$body:(is_string($body)?json_decode($body,true):null);
     $error=is_array($data)?($data['error'] ?? null):null;
     $code=is_array($error)?($error['code'] ?? $error['status'] ?? $error['type'] ?? ''):'';
     $code=is_scalar($code)?strtolower((string)$code):'';
-    if (in_array($status,[402,429],true)) return 'provider_rate_limit';
+    if (in_array($status,[402,429],true) || in_array($code,['402','429','resource_exhausted','rate_limit','rate_limit_exceeded','quota_exceeded','too_many_requests'],true)) return 'provider_rate_limit';
     if ($status>=500) return 'provider_unavailable';
-    if (in_array($code,['model_decommissioned','model_deprecated'],true)) return 'provider_model_retired';
-    if (in_array($code,['model_not_found','model_not_available'],true)) return 'provider_model_unavailable';
-    if (in_array($code,['model_permission_denied','model_not_allowed','permission_denied'],true) || $status===403) return 'provider_permission_error';
-    if (in_array($code,['invalid_api_key','api_key_invalid','unauthenticated'],true) || $status===401) return 'provider_auth_error';
+    if ($status===410 || in_array($code,['410','model_decommissioned','model_deprecated','model_retired'],true)) return 'provider_model_retired';
+    if (in_array($code,['404','model_not_found','model_not_available','not_found'],true)) return 'provider_model_unavailable';
+    if (in_array($code,['403','model_permission_denied','model_not_allowed','permission_denied'],true) || $status===403) return 'provider_permission_error';
+    if (in_array($code,['401','invalid_api_key','api_key_invalid','unauthenticated'],true) || $status===401) return 'provider_auth_error';
+    if (in_array($code,['400','422','invalid_argument','bad_request','unprocessable_entity'],true)) return 'provider_config_error';
     if (in_array($status,[400,404,422],true)) return 'provider_config_error';
     return 'provider_error';
 }

@@ -48,6 +48,7 @@
     if(discard&&voiceRequestController){voiceRequestController.abort();voiceRequestController=null;}
     if(!session)return;
     clearTimeout(session.timer);
+    clearTimeout(session.muteTimer);
     clearInterval(session.countdownTimer);
     clearInterval(session.meterTimer);
     try{session.recognition?.stop();}catch(_){}
@@ -60,10 +61,19 @@
 
   const clean=value=>String(value??'').replace(/\s+/g,' ').trim();
 
+  const privacySafeText=value=>clean(value)
+    .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,'[e-posta gizlendi]')
+    .replace(/(?:https?:\/\/|www\.)\S+/gi,'[bağlantı gizlendi]')
+    .replace(/(?<!\d)(?:\+?90[\s.-]?)?(?:0?[2-5]\d{2})[\s.-]?\d{3}[\s.-]?\d{2}[\s.-]?\d{2}(?!\d)/g,'[telefon gizlendi]')
+    .replace(/(?<!\d)\d{11}(?!\d)/g,'[kimlik bilgisi gizlendi]');
+
   const voiceErrorMessage=reason=>({
     provider_rate_limit:'Sesli kullanım sınırına ulaşıldı. Biraz sonra tekrar dene.',
     rate_limit:'Sesli kullanım sınırına ulaşıldı. Biraz sonra tekrar dene.',
     provider_auth_error:'Ses sağlayıcısının API anahtarı reddedildi. Lütfen yöneticine haber ver.',
+    provider_permission_error:'Ses sağlayıcısı bu hesap için erişim izni vermedi. Lütfen yöneticine haber ver.',
+    provider_model_retired:'Seçilen ses modeli kullanımdan kaldırılmış. Lütfen yöneticine haber ver.',
+    provider_model_unavailable:'Seçilen ses modeli bulunamadı veya bu hesapta kullanılamıyor. Lütfen yöneticine haber ver.',
     provider_config_error:'Ses sağlayıcısının model ayarı geçersiz. Lütfen yöneticine haber ver.',
     provider_disabled:'Sesli konuşma bağlantısı henüz ayarlanmamış. Sorunu yazarak gönderebilirsin.',
     provider_timeout:'Sesin yazıya çevrilmesi uzun sürdü. Tekrar deneyebilirsin.',
@@ -101,6 +111,25 @@
     if(name==='NotFoundError'||name==='DevicesNotFoundError')return 'Bu cihazda kullanılabilir mikrofon bulunamadı.';
     if(name==='NotReadableError'||name==='TrackStartError')return 'Mikrofon başka bir uygulama tarafından kullanılıyor olabilir. Kapatıp tekrar dene.';
     return 'Mikrofon başlatılamadı. İzni ve cihaz desteğini kontrol et.';
+  };
+
+  const browserRecognitionMessage=(reason,stopping=false)=>{
+    if(reason==='not-allowed'||reason==='service-not-allowed')return 'Mikrofon izni kapalı. Tarayıcı ayarlarından izin verip tekrar dene.';
+    if(reason==='no-speech'||(reason==='aborted'&&stopping))return 'Ses algılanmadı. Mikrofona daha yakın konuşup tekrar dene.';
+    if(reason==='audio-capture')return 'Tarayıcı mikrofondan ses alamadı. Mikrofonu kullanan başka uygulamaları kapatıp tekrar dene.';
+    if(reason==='network')return 'Tarayıcının ses tanıma hizmetine bağlanılamadı. İnternet bağlantısını kontrol et.';
+    return 'Mikrofon dinleyemedi. İzinleri kontrol edip tekrar dene.';
+  };
+
+  const createAudioRecorder=stream=>{
+    const candidates=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'];
+    for(const mimeType of candidates){
+      try{
+        if(typeof MediaRecorder.isTypeSupported==='function'&&!MediaRecorder.isTypeSupported(mimeType))continue;
+        return new MediaRecorder(stream,{mimeType});
+      }catch(_){}
+    }
+    return new MediaRecorder(stream);
   };
 
   const isVisible=el=>{
@@ -313,7 +342,7 @@
       return raw
         .filter(item=>item&&['user','assistant'].includes(item.role)&&clean(item.text))
         .slice(-MAX_HISTORY)
-        .map(item=>({role:item.role,text:clean(item.text).slice(0,300)}));
+        .map(item=>({role:item.role,text:privacySafeText(item.text).slice(0,300)}));
     }catch(_){return [];}
   };
 
@@ -321,7 +350,7 @@
     const safe=(Array.isArray(history)?history:[])
       .filter(item=>item&&['user','assistant'].includes(item.role)&&clean(item.text))
       .slice(-MAX_HISTORY)
-      .map(item=>({role:item.role,text:clean(item.text).slice(0,300)}));
+      .map(item=>({role:item.role,text:privacySafeText(item.text).slice(0,300)}));
     try{sessionStorage.setItem(scopedKey(HISTORY_KEY),JSON.stringify(safe));}catch(_){}
     return safe;
   };
@@ -331,7 +360,7 @@
   const rollbackPendingUser=message=>{
     const history=readHistory();
     const last=history[history.length-1];
-    if(last?.role==='user'&&clean(last.text)===clean(message))history.pop();
+    if(last?.role==='user'&&clean(last.text)===privacySafeText(message))history.pop();
     writeHistory(history);
   };
 
@@ -425,6 +454,10 @@
     };
     mic?.addEventListener('click',async()=>{
       if(!voiceConfig.enabled||chatBusy)return;
+      if(voiceRequestController){
+        status.textContent='Önceki konuşman hâlâ yazıya çevriliyor. Birkaç saniye bekle.';
+        return;
+      }
       if(voiceSession){
         if(voiceSession.pending){stopVoice(true);status.textContent='Mikrofon isteği iptal edildi.';}
         else if(voiceSession.recognition){
@@ -472,7 +505,7 @@
             const transcript=parts.join(' ');
             stopVoice();recognized(transcript);
           };
-          recognition.onerror=event=>{if(generation===voiceGeneration&&voiceSession===browserSession){const reason=String(event?.error||'');stopVoice();status.textContent=reason==='not-allowed'||reason==='service-not-allowed'?'Mikrofon izni kapalı. Tarayıcı ayarlarından izin verip tekrar dene.':reason==='no-speech'||(reason==='aborted'&&browserSession.stopping)?'Ses algılanmadı. Mikrofona daha yakın konuşup tekrar dene.':'Mikrofon dinleyemedi. İzinleri kontrol edip tekrar dene.';}};
+          recognition.onerror=event=>{if(generation===voiceGeneration&&voiceSession===browserSession){const reason=String(event?.error||'');stopVoice();status.textContent=browserRecognitionMessage(reason,browserSession.stopping===true);}};
           recognition.onend=()=>{
             if(generation!==voiceGeneration||voiceSession?.recognition!==recognition)return;
             stopVoice();
@@ -496,12 +529,8 @@
         stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
         if(generation!==voiceGeneration||modal.hidden||voiceSession!==permissionSession){stream.getTracks().forEach(track=>track.stop());return;}
         clearTimeout(permissionSession.timer);
-        const supportsMime=typeof MediaRecorder.isTypeSupported==='function'
-          ?type=>MediaRecorder.isTypeSupported(type)
-          :()=>false;
-        const preferredMime=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].find(supportsMime);
-        const recorder=preferredMime?new MediaRecorder(stream,{mimeType:preferredMime}):new MediaRecorder(stream);
-        const mime=recorder.mimeType||preferredMime||'audio/webm';
+        const recorder=createAudioRecorder(stream);
+        const mime=recorder.mimeType||'audio/webm';
         const chunks=[];
         const recordingSession={recorder,stream,startedAt:Date.now(),detectedSpeech:null,deviceEnded:false,deviceMuted:false};
         const AudioContextClass=window.AudioContext||window.webkitAudioContext;
@@ -537,11 +566,18 @@
           recordingSession.deviceEnded=true;
           stopVoice();
         },{once:true}));
-        stream.getAudioTracks().forEach(track=>track.addEventListener('mute',()=>{
-          if(voiceSession!==recordingSession)return;
-          recordingSession.deviceMuted=true;
-          stopVoice();
-        },{once:true}));
+        stream.getAudioTracks().forEach(track=>{
+          track.addEventListener('mute',()=>{
+            if(voiceSession!==recordingSession)return;
+            clearTimeout(recordingSession.muteTimer);
+            recordingSession.muteTimer=setTimeout(()=>{
+              if(voiceSession!==recordingSession||!track.muted)return;
+              recordingSession.deviceMuted=true;
+              stopVoice();
+            },900);
+          });
+          track.addEventListener('unmute',()=>clearTimeout(recordingSession.muteTimer));
+        });
         mic.textContent='⏹';mic.setAttribute('aria-label','Konuşmayı bitir');mic.setAttribute('aria-pressed','true');
         status.textContent='Dinliyorum… Bitirince kare düğmeye dokun.';
         recorder.ondataavailable=event=>{if(event.data.size)chunks.push(event.data);};
@@ -559,10 +595,17 @@
           try{
             const data=new FormData();data.append('audio',blob,'speech.'+(mime.includes('mp4')?'m4a':mime.includes('ogg')?'ogg':'webm'));
             const controller=new AbortController();voiceRequestController=controller;
+            mic.disabled=true;
+            mic.setAttribute('aria-label','Konuşma yazıya çevriliyor');
             const requestTimer=setTimeout(()=>controller.abort(),50000);
             let response;
             try{response=await fetch('api/adimbot-transcribe.php',{method:'POST',credentials:'same-origin',signal:controller.signal,headers:{'X-CSRF-Token':String(window.ILKADIM_CSRF_TOKEN||'')},body:data});}
-            finally{clearTimeout(requestTimer);if(voiceRequestController===controller)voiceRequestController=null;}
+            finally{
+              clearTimeout(requestTimer);
+              if(voiceRequestController===controller)voiceRequestController=null;
+              mic.disabled=false;
+              mic.setAttribute('aria-label','Mikrofonla sor');
+            }
             let result=null;
             try{result=await response.json();}
             catch(_){throw new Error(response.ok?'invalid_provider_response':voiceHttpReason(response.status));}
@@ -581,7 +624,7 @@
     const syncConnection=()=>{
       if(!status)return;
       if(!navigator.onLine){
-        const hadVoice=Boolean(voiceSession);
+        const hadVoice=Boolean(voiceSession||voiceRequestController);
         if(hadVoice)stopVoice(true);
         status.textContent=hadVoice
           ?'İnternet bağlantısı yok. Ses kaydı durduruldu; bağlantı gelince tekrar deneyebilirsin.'
@@ -596,9 +639,9 @@
     window.addEventListener('online',syncConnection);
     window.addEventListener('offline',syncConnection);
     document.addEventListener('visibilitychange',()=>{
-      if(document.hidden&&voiceSession){stopVoice(true);status.textContent='Sayfa arka plana geçtiği için mikrofon durduruldu.';}
+      if(document.hidden&&(voiceSession||voiceRequestController)){stopVoice(true);status.textContent='Sayfa arka plana geçtiği için mikrofon durduruldu.';}
     });
-    window.addEventListener('pagehide',()=>{if(voiceSession)stopVoice(true);});
+    window.addEventListener('pagehide',()=>{if(voiceSession||voiceRequestController)stopVoice(true);});
     syncConnection();
 
     const savedHistory=readHistory();
@@ -679,7 +722,7 @@
 
     form?.addEventListener('submit',async event=>{
       event.preventDefault();
-      if(voiceSession)stopVoice(true);
+      if(voiceSession||voiceRequestController)stopVoice(true);
       if(chatBusy)return;
 
       refreshTogetherButton();

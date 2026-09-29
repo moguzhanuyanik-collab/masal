@@ -146,6 +146,9 @@ function adimbot_ai_safe_output(string $text, bool $hasActiveQuestion=false): ar
     if ($hasActiveQuestion && preg_match('/(?:\b[A-D]\s+seçeneği\s+doğru\b|\byanıt\s*[:\-]?\s*[A-D](?:[’\x27]?(?:dır|dir|dur|dür))?\b)/iu',$value)) {
         return ['ok'=>false,'text'=>'Yanıtı doğrudan vermeyeyim. Sorudaki ipucunu kullanarak doğru seçeneği birlikte bulalım.','reason'=>'answer_key'];
     }
+    if ($hasActiveQuestion && preg_match('/(?:\d+\s*[-+×x÷\/:]\s*\d+\s*=\s*\d+|(?:\d+(?:[.,]\d+)?|bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on)\s+(?:eder|olur)\b)/iu',$value)) {
+        return ['ok'=>false,'text'=>'İşlemin sonucunu doğrudan söylemeyeyim. Önce hangi işlemi yapacağımızı birlikte bulalım.','reason'=>'answer_key'];
+    }
     if ($hasActiveQuestion && preg_match('/^\s*(?:[A-D]|\d+(?:[.,]\d+)?|bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on)\s*[.!]?\s*$/iu',$value)) {
         return ['ok'=>false,'text'=>'Sonucu doğrudan söylemeyeyim. Önce soruda verilen bilgileri birlikte bulalım.','reason'=>'answer_key'];
     }
@@ -327,6 +330,7 @@ Türkçe, kısa, sıcak, çocukların anlayacağı basit cümlelerle konuş.
 Yeni mesaja doğrudan karşılık ver. Bağlamda olmayan ders, kişi, başarı veya olay uydurma; yeterli bilgi yoksa tek bir kısa soru sor.
 Önceki AdımBot yanıtını aynen veya küçük değişikliklerle tekrarlama. Her yanıta aynı selam, övgü ya da başlangıç kalıbıyla başlama.
 Öğrenciye öğretici ipucu ver; aktif soru/şık varsa doğru cevabı veya doğru şıkkı doğrudan söyleme.
+Aktif soruda işlemi tamamlayıp sonucu yazma; eşitlik, “... eder” veya çözülmüş örnek yoluyla cevabı dolaylı biçimde de verme.
 Önce düşünmesini sağlayan bir ipucu, gerekirse küçük bir örnek ver.
 Ekran bağlamındaki ders, konu, etkinlik, aktif soru ve öğrenme ilerlemesini birlikte kullan; ancak öğrenciyi "zayıf", "başarısız" veya benzeri bir etiketle tanımlama.
 İlerleme sayıları yalnızca desteğin seviyesini ayarlamak içindir; öğrenciyle kıyaslama yapma ve gereksiz yere sayıları tekrar etme.

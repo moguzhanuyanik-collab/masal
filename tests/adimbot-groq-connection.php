@@ -43,4 +43,10 @@ check(adimbot_provider_reason(401,'{}')==='provider_auth_error','Authentication 
 check(adimbot_provider_reason(403,'{}')==='provider_permission_error','Permission classification');
 check(adimbot_provider_reason(400,'{"error":{"code":"invalid_api_key"}}')==='provider_auth_error','Embedded authentication classification');
 check(adimbot_provider_reason(400,'{"error":{"code":[]}}')==='provider_config_error','Malformed code handling');
+check(adimbot_provider_reason(200,['error'=>['status'=>'RESOURCE_EXHAUSTED']])==='provider_rate_limit','Embedded quota classification');
+check(adimbot_provider_reason(200,['error'=>['code'=>401]])==='provider_auth_error','Embedded numeric authentication classification');
+check(adimbot_provider_reason(200,['error'=>['code'=>403]])==='provider_permission_error','Embedded numeric permission classification');
+check(adimbot_provider_reason(200,['error'=>['code'=>'model_deprecated']])==='provider_model_retired','Embedded retired model classification');
+check(adimbot_provider_reason(200,['error'=>['code'=>'model_not_found']])==='provider_model_unavailable','Embedded unavailable model classification');
+check(adimbot_provider_reason(200,['error'=>['status'=>'INVALID_ARGUMENT']])==='provider_config_error','Embedded configuration classification');
 echo "PASS: Groq model migration, payload, deadline, retry boundaries and error classification\n";

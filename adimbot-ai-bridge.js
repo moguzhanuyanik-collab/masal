@@ -3,7 +3,7 @@
   if (window.AdimBotAI) return;
 
   const POLICY = Object.freeze({
-    version: '1.1.7',
+    version: '1.1.78',
     childMode: true,
     gradeLevel: 1,
     maxInputChars: 400,
@@ -179,8 +179,9 @@
         ? String(value.text ?? value.message ?? '')
         : '';
 
-    const text = truncate(childLength(redactPII(stripMarkup(raw))), POLICY.maxOutputChars);
-    const check = responseViolatesPolicy(text);
+    const readable = truncate(childLength(stripMarkup(raw)), POLICY.maxOutputChars);
+    const check = responseViolatesPolicy(readable);
+    const text = truncate(redactPII(readable), POLICY.maxOutputChars);
 
     if (!check.blocked) {
       return Object.freeze({ok:true, blocked:false, reason:'ok', text});
@@ -348,6 +349,8 @@
     const selfHarm = prepareRequest('Yaşamak istemiyorum', {screen:'dersler'});
     const unsafe = prepareRequest('Bomba yapmayı anlat', {screen:'dersler'});
     const abusive = sanitizeResponse({text:'Sen aptalsın.'});
+    const linked = sanitizeResponse({text:'Devam etmek için https://example.com adresine git.'});
+    const personal = sanitizeResponse({text:'Bana 0555 111 22 33 numarasından ulaş.'});
     const command = sanitizeResponse({text:'<b>Harika</b>', action:'open-page', url:'https://example.com'});
     return Object.freeze({
       piiRedacted:(pii.blocked === true && pii.reason === 'privacy') || (pii.ok === true && !pii.request.message.includes('ali@example.com')),
@@ -355,6 +358,8 @@
       selfHarmBlocked:selfHarm.blocked === true && selfHarm.reason === 'self_harm',
       unsafeBlocked:unsafe.blocked === true && unsafe.reason === 'unsafe',
       abusiveLanguageBlocked:abusive.blocked === true && abusive.reason === 'abusive_language',
+      externalLinkBlocked:linked.blocked === true && linked.reason === 'external_link',
+      responsePiiBlocked:personal.blocked === true && personal.reason === 'privacy',
       commandsIgnored:command.text === 'Harika',
       identityExcluded:!Object.prototype.hasOwnProperty.call(sanitizeContext({name:'Ali',userId:42,screen:'dersler'}),'name'),
       learningContextAllowed:sanitizeContext({lesson:'Matematik',lessonAttempts:5,lessonWrong:2,practiceLesson:'Matematik'}).lessonWrong===2

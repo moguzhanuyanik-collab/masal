@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require dirname(__DIR__).'/src/auth.php';
+require_once dirname(__DIR__).'/src/adimbot_groq.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, max-age=0');
@@ -21,12 +22,10 @@ function voice_resolve_key(mixed $configured, string $environment): string {
     $fallback=trim((string)(getenv($environment) ?: ''));
     return $fallback!=='' && !voice_placeholder_key($fallback) ? $fallback : '';
 }
-function voice_embedded_error(array $error): never {
-    $code=strtoupper((string)($error['code'] ?? $error['status'] ?? $error['type'] ?? ''));
-    if (in_array($code,['402','429'],true) || preg_match('/(?:RESOURCE_EXHAUSTED|RATE_LIMIT|QUOTA|TOO_MANY_REQUESTS)/',$code)) voice_result(['ok'=>false,'reason'=>'provider_rate_limit'],429);
-    if (in_array($code,['401','403'],true) || preg_match('/(?:UNAUTHENTICATED|PERMISSION_DENIED|INVALID_API_KEY|AUTH)/',$code)) voice_result(['ok'=>false,'reason'=>'provider_auth_error'],502);
-    if (in_array($code,['400','404','422'],true) || preg_match('/(?:INVALID_ARGUMENT|NOT_FOUND|MODEL|BAD_REQUEST)/',$code)) voice_result(['ok'=>false,'reason'=>'provider_config_error'],502);
-    voice_result(['ok'=>false,'reason'=>'provider_error'],502);
+function voice_provider_error(int $status, mixed $body): never {
+    $reason=adimbot_provider_reason($status,$body);
+    $httpStatus=$reason==='provider_rate_limit'?429:($reason==='provider_unavailable'?503:502);
+    voice_result(['ok'=>false,'reason'=>$reason],$httpStatus);
 }
 app_session_start();
 if ($_SERVER['REQUEST_METHOD']!=='POST') voice_result(['ok'=>false,'reason'=>'method'],405);
@@ -99,16 +98,11 @@ $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
 curl_close($ch);
 if ($curlErrno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) voice_result(['ok'=>false,'reason'=>'provider_timeout'],504);
 if ($curlErrno!==0) voice_result(['ok'=>false,'reason'=>'provider_connection_error'],502);
-if ($status===402 || $status===429) voice_result(['ok'=>false,'reason'=>'provider_rate_limit'],429);
-if ($status===401 || $status===403) voice_result(['ok'=>false,'reason'=>'provider_auth_error'],502);
-if ($status===400 || $status===404 || $status===422) voice_result(['ok'=>false,'reason'=>'provider_config_error'],502);
-if ($status>=500) voice_result(['ok'=>false,'reason'=>'provider_unavailable'],503);
-if ($status<200 || $status>=300 || !is_string($body)) voice_result(['ok'=>false,'reason'=>'provider_error'],502);
+if ($status<200 || $status>=300 || !is_string($body)) voice_provider_error($status,$body);
 $decoded=json_decode($body,true);
 if (!is_array($decoded)) voice_result(['ok'=>false,'reason'=>'invalid_provider_response'],502);
 if (isset($decoded['error'])) {
-    if(is_array($decoded['error'])) voice_embedded_error($decoded['error']);
-    voice_result(['ok'=>false,'reason'=>'provider_error'],502);
+    voice_provider_error($status,$decoded);
 }
 $providerBlocked=$provider==='gemini' && (trim((string)($decoded['promptFeedback']['blockReason'] ?? ''))!=='' || in_array((string)($decoded['candidates'][0]['finishReason'] ?? ''),['SAFETY','PROHIBITED_CONTENT','BLOCKLIST'],true));
 if ($providerBlocked) voice_result(['ok'=>false,'reason'=>'provider_safety'],422);
