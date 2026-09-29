@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
+require_once __DIR__.'/src/adimbot_groq.php';
 
 $user=require_role('super_admin');
 header('Cache-Control: no-store, max-age=0');
@@ -45,33 +46,46 @@ function aa_embedded_error_message(mixed $error): string {
     if(in_array($code,['400','404','422'],true)||preg_match('/(?:INVALID_ARGUMENT|NOT_FOUND|MODEL|BAD_REQUEST)/',$code)) return 'model kimliği veya istek ayarı sağlayıcı tarafından kabul edilmedi';
     return 'sağlayıcı isteği tamamlayamadı';
 }
-function aa_test_provider(string $provider,string $model,string $apiKey): string {
+function aa_test_provider(string $provider,string &$model,string $apiKey): string {
     if(!function_exists('curl_init')) throw new RuntimeException('Aday ayarlar uygulanmadı: sunucuda cURL kapalı olduğu için bağlantı test edilemedi.');
     if($apiKey==='') throw new RuntimeException('Aday ayarlar uygulanmadı: seçilen sağlayıcının API anahtarı bulunamadı.');
     $prompt='Yalnızca TAMAM yaz.';
     if($provider==='gemini'){
         $url='https://generativelanguage.googleapis.com/v1beta/models/'.rawurlencode($model).':generateContent';
         $headers=['x-goog-api-key: '.$apiKey,'Content-Type: application/json'];
-        $payload=['contents'=>[['parts'=>[['text'=>$prompt]]]],'generationConfig'=>['maxOutputTokens'=>8]];
+        $payload=['contents'=>[['parts'=>[['text'=>$prompt]]]],'generationConfig'=>['maxOutputTokens'=>600]];
     }elseif($provider==='groq'){
         $url='https://api.groq.com/openai/v1/chat/completions';
         $headers=['Authorization: Bearer '.$apiKey,'Content-Type: application/json'];
-        $payload=['model'=>$model,'messages'=>[['role'=>'user','content'=>$prompt]],'max_tokens'=>8];
+        $payload=['model'=>$model,'messages'=>[['role'=>'user','content'=>$prompt]],'max_tokens'=>64];
     }else{
         $url='https://api.openai.com/v1/responses';
         $headers=['Authorization: Bearer '.$apiKey,'Content-Type: application/json'];
-        $payload=['model'=>$model,'input'=>$prompt,'max_output_tokens'=>8];
+        $payload=['model'=>$model,'input'=>$prompt,'max_output_tokens'=>600];
     }
-    $ch=curl_init($url);
-    if($ch===false) throw new RuntimeException('Aday ayarlar uygulanmadı: bağlantı testi başlatılamadı.');
-    curl_setopt_array($ch,[CURLOPT_POST=>true,CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>6,CURLOPT_TIMEOUT=>15,CURLOPT_HTTPHEADER=>$headers,CURLOPT_POSTFIELDS=>json_encode($payload,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)]);
-    $body=curl_exec($ch);
-    $errno=curl_errno($ch);
-    $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
-    curl_close($ch);
+    if($provider==='groq'){
+        $result=adimbot_groq_request($payload,$apiKey,15);
+        $body=$result['body'];$errno=$result['errno'];$status=$result['status'];
+        $model=$result['model'];
+    }else{
+        $ch=curl_init($url);
+        if($ch===false) throw new RuntimeException('Aday ayarlar uygulanmadı: bağlantı testi başlatılamadı.');
+        curl_setopt_array($ch,[CURLOPT_POST=>true,CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>6,CURLOPT_TIMEOUT=>15,CURLOPT_HTTPHEADER=>$headers,CURLOPT_POSTFIELDS=>json_encode($payload,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)]);
+        $body=curl_exec($ch);
+        $errno=curl_errno($ch);
+        $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
+        curl_close($ch);
+    }
     if($errno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) throw new RuntimeException('Aday ayarlar uygulanmadı: bağlantı testi zaman aşımına uğradı; önceki ayarlar korundu.');
     if($errno!==0) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcıya ağ bağlantısı kurulamadı; önceki ayarlar korundu.');
-    if($status===401 || $status===403) throw new RuntimeException('Aday ayarlar uygulanmadı: API anahtarı sağlayıcı tarafından reddedildi; önceki ayarlar korundu.');
+    $reason=adimbot_provider_reason($status,$body);
+    $specificErrors=[
+        'provider_model_retired'=>'Seçilen model sağlayıcı tarafından kullanımdan kaldırılmış. Güncel model seçin.',
+        'provider_model_unavailable'=>'Model bulunamadı veya bu hesabın modele erişimi yok.',
+        'provider_permission_error'=>'Sağlayıcı erişim izni vermedi. Hesap/proje ve model izinlerini kontrol edin.',
+        'provider_auth_error'=>'API anahtarı sağlayıcı tarafından reddedildi.',
+    ];
+    if($status>=400 && isset($specificErrors[$reason])) throw new RuntimeException('Aday ayarlar uygulanmadı: '.$specificErrors[$reason]);
     if($status===402 || $status===429) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcı kotası, bakiyesi veya istek sınırı testi engelledi; önceki ayarlar korundu.');
     if($status===400 || $status===404 || $status===422) throw new RuntimeException('Aday ayarlar uygulanmadı: model kimliği veya istek ayarı sağlayıcı tarafından kabul edilmedi; önceki ayarlar korundu.');
     if($status<200 || $status>=300) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcı geçici olarak yanıt veremedi; önceki ayarlar korundu.');
@@ -107,7 +121,7 @@ function aa_test_voice_provider(string $provider,string $model,string $apiKey): 
             $payload=json_encode(['contents'=>[['parts'=>[
                 ['text'=>'Bu test sesini yalnızca yazıya çevir; konuşma yoksa boş bırak.'],
                 ['inline_data'=>['mime_type'=>'audio/wav','data'=>base64_encode($wav)]],
-            ]]]]],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+            ]]]],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
         }
         $ch=curl_init($url);
         if($ch===false) throw new RuntimeException('Konuşma sağlayıcısı testi başlatılamadı.');
@@ -213,6 +227,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                 default=>trim((string)(getenv('OPENAI_API_KEY')?:($ai['api_key']??''))),
             };
             $testMessage=aa_test_provider($provider,$model,$testKey);
+            $candidate['model']=$model;
             if($voiceEnabled && $voiceInput!=='browser'){
                 $voiceModel=$voiceInput==='groq'?$transcriptionModel:$geminiVoiceModel;
                 $voiceKey=$voiceInput==='groq'
@@ -276,7 +291,8 @@ $geminiKeySource=$geminiStored?'panelde korumalı ayar dosyasında kayıtlı':($
 <?php if($error!==''):?><div class="role-note"><p><?=aa_h($error)?></p></div><?php endif;?>
 <form method="post" class="settings-block" autocomplete="off"><input type="hidden" name="csrf" value="<?=aa_h(csrf_token())?>">
 <label class="field-label" for="provider">Sohbet sağlayıcısı</label><select class="text-input" id="provider" name="provider"><option value="groq" <?=$provider==='groq'?'selected':''?>>Groq</option><option value="gemini" <?=$provider==='gemini'?'selected':''?>>Gemini</option><option value="openai" <?=$provider==='openai'?'selected':''?>>OpenAI (mevcut ayar)</option></select>
-<label class="field-label" for="model">Model kimliği</label><input class="text-input" id="model" name="model" list="ai-models" maxlength="100" required value="<?=aa_h((string)($ai['model']??''))?>"><datalist id="ai-models"><option value="llama-3.1-8b-instant"><option value="llama-3.3-70b-versatile"><option value="gemini-3.5-flash-lite"><option value="gemini-3.8-flash"></datalist>
+<label class="field-label" for="model">Model kimliği</label><input class="text-input" id="model" name="model" list="ai-models" maxlength="100" required value="<?=aa_h((string)($ai['model']??''))?>"><datalist id="ai-models"><option value="openai/gpt-oss-20b"><option value="openai/gpt-oss-120b"><option value="gemini-3.5-flash-lite"><option value="gemini-3.8-flash"></datalist>
+<p class="little-note">Groq: Llama 3.1/3.3 modelleri ücretsiz ve geliştirici hesaplarında kapatıldı. Güncel seçenek openai/gpt-oss-20b; Groq anahtarınız kullanılır. Eski model kapanma hatası verirse güncel karşılığı bir kez denenir.</p>
 <p class="little-note">Ücretsiz katman hesabınıza ve seçilen modele bağlıdır. Geçerli kota ve ücretleri sağlayıcının panelinden kontrol edin.</p>
 <label class="field-label" for="groq-key">Groq API anahtarı</label><input class="text-input" id="groq-key" type="password" name="groq_api_key" maxlength="512" placeholder="<?=($keySet?'Anahtar kayıtlı — değiştirmek için yenisini girin':'Groq anahtarınızı girin')?>" autocomplete="new-password">
 <p class="little-note">Anahtar: <?=aa_h($groqKeySource)?>. Boş bırakılırsa mevcut panel anahtarı korunur. Ücretsiz planın istek ve token sınırları Groq hesabınıza bağlıdır.</p>
@@ -296,5 +312,5 @@ $geminiKeySource=$geminiStored?'panelde korumalı ayar dosyasında kayıtlı':($
 <button class="button full" type="submit" name="action" value="save_test">Kaydet ve Bağlantıyı Test Et</button></form>
 <p class="little-note">Groq hesabının ücretsiz kotası biterse AdımBot geçici olarak sınır mesajı gösterir. Ücretli sağlayıcıya otomatik geçiş yapılmaz.</p>
 </div></main><nav class="app-nav" aria-label="Süper Admin menüsü"><a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a><a href="sistem-durum.php"><span><svg><use href="#sa-database"/></svg></span>Durum</a><a class="active" href="adimbot-ayarlari.php"><span><svg><use href="#sa-settings"/></svg></span>AdımBot</a><a href="guncelleme.php"><span><svg><use href="#sa-refresh"/></svg></span>Güncelle</a><a href="super-admin-profil.php"><span><svg><use href="#sa-user"/></svg></span>Profil</a></nav></div>
-<script>document.getElementById('provider').addEventListener('change',function(){const field=document.getElementById('model');if(this.value==='groq')field.value='llama-3.1-8b-instant';if(this.value==='gemini')field.value='gemini-3.5-flash-lite';if(this.value==='openai')field.value='gpt-5.6-luna';});</script>
+<script>document.getElementById('provider').addEventListener('change',function(){const field=document.getElementById('model');if(this.value==='groq')field.value='openai/gpt-oss-20b';if(this.value==='gemini')field.value='gemini-3.5-flash-lite';if(this.value==='openai')field.value='gpt-5.6-luna';});</script>
 </body></html>

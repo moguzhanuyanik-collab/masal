@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require dirname(__DIR__) . '/src/auth.php';
+require_once dirname(__DIR__) . '/src/adimbot_groq.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, max-age=0');
@@ -170,26 +171,15 @@ function adimbot_ai_repeats_previous(string $reply, array $previous): bool {
     return false;
 }
 
-function adimbot_ai_provider_error(int $status, int $curlErrno): never {
+function adimbot_ai_provider_error(int $status, int $curlErrno, mixed $body=null): never {
     if ($curlErrno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) {
         adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ yanıtı zamanında gelmedi.','reason'=>'provider_timeout'],504);
     }
     if ($curlErrno!==0) {
         adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ sağlayıcısına bağlantı kurulamadı.','reason'=>'provider_connection_error'],502);
     }
-    if ($status===402 || $status===429) {
-        adimbot_ai_json(['ok'=>false,'message'=>'AdımBot kullanım sınırına ulaştı. Biraz sonra tekrar dene.','reason'=>'provider_rate_limit'],429);
-    }
-    if ($status===401 || $status===403) {
-        adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ erişim anahtarı sağlayıcı tarafından reddedildi.','reason'=>'provider_auth_error'],502);
-    }
-    if ($status===400 || $status===404 || $status===422) {
-        adimbot_ai_json(['ok'=>false,'message'=>'Seçilen yapay zekâ modeli veya istek ayarı sağlayıcı tarafından kabul edilmedi.','reason'=>'provider_config_error'],502);
-    }
-    if ($status>=500) {
-        adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ sağlayıcısı geçici olarak yanıt veremiyor.','reason'=>'provider_unavailable'],503);
-    }
-    adimbot_ai_json(['ok'=>false,'message'=>'AdımBot şu anda yapay zekâ yanıtına ulaşamadı.','reason'=>'provider_error'],502);
+    $reason=adimbot_provider_reason($status,$body);
+    adimbot_ai_json(['ok'=>false,'reason'=>$reason],$reason==='provider_rate_limit'?429:502);
 }
 
 function adimbot_ai_embedded_error(array $error): never {
@@ -374,35 +364,44 @@ $endpoint=match ($provider) {
     'gemini'=>'https://generativelanguage.googleapis.com/v1beta/models/'.rawurlencode($model).':generateContent',
     default=>'https://api.openai.com/v1/responses',
 };
-$ch=curl_init($endpoint);
-if ($ch===false) {
-    adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ bağlantısı başlatılamadı.','reason'=>'provider_connection_error'],502);
-}
-$encodedRequest=json_encode($request,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
-if (!is_string($encodedRequest)) {
+if ($provider==='groq') {
+    $groqResult=adimbot_groq_request($request,$apiKey,$timeout);
+    $responseBody=$groqResult['body'];
+    $status=$groqResult['status'];
+    $curlErrno=$groqResult['errno'];
+    $model=$groqResult['model'];
+} else {
+    $ch=curl_init($endpoint);
+    if ($ch===false) {
+        adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ bağlantısı başlatılamadı.','reason'=>'provider_connection_error'],502);
+    }
+    $encodedRequest=json_encode($request,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+    if (!is_string($encodedRequest)) {
+        curl_close($ch);
+        adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ isteği hazırlanamadı.','reason'=>'invalid_request'],500);
+    }
+    if (!curl_setopt_array($ch,[
+        CURLOPT_POST=>true,
+        CURLOPT_RETURNTRANSFER=>true,
+        CURLOPT_CONNECTTIMEOUT=>8,
+        CURLOPT_TIMEOUT=>$timeout,
+        CURLOPT_HTTPHEADER=>$provider==='gemini'
+            ?['x-goog-api-key: '.$apiKey,'Content-Type: application/json']
+            :['Authorization: Bearer '.$apiKey,'Content-Type: application/json'],
+        CURLOPT_POSTFIELDS=>$encodedRequest,
+    ])) {
+        curl_close($ch);
+        adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ bağlantısı hazırlanamadı.','reason'=>'provider_connection_error'],502);
+    }
+    $responseBody=curl_exec($ch);
+    $curlErrno=curl_errno($ch);
+    $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
     curl_close($ch);
-    adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ isteği hazırlanamadı.','reason'=>'invalid_request'],500);
+
 }
-if (!curl_setopt_array($ch,[
-    CURLOPT_POST=>true,
-    CURLOPT_RETURNTRANSFER=>true,
-    CURLOPT_CONNECTTIMEOUT=>8,
-    CURLOPT_TIMEOUT=>$timeout,
-    CURLOPT_HTTPHEADER=>$provider==='gemini'
-        ?['x-goog-api-key: '.$apiKey,'Content-Type: application/json']
-        :['Authorization: Bearer '.$apiKey,'Content-Type: application/json'],
-    CURLOPT_POSTFIELDS=>$encodedRequest,
-])) {
-    curl_close($ch);
-    adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ bağlantısı hazırlanamadı.','reason'=>'provider_connection_error'],502);
-}
-$responseBody=curl_exec($ch);
-$curlErrno=curl_errno($ch);
-$status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
-curl_close($ch);
 
 if (!is_string($responseBody) || $responseBody==='' || $status<200 || $status>=300) {
-    adimbot_ai_provider_error($status,$curlErrno);
+    adimbot_ai_provider_error($status,$curlErrno,$responseBody);
 }
 
 $decoded=json_decode($responseBody,true);

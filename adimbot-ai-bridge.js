@@ -322,7 +322,11 @@
       else if(reason==='ai_disabled')text='AdımBot sohbeti ayarlardan kapalı. Yöneticinin sohbeti açması gerekiyor.';
       else if(reason==='api_key_missing')text='AdımBot için seçilen hizmetin API anahtarı eksik. Yöneticinin bağlantı ayarını tamamlaması gerekiyor.';
       else if(reason==='model_missing'||reason==='provider_invalid')text='AdımBot hizmeti veya modeli seçilmemiş. Yöneticinin bağlantı ayarını tamamlaması gerekiyor.';
-      else if(reason==='provider_auth_error'||reason==='provider_config_error')text='AdımBot ayarlarında bir sorun var. Lütfen yöneticine haber ver.';
+      else if(reason==='provider_auth_error')text='Yapay zekâ hizmeti API anahtarını kabul etmedi. Yöneticinin kayıtlı anahtarı kontrol etmesi gerekiyor.';
+      else if(reason==='provider_permission_error')text='Yapay zekâ hizmeti bu hesap için erişim izni vermedi. Yöneticinin hizmet izinlerini kontrol etmesi gerekiyor.';
+      else if(reason==='provider_model_retired')text='AdımBot için seçilen yapay zekâ modeli kullanımdan kaldırılmış. Yöneticinin güncel modeli seçmesi gerekiyor.';
+      else if(reason==='provider_model_unavailable')text='Seçilen yapay zekâ modeli bulunamadı veya bu hesapta kullanılamıyor. Yöneticinin modeli kontrol etmesi gerekiyor.';
+      else if(reason==='provider_config_error')text='Yapay zekâ hizmeti model veya istek ayarını kabul etmedi. Yöneticinin bağlantı testini kontrol etmesi gerekiyor.';
       return Object.freeze({
         ok:false,
         blocked:false,
