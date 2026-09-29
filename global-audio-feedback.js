@@ -492,6 +492,8 @@
     return name?`${name}, ilk yıldızın için birlikte başlayabiliriz.`:'İlk yıldızın için birlikte başlayabiliriz.';
   };
 
+  const isLessonDetail=()=>/^#\/dersler\//.test(location.hash);
+
   const helpForScreen=()=>{
     const path=location.pathname.split('/').pop()||'';
     const hash=location.hash||'#/anasayfa';
@@ -545,6 +547,9 @@
     const path=location.pathname.split('/').pop()||'';
     const hash=location.hash||'#/anasayfa';
 
+    // Dersin içinde rehber yeniden konuşmaz; dokunulan kartın okuması devam eder.
+    if(isLessonDetail())return null;
+
     if(path==='ogretmenim.php'){
       const target=firstVisible('.teacher-group > summary,.teacher-lesson > summary,.teacher-topic > summary');
       return {
@@ -578,13 +583,13 @@
       };
     }
 
-    if(hash.startsWith('#/dersler')){
-      const target=firstVisible('#screen .course-row > a,#screen a.home-course,#screen a.lesson-step');
+    if(hash==='#/dersler'){
+      const target=firstVisible('#screen .course-row > a,#screen a.home-course');
       return {
         key:'dersler',
         target,
         text:target
-          ?'Öğrenmek istediğin ders veya çalışma kartına dokun.'
+          ?'Başlamak için Dersler bölümündeki bir ders kartına dokun.'
           :'Ders kartları burada görünecek. Bir ders seçerek başlayabilirsin.'
       };
     }
@@ -603,8 +608,8 @@
       key:'anasayfa',
       target,
       text:target
-        ?'Başlamak için Dersler bölümüne ya da ekrandaki bir çalışma kartına dokun.'
-        :'Hazır olduğunda birlikte bir ders seçebiliriz.'
+        ?'Ekrandaki kartlara dokunduğunda onları okuyabilirim.'
+        :'Ekrandaki bölümleri sana okuyabilirim.'
     };
   };
 
@@ -614,6 +619,7 @@
     clearGuideTarget();
 
     const step=guideStepForScreen();
+    if(!step){setGuideState(false);return false;}
     if(step.target){
       guideTarget=step.target;
       guideTarget.classList.add('adb-guide-target');
@@ -1000,6 +1006,7 @@
     armedCard=null;
     pendingFeedback.clear();
     clearGuideTarget();
+    if(isLessonDetail())setGuideState(false);
     setTimeout(()=>{
       decorateActivities();
       if(guideActive)presentGuide({voice:true});
