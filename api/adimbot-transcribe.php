@@ -22,7 +22,7 @@ if ($origin!=='') {
 }
 $config=require dirname(__DIR__).'/config/app.php';
 $ai=is_array($config['ai'] ?? null)?$config['ai']:[];
-$provider=(string)($ai['voice_input'] ?? 'browser');
+$provider=strtolower(trim((string)($ai['voice_input'] ?? 'browser')));
 if (($ai['enabled'] ?? true)===false || ($ai['voice_enabled'] ?? true)===false || !in_array($provider,['groq','gemini'],true)) voice_result(['ok'=>false,'reason'=>'disabled'],403);
 if ((int)($_SERVER['CONTENT_LENGTH'] ?? 0)>2200000) voice_result(['ok'=>false,'reason'=>'size'],413);
 $file=$_FILES['audio'] ?? null;
@@ -33,26 +33,25 @@ if (!class_exists(finfo::class)) voice_result(['ok'=>false,'reason'=>'format'],5
 $detected=(new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']);
 $mimes=['audio/webm'=>'webm','video/webm'=>'webm','audio/ogg'=>'ogg','application/ogg'=>'ogg','audio/mp4'=>'m4a','video/mp4'=>'m4a','audio/x-m4a'=>'m4a','audio/mpeg'=>'mp3','audio/wav'=>'wav','audio/x-wav'=>'wav'];
 if (!is_string($detected) || !isset($mimes[$detected])) voice_result(['ok'=>false,'reason'=>'format'],415);
+if (!function_exists('curl_init')) voice_result(['ok'=>false,'reason'=>'curl_missing'],500);
+$key=$provider==='groq' ? trim((string)(($ai['groq_api_key'] ?? '') ?: getenv('GROQ_API_KEY'))) : trim((string)(($ai['gemini_api_key'] ?? '') ?: getenv('GEMINI_API_KEY')));
+if ($key==='') voice_result(['ok'=>false,'reason'=>'provider_disabled'],503);
+$groqModel=trim((string)($ai['voice_transcription_model'] ?? 'whisper-large-v3-turbo'));
+$geminiModel=trim((string)($ai['voice_gemini_model'] ?? 'gemini-3.5-flash-lite'));
+if ($provider==='groq' && !in_array($groqModel,['whisper-large-v3-turbo','whisper-large-v3'],true)) voice_result(['ok'=>false,'reason'=>'provider_config_error'],500);
+if ($provider==='gemini' && !preg_match('/^gemini-[A-Za-z0-9._-]+$/D',$geminiModel)) voice_result(['ok'=>false,'reason'=>'provider_config_error'],500);
 $times=is_array($_SESSION['adimbot_voice_requests'] ?? null)?$_SESSION['adimbot_voice_requests']:[];
 $times=array_values(array_filter(array_map('intval',$times),static fn(int $t):bool=>$t>time()-600));
 if (count($times)>=max(3,min(30,(int)($ai['max_requests_per_10_minutes'] ?? 20)))) voice_result(['ok'=>false,'reason'=>'rate_limit'],429);
 $times[]=time();
 $_SESSION['adimbot_voice_requests']=$times;
 session_write_close();
-if (!function_exists('curl_init')) voice_result(['ok'=>false,'reason'=>'curl_missing'],500);
-
-$key=$provider==='groq' ? trim((string)(($ai['groq_api_key'] ?? '') ?: getenv('GROQ_API_KEY'))) : trim((string)(($ai['gemini_api_key'] ?? '') ?: getenv('GEMINI_API_KEY')));
-if ($key==='') voice_result(['ok'=>false,'reason'=>'provider_disabled'],503);
 $timeout=max(10,min(45,(int)($ai['timeout_seconds'] ?? 20)));
 if ($provider==='groq') {
-    $model=(string)($ai['voice_transcription_model'] ?? 'whisper-large-v3-turbo');
-    if (!in_array($model,['whisper-large-v3-turbo','whisper-large-v3'],true)) voice_result(['ok'=>false,'reason'=>'model'],500);
-    $request=['file'=>new CURLFile($file['tmp_name'],$detected,'speech.'.$mimes[$detected]),'model'=>$model,'language'=>'tr','response_format'=>'json'];
+    $request=['file'=>new CURLFile($file['tmp_name'],$detected,'speech.'.$mimes[$detected]),'model'=>$groqModel,'language'=>'tr','response_format'=>'json'];
     $url='https://api.groq.com/openai/v1/audio/transcriptions';
     $headers=['Authorization: Bearer '.$key];
 } else {
-    $geminiModel=trim((string)($ai['voice_gemini_model'] ?? 'gemini-3.5-flash-lite'));
-    if (!preg_match('/^gemini-[A-Za-z0-9._-]+$/D',$geminiModel)) voice_result(['ok'=>false,'reason'=>'provider_config_error'],500);
     $url='https://generativelanguage.googleapis.com/v1beta/models/'.rawurlencode($geminiModel).':generateContent';
     $headers=['x-goog-api-key: '.$key,'Content-Type: application/json'];
     $request=json_encode(['contents'=>[['parts'=>[
@@ -78,6 +77,8 @@ if (!is_array($decoded)) voice_result(['ok'=>false,'reason'=>'invalid_provider_r
 $text=$provider==='groq' ? ($decoded['text'] ?? '') : ($decoded['candidates'][0]['content']['parts'][0]['text'] ?? '');
 if (!is_string($text)) $text='';
 $text=trim(preg_replace('/\s+/u',' ',strip_tags($text)) ?? '');
+$text=preg_replace('/^(?:transkripsiyon|deşifre|metin)\s*[:\-]\s*/iu','',$text) ?? $text;
+$text=trim($text," \t\n\r\0\x0B\"'“”‘’");
 if (mb_strlen($text)>400) $text=mb_substr($text,0,400);
-if ($text==='') voice_result(['ok'=>false,'reason'=>'empty'],422);
+if ($text==='' || preg_match('/^(?:\[(?:müzik|sessizlik|anlaşılmayan ses)\]|(?:ses|konuşma) (?:algılanmadı|bulunamadı))\.?$/iu',$text) || !preg_match('/[\pL\pN]{2}/u',$text)) voice_result(['ok'=>false,'reason'=>'empty'],422);
 voice_result(['ok'=>true,'text'=>$text]);

@@ -22,8 +22,11 @@
     if(discard&&voiceRequestController){voiceRequestController.abort();voiceRequestController=null;}
     if(!session)return;
     clearTimeout(session.timer);
+    clearInterval(session.countdownTimer);
+    clearInterval(session.meterTimer);
     try{session.recognition?.stop();}catch(_){}
     try{if(session.recorder?.state==='recording')session.recorder.stop();}catch(_){}
+    try{session.audioContext?.close?.();}catch(_){}
     session.stream?.getTracks().forEach(track=>track.stop());
     const mic=modal?.querySelector('[data-adimbot-microphone]');
     if(mic){mic.textContent='🎤';mic.setAttribute('aria-label','Mikrofonla sor');mic.setAttribute('aria-pressed','false');}
@@ -409,7 +412,11 @@
     };
     mic?.addEventListener('click',async()=>{
       if(!voiceConfig.enabled||chatBusy)return;
-      if(voiceSession){stopVoice();return;}
+      if(voiceSession){
+        if(voiceSession.pending){stopVoice(true);status.textContent='Mikrofon isteği iptal edildi.';}
+        else stopVoice();
+        return;
+      }
       if(!navigator.onLine){status.textContent='Sesli sohbet için internet bağlantısı gerekli.';return;}
       try{window.AdimBotStudent?.stop?.();}catch(_){}
       const generation=++voiceGeneration;
@@ -420,11 +427,18 @@
         try{
           const recognition=new BrowserRecognition();
           recognition.lang='tr-TR';recognition.interimResults=false;recognition.maxAlternatives=1;
-          voiceSession={recognition,timer:setTimeout(()=>{
+          const browserSession={recognition,startedAt:Date.now()};
+          browserSession.timer=setTimeout(()=>{
             if(generation!==voiceGeneration||voiceSession?.recognition!==recognition)return;
             stopVoice();
             status.textContent='Dinleme süresi doldu. Mikrofona dokunup tekrar deneyebilirsin.';
-          },15000)};
+          },15000);
+          browserSession.countdownTimer=setInterval(()=>{
+            if(voiceSession!==browserSession)return;
+            const left=Math.max(1,15-Math.floor((Date.now()-browserSession.startedAt)/1000));
+            status.textContent='Dinliyorum… '+left+' saniye kaldı.';
+          },1000);
+          voiceSession=browserSession;
           mic.textContent='⏹';mic.setAttribute('aria-label','Dinlemeyi bitir');mic.setAttribute('aria-pressed','true');
           status.textContent='Dinliyorum… Konuşunca sorunu göndereceğim.';
           recognition.onresult=event=>{
@@ -445,13 +459,48 @@
       if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){status.textContent='Bu cihazda ses kaydı desteklenmiyor. Tarayıcı yöntemini seçebilir veya sorunu yazabilirsin.';return;}
       let stream;
       try{
+        voiceSession={pending:true};
+        status.textContent='Mikrofon izni bekleniyor…';
         stream=await navigator.mediaDevices.getUserMedia({audio:true});
-        if(generation!==voiceGeneration||modal.hidden){stream.getTracks().forEach(track=>track.stop());return;}
+        if(generation!==voiceGeneration||modal.hidden||!voiceSession?.pending){stream.getTracks().forEach(track=>track.stop());return;}
         const preferredMime=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].find(type=>MediaRecorder.isTypeSupported(type));
         const recorder=preferredMime?new MediaRecorder(stream,{mimeType:preferredMime}):new MediaRecorder(stream);
         const mime=recorder.mimeType||preferredMime||'audio/webm';
         const chunks=[];
-        voiceSession={recorder,stream,timer:setTimeout(()=>stopVoice(),15000)};
+        const recordingSession={recorder,stream,startedAt:Date.now(),detectedSpeech:null,deviceEnded:false};
+        const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+        if(AudioContextClass){
+          try{
+            const audioContext=new AudioContextClass();
+            const analyser=audioContext.createAnalyser();
+            analyser.fftSize=256;
+            audioContext.createMediaStreamSource(stream).connect(analyser);
+            try{audioContext.resume?.();}catch(_){}
+            const samples=new Uint8Array(analyser.fftSize);
+            recordingSession.audioContext=audioContext;
+            recordingSession.detectedSpeech=audioContext.state==='running'?false:null;
+            recordingSession.meterTimer=setInterval(()=>{
+              if(audioContext.state!=='running'){recordingSession.detectedSpeech=null;return;}
+              if(recordingSession.detectedSpeech===null)recordingSession.detectedSpeech=false;
+              analyser.getByteTimeDomainData(samples);
+              let peak=0;
+              for(const sample of samples)peak=Math.max(peak,Math.abs(sample-128));
+              if(peak>=7)recordingSession.detectedSpeech=true;
+            },160);
+          }catch(_){recordingSession.detectedSpeech=null;}
+        }
+        recordingSession.timer=setTimeout(()=>stopVoice(),15000);
+        recordingSession.countdownTimer=setInterval(()=>{
+          if(voiceSession!==recordingSession)return;
+          const left=Math.max(1,15-Math.floor((Date.now()-recordingSession.startedAt)/1000));
+          status.textContent='Dinliyorum… '+left+' saniye kaldı. Bitirmek için kare düğmeye dokun.';
+        },1000);
+        voiceSession=recordingSession;
+        stream.getAudioTracks().forEach(track=>track.addEventListener('ended',()=>{
+          if(voiceSession!==recordingSession)return;
+          recordingSession.deviceEnded=true;
+          stopVoice();
+        },{once:true}));
         mic.textContent='⏹';mic.setAttribute('aria-label','Konuşmayı bitir');mic.setAttribute('aria-pressed','true');
         status.textContent='Dinliyorum… Bitirince kare düğmeye dokun.';
         recorder.ondataavailable=event=>{if(event.data.size)chunks.push(event.data);};
@@ -459,6 +508,9 @@
         recorder.onstop=async()=>{
           stream.getTracks().forEach(track=>track.stop());
           if(generation!==voiceGeneration||modal.hidden)return;
+          if(recordingSession.deviceEnded){status.textContent='Mikrofon bağlantısı kesildi. Cihazı kontrol edip tekrar dene.';return;}
+          if(Date.now()-recordingSession.startedAt<700){status.textContent='Kayıt çok kısa. Mikrofona dokunup en az bir saniye konuş.';return;}
+          if(recordingSession.detectedSpeech===false){status.textContent='Konuşma sesi algılanmadı. Mikrofona daha yakın konuşup tekrar dene.';return;}
           const blob=new Blob(chunks,{type:mime});
           if(blob.size<100||blob.size>1600000){status.textContent='Kayıt çok kısa veya büyük. En fazla 15 saniye konuş.';return;}
           status.textContent='Konuşman yazıya çevriliyor…';
