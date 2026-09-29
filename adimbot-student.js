@@ -904,11 +904,12 @@
   };
 
   const viewportBounds=()=>{
-    const left=0;
-    const top=0;
-    const width=Math.max(1,window.innerWidth||document.documentElement.clientWidth||1);
-    const height=Math.max(1,window.innerHeight||document.documentElement.clientHeight||1);
-    return {left,top,right:width,bottom:height,width,height};
+    const visual=window.visualViewport;
+    const left=Math.max(0,Number(visual?.offsetLeft)||0);
+    const top=Math.max(0,Number(visual?.offsetTop)||0);
+    const width=Math.max(1,Number(visual?.width)||window.innerWidth||document.documentElement.clientWidth||1);
+    const height=Math.max(1,Number(visual?.height)||window.innerHeight||document.documentElement.clientHeight||1);
+    return {left,top,right:left+width,bottom:top+height,width,height};
   };
 
   const clamp=(left,top)=>{
@@ -944,7 +945,7 @@
     });
   };
 
-  let safePositionTimer=0;
+  let safePositionTimer=0,viewportFrame=0,dragSettleTimer=0;
   const safeSelectors=[
     '.app-nav',
     '#screen .answers',
@@ -1048,8 +1049,11 @@
     }
   }catch(_){scheduleSafePosition(320);}
 
+  stage?.setAttribute('aria-label',"AdımBot: dokunarak konuştur, sürükleyerek veya ok tuşlarıyla taşı; Home ile konumu sıfırla");
   stage?.addEventListener('pointerdown',event=>{
+    if(dragging||event.isPrimary===false||(event.pointerType==='mouse'&&event.button!==0))return;
     if(event.target.closest('button,input,select,label'))return;
+    clearTimeout(dragSettleTimer);root.classList.remove('adb-drag-settle');
     clearSpeechGestures();
     pointerId=event.pointerId;
     dragging=true;
@@ -1061,7 +1065,12 @@
     startX=event.clientX;
     startY=event.clientY;
     root.classList.add('adb-is-dragging');
-    stage.setPointerCapture?.(pointerId);
+    try{stage.setPointerCapture?.(pointerId);}catch(_){
+      dragging=false;pointerId=null;setState({dragging:false});
+      root.classList.remove('adb-is-dragging');
+      if(activeUtterance&&!speechPaused)scheduleSpeechGestures(activeUtterance);
+      return;
+    }
     event.preventDefault();
   });
 
@@ -1069,7 +1078,8 @@
     if(!dragging||event.pointerId!==pointerId)return;
     const dx=event.clientX-startX;
     const dy=event.clientY-startY;
-    if(Math.hypot(dx,dy)>5)moved=true;
+    if(!moved&&Math.hypot(dx,dy)<=5)return;
+    moved=true;
     queuePosition(startLeft+dx,startTop+dy);
     event.preventDefault();
   });
@@ -1081,12 +1091,15 @@
     root.classList.remove('adb-is-dragging');
     if(frame){cancelAnimationFrame(frame);frame=0;setPosition(pendingX,pendingY,false);}
     const r=root.getBoundingClientRect();
-    manualPosition=true;
-    setPosition(r.left,r.top,true);
+    if(moved){manualPosition=true;setPosition(r.left,r.top,true);}
+    if(moved&&!state.speaking&&!motionPreference?.matches&&!pageSuspended){
+      root.classList.add('adb-drag-settle');
+      dragSettleTimer=setTimeout(()=>root.classList.remove('adb-drag-settle'),280);
+    }
     try{stage.releasePointerCapture?.(pointerId);}catch(_){}
     pointerId=null;
     if(moved&&activeUtterance&&!speechPaused)scheduleSpeechGestures(activeUtterance);
-    if(!moved){
+    if(!moved&&event.type!=='pointercancel'){
       const guide=window.AdimBotGuide;
       if(guide&&typeof guide.request==='function'){
         guide.request();
@@ -1107,14 +1120,28 @@
     root.classList.remove('adb-is-dragging');
     if(frame){cancelAnimationFrame(frame);frame=0;setPosition(pendingX,pendingY,false);}
     const r=root.getBoundingClientRect();
-    manualPosition=true;
-    setPosition(r.left,r.top,true);
+    if(moved){manualPosition=true;setPosition(r.left,r.top,true);}
     pointerId=null;
     if(activeUtterance&&!speechPaused)scheduleSpeechGestures(activeUtterance);
   });
 
   stage?.addEventListener('keydown',event=>{
+    if(event.altKey||event.ctrlKey||event.metaKey||dragging)return;
+    const direction={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[event.key];
+    if(direction){
+      event.preventDefault();
+      const rect=root.getBoundingClientRect(),step=event.shiftKey?24:8;
+      manualPosition=true;setPosition(rect.left+direction[0]*step,rect.top+direction[1]*step,true);
+      wakeAdimBot();return;
+    }
+    if(event.key==='Home'){
+      event.preventDefault();manualPosition=false;
+      try{localStorage.removeItem(key);}catch(_){}
+      root.style.left='';root.style.top='';root.style.right='';root.style.bottom='';
+      refreshViewportPosition();scheduleSafePosition(0);wakeAdimBot();return;
+    }
     if(event.key==='Enter'||event.key===' '){
+      if(event.repeat){event.preventDefault();return;}
       event.preventDefault();
       const guide=window.AdimBotGuide;
       if(guide&&typeof guide.request==='function')guide.request();
@@ -1138,12 +1165,16 @@
     react('help');
   });
 
-  window.addEventListener('resize',()=>{
-    if(root.classList.contains('adb-is-hidden')||manualPosition)return;
-    const r=root.getBoundingClientRect();
-    setPosition(r.left,r.top,false);
-    scheduleSafePosition(100);
-  });
+  const refreshViewportPosition=()=>{
+    if(viewportFrame||dragging||pageSuspended||preferences.minimized||root.classList.contains('adb-is-hidden'))return;
+    viewportFrame=requestAnimationFrame(()=>{
+      viewportFrame=0;
+      if(dragging||pageSuspended)return;
+      const rect=root.getBoundingClientRect();setPosition(rect.left,rect.top,false);
+      if(!manualPosition)scheduleSafePosition(100);
+    });
+  };
+  window.addEventListener('resize',refreshViewportPosition);
 
   window.addEventListener('hashchange',()=>{if(!manualPosition)scheduleSafePosition(180);});
 
@@ -1154,6 +1185,8 @@
     clearIdlePower();
     stopSpeaking();
     clearTimeout(safePositionTimer);
+    clearTimeout(dragSettleTimer);root.classList.remove('adb-drag-settle');
+    if(viewportFrame){cancelAnimationFrame(viewportFrame);viewportFrame=0;}
     clearSpeechGestures();
     if(frame){cancelAnimationFrame(frame);frame=0;}
     if(dragging){
@@ -1169,6 +1202,7 @@
     root.classList.remove('adb-is-suspended');
     refreshVoices();
     try{speech?.resume?.();}catch(_){}
+    refreshViewportPosition();
     if(!manualPosition)scheduleSafePosition(120);
     scheduleIdlePower(8000);
   };
@@ -1188,9 +1222,8 @@
     },180);
   });
 
-  window.visualViewport?.addEventListener?.('resize',()=>{
-    if(!manualPosition)scheduleSafePosition(100);
-  });
+  window.visualViewport?.addEventListener?.('resize',refreshViewportPosition);
+  window.visualViewport?.addEventListener?.('scroll',refreshViewportPosition);
 
   const safeObserver=new MutationObserver(()=>{
     if(!manualPosition&&!dragging&&!preferences.minimized)scheduleSafePosition(160);

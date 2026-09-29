@@ -67,7 +67,7 @@ function ois_icon(string $type): string {
 <link rel="apple-touch-icon" href="ilkadim-logo-192.png">
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="ogretmenim.css?v=1.0.48">
-<link rel="stylesheet" href="adimbot-student.css?v=1.1.84">
+<link rel="stylesheet" href="adimbot-student.css?v=1.1.86">
 <script src="api/bootstrap.js.php?v=1.1.56" defer></script>
 <script src="adimbot-student.js?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-student.js'),0,16)?>" defer></script>
 <script src="global-audio-feedback.js?v=1.1.75" defer></script>
