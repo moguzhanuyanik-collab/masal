@@ -215,7 +215,7 @@
       if(!payload||typeof payload!=='object'){
         if(response.status===408||response.status===504)throw new Error('provider_timeout');
         if(response.status===429)throw new Error('provider_rate_limit');
-        if(response.status===401||response.status===403)throw new Error('provider_auth_error');
+        if(response.status===401||response.status===403)throw new Error('auth');
         if(response.status>=500)throw new Error('provider_unavailable');
         throw new Error('invalid_response');
       }
@@ -294,7 +294,8 @@
       else if(reason==='provider_unavailable')text='AdımBot yapay zekâ hizmeti şu anda meşgul. Biraz sonra tekrar deneyebilirsin.';
       else if(reason==='invalid_provider_response'||reason==='invalid_response')text='AdımBot yanıtı okunamadı. Biraz sonra tekrar deneyebilirsin.';
       else if(reason==='curl_missing')text='AdımBot bağlantısı sunucuda hazır değil. Lütfen yöneticine haber ver.';
-      else if(reason==='csrf'||reason==='csrf_missing')text='Oturum doğrulaması yenilenmeli. Sayfayı yenileyip tekrar deneyebilirsin.';
+      else if(reason==='csrf'||reason==='csrf_missing'||reason==='auth')text='Oturum doğrulaması yenilenmeli. Sayfayı yenileyip tekrar deneyebilirsin.';
+      else if(reason==='origin')text='AdımBot güvenlik doğrulaması yenilenmeli. Sayfayı yenileyip tekrar deneyebilirsin.';
       else if(reason==='rate_limit')text='AdımBot biraz dinlensin. Birkaç dakika sonra tekrar deneyebilirsin.';
       else if(reason==='provider_rate_limit')text='AdımBot kullanım sınırına ulaştı. Biraz sonra tekrar deneyebilirsin.';
       else if(reason==='provider_disabled')text=SAFE_MESSAGES.unavailable;

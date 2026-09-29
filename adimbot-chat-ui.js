@@ -53,6 +53,7 @@
     csrf:'Oturum doğrulaması yenilenmeli. Sayfayı yenileyip tekrar dene.',
     curl_missing:'Sunucudaki ses bağlantısı hazır değil. Lütfen yöneticine haber ver.',
     invalid_provider_response:'Ses sağlayıcısının yanıtı okunamadı. Biraz sonra tekrar dene.',
+    provider_safety:'Bu ses güvenli biçimde yazıya çevrilemedi. Sorunu yazarak gönderebilirsin.',
     auth:'Oturum doğrulaması yenilenmeli. Sayfayı yenileyip tekrar dene.',
     origin:'Ses isteğinin güvenlik doğrulaması başarısız oldu. Sayfayı yenileyip tekrar dene.',
     upload:'Ses kaydı sunucuya ulaşmadı. Mikrofona dokunup tekrar dene.',
@@ -434,7 +435,15 @@
       if(!voiceConfig.enabled||chatBusy)return;
       if(voiceSession){
         if(voiceSession.pending){stopVoice(true);status.textContent='Mikrofon isteği iptal edildi.';}
-        else stopVoice();
+        else if(voiceSession.recognition){
+          if(voiceSession.stopping)return;
+          voiceSession.stopping=true;
+          clearTimeout(voiceSession.timer);
+          clearInterval(voiceSession.countdownTimer);
+          status.textContent='Konuşman tamamlanıyor…';
+          try{voiceSession.recognition.stop();}
+          catch(_){stopVoice(true);status.textContent='Mikrofon durdurulamadı. Tekrar deneyebilirsin.';}
+        }else stopVoice();
         return;
       }
       if(!navigator.onLine){status.textContent='Sesli sohbet için internet bağlantısı gerekli.';return;}
@@ -450,7 +459,7 @@
           const browserSession={recognition,startedAt:Date.now()};
           browserSession.timer=setTimeout(()=>{
             if(generation!==voiceGeneration||voiceSession?.recognition!==recognition)return;
-            stopVoice();
+            stopVoice(true);
             status.textContent='Dinleme süresi doldu. Mikrofona dokunup tekrar deneyebilirsin.';
           },15000);
           browserSession.countdownTimer=setInterval(()=>{
@@ -466,7 +475,7 @@
             const transcript=event.results?.[0]?.[0]?.transcript||'';
             stopVoice();recognized(transcript);
           };
-          recognition.onerror=event=>{if(generation===voiceGeneration){const reason=String(event?.error||'');stopVoice();status.textContent=reason==='not-allowed'||reason==='service-not-allowed'?'Mikrofon izni kapalı. Tarayıcı ayarlarından izin verip tekrar dene.':reason==='no-speech'?'Ses algılanmadı. Mikrofona daha yakın konuşup tekrar dene.':'Mikrofon dinleyemedi. İzinleri kontrol edip tekrar dene.';}};
+          recognition.onerror=event=>{if(generation===voiceGeneration&&voiceSession===browserSession){const reason=String(event?.error||'');stopVoice();status.textContent=reason==='not-allowed'||reason==='service-not-allowed'?'Mikrofon izni kapalı. Tarayıcı ayarlarından izin verip tekrar dene.':reason==='no-speech'||(reason==='aborted'&&browserSession.stopping)?'Ses algılanmadı. Mikrofona daha yakın konuşup tekrar dene.':'Mikrofon dinleyemedi. İzinleri kontrol edip tekrar dene.';}};
           recognition.onend=()=>{
             if(generation!==voiceGeneration||voiceSession?.recognition!==recognition)return;
             stopVoice();

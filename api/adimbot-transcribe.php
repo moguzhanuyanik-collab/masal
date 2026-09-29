@@ -29,9 +29,18 @@ $file=$_FILES['audio'] ?? null;
 if (!is_array($file) || ($file['error'] ?? -1)!==UPLOAD_ERR_OK || !is_uploaded_file((string)($file['tmp_name'] ?? ''))) voice_result(['ok'=>false,'reason'=>'upload'],400);
 $size=(int)($file['size'] ?? 0);
 if ($size<100 || $size>1600000) voice_result(['ok'=>false,'reason'=>'size'],413);
-if (!class_exists(finfo::class)) voice_result(['ok'=>false,'reason'=>'format'],500);
-$detected=(new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']);
 $mimes=['audio/webm'=>'webm','video/webm'=>'webm','audio/ogg'=>'ogg','application/ogg'=>'ogg','audio/mp4'=>'m4a','video/mp4'=>'m4a','audio/x-m4a'=>'m4a','audio/mpeg'=>'mp3','audio/wav'=>'wav','audio/x-wav'=>'wav'];
+$audioBytes=file_get_contents($file['tmp_name']);
+if (!is_string($audioBytes) || strlen($audioBytes)!==$size) voice_result(['ok'=>false,'reason'=>'upload'],400);
+$detected=class_exists(finfo::class)?(new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']):'';
+if (!is_string($detected) || !isset($mimes[$detected])) {
+    $header=substr($audioBytes,0,16);
+    if (strlen($header)>=8 && substr($header,4,4)==='ftyp') $detected='audio/mp4';
+    elseif (str_starts_with($header,"\x1A\x45\xDF\xA3")) $detected='audio/webm';
+    elseif (str_starts_with($header,'OggS')) $detected='audio/ogg';
+    elseif (str_starts_with($header,'RIFF') && substr($header,8,4)==='WAVE') $detected='audio/wav';
+    elseif (str_starts_with($header,'ID3') || (strlen($header)>=2 && ord($header[0])===0xFF && (ord($header[1])&0xE0)===0xE0)) $detected='audio/mpeg';
+}
 if (!is_string($detected) || !isset($mimes[$detected])) voice_result(['ok'=>false,'reason'=>'format'],415);
 if (!function_exists('curl_init')) voice_result(['ok'=>false,'reason'=>'curl_missing'],500);
 $key=$provider==='groq' ? trim((string)(($ai['groq_api_key'] ?? '') ?: getenv('GROQ_API_KEY'))) : trim((string)(($ai['gemini_api_key'] ?? '') ?: getenv('GEMINI_API_KEY')));
@@ -56,7 +65,7 @@ if ($provider==='groq') {
     $headers=['x-goog-api-key: '.$key,'Content-Type: application/json'];
     $request=json_encode(['contents'=>[['parts'=>[
         ['text'=>'Bu Türkçe ses kaydını yalnızca yazıya çevir. Yorum, yanıt veya ek açıklama yazma.'],
-        ['inline_data'=>['mime_type'=>$detected==='video/webm'?'audio/webm':($detected==='video/mp4'?'audio/mp4':$detected),'data'=>base64_encode((string)file_get_contents($file['tmp_name']))]],
+        ['inline_data'=>['mime_type'=>$detected==='video/webm'?'audio/webm':($detected==='video/mp4'?'audio/mp4':$detected),'data'=>base64_encode($audioBytes)]],
     ]]]]],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 }
 $ch=curl_init($url);
@@ -74,6 +83,8 @@ if ($status>=500) voice_result(['ok'=>false,'reason'=>'provider_unavailable'],50
 if ($status<200 || $status>=300 || !is_string($body)) voice_result(['ok'=>false,'reason'=>'provider_error'],502);
 $decoded=json_decode($body,true);
 if (!is_array($decoded)) voice_result(['ok'=>false,'reason'=>'invalid_provider_response'],502);
+$providerBlocked=$provider==='gemini' && (trim((string)($decoded['promptFeedback']['blockReason'] ?? ''))!=='' || in_array((string)($decoded['candidates'][0]['finishReason'] ?? ''),['SAFETY','PROHIBITED_CONTENT','BLOCKLIST'],true));
+if ($providerBlocked) voice_result(['ok'=>false,'reason'=>'provider_safety'],422);
 $text=$provider==='groq' ? ($decoded['text'] ?? '') : ($decoded['candidates'][0]['content']['parts'][0]['text'] ?? '');
 if (!is_string($text)) $text='';
 $text=trim(preg_replace('/\s+/u',' ',strip_tags($text)) ?? '');

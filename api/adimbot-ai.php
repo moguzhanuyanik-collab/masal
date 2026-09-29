@@ -114,6 +114,9 @@ function adimbot_ai_safe_output(string $text, bool $hasActiveQuestion=false): ar
     if ($hasActiveQuestion && preg_match('/(?:cevap|sonuç|doğru\s+(?:seçenek|şık))\s*(?:(?:şudur|olur)\s*|[:\-]\s*)?(?:[A-D]\b|\d+(?:[.,]\d+)?\b|bir\b|iki\b|üç\b|dört\b|beş\b|altı\b|yedi\b|sekiz\b|dokuz\b|on\b)/iu',$value)) {
         return ['ok'=>false,'text'=>'Sonucu doğrudan vermeyeyim. İlk adımı birlikte bulalım: soruda bizden ne istendiğini söyleyebilir misin?','reason'=>'answer_key'];
     }
+    if ($hasActiveQuestion && preg_match('/(?:doğru\s+olan\s+[A-D]\b|seçmen\s+gereken\s+[A-D]\b|[A-D]\s*şıkkını\s+seç|^\s*[A-D]\s*(?:şıkkı|seçeneği)(?:dır|dir|dur|dür)?[.!]?\s*$)/iu',$value)) {
+        return ['ok'=>false,'text'=>'Doğru seçeneği doğrudan söylemeyeyim. Önce seçeneklerden hangisinin sorudaki ipucuyla eşleştiğini bulalım.','reason'=>'answer_key'];
+    }
     return ['ok'=>true,'text'=>adimbot_ai_redact($value),'reason'=>'ok'];
 }
 
@@ -168,7 +171,7 @@ $role=(string)($_SESSION['aktif_rol'] ?? '');
 $studentId=(int)($_SESSION['ogrenci_id'] ?? 0);
 $userId=(int)($_SESSION['kullanici_id'] ?? 0);
 if ($role!=='ogrenci' || $studentId<=0 || $userId<=0) {
-    adimbot_ai_json(['ok'=>false,'message'=>'Bu özellik yalnızca öğrenci hesabında kullanılabilir.'],403);
+    adimbot_ai_json(['ok'=>false,'message'=>'Bu özellik yalnızca öğrenci hesabında kullanılabilir.','reason'=>'auth'],403);
 }
 
 $csrf=(string)($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
@@ -186,7 +189,7 @@ if ($origin!=='') {
     $host=(string)($_SERVER['HTTP_HOST'] ?? '');
     $originHost=(string)(parse_url($origin,PHP_URL_HOST) ?? '');
     if ($originHost==='' || strcasecmp(preg_replace('/:\d+$/','',$host) ?? $host,$originHost)!==0) {
-        adimbot_ai_json(['ok'=>false,'message'=>'Geçersiz istek kaynağı.'],403);
+        adimbot_ai_json(['ok'=>false,'message'=>'Geçersiz istek kaynağı.','reason'=>'origin'],403);
     }
 }
 
