@@ -368,7 +368,11 @@
         try{
           const recognition=new BrowserRecognition();
           recognition.lang='tr-TR';recognition.interimResults=false;recognition.maxAlternatives=1;
-          voiceSession={recognition,timer:setTimeout(()=>stopVoice(),16000)};
+          voiceSession={recognition,timer:setTimeout(()=>{
+            if(generation!==voiceGeneration||voiceSession?.recognition!==recognition)return;
+            stopVoice();
+            status.textContent='Dinleme süresi doldu. Mikrofona dokunup tekrar deneyebilirsin.';
+          },15000)};
           mic.textContent='⏹';mic.setAttribute('aria-label','Dinlemeyi bitir');mic.setAttribute('aria-pressed','true');
           status.textContent='Dinliyorum… Konuşunca sorunu göndereceğim.';
           recognition.onresult=event=>{
@@ -377,7 +381,11 @@
             stopVoice();recognized(transcript);
           };
           recognition.onerror=()=>{if(generation===voiceGeneration){stopVoice();status.textContent='Mikrofon dinleyemedi. İzinleri kontrol edip tekrar dene.';}};
-          recognition.onend=()=>{if(generation===voiceGeneration&&voiceSession?.recognition===recognition)stopVoice();};
+          recognition.onend=()=>{
+            if(generation!==voiceGeneration||voiceSession?.recognition!==recognition)return;
+            stopVoice();
+            status.textContent='Ses algılanmadı. Mikrofona dokunup tekrar deneyebilirsin.';
+          };
           recognition.start();
         }catch(_){stopVoice(true);status.textContent='Mikrofon başlatılamadı. Tarayıcı iznini kontrol et.';}
         return;

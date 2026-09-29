@@ -72,7 +72,7 @@ function ois_icon(string $type): string {
 <script src="adimbot-student.js?v=1.1.21" defer></script>
 <script src="global-audio-feedback.js?v=1.1.55" defer></script>
 <script src="adimbot-ai-bridge.js?v=1.1.52" defer></script>
-<script src="adimbot-chat-ui.js?v=1.1.56" defer></script>
+<script src="adimbot-chat-ui.js?v=1.1.57" defer></script>
 </head>
 <body>
 <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
