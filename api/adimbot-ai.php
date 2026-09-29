@@ -78,8 +78,20 @@ function adimbot_ai_input_safety(string $text): ?array {
     return null;
 }
 
-function adimbot_ai_safe_output(string $text): array {
-    $value=adimbot_ai_clean($text,600);
+function adimbot_ai_readable_output(string $text): string {
+    $value=strip_tags($text);
+    $value=preg_replace('/\*\*([^*]+)\*\*/u','$1',$value) ?? $value;
+    $value=preg_replace('/__([^_]+)__/u','$1',$value) ?? $value;
+    $value=preg_replace('/`([^`]+)`/u','$1',$value) ?? $value;
+    $value=preg_replace('/^\s*(?:#{1,6}|>|[•-])\s+/mu','',$value) ?? $value;
+    $value=adimbot_ai_clean($value,600);
+    $sentences=preg_split('/(?<=[.!?])\s+/u',$value,-1,PREG_SPLIT_NO_EMPTY);
+    if(is_array($sentences) && count($sentences)>4) $value=implode(' ',array_slice($sentences,0,4));
+    return trim($value);
+}
+
+function adimbot_ai_safe_output(string $text, bool $hasActiveQuestion=false): array {
+    $value=adimbot_ai_readable_output($text);
     if ($value==='') return ['ok'=>false,'text'=>'Şu anda yanıt oluşturamadım. İstersen soruyu başka türlü soralım.','reason'=>'empty'];
 
     if (preg_match('/(?:telefon(?:unu| numaranı)|adres(?:ini|ini söyle)|e[- ]?posta(?:nı| adresini)|şifre(?:ni)?|tc\s*(?:kimlik)?)/iu',$value)) {
@@ -91,12 +103,29 @@ function adimbot_ai_safe_output(string $text): array {
     if (preg_match('/(?:doğru\s+(?:cevap|şık)|cevap\s+[A-D]\s*şıkkı|cevap\s*[:\-]\s*[A-D])/iu',$value)) {
         return ['ok'=>false,'text'=>'Cevabı doğrudan söylemeyeyim. Bir ipucu vereyim ve birlikte düşünelim.','reason'=>'answer_key'];
     }
+    if ($hasActiveQuestion && preg_match('/(?:cevap|sonuç|doğru\s+(?:seçenek|şık))\s*(?:(?:şudur|olur)\s*|[:\-]\s*)?(?:[A-D]\b|\d+(?:[.,]\d+)?\b|bir\b|iki\b|üç\b|dört\b|beş\b|altı\b|yedi\b|sekiz\b|dokuz\b|on\b)/iu',$value)) {
+        return ['ok'=>false,'text'=>'Sonucu doğrudan vermeyeyim. İlk adımı birlikte bulalım: soruda bizden ne istendiğini söyleyebilir misin?','reason'=>'answer_key'];
+    }
     return ['ok'=>true,'text'=>adimbot_ai_redact($value),'reason'=>'ok'];
 }
 
 function adimbot_ai_normalize_repeat(string $text): string {
     $value=mb_strtolower(adimbot_ai_clean($text,600),'UTF-8');
     return preg_replace('/[^\pL\pN]+/u','',$value) ?? $value;
+}
+
+function adimbot_ai_repeats_previous(string $reply, array $previous): bool {
+    $normalized=adimbot_ai_normalize_repeat($reply);
+    if($normalized==='') return false;
+    foreach($previous as $item){
+        $candidate=adimbot_ai_normalize_repeat((string)$item);
+        if($candidate==='' ) continue;
+        if($normalized===$candidate) return true;
+        if(mb_strlen($normalized)<40 || mb_strlen($candidate)<40) continue;
+        similar_text($normalized,$candidate,$percent);
+        if($percent>=88.0) return true;
+    }
+    return false;
 }
 
 function adimbot_ai_provider_error(int $status, int $curlErrno): never {
@@ -171,21 +200,8 @@ if (($blocked=adimbot_ai_input_safety($message))!==null) {
     adimbot_ai_json(['ok'=>true,'blocked'=>true,'reason'=>$blocked['reason'],'text'=>$blocked['text']]);
 }
 
-$now=time();
-$window=600;
-$requests=is_array($_SESSION['adimbot_ai_requests'] ?? null)?$_SESSION['adimbot_ai_requests']:[];
-$requests=array_values(array_filter(array_map('intval',$requests),static fn(int $ts):bool=>$ts>$now-$window));
-
 $config=require dirname(__DIR__) . '/config/app.php';
 $ai=is_array($config['ai'] ?? null)?$config['ai']:[];
-$limit=max(3,min(60,(int)($ai['max_requests_per_10_minutes'] ?? 20)));
-if (count($requests)>=$limit) {
-    $_SESSION['adimbot_ai_requests']=$requests;
-    adimbot_ai_json(['ok'=>false,'message'=>'AdımBot biraz dinlensin. Birkaç dakika sonra tekrar deneyebilirsin.','reason'=>'rate_limit'],429);
-}
-$requests[]=$now;
-$_SESSION['adimbot_ai_requests']=$requests;
-
 $enabled=($ai['enabled'] ?? true)!==false;
 $provider=strtolower(trim((string)($ai['provider'] ?? 'openai')));
 $apiKey=match ($provider) {
@@ -204,6 +220,19 @@ if (!$enabled || !in_array($provider,['openai','groq','gemini'],true) || $model=
         'text'=>'AdımBot yapay zekâ bağlantısı henüz yapılandırılmamış. Profildeki diğer AdımBot özelliklerini kullanmaya devam edebilirsin.'
     ],503);
 }
+
+$now=time();
+$window=600;
+$requests=is_array($_SESSION['adimbot_ai_requests'] ?? null)?$_SESSION['adimbot_ai_requests']:[];
+$requests=array_values(array_filter(array_map('intval',$requests),static fn(int $ts):bool=>$ts>$now-$window));
+$limit=max(3,min(60,(int)($ai['max_requests_per_10_minutes'] ?? 20)));
+if (count($requests)>=$limit) {
+    $_SESSION['adimbot_ai_requests']=$requests;
+    adimbot_ai_json(['ok'=>false,'message'=>'AdımBot biraz dinlensin. Birkaç dakika sonra tekrar deneyebilirsin.','reason'=>'rate_limit'],429);
+}
+$requests[]=$now;
+$_SESSION['adimbot_ai_requests']=$requests;
+session_write_close();
 
 $context=is_array($payload['context'] ?? null)?$payload['context']:[];
 $allowed=[];
@@ -313,9 +342,8 @@ $text=match ($provider) {
     'gemini'=>adimbot_ai_extract_gemini_text($decoded),
     default=>adimbot_ai_extract_text($decoded),
 };
-$safe=adimbot_ai_safe_output($text);
-$normalizedReply=adimbot_ai_normalize_repeat($safe['text']);
-if ($safe['ok'] && $normalizedReply!=='' && in_array($normalizedReply,array_map('adimbot_ai_normalize_repeat',$previousAssistantReplies),true)) {
+$safe=adimbot_ai_safe_output($text,isset($allowed['question']));
+if ($safe['ok'] && adimbot_ai_repeats_previous($safe['text'],$previousAssistantReplies)) {
     $safe=['ok'=>false,'text'=>'Aynı şeyi tekrarlamak istemiyorum. Takıldığın kısmı bir cümleyle söyler misin?','reason'=>'repeated_response'];
 }
 

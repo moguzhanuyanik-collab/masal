@@ -74,7 +74,7 @@ if ($status===400 || $status===404) voice_result(['ok'=>false,'reason'=>'provide
 if ($status>=500) voice_result(['ok'=>false,'reason'=>'provider_unavailable'],503);
 if ($status<200 || $status>=300 || !is_string($body)) voice_result(['ok'=>false,'reason'=>'provider_error'],502);
 $decoded=json_decode($body,true);
-if (!is_array($decoded)) voice_result(['ok'=>false,'reason'=>'provider_error'],502);
+if (!is_array($decoded)) voice_result(['ok'=>false,'reason'=>'invalid_provider_response'],502);
 $text=$provider==='groq' ? ($decoded['text'] ?? '') : ($decoded['candidates'][0]['content']['parts'][0]['text'] ?? '');
 if (!is_string($text)) $text='';
 $text=trim(preg_replace('/\s+/u',' ',strip_tags($text)) ?? '');

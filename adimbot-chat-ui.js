@@ -13,6 +13,7 @@
   let voiceSession=null;
   let voiceGeneration=0;
   let voiceRequestController=null;
+  let retryMessage='';
 
   const stopVoice=(discard=false)=>{
     const session=voiceSession;
@@ -43,8 +44,11 @@
     size:'Kayıt çok kısa veya büyük. En fazla 15 saniye konuş.',
     empty:'Ses anlaşılmadı. Mikrofona daha yakın konuşup tekrar dene.',
     csrf:'Oturum doğrulaması yenilenmeli. Sayfayı yenileyip tekrar dene.',
-    curl_missing:'Sunucudaki ses bağlantısı hazır değil. Lütfen yöneticine haber ver.'
+    curl_missing:'Sunucudaki ses bağlantısı hazır değil. Lütfen yöneticine haber ver.',
+    invalid_provider_response:'Ses sağlayıcısının yanıtı okunamadı. Biraz sonra tekrar dene.'
   }[String(reason||'')]||'Ses yazıya çevrilemedi. Biraz sonra tekrar deneyebilirsin.');
+
+  const retryableChatReasons=new Set(['timeout','provider_timeout','provider_connection_error','provider_unavailable','provider_error','invalid_provider_response','invalid_response']);
 
   const microphoneStartMessage=error=>{
     const name=String(error?.name||'');
@@ -308,8 +312,16 @@
 
   const remember=(role,text)=>writeHistory([...readHistory(),{role,text}]);
 
+  const rollbackPendingUser=message=>{
+    const history=readHistory();
+    const last=history[history.length-1];
+    if(last?.role==='user'&&clean(last.text)===clean(message))history.pop();
+    writeHistory(history);
+  };
+
   const clearHistory=()=>{
     try{sessionStorage.removeItem(HISTORY_KEY);}catch(_){}
+    retryMessage='';
     resetHintState();
     setTogetherActive(false);
     const hintButton=modal?.querySelector('[data-adimbot-hint]');
@@ -352,7 +364,7 @@
       '<button type="button" class="adb-chat-microphone" data-adimbot-microphone aria-label="Mikrofonla sor" aria-pressed="false">🎤</button>',
       '<button type="submit">Gönder</button>',
       '</form>',
-      '<div class="adb-chat-meta"><small data-adimbot-chat-counter>0 / 400</small><small class="adb-chat-status" data-adimbot-chat-status></small></div>',
+      '<div class="adb-chat-meta"><small data-adimbot-chat-counter>0 / 400</small><small class="adb-chat-status" data-adimbot-chat-status role="status" aria-live="polite"></small></div>',
       '</section>'
     ].join('');
 
@@ -472,7 +484,7 @@
     const syncConnection=()=>{
       if(!status)return;
       if(!navigator.onLine)status.textContent='İnternet bağlantısı yok. Bağlantı gelince tekrar deneyebilirsin.';
-      else if(!chatBusy&&!status.dataset.adimbotSpeechError)status.textContent='';
+      else if(!chatBusy&&!status.dataset.adimbotSpeechError&&!status.dataset.adimbotRetry)status.textContent='';
     };
 
     input?.addEventListener('input',()=>{
@@ -591,7 +603,10 @@
       }
 
       chatBusy=true;
+      const retrying=retryMessage!==''&&retryMessage===message;
+      retryMessage='';
       if(status)delete status.dataset.adimbotSpeechError;
+      if(status)delete status.dataset.adimbotRetry;
       modal.setAttribute('aria-busy','true');
       try{window.AdimBotStudent?.emote?.('think',1600);}catch(_){}
       const waitEmotionTimer=setTimeout(()=>{
@@ -604,7 +619,7 @@
       if(submit)submit.disabled=true;
       if(status)status.textContent='AdımBot düşünüyor...';
       const historyBefore=readHistory();
-      appendMessage(box,'user',message);
+      if(!retrying)appendMessage(box,'user',message);
       remember('user',message);
 
       try{
@@ -618,16 +633,28 @@
           const reply=result?.text||'Şu anda yanıt oluşturamadım.';
           appendMessage(box,'bot',reply);
           if(result?.ok||result?.blocked)remember('assistant',reply);
+          else if(retryableChatReasons.has(String(result?.reason||''))){
+            rollbackPendingUser(message);
+            retryMessage=message;
+            input.value=message;
+            if(counter)counter.textContent=String(message.length)+' / 400';
+            if(status){status.dataset.adimbotRetry='1';status.textContent='Sorun kaybolmadı. Bağlantı düzeldiğinde Gönder düğmesine yeniden dokunabilirsin.';}
+          }
         }
       }catch(_){
         appendMessage(box,'bot','Şu anda yanıt veremedim. İstersen tekrar deneyebilirsin.');
+        rollbackPendingUser(message);
+        retryMessage=message;
+        input.value=message;
+        if(counter)counter.textContent=String(message.length)+' / 400';
+        if(status){status.dataset.adimbotRetry='1';status.textContent='Sorun kaybolmadı. Gönder düğmesine yeniden dokunabilirsin.';}
       }finally{
         clearTimeout(waitEmotionTimer);
         chatBusy=false;
         modal.removeAttribute('aria-busy');
         input.disabled=false;
         if(submit)submit.disabled=false;
-        if(status&&!status.dataset.adimbotSpeechError)status.textContent=navigator.onLine?'':'İnternet bağlantısı yok. Bağlantı gelince tekrar deneyebilirsin.';
+        if(status&&!status.dataset.adimbotSpeechError&&!status.dataset.adimbotRetry)status.textContent=navigator.onLine?'':'İnternet bağlantısı yok. Bağlantı gelince tekrar deneyebilirsin.';
         if(!modal.hidden)input.focus();
       }
     });
