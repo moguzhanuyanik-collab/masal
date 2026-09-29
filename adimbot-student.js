@@ -354,7 +354,7 @@
     if(changed)emitState();
   };
 
-  const emotionTypes=new Set(['think','happy','surprised','encourage','wait']);
+  const emotionTypes=new Set(['think','happy','surprised','encourage','wait','listen','transcribe']);
   const clearEmotion=()=>{
     clearTimeout(emotionTimer);
     emotionTimer=0;
@@ -365,6 +365,7 @@
     const emotion=String(type||'').trim().toLowerCase();
     if(!emotionTypes.has(emotion)||dragging||preferences.minimized||root.classList.contains('adb-is-hidden'))return false;
     clearTimeout(emotionTimer);
+    if(emotion==='listen'||emotion==='transcribe')clearIdlePower();
     root.dataset.adimbotEmotion=emotion;
     setState({emotion});
     const ms=Math.max(450,Math.min(8000,Number(duration)||1400));

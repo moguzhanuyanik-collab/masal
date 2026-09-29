@@ -541,3 +541,14 @@ html.adb-chat-open,html.adb-chat-open body{overflow:hidden}
 .adb-student-widget.adb-is-speech-paused .adb-visual,
 .adb-student-widget.adb-is-speech-paused .adb-lid{animation-play-state:paused!important}
 @media(prefers-reduced-motion:reduce){.adb-mouth-open{transition:none}}
+
+/* Listening and transcription move only the character, never the viewport. */
+.adb-student-widget[data-adimbot-emotion="listen"]:not(.adb-is-dragging) .adb-visual{animation:adbListenPose 3.4s ease-in-out infinite}
+.adb-student-widget[data-adimbot-emotion="listen"] .adb-arm-leftview,
+.adb-student-widget[data-adimbot-emotion="listen"] .adb-arm-rightview{animation-play-state:paused}
+.adb-student-widget[data-adimbot-emotion="transcribe"]:not(.adb-is-dragging) .adb-visual{animation:adbEmotionThink 2.8s ease-in-out infinite}
+.adb-student-widget[data-adimbot-emotion="transcribe"] .adb-pulse{animation:adbEmotionWaitPulse 2.8s ease-in-out infinite}
+@keyframes adbListenPose{
+  0%,100%{transform:translateY(0) rotate(-.7deg)}
+  48%{transform:translateY(-1px) rotate(-1.3deg)}
+}

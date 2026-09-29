@@ -43,20 +43,49 @@
     modal?.removeAttribute('aria-busy');
   };
 
+  const stopTracks=stream=>{
+    let tracks=[];
+    try{tracks=stream?.getTracks?.()||[];}catch(_){}
+    for(const track of tracks){try{track.stop();}catch(_){}}
+  };
+  const releaseAudioContext=context=>{
+    try{Promise.resolve(context?.close?.()).catch(()=>{});}catch(_){}
+  };
+  const showVoiceEmotion=type=>{
+    try{
+      if(type)window.AdimBotStudent?.emote?.(type,8000);
+      else window.AdimBotStudent?.clearEmotion?.();
+    }catch(_){}
+  };
+  const releaseVoiceRequest=(controller,generation)=>{
+    if(voiceRequestController!==controller)return;
+    voiceRequestController=null;
+    if(generation!==voiceGeneration)return;
+    const mic=modal?.querySelector('[data-adimbot-microphone]');
+    if(mic){mic.disabled=false;mic.setAttribute('aria-label','Mikrofonla sor');}
+    showVoiceEmotion(null);
+  };
   const stopVoice=(discard=false)=>{
     const session=voiceSession;
     voiceSession=null;
     if(discard)voiceGeneration++;
-    if(discard&&voiceRequestController){voiceRequestController.abort();voiceRequestController=null;}
+    if(discard&&voiceRequestController){
+      const controller=voiceRequestController;
+      voiceRequestController=null;controller.abort();
+      const mic=modal?.querySelector('[data-adimbot-microphone]');
+      if(mic){mic.disabled=false;mic.setAttribute('aria-label','Mikrofonla sor');}
+    }
+    showVoiceEmotion(null);
     if(!session)return;
     clearTimeout(session.timer);
     clearTimeout(session.muteTimer);
     clearInterval(session.countdownTimer);
     clearInterval(session.meterTimer);
     try{session.recognition?.stop();}catch(_){}
-    try{if(session.recorder?.state==='recording')session.recorder.stop();}catch(_){}
-    try{session.audioContext?.close?.();}catch(_){}
-    session.stream?.getTracks().forEach(track=>track.stop());
+    if(discard&&session.chunks)session.chunks.length=0;
+    try{if(['recording','paused'].includes(session.recorder?.state))session.recorder.stop();}catch(_){}
+    releaseAudioContext(session.audioContext);
+    stopTracks(session.stream);
     const mic=modal?.querySelector('[data-adimbot-microphone]');
     if(mic){mic.textContent='🎤';mic.setAttribute('aria-label','Mikrofonla sor');mic.setAttribute('aria-pressed','false');}
   };
@@ -64,7 +93,10 @@
   const clean=value=>String(value??'').replace(/\s+/g,' ').trim();
 
   const retryAfterSeconds=value=>{
-    const seconds=Math.ceil(Number(value));
+    const raw=String(value??'').trim();
+    const seconds=/^\d+(?:\.\d+)?$/.test(raw)
+      ?Math.ceil(Number(raw))
+      :Math.ceil((Date.parse(raw)-Date.now())/1000);
     return Number.isFinite(seconds)?Math.max(0,Math.min(600,seconds)):0;
   };
 
@@ -440,7 +472,14 @@
           ?'Sesli okuma takıldı ve güvenli biçimde durduruldu. Tekrar dinle düğmesini deneyebilirsin.'
           :reason==='turkish_voice_missing'
             ?'Cihazda Türkçe ses bulunamadı; varsayılan cihaz sesi kullanılacak.'
-          :'Sesli okuma başlatılamadı. Cihazın ses ayarlarını kontrol edebilirsin.';
+          :({
+            network:'Ses bağlantısı kesildi. Bağlantını kontrol edip yeniden deneyebilirsin.',
+            'audio-busy':'Cihazın sesi şu an başka bir uygulama kullanıyor.',
+            'audio-hardware':'Cihazın ses çıkışı kullanılamıyor.',
+            'language-unavailable':'Bu cihazda Türkçe ses kullanılamıyor.',
+            'voice-unavailable':'Seçilen Türkçe ses şu an kullanılamıyor.',
+            'text-too-long':'Bu metin tek seferde okunamıyor. Daha kısa bir bölümü seçebilirsin.'
+          }[reason]||'Sesli okuma başlatılamadı. Cihazın ses ayarlarını kontrol edebilirsin.');
     };
     window.addEventListener('adimbot:speech-error',speechErrorHandler);
     window.addEventListener('adimbot:speech-start',()=>{if(status){delete status.dataset.adimbotSpeechError;status.textContent='';}});
@@ -505,20 +544,25 @@
           },15000);
           browserSession.countdownTimer=setInterval(()=>{
             if(voiceSession!==browserSession)return;
+            showVoiceEmotion('listen');
             const left=Math.max(1,15-Math.floor((Date.now()-browserSession.startedAt)/1000));
             status.textContent='Dinliyorum… '+left+' saniye kaldı.';
           },1000);
           voiceSession=browserSession;
           mic.textContent='⏹';mic.setAttribute('aria-label','Dinlemeyi bitir');mic.setAttribute('aria-pressed','true');
           status.textContent='Dinliyorum… Konuşunca sorunu göndereceğim.';
+          showVoiceEmotion('listen');
           recognition.onresult=event=>{
-            if(generation!==voiceGeneration)return;
+            if(generation!==voiceGeneration||voiceSession!==browserSession||browserSession.accepted)return;
             const parts=[];
             for(let i=0;i<(event.results?.length||0);i++){
+              if(event.results?.[i]?.isFinal!==true)continue;
               const value=event.results?.[i]?.[0]?.transcript;
               if(typeof value==='string'&&value.trim())parts.push(value.trim());
             }
             const transcript=parts.join(' ');
+            if(!transcript)return;
+            browserSession.accepted=true;
             stopVoice();recognized(transcript);
           };
           recognition.onerror=event=>{if(generation===voiceGeneration&&voiceSession===browserSession){const reason=String(event?.error||'');stopVoice();status.textContent=browserRecognitionMessage(reason,browserSession.stopping===true);}};
@@ -543,12 +587,12 @@
         voiceSession=permissionSession;
         status.textContent='Mikrofon izni bekleniyor…';
         stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
-        if(generation!==voiceGeneration||modal.hidden||voiceSession!==permissionSession){stream.getTracks().forEach(track=>track.stop());return;}
+        if(generation!==voiceGeneration||modal.hidden||voiceSession!==permissionSession){stopTracks(stream);return;}
         clearTimeout(permissionSession.timer);
         const recorder=createAudioRecorder(stream);
         const mime=recorder.mimeType||'audio/webm';
         const chunks=[];
-        const recordingSession={recorder,stream,startedAt:Date.now(),detectedSpeech:null,deviceEnded:false,deviceMuted:false};
+        const recordingSession={recorder,stream,chunks,bytes:0,tooLarge:false,startedAt:Date.now(),detectedSpeech:null,deviceEnded:false,deviceMuted:false};
         const AudioContextClass=window.AudioContext||window.webkitAudioContext;
         if(AudioContextClass){
           try{
@@ -556,7 +600,7 @@
             const analyser=audioContext.createAnalyser();
             analyser.fftSize=256;
             audioContext.createMediaStreamSource(stream).connect(analyser);
-            try{audioContext.resume?.();}catch(_){}
+            try{Promise.resolve(audioContext.resume?.()).catch(()=>{recordingSession.detectedSpeech=null;});}catch(_){}
             const samples=new Uint8Array(analyser.fftSize);
             recordingSession.audioContext=audioContext;
             recordingSession.detectedSpeech=audioContext.state==='running'?false:null;
@@ -573,6 +617,7 @@
         recordingSession.timer=setTimeout(()=>stopVoice(),15000);
         recordingSession.countdownTimer=setInterval(()=>{
           if(voiceSession!==recordingSession)return;
+          showVoiceEmotion('listen');
           const left=Math.max(1,15-Math.floor((Date.now()-recordingSession.startedAt)/1000));
           status.textContent='Dinliyorum… '+left+' saniye kaldı. Bitirmek için kare düğmeye dokun.';
         },1000);
@@ -596,35 +641,47 @@
         });
         mic.textContent='⏹';mic.setAttribute('aria-label','Konuşmayı bitir');mic.setAttribute('aria-pressed','true');
         status.textContent='Dinliyorum… Bitirince kare düğmeye dokun.';
-        recorder.ondataavailable=event=>{if(event.data.size)chunks.push(event.data);};
+        showVoiceEmotion('listen');
+        recorder.ondataavailable=event=>{
+          if(generation!==voiceGeneration||recordingSession.tooLarge||!event.data?.size)return;
+          recordingSession.bytes+=event.data.size;
+          if(recordingSession.bytes>1600000){
+            recordingSession.tooLarge=true;chunks.length=0;stopVoice();return;
+          }
+          chunks.push(event.data);
+        };
         recorder.onerror=()=>{if(generation===voiceGeneration&&!modal.hidden){stopVoice(true);status.textContent='Ses kaydı tamamlanamadı. Mikrofona yeniden dokunup dene.';}};
         recorder.onstop=async()=>{
-          stream.getTracks().forEach(track=>track.stop());
-          if(generation!==voiceGeneration||modal.hidden)return;
-          if(recordingSession.deviceEnded){status.textContent='Mikrofon bağlantısı kesildi. Cihazı kontrol edip tekrar dene.';return;}
-          if(recordingSession.deviceMuted){status.textContent='Mikrofonun ses kanalı kapandı. Cihazı kontrol edip tekrar dene.';return;}
-          if(Date.now()-recordingSession.startedAt<700){status.textContent='Kayıt çok kısa. Mikrofona dokunup en az bir saniye konuş.';return;}
-          if(recordingSession.detectedSpeech===false){status.textContent='Konuşma sesi algılanmadı. Mikrofona daha yakın konuşup tekrar dene.';return;}
+          if(voiceSession===recordingSession)stopVoice();
+          else stopTracks(stream);
+          if(generation!==voiceGeneration||modal.hidden){chunks.length=0;return;}
+          if(recordingSession.tooLarge){status.textContent='Kayıt çok büyük. Daha kısa konuşup tekrar dene.';return;}
+          if(recordingSession.deviceEnded){chunks.length=0;status.textContent='Mikrofon bağlantısı kesildi. Cihazı kontrol edip tekrar dene.';return;}
+          if(recordingSession.deviceMuted){chunks.length=0;status.textContent='Mikrofonun ses kanalı kapandı. Cihazı kontrol edip tekrar dene.';return;}
+          if(Date.now()-recordingSession.startedAt<700){chunks.length=0;status.textContent='Kayıt çok kısa. Mikrofona dokunup en az bir saniye konuş.';return;}
+          if(recordingSession.detectedSpeech===false){chunks.length=0;status.textContent='Konuşma sesi algılanmadı. Mikrofona daha yakın konuşup tekrar dene.';return;}
           const blob=new Blob(chunks,{type:mime});
+          chunks.length=0;
           if(blob.size<100||blob.size>1600000){status.textContent='Kayıt çok kısa veya büyük. En fazla 15 saniye konuş.';return;}
           status.textContent='Konuşman yazıya çevriliyor…';
+          showVoiceEmotion('transcribe');
+          let requestTimer=0,controller=null,emotionRefresh=0;
           try{
             const data=new FormData();data.append('audio',blob,'speech.'+(mime.includes('mp4')?'m4a':mime.includes('ogg')?'ogg':'webm'));
-            const controller=new AbortController();voiceRequestController=controller;
+            controller=new AbortController();voiceRequestController=controller;
             mic.disabled=true;
             mic.setAttribute('aria-label','Konuşma yazıya çevriliyor');
-            const requestTimer=setTimeout(()=>controller.abort(),50000);
-            let response;
-            try{response=await fetch('api/adimbot-transcribe.php',{method:'POST',credentials:'same-origin',signal:controller.signal,headers:{'X-CSRF-Token':String(window.ILKADIM_CSRF_TOKEN||'')},body:data});}
-            finally{
-              clearTimeout(requestTimer);
-              if(voiceRequestController===controller)voiceRequestController=null;
-              mic.disabled=false;
-              mic.setAttribute('aria-label','Mikrofonla sor');
-            }
+            requestTimer=setTimeout(()=>controller.abort(),50000);
+            emotionRefresh=setInterval(()=>{
+              if(voiceRequestController===controller&&generation===voiceGeneration)showVoiceEmotion('transcribe');
+            },6000);
+            const response=await fetch('api/adimbot-transcribe.php',{method:'POST',credentials:'same-origin',signal:controller.signal,headers:{'X-CSRF-Token':String(window.ILKADIM_CSRF_TOKEN||'')},body:data});
             let result=null;
             try{result=await response.json();}
-            catch(_){throw new Error(response.ok?'invalid_provider_response':voiceHttpReason(response.status));}
+            catch(error){
+              if(controller.signal.aborted||error?.name==='AbortError')throw Object.assign(new Error('timeout'),{name:'AbortError'});
+              throw new Error(response.ok?'invalid_provider_response':voiceHttpReason(response.status));
+            }
             if(generation!==voiceGeneration||modal.hidden)return;
             if(!response.ok||!result?.ok){
               const failure=new Error(result?.reason||voiceHttpReason(response.status));
@@ -632,18 +689,25 @@
               throw failure;
             }
             voiceRetryUntil=0;
+            releaseVoiceRequest(controller,generation);
             recognized(result.text);
           }catch(error){
+            if(generation!==voiceGeneration||modal.hidden)return;
             const reason=error?.name==='AbortError'?'provider_timeout':error instanceof TypeError||navigator.onLine===false?'provider_connection_error':error?.message;
             const retryAfter=retryAfterSeconds(error?.retryAfter);
             if(retryAfter>0)voiceRetryUntil=Date.now()+(retryAfter*1000);
             if(generation===voiceGeneration&&!modal.hidden)status.textContent=retryAfter>0
               ?'Sesli kullanım sınırı dolu. '+retryAfter+' saniye sonra tekrar deneyebilirsin.'
               :voiceErrorMessage(reason);
+          }finally{
+            clearTimeout(requestTimer);
+            clearInterval(emotionRefresh);
+            if(controller)releaseVoiceRequest(controller,generation);
+            else if(generation===voiceGeneration)showVoiceEmotion(null);
           }
         };
         recorder.start(1000);
-      }catch(error){stream?.getTracks().forEach(track=>track.stop());if(generation!==voiceGeneration)return;stopVoice(true);status.textContent=microphoneStartMessage(error);}
+      }catch(error){stopTracks(stream);if(generation!==voiceGeneration)return;stopVoice(true);status.textContent=microphoneStartMessage(error);}
     });
 
     const syncConnection=()=>{
@@ -922,3 +986,4 @@
 
   window.AdimBotChatUI=Object.freeze({open,close,clearHistory,captureContext,currentContext,learningContext,history:()=>readHistory().map(item=>({...item}))});
 })();
+
