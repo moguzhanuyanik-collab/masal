@@ -6,6 +6,10 @@
   const HISTORY_KEY='ilkadim.adimbot.chat.history.v1';
   const HINT_KEY='ilkadim.adimbot.chat.hint.v1';
   const TOGETHER_KEY='ilkadim.adimbot.chat.together.v1';
+  const scopedKey=base=>{
+    const studentId=Number(window.ILKADIM_CURRENT_STUDENT_ID||0);
+    return base+'.'+(Number.isInteger(studentId)&&studentId>0?'student-'+studentId:'anonymous');
+  };
   const MAX_HISTORY=6;
   let modal=null;
   let chatBusy=false;
@@ -48,8 +52,22 @@
     empty:'Ses anlaşılmadı. Mikrofona daha yakın konuşup tekrar dene.',
     csrf:'Oturum doğrulaması yenilenmeli. Sayfayı yenileyip tekrar dene.',
     curl_missing:'Sunucudaki ses bağlantısı hazır değil. Lütfen yöneticine haber ver.',
-    invalid_provider_response:'Ses sağlayıcısının yanıtı okunamadı. Biraz sonra tekrar dene.'
+    invalid_provider_response:'Ses sağlayıcısının yanıtı okunamadı. Biraz sonra tekrar dene.',
+    auth:'Oturum doğrulaması yenilenmeli. Sayfayı yenileyip tekrar dene.',
+    origin:'Ses isteğinin güvenlik doğrulaması başarısız oldu. Sayfayı yenileyip tekrar dene.',
+    upload:'Ses kaydı sunucuya ulaşmadı. Mikrofona dokunup tekrar dene.',
+    disabled:'Mikrofonla sohbet şu anda kapalı. Sorunu yazarak gönderebilirsin.'
   }[String(reason||'')]||'Ses yazıya çevrilemedi. Biraz sonra tekrar deneyebilirsin.');
+
+  const voiceHttpReason=status=>{
+    if(status===401||status===403)return 'auth';
+    if(status===408||status===504)return 'provider_timeout';
+    if(status===413)return 'size';
+    if(status===415)return 'format';
+    if(status===429)return 'provider_rate_limit';
+    if(status>=500)return 'provider_unavailable';
+    return 'provider_error';
+  };
 
   const retryableChatReasons=new Set(['timeout','provider_timeout','provider_connection_error','provider_unavailable','provider_error','invalid_provider_response','invalid_response']);
 
@@ -142,13 +160,13 @@
     if(safeActivity&&safeActivity!==safeLesson&&safeActivity!==safeTopic)context.activity=safeActivity.slice(0,80);
     if(safeQuestion)context.question=safeQuestion.slice(0,240);
 
-    try{sessionStorage.setItem(CONTEXT_KEY,JSON.stringify(context));}catch(_){}
+    try{sessionStorage.setItem(scopedKey(CONTEXT_KEY),JSON.stringify(context));}catch(_){}
   };
 
   const currentContext=()=>{
     captureContext();
     try{
-      const saved=JSON.parse(sessionStorage.getItem(CONTEXT_KEY)||'null');
+      const saved=JSON.parse(sessionStorage.getItem(scopedKey(CONTEXT_KEY))||'null');
       if(saved&&typeof saved==='object')return saved;
     }catch(_){}
     return {screen:(location.hash||'#/anasayfa').replace(/^#\//,'').split('/')[0]||'anasayfa'};
@@ -186,7 +204,7 @@
   const readHintState=()=>{
     const signature=hintSignature();
     try{
-      const saved=JSON.parse(sessionStorage.getItem(HINT_KEY)||'null');
+      const saved=JSON.parse(sessionStorage.getItem(scopedKey(HINT_KEY))||'null');
       if(saved&&saved.signature===signature){
         return {signature,level:Math.max(0,Math.min(3,Number(saved.level)||0))};
       }
@@ -196,26 +214,26 @@
 
   const writeHintLevel=level=>{
     const state={signature:hintSignature(),level:Math.max(0,Math.min(3,Number(level)||0))};
-    try{sessionStorage.setItem(HINT_KEY,JSON.stringify(state));}catch(_){}
+    try{sessionStorage.setItem(scopedKey(HINT_KEY),JSON.stringify(state));}catch(_){}
     return state;
   };
 
   const resetHintState=()=>{
-    try{sessionStorage.removeItem(HINT_KEY);}catch(_){}
+    try{sessionStorage.removeItem(scopedKey(HINT_KEY));}catch(_){}
   };
 
   const togetherActive=()=>{
     const signature=hintSignature();
     try{
-      const saved=JSON.parse(sessionStorage.getItem(TOGETHER_KEY)||'null');
+      const saved=JSON.parse(sessionStorage.getItem(scopedKey(TOGETHER_KEY))||'null');
       return Boolean(saved&&saved.signature===signature&&saved.active===true);
     }catch(_){return false;}
   };
 
   const setTogetherActive=active=>{
     try{
-      if(active)sessionStorage.setItem(TOGETHER_KEY,JSON.stringify({signature:hintSignature(),active:true}));
-      else sessionStorage.removeItem(TOGETHER_KEY);
+      if(active)sessionStorage.setItem(scopedKey(TOGETHER_KEY),JSON.stringify({signature:hintSignature(),active:true}));
+      else sessionStorage.removeItem(scopedKey(TOGETHER_KEY));
     }catch(_){}
   };
 
@@ -295,7 +313,7 @@
 
   const readHistory=()=>{
     try{
-      const raw=JSON.parse(sessionStorage.getItem(HISTORY_KEY)||'[]');
+      const raw=JSON.parse(sessionStorage.getItem(scopedKey(HISTORY_KEY))||'[]');
       if(!Array.isArray(raw))return [];
       return raw
         .filter(item=>item&&['user','assistant'].includes(item.role)&&clean(item.text))
@@ -309,7 +327,7 @@
       .filter(item=>item&&['user','assistant'].includes(item.role)&&clean(item.text))
       .slice(-MAX_HISTORY)
       .map(item=>({role:item.role,text:clean(item.text).slice(0,300)}));
-    try{sessionStorage.setItem(HISTORY_KEY,JSON.stringify(safe));}catch(_){}
+    try{sessionStorage.setItem(scopedKey(HISTORY_KEY),JSON.stringify(safe));}catch(_){}
     return safe;
   };
 
@@ -323,7 +341,7 @@
   };
 
   const clearHistory=()=>{
-    try{sessionStorage.removeItem(HISTORY_KEY);}catch(_){}
+    try{sessionStorage.removeItem(scopedKey(HISTORY_KEY));}catch(_){}
     retryMessage='';
     resetHintState();
     setTogetherActive(false);
@@ -521,12 +539,15 @@
             let response;
             try{response=await fetch('api/adimbot-transcribe.php',{method:'POST',credentials:'same-origin',signal:controller.signal,headers:{'X-CSRF-Token':String(window.ILKADIM_CSRF_TOKEN||'')},body:data});}
             finally{clearTimeout(requestTimer);if(voiceRequestController===controller)voiceRequestController=null;}
-            const result=await response.json();
+            let result=null;
+            try{result=await response.json();}
+            catch(_){throw new Error(response.ok?'invalid_provider_response':voiceHttpReason(response.status));}
             if(generation!==voiceGeneration||modal.hidden)return;
-            if(!response.ok||!result.ok)throw new Error(result.reason||'provider_error');
+            if(!response.ok||!result?.ok)throw new Error(result?.reason||voiceHttpReason(response.status));
             recognized(result.text);
           }catch(error){
-            if(generation===voiceGeneration&&!modal.hidden)status.textContent=error?.name==='AbortError'?'Sesin yazıya çevrilmesi uzun sürdü. Tekrar deneyebilirsin.':voiceErrorMessage(error?.message);
+            const reason=error?.name==='AbortError'?'provider_timeout':error instanceof TypeError||navigator.onLine===false?'provider_connection_error':error?.message;
+            if(generation===voiceGeneration&&!modal.hidden)status.textContent=voiceErrorMessage(reason);
           }
         };
         recorder.start(1000);

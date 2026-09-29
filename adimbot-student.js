@@ -311,6 +311,7 @@
   let index=0,timer=0,dragging=false,moved=false,pointerId=null,startX=0,startY=0,startLeft=0,startTop=0,manualPosition=false;
   let pendingX=0,pendingY=0,frame=0,activeUtterance=null;
   let activeSpeechToken=0,activeOnEnd=null,activeOnStart=null,speechStarted=false,speechPaused=false;
+  let longSpeechToken=0,longSpeechTimer=0;
   let gestureLoopTimer=0,gestureReleaseTimer=0,settleTimer=0,gestureIndex=0,lastGestureAt=0;
   let emotionTimer=0;
   let pageSuspended=document.hidden===true,idlePowerTimer=0;
@@ -546,7 +547,7 @@
     }
   };
 
-  const stopSpeaking=()=>{
+  const stopCurrentSpeech=()=>{
     const token=activeSpeechToken;
     const hadActive=state.speaking||activeUtterance!==null;
     if(hadActive)finishSpeech(token,true);
@@ -559,6 +560,12 @@
     }
     speechPaused=false;
     try{speech?.cancel();}catch(_){}
+  };
+  const stopSpeaking=()=>{
+    longSpeechToken++;
+    clearTimeout(longSpeechTimer);
+    longSpeechTimer=0;
+    stopCurrentSpeech();
   };
   const pauseSpeaking=()=>{
     if(!speech||!state.speaking||speechPaused)return false;
@@ -589,10 +596,12 @@
     const chunks=speechChunks(message);
     if(!chunks.length)return false;
     stopSpeaking();
+    const sequence=longSpeechToken;
     const finalOnEnd=typeof options.onEnd==='function'?options.onEnd:null;
     const firstOnStart=typeof options.onStart==='function'?options.onStart:null;
     let index=0;
     const next=()=>{
+      if(sequence!==longSpeechToken)return;
       if(index>=chunks.length){
         if(finalOnEnd){try{finalOnEnd({cancelled:false,chunks:chunks.length});}catch(_){}}
         return;
@@ -600,13 +609,14 @@
       const current=index++;
       speak(chunks[current],{
         ...options,
+        continuationToken:sequence,
         onStart:current===0?firstOnStart:null,
         onEnd:({cancelled=false}={})=>{
           if(cancelled){
             if(finalOnEnd){try{finalOnEnd({cancelled:true,chunks:chunks.length});}catch(_){}}
             return;
           }
-          if(index<chunks.length)setTimeout(next,110);
+          if(index<chunks.length)longSpeechTimer=setTimeout(next,110);
           else if(finalOnEnd){try{finalOnEnd({cancelled:false,chunks:chunks.length});}catch(_){}}
         }
       });
@@ -614,16 +624,20 @@
     next();
     return true;
   };
-  const speak=(message,{voice=true,onStart=null,onEnd=null}={})=>{
+  const speak=(message,{voice=true,onStart=null,onEnd=null,continuationToken=null}={})=>{
     if(!bubble)return false;
     const text=String(message||'').trim();
     if(!text)return false;
 
-    stopSpeaking();
+    if(continuationToken===null)stopSpeaking();
+    else{
+      if(continuationToken!==longSpeechToken)return false;
+      stopCurrentSpeech();
+    }
     bubble.textContent=text;
     root.classList.add('adb-is-ready');
 
-    if(!voice||!preferences.sound){
+    if(!voice||!preferences.sound||pageSuspended){
       if(typeof onStart==='function'){
         try{onStart();}catch(error){console.error('AdımBot sessiz onStart hatası:',error);}
       }

@@ -220,6 +220,15 @@ if (!$enabled || !in_array($provider,['openai','groq','gemini'],true) || $model=
         'text'=>'AdımBot yapay zekâ bağlantısı henüz yapılandırılmamış. Profildeki diğer AdımBot özelliklerini kullanmaya devam edebilirsin.'
     ],503);
 }
+if (!function_exists('curl_init')) {
+    adimbot_ai_json(['ok'=>false,'message'=>'Sunucuda yapay zekâ bağlantısı için cURL etkin değil.','reason'=>'curl_missing'],500);
+}
+$modelInvalid=($provider==='gemini' && !preg_match('/^gemini-[A-Za-z0-9._-]+$/D',$model))
+    || ($provider==='groq' && (str_starts_with($model,'gemini-') || str_starts_with($model,'gpt-')))
+    || ($provider==='openai' && (str_starts_with($model,'gemini-') || str_starts_with($model,'llama-')));
+if ($modelInvalid) {
+    adimbot_ai_json(['ok'=>false,'message'=>'Seçilen model sohbet sağlayıcısıyla uyumlu değil.','reason'=>'provider_config_error'],500);
+}
 
 $now=time();
 $window=600;
@@ -302,10 +311,6 @@ $request=$provider==='gemini'
         ['role'=>'user','content'=>$input],
     ],'max_tokens'=>220]
     :['model'=>$model,'instructions'=>$instructions,'input'=>$input,'max_output_tokens'=>220]);
-
-if (!function_exists('curl_init')) {
-    adimbot_ai_json(['ok'=>false,'message'=>'Sunucuda yapay zekâ bağlantısı için cURL etkin değil.','reason'=>'curl_missing'],500);
-}
 
 $endpoint=match ($provider) {
     'groq'=>'https://api.groq.com/openai/v1/chat/completions',

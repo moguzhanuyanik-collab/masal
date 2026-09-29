@@ -185,7 +185,7 @@
 
   const sameOriginProvider = async request => {
     const controller=new AbortController();
-    const timeout=setTimeout(()=>controller.abort(),25000);
+    const timeout=setTimeout(()=>controller.abort(),45000);
 
     try{
       const csrf=String(window.ILKADIM_CSRF_TOKEN||'');
@@ -207,6 +207,10 @@
       try{payload=await response.json();}catch(_){}
 
       if(!payload||typeof payload!=='object'){
+        if(response.status===408||response.status===504)throw new Error('provider_timeout');
+        if(response.status===429)throw new Error('provider_rate_limit');
+        if(response.status===401||response.status===403)throw new Error('provider_auth_error');
+        if(response.status>=500)throw new Error('provider_unavailable');
         throw new Error('invalid_response');
       }
 
@@ -217,6 +221,7 @@
       return {text:String(payload.text||'')};
     }catch(error){
       if(error?.name==='AbortError')throw new Error('timeout');
+      if(error instanceof TypeError||navigator.onLine===false)throw new Error('provider_connection_error');
       throw error;
     }finally{
       clearTimeout(timeout);
