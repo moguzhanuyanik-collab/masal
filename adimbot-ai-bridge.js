@@ -38,6 +38,11 @@
 
   const stripMarkup = value => cleanText(String(value ?? '').replace(/<[^>]*>/g, ' '));
 
+  const childLength = value => {
+    const sentences=cleanText(value).split(/(?<=[.!?])\s+/u).filter(Boolean);
+    return sentences.length>4?sentences.slice(0,4).join(' '):sentences.join(' ');
+  };
+
   const redactPII = value => {
     let text = cleanText(value);
     text = text.replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, '[e-posta gizlendi]');
@@ -63,7 +68,7 @@
     /(?:whatsapp|instagram|telegram|discord|snapchat|buluş(?:alım|mak)|görüşelim|beni\s+ara|seni\s+arayayım|özelden\s+yaz)/i.test(text);
 
   const selfHarmRequest = text =>
-    /(?:intihar|kendimi\s+öldür|canıma\s+kıy|kendime\s+zarar|yaşamak\s+istemiyorum)/i.test(text);
+    /(?:intihar|kendi(?:mi|ni|ne)\s+öldür|canı(?:ma|na)\s+kıy|kendi(?:me|ne)\s+zarar|yaşamak\s+isteme)/i.test(text);
 
   const unsafeRequest = text =>
     /(?:uyuşturucu|silah\s+yap|bomba\s+yap|birini\s+öldür|cinsel\s+ilişki|çıplak\s+foto)/i.test(text);
@@ -157,6 +162,8 @@
       return {blocked:true, reason:'privacy'};
     }
     if (contactRequest(value)) return {blocked:true, reason:'contact'};
+    if (selfHarmRequest(value)) return {blocked:true, reason:'self_harm'};
+    if (unsafeRequest(value)) return {blocked:true, reason:'unsafe'};
     if (/(?:doğru\s+(?:cevap|şık)|cevap\s+[A-D]\s*şıkkı|cevap\s*[:\-]\s*[A-D])/i.test(value)) {
       return {blocked:true, reason:'answer_key'};
     }
@@ -171,7 +178,7 @@
         ? String(value.text ?? value.message ?? '')
         : '';
 
-    const text = truncate(redactPII(stripMarkup(raw)), POLICY.maxOutputChars);
+    const text = truncate(childLength(redactPII(stripMarkup(raw))), POLICY.maxOutputChars);
     const check = responseViolatesPolicy(text);
 
     if (!check.blocked) {
@@ -180,6 +187,10 @@
 
     const fallback = check.reason === 'privacy'
       ? SAFE_MESSAGES.privacy
+      : check.reason === 'self_harm'
+        ? SAFE_MESSAGES.selfHarm
+        : check.reason === 'unsafe'
+          ? SAFE_MESSAGES.unsafe
       : check.reason === 'contact' || check.reason === 'external_link'
         ? SAFE_MESSAGES.contact
         : check.reason === 'answer_key'
@@ -298,6 +309,7 @@
       else if(reason==='provider_timeout')text='AdımBot yanıtı zamanında gelmedi. Biraz sonra tekrar deneyebilirsin.';
       else if(reason==='provider_connection_error')text='AdımBot yapay zekâ hizmetine bağlanamadı. İnternet bağlantısını kontrol edip tekrar deneyebilirsin.';
       else if(reason==='provider_unavailable')text='AdımBot yapay zekâ hizmeti şu anda meşgul. Biraz sonra tekrar deneyebilirsin.';
+      else if(reason==='provider_incomplete')text='AdımBot yanıtı tamamlanmadan kesildi. Sorunu yeniden gönderebilirsin.';
       else if(reason==='invalid_provider_response'||reason==='invalid_response')text='AdımBot yanıtı okunamadı. Biraz sonra tekrar deneyebilirsin.';
       else if(reason==='curl_missing')text='AdımBot bağlantısı sunucuda hazır değil. Lütfen yöneticine haber ver.';
       else if(reason==='csrf'||reason==='csrf_missing'||reason==='auth')text='Oturum doğrulaması yenilenmeli. Sayfayı yenileyip tekrar deneyebilirsin.';

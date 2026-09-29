@@ -65,7 +65,12 @@ function aa_test_provider(string $provider,string $model,string $apiKey): string
     if($status<200 || $status>=300) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcı geçici olarak yanıt veremedi; önceki ayarlar korundu.');
     $decoded=is_string($body)?json_decode($body,true):null;
     unset($body);
-    if(!is_array($decoded) || aa_provider_test_text($provider,$decoded)==='') throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcı geçerli bir sohbet yanıtı üretmedi; önceki ayarlar korundu.');
+    if(!is_array($decoded) || isset($decoded['error'])) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcı geçerli bir sohbet yanıtı üretmedi; önceki ayarlar korundu.');
+    $incomplete=($provider==='groq' && (string)($decoded['choices'][0]['finish_reason']??'')==='length')
+        || ($provider==='gemini' && (string)($decoded['candidates'][0]['finishReason']??'')==='MAX_TOKENS')
+        || ($provider==='openai' && ((string)($decoded['status']??'')==='incomplete' || isset($decoded['incomplete_details'])));
+    if($incomplete) throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcının test yanıtı tamamlanmadan kesildi; önceki ayarlar korundu.');
+    if(aa_provider_test_text($provider,$decoded)==='') throw new RuntimeException('Aday ayarlar uygulanmadı: sağlayıcı geçerli bir sohbet yanıtı üretmedi; önceki ayarlar korundu.');
     return 'Bağlantı testi başarılı: '.strtoupper($provider).' anahtarı ve '.$model.' modeli doğrulandı.';
 }
 function aa_test_voice_provider(string $provider,string $model,string $apiKey): string {

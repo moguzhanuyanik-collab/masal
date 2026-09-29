@@ -74,7 +74,7 @@ function adimbot_ai_extract_gemini_text(array $response): string {
 }
 
 function adimbot_ai_input_safety(string $text): ?array {
-    if (preg_match('/(?:intihar|kendimi\s+öldür|canıma\s+kıy|kendime\s+zarar|yaşamak\s+istemiyorum)/iu',$text)) {
+    if (preg_match('/(?:intihar|kendi(?:mi|ni|ne)\s+öldür|canı(?:ma|na)\s+kıy|kendi(?:me|ne)\s+zarar|yaşamak\s+isteme)/iu',$text)) {
         return ['reason'=>'self_harm','text'=>'Bunu tek başına taşıma. Hemen yanında güvendiğin bir yetişkine, ailenden birine veya öğretmenine haber ver.'];
     }
     if (adimbot_ai_privacy_request($text)) {
@@ -113,6 +113,12 @@ function adimbot_ai_safe_output(string $text, bool $hasActiveQuestion=false): ar
     }
     if (preg_match('/(?:https?:\/\/|www\.|whatsapp|instagram|telegram|discord|snapchat|özelden\s+yaz|buluşalım)/iu',$value)) {
         return ['ok'=>false,'text'=>'Seni başka bir uygulamaya veya kişiye yönlendirmeyeceğim. Burada dersine yardımcı olabilirim.','reason'=>'external_contact'];
+    }
+    if (preg_match('/(?:intihar|kendi(?:mi|ni|ne)\s+öldür|canı(?:ma|na)\s+kıy|kendi(?:me|ne)\s+zarar|yaşamak\s+isteme)/iu',$value)) {
+        return ['ok'=>false,'text'=>'Bu konuda hemen yanında güvendiğin bir yetişkinden yardım istemelisin. Yalnız kalma ve ailene ya da öğretmenine haber ver.','reason'=>'self_harm'];
+    }
+    if (preg_match('/(?:uyuşturucu|bomba\s+yap|silah\s+yap|birini\s+öldür|cinsel\s+ilişki|çıplak\s+foto)/iu',$value)) {
+        return ['ok'=>false,'text'=>'Bu konu yaşına uygun değil. Yanında güvendiğin bir yetişkinden yardım isteyebilir veya dersine geri dönebilirsin.','reason'=>'unsafe'];
     }
     if (preg_match('/(?:doğru\s+(?:cevap|şık)|cevap\s+[A-D]\s*şıkkı|cevap\s*[:\-]\s*[A-D])/iu',$value)) {
         return ['ok'=>false,'text'=>'Cevabı doğrudan söylemeyeyim. Bir ipucu vereyim ve birlikte düşünelim.','reason'=>'answer_key'];
@@ -359,6 +365,9 @@ $decoded=json_decode($responseBody,true);
 if (!is_array($decoded)) {
     adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ yanıtı okunamadı.','reason'=>'invalid_provider_response'],502);
 }
+if (isset($decoded['error'])) {
+    adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ sağlayıcısı isteği tamamlayamadı.','reason'=>'provider_error'],502);
+}
 
 $providerBlocked=($provider==='gemini' && (
         trim((string)($decoded['promptFeedback']['blockReason'] ?? ''))!==''
@@ -373,6 +382,12 @@ if ($providerBlocked) {
         'reason'=>'provider_safety',
         'text'=>'Bu konuya güvenli biçimde yanıt veremem. İstersen dersine uygun başka bir soruyu birlikte düşünelim.'
     ]);
+}
+$providerIncomplete=($provider==='gemini' && (string)($decoded['candidates'][0]['finishReason'] ?? '')==='MAX_TOKENS')
+    || ($provider==='groq' && (string)($decoded['choices'][0]['finish_reason'] ?? '')==='length')
+    || ($provider==='openai' && ((string)($decoded['status'] ?? '')==='incomplete' || isset($decoded['incomplete_details'])));
+if ($providerIncomplete) {
+    adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ yanıtı tamamlanmadan kesildi.','reason'=>'provider_incomplete'],502);
 }
 
 $text=match ($provider) {

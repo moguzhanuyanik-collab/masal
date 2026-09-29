@@ -70,6 +70,7 @@
     provider_timeout:'Sesin yazıya çevrilmesi uzun sürdü. Tekrar deneyebilirsin.',
     provider_connection_error:'Ses sağlayıcısına bağlanılamadı. İnternet bağlantısını kontrol et.',
     provider_unavailable:'Ses sağlayıcısı şu anda meşgul. Biraz sonra tekrar dene.',
+    provider_incomplete:'Ses yazıya çevrilirken yanıt yarım kaldı. Mikrofona dokunup tekrar söyle.',
     format:'Bu cihazın ses kayıt biçimi desteklenmedi. Tarayıcı yöntemini seçebilir veya yazabilirsin.',
     size:'Kayıt çok kısa veya büyük. En fazla 15 saniye konuş.',
     empty:'Ses anlaşılmadı. Mikrofona daha yakın konuşup tekrar dene.',
@@ -93,7 +94,7 @@
     return 'provider_error';
   };
 
-  const retryableChatReasons=new Set(['timeout','provider_timeout','provider_connection_error','provider_unavailable','provider_error','invalid_provider_response','invalid_response']);
+  const retryableChatReasons=new Set(['timeout','provider_timeout','provider_connection_error','provider_unavailable','provider_incomplete','provider_error','invalid_provider_response','invalid_response']);
 
   const microphoneStartMessage=error=>{
     const name=String(error?.name||'');

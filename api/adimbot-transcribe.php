@@ -87,8 +87,12 @@ if ($status>=500) voice_result(['ok'=>false,'reason'=>'provider_unavailable'],50
 if ($status<200 || $status>=300 || !is_string($body)) voice_result(['ok'=>false,'reason'=>'provider_error'],502);
 $decoded=json_decode($body,true);
 if (!is_array($decoded)) voice_result(['ok'=>false,'reason'=>'invalid_provider_response'],502);
+if (isset($decoded['error'])) voice_result(['ok'=>false,'reason'=>'provider_error'],502);
 $providerBlocked=$provider==='gemini' && (trim((string)($decoded['promptFeedback']['blockReason'] ?? ''))!=='' || in_array((string)($decoded['candidates'][0]['finishReason'] ?? ''),['SAFETY','PROHIBITED_CONTENT','BLOCKLIST'],true));
 if ($providerBlocked) voice_result(['ok'=>false,'reason'=>'provider_safety'],422);
+$geminiFinish=$provider==='gemini' ? (string)($decoded['candidates'][0]['finishReason'] ?? '') : '';
+if ($geminiFinish==='MAX_TOKENS') voice_result(['ok'=>false,'reason'=>'provider_incomplete'],502);
+if ($geminiFinish!=='' && !in_array($geminiFinish,['STOP','FINISH_REASON_UNSPECIFIED'],true)) voice_result(['ok'=>false,'reason'=>'provider_error'],502);
 $text=$decoded['text'] ?? '';
 if ($provider==='gemini') {
     $parts=$decoded['candidates'][0]['content']['parts'] ?? [];
@@ -99,7 +103,7 @@ if ($provider==='gemini') {
 }
 if (!is_string($text)) $text='';
 $text=trim(preg_replace('/\s+/u',' ',strip_tags($text)) ?? '');
-$text=preg_replace('/^(?:transkripsiyon|deşifre|metin)\s*[:\-]\s*/iu','',$text) ?? $text;
+$text=preg_replace('/^(?:(?:elbette|tabii)[,.!]?\s*)?(?:transkripsiyon|deşifre|metin|duyduğum\s+metin)\s*[:\-]\s*/iu','',$text) ?? $text;
 $text=trim($text," \t\n\r\0\x0B\"'“”‘’");
 if (mb_strlen($text)>400) $text=mb_substr($text,0,400);
 if ($text==='' || preg_match('/^(?:\[(?:müzik|sessizlik|anlaşılmayan ses)\]|(?:ses|konuşma) (?:algılanmadı|bulunamadı))\.?$/iu',$text) || !preg_match('/[\pL\pN]{2}/u',$text)) voice_result(['ok'=>false,'reason'=>'empty'],422);
