@@ -153,6 +153,33 @@
     .replace(/^şimdi\s+sıra\s+sende\s*[!:.\-–—]*\s*/i,'')
     .trim();
 
+  const hintContentSelector=[
+    '.hint-card','.hint-box','.tip-card','.tip-box','.question-hint',
+    '.hint-content','.hint-text','.tip-content','.question-hint-content',
+    '.teacher-hint','.teacher-explanation','.lesson-hint','.lesson-tip',
+    '[data-hint]','[data-hint-content]','[data-role="hint"]',
+    '[class*="hint" i]','[class*="ipucu" i]',
+    '[id*="hint" i]','[id*="ipucu" i]','[aria-label*="ipucu" i]'
+  ].join(',');
+  const hintReadableSelector=[
+    '.hint-card','.hint-box','.tip-card','.tip-box','.question-hint',
+    '.hint-content','.hint-text','.tip-content','.question-hint-content',
+    '.teacher-hint','.teacher-explanation','.lesson-hint','.lesson-tip',
+    '[data-hint]','[data-hint-content]','[data-role="hint"]',
+    '[class*="ipucu" i]','[id*="ipucu" i]'
+  ].join(',');
+
+  const removeHintContent=clone=>{
+    if(!(clone instanceof Element))return clone;
+    clone.querySelectorAll?.(hintContentSelector).forEach(el=>el.remove());
+    const hintLabel=/^(?:(?:mina(?:\s+öğretmen(?:im)?)?\s+)?(?:bir\s+)?ipucu|düşünme\s+ipucu)\s*[:.!?–—-]?\s*/i;
+    clone.querySelectorAll?.('*').forEach(el=>{
+      if(!clone.contains(el))return;
+      if(hintLabel.test(clean(el.textContent)))el.remove();
+    });
+    return clone;
+  };
+
   const optionSpeechText=(option,index)=>{
     if(!(option instanceof Element))return '';
     const letter=optionPrefix(index);
@@ -172,12 +199,12 @@
     const directSelector='[data-question-text],.question-text,.question-title,.question-prompt,.question-stem,.prompt';
     const direct=question.matches?.(directSelector)?question:question.querySelector?.(directSelector);
     if(direct){
-      const value=stripReadingLabels(direct.textContent);
+      const value=stripReadingLabels(removeHintContent(direct.cloneNode(true)).textContent);
       if(value)return value;
     }
 
-    const clone=question.cloneNode(true);
-    clone.querySelectorAll?.('.answers,.teacher-option,.feedback,.game-feedback,.hint-card,.hint-box,.tip-card,.tip-box,.question-hint,[data-hint],form,button,input,select,textarea,svg').forEach(el=>el.remove());
+    const clone=removeHintContent(question.cloneNode(true));
+    clone.querySelectorAll?.('.answers,.teacher-option,.feedback,.game-feedback,form,button,input,select,textarea,svg').forEach(el=>el.remove());
     return stripReadingLabels(clone.textContent);
   };
 
@@ -322,6 +349,14 @@
   };
 
   const markHintReadables=rootScope=>{
+    rootScope.querySelectorAll?.(hintReadableSelector).forEach(hint=>{
+      if(hint.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
+      const value=stripReadingLabels(hint.textContent);
+      if(!value)return;
+      hint.setAttribute('data-adimbot-read','text');
+      hint.setAttribute('data-adimbot-text',value);
+    });
+
     rootScope.querySelectorAll?.('#screen button,#screen summary,#screen h1,#screen h2,#screen h3,#screen h4,#screen strong,#screen [data-hint-trigger]').forEach(trigger=>{
       if(trigger.closest('[data-adimbot-student],[data-adimbot-ignore]'))return;
       const label=clean(trigger.getAttribute('aria-label')||trigger.textContent).toLocaleLowerCase('tr-TR');
@@ -648,8 +683,17 @@
     const target=e.target;
     if(!(target instanceof Element)||!canSpeak())return;
 
+    // Hint controls have their own reader. Do not also read the enclosing
+    // lesson/question card when the student taps a hint or its text.
+    if(target.closest('[data-adimbot-hint-trigger]'))return;
+    const hintContent=target.closest(hintContentSelector);
+    if(hintContent){
+      const hintReadable=target.closest('[data-adimbot-read]');
+      if(!hintReadable||!hintContent.contains(hintReadable))return;
+    }
+
     const question=target.closest('[data-adimbot-question-read]');
-    if(question&&!target.closest('button,input,select,textarea,label,.answers,.teacher-option,form,.feedback,.game-feedback,[data-adimbot-hint-trigger]')){
+    if(question&&!target.closest('button,input,select,textarea,label,.answers,.teacher-option,form,.feedback,.game-feedback,'+hintContentSelector)){
       e.preventDefault();
       e.stopImmediatePropagation();
       const text=stripReadingLabels(question.getAttribute('data-adimbot-text'))||questionSpeechText(question);
