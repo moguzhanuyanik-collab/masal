@@ -29,10 +29,12 @@ $ai=is_array($config['ai']??null)?$config['ai']:[];
 $aiEnabled=(bool)($ai['enabled']??false);
 $aiProvider=trim((string)($ai['provider']??''));
 $aiModel=trim((string)($ai['model']??''));
-$aiKey=$aiProvider==='groq'
-    ?trim((string)(getenv('GROQ_API_KEY')?:($ai['groq_api_key']??'')))
-    :trim((string)(getenv('OPENAI_API_KEY')?:($ai['api_key']??'')));
-$aiOk=$aiEnabled && in_array($aiProvider,['openai','groq'],true) && $aiModel!=='' && $aiKey!=='';
+$aiKey=match ($aiProvider) {
+    'groq'=>trim((string)(getenv('GROQ_API_KEY')?:($ai['groq_api_key']??''))),
+    'gemini'=>trim((string)(getenv('GEMINI_API_KEY')?:($ai['gemini_api_key']??''))),
+    default=>trim((string)(getenv('OPENAI_API_KEY')?:($ai['api_key']??''))),
+};
+$aiOk=$aiEnabled && in_array($aiProvider,['openai','groq','gemini'],true) && $aiModel!=='' && $aiKey!=='';
 
 $checks=[
     ['name'=>'Veritabanı','detail'=>'MySQL bağlantısı ve basit sorgu','status'=>sd_status($databaseOk,'Hazır','Bağlantı kurulamadı')],

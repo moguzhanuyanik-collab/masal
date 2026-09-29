@@ -249,6 +249,9 @@ html.adb-chat-open,html.adb-chat-open body{overflow:hidden}
 .adb-chat-form input{flex:1;min-width:0;border:1px solid #d8e3ef;border-radius:12px;padding:10px 11px;font:700 11px/1.2 inherit;color:#263a52;background:#fff}
 .adb-chat-form button{border:0;border-radius:12px;padding:10px 13px;background:#289ed8;color:#fff;font:900 11px/1 inherit;cursor:pointer}
 .adb-chat-form button:disabled,.adb-chat-form input:disabled{opacity:.6;cursor:default}
+.adb-chat-form .adb-chat-microphone{min-width:38px;padding:9px;background:#e9f7fc;color:#17688c;font-size:17px}
+.adb-chat-form .adb-chat-microphone[aria-pressed="true"]{background:#ffe7e7;color:#a93232}
+.adb-chat-form .adb-chat-microphone[hidden]{display:none}
 .adb-chat-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 14px 9px;background:#fff;color:#8794a5;font-size:9px}
 .adb-chat-meta>small:first-child{white-space:nowrap}
 .adb-chat-status{display:block;min-height:12px;color:#7d8a9a;font-size:9.5px;text-align:right}

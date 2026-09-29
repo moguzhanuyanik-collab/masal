@@ -10,6 +10,21 @@
   let modal=null;
   let chatBusy=false;
   let lastTrigger=null;
+  let voiceSession=null;
+  let voiceGeneration=0;
+
+  const stopVoice=(discard=false)=>{
+    const session=voiceSession;
+    voiceSession=null;
+    if(discard)voiceGeneration++;
+    if(!session)return;
+    clearTimeout(session.timer);
+    try{session.recognition?.stop();}catch(_){}
+    try{if(session.recorder?.state==='recording')session.recorder.stop();}catch(_){}
+    session.stream?.getTracks().forEach(track=>track.stop());
+    const mic=modal?.querySelector('[data-adimbot-microphone]');
+    if(mic){mic.textContent='🎤';mic.setAttribute('aria-label','Mikrofonla sor');mic.setAttribute('aria-pressed','false');}
+  };
 
   const clean=value=>String(value??'').replace(/\s+/g,' ').trim();
 
@@ -308,6 +323,7 @@
       '</div>',
       '<form class="adb-chat-form" data-adimbot-chat-form>',
       '<input type="text" maxlength="400" autocomplete="off" enterkeyhint="send" placeholder="AdımBot’a bir şey sor..." data-adimbot-chat-input>',
+      '<button type="button" class="adb-chat-microphone" data-adimbot-microphone aria-label="Mikrofonla sor" aria-pressed="false">🎤</button>',
       '<button type="submit">Gönder</button>',
       '</form>',
       '<div class="adb-chat-meta"><small data-adimbot-chat-counter>0 / 400</small><small class="adb-chat-status" data-adimbot-chat-status></small></div>',
@@ -321,7 +337,84 @@
     const input=modal.querySelector('[data-adimbot-chat-input]');
     const status=modal.querySelector('[data-adimbot-chat-status]');
     const counter=modal.querySelector('[data-adimbot-chat-counter]');
+    const mic=modal.querySelector('[data-adimbot-microphone]');
     const contextBadge=modal.querySelector('[data-adimbot-chat-context]');
+    const voiceConfig=window.ADIMBOT_VOICE_CONFIG||{enabled:false,input:'browser'};
+    if(mic)mic.hidden=!voiceConfig.enabled;
+    if(voiceConfig.enabled)mic.title=voiceConfig.input==='browser'?'Tarayıcı ses tanımayı kullanır':'Ses kaydı seçilen yapay zekâ sağlayıcısına gönderilir';
+    if(voiceConfig.enabled){
+      const description=modal.querySelector('#adb-chat-desc');
+      if(description)description.textContent=voiceConfig.input==='browser'
+        ?'Mikrofona dokunup sorunu söyle; cihazın ses tanıması kullanılır.'
+        :'Mikrofona dokunup sorunu söyle; kısa ses kaydı seçilen sağlayıcıya gönderilir.';
+    }
+    const recognized=text=>{
+      if(modal.hidden||chatBusy)return;
+      input.value=clean(text).slice(0,400);
+      input.dispatchEvent(new Event('input',{bubbles:true}));
+      if(input.value)form.requestSubmit();
+      else if(status)status.textContent='Ses anlaşılmadı. Tekrar deneyebilirsin.';
+    };
+    mic?.addEventListener('click',async()=>{
+      if(!voiceConfig.enabled||chatBusy)return;
+      if(voiceSession){stopVoice();return;}
+      if(!navigator.onLine){status.textContent='Sesli sohbet için internet bağlantısı gerekli.';return;}
+      try{window.AdimBotStudent?.stop?.();}catch(_){}
+      const generation=++voiceGeneration;
+      const selected=voiceConfig.input||'browser';
+      const BrowserRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+      if(selected==='browser'){
+        if(!BrowserRecognition){status.textContent='Bu cihazda mikrofonla yazma desteklenmiyor. Sorunu yazarak gönderebilirsin.';return;}
+        try{
+          const recognition=new BrowserRecognition();
+          recognition.lang='tr-TR';recognition.interimResults=false;recognition.maxAlternatives=1;
+          voiceSession={recognition,timer:setTimeout(()=>stopVoice(),16000)};
+          mic.textContent='⏹';mic.setAttribute('aria-label','Dinlemeyi bitir');mic.setAttribute('aria-pressed','true');
+          status.textContent='Dinliyorum… Konuşunca sorunu göndereceğim.';
+          recognition.onresult=event=>{
+            if(generation!==voiceGeneration)return;
+            const transcript=event.results?.[0]?.[0]?.transcript||'';
+            stopVoice();recognized(transcript);
+          };
+          recognition.onerror=()=>{if(generation===voiceGeneration){stopVoice();status.textContent='Mikrofon dinleyemedi. İzinleri kontrol edip tekrar dene.';}};
+          recognition.onend=()=>{if(generation===voiceGeneration&&voiceSession?.recognition===recognition)stopVoice();};
+          recognition.start();
+        }catch(_){stopVoice(true);status.textContent='Mikrofon başlatılamadı. Tarayıcı iznini kontrol et.';}
+        return;
+      }
+      if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){status.textContent='Bu cihazda ses kaydı desteklenmiyor. Tarayıcı yöntemini seçebilir veya sorunu yazabilirsin.';return;}
+      let stream;
+      try{
+        stream=await navigator.mediaDevices.getUserMedia({audio:true});
+        if(generation!==voiceGeneration||modal.hidden){stream.getTracks().forEach(track=>track.stop());return;}
+        const mime=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].find(type=>MediaRecorder.isTypeSupported(type));
+        if(!mime)throw new Error('format');
+        const recorder=new MediaRecorder(stream,{mimeType:mime});
+        const chunks=[];
+        voiceSession={recorder,stream,timer:setTimeout(()=>stopVoice(),15000)};
+        mic.textContent='⏹';mic.setAttribute('aria-label','Konuşmayı bitir');mic.setAttribute('aria-pressed','true');
+        status.textContent='Dinliyorum… Bitirince kare düğmeye dokun.';
+        recorder.ondataavailable=event=>{if(event.data.size)chunks.push(event.data);};
+        recorder.onstop=async()=>{
+          stream.getTracks().forEach(track=>track.stop());
+          if(generation!==voiceGeneration||modal.hidden)return;
+          const blob=new Blob(chunks,{type:mime});
+          if(blob.size<100||blob.size>1600000){status.textContent='Kayıt çok kısa veya büyük. En fazla 15 saniye konuş.';return;}
+          status.textContent='Konuşman yazıya çevriliyor…';
+          try{
+            const data=new FormData();data.append('audio',blob,'speech.'+(mime.includes('mp4')?'m4a':mime.includes('ogg')?'ogg':'webm'));
+            const response=await fetch('api/adimbot-transcribe.php',{method:'POST',credentials:'same-origin',headers:{'X-CSRF-Token':String(window.ILKADIM_CSRF_TOKEN||'')},body:data});
+            const result=await response.json();
+            if(generation!==voiceGeneration||modal.hidden)return;
+            if(!response.ok||!result.ok)throw new Error(result.reason||'provider_error');
+            recognized(result.text);
+          }catch(error){
+            if(generation===voiceGeneration&&!modal.hidden)status.textContent=error.message==='provider_rate_limit'||error.message==='rate_limit'?'Sesli kullanım sınırına ulaşıldı. Biraz sonra tekrar dene.':'Ses yazıya çevrilemedi. Mikrofon ve sağlayıcı ayarlarını kontrol edin.';
+          }
+        };
+        recorder.start();
+      }catch(_){stream?.getTracks().forEach(track=>track.stop());stopVoice(true);status.textContent='Mikrofon başlatılamadı. İzni ve cihaz desteğini kontrol et.';}
+    });
 
     const syncConnection=()=>{
       if(!status)return;
@@ -432,6 +525,7 @@
 
     form?.addEventListener('submit',async event=>{
       event.preventDefault();
+      if(voiceSession)stopVoice(true);
       if(chatBusy)return;
 
       refreshTogetherButton();
@@ -525,6 +619,7 @@
 
   const close=()=>{
     if(!modal)return true;
+    stopVoice(true);
     modal.hidden=true;
     modal.removeAttribute('aria-busy');
     document.documentElement.classList.remove('adb-chat-open');
@@ -563,6 +658,7 @@
   });
 
   window.addEventListener('hashchange',()=>setTimeout(captureContext,80));
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)stopVoice(true);});
   document.addEventListener('DOMContentLoaded',()=>setTimeout(captureContext,80),{once:true});
   setTimeout(captureContext,80);
 

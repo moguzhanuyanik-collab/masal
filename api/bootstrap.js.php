@@ -352,6 +352,11 @@ echo 'window.ILKADIM_CURRENT_STUDENT_ID='.json_encode($studentId,$flags).";\n";
 echo 'window.ILKADIM_CURRENT_GRADE='.json_encode($studentGrade,$flags).";\n";
 echo 'window.ILKADIM_CURRENT_EDUCATION_STAGE='.json_encode($educationStage,$flags).";\n";
 echo 'window.ILKADIM_CSRF_TOKEN='.json_encode(csrf_token(),$flags).";\n";
+$voiceAi=(require $root.'/config/app.php')['ai'] ?? [];
+echo 'window.ADIMBOT_VOICE_CONFIG='.json_encode([
+    'enabled'=>($voiceAi['enabled'] ?? true)!==false && ($voiceAi['voice_enabled'] ?? true)!==false,
+    'input'=>in_array($voiceAi['voice_input'] ?? 'browser',['browser','groq','gemini'],true)?$voiceAi['voice_input']:'browser',
+],$flags).";\n";
 echo 'window.ILKADIM_DB_CONNECTED='.($dbConnected?'true':'false').";\n";
 echo 'window.ILKADIM_DB_ERROR='.json_encode($error,$flags).";\n";
 echo 'window.ILKADIM_DB_SUMMARY='.json_encode($summary,$flags).";\n";
