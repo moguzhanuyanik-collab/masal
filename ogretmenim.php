@@ -69,10 +69,10 @@ function ois_icon(string $type): string {
 <link rel="stylesheet" href="ogretmenim.css?v=1.0.48">
 <link rel="stylesheet" href="adimbot-student.css?v=1.1.56">
 <script src="api/bootstrap.js.php?v=1.1.56" defer></script>
-<script src="adimbot-student.js?v=1.1.21" defer></script>
+<script src="adimbot-student.js?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-student.js'),0,16)?>" defer></script>
 <script src="global-audio-feedback.js?v=1.1.55" defer></script>
-<script src="adimbot-ai-bridge.js?v=1.1.52" defer></script>
-<script src="adimbot-chat-ui.js?v=1.1.57" defer></script>
+<script src="adimbot-ai-bridge.js?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-ai-bridge.js'),0,16)?>" defer></script>
+<script src="adimbot-chat-ui.js?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-chat-ui.js'),0,16)?>" defer></script>
 </head>
 <body>
 <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

@@ -269,13 +269,12 @@ $apiKey=match ($provider) {
 $model=trim((string)($ai['model'] ?? 'gpt-6-astra'));
 $timeout=max(5,min(40,(int)($ai['timeout_seconds'] ?? 20)));
 
-if (!$enabled || !in_array($provider,['openai','groq','gemini'],true) || $model==='' || $apiKey==='' || adimbot_ai_placeholder_key($apiKey)) {
-    adimbot_ai_json([
-        'ok'=>false,
-        'configured'=>false,
-        'reason'=>'provider_disabled',
-        'text'=>'AdımBot yapay zekâ bağlantısı henüz yapılandırılmamış. Profildeki diğer AdımBot özelliklerini kullanmaya devam edebilirsin.'
-    ],503);
+$configurationReason = !$enabled ? 'ai_disabled'
+    : (!in_array($provider,['openai','groq','gemini'],true) ? 'provider_invalid'
+    : ($model==='' ? 'model_missing'
+    : ($apiKey==='' || adimbot_ai_placeholder_key($apiKey) ? 'api_key_missing' : '')));
+if ($configurationReason!=='') {
+    adimbot_ai_json(['ok'=>false,'configured'=>false,'reason'=>$configurationReason],503);
 }
 if (!function_exists('curl_init')) {
     adimbot_ai_json(['ok'=>false,'message'=>'Sunucuda yapay zekâ bağlantısı için cURL etkin değil.','reason'=>'curl_missing'],500);

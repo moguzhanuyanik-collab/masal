@@ -319,6 +319,9 @@
       else if(reason==='rate_limit')text='AdımBot biraz dinlensin. Birkaç dakika sonra tekrar deneyebilirsin.';
       else if(reason==='provider_rate_limit')text='AdımBot kullanım sınırına ulaştı. Biraz sonra tekrar deneyebilirsin.';
       else if(reason==='provider_disabled')text=SAFE_MESSAGES.unavailable;
+      else if(reason==='ai_disabled')text='AdımBot sohbeti ayarlardan kapalı. Yöneticinin sohbeti açması gerekiyor.';
+      else if(reason==='api_key_missing')text='AdımBot için seçilen hizmetin API anahtarı eksik. Yöneticinin bağlantı ayarını tamamlaması gerekiyor.';
+      else if(reason==='model_missing'||reason==='provider_invalid')text='AdımBot hizmeti veya modeli seçilmemiş. Yöneticinin bağlantı ayarını tamamlaması gerekiyor.';
       else if(reason==='provider_auth_error'||reason==='provider_config_error')text='AdımBot ayarlarında bir sorun var. Lütfen yöneticine haber ver.';
       return Object.freeze({
         ok:false,

@@ -57,6 +57,8 @@ if (is_file($localFile)) {
 
 $adimbotSettingsFile = dirname(__DIR__) . '/storage/adimbot-ai.php';
 if (is_file($adimbotSettingsFile)) {
+    // Panel settings are mutable even when OPcache timestamp validation is disabled.
+    if (function_exists('opcache_invalidate')) @opcache_invalidate($adimbotSettingsFile, true);
     $adimbotSettings = require $adimbotSettingsFile;
     if (is_array($adimbotSettings)) {
         $defaults['ai'] = array_replace($defaults['ai'], $adimbotSettings);

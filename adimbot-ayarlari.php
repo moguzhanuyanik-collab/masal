@@ -206,6 +206,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             fclose($lock);
         }
         if(($_POST['action']??'save')==='save_test'){
+            if(!$enabled) throw new RuntimeException('Bağlantıyı etkinleştirmek için AdımBot AI yanıtları açık kutusunu işaretleyip tekrar test edin. Kapalı ayarlar uygulanmadı.');
             $testKey=match($provider){
                 'groq'=>trim((string)($groqKey!==''?$groqKey:getenv('GROQ_API_KEY'))),
                 'gemini'=>trim((string)($geminiKey!==''?$geminiKey:getenv('GEMINI_API_KEY'))),
@@ -239,7 +240,9 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             flock($lock,LOCK_UN);
             fclose($lock);
         }
+        if(function_exists('opcache_invalidate')) @opcache_invalidate($settingsFile,true);
         $message='AdımBot ayarları kaydedildi.';
+        if(!$enabled) $message.=' Dikkat: Yapay zekâ sohbeti kapalı; robot sağlayıcıya soru göndermez.';
         if(isset($testMessage)) $message.=' '.$testMessage;
         if(isset($voiceTestMessage)) $message.=' '.$voiceTestMessage;
         $config=require __DIR__.'/config/app.php';
