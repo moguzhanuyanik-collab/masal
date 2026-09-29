@@ -624,6 +624,13 @@
     });
     return chunks;
   };
+  // Sentence pauses belong to the speech sequence, so Stop cancels them too.
+  const speechPauseAfter=text=>{
+    const ending=String(text||'').trim();
+    if(/[.!?…][”’"')\]]*$/.test(ending))return 240;
+    if(/[,;:][”’"')\]]*$/.test(ending))return 140;
+    return 60;
+  };
   const speakLong=(message,options={})=>{
     const chunks=speechChunks(message);
     if(!chunks.length)return false;
@@ -648,7 +655,7 @@
             if(finalOnEnd){try{finalOnEnd({cancelled:true,chunks:chunks.length});}catch(_){}}
             return;
           }
-          if(index<chunks.length)longSpeechTimer=setTimeout(next,110);
+          if(index<chunks.length)longSpeechTimer=setTimeout(next,speechPauseAfter(chunks[current]));
           else if(finalOnEnd){try{finalOnEnd({cancelled:false,chunks:chunks.length});}catch(_){}}
         }
       });
@@ -697,7 +704,8 @@
     activeUtterance=utterance;
     utterance.lang='tr-TR';
     utterance.rate=preferences.rate;
-    utterance.pitch=1.04;
+    // Preserve the selected voice's natural pitch; rate remains user-controlled.
+    utterance.pitch=1;
     utterance.volume=1;
 
     const selectedVoice=pickTurkishVoice();
@@ -719,7 +727,7 @@
       if(activeSpeechToken!==token||activeUtterance!==utterance||!mouth)return;
       const charIndex=Number.isFinite(event.charIndex)?event.charIndex:0;
       const remaining=utterance.text.slice(charIndex);
-      const word=(remaining.match(/^[^\\s.,!?;:]+/)||[''])[0];
+      const word=(remaining.match(/^[^\s.,!?;:]+/)||[''])[0];
       if(!word)return;
 
       tuneMouthForWord(word,charIndex);
