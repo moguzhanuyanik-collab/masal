@@ -10,6 +10,7 @@ $config=require __DIR__.'/config/app.php';
 $updateConfig=is_array($config['update']??null)?$config['update']:[];
 $mysqldumpPath=find_mysqldump_binary($updateConfig);
 $dbBackupReady=function_exists('proc_open') && is_string($mysqldumpPath) && $mysqldumpPath!=='';
+$packageLimits=update_package_limits($updateConfig);
 
 function sd_h(string $value): string {
     return htmlspecialchars($value,ENT_QUOTES,'UTF-8');
@@ -47,7 +48,15 @@ $managedManifestReady=is_file(__DIR__.'/storage/updates/managed-files.json') || 
 $recoveryPath=__DIR__.'/storage/backups/recovery.json';
 $recoveryData=is_file($recoveryPath)?json_decode((string)file_get_contents($recoveryPath),true):null;
 $recoveryStatus=is_array($recoveryData)?trim((string)($recoveryData['status']??'')):'';
+$recoveryStage=is_array($recoveryData)?trim((string)($recoveryData['failure_stage']??($recoveryData['stage']??''))):'';
 $recoveryReady=$recoveryStatus!=='';
+$recoveryHealthy=$recoveryStatus==='update_completed';
+$recoveryLabel=match($recoveryStatus){
+    'update_completed'=>'Tamamlandı',
+    'preparing','application_backup_ready','ready_before_mutation'=>'Yarım kalmış olabilir',
+    'update_failed_before_mutation','update_failed_after_database_mutation','update_failed_during_file_activation'=>'İnceleme gerekli',
+    default=>$recoveryReady?'Durum bilinmiyor':'Henüz yok',
+};
 
 $checks=[
     ['name'=>'Veritabanı','detail'=>'MySQL bağlantısı ve basit sorgu','status'=>sd_status($databaseOk,'Hazır','Bağlantı kurulamadı')],
@@ -65,7 +74,8 @@ $checks=[
     ['name'=>'Temiz kurulum şeması','detail'=>'database/schema.sql','status'=>sd_file_status(__DIR__.'/database/schema.sql','Hazır','GitHub/kurulum kaynağı eksik')],
     ['name'=>'Temiz kurulum başlangıç verisi','detail'=>'database/seed.sql','status'=>sd_file_status(__DIR__.'/database/seed.sql','Hazır','GitHub/kurulum kaynağı eksik')],
     ['name'=>'Yönetilen dosya manifesti','detail'=>'Updater yalnız kendi yönettiği eski dosyaları güvenle temizler','status'=>sd_status($managedManifestReady,'Baseline hazır','Manifest bulunamadı')],
-    ['name'=>'Recovery manifest','detail'=>$recoveryReady?'Son durum: '.$recoveryStatus:'Henüz recovery manifest oluşmadı','status'=>sd_status($recoveryReady,'Hazır','Henüz yok')],
+    ['name'=>'Paket güvenlik sınırları','detail'=>number_format($packageLimits['max_download_bytes']/1048576,0).' MB indirme · '.number_format($packageLimits['max_uncompressed_bytes']/1048576,0).' MB açılım · '.$packageLimits['max_entries'].' kayıt','status'=>sd_status(true,'Etkin','Kapalı')],
+    ['name'=>'Recovery manifest','detail'=>$recoveryReady?'Son durum: '.$recoveryStatus.($recoveryStage!==''?' · aşama: '.$recoveryStage:''):'Henüz recovery manifest oluşmadı','status'=>['ok'=>$recoveryHealthy,'label'=>$recoveryLabel]],
     ['name'=>'AdımBot','detail'=>$aiProvider!=='' && $aiModel!==''?$aiProvider.' · '.$aiModel:'Sağlayıcı veya model seçilmedi','status'=>sd_status($aiOk,'Yapılandırıldı',$aiEnabled?'Eksik yapılandırma':'Kapalı')],
 ];
 $readyCount=count(array_filter($checks,static fn(array $check):bool=>(bool)$check['status']['ok']));
