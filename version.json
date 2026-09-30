@@ -1,4 +1,4 @@
 {
-  "version": "1.1.91",
-  "name": "Güvenlik, güncelleme CSRF ve cache sağlamlaştırması"
+  "version": "1.1.92",
+  "name": "Giriş güvenliği, eski öğrenci girişi ve AI bekleme süresi"
 }
