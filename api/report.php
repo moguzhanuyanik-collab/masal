@@ -9,9 +9,32 @@ try {
     $pdo=db();
     $requested=isset($_GET['student_id'])?(int)$_GET['student_id']:null;
     $studentId=require_api_student_access($pdo,$requested);
+    $scope=normalized_student_curriculum($pdo,$studentId);
+    $stage=$scope['kademe_kodu'];
+    $grade=$scope['sinif_seviyesi'];
 
-    $s=$pdo->prepare('SELECT d.kod,d.ad,COUNT(DISTINCT m.id) toplam_modul,SUM(CASE WHEN oi.id IS NOT NULL AND oi.tamamlandi=1 THEN 1 ELSE 0 END) tamamlanan_modul FROM dersler d LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.aktif=1 LEFT JOIN ogrenci_ilerleme oi ON oi.ogrenci_id=? AND oi.ders_kodu=d.kod AND oi.modul_indeksi=m.sira-1 WHERE d.aktif=1 GROUP BY d.id,d.kod,d.ad,d.sira ORDER BY d.sira,d.id');
-    $s->execute([$studentId]);
+    $s=$pdo->prepare('SELECT d.kod,d.ad,COUNT(DISTINCT m.id) toplam_modul,COUNT(DISTINCT CASE WHEN oi.id IS NOT NULL AND oi.tamamlandi=1 THEN m.id END) tamamlanan_modul
+        FROM dersler d
+        INNER JOIN sinif_dersleri sd
+          ON sd.ders_id=d.id
+         AND sd.kademe_kodu=?
+         AND sd.sinif_seviyesi=?
+         AND sd.aktif=1
+        LEFT JOIN ders_modulleri m
+          ON m.ders_id=d.id
+         AND m.kademe_kodu=?
+         AND m.sinif_seviyesi=?
+         AND m.aktif=1
+        LEFT JOIN ogrenci_ilerleme oi
+          ON oi.ogrenci_id=?
+         AND oi.sinif_seviyesi=?
+         AND oi.ders_kodu=d.kod
+         AND oi.modul_indeksi=m.sira-1
+         AND oi.tamamlandi=1
+        WHERE d.aktif=1
+        GROUP BY d.id,d.kod,d.ad,d.sira
+        ORDER BY d.sira,d.id');
+    $s->execute([$stage,$grade,$stage,$grade,$studentId,$grade]);
     $lessons=[];
     foreach ($s->fetchAll() as $r) {
         $t=(int)$r['toplam_modul'];
