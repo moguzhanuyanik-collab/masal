@@ -122,10 +122,10 @@ $users=[
     [6,'global-parent@example.test','Global Veli','veli'],
     [7,'global-student@example.test','Global Öğrenci','ogrenci'],
 ];
-$stmt=$pdo->prepare('INSERT INTO kullanicilar(id,email,ad_soyad,ana_rol) VALUES (?,?,?,?,?)');
+$stmt=$pdo->prepare('INSERT INTO kullanicilar(id,email,ad_soyad,ana_rol) VALUES (?,?,?,?)');
 foreach($users as [$id,$email,$name,$role])$stmt->execute([$id,$email,$name,$role]);
 $stmt=$pdo->prepare('INSERT INTO kullanici_rolleri(kullanici_id,rol) VALUES (?,?)');
-foreach($users as [$id,,, $role])$stmt->execute([$id,$role]);
+foreach($users as $row){ $stmt->execute([(int)$row[0],(string)$row[3]]); }
 
 $pdo->exec("INSERT INTO kurumlar(id,ad) VALUES (10,'Kurum A'),(20,'Kurum B')");
 $pdo->exec("INSERT INTO kurum_kullanicilari(kurum_id,kullanici_id,kurum_rolu) VALUES
