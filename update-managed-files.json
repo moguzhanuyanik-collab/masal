@@ -5,6 +5,7 @@
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
     "HOTFIX-1.1.97.md",
+    "QUALITY-500.md",
     "README.md",
     "RELEASE-1.0.11.md",
     "RELEASE-1.0.12.md",
@@ -378,6 +379,7 @@
     "pwa-icon-512.png",
     "pwa-store.js",
     "pwa-v4.js",
+    "quality/update-quality-500.json",
     "rol-paneli.php",
     "service-worker.js",
     "settings-account.js",
@@ -439,6 +441,7 @@
     "tests/update-managed-integrity-111.php",
     "tests/update-manifest-contract-103.cjs",
     "tests/update-manifest-contract-103.php",
+    "tests/update-quality-catalog-111.cjs",
     "tests/update-release-anchor-101.cjs",
     "tests/update-release-head-anchor-109.cjs",
     "tests/update-release-revision-105.cjs",
@@ -466,5 +469,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 3
+  "release_revision": 4
 }

@@ -20,3 +20,11 @@
 ## Rev 3
 
 - 1.1.104 aktivasyon regresyon testi yeni hash-korumalı stale-file çağrısını fonksiyon imzasına bağımlı olmadan doğrulayacak şekilde güncellendi.
+
+## Rev 4 — 500 maddelik kalite matrisi
+
+- 10 kategori × 50 madde = tam 500 benzersiz güncelleme/kalite maddesi eklendi.
+- İlk 40 kritik madde bu sürümde mevcut updater/recovery/release korumalarıyla uygulanmış olarak işaretlendi; kalan 460 madde izlenebilir plan statüsünde tutulur.
+- Katalog JSON ve Markdown olarak sürümlenir.
+- CI, katalog sayısını, benzersiz ID'leri, kategori dağılımını, statüleri, acceptance kriterlerini ve sürüm/revision eşleşmesini doğrular.
+- 1.1.110 regresyon testindeki 111–119 aralığını yanlış dışlayan sürüm regex'i semver parçalamasıyla düzeltildi.

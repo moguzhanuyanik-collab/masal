@@ -87,3 +87,4 @@ jobs:
           node tests/update-release-head-anchor-109.cjs
           node tests/update-198-rescue-110.cjs
           node tests/update-managed-integrity-111.cjs
+          node tests/update-quality-catalog-111.cjs
