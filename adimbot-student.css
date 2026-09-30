@@ -569,3 +569,18 @@ html.adb-chat-open,html.adb-chat-open body{overflow:hidden}
   48%{transform:translateY(-.3px) rotate(-.1deg)}
   100%{transform:translateY(0) rotate(0deg)}
 }
+
+/* Short landscape viewports must leave room for the input and close button. */
+@media(max-height:500px){
+  .adb-chat-modal{padding:6px}
+  .adb-chat-dialog{max-height:calc(100dvh - 12px);overflow:auto}
+  .adb-chat-messages{min-height:48px;flex:1 1 48px}
+  .adb-chat-dialog-head,.adb-chat-form,.adb-chat-meta,.adb-chat-suggestions,.adb-chat-context{flex-shrink:0}
+}
+@media(prefers-reduced-motion:reduce){
+  .adb-student-widget *{transition:none!important;scroll-behavior:auto!important}
+}
+
+/* Calm speech keeps a longer interval; thinking coordinates both eyelids. */
+.adb-student-widget.adb-is-speaking .adb-lid{animation-duration:calc(var(--adb-blink-period,6s) * 1.3)}
+.adb-student-widget[data-adimbot-emotion="think"] .adb-lid-right{animation:adbEmotionThinkBlink 1.8s ease-in-out infinite;animation-delay:.025s}

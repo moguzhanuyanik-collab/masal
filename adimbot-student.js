@@ -380,9 +380,9 @@
 
   const scheduleIdlePower=(delay=12000)=>{
     clearTimeout(idlePowerTimer);
-    if(pageSuspended||preferences.minimized||state.speaking||dragging)return;
+    if(pageSuspended||preferences.minimized||state.speaking||dragging||state.emotion==='listen'||state.emotion==='transcribe')return;
     idlePowerTimer=setTimeout(()=>{
-      if(!pageSuspended&&!preferences.minimized&&!state.speaking&&!dragging){
+      if(!pageSuspended&&!preferences.minimized&&!state.speaking&&!dragging&&state.emotion!=='listen'&&state.emotion!=='transcribe'){
         root.classList.add('adb-is-idle-power');
       }
     },delay);
@@ -424,6 +424,7 @@
   };
   let gentleSpeech=false;
   const gestureClasses=['adb-gesture-left','adb-gesture-right','adb-gesture-open'];
+  let speechLipTimer=0;
 
   const clearSpeechGestures=()=>{
     clearTimeout(gestureLoopTimer);
@@ -476,6 +477,7 @@
   });
 
   const resetMouthCadence=()=>{
+    clearTimeout(speechLipTimer);
     if(!mouth)return;
     mouth.style.animationDuration='';
     mouth.style.removeProperty('--adb-mouth-open-y');
@@ -491,7 +493,7 @@
 
     const base=length>=9?.205:length<=2?.31:length<=4?.275:.24;
     const variation=(charIndex%4)*.01;
-    const openness=Math.min(1.10,Math.max(.86,.88+(vowelRatio*.18)+(length>=7?.045:0)));
+    const openness=Math.min(gentleSpeech?.96:1.10,Math.max(.86,.88+(vowelRatio*.18)+(length>=7?.045:0)));
     const middle=Math.max(.82,openness-.12);
 
     mouth.style.animationDuration=((base+variation)/activeSpeechRate).toFixed(3)+'s';
@@ -676,6 +678,16 @@
   };
   const prepareSpeechText=message=>String(message||'')
     .normalize('NFC')
+    // Expand only bounded numeric notation; displayed text remains untouched.
+    .replace(/(?<![\p{L}\p{N}:])([01]?\d|2[0-3]):([0-5]\d)(?![\p{L}\p{N}:])/gu,(_,h,m)=>`${Number(h)} saat ${Number(m)} dakika`)
+    .replace(/%\s*(\d+(?:[.,]\d+)?)(?![\p{L}\p{N}])/gu,'yüzde $1')
+    .replace(/(\d+(?:[.,]\d+)?)\s*%(?![\p{L}\p{N}])/gu,'yüzde $1')
+    .replace(/(\d+(?:[.,]\d+)?)\s*°\s*C(?![\p{L}\p{N}])/gu,'$1 derece Celsius')
+    .replace(/(\d+(?:[.,]\d+)?)\s*(cm|mm|km|kg|mg|ml)(?![\p{L}\p{N}])/gu,(_,n,u)=>n+' '+({cm:'santimetre',mm:'milimetre',km:'kilometre',kg:'kilogram',mg:'miligram',ml:'mililitre'}[u]))
+    .replace(/(\d)\s*±\s*(?=\d)/g,'$1 artı eksi ')
+    .replace(/(\d+)²/g,'$1 karesi').replace(/(\d+)³/g,'$1 küpü')
+    .replace(/^[ \t]*[-*•][ \t]+/gm,'')
+    .replace(/^[ \t]*>[ \t]+/gm,'')
     .replace(/\[([^\]]+)\]\((?:https?:\/\/|www\.)[^\s)]+\)/gi,'$1')
     .replace(/\*\*([^*]+)\*\*|__([^_]+)__/g,(_,a,b)=>a||b)
     .replace(/`([^`]+)`/g,'$1')
@@ -866,8 +878,16 @@
       if(!word)return;
 
       clearTimeout(mouthRestTimer);
+      clearTimeout(speechLipTimer);
       root.classList.remove('adb-mouth-rest');
       tuneMouthForWord(word,charIndex);
+      // A brief closed-lip pose for bilabial initials; this is approximate TTS timing.
+      if(/^[bpmBPM]/.test(word)&&!motionPreference?.matches){
+        root.classList.add('adb-mouth-rest');
+        speechLipTimer=setTimeout(()=>{
+          if(token===activeSpeechToken&&!speechPaused)root.classList.remove('adb-mouth-rest');
+        },Math.round(70/activeSpeechRate));
+      }
       const punctuation=utterance.text.slice(charIndex+word.length).match(/^[\s]*[.!?…,:;]/);
       if(punctuation){
         mouthRestTimer=setTimeout(()=>{
@@ -1362,4 +1382,3 @@
   maybeShowHomeGreeting();
   window.addEventListener('hashchange',maybeShowHomeGreeting);
 })();
-
