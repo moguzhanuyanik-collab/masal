@@ -29,7 +29,7 @@ try {
         auth_audit($pdo,(int)$actor['id'],$target,'yonetici_yetkileri',implode(',',$selected)?:'Tüm izinler kaldırıldı');
         $message='Yönetici izinleri kaydedildi.';
     }
-} catch(Throwable $e){$error=$e->getMessage();}
+} catch(PDOException $e){error_log('[IlkAdim][manager-permissions-db] '.$e->getMessage());$error='Yönetici izinleri veritabanında kaydedilemedi.';} catch(RuntimeException $e){$error=$e->getMessage();} catch(Throwable $e){error_log('[IlkAdim][manager-permissions] '.$e->getMessage());$error='Yönetici izinleri kaydedilemedi. Lütfen tekrar deneyin.';}
 $managers=[];$grants=[];
 try {
     $managers=$pdo->query("SELECT k.id,k.ad_soyad,k.email FROM kullanicilar k WHERE k.aktif=1 AND (k.ana_rol='yonetici' OR EXISTS(SELECT 1 FROM kullanici_rolleri r WHERE r.kullanici_id=k.id AND r.rol='yonetici')) ORDER BY k.ad_soyad,k.id")->fetchAll(PDO::FETCH_ASSOC);
