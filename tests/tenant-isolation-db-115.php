@@ -100,17 +100,13 @@ $pdo->exec("CREATE TABLE ogretmenler (
 $pdo->exec("CREATE TABLE veli_ogrenci (
     veli_id BIGINT UNSIGNED NOT NULL,
     ogrenci_id BIGINT UNSIGNED NOT NULL,
-    kurum_id BIGINT UNSIGNED NOT NULL DEFAULT 0,
-    PRIMARY KEY(veli_id,ogrenci_id,kurum_id),
-    KEY ix_scope(kurum_id,ogrenci_id)
+    PRIMARY KEY(veli_id,ogrenci_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
 $pdo->exec("CREATE TABLE ogretmen_ogrenci (
     ogretmen_id BIGINT UNSIGNED NOT NULL,
     ogrenci_id BIGINT UNSIGNED NOT NULL,
-    kurum_id BIGINT UNSIGNED NOT NULL DEFAULT 0,
-    PRIMARY KEY(ogretmen_id,ogrenci_id,kurum_id),
-    KEY ix_scope(kurum_id,ogrenci_id)
+    PRIMARY KEY(ogretmen_id,ogrenci_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
 $users=[
@@ -144,18 +140,42 @@ $pdo->exec("INSERT INTO ogrenciler(id,kullanici_id,ad) VALUES
 $pdo->exec("INSERT INTO veliler(id,kullanici_id,ad_soyad) VALUES (201,2,'Veli'),(202,6,'Global Veli')");
 $pdo->exec("INSERT INTO ogretmenler(id,kullanici_id,ad_soyad) VALUES (301,1,'Öğretmen')");
 
-$pdo->exec("INSERT INTO ogretmen_ogrenci(ogretmen_id,ogrenci_id,kurum_id) VALUES
-    (301,101,10),
-    (301,102,10),
-    (301,103,20),
-    (301,103,10)");
+$pdo->exec("INSERT INTO ogretmen_ogrenci(ogretmen_id,ogrenci_id) VALUES
+    (301,101),
+    (301,102),
+    (301,103)");
 
-$pdo->exec("INSERT INTO veli_ogrenci(veli_id,ogrenci_id,kurum_id) VALUES
-    (201,101,10),
-    (201,102,10),
-    (201,103,20),
-    (201,103,10),
-    (202,104,0)");
+$pdo->exec("INSERT INTO veli_ogrenci(veli_id,ogrenci_id) VALUES
+    (201,101),
+    (201,102),
+    (201,103),
+    (202,104)");
+
+$migrationPath=__DIR__.'/../database/migrations/065_kurum_bazli_eslestirme_izolasyonu.sql';
+$raw=file_get_contents($migrationPath);
+if(!is_string($raw)) fail_test('065 migration okunamadı.');
+$buffer='';
+foreach(preg_split('/\\R/',$raw) as $line){
+    $trim=trim($line);
+    if($trim==='' || str_starts_with($trim,'--')) continue;
+    $buffer.=$line."\\n";
+    if(str_ends_with(rtrim($line),';')){
+        $sql=trim($buffer);
+        $buffer='';
+        if($sql!=='') $pdo->exec($sql);
+    }
+}
+if(trim($buffer)!=='') $pdo->exec(trim($buffer));
+
+$voScope=$pdo->prepare('SELECT kurum_id FROM veli_ogrenci WHERE veli_id=? AND ogrenci_id=?');
+$voScope->execute([201,101]); ok((int)$voScope->fetchColumn()===10,'Veli-öğrenci tek ortak kurum backfill edilmeli.');
+$voScope->execute([201,102]); ok((int)$voScope->fetchColumn()===0,'Veli-öğrenci ortak kurumu olmayan ilişki global 0 olmalı.');
+$voScope->execute([201,103]); ok((int)$voScope->fetchColumn()===10,'Veli-öğrenci ortak kurum kapsamı korunmalı.');
+
+$ooScope=$pdo->prepare('SELECT kurum_id FROM ogretmen_ogrenci WHERE ogretmen_id=? AND ogrenci_id=?');
+$ooScope->execute([301,101]); ok((int)$ooScope->fetchColumn()===10,'Öğretmen-öğrenci tek ortak kurum backfill edilmeli.');
+$ooScope->execute([301,102]); ok((int)$ooScope->fetchColumn()===0,'Öğretmen-öğrenci ortak kurumu olmayan ilişki global 0 olmalı.');
+$ooScope->execute([301,103]); ok((int)$ooScope->fetchColumn()===10,'Öğretmen-öğrenci ortak kurum kapsamı korunmalı.');
 
 require_once __DIR__.'/../src/auth.php';
 
@@ -178,6 +198,11 @@ $pk=$pdo->query("SELECT GROUP_CONCAT(column_name ORDER BY seq_in_index)
     FROM information_schema.statistics
     WHERE table_schema=DATABASE() AND table_name='veli_ogrenci' AND index_name='PRIMARY'")->fetchColumn();
 ok((string)$pk==='veli_id,ogrenci_id,kurum_id','Veli-öğrenci PK kurum kapsamını içermeli.');
+
+$pk2=$pdo->query("SELECT GROUP_CONCAT(column_name ORDER BY seq_in_index)
+    FROM information_schema.statistics
+    WHERE table_schema=DATABASE() AND table_name='ogretmen_ogrenci' AND index_name='PRIMARY'")->fetchColumn();
+ok((string)$pk2==='ogretmen_id,ogrenci_id,kurum_id','Öğretmen-öğrenci PK kurum kapsamını içermeli.');
 
 $pdo->exec('DROP TABLE ogretmen_ogrenci,veli_ogrenci,ogretmenler,veliler,ogrenciler,kurum_kullanicilari,kurumlar,kullanici_rolleri,kullanicilar');
 
