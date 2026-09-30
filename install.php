@@ -67,16 +67,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $githubBranch = trim((string)($_POST['github_branch'] ?? 'main')) ?: 'main';
         $githubToken = trim((string)($_POST['github_token'] ?? ''));
 
-        $local = "<?php\nreturn " . var_export([
-            'db' => $db,
-            'github' => [
-                'owner' => $githubOwner,
-                'repo' => $githubRepo,
-                'branch' => $githubBranch,
-                'token' => $githubToken,
-            ],
-        ], true) . ";\n";
-        if (file_put_contents($root . '/config/local.php', $local, LOCK_EX) === false) throw new RuntimeException('config/local.php yazılamadı.');
+        if($githubOwner!=='' && preg_match('/^[A-Za-z0-9_.-]+$/D',$githubOwner)!==1){
+            throw new RuntimeException('GitHub owner alanı geçersiz karakter içeriyor.');
+        }
+        if($githubRepo!=='' && preg_match('/^[A-Za-z0-9_.-]+$/D',$githubRepo)!==1){
+            throw new RuntimeException('GitHub repository alanı geçersiz karakter içeriyor.');
+        }
+        if(preg_match('/^[A-Za-z0-9_.\/-]+$/D',$githubBranch)!==1){
+            throw new RuntimeException('GitHub branch alanı geçersiz.');
+        }
+
+        $schemaPath=$root.'/database/schema.sql';
+        $seedPath=$root.'/database/seed.sql';
+        if(!is_file($schemaPath) || !is_readable($schemaPath)){
+            throw new RuntimeException('Kurulum paketi eksik: database/schema.sql bulunamadı.');
+        }
+        if(!is_file($seedPath) || !is_readable($seedPath)){
+            throw new RuntimeException('Kurulum paketi eksik: database/seed.sql bulunamadı.');
+        }
 
         $dsnServer = "mysql:host={$db['host']};port={$db['port']};charset=utf8mb4";
         $server = new PDO($dsnServer, $db['user'], $db['pass'], [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);
@@ -88,8 +96,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC,
         ]);
-        run_sql_file($pdo, $root . '/database/schema.sql');
-        run_sql_file($pdo, $root . '/database/seed.sql');
+        run_sql_file($pdo,$schemaPath);
+        run_sql_file($pdo,$seedPath);
+
+        // Kalıcı ayarı yalnız veritabanı kurulumu başarıyla tamamlandıktan sonra yaz.
+        $local = "<?php\nreturn " . var_export([
+            'db' => $db,
+            'github' => [
+                'owner' => $githubOwner,
+                'repo' => $githubRepo,
+                'branch' => $githubBranch,
+                'token' => $githubToken,
+            ],
+        ], true) . ";\n";
+        $configPath=$root.'/config/local.php';
+        $configTmp=$configPath.'.tmp';
+        if(file_put_contents($configTmp,$local,LOCK_EX)===false){
+            throw new RuntimeException('Kurulum ayar dosyası hazırlanamadı.');
+        }
+        @chmod($configTmp,0600);
+        if(!@rename($configTmp,$configPath)){
+            @unlink($configTmp);
+            throw new RuntimeException('Kurulum ayar dosyası etkinleştirilemedi.');
+        }
+        @chmod($configPath,0600);
+
         $lockDir=dirname($lockFile);
         if (!is_dir($lockDir) && !mkdir($lockDir,0750,true) && !is_dir($lockDir)) {
             throw new RuntimeException('Kurulum kilidi klasörü oluşturulamadı.');
@@ -101,7 +132,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $locked=true;
         $message = 'Kurulum tamamlandı. MySQL tabloları ve başlangıç verileri hazır.';
         } catch (Throwable $e) {
-            $error = $e->getMessage();
+            error_log('[IlkAdim][install] '.$e->getMessage());
+            if($e instanceof PDOException){
+                $error='Veritabanı bağlantısı veya kurulum işlemi tamamlanamadı. Sunucu ayarlarını kontrol edin.';
+            }elseif($e instanceof RuntimeException){
+                $error=$e->getMessage();
+            }else{
+                $error='Kurulum tamamlanamadı. Ayrıntılar sunucu günlüğüne kaydedildi.';
+            }
         }
     }
 }
