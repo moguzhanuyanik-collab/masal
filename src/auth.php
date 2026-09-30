@@ -115,10 +115,10 @@ if (!function_exists('auth_login_rate_failure')) {
                 FROM giris_guvenlik WHERE kapsam=? AND kapsam_hash=? LIMIT 1 FOR UPDATE");
             $insert=$pdo->prepare("INSERT INTO giris_guvenlik
                 (kapsam,kapsam_hash,deneme_sayisi,pencere_baslangici,engel_bitis,son_deneme)
-                VALUES (?,?,?,FROM_UNIXTIME(?),?,FROM_UNIXTIME(?))");
+                VALUES (?,?,?,FROM_UNIXTIME(?),FROM_UNIXTIME(?),FROM_UNIXTIME(?))");
             $update=$pdo->prepare("UPDATE giris_guvenlik
                 SET deneme_sayisi=?,pencere_baslangici=FROM_UNIXTIME(?),
-                    engel_bitis=?,son_deneme=FROM_UNIXTIME(?)
+                    engel_bitis=FROM_UNIXTIME(?),son_deneme=FROM_UNIXTIME(?)
                 WHERE kapsam=? AND kapsam_hash=?");
             foreach($scopes as [$scope,$hash]){
                 $select->execute([$scope,$hash]);
@@ -134,7 +134,7 @@ if (!function_exists('auth_login_rate_failure')) {
                     }
                 }
                 $blockUntil=$count>=5 ? $now+600 : 0;
-                $blockValue=$blockUntil>0 ? date('Y-m-d H:i:s',$blockUntil) : null;
+                $blockValue=$blockUntil>0 ? $blockUntil : null;
                 if(is_array($row)){
                     $update->execute([$count,$windowStart,$blockValue,$now,$scope,$hash]);
                 }else{
