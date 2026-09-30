@@ -397,15 +397,32 @@ function ensure_runtime_storage_guard(string $root): void {
     }
 }
 
+function project_backup_files(string $root,string $relative=''): Generator {
+    $base=$relative===''?$root:$root.'/'.$relative;
+    foreach(scandir($base)?:[] as $item){
+        if($item==='.'||$item==='..') continue;
+        $rel=ltrim($relative.'/'.$item,'/');
+        if($rel==='storage'||str_starts_with($rel,'storage/')
+            ||$rel==='.git'||str_starts_with($rel,'.git/')
+            ||$rel==='config/local.php'||$rel==='.env'){
+            continue;
+        }
+        $path=$root.'/'.$rel;
+        if(is_link($path)) continue;
+        if(is_dir($path)){
+            yield from project_backup_files($root,$rel);
+            continue;
+        }
+        if(is_file($path)){
+            yield ['path'=>$path,'relative'=>$rel,'bytes'=>(int)(filesize($path)?:0)];
+        }
+    }
+}
+
 function project_backup_source_bytes(string $root): int {
     $total=0;
-    $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root,FilesystemIterator::SKIP_DOTS));
-    foreach($it as $file){
-        if(!$file->isFile() || $file->isLink()) continue;
-        $path=$file->getPathname();
-        $rel=ltrim(str_replace('\\','/',substr($path,strlen($root))),'/');
-        if($rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')||str_starts_with($rel,'.git/')) continue;
-        $total+=max(0,(int)$file->getSize());
+    foreach(project_backup_files($root) as $file){
+        $total+=max(0,(int)($file['bytes']??0));
     }
     return $total;
 }
@@ -468,14 +485,9 @@ function create_project_backup(string $root,string $target): void {
     $zip=new ZipArchive();
     if($zip->open($target,ZipArchive::CREATE|ZipArchive::OVERWRITE)!==true) throw new RuntimeException('Yedek ZIP olusturulamadi.');
     try{
-        $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root,FilesystemIterator::SKIP_DOTS));
-        foreach($it as $file){
-            if(!$file->isFile() || $file->isLink()) continue;
-            $path=$file->getPathname();
-            $rel=ltrim(str_replace('\\','/',substr($path,strlen($root))),'/');
-            // Güncelleme geri dönüş yedeği yalnız uygulama kodunu taşır.
-            // Canlı sırlar ve çalışma verileri ayrı korunur; ZIP içine alınmaz.
-            if($rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')||str_starts_with($rel,'.git/')) continue;
+        foreach(project_backup_files($root) as $file){
+            $path=(string)$file['path'];
+            $rel=(string)$file['relative'];
             if(!$zip->addFile($path,$rel)){
                 throw new RuntimeException('Uygulama yedeğine dosya eklenemedi: '.$rel);
             }
