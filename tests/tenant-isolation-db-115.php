@@ -154,6 +154,7 @@ $pdo->exec("INSERT INTO veli_ogrenci(veli_id,ogrenci_id,kurum_id) VALUES
     (201,101,10),
     (201,102,10),
     (201,103,20),
+    (201,103,10),
     (202,104,0)");
 
 require_once __DIR__.'/../src/auth.php';
