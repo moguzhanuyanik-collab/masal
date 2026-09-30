@@ -158,6 +158,26 @@ if ($isAjax) {
                 is_array($updateCfg)?$updateCfg:[]
             );
 
+            if (($result['retry_required'] ?? false) === true) {
+                ajax_response([
+                    'ok' => true,
+                    'action' => 'install',
+                    'retry_required' => true,
+                    'core_handoff' => (bool)($result['core_handoff'] ?? false),
+                    'message' => (string)($result['message'] ?? 'Updater çekirdeği yenilendi.'),
+                    'backup' => (string)($result['backup'] ?? ''),
+                    'updater_backup' => (string)($result['updater_backup'] ?? ''),
+                    'recovery_manifest' => (string)($result['recovery_manifest'] ?? ''),
+                    'local_version' => $local,
+                    'local_revision' => $localRevision,
+                    'remote_version' => (string)($remoteBefore['version'] ?? ''),
+                    'remote_revision' => normalize_release_revision($remoteBefore['release_revision'] ?? 0),
+                    'remote_name' => (string)($remoteBefore['name'] ?? ''),
+                    'commit' => (string)($remoteBefore['commit'] ?? ''),
+                    'update_available' => true,
+                ]);
+            }
+
             $newLocal = read_app_version();
             $newLocalRevision = read_local_release_revision(__DIR__,$newLocal);
 
@@ -448,7 +468,24 @@ $localRevision = read_local_release_revision(__DIR__,$local);
         setBusy(true, 'install');
 
         try {
-            const data = await request('install');
+            let data;
+            let handoffRetries = 0;
+            while (true) {
+                data = await request('install');
+                if (data.retry_required === true && handoffRetries < 2) {
+                    handoffRetries += 1;
+                    statusTitle.textContent = 'Güncelleme çekirdeği yenilendi';
+                    statusText.textContent = 'Yeni updater çekirdeğiyle kurulum otomatik yeniden başlatılıyor...';
+                    await new Promise(resolve => setTimeout(resolve, 350));
+                    continue;
+                }
+                break;
+            }
+
+            if (data && data.retry_required === true) {
+                throw new Error(data.message || 'Updater çekirdeği yenilendi ancak otomatik yeniden deneme tamamlanamadı.');
+            }
+
             applyState(data);
 
             statusTitle.textContent = 'Güncelleme tamamlandı';
@@ -456,6 +493,7 @@ $localRevision = read_local_release_revision(__DIR__,$local);
 
             const backupParts = [];
             if (data.backup) backupParts.push('Uygulama: ' + data.backup);
+            if (data.updater_backup) backupParts.push('Updater: ' + data.updater_backup);
             if (data.database_backup) backupParts.push('DB: ' + data.database_backup);
             if (data.recovery_manifest) backupParts.push('Recovery: ' + data.recovery_manifest);
             if (backupParts.length) {
