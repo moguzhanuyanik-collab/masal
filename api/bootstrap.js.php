@@ -334,7 +334,8 @@ try {
     $summary=function_exists('student_database_summary')?student_database_summary($pdo,$studentId):null;
     $dbConnected=true;
 } catch (Throwable $e) {
-    $error=$e->getMessage();
+    error_log('[IlkAdim][bootstrap-js] '.$e->getMessage());
+    $error='Öğrenci verileri şu anda veritabanından yüklenemedi.';
     $fallback=$root.'/database/lessons.json';
     if (is_file($fallback)) {
         $decoded=json_decode((string)file_get_contents($fallback),true);
