@@ -503,11 +503,13 @@ function repair_legacy_institution_membership_schema(PDO $pdo): void {
 function retired_automatic_migrations(): array {
     return [
         '000_v3_kurum_kullanicilari_onarim'=>true,
+        '007_icerik_paketi_geri_al'=>true,
         '024_tek_aktif_super_admin'=>true,
         '025_tek_super_admin_sert_temizlik'=>true,
         '026_tek_aktif_super_admin_duzeltme'=>true,
         '027_tek_super_admin_kesin_sifirlama'=>true,
         '028_legacy_kurum_fk_temizlik'=>true,
+        '032_test_ilerleme_sifirlama'=>true,
     ];
 }
 
