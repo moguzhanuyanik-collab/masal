@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-$isAjax = isset($_REQUEST['ajax']) && (string)$_REQUEST['ajax'] === '1';
+$isAjax = isset($_GET['ajax']) && (string)$_GET['ajax'] === '1';
 if ($isAjax) {
     ob_start();
 }
@@ -55,10 +55,11 @@ function ajax_response(array $data, int $status = 200): never {
 
 $gh = app_config('github');
 $updateCfg = app_config('update');
+$updateCsrf = csrf_token();
 
 if ($isAjax) {
     try {
-        $action = (string)($_REQUEST['action'] ?? 'check');
+        $action = (string)($_GET['action'] ?? 'check');
         $local = read_app_version();
 
         if ($action === 'check') {
@@ -85,6 +86,13 @@ if ($isAjax) {
                     'ok' => false,
                     'message' => 'Kurulum işlemi POST isteği ile yapılmalıdır.',
                 ], 405);
+            }
+            $csrf=(string)($_SERVER['HTTP_X_CSRF_TOKEN'] ?? ($_POST['csrf'] ?? ''));
+            if (!verify_csrf($csrf)) {
+                ajax_response([
+                    'ok' => false,
+                    'message' => 'Güvenlik doğrulaması başarısız. Sayfayı yenileyip tekrar deneyin.',
+                ], 403);
             }
 
             $remoteBefore = next_remote_version_info($gh,$local);
@@ -275,6 +283,7 @@ $local = read_app_version();
     const messageText = document.getElementById('messageText');
     const checkButton = document.getElementById('checkButton');
     const installButton = document.getElementById('installButton');
+    const csrfToken = <?=json_encode($updateCsrf, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)?>;
 
     let busy = false;
 
@@ -333,6 +342,7 @@ $local = read_app_version();
             method,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-Token': csrfToken,
                 'Accept': 'application/json'
             },
             cache: 'no-store'
