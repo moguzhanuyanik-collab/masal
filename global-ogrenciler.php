@@ -18,7 +18,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
    ky_deactivate_global_user($pdo,$user,'ogrenci',(int)($_POST['kullanici_id']??0));
    $message='Global öğrenci pasife alındı.';
   }
- }catch(PDOException $e){$error=$e->getCode()==='23000'?'Bu e-posta zaten kullanılıyor.':'Veritabanı işlemi tamamlanamadı.';}catch(Throwable $e){$error=$e->getMessage();}
+ }catch(PDOException $e){error_log('[IlkAdim][global-student-db] '.$e->getMessage());$error=$e->getCode()==='23000'?'Bu e-posta zaten kullanılıyor.':'Veritabanı işlemi tamamlanamadı.';}catch(RuntimeException $e){$error=$e->getMessage();}catch(Throwable $e){error_log('[IlkAdim][global-student] '.$e->getMessage());$error='Öğrenci işlemi tamamlanamadı. Lütfen tekrar deneyin.';}
 }
 $students=ky_global_students($pdo);
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Global Öğrenciler — İlkAdım</title>
