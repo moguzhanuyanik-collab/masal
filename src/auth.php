@@ -723,6 +723,7 @@ if (!function_exists('auth_accessible_student_ids')) {
                      AND ks.kurum_id=kt.kurum_id
                      AND ks.kurum_rolu='ogrenci'
                      AND ks.aktif=1
+                    WHERE oo.kurum_id=kt.kurum_id
                     ORDER BY oo.ogrenci_id");
                 $stmt->execute([$userId]);
                 $ids=array_map('intval',$stmt->fetchAll(PDO::FETCH_COLUMN)?:[]);
@@ -771,6 +772,7 @@ if (!function_exists('auth_accessible_student_ids')) {
                             WHERE vk.kullanici_id=v.kullanici_id
                               AND vk.kurum_rolu='veli'
                               AND vk.aktif=1
+                              AND vo.kurum_id=vk.kurum_id
                         )
                         OR (
                             NOT EXISTS (
@@ -793,6 +795,7 @@ if (!function_exists('auth_accessible_student_ids')) {
                                   AND sk0.kurum_rolu='ogrenci'
                                   AND sk0.aktif=1
                             )
+                            AND vo.kurum_id=0
                         )
                     )
                     ORDER BY vo.ogrenci_id");
