@@ -2,5 +2,5 @@
   "format": 1,
   "version": "1.1.114",
   "name": "Kurum bazlı eşleştirme izolasyonu ve gerçek DB tenant testleri",
-  "release_revision": 1
+  "release_revision": 2
 }
