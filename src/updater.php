@@ -261,6 +261,52 @@ function collect_managed_update_files(string $source,array $preserve,string $rel
     return array_values(array_unique($files));
 }
 
+function normalized_packaged_manifest_files(array $manifestData): array {
+    if((int)($manifestData['format']??0)!==1){
+        throw new RuntimeException('Güncelleme paketi yönetilen dosya manifest formatı desteklenmiyor.');
+    }
+    $raw=$manifestData['files']??null;
+    if(!is_array($raw) || $raw===[]){
+        throw new RuntimeException('Güncelleme paketi yönetilen dosya manifesti boş veya geçersiz.');
+    }
+
+    $files=[];
+    $seen=[];
+    foreach($raw as $relative){
+        if(!is_string($relative) || trim($relative)===''){
+            throw new RuntimeException('Güncelleme paketi yönetilen dosya manifestinde geçersiz kayıt var.');
+        }
+        $normalized=managed_relative_path($relative);
+        if(isset($seen[$normalized])){
+            throw new RuntimeException('Güncelleme paketi yönetilen dosya manifestinde tekrarlı kayıt var: '.$normalized);
+        }
+        $seen[$normalized]=true;
+        $files[]=$normalized;
+    }
+    sort($files,SORT_STRING);
+    return $files;
+}
+
+function assert_packaged_manifest_matches_tree(array $manifestData,array $actualFiles): void {
+    $declared=normalized_packaged_manifest_files($manifestData);
+    $actual=[];
+    foreach($actualFiles as $relative) $actual[]=managed_relative_path((string)$relative);
+    sort($actual,SORT_STRING);
+    $actual=array_values(array_unique($actual));
+
+    if($declared===$actual) return;
+
+    $missing=array_values(array_diff($actual,$declared));
+    $phantom=array_values(array_diff($declared,$actual));
+    $parts=[];
+    if($missing!==[]) $parts[]='manifestte eksik: '.implode(', ',array_slice($missing,0,5)).(count($missing)>5?' ...':'');
+    if($phantom!==[]) $parts[]='pakette bulunmayan: '.implode(', ',array_slice($phantom,0,5)).(count($phantom)>5?' ...':'');
+    throw new RuntimeException(
+        'Güncelleme paketi yönetilen dosya manifesti gerçek paket ağacıyla eşleşmiyor'
+        .($parts!==[]?': '.implode('; ',$parts):'.')
+    );
+}
+
 function managed_manifest_path(string $root): string {
     return rtrim($root,'/\\').'/storage/updates/managed-files.json';
 }
@@ -1398,6 +1444,7 @@ function install_github_update(
         // İlk manifest yoksa hiçbir canlı dosya silinmez; sadece yeni baseline kaydedilir.
         $oldManagedFiles=read_managed_update_manifest($root);
         $newManagedFiles=collect_managed_update_files($sourceRoot,$preserve);
+        assert_packaged_manifest_matches_tree($manifestData,$newManagedFiles);
         assert_managed_copy_type_safe($root,$sourceRoot,$newManagedFiles,$oldManagedFiles,$preserve);
 
         // Migration/legacy şema onarımı gerekiyorsa önce gerçek DB snapshot alınır.
