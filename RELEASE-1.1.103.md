@@ -21,3 +21,7 @@ Güncelleme paketindeki `update-managed-files.json` sözleşmesini gerçek paket
 ## Veri güvenliği
 
 Yeni migration yoktur. Kullanıcı ve kurum verileri değiştirilmez. Bu kontrol 1.1.103 kurulduktan sonraki paketlerde zorunlu olur; 1.1.103'ün kendisi 1.1.102 updater tarafından mevcut 1.1.102 güvenlik kurallarıyla kurulacaktır.
+
+## Doğrulama
+
+Sürüm önce `updater-manifest-103` dalında tam kalite kapısından geçirilir; yalnız yeşil sonuçtan sonra aynı doğrulanmış commit `main` dalına fast-forward edilir.
