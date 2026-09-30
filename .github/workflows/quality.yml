@@ -7,6 +7,7 @@ on:
       - 'migration-safety-*'
       - 'hardening-*'
       - 'pwa-hardening-*'
+      - 'updater-manifest-*'
   pull_request:
 
 permissions:
@@ -42,3 +43,4 @@ jobs:
           node tests/migration-safety-93.cjs
           node tests/hardening-94.cjs
           node tests/pwa-95.cjs
+          node tests/updater-manifest-96.cjs
