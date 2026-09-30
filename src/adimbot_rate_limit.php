@@ -2,13 +2,17 @@
 declare(strict_types=1);
 
 function adimbot_rate_limit_table_ready(PDO $pdo): bool {
+    static $cache=[];
+    $key=spl_object_id($pdo);
+    if(array_key_exists($key,$cache)) return (bool)$cache[$key];
     try{
         $stmt=$pdo->prepare("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='adimbot_rate_limitleri'");
         $stmt->execute();
         $ok=(int)$stmt->fetchColumn()>0;
         $stmt->closeCursor();
-        return $ok;
+        return $cache[$key]=$ok;
     }catch(Throwable){
+        $cache[$key]=false;
         return false;
     }
 }
@@ -115,7 +119,15 @@ function adimbot_rate_limit_check_and_record(
             ]);
         }
 
-        if($started)$pdo->commit();
+        if($started){
+            $pdo->commit();
+            try{
+                $pdo->exec("DELETE FROM adimbot_rate_limitleri
+                    WHERE son_deneme < DATE_SUB(NOW(), INTERVAL 7 DAY)
+                    ORDER BY son_deneme
+                    LIMIT 200");
+            }catch(Throwable){}
+        }
         return [
             'persistent'=>true,
             'blocked'=>$retryAfter>0,
