@@ -24,7 +24,7 @@ try {
             $message='Eşleştirme kaldırıldı.';
         }else throw new RuntimeException('Geçersiz işlem.');
     }
-}catch(Throwable $e){$error=$e->getMessage();}
+}catch(PDOException $e){error_log('[IlkAdim][global-matching-db] '.$e->getMessage());$error='Eşleştirme işlemi veritabanında tamamlanamadı.';}catch(RuntimeException $e){$error=$e->getMessage();}catch(Throwable $e){error_log('[IlkAdim][global-matching] '.$e->getMessage());$error='Eşleştirme işlemi tamamlanamadı. Lütfen tekrar deneyin.';}
 $links=[];
 try{
     $stmt=$pdo->query('SELECT veli_id,ogrenci_id FROM veli_ogrenci ORDER BY veli_id,ogrenci_id');
