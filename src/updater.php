@@ -711,6 +711,48 @@ function create_database_backup(
     return basename($final);
 }
 
+function backup_artifact_metadata(string $root,string $filename): ?array {
+    $filename=basename(trim($filename));
+    if($filename==='') return null;
+    $path=rtrim($root,'/\\').'/storage/backups/'.$filename;
+    if(!is_file($path)) return null;
+    $hash=hash_file('sha256',$path);
+    if(!is_string($hash)||strlen($hash)!==64){
+        throw new RuntimeException('Yedek bütünlük SHA-256 değeri üretilemedi: '.$filename);
+    }
+    return [
+        'file'=>$filename,
+        'bytes'=>(int)(filesize($path)?:0),
+        'sha256'=>$hash,
+    ];
+}
+
+function write_recovery_manifest(string $root,array $state): string {
+    $dir=rtrim($root,'/\\').'/storage/backups';
+    if(!is_dir($dir)&&!mkdir($dir,0750,true)&&!is_dir($dir)){
+        throw new RuntimeException('Recovery manifest klasörü oluşturulamadı.');
+    }
+    $path=$dir.'/recovery.json';
+    $tmp=$path.'.tmp';
+    $payload=[
+        'format'=>1,
+        'updated_at'=>date(DATE_ATOM),
+    ]+$state;
+    $json=json_encode($payload,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
+    if(!is_string($json)) throw new RuntimeException('Recovery manifest oluşturulamadı.');
+    @unlink($tmp);
+    if(file_put_contents($tmp,$json."\n",LOCK_EX)===false){
+        throw new RuntimeException('Recovery manifest yazılamadı.');
+    }
+    @chmod($tmp,0600);
+    if(!@rename($tmp,$path)){
+        @unlink($tmp);
+        throw new RuntimeException('Recovery manifest etkinleştirilemedi.');
+    }
+    @chmod($path,0600);
+    return basename($path);
+}
+
 function legacy_membership_repair_needed(PDO $pdo): bool {
     if(!auth_table_exists($pdo,'kurum_kullanicilari')) return false;
     $cols=auth_column_map($pdo,'kurum_kullanicilari');
@@ -1173,6 +1215,10 @@ function install_github_update(
     $backupPath=$storage.'/backups/onceki_surum.zip';
 
     $pdo=db(); ensure_updater_schema($pdo);
+    $recoveryState=null;
+    $recoveryManifestName='';
+    $databaseMutationStarted=false;
+    $fileActivationStarted=false;
     $log=$pdo->prepare("INSERT INTO guncelleme_gecmisi (onceki_surumu,yeni_surumu,github_commit,durum) VALUES (?,?,?,'basladi')");
     $log->execute([$localVersion,$remote['version'],$remote['commit']]); $logId=(int)$pdo->lastInsertId();
 
@@ -1226,18 +1272,38 @@ function install_github_update(
 
         // Migration/legacy şema onarımı gerekiyorsa önce gerçek DB snapshot alınır.
         // mysqldump yoksa veri dönüştüren güncelleme fail-closed durur.
+        $pendingMigrations=pending_migration_names($pdo,$sourceRoot,$localVersion);
+        $legacyRepairNeeded=legacy_membership_repair_needed($pdo);
+        $studentSchemaMissing=!auth_table_exists($pdo,'ogrenciler');
+        $requiresDbBackup=$studentSchemaMissing || $legacyRepairNeeded || $pendingMigrations!==[];
+
         $dbBackupName='';
-        $requiresDbBackup=database_update_requires_backup($pdo,$sourceRoot,$localVersion);
         if($requiresDbBackup){
             $dbBackupName=create_database_backup($root,$dbConfig,$updateConfig,$pdo);
         }
 
+        $recoveryState=[
+            'from_version'=>$localVersion,
+            'to_version'=>(string)$remote['version'],
+            'target_commit'=>$targetCommit,
+            'status'=>'ready_before_mutation',
+            'application_backup'=>backup_artifact_metadata($root,$backupName),
+            'database_backup'=>backup_artifact_metadata($root,$dbBackupName),
+            'pending_migrations'=>$pendingMigrations,
+            'legacy_membership_repair'=>$legacyRepairNeeded,
+            'student_schema_missing'=>$studentSchemaMissing,
+            'manual_restore_only'=>true,
+        ];
+        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+
         // Migration'lar önce staging paketinden uygulanır.
         // DB dönüşümü başarısızsa yeni uygulama dosyaları canlıya kopyalanmaz.
-        if(!auth_table_exists($pdo,'ogrenciler')) ensure_student_auth_schema($pdo);
+        $databaseMutationStarted=$requiresDbBackup;
+        if($studentSchemaMissing) ensure_student_auth_schema($pdo);
         $migrations=run_pending_migrations($pdo,$sourceRoot,$localVersion);
 
         // Şema başarıyla hazırlandıktan sonra yeni uygulama dosyalarını etkinleştir.
+        $fileActivationStarted=true;
         copy_update_tree($sourceRoot,$root,$preserve);
         $removedManagedFiles=remove_stale_managed_files($root,$oldManagedFiles,$newManagedFiles,$preserve);
         write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version']);
@@ -1248,6 +1314,14 @@ function install_github_update(
         if($removedManagedFiles!==[]) $historyMessage.='; temizlenen eski dosya: '.count($removedManagedFiles);
         $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='basarili',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute([$historyMessage,$logId]);
 
+        if(is_array($recoveryState)){
+            $recoveryState['status']='update_completed';
+            $recoveryState['completed_at']=date(DATE_ATOM);
+            $recoveryState['applied_migrations']=$migrations;
+            $recoveryState['removed_files']=$removedManagedFiles;
+            $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+        }
+
         @unlink($zipPath); delete_tree($extractDir);
         flock($updateLock,LOCK_UN); fclose($updateLock);
         return [
@@ -1257,12 +1331,23 @@ function install_github_update(
             'local'=>$localVersion,
             'backup'=>$backupName,
             'database_backup'=>$dbBackupName,
+            'recovery_manifest'=>$recoveryManifestName,
             'migrations'=>$migrations,
             'removed_files'=>$removedManagedFiles,
             'managed_files'=>count($newManagedFiles),
         ];
     }catch(Throwable $e){
         error_log('[IlkAdim][updater] '.$e->getMessage());
+        if(is_array($recoveryState)){
+            $recoveryState['status']=$fileActivationStarted
+                ?'update_failed_during_file_activation'
+                :($databaseMutationStarted?'update_failed_after_database_mutation':'update_failed_before_mutation');
+            $recoveryState['failed_at']=date(DATE_ATOM);
+            $recoveryState['manual_review_required']=true;
+            try{$recoveryManifestName=write_recovery_manifest($root,$recoveryState);}catch(Throwable $manifestError){
+                error_log('[IlkAdim][recovery-manifest] '.$manifestError->getMessage());
+            }
+        }
         try{ $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='hatali',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute(['Guncelleme hatayla sonlandi. Ayrintilar sunucu gunlugune kaydedildi.',$logId]); }catch(Throwable $ignored){}
         @unlink($zipPath); delete_tree($extractDir);
         if(is_resource($updateLock)){flock($updateLock,LOCK_UN);fclose($updateLock);}
