@@ -18,7 +18,7 @@ SET @ilkadim_existing_history = (
   '011_etkinlik_oyunlari_ve_35_gorev',
   '012_etkinlik_simge_ve_tekrar_oynama',
   '013_ilk_uc_oyun_veritabani',
-  '014_15_yeni_1_sinif_modulu',
+  '014_15_yeni_etkinlik_150_gorev',
   '016_pwa_offline_sync',
   '017_v4_ozellikler',
   '018_gercek_yetkilendirme',
