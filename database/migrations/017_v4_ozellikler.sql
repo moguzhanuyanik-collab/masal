@@ -1,0 +1,48 @@
+SET NAMES utf8mb4;
+
+CREATE TABLE IF NOT EXISTS v4_ogrenci_tercihleri (
+ ogrenci_id INT UNSIGNED NOT NULL,
+ sac VARCHAR(12) NOT NULL DEFAULT '🟤',
+ tisort VARCHAR(12) NOT NULL DEFAULT '💜',
+ aksesuar VARCHAR(12) NOT NULL DEFAULT '✨',
+ arka_plan VARCHAR(20) NOT NULL DEFAULT '',
+ gece_okuma TINYINT(1) NOT NULL DEFAULT 0,
+ guncellenme_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (ogrenci_id),
+ CONSTRAINT fk_v4_tercih_ogrenci FOREIGN KEY (ogrenci_id) REFERENCES ogrenciler(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS v4_odul_satin_alimlari (
+ id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+ ogrenci_id INT UNSIGNED NOT NULL,
+ odul_kodu VARCHAR(30) NOT NULL,
+ yildiz_maliyeti INT UNSIGNED NOT NULL,
+ alinma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ PRIMARY KEY (id),
+ UNIQUE KEY uk_v4_satin_alim (ogrenci_id, odul_kodu),
+ CONSTRAINT fk_v4_satin_ogrenci FOREIGN KEY (ogrenci_id) REFERENCES ogrenciler(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS v4_haftalik_plan (
+ id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+ ogrenci_id INT UNSIGNED NOT NULL,
+ gun TINYINT UNSIGNED NOT NULL,
+ ders_kodu VARCHAR(50) NOT NULL,
+ hedef VARCHAR(160) NOT NULL,
+ tamamlandi TINYINT(1) NOT NULL DEFAULT 0,
+ guncellenme_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (id),
+ UNIQUE KEY uk_v4_plan (ogrenci_id,gun),
+ CONSTRAINT fk_v4_plan_ogrenci FOREIGN KEY (ogrenci_id) REFERENCES ogrenciler(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS v4_okuma_denemeleri (
+ id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+ ogrenci_id INT UNSIGNED NOT NULL,
+ hikaye_kodu VARCHAR(50) NOT NULL,
+ eslesme_orani TINYINT UNSIGNED NOT NULL,
+ deneme_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ PRIMARY KEY (id),
+ KEY ix_v4_okuma (ogrenci_id, deneme_tarihi),
+ CONSTRAINT fk_v4_okuma_ogrenci FOREIGN KEY (ogrenci_id) REFERENCES ogrenciler(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
