@@ -65,3 +65,10 @@
 - Bu dar recovery veri dönüştürmediği için normal pending-migration DB snapshot kapısına takılmadan önce tamamlanır.
 - Yeni tarihsel geçiş ankrajı `1.1.99 rev1001` olarak yayınlandı.
 
+## Rev 12 — GitHub branch → gerçek commit SHA düzeltmesi
+
+- Güncelleme kontrolünde `main` gibi branch adlarının `commit` alanına sızması engellendi.
+- Branch HEAD önce GitHub API üzerinden 40 karakterlik gerçek commit SHA değerine çözümlenir.
+- 1.1.99 recovery checkpointinden güncel main sürümüne geçiş artık branch adıyla değil sabit commit SHA ile kurulur.
+- Kurulum aşamasında eski bir updater yine branch adı üretirse hedef commit son kez gerçek HEAD SHA'ya normalize edilir.
+
