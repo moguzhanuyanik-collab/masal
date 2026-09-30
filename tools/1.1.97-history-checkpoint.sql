@@ -1,0 +1,5 @@
+-- İlkAdım 1.1.97 migration-history rescue SQL örneği.
+-- Normal kullanımda bu dosyayı elle çalıştırmayın; tools/updater-1.1.97-rescue.php
+-- hedef 1.1.97 paketindeki aynı checkpoint'i kontrollü olarak çalıştırır.
+-- Şema/veri değiştirmez, yalnız sistem_migrations kayıtlarını baseline eder.
+-- Tarihsel anchor içindeki gerçek dosya: database/migrations/001_1_1_97_history_checkpoint.sql
