@@ -38,6 +38,12 @@ $defaults = [
         // Boş bırakılırsa updater yaygın sistem yollarında mysqldump arar.
         // Shared hosting özel yol kullanıyorsa config/local.php içinden ayarlanabilir.
         'mysqldump_path' => '',
+        // GitHub update paketleri için fail-closed kaynak sınırları.
+        'max_package_download_bytes' => 64 * 1024 * 1024,
+        'max_package_entries' => 5000,
+        'max_package_uncompressed_bytes' => 128 * 1024 * 1024,
+        'max_package_file_bytes' => 16 * 1024 * 1024,
+        'max_package_compression_ratio' => 250,
         'preserve' => [
             'config/local.php',
             'storage',
