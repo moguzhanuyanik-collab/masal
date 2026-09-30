@@ -13,7 +13,7 @@ assert(updater.includes("strtotime($updatedAt)"));
 assert(updater.includes("'Handoff updater yedeği'"));
 assert(updater.includes("'Canlı updater çekirdeği'"));
 assert(updater.includes('function managed_runtime_manifest_state('));
-assert(updater.includes("if($version!==$localVersion) return null"));
+assert(updater.includes("$version!==$localVersion"));
 assert(updater.includes("if(count($hashes)!==count($files)) return []"));
 assert(workflow.includes('tests/update-continuity-112.php'));
 assert(workflow.includes('tests/update-continuity-112.cjs'));

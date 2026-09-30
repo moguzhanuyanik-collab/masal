@@ -24,3 +24,7 @@
 
 - 1.1.111 managed-integrity davranış testi yeni runtime manifest kimlik sözleşmesine uyumlu hale getirildi.
 - Test fixture artık yerel `version.json` sürüm/revision kimliğini kurarak hash baseline davranışını gerçek çalışma koşuluyla doğrular.
+
+## Rev 3
+
+- Continuity Node regresyon testi runtime manifest sürüm eşleşmesini birebir satır metnine değil gerçek guard ifadesine göre doğrulayacak şekilde düzeltildi.
