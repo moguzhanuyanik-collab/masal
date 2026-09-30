@@ -26,3 +26,10 @@ kontrolünde durduğu kurulumlar içindir.
 Bu sürüm önce `update-197-rescue-106` aday dalında tam kalite kapısından geçirilir.
 Ayrıca Git commit geçmişi üzerinden 1.1.96 updater'ın sıradaki hedef olarak repair
 1.1.97 rev 2 commitini, 1.1.97 updater'ın ise 1.1.98'i seçtiği ayrı doğrulanır.
+
+## Reconciled tarihsel zincir
+
+Mevcut main'deki `1.1.98 recovery for stuck 1.1.97 installs` paketi korunmuştur.
+Yeni 1.1.97 rev 2 repair anchor bunun hemen önüne eklenmiş; ardından 1.1.99-1.1.105
+anchorları yeniden sıralanmıştır. Bu nedenle 1.1.96 -> 1.1.97 ve 1.1.97 -> 1.1.98
+iki ayrı kurtarma aşaması birbirini ezmeden birlikte çalışır.
