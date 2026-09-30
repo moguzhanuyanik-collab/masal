@@ -167,6 +167,22 @@ foreach(preg_split('/\\R/',$raw) as $line){
 }
 if(trim($buffer)!=='') $pdo->exec(trim($buffer));
 
+$guardPath=__DIR__.'/../database/migrations/066_kurum_eslestirme_schema_guard.sql';
+$guard=file_get_contents($guardPath);
+if(!is_string($guard)) fail_test('066 migration okunamadı.');
+$guardBuffer='';
+foreach(preg_split('/\\R/',$guard) as $line){
+    $trim=trim($line);
+    if($trim==='' || str_starts_with($trim,'--')) continue;
+    $guardBuffer.=$line."\n";
+    if(str_ends_with(rtrim($line),';')){
+        $sql=trim($guardBuffer);
+        $guardBuffer='';
+        if($sql!=='') $pdo->exec($sql);
+    }
+}
+if(trim($guardBuffer)!=='') $pdo->exec(trim($guardBuffer));
+
 $voScope=$pdo->prepare('SELECT kurum_id FROM veli_ogrenci WHERE veli_id=? AND ogrenci_id=?');
 $voScope->execute([201,101]); ok((int)$voScope->fetchColumn()===10,'Veli-öğrenci tek ortak kurum backfill edilmeli.');
 $voScope->execute([201,102]); ok((int)$voScope->fetchColumn()===0,'Veli-öğrenci ortak kurumu olmayan ilişki global 0 olmalı.');
