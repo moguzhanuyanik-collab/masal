@@ -158,7 +158,7 @@ $buffer='';
 foreach(preg_split('/\\R/',$raw) as $line){
     $trim=trim($line);
     if($trim==='' || str_starts_with($trim,'--')) continue;
-    $buffer.=$line."\\n";
+    $buffer.=$line."\n";
     if(str_ends_with(rtrim($line),';')){
         $sql=trim($buffer);
         $buffer='';
