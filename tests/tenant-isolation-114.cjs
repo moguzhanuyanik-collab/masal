@@ -8,6 +8,9 @@ const teacherPanel=fs.readFileSync('ogretmen-paneli.php','utf8');
 const parentPanel=fs.readFileSync('veli-paneli.php','utf8');
 const activities=fs.readFileSync('api/activities.php','utf8');
 const activitiesClient=fs.readFileSync('activities-extra.js','utf8');
+const v4=fs.readFileSync('api/v4-features.php','utf8');
+const report=fs.readFileSync('api/report.php','utf8');
+const normalized=fs.readFileSync('src/normalized.php','utf8');
 
 // Öğretmen erişimi: ilişki tek başına yeterli değildir; öğretmen ve öğrenci
 // aynı aktif kurum üyeliğini paylaşmalıdır.
@@ -39,5 +42,20 @@ assert(activities.includes("verify_csrf($_SERVER['HTTP_X_CSRF_TOKEN'] ?? null)")
 assert(activities.includes("['ok'=>true,'games'=>$out,'csrf'=>csrf_token()]"));
 assert(activitiesClient.includes("csrfToken=typeof data.csrf==='string'?data.csrf:''"));
 assert(activitiesClient.includes("'X-CSRF-Token':csrfToken"));
+
+// V4 ve öğrenci raporu, bütün dersleri değil öğrencinin aktif kademe/sınıf
+// müfredatını kullanmalıdır.
+assert(normalized.includes("function normalized_student_curriculum(PDO $pdo,int $studentId):array"));
+assert(v4.includes("normalized_student_curriculum($db,$sid)"));
+assert(v4.includes("sd.kademe_kodu=?"));
+assert(v4.includes("sd.sinif_seviyesi=?"));
+assert(v4.includes("m.kademe_kodu=?"));
+assert(v4.includes("m.sinif_seviyesi=?"));
+assert(v4.includes("oi.sinif_seviyesi=?"));
+assert(v4.includes("Bu ders öğrencinin sınıfına ait değil."));
+assert(report.includes("normalized_student_curriculum($pdo,$studentId)"));
+assert(report.includes("sd.kademe_kodu=?"));
+assert(report.includes("sd.sinif_seviyesi=?"));
+assert(report.includes("oi.sinif_seviyesi=?"));
 
 console.log('Tenant isolation and activity CSRF checks passed');
