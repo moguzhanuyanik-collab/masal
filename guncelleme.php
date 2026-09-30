@@ -68,11 +68,6 @@ function update_public_error_message(Throwable $e): string {
         'İndirilen güncelleme',
         'Guncelleme paketi',
         'Güncelleme paketi',
-        'Güncelleme ZIP paketi',
-        'Güncelleme hedef',
-        'Güncelleme dosya',
-        'Güncelleme kaynak',
-        'Güncelleme sonrası',
         'Yedek ',
         'Onceki surum',
         'Önceki sürüm',
@@ -92,7 +87,6 @@ try{
 }
 
 $gh = app_config('github');
-$dbCfg = app_config('db');
 $updateCfg = app_config('update');
 $updateCsrf = csrf_token();
 
@@ -100,21 +94,22 @@ if ($isAjax) {
     try {
         $action = (string)($_GET['action'] ?? 'check');
         $local = read_app_version();
-        $localRevision = read_local_release_revision(__DIR__,$local);
 
         if ($action === 'check') {
-            $remote = next_remote_version_info($gh,$local,$localRevision);
+            $remote = next_remote_version_info($gh,$local);
 
             ajax_response([
                 'ok' => true,
                 'action' => 'check',
                 'local_version' => $local,
-                'local_revision' => $localRevision,
                 'remote_version' => (string)($remote['version'] ?? ''),
-                'remote_revision' => normalize_release_revision($remote['release_revision'] ?? 0),
                 'remote_name' => (string)($remote['name'] ?? ''),
                 'commit' => (string)($remote['commit'] ?? ''),
-                'update_available' => release_identity_is_newer($remote,$local,$localRevision),
+                'update_available' => version_compare(
+                    (string)($remote['version'] ?? '0.0.0'),
+                    $local,
+                    '>'
+                ),
             ]);
         }
 
@@ -133,17 +128,19 @@ if ($isAjax) {
                 ], 403);
             }
 
-            $remoteBefore = next_remote_version_info($gh,$local,$localRevision);
+            $remoteBefore = next_remote_version_info($gh,$local);
 
-            if (!release_identity_is_newer($remoteBefore,$local,$localRevision)) {
+            if (!version_compare(
+                (string)($remoteBefore['version'] ?? '0.0.0'),
+                $local,
+                '>'
+            )) {
                 ajax_response([
                     'ok' => true,
                     'action' => 'install',
                     'message' => 'Sistem zaten güncel.',
                     'local_version' => $local,
-                    'local_revision' => $localRevision,
                     'remote_version' => (string)($remoteBefore['version'] ?? ''),
-                    'remote_revision' => normalize_release_revision($remoteBefore['release_revision'] ?? 0),
                     'remote_name' => (string)($remoteBefore['name'] ?? ''),
                     'commit' => (string)($remoteBefore['commit'] ?? ''),
                     'update_available' => false,
@@ -153,33 +150,22 @@ if ($isAjax) {
             $result = install_github_update(
                 __DIR__,
                 $gh,
-                (array)($updateCfg['preserve'] ?? []),
-                is_array($dbCfg)?$dbCfg:[],
-                is_array($updateCfg)?$updateCfg:[]
+                (array)($updateCfg['preserve'] ?? [])
             );
 
             $newLocal = read_app_version();
-            $newLocalRevision = read_local_release_revision(__DIR__,$newLocal);
 
-            // Kurulum başarıyla tamamlandıktan sonraki GitHub kontrolü ikincil bir adımdır.
-            // Bu ağ isteği başarısız olsa bile tamamlanmış kurulumu kullanıcıya hatalı gösterme.
+            // Kurulumdan sonra zincirde bir sonraki sürümü tekrar kontrol et.
+            // Örn. 1.1.5 kurulduysa ve 1.1.6 varsa ekran hemen 1.1.6'yı sunar.
+            $remote = next_remote_version_info($gh,$newLocal);
+            $hasNext = version_compare(
+                (string)($remote['version'] ?? '0.0.0'),
+                $newLocal,
+                '>'
+            );
             $message = (string)($result['message'] ?? 'Güncelleme başarıyla kuruldu.');
-            $remote = [
-                'version' => $newLocal,
-                'release_revision' => $newLocalRevision,
-                'name' => '',
-                'commit' => '',
-            ];
-            $hasNext = false;
-            try {
-                $remote = next_remote_version_info($gh,$newLocal,$newLocalRevision);
-                $hasNext = release_identity_is_newer($remote,$newLocal,$newLocalRevision);
-                if ($hasNext) {
-                    $message .= ' Sıradaki güncelleme '.(string)$remote['version'].' rev '.normalize_release_revision($remote['release_revision']??0).' kuruluma hazır.';
-                }
-            } catch (Throwable $postInstallCheckError) {
-                error_log('[IlkAdim][update-post-check] '.$postInstallCheckError->getMessage());
-                $message .= ' Güncelleme kuruldu; sonraki sürüm kontrolü şu anda tamamlanamadı.';
+            if ($hasNext) {
+                $message .= ' Sıradaki sürüm '.(string)$remote['version'].' kuruluma hazır.';
             }
 
             ajax_response([
@@ -187,12 +173,8 @@ if ($isAjax) {
                 'action' => 'install',
                 'message' => $message,
                 'backup' => (string)($result['backup'] ?? ''),
-                'database_backup' => (string)($result['database_backup'] ?? ''),
-                'recovery_manifest' => (string)($result['recovery_manifest'] ?? ''),
                 'local_version' => $newLocal,
-                'local_revision' => $newLocalRevision,
                 'remote_version' => (string)($remote['version'] ?? ''),
-                'remote_revision' => normalize_release_revision($remote['release_revision'] ?? 0),
                 'remote_name' => (string)($remote['name'] ?? ''),
                 'commit' => (string)($remote['commit'] ?? ''),
                 'update_available' => $hasNext,
@@ -213,7 +195,6 @@ if ($isAjax) {
 }
 
 $local = read_app_version();
-$localRevision = read_local_release_revision(__DIR__,$local);
 ?>
 <!DOCTYPE html>
 <html lang="tr">
@@ -262,7 +243,7 @@ $localRevision = read_local_release_revision(__DIR__,$local);
                     <span><svg><use href="#sa-device"/></svg></span>
                     <div>
                         <strong>Kurulu sürüm</strong>
-                        <small id="localVersion"><?=h($local)?><?= $localRevision>0 ? ' · rev '.(int)$localRevision : '' ?></small>
+                        <small id="localVersion"><?=h($local)?></small>
                     </div>
                     <svg aria-hidden="true"><use href="#i-check"/></svg>
                 </div>
@@ -309,7 +290,7 @@ $localRevision = read_local_release_revision(__DIR__,$local);
                 Güncellemeyi Şimdi Kur
             </button>
 
-            <p class="little-note">Sunucuda yalnızca bir önceki uygulama sürümünün tek yedeği tutulur. Migration varsa ayrıca doğrulanmış DB snapshot ve SHA-256 recovery manifest oluşturulur. Otomatik restore yapılmaz; recovery bilgisi kontrollü geri dönüş içindir.</p>
+            <p class="little-note">Sunucuda yalnızca bir önceki uygulama sürümünün tek yedeği tutulur. Canlı ayarlar ve storage verileri yedeğe eklenmez. Repoda izlenen CSS dosyaları güncellenir; canlı runtime verileri korunur.</p>
         </div>
     </main>
 
@@ -369,12 +350,10 @@ $localRevision = read_local_release_revision(__DIR__,$local);
 
     function applyState(data) {
         if (data.local_version) {
-            const localRevision = Number(data.local_revision || 0);
-            localVersion.textContent = data.local_version + (localRevision > 0 ? ' · rev ' + localRevision : '');
+            localVersion.textContent = data.local_version;
         }
 
-        const remoteRevision = Number(data.remote_revision || 0);
-        remoteVersion.textContent = (data.remote_version || '-') + (remoteRevision > 0 ? ' · rev ' + remoteRevision : '');
+        remoteVersion.textContent = data.remote_version || '-';
         remoteName.textContent = data.remote_name ? ' — ' + data.remote_name : '';
         commit.textContent = data.commit ? data.commit.substring(0, 12) : '-';
 
@@ -454,12 +433,8 @@ $localRevision = read_local_release_revision(__DIR__,$local);
             statusTitle.textContent = 'Güncelleme tamamlandı';
             statusText.textContent = data.message || 'Güncelleme başarıyla kuruldu.';
 
-            const backupParts = [];
-            if (data.backup) backupParts.push('Uygulama: ' + data.backup);
-            if (data.database_backup) backupParts.push('DB: ' + data.database_backup);
-            if (data.recovery_manifest) backupParts.push('Recovery: ' + data.recovery_manifest);
-            if (backupParts.length) {
-                backupText.textContent = backupParts.join(' · ');
+            if (data.backup) {
+                backupText.textContent = 'Yedek: ' + data.backup;
                 backupText.hidden = false;
             }
 

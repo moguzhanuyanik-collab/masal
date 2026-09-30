@@ -23,15 +23,13 @@ assert(install.includes("$e instanceof PDOException"));
 
 assert(updater.includes("function ensure_runtime_storage_guard"));
 assert(updater.includes("Require all denied"));
-assert(updater.includes("$rel==='config/local.php'"));
-assert(updater.includes("$rel==='.env'"));
-assert(updater.includes("str_starts_with($rel,'storage/')"));
+assert(updater.includes("$rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')"));
 assert(updater.includes("Guncelleme hatayla sonlandi. Ayrintilar sunucu gunlugune kaydedildi."));
 assert(!updater.includes("execute([$e->getMessage(),$logId])"));
 
 assert(updatePage.includes("update_public_error_message"));
 assert(updatePage.includes("ensure_runtime_storage_guard(__DIR__)"));
-assert(updatePage.includes("Sunucuda yalnızca bir önceki uygulama sürümünün tek yedeği tutulur."));
+assert(updatePage.includes("Canlı ayarlar ve storage verileri yedeğe eklenmez."));
 
 assert(!activities.includes("'detail'=>$e->getMessage()"));
 assert(!state.includes("'detail'=>$e->getMessage()"));

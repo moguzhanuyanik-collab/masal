@@ -27,7 +27,7 @@ const historical=fs.readdirSync('database/migrations')
   .map(name=>name.replace(/\.sql$/,''))
   .filter(name=>{
     const number=Number(name.slice(0,3));
-    return number>=1 && number<=63 && !retired.has(name);
+    return number>=1 && number<=63 && name!=='001_197_history_recovery' && !retired.has(name);
   })
   .sort();
 
@@ -66,5 +66,5 @@ assert(workflow.includes('tests/adimbot-rate-limit-98.php'));
 assert(workflow.includes('for file in tests/adimbot-*.cjs'));
 assert(workflow.includes('tests/adimbot-transcript-behavior.php'));
 
-assert(/^1\.1\.(?:9[8-9]|[1-9][0-9]{2,})$/.test(String(version.version)),'version must be 1.1.98 or newer');
+assert.strictEqual(version.version,'1.1.98');
 console.log('1.1.98 DB and AI safety checks passed');
