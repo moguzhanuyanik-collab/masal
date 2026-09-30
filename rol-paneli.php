@@ -54,8 +54,14 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && (string)($_POST['action']??'')==='boo
         $user=auth_fetch_user($pdo,(int)$user['id'])??$user;
         $superAdminCount=1;
         $message='Sistem sahibi yetkisi etkinleştirildi. Artık kullanıcı ve eşleştirmeleri yönetebilirsin.';
-    } catch (Throwable $e) {
+    } catch (PDOException $e) {
+        error_log('[IlkAdim][role-panel-db] '.$e->getMessage());
+        $error='Yetki işlemi şu anda tamamlanamadı.';
+    } catch (RuntimeException $e) {
         $error=$e->getMessage();
+    } catch (Throwable $e) {
+        error_log('[IlkAdim][role-panel] '.$e->getMessage());
+        $error='Yetki işlemi şu anda tamamlanamadı.';
     }
 }
 
