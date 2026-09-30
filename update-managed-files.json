@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.115",
+  "version": "1.1.116",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
