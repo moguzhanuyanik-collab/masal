@@ -16,6 +16,7 @@ assert(migration.includes('ix_veli_ogrenci_kurum'),'parent tenant index postcond
 assert(migration.includes('ix_ogretmen_ogrenci_kurum'),'teacher tenant index postcondition must be checked');
 assert(migration.includes('id=0'),'global scope zero must not collide with a real institution');
 assert(migration.includes('__ilkadim_tenant_relation_schema_guard_failed__'),'guard must fail closed');
+assert(migration.includes('SET @ilkadim_relation_guard_passed = 1'),'successful guard path must not return an unbuffered result set');
 assert(dbTest.includes('066_kurum_eslestirme_schema_guard.sql'),'DB integration test must execute migration 066');
 assert(workflow.includes('node tests/tenant-schema-guard-116.cjs'),'CI must run the schema guard regression');
 assert.strictEqual(version.version,'1.1.115');
