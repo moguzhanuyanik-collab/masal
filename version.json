@@ -1,5 +1,5 @@
 {
-  "version": "1.1.100",
-  "name": "1.1.99 → 1.1.100 sıralı geçiş köprüsü",
-  "release_revision": 1
+  "version": "1.1.113",
+  "name": "Kurum bazlı eşleştirme izolasyonu ve gerçek DB tenant testleri · sıralı güncelleme zinciri",
+  "release_revision": 13
 }
