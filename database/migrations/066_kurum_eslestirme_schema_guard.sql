@@ -91,7 +91,7 @@ SET @ilkadim_relation_guard_sql = IF(
     WHERE oo.kurum_id<>0
       AND k.id IS NULL
   )=0,
-  'SELECT 1',
+  'SET @ilkadim_relation_guard_passed = 1',
   'SELECT * FROM __ilkadim_tenant_relation_schema_guard_failed__ LIMIT 1'
 );
 
