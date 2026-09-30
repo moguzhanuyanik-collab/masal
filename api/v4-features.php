@@ -28,15 +28,39 @@ function v4_data(PDO $db,int $sid): array {
  $stars=count($state['steps']??[])+count($state['games']??[])
    +count(array_unique(array_column($state['readings']??[],'id')))
    +2*count($state['claimed']??[]);
+ $scope=normalized_student_curriculum($db,$sid);
+ $stage=$scope['kademe_kodu'];
+ $grade=$scope['sinif_seviyesi'];
  $complete=0;
- $rows=$db->query("SELECT d.kod,d.ad,COUNT(m.id) AS toplam FROM dersler d
-   LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod,d.ad")->fetchAll(PDO::FETCH_ASSOC);
- $done=[];
- foreach($state['steps']??[] as $step)if(is_string($step)&&preg_match('/^(.+)-(\d+)$/',$step,$m))$done[$m[1]][$m[2]]=1;
+ $s=$db->prepare("SELECT d.kod,d.ad,COUNT(DISTINCT m.id) AS toplam,
+     COUNT(DISTINCT CASE WHEN oi.id IS NOT NULL AND oi.tamamlandi=1 THEN m.id END) AS tamamlanan
+   FROM dersler d
+   INNER JOIN sinif_dersleri sd
+     ON sd.ders_id=d.id
+    AND sd.kademe_kodu=?
+    AND sd.sinif_seviyesi=?
+    AND sd.aktif=1
+   LEFT JOIN ders_modulleri m
+     ON m.ders_id=d.id
+    AND m.kademe_kodu=?
+    AND m.sinif_seviyesi=?
+    AND m.aktif=1
+   LEFT JOIN ogrenci_ilerleme oi
+     ON oi.ogrenci_id=?
+    AND oi.sinif_seviyesi=?
+    AND oi.ders_kodu=d.kod
+    AND oi.modul_indeksi=m.sira-1
+    AND oi.tamamlandi=1
+   WHERE d.aktif=1
+   GROUP BY d.id,d.kod,d.ad,d.sira
+   ORDER BY d.sira,d.id");
+ $s->execute([$stage,$grade,$stage,$grade,$sid,$grade]);
+ $rows=$s->fetchAll(PDO::FETCH_ASSOC);
  $completed=[];
  foreach($rows as $row){
-   $n=(int)$row['toplam'];
-   if($n>0&&count($done[$row['kod']]??[]) >= $n) {
+   $total=(int)$row['toplam'];
+   $done=(int)$row['tamamlanan'];
+   if($total>0&&$done>=$total){
      $complete++;
      $completed[]=$row['ad'];
    }
@@ -97,8 +121,10 @@ try {
    $day=(int)($body['day']??0);$lesson=(string)($body['lesson']??'');$goal=trim((string)($body['goal']??''));
    if($day<1||$day>7||strlen($lesson)>50||mb_strlen($goal)>160||$goal==='')
      json_response(['ok'=>false,'message'=>'Gün, ders veya hedef geçersiz.'],400);
-   $s=$db->prepare('SELECT COUNT(*) FROM dersler WHERE kod=? AND aktif=1');$s->execute([$lesson]);
-   if(!(int)$s->fetchColumn())json_response(['ok'=>false,'message'=>'Ders bulunamadı.'],400);
+   $scope=normalized_student_curriculum($db,$sid);
+   $s=$db->prepare('SELECT COUNT(*) FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id AND sd.kademe_kodu=? AND sd.sinif_seviyesi=? AND sd.aktif=1 WHERE d.kod=? AND d.aktif=1');
+   $s->execute([$scope['kademe_kodu'],$scope['sinif_seviyesi'],$lesson]);
+   if(!(int)$s->fetchColumn())json_response(['ok'=>false,'message'=>'Bu ders öğrencinin sınıfına ait değil.'],400);
    $s=$db->prepare('INSERT INTO v4_haftalik_plan (ogrenci_id,gun,ders_kodu,hedef,tamamlandi) VALUES (?,?,?,?,0)
     ON DUPLICATE KEY UPDATE ders_kodu=VALUES(ders_kodu),hedef=VALUES(hedef),tamamlandi=0');
    $s->execute([$sid,$day,$lesson,$goal]);

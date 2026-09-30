@@ -434,6 +434,7 @@
     "tests/recovery-safety-100.cjs",
     "tests/recovery-safety-100.php",
     "tests/security-92.cjs",
+    "tests/tenant-isolation-114.cjs",
     "tests/update-197-rescue-106.cjs",
     "tests/update-197-rescue-106.php",
     "tests/update-197-rescue-installer-107.cjs",

@@ -95,3 +95,4 @@ jobs:
           node tests/update-legacy-bridge-113.cjs
           node tests/update-quality-catalog-113.cjs
           node tests/web-rescue-197-198-113.cjs
+          node tests/tenant-isolation-114.cjs
