@@ -133,7 +133,7 @@ function ky_global_students(PDO $pdo): array {
           GROUP_CONCAT(DISTINCT pv.ad_soyad ORDER BY pv.ad_soyad SEPARATOR ', ') veli_adlari
           FROM kullanicilar k
           INNER JOIN ogrenciler o ON o.kullanici_id=k.id
-          LEFT JOIN veli_ogrenci vo ON vo.ogrenci_id=o.id
+          LEFT JOIN veli_ogrenci vo ON vo.ogrenci_id=o.id AND vo.kurum_id=0
           LEFT JOIN veliler v ON v.id=vo.veli_id AND v.aktif=1
           LEFT JOIN kullanicilar pv ON pv.id=v.kullanici_id AND pv.aktif=1
           WHERE k.aktif=1 AND o.aktif=1
@@ -157,7 +157,7 @@ function ky_global_parents(PDO $pdo): array {
           GROUP_CONCAT(DISTINCT o.ad ORDER BY o.ad SEPARATOR ', ') ogrenci_adlari
           FROM kullanicilar k
           INNER JOIN veliler v ON v.kullanici_id=k.id
-          LEFT JOIN veli_ogrenci vo ON vo.veli_id=v.id
+          LEFT JOIN veli_ogrenci vo ON vo.veli_id=v.id AND vo.kurum_id=0
           LEFT JOIN ogrenciler o ON o.id=vo.ogrenci_id AND o.aktif=1
           WHERE k.aktif=1 AND v.aktif=1
             AND NOT EXISTS (
