@@ -31,7 +31,7 @@ assert(updater.includes("'--hex-blob'"));
 assert(updater.includes("'--skip-lock-tables'"));
 assert(!updater.includes("'--password="));
 assert(updater.includes('Migration öncesi veritabanı yedeği doğrulanamadı'));
-assert(updater.includes('$requiresDbBackup=database_update_requires_backup'));
+assert(updater.includes("$requiresDbBackup=$studentSchemaMissing || $legacyRepairNeeded || $pendingMigrations!==[];"));
 assert(updater.indexOf('create_database_backup($root,$dbConfig,$updateConfig,$pdo)')
   < updater.indexOf("if($studentSchemaMissing) ensure_student_auth_schema($pdo)"));
 assert(updater.includes("'database_backup'=>$dbBackupName"));
