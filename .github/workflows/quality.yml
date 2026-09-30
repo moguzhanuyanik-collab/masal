@@ -32,3 +32,4 @@ jobs:
         run: |
           node tests/security-92.cjs
           node tests/migration-safety-93.cjs
+          node tests/hardening-94.cjs
