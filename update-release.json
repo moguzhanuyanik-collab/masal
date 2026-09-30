@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.113",
-  "name": "Kurum izolasyonu, CSRF ve müfredat kapsamı · V4 plan/rozet · state API + 064 recovery · 064 preflight recovery · 064 idempotent recovery · gerçek GitHub commit çözümleme",
-  "release_revision": 12
+  "version": "1.1.114",
+  "name": "Kurum bazlı eşleştirme izolasyonu ve gerçek DB tenant testleri",
+  "release_revision": 2
 }
