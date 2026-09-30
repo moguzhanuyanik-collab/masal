@@ -68,11 +68,25 @@
     if(!ALL_GAME_IDS.includes(gameId))return;
     completed.add(gameId);
     if(EXTRA_IDS.includes(gameId))writeStored();
+
+    const send=()=>{
+      if(!csrfToken)return;
+      nativeFetch('api/activities.php',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json','X-CSRF-Token':csrfToken},
+        body:JSON.stringify({game:gameId}),
+        credentials:'same-origin'
+      }).catch(()=>{});
+    };
+
+    if(csrfToken){send();return;}
     nativeFetch('api/activities.php',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json',...(csrfToken?{'X-CSRF-Token':csrfToken}:{})},
-      body:JSON.stringify({game:gameId}),
-      credentials:'same-origin'
+      headers:{'Accept':'application/json'},
+      credentials:'same-origin',
+      cache:'no-store'
+    }).then(r=>r.ok?r.json():null).then(data=>{
+      if(data&&typeof data.csrf==='string')csrfToken=data.csrf;
+      send();
     }).catch(()=>{});
   }
 
