@@ -126,7 +126,7 @@
   evt.preventDefault();evt.stopImmediatePropagation();
   try{
    const pending=await store.getPending(sid);
-   if(pending.length&&!confirm(pending.length+' çevrimdışı kayıt henüz gönderilmedi. Kayıtlar bu cihazda korunacak ve aynı öğrenci tekrar giriş yaptığında eşitlenebilecek. Yine de çıkış yapılsın mı?'))return;
+   if(pending.length&&!confirm(pending.length+' çevrimdışı kayıt henüz gönderilmedi. Çıkış yapılırsa çevrimdışı paket ve bekleyen kayıtlar bu cihazdan silinecek. Yine de çıkış yapılsın mı?'))return;
    localStorage.removeItem('ilkadim-pwa34-active-student');
   }catch{
    try{localStorage.removeItem('ilkadim-pwa34-active-student');}catch{}
