@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.114",
-  "name": "Kurum bazlı eşleştirme izolasyonu ve gerçek DB tenant testleri",
-  "release_revision": 2
+  "version": "1.1.115",
+  "name": "Kurum eşleştirme şema guard ve fail-closed tenant doğrulaması",
+  "release_revision": 1
 }
