@@ -3,6 +3,7 @@ declare(strict_types=1);
 require dirname(__DIR__).'/src/auth.php';
 require_once dirname(__DIR__).'/src/adimbot_groq.php';
 require_once dirname(__DIR__).'/src/adimbot_transcript.php';
+require_once dirname(__DIR__).'/src/adimbot_rate_limit.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, max-age=0');
@@ -73,18 +74,45 @@ $groqModel=trim((string)($ai['voice_transcription_model'] ?? 'whisper-large-v3-t
 $geminiModel=trim((string)($ai['voice_gemini_model'] ?? 'gemini-3.5-flash-lite'));
 if ($provider==='groq' && !in_array($groqModel,['whisper-large-v3-turbo','whisper-large-v3'],true)) voice_result(['ok'=>false,'reason'=>'provider_config_error'],500);
 if ($provider==='gemini' && !preg_match('/^gemini-[A-Za-z0-9._-]+$/D',$geminiModel)) voice_result(['ok'=>false,'reason'=>'provider_config_error'],500);
-$times=is_array($_SESSION['adimbot_voice_requests'] ?? null)?$_SESSION['adimbot_voice_requests']:[];
 $voiceNow=time();
 $voiceWindow=600;
-$times=array_values(array_filter(array_map('intval',$times),static fn(int $t):bool=>$t>$voiceNow-$voiceWindow));
-if (count($times)>=max(3,min(30,(int)($ai['max_requests_per_10_minutes'] ?? 20)))) {
-    $retryAfter=max(1,min($voiceWindow,$times[0]+$voiceWindow-$voiceNow));
-    header('Retry-After: '.$retryAfter);
-    voice_result(['ok'=>false,'reason'=>'rate_limit','retry_after'=>$retryAfter],429);
+$voiceLimit=max(3,min(30,(int)($ai['max_requests_per_10_minutes'] ?? 20)));
+$voiceRate=['persistent'=>false,'blocked'=>false,'retry_after'=>0];
+if(function_exists('db')){
+    try{
+        $voiceRate=adimbot_rate_limit_check_and_record(
+            db(),
+            'voice',
+            (int)($_SESSION['ogrenci_id'] ?? 0),
+            mb_substr((string)($_SERVER['REMOTE_ADDR'] ?? ''),0,45),
+            $voiceLimit,
+            $voiceWindow
+        );
+    }catch(Throwable){
+        $voiceRate=['persistent'=>false,'blocked'=>false,'retry_after'=>0];
+    }
 }
-$times[]=$voiceNow;
-$_SESSION['adimbot_voice_requests']=$times;
-session_write_close();
+
+if(($voiceRate['persistent']??false)===true){
+    unset($_SESSION['adimbot_voice_requests']);
+    session_write_close();
+    if(($voiceRate['blocked']??false)===true){
+        $retryAfter=max(1,min($voiceWindow,(int)($voiceRate['retry_after']??$voiceWindow)));
+        header('Retry-After: '.$retryAfter);
+        voice_result(['ok'=>false,'reason'=>'rate_limit','retry_after'=>$retryAfter],429);
+    }
+}else{
+    $times=is_array($_SESSION['adimbot_voice_requests'] ?? null)?$_SESSION['adimbot_voice_requests']:[];
+    $times=array_values(array_filter(array_map('intval',$times),static fn(int $t):bool=>$t>$voiceNow-$voiceWindow));
+    if(count($times)>=$voiceLimit){
+        $retryAfter=max(1,min($voiceWindow,$times[0]+$voiceWindow-$voiceNow));
+        header('Retry-After: '.$retryAfter);
+        voice_result(['ok'=>false,'reason'=>'rate_limit','retry_after'=>$retryAfter],429);
+    }
+    $times[]=$voiceNow;
+    $_SESSION['adimbot_voice_requests']=$times;
+    session_write_close();
+}
 $timeout=max(10,min(45,(int)($ai['timeout_seconds'] ?? 20)));
 if ($provider==='groq') {
     $request=['file'=>new CURLFile($file['tmp_name'],$detected,'speech.'.$mimes[$detected]),'model'=>$groqModel,'language'=>'tr','response_format'=>'json'];
