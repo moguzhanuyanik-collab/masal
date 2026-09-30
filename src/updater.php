@@ -648,7 +648,8 @@ function install_github_update(string $root,array $gh,array $preserve): array {
         flock($updateLock,LOCK_UN); fclose($updateLock);
         return ['updated'=>true,'message'=>'Guncelleme basariyla kuruldu.','remote'=>$remote,'local'=>$localVersion,'backup'=>$backupName,'migrations'=>$migrations];
     }catch(Throwable $e){
-        try{ $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='hatali',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute([$e->getMessage(),$logId]); }catch(Throwable $ignored){}
+        error_log('[IlkAdim][updater] '.$e->getMessage());
+        try{ $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='hatali',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute(['Guncelleme hatayla sonlandi. Ayrintilar sunucu gunlugune kaydedildi.',$logId]); }catch(Throwable $ignored){}
         @unlink($zipPath); delete_tree($extractDir);
         if(is_resource($updateLock)){flock($updateLock,LOCK_UN);fclose($updateLock);}
         throw $e;
