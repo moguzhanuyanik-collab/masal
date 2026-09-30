@@ -20,6 +20,10 @@ function sd_writable_status(string $path): array {
     return sd_status(is_writable($path),'Yazılabilir','Yazma izni yok');
 }
 
+function sd_file_status(string $path,string $ready='Mevcut',string $missing='Eksik'): array {
+    return sd_status(is_file($path),$ready,$missing);
+}
+
 $databaseOk=false;
 try{
     $databaseOk=(bool)$pdo->query('SELECT 1')->fetchColumn();
@@ -45,6 +49,12 @@ $checks=[
     ['name'=>'Storage','detail'=>'Uygulama çalışma verileri','status'=>sd_writable_status(__DIR__.'/storage')],
     ['name'=>'Güncelleme alanı','detail'=>'İndirilen paket ve geçici dosyalar','status'=>sd_writable_status(__DIR__.'/storage/updates')],
     ['name'=>'Yedek alanı','detail'=>'Güncelleme öncesi dosya yedekleri','status'=>sd_writable_status(__DIR__.'/storage/backups')],
+    ['name'=>'Çalışma bootstrap','detail'=>'Canlı uygulamanın src/bootstrap.php dosyası','status'=>sd_file_status(__DIR__.'/src/bootstrap.php')],
+    ['name'=>'Ana stil dosyası','detail'=>'Canlı uygulamanın styles.css dosyası','status'=>sd_file_status(__DIR__.'/styles.css')],
+    ['name'=>'Uygulama runtime','detail'=>'Canlı uygulamanın app-runtime.js dosyası','status'=>sd_file_status(__DIR__.'/app-runtime.js')],
+    ['name'=>'Temiz kurulum şeması','detail'=>'database/schema.sql','status'=>sd_file_status(__DIR__.'/database/schema.sql','Hazır','GitHub/kurulum kaynağı eksik')],
+    ['name'=>'Temiz kurulum başlangıç verisi','detail'=>'database/seed.sql','status'=>sd_file_status(__DIR__.'/database/seed.sql','Hazır','GitHub/kurulum kaynağı eksik')],
+    ['name'=>'Yönetilen dosya manifesti','detail'=>'Updater yalnız kendi yönettiği eski dosyaları güvenle temizler','status'=>sd_file_status(__DIR__.'/storage/updates/managed-files.json','Aktif','İlk 1.1.96+ güncellemede oluşacak')],
     ['name'=>'AdımBot','detail'=>$aiProvider!=='' && $aiModel!==''?$aiProvider.' · '.$aiModel:'Sağlayıcı veya model seçilmedi','status'=>sd_status($aiOk,'Yapılandırıldı',$aiEnabled?'Eksik yapılandırma':'Kapalı')],
 ];
 $readyCount=count(array_filter($checks,static fn(array $check):bool=>(bool)$check['status']['ok']));
@@ -68,7 +78,7 @@ if(is_file($versionFile)){
 <div><span class="sa-status-icon"><svg><use href="<?=$status['ok']?'#sa-shield':'#sa-settings'?>"/></svg></span><p><strong><?=sd_h((string)$check['name'])?></strong><small><?=sd_h((string)$check['detail'])?></small></p><?php if($status['ok']):?><b><i></i><?=sd_h((string)$status['label'])?></b><?php else:?><em><?=sd_h((string)$status['label'])?></em><?php endif;?></div>
 <?php endforeach; ?>
 </div></section>
-<p class="little-note">Bu ekran yalnız durum okur; ayarları, veritabanını veya dosyaları değiştirmez. <a href="adimbot-ayarlari.php">AdımBot ayarlarını aç</a>.</p>
+<p class="little-note">Bu ekran yalnız durum okur; ayarları, veritabanını veya dosyaları değiştirmez. Temiz kurulum şeması/seed eksikse mevcut çalışan sunucu etkilenmez ancak yeni sunucuya sıfırdan kurulum tamamlanamaz. <a href="adimbot-ayarlari.php">AdımBot ayarlarını aç</a>.</p>
 </div></main>
 <nav class="app-nav" aria-label="Süper Admin menüsü"><a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a><a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a><a href="global.php"><span><svg><use href="#sa-users"/></svg></span>Global</a><a href="guncelleme.php"><span><svg><use href="#sa-refresh"/></svg></span>Güncelle</a><a class="active" href="sistem-durum.php"><span><svg><use href="#sa-database"/></svg></span>Durum</a></nav>
 </div></body></html>
