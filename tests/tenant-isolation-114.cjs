@@ -23,6 +23,9 @@ assert(auth.includes("INNER JOIN kurum_kullanicilari vk"));
 assert(auth.includes("vk.kurum_rolu='veli'"));
 assert(auth.includes("sk.kurum_id=vk.kurum_id"));
 assert(auth.includes("sk.kurum_rolu='ogrenci'"));
+assert(auth.includes("NOT EXISTS ("));
+assert(auth.includes("vk0.kurum_rolu='veli'"));
+assert(auth.includes("sk0.kurum_rolu='ogrenci'"));
 
 // Rol panelleri, doğrudan eski eşleştirme tablolarından öğrenci sızdırmamalı.
 assert(teacherPanel.includes('auth_accessible_student_ids($pdo,(int)$user[\'id\'])'));
