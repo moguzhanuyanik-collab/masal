@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.102",
-  "name": "Updater paket sınırları ve recovery yaşam döngüsü",
-  "release_revision": 4
+  "version": "1.1.103",
+  "name": "Updater managed-file manifest bütünlüğü",
+  "release_revision": 2
 }
