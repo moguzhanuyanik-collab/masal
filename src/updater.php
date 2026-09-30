@@ -404,7 +404,7 @@ function project_backup_source_bytes(string $root): int {
         if(!$file->isFile() || $file->isLink()) continue;
         $path=$file->getPathname();
         $rel=ltrim(str_replace('\\','/',substr($path,strlen($root))),'/');
-        if($rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')) continue;
+        if($rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')||str_starts_with($rel,'.git/')) continue;
         $total+=max(0,(int)$file->getSize());
     }
     return $total;
@@ -441,7 +441,7 @@ function validate_project_backup(string $path): array {
                 throw new RuntimeException('Uygulama yedeğinde kritik dosya eksik: '.$required);
             }
         }
-        foreach(['config/local.php','.env'] as $secret){
+        foreach(['config/local.php','.env','.git/config'] as $secret){
             if($zip->locateName($secret)!==false){
                 throw new RuntimeException('Uygulama yedeği gizli yapılandırma dosyası içeriyor: '.$secret);
             }
@@ -475,7 +475,7 @@ function create_project_backup(string $root,string $target): void {
             $rel=ltrim(str_replace('\\','/',substr($path,strlen($root))),'/');
             // Güncelleme geri dönüş yedeği yalnız uygulama kodunu taşır.
             // Canlı sırlar ve çalışma verileri ayrı korunur; ZIP içine alınmaz.
-            if($rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')) continue;
+            if($rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')||str_starts_with($rel,'.git/')) continue;
             if(!$zip->addFile($path,$rel)){
                 throw new RuntimeException('Uygulama yedeğine dosya eklenemedi: '.$rel);
             }
