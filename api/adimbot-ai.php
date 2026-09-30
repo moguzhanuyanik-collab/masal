@@ -193,9 +193,14 @@ function adimbot_ai_provider_error(int $status, int $curlErrno, mixed $body=null
     adimbot_ai_json(['ok'=>false,'reason'=>$reason],$reason==='provider_rate_limit'?429:502);
 }
 
-function adimbot_ai_embedded_error(array $error): never {
+function adimbot_ai_embedded_error(array $error, int $retryAfter=0): never {
     $code=strtoupper((string)($error['code'] ?? $error['status'] ?? $error['type'] ?? ''));
     if (in_array($code,['402','429'],true) || preg_match('/(?:RESOURCE_EXHAUSTED|RATE_LIMIT|QUOTA|TOO_MANY_REQUESTS)/',$code)) {
+        if($retryAfter>0){
+            $retryAfter=max(1,min(600,$retryAfter));
+            header('Retry-After: '.$retryAfter);
+            adimbot_ai_json(['ok'=>false,'message'=>'AdımBot kullanım sınırına ulaştı. Biraz sonra tekrar dene.','reason'=>'provider_rate_limit','retry_after'=>$retryAfter],429);
+        }
         adimbot_ai_json(['ok'=>false,'message'=>'AdımBot kullanım sınırına ulaştı. Biraz sonra tekrar dene.','reason'=>'provider_rate_limit'],429);
     }
     if (in_array($code,['401','403'],true) || preg_match('/(?:UNAUTHENTICATED|PERMISSION_DENIED|INVALID_API_KEY|AUTH)/',$code)) {
@@ -432,7 +437,7 @@ $decoded=json_decode($responseBody,true);
 if (!is_array($decoded)) {
     adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ yanıtı okunamadı.','reason'=>'invalid_provider_response'],502);
 }
-if (is_array($decoded['error'] ?? null)) adimbot_ai_embedded_error($decoded['error']);
+if (is_array($decoded['error'] ?? null)) adimbot_ai_embedded_error($decoded['error'],$providerRetryAfter);
 
 $providerBlocked=($provider==='gemini' && (
         trim((string)($decoded['promptFeedback']['blockReason'] ?? ''))!==''
