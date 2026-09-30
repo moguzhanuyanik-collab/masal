@@ -100,22 +100,21 @@ if ($isAjax) {
     try {
         $action = (string)($_GET['action'] ?? 'check');
         $local = read_app_version();
+        $localRevision = read_local_release_revision(__DIR__,$local);
 
         if ($action === 'check') {
-            $remote = next_remote_version_info($gh,$local);
+            $remote = next_remote_version_info($gh,$local,$localRevision);
 
             ajax_response([
                 'ok' => true,
                 'action' => 'check',
                 'local_version' => $local,
+                'local_revision' => $localRevision,
                 'remote_version' => (string)($remote['version'] ?? ''),
+                'remote_revision' => normalize_release_revision($remote['release_revision'] ?? 0),
                 'remote_name' => (string)($remote['name'] ?? ''),
                 'commit' => (string)($remote['commit'] ?? ''),
-                'update_available' => version_compare(
-                    (string)($remote['version'] ?? '0.0.0'),
-                    $local,
-                    '>'
-                ),
+                'update_available' => release_identity_is_newer($remote,$local,$localRevision),
             ]);
         }
 
@@ -134,19 +133,17 @@ if ($isAjax) {
                 ], 403);
             }
 
-            $remoteBefore = next_remote_version_info($gh,$local);
+            $remoteBefore = next_remote_version_info($gh,$local,$localRevision);
 
-            if (!version_compare(
-                (string)($remoteBefore['version'] ?? '0.0.0'),
-                $local,
-                '>'
-            )) {
+            if (!release_identity_is_newer($remoteBefore,$local,$localRevision)) {
                 ajax_response([
                     'ok' => true,
                     'action' => 'install',
                     'message' => 'Sistem zaten güncel.',
                     'local_version' => $local,
+                    'local_revision' => $localRevision,
                     'remote_version' => (string)($remoteBefore['version'] ?? ''),
+                    'remote_revision' => normalize_release_revision($remoteBefore['release_revision'] ?? 0),
                     'remote_name' => (string)($remoteBefore['name'] ?? ''),
                     'commit' => (string)($remoteBefore['commit'] ?? ''),
                     'update_available' => false,
@@ -162,25 +159,23 @@ if ($isAjax) {
             );
 
             $newLocal = read_app_version();
+            $newLocalRevision = read_local_release_revision(__DIR__,$newLocal);
 
             // Kurulum başarıyla tamamlandıktan sonraki GitHub kontrolü ikincil bir adımdır.
             // Bu ağ isteği başarısız olsa bile tamamlanmış kurulumu kullanıcıya hatalı gösterme.
             $message = (string)($result['message'] ?? 'Güncelleme başarıyla kuruldu.');
             $remote = [
                 'version' => $newLocal,
+                'release_revision' => $newLocalRevision,
                 'name' => '',
                 'commit' => '',
             ];
             $hasNext = false;
             try {
-                $remote = next_remote_version_info($gh,$newLocal);
-                $hasNext = version_compare(
-                    (string)($remote['version'] ?? '0.0.0'),
-                    $newLocal,
-                    '>'
-                );
+                $remote = next_remote_version_info($gh,$newLocal,$newLocalRevision);
+                $hasNext = release_identity_is_newer($remote,$newLocal,$newLocalRevision);
                 if ($hasNext) {
-                    $message .= ' Sıradaki sürüm '.(string)$remote['version'].' kuruluma hazır.';
+                    $message .= ' Sıradaki güncelleme '.(string)$remote['version'].' rev '.normalize_release_revision($remote['release_revision']??0).' kuruluma hazır.';
                 }
             } catch (Throwable $postInstallCheckError) {
                 error_log('[IlkAdim][update-post-check] '.$postInstallCheckError->getMessage());
@@ -195,7 +190,9 @@ if ($isAjax) {
                 'database_backup' => (string)($result['database_backup'] ?? ''),
                 'recovery_manifest' => (string)($result['recovery_manifest'] ?? ''),
                 'local_version' => $newLocal,
+                'local_revision' => $newLocalRevision,
                 'remote_version' => (string)($remote['version'] ?? ''),
+                'remote_revision' => normalize_release_revision($remote['release_revision'] ?? 0),
                 'remote_name' => (string)($remote['name'] ?? ''),
                 'commit' => (string)($remote['commit'] ?? ''),
                 'update_available' => $hasNext,
@@ -216,6 +213,7 @@ if ($isAjax) {
 }
 
 $local = read_app_version();
+$localRevision = read_local_release_revision(__DIR__,$local);
 ?>
 <!DOCTYPE html>
 <html lang="tr">
@@ -264,7 +262,7 @@ $local = read_app_version();
                     <span><svg><use href="#sa-device"/></svg></span>
                     <div>
                         <strong>Kurulu sürüm</strong>
-                        <small id="localVersion"><?=h($local)?></small>
+                        <small id="localVersion"><?=h($local)?><?= $localRevision>0 ? ' · rev '.(int)$localRevision : '' ?></small>
                     </div>
                     <svg aria-hidden="true"><use href="#i-check"/></svg>
                 </div>
@@ -371,10 +369,12 @@ $local = read_app_version();
 
     function applyState(data) {
         if (data.local_version) {
-            localVersion.textContent = data.local_version;
+            const localRevision = Number(data.local_revision || 0);
+            localVersion.textContent = data.local_version + (localRevision > 0 ? ' · rev ' + localRevision : '');
         }
 
-        remoteVersion.textContent = data.remote_version || '-';
+        const remoteRevision = Number(data.remote_revision || 0);
+        remoteVersion.textContent = (data.remote_version || '-') + (remoteRevision > 0 ? ' · rev ' + remoteRevision : '');
         remoteName.textContent = data.remote_name ? ' — ' + data.remote_name : '';
         commit.textContent = data.commit ? data.commit.substring(0, 12) : '-';
 
