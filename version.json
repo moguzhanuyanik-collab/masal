@@ -1,4 +1,4 @@
 {
-  "version": "1.1.95",
-  "name": "PWA cache, çevrimdışı gizlilik ve asset sürümleme"
+  "version": "1.1.96",
+  "name": "Güvenli updater dosya manifesti ve stale cleanup altyapısı"
 }
