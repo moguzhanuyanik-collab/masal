@@ -1,10 +1,31 @@
 <?php
 declare(strict_types=1);
 
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
+header('X-Content-Type-Options: nosniff');
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_name('ilkadim_install');
+    session_set_cookie_params([
+        'lifetime'=>0,
+        'path'=>'/',
+        'secure'=>(!empty($_SERVER['HTTPS']) && strtolower((string)$_SERVER['HTTPS']) !== 'off'),
+        'httponly'=>true,
+        'samesite'=>'Lax',
+    ]);
+    session_start();
+}
+
 $root = __DIR__;
 $lockFile = $root . '/storage/install.lock';
 $message = '';
 $error = '';
+$locked = is_file($lockFile);
+if (empty($_SESSION['install_csrf']) || !is_string($_SESSION['install_csrf'])) {
+    $_SESSION['install_csrf'] = bin2hex(random_bytes(32));
+}
+$installCsrf = $_SESSION['install_csrf'];
 
 function h(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); }
 function run_sql_file(PDO $pdo, string $path): void {
@@ -23,7 +44,14 @@ function run_sql_file(PDO $pdo, string $path): void {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
+    if ($locked) {
+        http_response_code(403);
+        $error = 'Kurulum kilitli. Canlı sistemde kurulum yeniden çalıştırılamaz.';
+    } elseif (!hash_equals($installCsrf, (string)($_POST['csrf'] ?? ''))) {
+        http_response_code(403);
+        $error = 'Güvenlik doğrulaması başarısız. Sayfayı yenileyip tekrar deneyin.';
+    } else {
+        try {
         if (!extension_loaded('pdo_mysql')) throw new RuntimeException('Sunucuda PHP pdo_mysql eklentisi açık olmalı.');
         $db = [
             'host' => trim((string)($_POST['db_host'] ?? 'localhost')),
@@ -62,14 +90,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
         run_sql_file($pdo, $root . '/database/schema.sql');
         run_sql_file($pdo, $root . '/database/seed.sql');
-        file_put_contents($lockFile, date(DATE_ATOM) . "\n", LOCK_EX);
+        $lockDir=dirname($lockFile);
+        if (!is_dir($lockDir) && !mkdir($lockDir,0750,true) && !is_dir($lockDir)) {
+            throw new RuntimeException('Kurulum kilidi klasörü oluşturulamadı.');
+        }
+        if (file_put_contents($lockFile, date(DATE_ATOM) . "\n", LOCK_EX) === false) {
+            throw new RuntimeException('Kurulum kilidi oluşturulamadı.');
+        }
+        @chmod($lockFile,0600);
+        $locked=true;
         $message = 'Kurulum tamamlandı. MySQL tabloları ve başlangıç verileri hazır.';
-    } catch (Throwable $e) {
-        $error = $e->getMessage();
+        } catch (Throwable $e) {
+            $error = $e->getMessage();
+        }
     }
 }
-
-$locked = is_file($lockFile) && $_SERVER['REQUEST_METHOD'] !== 'POST';
 ?><!doctype html>
 <html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>İlkAdım Kurulum</title></head>
 <body style="font-family:system-ui,sans-serif;max-width:760px;margin:40px auto;padding:0 18px;line-height:1.5">
@@ -77,8 +112,9 @@ $locked = is_file($lockFile) && $_SERVER['REQUEST_METHOD'] !== 'POST';
 <?php if ($message): ?><p style="padding:12px;background:#e8fff0;border:1px solid #96d7ab"><?=h($message)?></p><p><a href="index.php">Uygulamayı aç</a> · <a href="guncelleme.php">Güncelleme sayfası</a></p><?php endif; ?>
 <?php if ($error): ?><p style="padding:12px;background:#fff0f0;border:1px solid #e4a5a5"><strong>Hata:</strong> <?=h($error)?></p><?php endif; ?>
 <?php if ($locked && !$message): ?><p>Kurulum daha önce tamamlanmış görünüyor. Yeniden kurulum gerekiyorsa önce <code>storage/install.lock</code> dosyasını kaldır.</p><p><a href="index.php">Uygulamaya dön</a></p><?php elseif (!$message): ?>
-<p>Bu sayfa yalnızca ilk kurulum içindir. Login sistemi daha sonra eklenecek; şimdilik sistem tek demo öğrenciyle çalışır.</p>
+<p>Bu sayfa yalnızca ilk kurulum içindir. Kurulum tamamlandıktan sonra güvenlik kilidi yeniden çalıştırmayı engeller.</p>
 <form method="post">
+<input type="hidden" name="csrf" value="<?=h($installCsrf)?>">
 <fieldset><legend>MySQL</legend>
 <p><label>Host<br><input name="db_host" value="localhost" required></label></p>
 <p><label>Port<br><input name="db_port" value="3306" inputmode="numeric" required></label></p>
