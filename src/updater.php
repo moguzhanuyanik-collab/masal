@@ -1828,6 +1828,8 @@ function recover_missing_064_checkpoint_after_1_1_98_bridge(PDO $pdo,string $roo
     $check->closeCursor();
     if($already) return [];
 
+    // Yalnız 064 eksikse onar. 064 öncesindeki bütün non-retired geçmiş
+    // eksiksiz değilse hiçbir değişiklik yapmadan dur.
     $retired=retired_automatic_migrations();
     $expected=[];
     foreach(glob(rtrim($root,'/\\').'/database/migrations/*.sql')?:[] as $file){
@@ -1849,23 +1851,31 @@ function recover_missing_064_checkpoint_after_1_1_98_bridge(PDO $pdo,string $roo
     if($missing!==[]){
         sort($missing,SORT_NATURAL);
         throw new RuntimeException(
-            '1.1.98 köprü recovery yalnız 064 checkpointini tamamlayabilir. '
-            .'064 öncesinde eksik migration var: '.implode(', ',array_slice($missing,0,8))
+            '064 checkpoint recovery durduruldu. Önceki migration geçmişinde eksik kayıt var: '
+            .implode(', ',array_slice($missing,0,8))
             .(count($missing)>8?' ...':'')
         );
     }
 
-    $path=rtrim($root,'/\\').'/database/migrations/'.$name.'.sql';
-    if(!is_file($path)){
-        throw new RuntimeException('064 checkpoint recovery dosyası güncelleme paketinde bulunamadı.');
-    }
-
-    assert_automatic_migration_safe($name,$path);
-    run_migration_sql($pdo,$path);
+    // 064'ün gerçek şema etkisi idempotent biçimde uygulanır. Eski migration
+    // SQL'i tekrar oynatılmaz ve mevcut kullanıcı/kurum verisine dokunulmaz.
+    $pdo->exec("CREATE TABLE IF NOT EXISTS adimbot_rate_limitleri (
+        kanal VARCHAR(16) NOT NULL,
+        kapsam VARCHAR(16) NOT NULL,
+        kapsam_hash CHAR(64) NOT NULL,
+        deneme_sayisi SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+        pencere_baslangici DATETIME NOT NULL,
+        engel_bitis DATETIME NULL,
+        son_deneme DATETIME NOT NULL,
+        PRIMARY KEY (kanal,kapsam,kapsam_hash),
+        KEY ix_adimbot_rate_engel (engel_bitis),
+        KEY ix_adimbot_rate_son (son_deneme)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
     $insert=$pdo->prepare('INSERT IGNORE INTO sistem_migrations (migration) VALUES (?)');
     $insert->execute([$name]);
     $insert->closeCursor();
+
     return [$name];
 }
 
@@ -2244,6 +2254,13 @@ function install_github_update(
         $recoveryState['activation_preflight']=$activationPreflight;
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
 
+        // 1.1.98 bridge'in bıraktığı tek 064 checkpoint eksikliği, veri dönüştürmeyen
+        // idempotent şema onarımıyla önce tamamlanır. Böylece bu özel durumda
+        // mysqldump zorunluluğu yüzünden güncelleme zinciri kilitlenmez.
+        $preflightRecoveredMigrations=recover_missing_064_checkpoint_after_1_1_98_bridge(
+            $pdo,$sourceRoot,$localVersion
+        );
+
         // Migration/legacy şema onarımı gerekiyorsa önce gerçek DB snapshot alınır.
         // mysqldump yoksa veri dönüştüren güncelleme fail-closed durur.
         $pendingMigrations=pending_migration_names($pdo,$sourceRoot,$localVersion);
@@ -2274,7 +2291,10 @@ function install_github_update(
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
         $databaseMutationStarted=$requiresDbBackup;
         if($studentSchemaMissing) ensure_student_auth_schema($pdo);
-        $migrations=run_pending_migrations($pdo,$sourceRoot,$localVersion);
+        $migrations=array_values(array_unique(array_merge(
+            $preflightRecoveredMigrations,
+            run_pending_migrations($pdo,$sourceRoot,$localVersion)
+        )));
 
         // Şema başarıyla hazırlandıktan sonra yeni uygulama dosyalarını etkinleştir.
         $updateStage='file_activation';
