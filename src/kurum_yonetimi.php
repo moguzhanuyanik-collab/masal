@@ -206,7 +206,7 @@ function ky_link_global_parent_student(PDO $pdo,array $actor,int $parentUserId,i
     $s->closeCursor();
     if($validStudent<=0) throw new RuntimeException('Seçilen öğrenci global öğrenci değil.');
 
-    $pdo->prepare('INSERT IGNORE INTO veli_ogrenci (veli_id,ogrenci_id) VALUES (?,?)')
+    $pdo->prepare('INSERT IGNORE INTO veli_ogrenci (veli_id,ogrenci_id,kurum_id) VALUES (?,?,0)')
         ->execute([$parentProfileId,$studentId]);
 
     auth_audit($pdo,(int)$actor['id'],$parentUserId,'global_veli_ogrenci_eslestir','Öğrenci: '.$studentId);
