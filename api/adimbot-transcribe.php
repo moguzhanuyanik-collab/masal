@@ -127,6 +127,6 @@ if (!is_string($text)) $text='';
 $text=trim(preg_replace('/\s+/u',' ',strip_tags($text)) ?? '');
 $text=preg_replace('/^(?:(?:elbette|tabii)[,.!]?\s*)?(?:transkripsiyon|deşifre|metin|duyduğum\s+metin)\s*[:\-]\s*/iu','',$text) ?? $text;
 $text=trim($text," \t\n\r\0\x0B\"'“”‘’");
-if (mb_strlen($text)>400) $text=mb_substr($text,0,400);
+if (mb_strlen($text)>400) voice_result(['ok'=>false,'reason'=>'too_long'],422);
 if ($text==='' || preg_match('/^(?:[\[(](?:müzik|music|sessizlik|silence|gürültü|noise|alkış|applause|anlaşılmayan ses)[\])]|(?:ses|konuşma) (?:algılanmadı|bulunamadı))\.?$/iu',$text) || !preg_match('/[\pL\pN]{2}/u',$text)) voice_result(['ok'=>false,'reason'=>'empty'],422);
 voice_result(['ok'=>true,'text'=>$text]);
