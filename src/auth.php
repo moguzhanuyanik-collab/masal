@@ -688,12 +688,42 @@ if (!function_exists('auth_accessible_student_ids')) {
             return array_values(array_map('intval',$rows?:[]));
         }
 
+        // Kurum izolasyonu: eşleştirme tablolarında kurum_id tutulmadığı için
+        // erişim yalnızca aktör ile öğrencinin aynı aktif kurum üyeliğini
+        // paylaşması halinde geçerlidir. Bu kontrol, kurum değişikliğinden sonra
+        // geçmiş eşleştirmelerin yeni kuruma sızmasını engeller.
         if ($effective==='ogretmen'
             && auth_runtime_table_exists($pdo,'ogretmen_ogrenci')
             && auth_runtime_table_exists($pdo,'ogretmenler')
+            && auth_runtime_table_exists($pdo,'kurum_kullanicilari')
+            && auth_runtime_table_exists($pdo,'kurumlar')
             && auth_runtime_column_exists($pdo,'ogretmenler','kullanici_id')) {
             try {
-                $stmt=$pdo->prepare('SELECT DISTINCT oo.ogrenci_id FROM ogretmen_ogrenci oo INNER JOIN ogretmenler o ON o.id=oo.ogretmen_id WHERE o.kullanici_id=? AND o.aktif=1 ORDER BY oo.ogrenci_id');
+                $stmt=$pdo->prepare("SELECT DISTINCT oo.ogrenci_id
+                    FROM ogretmen_ogrenci oo
+                    INNER JOIN ogretmenler o
+                      ON o.id=oo.ogretmen_id
+                     AND o.kullanici_id=?
+                     AND o.aktif=1
+                    INNER JOIN kurum_kullanicilari kt
+                      ON kt.kullanici_id=o.kullanici_id
+                     AND kt.kurum_rolu='ogretmen'
+                     AND kt.aktif=1
+                    INNER JOIN kurumlar k
+                      ON k.id=kt.kurum_id
+                     AND k.aktif=1
+                    INNER JOIN ogrenciler s
+                      ON s.id=oo.ogrenci_id
+                     AND s.aktif=1
+                    INNER JOIN kullanicilar su
+                      ON su.id=s.kullanici_id
+                     AND su.aktif=1
+                    INNER JOIN kurum_kullanicilari ks
+                      ON ks.kullanici_id=s.kullanici_id
+                     AND ks.kurum_id=kt.kurum_id
+                     AND ks.kurum_rolu='ogrenci'
+                     AND ks.aktif=1
+                    ORDER BY oo.ogrenci_id");
                 $stmt->execute([$userId]);
                 $ids=array_map('intval',$stmt->fetchAll(PDO::FETCH_COLUMN)?:[]);
                 $stmt->closeCursor();
@@ -706,9 +736,35 @@ if (!function_exists('auth_accessible_student_ids')) {
         if ($effective==='veli'
             && auth_runtime_table_exists($pdo,'veli_ogrenci')
             && auth_runtime_table_exists($pdo,'veliler')
+            && auth_runtime_table_exists($pdo,'kurum_kullanicilari')
+            && auth_runtime_table_exists($pdo,'kurumlar')
             && auth_runtime_column_exists($pdo,'veliler','kullanici_id')) {
             try {
-                $stmt=$pdo->prepare('SELECT DISTINCT vo.ogrenci_id FROM veli_ogrenci vo INNER JOIN veliler v ON v.id=vo.veli_id WHERE v.kullanici_id=? AND v.aktif=1 ORDER BY vo.ogrenci_id');
+                $stmt=$pdo->prepare("SELECT DISTINCT vo.ogrenci_id
+                    FROM veli_ogrenci vo
+                    INNER JOIN veliler v
+                      ON v.id=vo.veli_id
+                     AND v.kullanici_id=?
+                     AND v.aktif=1
+                    INNER JOIN kurum_kullanicilari vk
+                      ON vk.kullanici_id=v.kullanici_id
+                     AND vk.kurum_rolu='veli'
+                     AND vk.aktif=1
+                    INNER JOIN kurumlar k
+                      ON k.id=vk.kurum_id
+                     AND k.aktif=1
+                    INNER JOIN ogrenciler s
+                      ON s.id=vo.ogrenci_id
+                     AND s.aktif=1
+                    INNER JOIN kullanicilar su
+                      ON su.id=s.kullanici_id
+                     AND su.aktif=1
+                    INNER JOIN kurum_kullanicilari sk
+                      ON sk.kullanici_id=s.kullanici_id
+                     AND sk.kurum_id=vk.kurum_id
+                     AND sk.kurum_rolu='ogrenci'
+                     AND sk.aktif=1
+                    ORDER BY vo.ogrenci_id");
                 $stmt->execute([$userId]);
                 $ids=array_map('intval',$stmt->fetchAll(PDO::FETCH_COLUMN)?:[]);
                 $stmt->closeCursor();
