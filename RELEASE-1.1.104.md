@@ -28,3 +28,5 @@ Yeni migration yoktur. Kullanıcı/kurum verisi değiştirilmez. DB dönüşüm�
 ## Doğrulama
 
 Sürüm önce `update-activation-104` aday dalında tam kalite kapısından geçirilir; yalnız yeşil sonuçtan sonra aynı doğrulanmış commit `main` dalına fast-forward edilir.
+
+Aday dalın ilk push'unda workflow tetiklenmedi; kalite kapısının branch filtresine `update-*` aday dalları eklendi. Bu değişiklik gelecekteki updater adaylarının da `main` öncesi doğrulanmasını sağlar.
