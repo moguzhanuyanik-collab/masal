@@ -16,3 +16,8 @@
 - Q1001–Q1500 arasında 500 yeni kalite/güncelleme maddesi eklendi.
 - Önceki Q001–Q1000 korunur; toplam katalog 1500 maddedir.
 - 14 yeni kritik madde bu sürümde uygulandı, 486 madde plan statüsündedir.
+
+## Rev 2
+
+- Web rescue regresyon testindeki PHP string interpolation kaynaklı syntax hatası giderildi.
+- Test artık kritik rescue sözleşmelerini interpolation olmadan kaynak metninden doğrular.
