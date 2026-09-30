@@ -210,6 +210,47 @@ function path_is_preserved(string $relative,array $preserve): bool {
     return false;
 }
 
+function update_file_sha256(string $path,string $label): string {
+    if(!is_file($path) || is_link($path)){
+        throw new RuntimeException($label.' normal dosya değil.');
+    }
+    $hash=hash_file('sha256',$path);
+    if(!is_string($hash) || strlen($hash)!==64){
+        throw new RuntimeException($label.' SHA-256 değeri üretilemedi.');
+    }
+    return $hash;
+}
+
+function atomic_replace_update_file(string $source,string $target,string $relative): void {
+    $parent=dirname($target);
+    if(!is_dir($parent)&&!mkdir($parent,0775,true)&&!is_dir($parent)){
+        throw new RuntimeException('Güncelleme hedef klasörü oluşturulamadı: '.$relative);
+    }
+    if(is_link($target)){
+        throw new RuntimeException('Güncelleme hedef dosyası sembolik bağlantı olamaz: '.$relative);
+    }
+
+    $tmp=$parent.'/.'.basename($target).'.ilkadim-update-'.bin2hex(random_bytes(6)).'.tmp';
+    @unlink($tmp);
+    try{
+        if(!copy($source,$tmp)){
+            throw new RuntimeException('Güncelleme dosyası geçici alana yazılamadı: '.$relative);
+        }
+        $sourceHash=update_file_sha256($source,'Kaynak güncelleme dosyası');
+        $tmpHash=update_file_sha256($tmp,'Geçici güncelleme dosyası');
+        if(!hash_equals($sourceHash,$tmpHash)){
+            throw new RuntimeException('Güncelleme dosyası geçici yazım bütünlüğü doğrulanamadı: '.$relative);
+        }
+        $mode=@fileperms($source);
+        if(is_int($mode)) @chmod($tmp,$mode&0777);
+        if(!@rename($tmp,$target)){
+            throw new RuntimeException('Güncelleme dosyası atomik olarak etkinleştirilemedi: '.$relative);
+        }
+    }finally{
+        if(is_file($tmp)||is_link($tmp)) @unlink($tmp);
+    }
+}
+
 function copy_update_tree(string $source,string $destination,array $preserve,string $relative=''): void {
     foreach(scandir($source)?:[] as $item){
         if($item==='.'||$item==='..'||$item==='.git') continue;
@@ -220,13 +261,16 @@ function copy_update_tree(string $source,string $destination,array $preserve,str
             throw new RuntimeException('Güncelleme paketi sembolik bağlantı içeriyor: '.$rel);
         }
         if(is_dir($src)){
-            if(!is_dir($dst)&&!mkdir($dst,0775,true)&&!is_dir($dst)) throw new RuntimeException('Klasor olusturulamadi: '.$rel);
+            if(!is_dir($dst)&&!mkdir($dst,0775,true)&&!is_dir($dst)){
+                throw new RuntimeException('Güncelleme hedef klasörü oluşturulamadı: '.$rel);
+            }
             copy_update_tree($src,$destination,$preserve,$rel);
-        }else{
-            $parent=dirname($dst);
-            if(!is_dir($parent)&&!mkdir($parent,0775,true)&&!is_dir($parent)) throw new RuntimeException('Klasor olusturulamadi: '.$rel);
-            if(!copy($src,$dst)) throw new RuntimeException('Dosya guncellenemedi: '.$rel);
+            continue;
         }
+        if(!is_file($src)){
+            throw new RuntimeException('Güncelleme paketi desteklenmeyen dosya türü içeriyor: '.$rel);
+        }
+        atomic_replace_update_file($src,$dst,$rel);
     }
 }
 
@@ -433,6 +477,102 @@ function assert_managed_copy_type_safe(string $root,string $sourceRoot,array $ne
             );
         }
     }
+}
+
+function nearest_existing_update_directory(string $path,string $root): string {
+    $root=rtrim($root,'/\\');
+    $current=$path;
+    while(!is_dir($current)){
+        $parent=dirname($current);
+        if($parent===$current || strlen($parent)<strlen($root)){
+            throw new RuntimeException('Güncelleme hedef klasörü güvenli biçimde çözümlenemedi.');
+        }
+        $current=$parent;
+    }
+    return $current;
+}
+
+function assert_update_activation_preflight(
+    string $root,
+    string $sourceRoot,
+    array $newFiles,
+    array $oldFiles,
+    array $preserve
+): array {
+    $root=rtrim($root,'/\\');
+    $sourceRoot=rtrim($sourceRoot,'/\\');
+    $bytes=0;
+    $checkedDirectories=[];
+
+    $checkDirectory=static function(string $directory) use(&$checkedDirectories): void {
+        $key=str_replace('\\','/',$directory);
+        if(isset($checkedDirectories[$key])) return;
+        if(!is_dir($directory) || is_link($directory) || !is_writable($directory)){
+            throw new RuntimeException('Güncelleme hedef klasörü yazılabilir değil.');
+        }
+        $checkedDirectories[$key]=true;
+    };
+
+    foreach($newFiles as $relative){
+        $relative=managed_relative_path((string)$relative);
+        if(path_is_preserved($relative,$preserve)) continue;
+        $source=$sourceRoot.'/'.$relative;
+        if(!is_file($source) || is_link($source)){
+            throw new RuntimeException('Güncelleme kaynak dosyası geçersiz: '.$relative);
+        }
+        $bytes+=max(0,(int)(filesize($source)?:0));
+
+        $target=assert_managed_target_safe($root,$relative);
+        if(is_link($target)){
+            throw new RuntimeException('Güncelleme hedef dosyası sembolik bağlantı olamaz: '.$relative);
+        }
+        if(file_exists($target) && !is_file($target)){
+            throw new RuntimeException('Güncelleme hedef yolu normal dosya değil: '.$relative);
+        }
+        $parent=nearest_existing_update_directory(dirname($target),$root);
+        $checkDirectory($parent);
+    }
+
+    $newLookup=array_fill_keys($newFiles,true);
+    foreach($oldFiles as $relative){
+        $relative=managed_relative_path((string)$relative);
+        if(isset($newLookup[$relative]) || path_is_preserved($relative,$preserve)) continue;
+        $target=assert_managed_target_safe($root,$relative);
+        if(!file_exists($target) && !is_link($target)) continue;
+        if(is_link($target) || !is_file($target)){
+            throw new RuntimeException('Eski yönetilen hedef normal dosya değil: '.$relative);
+        }
+        $checkDirectory(dirname($target));
+    }
+
+    assert_backup_disk_space($root,$bytes,'Güncelleme dosya aktivasyonu');
+    return [
+        'files'=>count($newFiles),
+        'bytes'=>$bytes,
+        'directories'=>count($checkedDirectories),
+    ];
+}
+
+function verify_activated_update_files(string $sourceRoot,string $root,array $files,array $preserve): array {
+    $verified=0;
+    $bytes=0;
+    foreach($files as $relative){
+        $relative=managed_relative_path((string)$relative);
+        if(path_is_preserved($relative,$preserve)) continue;
+        $source=$sourceRoot.'/'.$relative;
+        $target=assert_managed_target_safe($root,$relative);
+        if(!is_file($target) || is_link($target)){
+            throw new RuntimeException('Güncelleme sonrası dosya bulunamadı veya geçersiz: '.$relative);
+        }
+        $sourceHash=update_file_sha256($source,'Kaynak güncelleme dosyası');
+        $targetHash=update_file_sha256($target,'Etkin güncelleme dosyası');
+        if(!hash_equals($sourceHash,$targetHash)){
+            throw new RuntimeException('Güncelleme sonrası dosya bütünlüğü doğrulanamadı: '.$relative);
+        }
+        $verified++;
+        $bytes+=max(0,(int)(filesize($target)?:0));
+    }
+    return ['files'=>$verified,'bytes'=>$bytes];
 }
 
 function remove_stale_managed_files(string $root,array $oldFiles,array $newFiles,array $preserve): array {
@@ -1446,6 +1586,11 @@ function install_github_update(
         $newManagedFiles=collect_managed_update_files($sourceRoot,$preserve);
         assert_packaged_manifest_matches_tree($manifestData,$newManagedFiles);
         assert_managed_copy_type_safe($root,$sourceRoot,$newManagedFiles,$oldManagedFiles,$preserve);
+        $activationPreflight=assert_update_activation_preflight(
+            $root,$sourceRoot,$newManagedFiles,$oldManagedFiles,$preserve
+        );
+        $recoveryState['activation_preflight']=$activationPreflight;
+        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
 
         // Migration/legacy şema onarımı gerekiyorsa önce gerçek DB snapshot alınır.
         // mysqldump yoksa veri dönüştüren güncelleme fail-closed durur.
@@ -1485,6 +1630,11 @@ function install_github_update(
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
         $fileActivationStarted=true;
         copy_update_tree($sourceRoot,$root,$preserve);
+        $activationVerification=verify_activated_update_files(
+            $sourceRoot,$root,$newManagedFiles,$preserve
+        );
+        $recoveryState['activation_verification']=$activationVerification;
+        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
         $removedManagedFiles=remove_stale_managed_files($root,$oldManagedFiles,$newManagedFiles,$preserve);
         write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version']);
 

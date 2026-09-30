@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.103",
+  "version": "1.1.104",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -62,6 +62,7 @@
     "RELEASE-1.1.101.md",
     "RELEASE-1.1.102.md",
     "RELEASE-1.1.103.md",
+    "RELEASE-1.1.104.md",
     "RELEASE-1.1.11.md",
     "RELEASE-1.1.12.md",
     "RELEASE-1.1.13.md",
@@ -414,6 +415,8 @@
     "tests/recovery-safety-100.cjs",
     "tests/recovery-safety-100.php",
     "tests/security-92.cjs",
+    "tests/update-activation-104.cjs",
+    "tests/update-activation-104.php",
     "tests/update-manifest-contract-103.cjs",
     "tests/update-manifest-contract-103.php",
     "tests/update-release-anchor-101.cjs",
