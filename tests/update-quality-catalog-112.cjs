@@ -26,9 +26,9 @@ assert.strictEqual(index.total,1000);
 assert.strictEqual(index.implemented,52);
 assert.strictEqual(index.planned,948);
 assert(md.includes('Q501') && md.includes('Q1000'));
-assert.strictEqual(b.version,version.version);
-assert.strictEqual(b.release_revision,version.release_revision);
-assert.strictEqual(index.version,version.version);
-assert.strictEqual(index.release_revision,version.release_revision);
+assert.strictEqual(b.version,'1.1.112');
+assert.strictEqual(b.release_revision,1);
+assert.strictEqual(index.version,'1.1.112');
+assert.strictEqual(index.release_revision,1);
 
 console.log('PASS: Q001-Q1000 quality catalog continuity');

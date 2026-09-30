@@ -32,3 +32,7 @@
 ## Rev 4
 
 - 1.1.112 continuity regresyon testi sabit revision yerine pozitif release revision sözleşmesini doğrular.
+
+## Rev 5
+
+- Q501–Q1000 kalite kataloğu tarihsel release artefaktı olarak 1.1.112 rev1 kimliğine sabitlendi; sonraki aynı-sürüm düzeltme revisionları kataloğu yanlış negatif üretmeyecek.
