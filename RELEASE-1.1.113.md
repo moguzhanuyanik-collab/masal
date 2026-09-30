@@ -22,3 +22,8 @@
 - 10 kategori × 50 madde.
 - Bu sürümde 15 kritik madde uygulanmış, 485 madde plan statüsündedir.
 - Q001–Q1500 sürekliliği CI tarafından otomatik doğrulanır.
+
+## Rev 2
+
+- 1.1.112 continuity testi sonraki sürümleri kabul edecek minimum sürüm sözleşmesine geçirildi.
+- Q1001–Q1500 katalog ve quality-index dosyaları tarihsel 1.1.113 rev1 artefaktı olarak sabitlendi; aynı sürüm içi test düzeltme revisionları kataloğu bozmayacak.
