@@ -18,7 +18,7 @@ function updater_headers(array $gh): array {
     return $h;
 }
 
-function updater_http(string $url,array $gh,?string $target=null): string|array {
+function updater_http(string $url,array $gh,?string $target=null,int $maxBytes=0): string|array {
     if(!function_exists('curl_init')) throw new RuntimeException('PHP cURL eklentisi gerekli.');
     $ch=curl_init($url);
     if($ch===false) throw new RuntimeException('cURL baslatilamadi.');
@@ -33,12 +33,21 @@ function updater_http(string $url,array $gh,?string $target=null): string|array 
         CURLOPT_FORBID_REUSE=>true,
     ];
     $fp=null;
+    $writtenBytes=0;
+    $downloadTooLarge=false;
     if($target!==null){
         $fp=fopen($target,'wb');
         if($fp===false){ curl_close($ch); throw new RuntimeException('Guncelleme paketi yazilamadi.'); }
         $opts[CURLOPT_RETURNTRANSFER]=false;
-        $opts[CURLOPT_WRITEFUNCTION]=static function($curl,string $data) use($fp): int {
-            $n=fwrite($fp,$data); return $n===false?0:$n;
+        $opts[CURLOPT_WRITEFUNCTION]=static function($curl,string $data) use($fp,$maxBytes,&$writtenBytes,&$downloadTooLarge): int {
+            $length=strlen($data);
+            if($maxBytes>0 && $writtenBytes+$length>$maxBytes){
+                $downloadTooLarge=true;
+                return 0;
+            }
+            $n=fwrite($fp,$data);
+            if($n!==false) $writtenBytes+=$n;
+            return $n===false?0:$n;
         };
     }else{
         $opts[CURLOPT_RETURNTRANSFER]=true;
@@ -50,6 +59,10 @@ function updater_http(string $url,array $gh,?string $target=null): string|array 
     curl_close($ch);
     if(is_resource($fp)){ fflush($fp); fclose($fp); }
 
+    if($downloadTooLarge){
+        if($target!==null) @unlink($target);
+        throw new RuntimeException('Güncelleme paketi indirme boyutu güvenlik sınırını aşıyor.');
+    }
     if($body===false||$status<200||$status>=300){
         if($target!==null) @unlink($target);
         throw new RuntimeException('GitHub istegi basarisiz (HTTP '.$status.')'.($err!==''?': '.$err:''));
@@ -63,22 +76,51 @@ function updater_http(string $url,array $gh,?string $target=null): string|array 
     return (string)$body;
 }
 
-function remote_version_info_at_ref(array $gh,string $ref): array {
+function update_package_limits(array $updateConfig=[]): array {
+    $read=static function(string $key,int $default,int $minimum,int $maximum) use($updateConfig): int {
+        $value=(int)($updateConfig[$key]??$default);
+        if($value<$minimum) return $minimum;
+        if($value>$maximum) return $maximum;
+        return $value;
+    };
+    return [
+        'max_download_bytes'=>$read('max_package_download_bytes',64*1024*1024,8*1024*1024,1024*1024*1024),
+        'max_entries'=>$read('max_package_entries',5000,100,50000),
+        'max_uncompressed_bytes'=>$read('max_package_uncompressed_bytes',128*1024*1024,16*1024*1024,2*1024*1024*1024),
+        'max_file_bytes'=>$read('max_package_file_bytes',16*1024*1024,1024*1024,512*1024*1024),
+        'max_compression_ratio'=>$read('max_package_compression_ratio',250,10,2000),
+    ];
+}
+
+function remote_update_metadata_at_ref(array $gh,string $ref,string $metadataFile='version.json'): array {
     [$owner,$repo,$branch]=github_repo_info($gh);
     $ref=trim($ref);
     if($ref==='') throw new RuntimeException('GitHub surum referansi bos olamaz.');
     if(!preg_match('/^[A-Za-z0-9_.\/-]+$/',$ref)) throw new RuntimeException('GitHub surum referansi gecersiz.');
+    if(!in_array($metadataFile,['version.json','update-release.json'],true)){
+        throw new RuntimeException('GitHub surum metadata dosyasi gecersiz.');
+    }
 
     $cacheBuster=(string)round(microtime(true)*1000);
-    $url='https://raw.githubusercontent.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/'.rawurlencode($ref).'/version.json?cb='.$cacheBuster;
+    $url='https://raw.githubusercontent.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/'.rawurlencode($ref).'/'.$metadataFile.'?cb='.$cacheBuster;
     $data=json_decode((string)updater_http($url,$gh),true);
-    if(!is_array($data)||empty($data['version'])) throw new RuntimeException('GitHub version.json okunamadi veya gecersiz.');
+    if(!is_array($data)||empty($data['version'])){
+        throw new RuntimeException('GitHub '.$metadataFile.' okunamadi veya gecersiz.');
+    }
 
     return [
         'version'=>(string)$data['version'],
         'name'=>(string)($data['name']??''),
         'commit'=>$ref,
     ];
+}
+
+function remote_version_info_at_ref(array $gh,string $ref): array {
+    return remote_update_metadata_at_ref($gh,$ref,'version.json');
+}
+
+function remote_release_info_at_ref(array $gh,string $ref): array {
+    return remote_update_metadata_at_ref($gh,$ref,'update-release.json');
 }
 
 function remote_version_info(array $gh): array {
@@ -91,6 +133,7 @@ function next_remote_version_info(array $gh,string $localVersion): array {
     $localVersion=trim($localVersion);
     if($localVersion==='') $localVersion='0.0.0';
 
+    $historyFile=version_compare($localVersion,'1.1.101','>=')?'update-release.json':'version.json';
     $next=null;
     $page=1;
     $maxPages=20;
@@ -98,7 +141,7 @@ function next_remote_version_info(array $gh,string $localVersion): array {
     while($page<=$maxPages){
         $url='https://api.github.com/repos/'.rawurlencode($owner).'/'.rawurlencode($repo)
             .'/commits?sha='.rawurlencode($branch)
-            .'&path='.rawurlencode(version_compare($localVersion,'1.1.101','>=')?'update-release.json':'version.json').'&per_page=100&page='.$page
+            .'&path='.rawurlencode($historyFile).'&per_page=100&page='.$page
             .'&cb='.(string)round(microtime(true)*1000);
 
         $rows=json_decode((string)updater_http($url,$gh),true);
@@ -112,7 +155,9 @@ function next_remote_version_info(array $gh,string $localVersion): array {
             if(!preg_match('/^[a-f0-9]{40}$/i',$sha)) continue;
 
             try{
-                $info=remote_version_info_at_ref($gh,$sha);
+                $info=$historyFile==='update-release.json'
+                    ?remote_release_info_at_ref($gh,$sha)
+                    :remote_version_info_at_ref($gh,$sha);
             }catch(Throwable $ignored){
                 continue;
             }
@@ -139,7 +184,9 @@ function next_remote_version_info(array $gh,string $localVersion): array {
         return $next;
     }
 
-    $latest=remote_version_info($gh);
+    $latest=$historyFile==='update-release.json'
+        ?remote_release_info_at_ref($gh,$branch)
+        :remote_version_info($gh);
     $latestVersion=trim((string)($latest['version']??''));
 
     if($latestVersion===''||version_compare($latestVersion,$localVersion,'<=')){
@@ -1169,8 +1216,16 @@ function detect_update_root(string $extractDir): string {
     throw new RuntimeException('GitHub paket koku anlasilamadi. version.json bulunamadi.');
 }
 
-function assert_update_zip_safe(ZipArchive $zip): void {
-    for($i=0;$i<$zip->numFiles;$i++){
+function assert_update_zip_safe(ZipArchive $zip,array $updateConfig=[]): array {
+    $limits=update_package_limits($updateConfig);
+    $entries=(int)$zip->numFiles;
+    if($entries<=0) throw new RuntimeException('Güncelleme paketi boş.');
+    if($entries>$limits['max_entries']){
+        throw new RuntimeException('Güncelleme paketi dosya sayısı güvenlik sınırını aşıyor.');
+    }
+
+    $totalBytes=0;
+    for($i=0;$i<$entries;$i++){
         $name=(string)$zip->getNameIndex($i);
         $normalized=str_replace('\\','/',$name);
         if($normalized==='' || str_contains($normalized,"\0")
@@ -1182,18 +1237,37 @@ function assert_update_zip_safe(ZipArchive $zip): void {
             if($part==='..') throw new RuntimeException('Güncelleme ZIP paketi yol kaçışı içeriyor.');
         }
 
+        $stat=$zip->statIndex($i);
+        if(!is_array($stat)) throw new RuntimeException('Güncelleme paketi dosya bilgisi okunamadı.');
+        $size=max(0,(int)($stat['size']??0));
+        $compressed=max(0,(int)($stat['comp_size']??0));
+        if($size>$limits['max_file_bytes']){
+            throw new RuntimeException('Güncelleme paketi tek dosya boyutu güvenlik sınırını aşıyor: '.$normalized);
+        }
+        $totalBytes+=$size;
+        if($totalBytes>$limits['max_uncompressed_bytes']){
+            throw new RuntimeException('Güncelleme paketi açılmış toplam boyutu güvenlik sınırını aşıyor.');
+        }
+        if($size>=1024*1024 && $compressed>0 && ($size/$compressed)>$limits['max_compression_ratio']){
+            throw new RuntimeException('Güncelleme paketi olağandışı sıkıştırma oranı içeriyor: '.$normalized);
+        }
+
         if(method_exists($zip,'getExternalAttributesIndex')){
             $opsys=0;$attributes=0;
             $unixOpsys=defined('ZipArchive::OPSYS_UNIX')?(int)constant('ZipArchive::OPSYS_UNIX'):3;
-            if($zip->getExternalAttributesIndex($i,$opsys,$attributes)
-                && $opsys===$unixOpsys){
+            if($zip->getExternalAttributesIndex($i,$opsys,$attributes) && $opsys===$unixOpsys){
                 $mode=($attributes>>16)&0170000;
                 if($mode===0120000){
                     throw new RuntimeException('Güncelleme ZIP paketi sembolik bağlantı içeriyor.');
                 }
+                if($mode!==0 && $mode!==0100000 && $mode!==0040000){
+                    throw new RuntimeException('Güncelleme ZIP paketi desteklenmeyen dosya türü içeriyor.');
+                }
             }
         }
     }
+
+    return ['entries'=>$entries,'uncompressed_bytes'=>$totalBytes];
 }
 
 function install_github_update(
@@ -1227,23 +1301,52 @@ function install_github_update(
     $backupPath=$storage.'/backups/onceki_surum.zip';
 
     $pdo=db(); ensure_updater_schema($pdo);
+    $packageLimits=update_package_limits($updateConfig);
     $recoveryState=null;
     $recoveryManifestName='';
     $databaseMutationStarted=false;
     $fileActivationStarted=false;
+    $updateStage='preparing';
     $log=$pdo->prepare("INSERT INTO guncelleme_gecmisi (onceki_surumu,yeni_surumu,github_commit,durum) VALUES (?,?,?,'basladi')");
     $log->execute([$localVersion,$remote['version'],$remote['commit']]); $logId=(int)$pdo->lastInsertId();
 
     try{
+        $recoveryState=[
+            'from_version'=>$localVersion,
+            'to_version'=>(string)$remote['version'],
+            'target_commit'=>$targetCommit,
+            'status'=>'preparing',
+            'stage'=>$updateStage,
+            'application_backup'=>null,
+            'database_backup'=>null,
+            'pending_migrations'=>[],
+            'legacy_membership_repair'=>false,
+            'student_schema_missing'=>false,
+            'manual_restore_only'=>true,
+        ];
+        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+
+        $updateStage='application_backup';
         $backupName=create_single_previous_backup($root);
+        $recoveryState['status']='application_backup_ready';
+        $recoveryState['stage']=$updateStage;
+        $recoveryState['application_backup']=backup_artifact_metadata($root,$backupName);
+        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
         // En son main paketini degil, siradaki surumun sabit commit paketini indir.
         $downloadUrl='https://codeload.github.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/zip/'.rawurlencode($targetCommit).'?cb='.(string)round(microtime(true)*1000);
-        updater_http($downloadUrl,$gh,$zipPath);
+        $updateStage='download';
+        $recoveryState['stage']=$updateStage;
+        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+        updater_http($downloadUrl,$gh,$zipPath,$packageLimits['max_download_bytes']);
 
         if(!class_exists('ZipArchive')) throw new RuntimeException('PHP ZipArchive eklentisi gerekli.');
         $zip=new ZipArchive();
         if($zip->open($zipPath)!==true) throw new RuntimeException('GitHub ZIP paketi acilamadi.');
-        assert_update_zip_safe($zip);
+        $updateStage='package_validation';
+        $recoveryState['stage']=$updateStage;
+        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+        $zipStats=assert_update_zip_safe($zip,$updateConfig);
+        assert_backup_disk_space(dirname($extractDir),(int)$zipStats['uncompressed_bytes'],'Güncelleme paketi açılımı');
         if(!is_dir($extractDir)&&!mkdir($extractDir,0775,true)&&!is_dir($extractDir)){ $zip->close(); throw new RuntimeException('Gecici klasor olusturulamadi.'); }
         if(!$zip->extractTo($extractDir)){ $zip->close(); throw new RuntimeException('GitHub paketi acilamadi.'); }
         $zip->close();
@@ -1264,6 +1367,8 @@ function install_github_update(
 
         $requiredPackageFiles=[
             'version.json',
+            'update-release.json',
+            'update-managed-files.json',
             'config/app.php',
             'src/updater.php',
             'src/auth.php',
@@ -1274,6 +1379,19 @@ function install_github_update(
             if(!is_file($sourceRoot.'/'.$requiredFile)){
                 throw new RuntimeException('Güncelleme paketi eksik zorunlu dosya içeriyor: '.$requiredFile);
             }
+        }
+
+        $releaseData=json_decode((string)file_get_contents($sourceRoot.'/update-release.json'),true);
+        $manifestData=json_decode((string)file_get_contents($sourceRoot.'/update-managed-files.json'),true);
+        $releaseVersion=is_array($releaseData)?trim((string)($releaseData['version']??'')):'';
+        $manifestVersion=is_array($manifestData)?trim((string)($manifestData['version']??'')):'';
+        if($releaseVersion!==$packageVersion || $manifestVersion!==$packageVersion){
+            throw new RuntimeException(
+                'Güncelleme paketi sürüm metadata dosyaları birbiriyle eşleşmiyor.'
+            );
+        }
+        if(!is_array($manifestData['files']??null)){
+            throw new RuntimeException('Güncelleme paketi yönetilen dosya manifesti geçersiz.');
         }
 
         // Yalnız updater'ın daha önce yönettiği dosyalar stale cleanup adayıdır.
@@ -1290,31 +1408,34 @@ function install_github_update(
         $requiresDbBackup=$studentSchemaMissing || $legacyRepairNeeded || $pendingMigrations!==[];
 
         $dbBackupName='';
+        $updateStage='database_backup';
+        $recoveryState['stage']=$updateStage;
+        $recoveryState['pending_migrations']=$pendingMigrations;
+        $recoveryState['legacy_membership_repair']=$legacyRepairNeeded;
+        $recoveryState['student_schema_missing']=$studentSchemaMissing;
         if($requiresDbBackup){
+            $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
             $dbBackupName=create_database_backup($root,$dbConfig,$updateConfig,$pdo);
         }
 
-        $recoveryState=[
-            'from_version'=>$localVersion,
-            'to_version'=>(string)$remote['version'],
-            'target_commit'=>$targetCommit,
-            'status'=>'ready_before_mutation',
-            'application_backup'=>backup_artifact_metadata($root,$backupName),
-            'database_backup'=>backup_artifact_metadata($root,$dbBackupName),
-            'pending_migrations'=>$pendingMigrations,
-            'legacy_membership_repair'=>$legacyRepairNeeded,
-            'student_schema_missing'=>$studentSchemaMissing,
-            'manual_restore_only'=>true,
-        ];
+        $recoveryState['status']='ready_before_mutation';
+        $recoveryState['stage']='ready_before_mutation';
+        $recoveryState['database_backup']=backup_artifact_metadata($root,$dbBackupName);
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
 
         // Migration'lar önce staging paketinden uygulanır.
         // DB dönüşümü başarısızsa yeni uygulama dosyaları canlıya kopyalanmaz.
+        $updateStage='database_mutation';
+        $recoveryState['stage']=$updateStage;
+        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
         $databaseMutationStarted=$requiresDbBackup;
         if($studentSchemaMissing) ensure_student_auth_schema($pdo);
         $migrations=run_pending_migrations($pdo,$sourceRoot,$localVersion);
 
         // Şema başarıyla hazırlandıktan sonra yeni uygulama dosyalarını etkinleştir.
+        $updateStage='file_activation';
+        $recoveryState['stage']=$updateStage;
+        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
         $fileActivationStarted=true;
         copy_update_tree($sourceRoot,$root,$preserve);
         $removedManagedFiles=remove_stale_managed_files($root,$oldManagedFiles,$newManagedFiles,$preserve);
@@ -1328,6 +1449,7 @@ function install_github_update(
 
         if(is_array($recoveryState)){
             $recoveryState['status']='update_completed';
+            $recoveryState['stage']='completed';
             $recoveryState['completed_at']=date(DATE_ATOM);
             $recoveryState['applied_migrations']=$migrations;
             $recoveryState['removed_files']=$removedManagedFiles;
@@ -1355,6 +1477,8 @@ function install_github_update(
                 ?'update_failed_during_file_activation'
                 :($databaseMutationStarted?'update_failed_after_database_mutation':'update_failed_before_mutation');
             $recoveryState['failed_at']=date(DATE_ATOM);
+            $recoveryState['failure_stage']=$updateStage;
+            $recoveryState['stage']='failed';
             $recoveryState['manual_review_required']=true;
             try{$recoveryManifestName=write_recovery_manifest($root,$recoveryState);}catch(Throwable $manifestError){
                 error_log('[IlkAdim][recovery-manifest] '.$manifestError->getMessage());

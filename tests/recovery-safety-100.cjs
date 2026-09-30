@@ -26,7 +26,10 @@ assert(!updater.includes("'MYSQL_PWD'"));
 assert(updater.includes("'--defaults-extra-file='"));
 assert(updater.includes("str_starts_with($rel,'.git/')"));
 assert(updater.includes("['config/local.php','.env','.git/config']"));
-assert(updater.includes("'status'=>'ready_before_mutation'"));
+assert(
+  updater.includes("'status'=>'ready_before_mutation'")
+  || updater.includes("$recoveryState['status']='ready_before_mutation'")
+);
 assert(updater.includes("'manual_restore_only'=>true"));
 assert(updater.includes("'update_failed_during_file_activation'"));
 assert(updater.includes("'update_failed_after_database_mutation'"));
