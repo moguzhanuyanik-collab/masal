@@ -1,6 +1,6 @@
 {
   "format": 1,
   "version": "1.1.113",
-  "name": "Kurum izolasyonu, CSRF ve müfredat kapsamı · V4 plan/rozet kapsamı",
-  "release_revision": 7
+  "name": "Kurum izolasyonu, CSRF ve müfredat kapsamı · V4 plan/rozet · state API",
+  "release_revision": 8
 }
