@@ -42,10 +42,14 @@ try {
         }
 
         $user=null;
+        $passwordVerified=false;
         if (auth_runtime_table_exists($pdo,'kullanicilar')) {
             $stmt=$pdo->prepare('SELECT id,email,sifre_hash,ad_soyad,ana_rol,aktif FROM kullanicilar WHERE email=? AND aktif=1 LIMIT 1');
             $stmt->execute([$email]);
             $user=$stmt->fetch();
+            if(is_array($user) && !empty($user['sifre_hash'])){
+                $passwordVerified=password_verify($password,(string)$user['sifre_hash']);
+            }
         }
 
         // Eski öğrenci hesaplarını güncelleme sırasında koruyan uyumluluk yolu.
@@ -57,11 +61,14 @@ try {
                 $map=$pdo->prepare('SELECT kullanici_id FROM ogrenciler WHERE id=? LIMIT 1');
                 $map->execute([(int)$legacy['id']]);
                 $userId=(int)($map->fetchColumn()?:0);
-                if ($userId>0) $user=auth_fetch_user($pdo,$userId);
+                if ($userId>0) {
+                    $user=auth_fetch_user($pdo,$userId);
+                    $passwordVerified=is_array($user);
+                }
             }
         }
 
-        if (!is_array($user) || empty($user['sifre_hash']) || !password_verify($password,(string)$user['sifre_hash'])) {
+        if (!is_array($user) || !$passwordVerified) {
             auth_login_rate_failure($pdo,$email,$ip);
             $rate=auth_login_rate_status($pdo,$email,$ip);
             usleep(300000);
