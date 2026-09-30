@@ -21,6 +21,16 @@ Bu sürüm yeni özellik eklemek yerine güncelleme/migration zincirindeki veri 
 11. Hesap kilitleme saldırısını azaltmak için üç katmanlı limit uygulanır: hesap+IP 5/10 dk, hesap geneli 20/10 dk, IP geneli 30/15 dk.
 12. Başarılı giriş yalnız hesap ve o hesap+IP sayacını temizler; IP saldırı sayacı korunur.
 13. Rate-limit DB hataları hassas ayrıntı yazmadan sunucu güvenlik loguna kod olarak işaretlenir.
+14. 1.1.92'de `api/adimbot-transcribe.php` içine giren hatalı PHP dizi/parantez kapanışı düzeltildi; ses transkripsiyon endpoint'i yeniden parse edilebilir.
+15. GitHub Actions kalite kapısı eklendi: tüm PHP dosyaları `php -l` ile, 1.1.92 ve 1.1.93 güvenlik regresyonları Node ile kontrol edilir.
+16. Eski 1.1.92 kaynak testi, yeni ve daha güçlü login limit politikasını yanlış negatif vermeden doğrulayacak şekilde güncellendi.
+
+## Doğrulama
+
+- GitHub Actions Quality Gate üzerinde PHP syntax kontrolü geçti.
+- `tests/security-92.cjs` geçti.
+- `tests/migration-safety-93.cjs` geçti.
+- 61 migration dosyası yıkıcı SQL kalıpları açısından tarandı; tespit edilen 007 ve 032 de emekliye ayrıldı.
 
 ## Bilinen kalan konu
 
