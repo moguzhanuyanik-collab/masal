@@ -218,8 +218,7 @@ function managed_manifest_path(string $root): string {
     return rtrim($root,'/\\').'/storage/updates/managed-files.json';
 }
 
-function read_managed_update_manifest(string $root): array {
-    $path=managed_manifest_path($root);
+function read_managed_file_list(string $path): array {
     if(!is_file($path)) return [];
     $decoded=json_decode((string)file_get_contents($path),true);
     if(!is_array($decoded) || !is_array($decoded['files']??null)) return [];
@@ -231,6 +230,15 @@ function read_managed_update_manifest(string $root): array {
     }
     sort($files,SORT_STRING);
     return array_values(array_unique($files));
+}
+
+function read_managed_update_manifest(string $root): array {
+    $runtime=read_managed_file_list(managed_manifest_path($root));
+    if($runtime!==[]) return $runtime;
+
+    // İlk 1.1.96 kurulumu eski updater ile yapılır. Paketle gelen baseline manifest,
+    // sonraki güncellemede ilk güvenli karşılaştırma kaynağı olur.
+    return read_managed_file_list(rtrim($root,'/\\').'/update-managed-files.json');
 }
 
 function write_managed_update_manifest(string $root,array $files,string $version): void {
@@ -771,8 +779,9 @@ function assert_update_zip_safe(ZipArchive $zip): void {
 
         if(method_exists($zip,'getExternalAttributesIndex')){
             $opsys=0;$attributes=0;
+            $unixOpsys=defined('ZipArchive::OPSYS_UNIX')?(int)constant('ZipArchive::OPSYS_UNIX'):3;
             if($zip->getExternalAttributesIndex($i,$opsys,$attributes)
-                && $opsys===ZipArchive::OPSYS_UNIX){
+                && $opsys===$unixOpsys){
                 $mode=($attributes>>16)&0170000;
                 if($mode===0120000){
                     throw new RuntimeException('Güncelleme ZIP paketi sembolik bağlantı içeriyor.');
