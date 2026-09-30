@@ -188,13 +188,6 @@ function next_remote_version_info(array $gh,string $localVersion,int $localRevis
     if($localVersion==='') $localVersion='0.0.0';
     $localRevision=max(0,$localRevision);
 
-    // Özel 1.1.99 recovery checkpointinden sonra eski ara updater
-    // paketlerine geri dönme; güncel main paketine geç.
-    if($localVersion==='1.1.99' && $localRevision>=999){
-        $latest=remote_version_info($gh);
-        if(version_compare((string)($latest['version']??''),$localVersion,'>')) return $latest;
-    }
-
     $historyFile=version_compare($localVersion,'1.1.101','>=')?'update-release.json':'version.json';
     $next=null;
     $page=1;
@@ -232,8 +225,7 @@ function next_remote_version_info(array $gh,string $localVersion,int $localRevis
                     if(release_identity_should_replace_next($info,$next)) $next=$info;
                     continue;
                 }
-                $reachedInstalledOrOlder=true;
-                break;
+                continue;
             }
 
             if(release_identity_is_newer($info,$localVersion,$localRevision)){
@@ -241,15 +233,10 @@ function next_remote_version_info(array $gh,string $localVersion,int $localRevis
                 continue;
             }
 
-            $versionCmp=version_compare($candidateVersion,$localVersion);
-            $candidateRevision=normalize_release_revision($info['release_revision']??0);
-            if($versionCmp<0 || ($versionCmp===0 && $candidateRevision<=$localRevision)){
-                $reachedInstalledOrOlder=true;
-                break;
-            }
+            continue;
         }
 
-        if($reachedInstalledOrOlder||count($rows)<100) break;
+        if(count($rows)<100) break;
         $page++;
     }
 
