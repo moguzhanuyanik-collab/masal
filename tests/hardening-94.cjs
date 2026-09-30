@@ -31,7 +31,7 @@ assert(!updater.includes("execute([$e->getMessage(),$logId])"));
 
 assert(updatePage.includes("update_public_error_message"));
 assert(updatePage.includes("ensure_runtime_storage_guard(__DIR__)"));
-assert(updatePage.includes("Canlı ayarlar ve storage verileri yedeğe eklenmez."));
+assert(updatePage.includes("Sunucuda yalnızca bir önceki uygulama sürümünün tek yedeği tutulur."));
 
 assert(!activities.includes("'detail'=>$e->getMessage()"));
 assert(!state.includes("'detail'=>$e->getMessage()"));
