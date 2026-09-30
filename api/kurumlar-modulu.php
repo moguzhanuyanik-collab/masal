@@ -140,5 +140,6 @@ try{
         :'Veritabanı işlemi tamamlanamadı.';
     km_api_response(['ok'=>false,'message'=>$message],400);
 }catch(Throwable $e){
-    km_api_response(['ok'=>false,'message'=>$e->getMessage()],400);
+    error_log('[IlkAdim][kurumlar-api] '.$e->getMessage());
+    km_api_response(['ok'=>false,'message'=>'İşlem tamamlanamadı. Lütfen tekrar deneyin.'],500);
 }
