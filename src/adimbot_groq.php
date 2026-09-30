@@ -25,20 +25,45 @@ function adimbot_groq_payload(array $payload): array {
     return $payload;
 }
 
+function adimbot_retry_after_seconds(mixed $value, int $max=600): int {
+    $raw=trim((string)$value);
+    if($raw==='') return 0;
+    if(preg_match('/^\d+(?:\.\d+)?$/D',$raw)===1){
+        return max(0,min($max,(int)ceil((float)$raw)));
+    }
+    $timestamp=strtotime($raw);
+    if($timestamp===false) return 0;
+    return max(0,min($max,$timestamp-time()));
+}
+
 function adimbot_groq_http(array $payload, string $key, int $timeout): array {
     $json=json_encode($payload,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
     if (!is_string($json)) return ['body'=>false,'status'=>0,'errno'=>CURLE_FAILED_INIT];
     $ch=curl_init('https://api.groq.com/openai/v1/chat/completions');
     if ($ch===false) return ['body'=>false,'status'=>0,'errno'=>CURLE_FAILED_INIT];
+    $retryAfter=0;
     try {
         if (!curl_setopt_array($ch,[
             CURLOPT_POST=>true,CURLOPT_RETURNTRANSFER=>true,
             CURLOPT_CONNECTTIMEOUT=>min(8,$timeout),CURLOPT_TIMEOUT=>$timeout,
             CURLOPT_HTTPHEADER=>['Authorization: Bearer '.$key,'Content-Type: application/json'],
+            CURLOPT_HEADERFUNCTION=>static function($curl,string $line) use (&$retryAfter): int {
+                $length=strlen($line);
+                $parts=explode(':',$line,2);
+                if(count($parts)===2 && strcasecmp(trim($parts[0]),'Retry-After')===0){
+                    $retryAfter=adimbot_retry_after_seconds(trim($parts[1]));
+                }
+                return $length;
+            },
             CURLOPT_POSTFIELDS=>$json,
-        ])) return ['body'=>false,'status'=>0,'errno'=>CURLE_FAILED_INIT];
+        ])) return ['body'=>false,'status'=>0,'errno'=>CURLE_FAILED_INIT,'retry_after'=>0];
         $body=curl_exec($ch);
-        return ['body'=>$body,'status'=>(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE),'errno'=>curl_errno($ch)];
+        return [
+            'body'=>$body,
+            'status'=>(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE),
+            'errno'=>curl_errno($ch),
+            'retry_after'=>$retryAfter
+        ];
     } finally {
         curl_close($ch);
     }
@@ -49,6 +74,7 @@ function adimbot_groq_request(array $payload, string $key, int $timeout, ?callab
     $start=microtime(true);
     $payload=adimbot_groq_payload($payload);
     $result=$transport($payload,$key,$timeout);
+    $result['retry_after']=adimbot_retry_after_seconds($result['retry_after'] ?? 0);
     $result['model']=(string)$payload['model'];
     $result['migrated']=false;
     $replacement=($result['errno'] ?? 0)===0
@@ -58,6 +84,7 @@ function adimbot_groq_request(array $payload, string $key, int $timeout, ?callab
     if ($replacement!==null && $remaining>=1) {
         $payload['model']=$replacement;
         $result=$transport(adimbot_groq_payload($payload),$key,$remaining);
+        $result['retry_after']=adimbot_retry_after_seconds($result['retry_after'] ?? 0);
         $result['model']=$replacement;
         $result['migrated']=true;
     }
