@@ -158,17 +158,28 @@ if ($isAjax) {
 
             $newLocal = read_app_version();
 
-            // Kurulumdan sonra zincirde bir sonraki sürümü tekrar kontrol et.
-            // Örn. 1.1.5 kurulduysa ve 1.1.6 varsa ekran hemen 1.1.6'yı sunar.
-            $remote = next_remote_version_info($gh,$newLocal);
-            $hasNext = version_compare(
-                (string)($remote['version'] ?? '0.0.0'),
-                $newLocal,
-                '>'
-            );
+            // Kurulum başarıyla tamamlandıktan sonraki GitHub kontrolü ikincil bir adımdır.
+            // Bu ağ isteği başarısız olsa bile tamamlanmış kurulumu kullanıcıya hatalı gösterme.
             $message = (string)($result['message'] ?? 'Güncelleme başarıyla kuruldu.');
-            if ($hasNext) {
-                $message .= ' Sıradaki sürüm '.(string)$remote['version'].' kuruluma hazır.';
+            $remote = [
+                'version' => $newLocal,
+                'name' => '',
+                'commit' => '',
+            ];
+            $hasNext = false;
+            try {
+                $remote = next_remote_version_info($gh,$newLocal);
+                $hasNext = version_compare(
+                    (string)($remote['version'] ?? '0.0.0'),
+                    $newLocal,
+                    '>'
+                );
+                if ($hasNext) {
+                    $message .= ' Sıradaki sürüm '.(string)$remote['version'].' kuruluma hazır.';
+                }
+            } catch (Throwable $postInstallCheckError) {
+                error_log('[IlkAdim][update-post-check] '.$postInstallCheckError->getMessage());
+                $message .= ' Güncelleme kuruldu; sonraki sürüm kontrolü şu anda tamamlanamadı.';
             }
 
             ajax_response([

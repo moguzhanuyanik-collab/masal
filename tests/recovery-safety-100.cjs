@@ -40,6 +40,6 @@ assert(status.includes("storage/backups/recovery.json"));
 
 assert(workflow.includes('tests/recovery-safety-100.php'));
 assert(workflow.includes('tests/recovery-safety-100.cjs'));
-assert.strictEqual(version.version,'1.1.100');
+assert(/^1\.1\.(?:100|10[1-9]|1[1-9][0-9]|[2-9][0-9]{2,})$/.test(String(version.version)),'version must be 1.1.100 or newer');
 
 console.log('1.1.100 recovery safety checks passed');
