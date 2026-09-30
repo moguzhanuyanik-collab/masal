@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.118",
+  "version": "1.1.100",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -486,6 +486,7 @@
     "tools/rollback-updater-1.1.97-rescue.php",
     "tools/updater-1.1.97-rescue.php",
     "tools/updater-1.1.98-rescue.php",
+    "update-bridge-1.1.99-recovery.json",
     "update-managed-files.json",
     "update-release.json",
     "v4-features.css",
@@ -500,5 +501,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 1
+  "release_revision": 2
 }
