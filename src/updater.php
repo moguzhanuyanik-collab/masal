@@ -255,6 +255,28 @@ function run_migration_sql(PDO $pdo,string $path): void {
     if(trim($buffer)!=='') $pdo->exec($buffer);
 }
 
+function assert_automatic_migration_safe(string $name,string $path): void {
+    $raw=file_get_contents($path);
+    if(!is_string($raw)) throw new RuntimeException('Migration okunamadı: '.$name);
+
+    // Yorumları çıkar; yalnız çalıştırılabilir SQL üzerinde yüksek riskli kalıpları ara.
+    $sql=preg_replace('/\/\*.*?\*\//s',' ',$raw) ?? $raw;
+    $sql=preg_replace('/^\s*--.*$/m',' ',$sql) ?? $sql;
+    $sql=str_replace(chr(96),'',$sql);
+
+    $dangerous =
+        preg_match('/\b(?:DROP|TRUNCATE)\s+TABLE\b/i',$sql)===1
+        || preg_match('/\bDELETE\s+FROM\s+[A-Za-z0-9_]+\s*;/i',$sql)===1
+        || preg_match('/\bUPDATE\s+[A-Za-z0-9_]+\s+SET\s+aktif\s*=\s*0\s*;/i',$sql)===1;
+
+    if($dangerous){
+        throw new RuntimeException(
+            'Migration '.$name.' otomatik güncelleme için yıkıcı SQL içeriyor. '
+            .'Veri kaybını önlemek için kurulum durduruldu.'
+        );
+    }
+}
+
 function ensure_updater_schema(PDO $pdo): void {
     $pdo->exec("CREATE TABLE IF NOT EXISTS guncelleme_gecmisi (
         id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -507,6 +529,7 @@ function run_pending_migrations(PDO $pdo,string $root): array {
         if($name==='004_ogrenci_giris_sistemi'){
             ensure_student_auth_schema($pdo);
         }else{
+            assert_automatic_migration_safe($name,$file);
             run_migration_sql($pdo,$file);
         }
         $insert->execute([$name]); $applied[]=$name;
