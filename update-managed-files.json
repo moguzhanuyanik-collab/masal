@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.114",
+  "version": "1.1.115",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -78,6 +78,7 @@
     "RELEASE-1.1.112.md",
     "RELEASE-1.1.113.md",
     "RELEASE-1.1.114.md",
+    "RELEASE-1.1.115.md",
     "RELEASE-1.1.12.md",
     "RELEASE-1.1.13.md",
     "RELEASE-1.1.14.md",
@@ -330,6 +331,7 @@
     "database/migrations/063_login_rate_limit.sql",
     "database/migrations/064_adimbot_rate_limit_ve_migration_checkpoint.sql",
     "database/migrations/065_kurum_bazli_eslestirme_izolasyonu.sql",
+    "database/migrations/066_kurum_eslestirme_schema_guard.sql",
     "global-audio-feedback.js",
     "global-eslestirme.php",
     "global-ogrenciler.php",
@@ -439,6 +441,7 @@
     "tests/tenant-isolation-114.cjs",
     "tests/tenant-isolation-db-115.php",
     "tests/tenant-relation-schema-115.cjs",
+    "tests/tenant-schema-guard-116.cjs",
     "tests/update-197-rescue-106.cjs",
     "tests/update-197-rescue-106.php",
     "tests/update-197-rescue-installer-107.cjs",
