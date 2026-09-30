@@ -548,22 +548,17 @@ function km_save_matching(PDO $pdo,array $actor,int $institutionId,int $studentI
 
     $pdo->beginTransaction();
     try{
-        $stmt=$pdo->prepare("DELETE vo FROM veli_ogrenci vo
-          INNER JOIN veliler v ON v.id=vo.veli_id
-          INNER JOIN kurum_kullanicilari kk
-            ON kk.kullanici_id=v.kullanici_id
-           AND kk.kurum_id=? AND kk.kurum_rolu='veli' AND kk.aktif=1
-          WHERE vo.ogrenci_id=? AND vo.kurum_id=?");
-        $stmt->execute([$institutionId,$studentId,$institutionId]);
+        // İlişkinin kurum kapsamı zaten satırın üzerinde tutuluyor. Silme
+        // sırasında veli/öğretmen üyeliğinin hâlen aktif olmasına bağlı kalmak,
+        // pasife alınmış eski ilişkileri görünmez bırakıp yeni eşleştirmeyi
+        // INSERT IGNORE ile sessizce yutabilir. Bu nedenle yalnızca tenant +
+        // öğrenci kapsamını hedefliyoruz.
+        $stmt=$pdo->prepare('DELETE FROM veli_ogrenci WHERE ogrenci_id=? AND kurum_id=?');
+        $stmt->execute([$studentId,$institutionId]);
         $stmt->closeCursor();
 
-        $stmt=$pdo->prepare("DELETE oo FROM ogretmen_ogrenci oo
-          INNER JOIN ogretmenler og ON og.id=oo.ogretmen_id
-          INNER JOIN kurum_kullanicilari kk
-            ON kk.kullanici_id=og.kullanici_id
-           AND kk.kurum_id=? AND kk.kurum_rolu='ogretmen' AND kk.aktif=1
-          WHERE oo.ogrenci_id=? AND oo.kurum_id=?");
-        $stmt->execute([$institutionId,$studentId,$institutionId]);
+        $stmt=$pdo->prepare('DELETE FROM ogretmen_ogrenci WHERE ogrenci_id=? AND kurum_id=?');
+        $stmt->execute([$studentId,$institutionId]);
         $stmt->closeCursor();
 
         if($parentIds){

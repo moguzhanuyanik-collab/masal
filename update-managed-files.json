@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.116",
+  "version": "1.1.117",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -80,6 +80,7 @@
     "RELEASE-1.1.114.md",
     "RELEASE-1.1.115.md",
     "RELEASE-1.1.116.md",
+    "RELEASE-1.1.117.md",
     "RELEASE-1.1.12.md",
     "RELEASE-1.1.13.md",
     "RELEASE-1.1.14.md",
@@ -441,6 +442,7 @@
     "tests/security-92.cjs",
     "tests/tenant-isolation-114.cjs",
     "tests/tenant-isolation-db-115.php",
+    "tests/tenant-matching-crud-117.cjs",
     "tests/tenant-relation-schema-115.cjs",
     "tests/tenant-schema-guard-116.cjs",
     "tests/update-197-rescue-106.cjs",
