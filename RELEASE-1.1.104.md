@@ -24,3 +24,7 @@ Güncelleme sırasında canlı uygulama dosyalarının yarım veya bozuk yazılm
 ## Veri güvenliği
 
 Yeni migration yoktur. Kullanıcı/kurum verisi değiştirilmez. DB dönüşümü gereken bir güncellemede mevcut DB snapshot/recovery politikası korunur.
+
+## Doğrulama
+
+Sürüm önce `update-activation-104` aday dalında tam kalite kapısından geçirilir; yalnız yeşil sonuçtan sonra aynı doğrulanmış commit `main` dalına fast-forward edilir.
