@@ -1,6 +1,5 @@
+-- İlkAdım 1.1.93
+-- RETIRED: Geçmişte içerik tablolarını DROP ederek geri alan tek seferlik
+-- migration. Üretim verisini değiştirmemesi için artık no-op.
 SET NAMES utf8mb4;
-
-DROP TABLE IF EXISTS etkinlikler;
-DROP TABLE IF EXISTS sorular;
-DROP TABLE IF EXISTS ders_icerikleri;
-DROP TABLE IF EXISTS konular;
+SET @ilkadim_retired_007 = 1;
