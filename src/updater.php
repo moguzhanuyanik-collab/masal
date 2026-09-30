@@ -169,6 +169,9 @@ function copy_update_tree(string $source,string $destination,array $preserve,str
         $rel=ltrim($relative.'/'.$item,'/');
         if(path_is_preserved($rel,$preserve)) continue;
         $src=$source.'/'.$item; $dst=$destination.'/'.$rel;
+        if(is_link($src)){
+            throw new RuntimeException('Güncelleme paketi sembolik bağlantı içeriyor: '.$rel);
+        }
         if(is_dir($src)){
             if(!is_dir($dst)&&!mkdir($dst,0775,true)&&!is_dir($dst)) throw new RuntimeException('Klasor olusturulamadi: '.$rel);
             copy_update_tree($src,$destination,$preserve,$rel);
@@ -198,11 +201,14 @@ function collect_managed_update_files(string $source,array $preserve,string $rel
         $rel=ltrim($relative.'/'.$item,'/');
         if(path_is_preserved($rel,$preserve)) continue;
         $src=$source.'/'.$item;
-        if(is_dir($src) && !is_link($src)){
+        if(is_link($src)){
+            throw new RuntimeException('Güncelleme paketi sembolik bağlantı içeriyor: '.$rel);
+        }
+        if(is_dir($src)){
             foreach(collect_managed_update_files($src,$preserve,$rel) as $nested) $files[]=$nested;
             continue;
         }
-        if(is_file($src) || is_link($src)) $files[]=managed_relative_path($rel);
+        if(is_file($src)) $files[]=managed_relative_path($rel);
     }
     sort($files,SORT_STRING);
     return array_values(array_unique($files));
@@ -714,6 +720,21 @@ function detect_update_root(string $extractDir): string {
     throw new RuntimeException('GitHub paket koku anlasilamadi. version.json bulunamadi.');
 }
 
+function assert_update_zip_safe(ZipArchive $zip): void {
+    for($i=0;$i<$zip->numFiles;$i++){
+        $name=(string)$zip->getNameIndex($i);
+        $normalized=str_replace('\\','/',$name);
+        if($normalized==='' || str_contains($normalized,"\0")
+            || str_starts_with($normalized,'/')
+            || preg_match('/^[A-Za-z]:\//',$normalized)===1){
+            throw new RuntimeException('Güncelleme ZIP paketi geçersiz dosya yolu içeriyor.');
+        }
+        foreach(explode('/',$normalized) as $part){
+            if($part==='..') throw new RuntimeException('Güncelleme ZIP paketi yol kaçışı içeriyor.');
+        }
+    }
+}
+
 function install_github_update(string $root,array $gh,array $preserve): array {
     [$owner,$repo,$branch]=github_repo_info($gh);
     $localVersion=read_app_version();
@@ -751,6 +772,7 @@ function install_github_update(string $root,array $gh,array $preserve): array {
         if(!class_exists('ZipArchive')) throw new RuntimeException('PHP ZipArchive eklentisi gerekli.');
         $zip=new ZipArchive();
         if($zip->open($zipPath)!==true) throw new RuntimeException('GitHub ZIP paketi acilamadi.');
+        assert_update_zip_safe($zip);
         if(!is_dir($extractDir)&&!mkdir($extractDir,0775,true)&&!is_dir($extractDir)){ $zip->close(); throw new RuntimeException('Gecici klasor olusturulamadi.'); }
         if(!$zip->extractTo($extractDir)){ $zip->close(); throw new RuntimeException('GitHub paketi acilamadi.'); }
         $zip->close();
@@ -767,6 +789,20 @@ function install_github_update(string $root,array $gh,array $preserve): array {
                 'Indirilen guncelleme paketi beklenen surumle eslesmiyor. Beklenen: '
                 .(string)$remote['version'].' / Paket: '.($packageVersion!==''?$packageVersion:'bilinmiyor')
             );
+        }
+
+        $requiredPackageFiles=[
+            'version.json',
+            'config/app.php',
+            'src/updater.php',
+            'src/auth.php',
+            'login.php',
+            'index.php',
+        ];
+        foreach($requiredPackageFiles as $requiredFile){
+            if(!is_file($sourceRoot.'/'.$requiredFile)){
+                throw new RuntimeException('Güncelleme paketi eksik zorunlu dosya içeriyor: '.$requiredFile);
+            }
         }
 
         // Yalnız updater'ın daha önce yönettiği dosyalar stale cleanup adayıdır.
