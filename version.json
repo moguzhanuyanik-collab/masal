@@ -1,4 +1,4 @@
 {
-  "version": "1.1.99",
-  "name": "Migration öncesi native DB yedeği ve legacy hesap güvenliği"
+  "version": "1.1.100",
+  "name": "Recovery manifest, yedek bütünlüğü ve güvenli credential akışı"
 }
