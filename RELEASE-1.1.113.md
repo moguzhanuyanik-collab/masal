@@ -48,3 +48,11 @@
 - 1.1.99 rev999 recovery checkpointi güncel updater çekirdeğini taşır.
 - Recovery checkpointinden sonra eski 1.1.100–1.1.112 updater paketleri atlanır ve güncel main sürümüne geçilir.
 
+## Rev 10 — 064 preflight recovery düzeltmesi
+
+- 1.1.98 bridge sonrasında yalnız `064_adimbot_rate_limit_ve_migration_checkpoint` eksik olduğunda tarihsel doğrulama artık preflight aşamasını geçirebilir.
+- Bu istisna migrationı doğrudan çalıştırmaz; önce pending listesine alınır ve mevcut updater akışı DB yedeğini oluşturur.
+- DB yedeği hazırlandıktan sonra dar kapsamlı 064 recovery çalışır ve `sistem_migrations` kaydını tamamlar.
+- 064 dışında başka herhangi bir geçmiş migration eksikse sistem yine fail-closed durur.
+- Yeni ara ankraj `1.1.99 rev1000` olarak yayınlandı.
+
