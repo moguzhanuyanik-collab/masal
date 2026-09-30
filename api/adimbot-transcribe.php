@@ -22,9 +22,14 @@ function voice_resolve_key(mixed $configured, string $environment): string {
     $fallback=trim((string)(getenv($environment) ?: ''));
     return $fallback!=='' && !voice_placeholder_key($fallback) ? $fallback : '';
 }
-function voice_provider_error(int $status, mixed $body): never {
+function voice_provider_error(int $status, mixed $body, int $retryAfter=0): never {
     $reason=adimbot_provider_reason($status,$body);
     $httpStatus=$reason==='provider_rate_limit'?429:($reason==='provider_unavailable'?503:502);
+    if($reason==='provider_rate_limit' && $retryAfter>0){
+        $retryAfter=max(1,min(600,$retryAfter));
+        header('Retry-After: '.$retryAfter);
+        voice_result(['ok'=>false,'reason'=>$reason,'retry_after'=>$retryAfter],429);
+    }
     voice_result(['ok'=>false,'reason'=>$reason],$httpStatus);
 }
 app_session_start();
@@ -92,9 +97,25 @@ if ($provider==='groq') {
         ['inline_data'=>['mime_type'=>$detected==='video/webm'?'audio/webm':($detected==='video/mp4'?'audio/mp4':$detected),'data'=>base64_encode($audioBytes)]],
     ]]]]],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 }
+$providerRetryAfter=0;
 $ch=curl_init($url);
 if ($ch===false) voice_result(['ok'=>false,'reason'=>'provider_connection_error'],502);
-if (!curl_setopt_array($ch,[CURLOPT_POST=>true,CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>8,CURLOPT_TIMEOUT=>$timeout,CURLOPT_HTTPHEADER=>$headers,CURLOPT_POSTFIELDS=>$request])) {
+if (!curl_setopt_array($ch,[
+    CURLOPT_POST=>true,
+    CURLOPT_RETURNTRANSFER=>true,
+    CURLOPT_CONNECTTIMEOUT=>8,
+    CURLOPT_TIMEOUT=>$timeout,
+    CURLOPT_HTTPHEADER=>$headers,
+    CURLOPT_HEADERFUNCTION=>static function($curl,string $line) use (&$providerRetryAfter): int {
+        $length=strlen($line);
+        $parts=explode(':',$line,2);
+        if(count($parts)===2 && strcasecmp(trim($parts[0]),'Retry-After')===0){
+            $providerRetryAfter=adimbot_retry_after_seconds(trim($parts[1]));
+        }
+        return $length;
+    },
+    CURLOPT_POSTFIELDS=>$request
+])) {
     curl_close($ch);
     voice_result(['ok'=>false,'reason'=>'provider_connection_error'],502);
 }
@@ -104,11 +125,11 @@ $status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
 curl_close($ch);
 if ($curlErrno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) voice_result(['ok'=>false,'reason'=>'provider_timeout'],504);
 if ($curlErrno!==0) voice_result(['ok'=>false,'reason'=>'provider_connection_error'],502);
-if ($status<200 || $status>=300 || !is_string($body)) voice_provider_error($status,$body);
+if ($status<200 || $status>=300 || !is_string($body)) voice_provider_error($status,$body,$providerRetryAfter);
 $decoded=json_decode($body,true);
 if (!is_array($decoded)) voice_result(['ok'=>false,'reason'=>'invalid_provider_response'],502);
 if (isset($decoded['error'])) {
-    voice_provider_error($status,$decoded);
+    voice_provider_error($status,$decoded,$providerRetryAfter);
 }
 $providerBlocked=$provider==='gemini' && (trim((string)($decoded['promptFeedback']['blockReason'] ?? ''))!=='' || in_array((string)($decoded['candidates'][0]['finishReason'] ?? ''),['SAFETY','PROHIBITED_CONTENT','BLOCKLIST'],true));
 if ($providerBlocked) voice_result(['ok'=>false,'reason'=>'provider_safety'],422);
