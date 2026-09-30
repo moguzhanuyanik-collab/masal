@@ -33,7 +33,12 @@ for(const name of retired){
 }
 
 assert(updater.includes("SELECT COUNT(*) FROM kurum_kullanicilari"));
-assert(updater.includes("if($rowCount>0)"));
+assert(
+  updater.includes('kurum_kullanicilari_v4_bridge')
+  && updater.includes('kurum_kullanicilari_legacy_197_backup')
+  && updater.includes('RENAME TABLE kurum_kullanicilari TO')
+  && updater.includes('Legacy kurum üyeliği kullanıcı eşlemesi çözülemedi')
+);
 assert(updater.includes("assert_automatic_migration_safe($name,$file)"));
 assert(updater.includes("$rel==='config/local.php'"));
 assert(updater.includes("$rel==='.env'"));

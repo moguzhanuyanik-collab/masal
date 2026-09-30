@@ -16,3 +16,7 @@
 - Q1001–Q1500 arasında 500 yeni madde eklendi.
 - 20 kritik madde uygulanmış, 480 madde plan statüsündedir.
 - Toplam izlenebilir kalite/güncelleme kataloğu 1500 maddeye çıktı.
+
+## Rev 2
+
+- 1.1.93 tarihsel migration güvenlik testi, eski "dolu tabloysa her zaman dur" sözleşmesi yerine lossless staging + atomik swap + çözülemeyen satırda fail-closed sözleşmesini doğrulayacak şekilde güncellendi.
