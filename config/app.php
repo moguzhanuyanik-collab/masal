@@ -38,9 +38,7 @@ $defaults = [
         'preserve' => [
             'config/local.php',
             'storage',
-            'styles.css',
-            'app-style.css',
-            'features-style.css',
+            // Canlı yüklemeler/legacy varlıklar repoda olmadığı için korunur.
             'assets',
             'v4',
         ],
