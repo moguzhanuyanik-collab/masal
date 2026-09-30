@@ -298,6 +298,42 @@ function cleanup_empty_managed_parents(string $root,string $relative,array $pres
     }
 }
 
+function assert_managed_copy_type_safe(string $root,string $sourceRoot,array $newFiles,array $oldFiles,array $preserve): void {
+    $oldLookup=array_fill_keys($oldFiles,true);
+    foreach($newFiles as $relative){
+        $relative=managed_relative_path((string)$relative);
+        if(path_is_preserved($relative,$preserve)) continue;
+
+        $source=$sourceRoot.'/'.$relative;
+        if(!is_file($source)) continue;
+
+        $parts=explode('/',$relative);
+        array_pop($parts);
+        $prefix='';
+        foreach($parts as $part){
+            $prefix=$prefix===''?$part:$prefix.'/'.$part;
+            $live=$root.'/'.$prefix;
+            if(is_file($live) || is_link($live)){
+                if(!isset($oldLookup[$prefix])){
+                    throw new RuntimeException(
+                        'Güncelleme yol türü canlıya özel dosyayla çakışıyor; otomatik işlem durduruldu: '.$prefix
+                    );
+                }
+                throw new RuntimeException(
+                    'Yönetilen dosyanın klasöre dönüşmesi kontrollü geçiş gerektiriyor: '.$prefix
+                );
+            }
+        }
+
+        $liveTarget=$root.'/'.$relative;
+        if(is_dir($liveTarget) && !is_link($liveTarget)){
+            throw new RuntimeException(
+                'Yönetilen klasörün dosyaya dönüşmesi kontrollü geçiş gerektiriyor: '.$relative
+            );
+        }
+    }
+}
+
 function remove_stale_managed_files(string $root,array $oldFiles,array $newFiles,array $preserve): array {
     if($oldFiles===[]) return [];
     $newLookup=array_fill_keys($newFiles,true);
@@ -732,6 +768,17 @@ function assert_update_zip_safe(ZipArchive $zip): void {
         foreach(explode('/',$normalized) as $part){
             if($part==='..') throw new RuntimeException('Güncelleme ZIP paketi yol kaçışı içeriyor.');
         }
+
+        if(method_exists($zip,'getExternalAttributesIndex')){
+            $opsys=0;$attributes=0;
+            if($zip->getExternalAttributesIndex($i,$opsys,$attributes)
+                && $opsys===ZipArchive::OPSYS_UNIX){
+                $mode=($attributes>>16)&0170000;
+                if($mode===0120000){
+                    throw new RuntimeException('Güncelleme ZIP paketi sembolik bağlantı içeriyor.');
+                }
+            }
+        }
     }
 }
 
@@ -809,6 +856,7 @@ function install_github_update(string $root,array $gh,array $preserve): array {
         // İlk manifest yoksa hiçbir canlı dosya silinmez; sadece yeni baseline kaydedilir.
         $oldManagedFiles=read_managed_update_manifest($root);
         $newManagedFiles=collect_managed_update_files($sourceRoot,$preserve);
+        assert_managed_copy_type_safe($root,$sourceRoot,$newManagedFiles,$oldManagedFiles,$preserve);
 
         // Migration'lar önce staging paketinden uygulanır.
         // DB dönüşümü başarısızsa yeni uygulama dosyaları canlıya kopyalanmaz.
