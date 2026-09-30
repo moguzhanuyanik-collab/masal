@@ -169,6 +169,7 @@
     provider_incomplete:'Ses yazıya çevrilirken yanıt yarım kaldı. Mikrofona dokunup tekrar söyle.',
     format:'Bu cihazın ses kayıt biçimi desteklenmedi. Tarayıcı yöntemini seçebilir veya yazabilirsin.',
     size:'Kayıt çok kısa veya büyük. En fazla 15 saniye konuş.',
+    too_long:'Söylediğin soru biraz uzun oldu. Daha kısa bir cümleyle tekrar söyleyebilirsin.',
     empty:'Ses anlaşılmadı. Mikrofona daha yakın konuşup tekrar dene.',
     csrf:'Oturum doğrulaması yenilenmeli. Sayfayı yenileyip tekrar dene.',
     curl_missing:'Sunucudaki ses bağlantısı hazır değil. Lütfen yöneticine haber ver.',
