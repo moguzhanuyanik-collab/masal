@@ -110,8 +110,14 @@ try {
         header('Location: '.auth_post_login_url($sessionUser));
         exit;
     }
-} catch (Throwable $e) {
+} catch (PDOException $e) {
+    error_log('[IlkAdim][login-db] '.$e->getMessage());
+    $error='Giriş işlemi şu anda tamamlanamadı. Lütfen tekrar deneyin.';
+} catch (RuntimeException $e) {
     $error=$e->getMessage();
+} catch (Throwable $e) {
+    error_log('[IlkAdim][login] '.$e->getMessage());
+    $error='Giriş işlemi şu anda tamamlanamadı. Lütfen tekrar deneyin.';
 }
 
 function h(string $v): string { return htmlspecialchars($v,ENT_QUOTES,'UTF-8'); }
