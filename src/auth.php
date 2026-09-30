@@ -73,11 +73,32 @@ if (!function_exists('auth_runtime_column_exists')) {
     }
 }
 
+if (!function_exists('auth_security_log_once')) {
+    function auth_security_log_once(string $code): void {
+        static $logged=[];
+        if(isset($logged[$code])) return;
+        $logged[$code]=true;
+        error_log('[IlkAdim][security] '.$code);
+    }
+}
+
+if (!function_exists('auth_login_rate_scopes')) {
+    function auth_login_rate_scopes(string $email, string $ip): array {
+        $normalizedEmail=mb_strtolower(trim($email),'UTF-8');
+        $emailHash=hash('sha256',$normalizedEmail);
+        $cleanIp=trim($ip);
+        $scopes=[['email',$emailHash]];
+        if($cleanIp!==''){
+            $scopes[]=['email_ip',hash('sha256',$normalizedEmail."\n".$cleanIp)];
+            $scopes[]=['ip',hash('sha256',$cleanIp)];
+        }
+        return $scopes;
+    }
+}
+
 if (!function_exists('auth_login_rate_status')) {
     function auth_login_rate_status(PDO $pdo, string $email, string $ip): array {
         if (!auth_runtime_table_exists($pdo,'giris_guvenlik')) return ['blocked'=>false,'retry_after'=>0];
-        $scopes=[['email',hash('sha256',mb_strtolower(trim($email),'UTF-8'))]];
-        if(trim($ip)!=='') $scopes[]=['ip',hash('sha256',trim($ip))];
         $retryAfter=0;
         try {
             $stmt=$pdo->prepare("SELECT UNIX_TIMESTAMP(engel_bitis) engel_bitis
@@ -85,13 +106,14 @@ if (!function_exists('auth_login_rate_status')) {
                 WHERE kapsam=? AND kapsam_hash=?
                 LIMIT 1");
             $now=(int)($pdo->query('SELECT UNIX_TIMESTAMP(NOW())')->fetchColumn()?:time());
-            foreach($scopes as [$scope,$hash]){
+            foreach(auth_login_rate_scopes($email,$ip) as [$scope,$hash]){
                 $stmt->execute([$scope,$hash]);
                 $until=(int)($stmt->fetchColumn()?:0);
                 $stmt->closeCursor();
                 if($until>$now) $retryAfter=max($retryAfter,$until-$now);
             }
         } catch (Throwable) {
+            auth_security_log_once('login_rate_status_failed');
             return ['blocked'=>false,'retry_after'=>0];
         }
         return ['blocked'=>$retryAfter>0,'retry_after'=>min(3600,$retryAfter)];
@@ -101,47 +123,50 @@ if (!function_exists('auth_login_rate_status')) {
 if (!function_exists('auth_login_rate_failure')) {
     function auth_login_rate_failure(PDO $pdo, string $email, string $ip): void {
         if (!auth_runtime_table_exists($pdo,'giris_guvenlik')) return;
-        $scopes=[['email',hash('sha256',mb_strtolower(trim($email),'UTF-8'))]];
-        if(trim($ip)!=='') $scopes[]=['ip',hash('sha256',trim($ip))];
         $started=false;
         try {
             if(!$pdo->inTransaction()){$pdo->beginTransaction();$started=true;}
             $now=(int)($pdo->query('SELECT UNIX_TIMESTAMP(NOW())')->fetchColumn()?:time());
+            $ensure=$pdo->prepare("INSERT IGNORE INTO giris_guvenlik
+                (kapsam,kapsam_hash,deneme_sayisi,pencere_baslangici,engel_bitis,son_deneme)
+                VALUES (?,?,0,FROM_UNIXTIME(?),NULL,FROM_UNIXTIME(?))");
             $select=$pdo->prepare("SELECT deneme_sayisi,UNIX_TIMESTAMP(pencere_baslangici) pencere_baslangici
                 FROM giris_guvenlik WHERE kapsam=? AND kapsam_hash=? LIMIT 1 FOR UPDATE");
-            $insert=$pdo->prepare("INSERT INTO giris_guvenlik
-                (kapsam,kapsam_hash,deneme_sayisi,pencere_baslangici,engel_bitis,son_deneme)
-                VALUES (?,?,?,FROM_UNIXTIME(?),FROM_UNIXTIME(?),FROM_UNIXTIME(?))");
             $update=$pdo->prepare("UPDATE giris_guvenlik
                 SET deneme_sayisi=?,pencere_baslangici=FROM_UNIXTIME(?),
                     engel_bitis=FROM_UNIXTIME(?),son_deneme=FROM_UNIXTIME(?)
                 WHERE kapsam=? AND kapsam_hash=?");
-            foreach($scopes as [$scope,$hash]){
+            foreach(auth_login_rate_scopes($email,$ip) as [$scope,$hash]){
+                // Önce satırı oluştur, sonra FOR UPDATE ile kilitle. Böylece ilk eşzamanlı
+                // başarısız denemelerde olmayan satır üzerinde yarış oluşmaz.
+                $ensure->execute([$scope,$hash,$now,$now]);
                 $select->execute([$scope,$hash]);
                 $row=$select->fetch(PDO::FETCH_ASSOC);
                 $select->closeCursor();
+                if(!is_array($row)) throw new RuntimeException('Giriş güvenlik sayacı oluşturulamadı.');
+
                 $count=1;
                 $windowStart=$now;
-                if(is_array($row)){
-                    $oldStart=(int)($row['pencere_baslangici']??0);
-                    if($oldStart>0 && $oldStart>=$now-900){
-                        $count=max(0,(int)($row['deneme_sayisi']??0))+1;
-                        $windowStart=$oldStart;
-                    }
+                $oldStart=(int)($row['pencere_baslangici']??0);
+                if($oldStart>0 && $oldStart>=$now-900){
+                    $count=max(0,(int)($row['deneme_sayisi']??0))+1;
+                    $windowStart=$oldStart;
                 }
-                $threshold=$scope==='email'?5:30;
-                $blockSeconds=$scope==='email'?600:900;
+
+                [$threshold,$blockSeconds]=match($scope){
+                    'email_ip'=>[5,600],
+                    'email'=>[20,600],
+                    'ip'=>[30,900],
+                    default=>[30,600],
+                };
                 $blockUntil=$count>=$threshold ? $now+$blockSeconds : 0;
                 $blockValue=$blockUntil>0 ? $blockUntil : null;
-                if(is_array($row)){
-                    $update->execute([$count,$windowStart,$blockValue,$now,$scope,$hash]);
-                }else{
-                    $insert->execute([$scope,$hash,$count,$windowStart,$blockValue,$now]);
-                }
+                $update->execute([$count,$windowStart,$blockValue,$now,$scope,$hash]);
             }
             if($started)$pdo->commit();
         } catch (Throwable) {
             if($started && $pdo->inTransaction())$pdo->rollBack();
+            auth_security_log_once('login_rate_failure_failed');
         }
     }
 }
@@ -150,9 +175,22 @@ if (!function_exists('auth_login_rate_success')) {
     function auth_login_rate_success(PDO $pdo, string $email, string $ip): void {
         if (!auth_runtime_table_exists($pdo,'giris_guvenlik')) return;
         try {
-            $stmt=$pdo->prepare("DELETE FROM giris_guvenlik WHERE kapsam='email' AND kapsam_hash=?");
-            $stmt->execute([hash('sha256',mb_strtolower(trim($email),'UTF-8'))]);
-        } catch (Throwable) {}
+            $normalizedEmail=mb_strtolower(trim($email),'UTF-8');
+            $emailHash=hash('sha256',$normalizedEmail);
+            $cleanIp=trim($ip);
+            if($cleanIp===''){
+                $stmt=$pdo->prepare("DELETE FROM giris_guvenlik WHERE kapsam='email' AND kapsam_hash=?");
+                $stmt->execute([$emailHash]);
+                return;
+            }
+            $emailIpHash=hash('sha256',$normalizedEmail."\n".$cleanIp);
+            $stmt=$pdo->prepare("DELETE FROM giris_guvenlik
+                WHERE (kapsam='email' AND kapsam_hash=?)
+                   OR (kapsam='email_ip' AND kapsam_hash=?)");
+            $stmt->execute([$emailHash,$emailIpHash]);
+        } catch (Throwable) {
+            auth_security_log_once('login_rate_success_failed');
+        }
     }
 }
 
