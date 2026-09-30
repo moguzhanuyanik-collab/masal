@@ -15,3 +15,9 @@
 - Gerçek PDO/MariaDB tenant izolasyon testi CI'a bağlandı.
 - Migration 065 gerçek legacy ilişki şeması üzerinde çalıştırılarak backfill ve primary key değişimi doğrulanıyor.
 - PHP, JavaScript, AdımBot ve mevcut regression testleri korunuyor.
+
+## Rev 14 — 1.1.114 yayın ankrajı
+
+- 1.1.114 kurum bazlı eşleştirme izolasyonu ana dalda yayınlandı.
+- Sıralı güncelleme zinciri korunarak 1.1.113 sonrasındaki ilk yayın 1.1.114 olarak sabitlendi.
+- Release metadata, managed manifest ve version.json aynı sürüm/revision değerine bağlandı.
