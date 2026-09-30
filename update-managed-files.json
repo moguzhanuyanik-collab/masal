@@ -1,11 +1,12 @@
 {
   "format": 1,
-  "version": "1.1.112",
+  "version": "1.1.113",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
     "HOTFIX-1.1.97.md",
     "QUALITY-500-V2.md",
+    "QUALITY-500-V3.md",
     "QUALITY-500.md",
     "README.md",
     "RELEASE-1.0.11.md",
@@ -75,6 +76,7 @@
     "RELEASE-1.1.110.md",
     "RELEASE-1.1.111.md",
     "RELEASE-1.1.112.md",
+    "RELEASE-1.1.113.md",
     "RELEASE-1.1.12.md",
     "RELEASE-1.1.13.md",
     "RELEASE-1.1.14.md",
@@ -383,7 +385,9 @@
     "pwa-v4.js",
     "quality/quality-index.json",
     "quality/update-quality-500-v2.json",
+    "quality/update-quality-500-v3.json",
     "quality/update-quality-500.json",
+    "rescue-1.1.97-to-1.1.98.php",
     "rol-paneli.php",
     "service-worker.js",
     "settings-account.js",
@@ -449,6 +453,7 @@
     "tests/update-manifest-contract-103.php",
     "tests/update-quality-catalog-111.cjs",
     "tests/update-quality-catalog-112.cjs",
+    "tests/update-quality-catalog-113.cjs",
     "tests/update-release-anchor-101.cjs",
     "tests/update-release-head-anchor-109.cjs",
     "tests/update-release-revision-105.cjs",
@@ -456,6 +461,8 @@
     "tests/update-safety-102.cjs",
     "tests/update-safety-102.php",
     "tests/updater-manifest-96.cjs",
+    "tests/web-rescue-197-198-113.cjs",
+    "tests/web-rescue-197-198-113.php",
     "tools/1.1.97-history-checkpoint.sql",
     "tools/apply-updater-1.1.97-rescue.php",
     "tools/apply-updater-1.1.98-rescue.php",
@@ -476,5 +483,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 5
+  "release_revision": 1
 }
