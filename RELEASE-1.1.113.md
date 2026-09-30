@@ -20,3 +20,7 @@
 ## Rev 2
 
 - 1.1.93 tarihsel migration güvenlik testi, eski "dolu tabloysa her zaman dur" sözleşmesi yerine lossless staging + atomik swap + çözülemeyen satırda fail-closed sözleşmesini doğrulayacak şekilde güncellendi.
+
+## Rev 3
+
+- Q1001–Q1500 katalog ve 1500-madde index dosyaları tarihsel rev1 artefaktı olarak sabitlendi; aynı sürüm içindeki düzeltme revisionları katalog süreklilik testini bozmaz.
