@@ -30,3 +30,12 @@ assert(workflow.includes('mariadb:11.4'),'CI must provide MariaDB integration se
 assert(workflow.includes('tests/tenant-isolation-db-115.php'),'CI must run DB tenant integration');
 
 console.log('1.1.114 tenant relation schema checks passed');
+
+
+const globalPage=fs.readFileSync('global-eslestirme.php','utf8');
+const globalManager=fs.readFileSync('src/kurum_yonetimi.php','utf8');
+assert(globalPage.includes('DELETE FROM veli_ogrenci WHERE veli_id=? AND ogrenci_id=? AND kurum_id=0'),'global unlink must only remove global relation');
+assert(globalPage.includes('SELECT veli_id,ogrenci_id FROM veli_ogrenci WHERE kurum_id=0'),'global listing must ignore institution relations');
+assert(globalManager.includes('LEFT JOIN veli_ogrenci vo ON vo.ogrenci_id=o.id AND vo.kurum_id=0'),'global student list must only join global relations');
+assert(globalManager.includes('LEFT JOIN veli_ogrenci vo ON vo.veli_id=v.id AND vo.kurum_id=0'),'global parent list must only join global relations');
+assert(globalManager.includes('INSERT IGNORE INTO veli_ogrenci (veli_id,ogrenci_id,kurum_id) VALUES (?,?,0)'),'global link creation must explicitly write scope zero');
