@@ -41,9 +41,13 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         );
         $message=$kyTitle.' hesabı kuruma eklendi.';
     }catch(PDOException $e){
+        error_log('[IlkAdim][institution-role-db] '.$e->getMessage());
         $error=$e->getCode()==='23000'?'Bu e-posta zaten kullanılıyor.':'Veritabanı işlemi tamamlanamadı.';
-    }catch(Throwable $e){
+    }catch(RuntimeException $e){
         $error=$e->getMessage();
+    }catch(Throwable $e){
+        error_log('[IlkAdim][institution-role] '.$e->getMessage());
+        $error='Kullanıcı işlemi tamamlanamadı. Lütfen tekrar deneyin.';
     }
 }
 
