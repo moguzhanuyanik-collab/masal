@@ -91,16 +91,6 @@ function next_remote_version_info(array $gh,string $localVersion): array {
     $localVersion=trim($localVersion);
     if($localVersion==='') $localVersion='0.0.0';
 
-    // 1.1.97 kurtarma paketi 1.1.98'e ulaştıktan sonra, geçmişteki
-    // tekrar-ankraj commitlerine takılmadan modern final-release zincirine geç.
-    if($localVersion==='1.1.98'){
-        $bridge=remote_version_info_at_ref($gh,'14db8cf61b633d81937346f41758b39bf09a1706');
-        if((string)($bridge['version']??'')!=='1.1.101'){
-            throw new RuntimeException('1.1.98 kurtarma köprüsü doğrulanamadı.');
-        }
-        return $bridge;
-    }
-
     $next=null;
     $page=1;
     $maxPages=20;
@@ -464,6 +454,165 @@ function create_single_previous_backup(string $root): string {
     return basename($final);
 }
 
+function normalize_db_backup_config(array $db): array {
+    $host=trim((string)($db['host']??'localhost'));
+    $port=max(1,min(65535,(int)($db['port']??3306)));
+    $name=trim((string)($db['name']??''));
+    $user=(string)($db['user']??'');
+    $pass=(string)($db['pass']??'');
+    foreach([$host,$name,$user] as $value){
+        if($value==='' || str_contains($value,"\0") || str_contains($value,"\n") || str_contains($value,"\r")){
+            throw new RuntimeException('Veritabanı yedeği için DB ayarları geçersiz.');
+        }
+    }
+    return ['host'=>$host,'port'=>$port,'name'=>$name,'user'=>$user,'pass'=>$pass];
+}
+
+function find_mysqldump_binary(array $updateConfig=[]): ?string {
+    $configured=trim((string)($updateConfig['mysqldump_path']??''));
+    $candidates=[];
+    if($configured!=='') $candidates[]=$configured;
+    foreach([
+        '/usr/bin/mysqldump',
+        '/usr/local/bin/mysqldump',
+        '/usr/local/mysql/bin/mysqldump',
+        '/opt/homebrew/bin/mysqldump',
+    ] as $candidate) $candidates[]=$candidate;
+
+    foreach(array_values(array_unique($candidates)) as $candidate){
+        if(is_file($candidate) && is_executable($candidate)) return $candidate;
+    }
+    return null;
+}
+
+function create_database_backup(string $root,array $dbConfig,array $updateConfig=[]): string {
+    if(!function_exists('proc_open')){
+        throw new RuntimeException('Migration için veritabanı yedeği alınamıyor: proc_open kullanılamıyor.');
+    }
+    $binary=find_mysqldump_binary($updateConfig);
+    if($binary===null){
+        throw new RuntimeException(
+            'Migration için veritabanı yedeği zorunlu; mysqldump bulunamadı. '
+            .'update.mysqldump_path ayarlanmalı veya sunucuya mysqldump kurulmalı.'
+        );
+    }
+
+    $db=normalize_db_backup_config($dbConfig);
+    $dir=rtrim($root,'/\\').'/storage/backups';
+    if(!is_dir($dir)&&!mkdir($dir,0750,true)&&!is_dir($dir)){
+        throw new RuntimeException('Veritabanı yedek klasörü oluşturulamadı.');
+    }
+
+    $final=$dir.'/onceki_veritabani.sql';
+    $tmp=$dir.'/onceki_veritabani.tmp.sql';
+    $old=$dir.'/onceki_veritabani.old.sql';
+    @unlink($tmp);
+    @unlink($old);
+
+    $cmd=[
+        $binary,
+        '--single-transaction',
+        '--quick',
+        '--triggers',
+        '--hex-blob',
+        '--skip-lock-tables',
+        '--default-character-set=utf8mb4',
+        '--host='.$db['host'],
+        '--port='.(string)$db['port'],
+        '--user='.$db['user'],
+        $db['name'],
+    ];
+
+    $descriptors=[
+        0=>['pipe','r'],
+        1=>['file',$tmp,'wb'],
+        2=>['pipe','w'],
+    ];
+    $env=getenv();
+    if(!is_array($env)) $env=[];
+    $env['MYSQL_PWD']=$db['pass'];
+
+    $process=@proc_open($cmd,$descriptors,$pipes,null,$env,['bypass_shell'=>true]);
+    if(!is_resource($process)){
+        @unlink($tmp);
+        throw new RuntimeException('mysqldump işlemi başlatılamadı.');
+    }
+    if(isset($pipes[0])&&is_resource($pipes[0])) fclose($pipes[0]);
+    $stderr='';
+    if(isset($pipes[2])&&is_resource($pipes[2])){
+        $stderr=stream_get_contents($pipes[2],8192) ?: '';
+        fclose($pipes[2]);
+    }
+    $exit=proc_close($process);
+
+    $size=is_file($tmp)?(int)(filesize($tmp)?:0):0;
+    $head='';
+    if($size>0){
+        $fh=@fopen($tmp,'rb');
+        if(is_resource($fh)){
+            $head=(string)fread($fh,16384);
+            fclose($fh);
+        }
+    }
+    $looksLikeDump=$size>512 && (
+        stripos($head,'MySQL dump')!==false
+        || stripos($head,'MariaDB dump')!==false
+        || stripos($head,'CREATE TABLE')!==false
+    );
+    if($exit!==0 || !$looksLikeDump){
+        @unlink($tmp);
+        error_log('[IlkAdim][db-backup] mysqldump exit='.(string)$exit.' '.mb_substr(trim($stderr),0,1000));
+        throw new RuntimeException('Migration öncesi veritabanı yedeği doğrulanamadı; güncelleme durduruldu.');
+    }
+    @chmod($tmp,0600);
+
+    if(is_file($final)&&!@rename($final,$old)){
+        @unlink($tmp);
+        throw new RuntimeException('Mevcut veritabanı yedeği güvenli biçimde değiştirilemedi.');
+    }
+    if(!@rename($tmp,$final)){
+        if(is_file($old)) @rename($old,$final);
+        @unlink($tmp);
+        throw new RuntimeException('Yeni veritabanı yedeği etkinleştirilemedi.');
+    }
+    @chmod($final,0600);
+    @unlink($old);
+    return basename($final);
+}
+
+function legacy_membership_repair_needed(PDO $pdo): bool {
+    if(!auth_table_exists($pdo,'kurum_kullanicilari')) return false;
+    $cols=auth_column_map($pdo,'kurum_kullanicilari');
+    foreach(['veli_id','ogretmen_id','ogrenci_id','yonetici_id'] as $column){
+        if(isset($cols[$column])) return true;
+    }
+    return false;
+}
+
+function pending_migration_names(PDO $pdo,string $root,string $localVersion='0.0.0'): array {
+    assert_historical_migration_history($pdo,$root,$localVersion);
+    $retired=retired_automatic_migrations();
+    $files=glob($root.'/database/migrations/*.sql')?:[];
+    sort($files,SORT_NATURAL);
+    $check=$pdo->prepare('SELECT 1 FROM sistem_migrations WHERE migration=? LIMIT 1');
+    $pending=[];
+    foreach($files as $file){
+        $name=basename($file,'.sql');
+        if(isset($retired[$name])) continue;
+        $check->execute([$name]);
+        $exists=(bool)$check->fetchColumn();
+        $check->closeCursor();
+        if(!$exists) $pending[]=$name;
+    }
+    return $pending;
+}
+
+function database_update_requires_backup(PDO $pdo,string $root,string $localVersion='0.0.0'): bool {
+    if(!auth_table_exists($pdo,'ogrenciler')) return true;
+    if(legacy_membership_repair_needed($pdo)) return true;
+    return pending_migration_names($pdo,$root,$localVersion)!==[];
+}
+
 function run_migration_sql(PDO $pdo,string $path): void {
     $buffer='';
     foreach(file($path,FILE_IGNORE_NEW_LINES)?:[] as $line){
@@ -660,37 +809,9 @@ function ensure_student_auth_schema(PDO $pdo): void {
         }
     }
 
-    $email='masal@gmail.com';
-    $passwordHash=password_hash('12345678',PASSWORD_DEFAULT);
-    if(!is_string($passwordHash)||$passwordHash===''){
-        throw new RuntimeException('Test ogrenci sifresi olusturulamadi.');
-    }
+    // Şema onarımı kullanıcı kimliği, e-posta veya parola üretmez/değiştirmez.
+    // Test/demo hesapları updater sorumluluğu değildir.
 
-    $stmt=$pdo->prepare('SELECT id FROM ogrenciler WHERE email=? LIMIT 1');
-    $stmt->execute([$email]);
-    $studentId=(int)($stmt->fetchColumn()?:0);
-
-    if($studentId<=0){
-        $old=$pdo->prepare('SELECT id FROM ogrenciler WHERE email=? LIMIT 1');
-        $old->execute(['test@ilkadim.local']);
-        $studentId=(int)($old->fetchColumn()?:0);
-    }
-
-    if($studentId<=0){
-        $first=$pdo->query('SELECT id FROM ogrenciler WHERE aktif=1 ORDER BY id LIMIT 1');
-        $studentId=(int)($first?$first->fetchColumn():0);
-    }
-
-    if($studentId>0){
-        $pdo->prepare("UPDATE ogrenciler
-            SET ad=CASE WHEN ad IS NULL OR ad='' THEN 'Test Ogrenci' ELSE ad END,
-                email=?,sifre_hash=?,aktif=1
-            WHERE id=?")
-            ->execute([$email,$passwordHash,$studentId]);
-    }else{
-        $pdo->prepare("INSERT INTO ogrenciler (ad,email,sifre_hash,avatar,aktif) VALUES (?,?,?,?,1)")
-            ->execute(['Test Ogrenci',$email,$passwordHash,'🌞']);
-    }
 }
 
 function repair_legacy_institution_membership_schema(PDO $pdo): void {
@@ -890,7 +1011,13 @@ function assert_update_zip_safe(ZipArchive $zip): void {
     }
 }
 
-function install_github_update(string $root,array $gh,array $preserve): array {
+function install_github_update(
+    string $root,
+    array $gh,
+    array $preserve,
+    array $dbConfig=[],
+    array $updateConfig=[]
+): array {
     [$owner,$repo,$branch]=github_repo_info($gh);
     $localVersion=read_app_version();
     $remote=next_remote_version_info($gh,$localVersion);
@@ -966,6 +1093,14 @@ function install_github_update(string $root,array $gh,array $preserve): array {
         $newManagedFiles=collect_managed_update_files($sourceRoot,$preserve);
         assert_managed_copy_type_safe($root,$sourceRoot,$newManagedFiles,$oldManagedFiles,$preserve);
 
+        // Migration/legacy şema onarımı gerekiyorsa önce gerçek DB snapshot alınır.
+        // mysqldump yoksa veri dönüştüren güncelleme fail-closed durur.
+        $dbBackupName='';
+        $requiresDbBackup=database_update_requires_backup($pdo,$sourceRoot,$localVersion);
+        if($requiresDbBackup){
+            $dbBackupName=create_database_backup($root,$dbConfig,$updateConfig);
+        }
+
         // Migration'lar önce staging paketinden uygulanır.
         // DB dönüşümü başarısızsa yeni uygulama dosyaları canlıya kopyalanmaz.
         if(!auth_table_exists($pdo,'ogrenciler')) ensure_student_auth_schema($pdo);
@@ -978,6 +1113,7 @@ function install_github_update(string $root,array $gh,array $preserve): array {
 
         $pdo->prepare("INSERT INTO sistem_ayarlar (ayar_anahtari,ayar_degeri) VALUES ('uygulama_surumu',?) ON DUPLICATE KEY UPDATE ayar_degeri=VALUES(ayar_degeri)")->execute([$remote['version']]);
         $historyMessage='Guncelleme tamamlandi. Yedek: '.$backupName;
+        if($dbBackupName!=='') $historyMessage.='; DB yedek: '.$dbBackupName;
         if($removedManagedFiles!==[]) $historyMessage.='; temizlenen eski dosya: '.count($removedManagedFiles);
         $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='basarili',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute([$historyMessage,$logId]);
 
@@ -989,6 +1125,7 @@ function install_github_update(string $root,array $gh,array $preserve): array {
             'remote'=>$remote,
             'local'=>$localVersion,
             'backup'=>$backupName,
+            'database_backup'=>$dbBackupName,
             'migrations'=>$migrations,
             'removed_files'=>$removedManagedFiles,
             'managed_files'=>count($newManagedFiles),

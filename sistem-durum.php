@@ -2,10 +2,14 @@
 declare(strict_types=1);
 require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
+require __DIR__.'/src/updater.php';
 
 $user=require_role('super_admin');
 $pdo=db();
 $config=require __DIR__.'/config/app.php';
+$updateConfig=is_array($config['update']??null)?$config['update']:[];
+$mysqldumpPath=find_mysqldump_binary($updateConfig);
+$dbBackupReady=function_exists('proc_open') && is_string($mysqldumpPath) && $mysqldumpPath!=='';
 
 function sd_h(string $value): string {
     return htmlspecialchars($value,ENT_QUOTES,'UTF-8');
@@ -49,7 +53,8 @@ $checks=[
     ['name'=>'GD','detail'=>'Profil fotoğrafı işleme','status'=>sd_status(extension_loaded('gd'),'Yüklü','Eksik')],
     ['name'=>'Storage','detail'=>'Uygulama çalışma verileri','status'=>sd_writable_status(__DIR__.'/storage')],
     ['name'=>'Güncelleme alanı','detail'=>'İndirilen paket ve geçici dosyalar','status'=>sd_writable_status(__DIR__.'/storage/updates')],
-    ['name'=>'Yedek alanı','detail'=>'Güncelleme öncesi dosya yedekleri','status'=>sd_writable_status(__DIR__.'/storage/backups')],
+    ['name'=>'Yedek alanı','detail'=>'Güncelleme öncesi dosya ve DB yedekleri','status'=>sd_writable_status(__DIR__.'/storage/backups')],
+    ['name'=>'Migration DB yedeği','detail'=>'Migration öncesi native mysqldump snapshot','status'=>sd_status($dbBackupReady,'Hazır',$mysqldumpPath===null?'mysqldump bulunamadı':'proc_open kapalı')],
     ['name'=>'Çalışma bootstrap','detail'=>'Canlı uygulamanın src/bootstrap.php dosyası','status'=>sd_file_status(__DIR__.'/src/bootstrap.php')],
     ['name'=>'Ana stil dosyası','detail'=>'Canlı uygulamanın styles.css dosyası','status'=>sd_file_status(__DIR__.'/styles.css')],
     ['name'=>'Uygulama runtime','detail'=>'Canlı uygulamanın app-runtime.js dosyası','status'=>sd_file_status(__DIR__.'/app-runtime.js')],
@@ -79,7 +84,7 @@ if(is_file($versionFile)){
 <div><span class="sa-status-icon"><svg><use href="<?=$status['ok']?'#sa-shield':'#sa-settings'?>"/></svg></span><p><strong><?=sd_h((string)$check['name'])?></strong><small><?=sd_h((string)$check['detail'])?></small></p><?php if($status['ok']):?><b><i></i><?=sd_h((string)$status['label'])?></b><?php else:?><em><?=sd_h((string)$status['label'])?></em><?php endif;?></div>
 <?php endforeach; ?>
 </div></section>
-<p class="little-note">Bu ekran yalnız durum okur; ayarları, veritabanını veya dosyaları değiştirmez. Temiz kurulum şeması/seed eksikse mevcut çalışan sunucu etkilenmez ancak yeni sunucuya sıfırdan kurulum tamamlanamaz. <a href="adimbot-ayarlari.php">AdımBot ayarlarını aç</a>.</p>
+<p class="little-note">Bu ekran yalnız durum okur; ayarları, veritabanını veya dosyaları değiştirmez. Migration varsa native DB yedeği alınmadan güncelleme kurulmaz. Temiz kurulum şeması/seed eksikse mevcut çalışan sunucu etkilenmez ancak yeni sunucuya sıfırdan kurulum tamamlanamaz. <a href="adimbot-ayarlari.php">AdımBot ayarlarını aç</a>.</p>
 </div></main>
 <nav class="app-nav" aria-label="Süper Admin menüsü"><a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a><a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a><a href="global.php"><span><svg><use href="#sa-users"/></svg></span>Global</a><a href="guncelleme.php"><span><svg><use href="#sa-refresh"/></svg></span>Güncelle</a><a class="active" href="sistem-durum.php"><span><svg><use href="#sa-database"/></svg></span>Durum</a></nav>
 </div></body></html>
