@@ -19,8 +19,12 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             $flash=$correct?'Harika! Doğru cevap. ⭐':'Tekrar deneyebilirsin. Öğretmenin açıklamasına göz at.';
             $flashType=$correct?'ok':'bad';
         }
-    }catch(Throwable $e){
+    }catch(RuntimeException $e){
         $flash=$e->getMessage();
+        $flashType='bad';
+    }catch(Throwable $e){
+        error_log('[IlkAdim][student-teacher-content] '.$e->getMessage());
+        $flash='Cevabın şu anda kaydedilemedi. Lütfen tekrar dene.';
         $flashType='bad';
     }
 }
