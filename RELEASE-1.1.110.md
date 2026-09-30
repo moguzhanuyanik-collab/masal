@@ -9,3 +9,8 @@
 - Diğer tüm sürüm geçişlerinde mevcut updater davranışı korunur.
 - Rescue installer yalnız kurulu sürüm tam olarak 1.1.97 olduğunda çalışır ve mevcut updater'ı SHA-256 yedekler.
 - Tarihsel 1.1.98 anchor ve sonraki sürüm zinciri yeniden ankrajlanmıştır.
+
+## Rev 2
+
+- `database/migrations/001_197_history_recovery.sql` final managed-file manifestine eklendi.
+- Paket ağacı ile manifest birebir eşleştirildi.

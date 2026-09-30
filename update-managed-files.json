@@ -261,6 +261,7 @@
     "database/content/grade8/30_diger_dersler_soru_havuzu.sql",
     "database/content/grade8/README.md",
     "database/migrations/000_v3_kurum_kullanicilari_onarim.sql",
+    "database/migrations/001_197_history_recovery.sql",
     "database/migrations/002_utf8mb4_unicode.sql",
     "database/migrations/003_gercek_veri_takibi.sql",
     "database/migrations/004_ogrenci_giris_sistemi.sql",
@@ -463,5 +464,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 1
+  "release_revision": 2
 }
