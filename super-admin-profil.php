@@ -42,7 +42,7 @@ try {
         auth_audit($pdo,(int)$user['id'],(int)$user['id'],'profil_guncelle','Süper admin profili güncellendi');
         $user=auth_fetch_user($pdo,(int)$user['id'])??$user;$message='Profil güncellendi.';
     }
-}catch(Throwable $e){$error=$e->getMessage();}
+}catch(PDOException $e){error_log('[IlkAdim][profile-db] '.$e->getMessage());$error='Profil bilgileri şu anda kaydedilemedi.';}catch(RuntimeException $e){$error=$e->getMessage();}catch(Throwable $e){error_log('[IlkAdim][profile] '.$e->getMessage());$error='Profil bilgileri şu anda kaydedilemedi.';}
 $photoPath=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase.'.jpg')?$photoBase.'.jpg':'');
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Profil — İlkAdım</title><link rel="stylesheet" href="super-admin-pages.css?v=1.0.72"></head>
 <body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?><div class="app-shell"><header class="app-topbar"><a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a></header><main id="screen"><div class="screen-content"><section class="subpage-intro"><span><svg><use href="#sa-user"/></svg></span><h1>Profilim</h1><p>Görünür adınızı ve profil fotoğrafınızı yönetin.</p></section>
