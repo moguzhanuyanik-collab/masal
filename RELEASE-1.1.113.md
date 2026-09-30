@@ -33,3 +33,11 @@
 - Gömülü payload mevcut rev3 lossless rescue updater ile birebir aynıdır.
 - Etkinleştirme başarısızlığında eski updater atomik restore edilir.
 - 1.1.98 kurulumu sonrasında kurum_kullanicilari dönüşümü mevcut lossless staging + doğrulama + atomik RENAME TABLE akışıyla devam eder.
+
+## Rev 5 — 1.1.97 → 1.1.98 geçiş ankrajı
+
+- Eski 1.1.97 updater'ın version.json geçmiş taramasında önce güvenli bir 1.1.98 köprü commitini seçebilmesi için tarihsel bridge ankrajı eklendi.
+- Köprü paketinde database/migrations altındaki SQL dosyaları bilinçli olarak yoktur; amaç eski migration geçmişini yeniden oynatmadan modern updater çekirdeğini canlıya taşımaktır.
+- Köprü commitinden hemen sonra 1.1.113 paket ağacı eksiksiz geri yüklenmiştir; main dalındaki güncel paket içeriği korunur.
+- Güncel release HEAD tekrar version.json + update-release.json + update-managed-files.json üçlü ankrajıyla rev 5 olarak sabitlenmiştir.
+
