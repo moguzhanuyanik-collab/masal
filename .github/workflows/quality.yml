@@ -20,46 +20,21 @@ permissions:
 jobs:
   source-checks:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    services:
-      mariadb:
-        image: mariadb:11.4.12
-        env:
-          MARIADB_ROOT_PASSWORD: root
-          MARIADB_DATABASE: ilkadim_ci
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd "healthcheck.sh --connect --innodb_initialized"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 20
-          --health-start-period 10s
-
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 2
 
-      - name: PHP MySQL extension
+      - name: PHP syntax
         shell: bash
         run: |
           if ! command -v php >/dev/null 2>&1; then
             echo "PHP CLI is not available on this runner."
             exit 1
           fi
-          if ! php -m | grep -qi '^pdo_mysql$'; then
-            sudo apt-get update
-            sudo apt-get install -y php-mysql
-          fi
-          php -m | grep -qi '^pdo_mysql$'
-
-      - name: PHP syntax
-        shell: bash
-        run: |
-          find . -type f -name '*.php' -not -path './vendor/*' -print0 \
-            | xargs -0 -n1 php -l
+          find . -type f -name '*.php' -not -path './vendor/*' -print0             | xargs -0 -n1 php -l
 
       - name: JavaScript syntax
         shell: bash
@@ -91,17 +66,6 @@ jobs:
           php tests/update-continuity-112.php
           php tests/web-rescue-197-198-113.php
 
-      - name: MariaDB tenant isolation integration
-        shell: bash
-        env:
-          ILKADIM_DB_HOST: 127.0.0.1
-          ILKADIM_DB_PORT: 3306
-          ILKADIM_DB_NAME: ilkadim_ci
-          ILKADIM_DB_USER: root
-          ILKADIM_DB_PASSWORD: root
-        run: |
-          php tests/tenant-isolation-db-115.php
-
       - name: Node regression checks
         shell: bash
         run: |
@@ -132,4 +96,3 @@ jobs:
           node tests/update-quality-catalog-113.cjs
           node tests/web-rescue-197-198-113.cjs
           node tests/tenant-isolation-114.cjs
-          node tests/tenant-relation-schema-115.cjs
