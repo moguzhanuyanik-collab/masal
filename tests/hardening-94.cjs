@@ -23,7 +23,9 @@ assert(install.includes("$e instanceof PDOException"));
 
 assert(updater.includes("function ensure_runtime_storage_guard"));
 assert(updater.includes("Require all denied"));
-assert(updater.includes("$rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')"));
+assert(updater.includes("$rel==='config/local.php'"));
+assert(updater.includes("$rel==='.env'"));
+assert(updater.includes("str_starts_with($rel,'storage/')"));
 assert(updater.includes("Guncelleme hatayla sonlandi. Ayrintilar sunucu gunlugune kaydedildi."));
 assert(!updater.includes("execute([$e->getMessage(),$logId])"));
 
