@@ -10,6 +10,7 @@ on:
       - 'updater-manifest-*'
       - 'db-ai-safety-*'
       - 'db-backup-*'
+      - 'recovery-safety-*'
   pull_request:
 
 permissions:
@@ -48,6 +49,7 @@ jobs:
           php tests/adimbot-transcript-behavior.php
           php tests/adimbot-rate-limit-98.php
           php tests/db-backup-99.php
+          php tests/recovery-safety-100.php
 
       - name: Node regression checks
         shell: bash
@@ -59,3 +61,4 @@ jobs:
           node tests/updater-manifest-96.cjs
           node tests/db-ai-safety-98.cjs
           node tests/db-backup-99.cjs
+          node tests/recovery-safety-100.cjs
