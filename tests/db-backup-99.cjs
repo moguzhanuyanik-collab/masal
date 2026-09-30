@@ -21,7 +21,9 @@ for(const fn of [
   assert(updater.includes('function '+fn+'('),fn+' missing');
 }
 
-assert(updater.includes("'MYSQL_PWD'"));
+assert(!updater.includes("'MYSQL_PWD'"));
+assert(updater.includes('function create_mysql_defaults_file'));
+assert(updater.includes("'--defaults-extra-file='"));
 assert(updater.includes("'--single-transaction'"));
 assert(updater.includes("'--quick'"));
 assert(updater.includes("'--triggers'"));
@@ -30,8 +32,8 @@ assert(updater.includes("'--skip-lock-tables'"));
 assert(!updater.includes("'--password="));
 assert(updater.includes('Migration öncesi veritabanı yedeği doğrulanamadı'));
 assert(updater.includes('$requiresDbBackup=database_update_requires_backup'));
-assert(updater.indexOf('create_database_backup($root,$dbConfig,$updateConfig)')
-  < updater.indexOf("if(!auth_table_exists($pdo,'ogrenciler')) ensure_student_auth_schema($pdo)"));
+assert(updater.indexOf('create_database_backup($root,$dbConfig,$updateConfig,$pdo)')
+  < updater.indexOf("if($studentSchemaMissing) ensure_student_auth_schema($pdo)"));
 assert(updater.includes("'database_backup'=>$dbBackupName"));
 
 assert(!updater.includes("masal@gmail.com"));
@@ -47,6 +49,6 @@ assert(status.includes('Migration DB yedeği'));
 assert(status.includes('find_mysqldump_binary($updateConfig)'));
 
 assert(workflow.includes('tests/db-backup-99.php'));
-assert.strictEqual(version.version,'1.1.99');
+assert(/^1\.1\.(?:99|[1-9][0-9]{2,})$/.test(String(version.version)),'version must be 1.1.99 or newer');
 
 console.log('1.1.99 DB backup and legacy account safety checks passed');
