@@ -76,10 +76,8 @@ if (!function_exists('auth_runtime_column_exists')) {
 if (!function_exists('auth_login_rate_status')) {
     function auth_login_rate_status(PDO $pdo, string $email, string $ip): array {
         if (!auth_runtime_table_exists($pdo,'giris_guvenlik')) return ['blocked'=>false,'retry_after'=>0];
-        $scopes=[
-            ['email',hash('sha256',mb_strtolower(trim($email),'UTF-8'))],
-            ['ip',hash('sha256',trim($ip))],
-        ];
+        $scopes=[['email',hash('sha256',mb_strtolower(trim($email),'UTF-8'))]];
+        if(trim($ip)!=='') $scopes[]=['ip',hash('sha256',trim($ip))];
         $retryAfter=0;
         try {
             $stmt=$pdo->prepare("SELECT UNIX_TIMESTAMP(engel_bitis) engel_bitis
@@ -103,10 +101,8 @@ if (!function_exists('auth_login_rate_status')) {
 if (!function_exists('auth_login_rate_failure')) {
     function auth_login_rate_failure(PDO $pdo, string $email, string $ip): void {
         if (!auth_runtime_table_exists($pdo,'giris_guvenlik')) return;
-        $scopes=[
-            ['email',hash('sha256',mb_strtolower(trim($email),'UTF-8'))],
-            ['ip',hash('sha256',trim($ip))],
-        ];
+        $scopes=[['email',hash('sha256',mb_strtolower(trim($email),'UTF-8'))]];
+        if(trim($ip)!=='') $scopes[]=['ip',hash('sha256',trim($ip))];
         $started=false;
         try {
             if(!$pdo->inTransaction()){$pdo->beginTransaction();$started=true;}
@@ -133,7 +129,9 @@ if (!function_exists('auth_login_rate_failure')) {
                         $windowStart=$oldStart;
                     }
                 }
-                $blockUntil=$count>=5 ? $now+600 : 0;
+                $threshold=$scope==='email'?5:30;
+                $blockSeconds=$scope==='email'?600:900;
+                $blockUntil=$count>=$threshold ? $now+$blockSeconds : 0;
                 $blockValue=$blockUntil>0 ? $blockUntil : null;
                 if(is_array($row)){
                     $update->execute([$count,$windowStart,$blockValue,$now,$scope,$hash]);
@@ -152,11 +150,8 @@ if (!function_exists('auth_login_rate_success')) {
     function auth_login_rate_success(PDO $pdo, string $email, string $ip): void {
         if (!auth_runtime_table_exists($pdo,'giris_guvenlik')) return;
         try {
-            $stmt=$pdo->prepare("DELETE FROM giris_guvenlik WHERE (kapsam='email' AND kapsam_hash=?) OR (kapsam='ip' AND kapsam_hash=?)");
-            $stmt->execute([
-                hash('sha256',mb_strtolower(trim($email),'UTF-8')),
-                hash('sha256',trim($ip))
-            ]);
+            $stmt=$pdo->prepare("DELETE FROM giris_guvenlik WHERE kapsam='email' AND kapsam_hash=?");
+            $stmt->execute([hash('sha256',mb_strtolower(trim($email),'UTF-8'))]);
         } catch (Throwable) {}
     }
 }
