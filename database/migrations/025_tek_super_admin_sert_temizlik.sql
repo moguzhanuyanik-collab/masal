@@ -1,5 +1,5 @@
--- İlkAdım V1.0.66 uyumluluk migration'ı
--- Önceki sürümdeki sert temizlik bazı canlı veritabanlarında yabancı anahtar
--- bağımlılıkları nedeniyle hata verebildi. Gerçek temizleme V1.0.67 içindeki
--- 026_tek_super_admin_kesin_temizlik.sql tarafından yapılır.
+-- İlkAdım 1.1.93
+-- RETIRED: Eski tek Süper Admin temizlik zincirinin uyumluluk migration'ı.
+-- Üretim verisini değiştirmemesi için no-op.
 SET NAMES utf8mb4;
+SET @ilkadim_retired_025 = 1;
