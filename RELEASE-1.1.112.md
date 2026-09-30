@@ -28,3 +28,7 @@
 ## Rev 3
 
 - Continuity Node regresyon testi runtime manifest sürüm eşleşmesini birebir satır metnine değil gerçek guard ifadesine göre doğrulayacak şekilde düzeltildi.
+
+## Rev 4
+
+- 1.1.112 continuity regresyon testi sabit revision yerine pozitif release revision sözleşmesini doğrular.
