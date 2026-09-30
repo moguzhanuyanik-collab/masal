@@ -27,7 +27,7 @@
     if(typeof value!=='string')return true;
     const text=clean(value);
     if(!/[\p{L}\p{N}]/u.test(text))return true;
-    return /^(?:[\[(](?:sessizlik|gürültü|müzik|alkış|silence|noise|music|applause|blank[_ ]audio|no[_ ]speech|anlaşılmayan\s+ses|konuşma\s+yok|no\s+speech)[\])]|blank[_ ]audio|no[_ ]speech|anlaşılmayan\s+ses|konuşma\s+yok|no\s+speech)$/u.test(text.toLocaleLowerCase('tr-TR').replace(/ı/g,'i'));
+    return /^(?:[\[(](?:sessizlik|gürültü|müzik|alkiş|silence|noise|music|applause|blank[_ ]audio|no[_ ]speech|anlaşilmayan\s+ses|konuşma\s+yok|no\s+speech)[\])]|blank[_ ]audio|no[_ ]speech|anlaşilmayan\s+ses|konuşma\s+yok|no\s+speech)[.!]?$/u.test(text.toLocaleLowerCase('tr-TR').replace(/ı/g,'i'));
   };
   const mergeRecognizedDraft=(draft,spoken)=>{
     const typed=clean(draft),voice=clean(spoken);
@@ -614,29 +614,45 @@
       if(!navigator.onLine){status.textContent='Sesli sohbet için internet bağlantısı gerekli.';return;}
       try{window.AdimBotStudent?.stop?.();}catch(_){}
       const generation=++voiceGeneration;
-      const selected=voiceConfig.input||'browser';
+      const selected=String(voiceConfig.input||'browser').trim().toLowerCase();
+      if(!['browser','groq','gemini'].includes(selected)){
+        status.textContent='Mikrofon yöntemi ayarlarda geçersiz. Sorunu yazabilir veya yöneticine haber verebilirsin.';
+        return;
+      }
       const BrowserRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
       if(selected==='browser'){
         if(!BrowserRecognition){status.textContent='Bu cihazda mikrofonla yazma desteklenmiyor. Sorunu yazarak gönderebilirsin.';return;}
         try{
           const recognition=new BrowserRecognition();
           recognition.lang='tr-TR';recognition.interimResults=false;recognition.maxAlternatives=1;
-          const browserSession={recognition,startedAt:Date.now()};
+          const browserSession={recognition,startedAt:0,pending:true,accepted:false,stopping:false};
           browserSession.timer=setTimeout(()=>{
             if(generation!==voiceGeneration||voiceSession?.recognition!==recognition)return;
             stopVoice(true);
-            status.textContent='Dinleme süresi doldu. Mikrofona dokunup tekrar deneyebilirsin.';
+            status.textContent='Mikrofon başlatılamadı. Tarayıcı iznini kontrol edip tekrar deneyebilirsin.';
           },15000);
           browserSession.countdownTimer=setInterval(()=>{
             if(voiceSession!==browserSession)return;
-            showVoiceEmotion('listen');
-            const left=Math.max(1,15-Math.floor((Date.now()-browserSession.startedAt)/1000));
-            status.textContent='Dinliyorum… '+left+' saniye kaldı.';
+            const left=Math.max(1,15-Math.floor((Date.now()-(browserSession.startedAt||browserSession.requestedAt))/1000));
+            showVoiceEmotion(browserSession.pending?'wait':'listen');
+            status.textContent=(browserSession.pending?'Mikrofon izni bekleniyor… ':'Dinliyorum… ')+left+' saniye kaldı.';
           },1000);
           voiceSession=browserSession;
           mic.textContent='⏹';mic.setAttribute('aria-label','Dinlemeyi bitir');mic.setAttribute('aria-pressed','true');
-          status.textContent='Dinliyorum… Konuşunca sorunu göndereceğim.';
-          showVoiceEmotion('listen');
+          browserSession.requestedAt=Date.now();
+          status.textContent='Mikrofon izni bekleniyor…';
+          showVoiceEmotion('wait');
+          recognition.onstart=()=>{
+            if(generation!==voiceGeneration||voiceSession!==browserSession||modal.hidden)return;
+            browserSession.pending=false;browserSession.startedAt=Date.now();
+            clearTimeout(browserSession.timer);
+            browserSession.timer=setTimeout(()=>{
+              if(generation!==voiceGeneration||voiceSession!==browserSession)return;
+              stopVoice(true);status.textContent='Dinleme süresi doldu. Tekrar deneyebilirsin.';
+            },15000);
+            status.textContent='Dinliyorum… Konuşman bitince otomatik göndereceğim.';
+            showVoiceEmotion('listen');
+          };
           recognition.onresult=event=>{
             if(generation!==voiceGeneration||voiceSession!==browserSession||browserSession.accepted)return;
             const parts=[];
@@ -670,15 +686,24 @@
           status.textContent='Mikrofon izni 15 saniye içinde verilmedi. İzni kontrol edip tekrar dene.';
         },15000);
         voiceSession=permissionSession;
+        const permissionAt=Date.now();
+        permissionSession.countdownTimer=setInterval(()=>{
+          if(generation!==voiceGeneration||voiceSession!==permissionSession||modal.hidden)return;
+          status.textContent='Mikrofon izni bekleniyor… '+Math.max(1,15-Math.floor((Date.now()-permissionAt)/1000))+' saniye kaldı.';
+          showVoiceEmotion('wait');
+        },1000);
+        mic.textContent='⏹';mic.setAttribute('aria-label','Mikrofon isteğini iptal et');mic.setAttribute('aria-pressed','true');
         status.textContent='Mikrofon izni bekleniyor…';
+        showVoiceEmotion('wait');
         stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
         if(generation!==voiceGeneration||modal.hidden||voiceSession!==permissionSession){stopTracks(stream);return;}
         clearTimeout(permissionSession.timer);
+        clearInterval(permissionSession.countdownTimer);
         const audioTracks=stream.getAudioTracks();
         if(!audioTracks.some(track=>track.readyState!=='ended'&&track.enabled!==false))throw Object.assign(new Error('no_audio_track'),{name:'NotFoundError'});
         const recorder=createAudioRecorder(stream);
         const chunks=[];
-        const recordingSession={recorder,stream,chunks,bytes:0,tooLarge:false,startedAt:Date.now(),detectedSpeech:null,deviceEnded:false,deviceMuted:false};
+        const recordingSession={recorder,stream,chunks,bytes:0,tooLarge:false,startedAt:Date.now(),lastSpeechAt:0,speechSamples:0,detectedSpeech:null,deviceEnded:false,deviceMuted:false};
         const AudioContextClass=window.AudioContext||window.webkitAudioContext;
         if(AudioContextClass){
           try{
@@ -692,21 +717,29 @@
             recordingSession.audioContext=audioContext;
             recordingSession.detectedSpeech=audioContext.state==='running'?false:null;
             recordingSession.meterTimer=setInterval(()=>{
+              if(generation!==voiceGeneration||voiceSession!==recordingSession||modal.hidden)return;
               if(audioContext.state!=='running'){recordingSession.detectedSpeech=null;return;}
               if(recordingSession.detectedSpeech===null)recordingSession.detectedSpeech=false;
               analyser.getByteTimeDomainData(samples);
               let peak=0;
               for(const sample of samples)peak=Math.max(peak,Math.abs(sample-128));
-              if(peak>=7)recordingSession.detectedSpeech=true;
+              if(peak>=7){
+                recordingSession.speechSamples++;
+                recordingSession.lastSpeechAt=Date.now();
+                if(recordingSession.speechSamples>=3)recordingSession.detectedSpeech=true;
+              }
+              if(recordingSession.detectedSpeech===true&&recordingSession.lastSpeechAt>0&&Date.now()-recordingSession.lastSpeechAt>=1800&&Date.now()-recordingSession.startedAt>=1200)stopVoice();
             },160);
           }catch(_){releaseAudioContext(recordingSession.audioContext);recordingSession.audioContext=null;recordingSession.detectedSpeech=null;}
         }
-        recordingSession.timer=setTimeout(()=>stopVoice(),15000);
+        recordingSession.timer=setTimeout(()=>{
+          if(generation===voiceGeneration&&voiceSession===recordingSession)stopVoice();
+        },15000);
         recordingSession.countdownTimer=setInterval(()=>{
           if(voiceSession!==recordingSession)return;
           showVoiceEmotion('listen');
           const left=Math.max(1,15-Math.floor((Date.now()-recordingSession.startedAt)/1000));
-          status.textContent='Dinliyorum… '+left+' saniye kaldı. Bitirmek için kare düğmeye dokun.';
+          status.textContent='Dinliyorum… '+left+' saniye kaldı. Konuşman bitince otomatik göndereceğim.';
         },1000);
         voiceSession=recordingSession;
         stream.getAudioTracks().forEach(track=>track.addEventListener('ended',()=>{
@@ -727,7 +760,9 @@
           track.addEventListener('unmute',()=>clearTimeout(recordingSession.muteTimer));
         });
         mic.textContent='⏹';mic.setAttribute('aria-label','Konuşmayı bitir');mic.setAttribute('aria-pressed','true');
-        status.textContent='Dinliyorum… Bitirince kare düğmeye dokun.';
+        status.textContent=recordingSession.audioContext
+          ?'Dinliyorum… Konuşman bitince otomatik göndereceğim.'
+          :'Dinliyorum… Bitirmek için kare düğmeye dokun; en fazla 15 saniye kaydedilir.';
         showVoiceEmotion('listen');
         recorder.ondataavailable=event=>{
           if(generation!==voiceGeneration||recordingSession.tooLarge||!event.data?.size)return;
@@ -841,7 +876,7 @@
     if(savedHistory.length){
       savedHistory.forEach(item=>appendMessage(box,item.role==='assistant'?'bot':'user',item.text));
     }else{
-      appendMessage(box,'bot','Merhaba! Dersinle ilgili merak ettiğin bir şeyi sorabilirsin.');
+      appendMessage(box,'bot','Merhaba! Ben AdımBot. Ne hakkında sohbet edelim?');
     }
 
     modal.querySelector('[data-adimbot-chat-clear]')?.addEventListener('click',clearHistory);

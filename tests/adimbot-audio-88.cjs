@@ -2,7 +2,7 @@ const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/st
 const s=fs.readFileSync(__dirname+'/../adimbot-chat-ui.js','utf8'),source=fs.readFileSync(__dirname+'/../adimbot-student.js','utf8');
 const old=fs.readFileSync(__dirname+'/adimbot-voice-83.cjs','utf8');const create=vm.runInNewContext(old.slice(old.indexOf('function create(){'),old.indexOf('async function run(){'))+'create',{s,fs,vm,assert,console,Blob,FormData,AbortController,Date,setTimeout,clearTimeout});
 function record(h,type='audio/webm'){const session={recorder:{state:'inactive'},stream:h.stream,chunks:[new Blob(['a'.repeat(200)],{type})],startedAt:Date.now()-1000};h.c.voiceSession=session;h.installRecorder(session);return session;}
-function recognizedHarness(){let sent=0,focused=0;const c={modal:{hidden:false},chatBusy:false,input:{value:'',dispatchEvent(){},focus(){focused++;}},status:{textContent:''},form:{requestSubmit(){sent++;}},Event:class{},clean:v=>String(v??'').normalize('NFC').replace(/\s+/g,' ').trim(),voiceErrorMessage:()=> 'Yanıt okunamadı'};vm.createContext(c);vm.runInContext(s.slice(s.indexOf('    const recognized='),s.indexOf("    mic?.addEventListener('click'"))+'this.recognized=recognized;',c);return {c,sent:()=>sent,focused:()=>focused};}
+function recognizedHarness(){let sent=0,focused=0;const c={modal:{hidden:false},chatBusy:false,input:{value:'',dispatchEvent(){},focus(){focused++;}},status:{textContent:''},form:{requestSubmit(){sent++;}},Event:class{},clean:v=>String(v??'').normalize('NFC').replace(/\s+/g,' ').trim(),voiceErrorMessage:()=> 'Yanıt okunamadı'};vm.createContext(c);vm.runInContext(s.slice(s.indexOf('  const isUnclearTranscript='),s.indexOf('  const answerEmotion='))+s.slice(s.indexOf('  const requestRecognizedSubmit='),s.indexOf('  const cancelChat=')),c);vm.runInContext(s.slice(s.indexOf('    const recognized='),s.indexOf("    mic?.addEventListener('click'"))+'this.recognized=recognized;',c);return {c,sent:()=>sent,focused:()=>focused};}
 async function run(){
 // 1: malformed transcript payloads are rejected without sending object text.
 for(const text of [{secret:'hidden'},['soru'],3,null,'']){const h=create(),r=record(h);h.c.fetch=async()=>({ok:true,json:async()=>({ok:true,text})});await r.recorder.onstop();assert.equal(h.c.transcript,undefined);assert.match(h.status.textContent,/yanıtı okunamadı/);assert.equal(h.mic.disabled,false);}
@@ -43,3 +43,4 @@ const speechOld=fs.readFileSync(__dirname+'/adimbot-lifecycle-82.cjs','utf8');co
 console.log('PASS: 15 transcription, microphone, voice selection, resume ownership and mouth-rest scenarios; synthetic devices only.');
 }
 run().catch(e=>{console.error(e);process.exitCode=1;});
+

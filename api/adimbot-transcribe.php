@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require dirname(__DIR__).'/src/auth.php';
 require_once dirname(__DIR__).'/src/adimbot_groq.php';
+require_once dirname(__DIR__).'/src/adimbot_transcript.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, max-age=0');
@@ -155,6 +156,5 @@ if (!is_string($text)) $text='';
 $text=trim(preg_replace('/\s+/u',' ',strip_tags($text)) ?? '');
 $text=preg_replace('/^(?:(?:elbette|tabii)[,.!]?\s*)?(?:transkripsiyon|deşifre|metin|duyduğum\s+metin)\s*[:\-]\s*/iu','',$text) ?? $text;
 $text=trim($text," \t\n\r\0\x0B\"'“”‘’");
-if (mb_strlen($text)>400) voice_result(['ok'=>false,'reason'=>'too_long'],422);
-if ($text==='' || preg_match('/^(?:[\[(](?:müzik|music|sessizlik|silence|gürültü|noise|alkış|applause|anlaşılmayan ses)[\])]|(?:ses|konuşma) (?:algılanmadı|bulunamadı))\.?$/iu',$text) || !preg_match('/[\pL\pN]{2}/u',$text)) voice_result(['ok'=>false,'reason'=>'empty'],422);
-voice_result(['ok'=>true,'text'=>$text]);
+$transcriptResult=adimbot_transcript_result($text);
+voice_result($transcriptResult,$transcriptResult['ok']?200:422);
