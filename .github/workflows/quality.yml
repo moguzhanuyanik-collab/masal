@@ -1,0 +1,34 @@
+name: Quality Gate
+
+on:
+  push:
+    branches:
+      - main
+      - 'migration-safety-*'
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  source-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: PHP syntax
+        shell: bash
+        run: |
+          if ! command -v php >/dev/null 2>&1; then
+            echo "PHP CLI is not available on this runner."
+            exit 1
+          fi
+          find . -type f -name '*.php' -not -path './vendor/*' -print0             | xargs -0 -n1 php -l
+
+      - name: Node regression checks
+        shell: bash
+        run: |
+          node tests/security-92.cjs
+          node tests/migration-safety-93.cjs
