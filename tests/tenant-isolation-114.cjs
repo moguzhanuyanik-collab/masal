@@ -7,6 +7,7 @@ const auth=fs.readFileSync('src/auth.php','utf8');
 const teacherPanel=fs.readFileSync('ogretmen-paneli.php','utf8');
 const parentPanel=fs.readFileSync('veli-paneli.php','utf8');
 const activities=fs.readFileSync('api/activities.php','utf8');
+const stateApi=fs.readFileSync('api/state.php','utf8');
 const activitiesClient=fs.readFileSync('activities-extra.js','utf8');
 const v4=fs.readFileSync('api/v4-features.php','utf8');
 const report=fs.readFileSync('api/report.php','utf8');
@@ -39,6 +40,8 @@ assert(!parentPanel.includes('WHERE v.kullanici_id=? AND v.aktif=1 AND o.aktif=1
 // Etkinlik tamamlama POST'u CSRF ile korunmalı; istemci tokenı GET cevabından alıp
 // POST isteğine taşır.
 assert(activities.includes("verify_csrf($_SERVER['HTTP_X_CSRF_TOKEN'] ?? null)"));
+assert(stateApi.includes("verify_csrf((string)($_SERVER['HTTP_X_CSRF_TOKEN']??''))"));
+assert(stateApi.includes("'csrf'=>csrf_token()"));
 assert(activities.includes("['ok'=>true,'games'=>$out,'csrf'=>csrf_token()]"));
 assert(activitiesClient.includes("csrfToken=typeof data.csrf==='string'?data.csrf:''"));
 assert(activitiesClient.includes("'X-CSRF-Token':csrfToken"));
