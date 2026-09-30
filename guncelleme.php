@@ -53,6 +53,39 @@ function ajax_response(array $data, int $status = 200): never {
     exit;
 }
 
+function update_public_error_message(Throwable $e): string {
+    $message=trim($e->getMessage());
+    $safePrefixes=[
+        'Baska bir guncelleme',
+        'Başka bir güncelleme',
+        'Siradaki guncelleme',
+        'Sıradaki güncelleme',
+        'Migration ',
+        'Eski kurum_kullanicilari',
+        'Eski kurum kullanıcı',
+        'GitHub ',
+        'Indirilen guncelleme',
+        'İndirilen güncelleme',
+        'Guncelleme paketi',
+        'Güncelleme paketi',
+        'Yedek ',
+        'Onceki surum',
+        'Önceki sürüm',
+        'PHP ZipArchive',
+        'Storage ',
+    ];
+    foreach($safePrefixes as $prefix){
+        if($message!=='' && str_starts_with($message,$prefix)) return $message;
+    }
+    return 'Güncelleme işlemi tamamlanamadı. Teknik ayrıntılar sunucu günlüğüne kaydedildi.';
+}
+
+try{
+    ensure_runtime_storage_guard(__DIR__);
+}catch(Throwable $storageError){
+    error_log('[IlkAdim][update-storage] '.$storageError->getMessage());
+}
+
 $gh = app_config('github');
 $updateCfg = app_config('update');
 $updateCsrf = csrf_token();
@@ -153,9 +186,10 @@ if ($isAjax) {
             'message' => 'Geçersiz AJAX işlemi.',
         ], 400);
     } catch (Throwable $e) {
+        error_log('[IlkAdim][update] '.$e->getMessage());
         ajax_response([
             'ok' => false,
-            'message' => $e->getMessage(),
+            'message' => update_public_error_message($e),
         ], 500);
     }
 }
@@ -256,7 +290,7 @@ $local = read_app_version();
                 Güncellemeyi Şimdi Kur
             </button>
 
-            <p class="little-note">Sunucuda yalnızca bir önceki sürümün tek yedeği tutulur. Yeni güncellemede eski yedek güvenli biçimde yenilenir. CSS ve mevcut görseller korunur.</p>
+            <p class="little-note">Sunucuda yalnızca bir önceki uygulama sürümünün tek yedeği tutulur. Canlı ayarlar ve storage verileri yedeğe eklenmez. Repoda izlenen CSS dosyaları güncellenir; canlı runtime verileri korunur.</p>
         </div>
     </main>
 
