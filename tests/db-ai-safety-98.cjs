@@ -27,7 +27,7 @@ const historical=fs.readdirSync('database/migrations')
   .map(name=>name.replace(/\.sql$/,''))
   .filter(name=>{
     const number=Number(name.slice(0,3));
-    return number>=1 && number<=63 && !retired.has(name);
+    return number>=1 && number<=63 && name!=='001_197_history_recovery' && !retired.has(name);
   })
   .sort();
 

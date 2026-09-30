@@ -43,3 +43,5 @@ Bu yeniden-ankraj paketi:
 - doğrulama geçerse 064 checkpoint'in beklediği 53 güvenli geçmiş migration kaydını `INSERT IGNORE` ile normalize eder;
 - kullanıcı verisi silmez, eski içerik migrationlarını yeniden çalıştırmaz;
 - 1.1.98 kurulduktan sonra updater'ı sabit 1.1.101 final ankrajına geçirir; oradan modern `update-release.json` zinciri devam eder.
+
+İlk kurtarma adayı CI turunda PHP/JS ve AdımBot kontrolleri geçti. Eski 1.1.98 regresyonu yeni `001_197_history_recovery` köprüsünü tarihsel checkpoint sayımına dahil ederek 54/53 hatası verdi; test yalnız kurtarma köprüsünü bu sayıma dahil etmeyecek şekilde düzeltildi. Checkpoint'in 53 gerçek geçmiş migration beklentisi değişmedi.
