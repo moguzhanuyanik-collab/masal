@@ -397,21 +397,99 @@ function ensure_runtime_storage_guard(string $root): void {
     }
 }
 
-function create_project_backup(string $root,string $target): void {
-    if(!class_exists('ZipArchive')) throw new RuntimeException('PHP ZipArchive eklentisi gerekli.');
-    $zip=new ZipArchive();
-    if($zip->open($target,ZipArchive::CREATE|ZipArchive::OVERWRITE)!==true) throw new RuntimeException('Yedek ZIP olusturulamadi.');
+function project_backup_source_bytes(string $root): int {
+    $total=0;
     $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root,FilesystemIterator::SKIP_DOTS));
     foreach($it as $file){
-        if(!$file->isFile()) continue;
+        if(!$file->isFile() || $file->isLink()) continue;
         $path=$file->getPathname();
         $rel=ltrim(str_replace('\\','/',substr($path,strlen($root))),'/');
-        // Güncelleme geri dönüş yedeği yalnız uygulama kodunu taşır.
-        // Canlı sırlar ve çalışma verileri ayrı korunur; ZIP içine alınmaz.
         if($rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')) continue;
-        $zip->addFile($path,$rel);
+        $total+=max(0,(int)$file->getSize());
     }
-    $zip->close();
+    return $total;
+}
+
+function assert_backup_disk_space(string $path,int $estimatedBytes,string $label): void {
+    $dir=is_dir($path)?$path:dirname($path);
+    $free=@disk_free_space($dir);
+    if(!is_float($free) && !is_int($free)) return;
+    $required=max(16*1024*1024,(int)ceil(max(0,$estimatedBytes)*1.15));
+    if((int)$free<$required){
+        throw new RuntimeException(
+            $label.' için yeterli boş disk alanı yok. Gerekli yaklaşık: '
+            .number_format($required/1048576,1,'.','').' MB.'
+        );
+    }
+}
+
+function validate_project_backup(string $path): array {
+    if(!class_exists('ZipArchive')) throw new RuntimeException('PHP ZipArchive eklentisi gerekli.');
+    if(!is_file($path)||(int)(filesize($path)?:0)<128){
+        throw new RuntimeException('Uygulama yedeği boş veya geçersiz.');
+    }
+
+    $zip=new ZipArchive();
+    $flags=defined('ZipArchive::CHECKCONS')?(int)constant('ZipArchive::CHECKCONS'):0;
+    if($zip->open($path,$flags)!==true){
+        throw new RuntimeException('Uygulama yedeği tekrar açılamadı.');
+    }
+    try{
+        if($zip->numFiles<5) throw new RuntimeException('Uygulama yedeği beklenenden az dosya içeriyor.');
+        foreach(['version.json','src/updater.php','src/auth.php','login.php','index.php'] as $required){
+            if($zip->locateName($required)===false){
+                throw new RuntimeException('Uygulama yedeğinde kritik dosya eksik: '.$required);
+            }
+        }
+        foreach(['config/local.php','.env'] as $secret){
+            if($zip->locateName($secret)!==false){
+                throw new RuntimeException('Uygulama yedeği gizli yapılandırma dosyası içeriyor: '.$secret);
+            }
+        }
+    }finally{
+        $zip->close();
+    }
+
+    $hash=hash_file('sha256',$path);
+    if(!is_string($hash)||strlen($hash)!==64){
+        throw new RuntimeException('Uygulama yedeği SHA-256 değeri üretilemedi.');
+    }
+    return [
+        'file'=>basename($path),
+        'bytes'=>(int)(filesize($path)?:0),
+        'sha256'=>$hash,
+    ];
+}
+
+function create_project_backup(string $root,string $target): void {
+    if(!class_exists('ZipArchive')) throw new RuntimeException('PHP ZipArchive eklentisi gerekli.');
+    assert_backup_disk_space(dirname($target),project_backup_source_bytes($root),'Uygulama yedeği');
+
+    $zip=new ZipArchive();
+    if($zip->open($target,ZipArchive::CREATE|ZipArchive::OVERWRITE)!==true) throw new RuntimeException('Yedek ZIP olusturulamadi.');
+    try{
+        $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root,FilesystemIterator::SKIP_DOTS));
+        foreach($it as $file){
+            if(!$file->isFile() || $file->isLink()) continue;
+            $path=$file->getPathname();
+            $rel=ltrim(str_replace('\\','/',substr($path,strlen($root))),'/');
+            // Güncelleme geri dönüş yedeği yalnız uygulama kodunu taşır.
+            // Canlı sırlar ve çalışma verileri ayrı korunur; ZIP içine alınmaz.
+            if($rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')) continue;
+            if(!$zip->addFile($path,$rel)){
+                throw new RuntimeException('Uygulama yedeğine dosya eklenemedi: '.$rel);
+            }
+        }
+    }catch(Throwable $e){
+        $zip->close();
+        @unlink($target);
+        throw $e;
+    }
+    if(!$zip->close()){
+        @unlink($target);
+        throw new RuntimeException('Uygulama yedeği kapatılamadı.');
+    }
+    validate_project_backup($target);
 }
 
 function create_single_previous_backup(string $root): string {
