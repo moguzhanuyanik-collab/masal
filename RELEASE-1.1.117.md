@@ -15,3 +15,8 @@ MariaDB 1452, child kaydın referans verdiği parent kaydın bulunmadığını b
 ## Hedef
 
 Kurum eşleştirme modülünü mevcut tenant izolasyonunu bozmadan daha görünür, tekrar eşleştirmeye dayanıklı ve hata teşhisi daha net hale getirmek.
+
+## Rev 2 — regression testi düzeltmesi
+
+- Regression testi, modülün diğer sorgularındaki kurum üyeliği JOIN'leri ile eşleştirme temizleme sorgularını birbirinden ayıracak şekilde sıkılaştırıldı.
+- Sürüm kimliği 1.1.117 rev 2 olarak yeniden ankrajlandı.

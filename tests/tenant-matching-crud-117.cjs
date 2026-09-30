@@ -17,8 +17,12 @@ assert(!api.includes("$rows=[];\\n                $matchingOptions=['ogrenciler'
 
 assert(matching.includes("DELETE FROM veli_ogrenci WHERE ogrenci_id=? AND kurum_id=?"));
 assert(matching.includes("DELETE FROM ogretmen_ogrenci WHERE ogrenci_id=? AND kurum_id=?"));
-assert(!matching.includes("kk.kurum_rolu='veli' AND kk.aktif=1"));
-assert(!matching.includes("kk.kurum_rolu='ogretmen' AND kk.aktif=1"));
+const saveStart=matching.indexOf('function km_save_matching');
+const deleteStart=matching.indexOf('function km_delete_matching',saveStart);
+assert(saveStart>=0 && deleteStart>saveStart,'km_save_matching sınırları bulunamadı.');
+const saveBlock=matching.slice(saveStart,deleteStart);
+assert(!saveBlock.includes('INNER JOIN kurum_kullanicilari'),
+  'Eşleştirme temizliği pasif üyelik JOIN\'ine bağlı olmamalı.');
 
 assert(api.includes('$mysqlError=(int)($e->errorInfo[1]??0);'));
 assert(api.includes("if($mysqlError===1452)"));
