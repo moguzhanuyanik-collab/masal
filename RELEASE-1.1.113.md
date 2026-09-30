@@ -21,3 +21,10 @@
 
 - Web rescue regresyon testindeki PHP string interpolation kaynaklı syntax hatası giderildi.
 - Test artık kritik rescue sözleşmelerini interpolation olmadan kaynak metninden doğrular.
+
+## Rev 3
+
+- 1.1.112 continuity testi sonraki sürümlerde kırılmayacak minimum sürüm sözleşmesine geçirildi.
+- Q1001–Q1500 katalog dosyası tarihsel 1.1.113 rev1 artefaktı olarak sabitlendi.
+- quality-index.json güncel 1.1.113 rev3 kimliğine taşındı.
+- 1.1.113 web-rescue Node testi sonraki sürümler için minimum sürüm sözleşmesine geçirildi.

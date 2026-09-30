@@ -18,7 +18,10 @@ assert(updater.includes("if(count($hashes)!==count($files)) return []"));
 assert(workflow.includes('tests/update-continuity-112.php'));
 assert(workflow.includes('tests/update-continuity-112.cjs'));
 
-assert.strictEqual(version.version,'1.1.112');
+{
+  const parts=String(version.version).split('.').map(Number);
+  assert(parts.length===3 && parts[0]===1 && parts[1]===1 && Number.isInteger(parts[2]) && parts[2]>=112,'version must be 1.1.112 or newer');
+}
 assert(Number.isInteger(version.release_revision) && version.release_revision>=1,'release revision must be positive');
 assert.strictEqual(anchor.version,version.version);
 assert.strictEqual(anchor.release_revision,version.release_revision);

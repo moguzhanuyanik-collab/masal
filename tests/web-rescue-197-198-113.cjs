@@ -15,5 +15,8 @@ assert(bridge.includes("rescue_atomic_restore($backup,$target)"));
 assert(bridge.includes("'target_version'=>'1.1.98'"));
 assert(workflow.includes('tests/web-rescue-197-198-113.php'));
 assert(workflow.includes('tests/web-rescue-197-198-113.cjs'));
-assert.strictEqual(version.version,'1.1.113');
+{
+  const parts=String(version.version).split('.').map(Number);
+  assert(parts.length===3 && parts[0]===1 && parts[1]===1 && Number.isInteger(parts[2]) && parts[2]>=113,'version must be 1.1.113 or newer');
+}
 console.log('PASS: 1.1.113 web rescue source contract');
