@@ -11,3 +11,8 @@
 - Eski yönetilen dosya son kurulumdan sonra değiştirilmişse updater bu dosyayı silmez ve güncellemeyi mutation başlamadan durdurur.
 - Stale dosya hash kontrolü hem mutation öncesi preflight'ta hem gerçek silme anında tekrar yapılır.
 - Handoff backup tamper ve managed stale-file davranışı gerçek temp dosya sistemi üzerinde PHP regresyon testiyle doğrulanır.
+
+## Rev 2
+
+- 1.1.96'dan kalan updater manifest regresyon testi, stale-file silme fonksiyonunun yeni hash parametresini kabul edecek şekilde geleceğe uyumlu hale getirildi.
+- 1.1.111 release revision testi sabit revizyon yerine pozitif revision sözleşmesini doğruluyor.

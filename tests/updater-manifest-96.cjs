@@ -26,7 +26,11 @@ assert(updater.includes("read_managed_file_list(rtrim($root,'/\\\\').'/update-ma
 assert(updater.includes("path_is_preserved($relative,$preserve)"));
 assert(updater.includes("Güncelleme paketi sembolik bağlantı içeriyor"));
 assert(updater.includes("Güncelleme ZIP paketi yol kaçışı içeriyor"));
-assert(updater.includes("remove_stale_managed_files($root,$oldManagedFiles,$newManagedFiles,$preserve)"));
+assert(updater.includes('function remove_stale_managed_files('));
+assert(
+  updater.includes('$root,$oldManagedFiles,$newManagedFiles,$preserve,$oldManagedHashes')
+  || updater.includes("remove_stale_managed_files($root,$oldManagedFiles,$newManagedFiles,$preserve)")
+);
 assert(
   updater.includes("write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version'])")
   || updater.includes("write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version'],")
