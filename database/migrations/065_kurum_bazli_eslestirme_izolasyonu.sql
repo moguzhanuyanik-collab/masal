@@ -9,6 +9,7 @@ SET NAMES utf8mb4;
 --   * birden fazla ortak kurum veya hiç ortak kurum yoksa ilişki global 0'a
 --     alınır; tenant erişim katmanı bu kaydı kurum kullanıcısına açmaz.
 -- Bu migration DELETE içermez ve updater tarafından yedek alınarak çalıştırılır.
+-- ILKADIM_ALLOW_SAFE_TENANT_SCHEMA_ALTER
 
 SET @kurum_id_type = (
   SELECT COLUMN_TYPE
