@@ -54,6 +54,7 @@ jobs:
           php tests/db-backup-99.php
           php tests/recovery-safety-100.php
           php tests/update-safety-102.php
+          php tests/update-migration-safety-116.php
           php tests/update-manifest-contract-103.php
           php tests/update-activation-104.php
           php tests/update-release-revision-105.php
