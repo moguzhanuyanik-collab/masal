@@ -647,9 +647,45 @@ function ensure_student_auth_schema(PDO $pdo): void {
     }
 }
 
+function legacy_membership_profile_user_id(PDO $pdo,string $table,int $profileId): int {
+    if($profileId<=0 || !auth_table_exists($pdo,$table)) return 0;
+    $cols=auth_column_map($pdo,$table);
+    if(!isset($cols['id'],$cols['kullanici_id'])) return 0;
+    $stmt=$pdo->prepare("SELECT kullanici_id FROM `".$table."` WHERE id=? LIMIT 1");
+    $stmt->execute([$profileId]);
+    $userId=(int)($stmt->fetchColumn()?:0);
+    $stmt->closeCursor();
+    return $userId;
+}
+
+function legacy_membership_manager_user_id(PDO $pdo,int $legacyId): int {
+    if($legacyId<=0) return 0;
+    if(auth_table_exists($pdo,'yoneticiler')){
+        $cols=auth_column_map($pdo,'yoneticiler');
+        if(isset($cols['id'],$cols['kullanici_id'])){
+            $stmt=$pdo->prepare('SELECT kullanici_id FROM yoneticiler WHERE id=? LIMIT 1');
+            $stmt->execute([$legacyId]);
+            $mapped=(int)($stmt->fetchColumn()?:0);
+            $stmt->closeCursor();
+            if($mapped>0) return $mapped;
+        }
+    }
+    $stmt=$pdo->prepare("SELECT k.id
+      FROM kullanicilar k
+      LEFT JOIN kullanici_rolleri r ON r.kullanici_id=k.id
+      WHERE k.id=? AND (
+        k.ana_rol IN ('yonetici','super_admin')
+        OR r.rol IN ('yonetici','super_admin')
+      )
+      LIMIT 1");
+    $stmt->execute([$legacyId]);
+    $mapped=(int)($stmt->fetchColumn()?:0);
+    $stmt->closeCursor();
+    return $mapped;
+}
+
 function repair_legacy_institution_membership_schema(PDO $pdo): void {
     if(!auth_table_exists($pdo,'kurum_kullanicilari')) return;
-
     $cols=auth_column_map($pdo,'kurum_kullanicilari');
     $legacyColumns=['veli_id','ogretmen_id','ogrenci_id','yonetici_id'];
     $hasLegacy=false;
@@ -657,58 +693,164 @@ function repair_legacy_institution_membership_schema(PDO $pdo): void {
         if(isset($cols[$column])){$hasLegacy=true;break;}
     }
     if(!$hasLegacy) return;
-
-    // Eski tablo veri içeriyorsa otomatik DROP yasaktır. Bu kayıtların hangi
-    // kullanici_id ile eşleşeceği kurulumdan kuruluma değişebilir; tahmin ederek
-    // taşımak veri kaybı veya yanlış kurum eşleşmesi üretir.
-    $rowCount=(int)($pdo->query('SELECT COUNT(*) FROM kurum_kullanicilari')->fetchColumn()?:0);
-    if($rowCount>0){
-        throw new RuntimeException(
-            'Eski kurum_kullanicilari şeması '.$rowCount.' kayıt içeriyor. '
-            .'Veri kaybını önlemek için otomatik güncelleme durduruldu; '
-            .'kurum eşleşmeleri kontrollü migration ile dönüştürülmelidir.'
-        );
+    if(!isset($cols['kurum_id'])){
+        throw new RuntimeException('Eski kurum üyeliği tablosunda kurum_id yok; otomatik dönüşüm güvenli değil.');
+    }
+    if(!auth_table_exists($pdo,'kurumlar') || !auth_table_exists($pdo,'kullanicilar')){
+        throw new RuntimeException('Eski kurum üyeliği dönüşümü için temel tablolar eksik.');
     }
 
-    if(!auth_table_exists($pdo,'kurumlar')||!auth_table_exists($pdo,'kullanicilar')){
-        throw new RuntimeException('Eski kurum kullanıcısı şeması onarılamadı: temel tablolar eksik.');
+    $inbound=(int)($pdo->query("SELECT COUNT(*) FROM information_schema.KEY_COLUMN_USAGE
+      WHERE TABLE_SCHEMA=DATABASE()
+        AND REFERENCED_TABLE_NAME='kurum_kullanicilari'
+        AND TABLE_NAME<>'kurum_kullanicilari'")->fetchColumn()?:0);
+    if($inbound>0){
+        throw new RuntimeException('Eski kurum üyeliği tablosuna bağlı yabancı anahtarlar var; otomatik dönüşüm durduruldu.');
     }
 
-    $typeStmt=$pdo->prepare("SELECT COLUMN_TYPE FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name=? AND column_name='id' LIMIT 1");
+    $backupTable='kurum_kullanicilari_legacy_197_backup';
+    $stageTable='kurum_kullanicilari_v4_bridge';
+    if(auth_table_exists($pdo,$backupTable)){
+        throw new RuntimeException('Legacy kurum üyeliği yedek tablosu zaten var; tekrar dönüşüm güvenli değil.');
+    }
+    if(auth_table_exists($pdo,$stageTable)){
+        $pdo->exec('DROP TABLE kurum_kullanicilari_v4_bridge');
+    }
+
+    $rows=$pdo->query('SELECT * FROM kurum_kullanicilari')->fetchAll(PDO::FETCH_ASSOC)?:[];
+    $institutionCheck=$pdo->prepare('SELECT 1 FROM kurumlar WHERE id=? LIMIT 1');
+    $userCheck=$pdo->prepare('SELECT 1 FROM kullanicilar WHERE id=? LIMIT 1');
+    $members=[];
+
+    foreach($rows as $index=>$row){
+        $kurumId=(int)($row['kurum_id']??0);
+        if($kurumId<=0){
+            throw new RuntimeException('Legacy kurum üyeliği satırında geçersiz kurum_id var.');
+        }
+        $institutionCheck->execute([$kurumId]);
+        $institutionExists=(bool)$institutionCheck->fetchColumn();
+        $institutionCheck->closeCursor();
+        if(!$institutionExists){
+            throw new RuntimeException('Legacy kurum üyeliği mevcut olmayan kuruma bağlı: '.$kurumId);
+        }
+
+        $aktif=array_key_exists('aktif',$row)?((int)$row['aktif']===1?1:0):1;
+        $created=trim((string)($row['olusturulma_tarihi']??''));
+        if($created==='' || strtotime($created)===false) $created='';
+
+        $resolvedForRow=0;
+        $candidates=[];
+        if(isset($cols['kullanici_id']) && (int)($row['kullanici_id']??0)>0){
+            $role=trim((string)($row['kurum_rolu']??''));
+            if(in_array($role,['yonetici','ogretmen','veli','ogrenci'],true)){
+                $candidates[]=[$role,(int)$row['kullanici_id']];
+            }
+        }
+        if(isset($cols['veli_id']) && (int)($row['veli_id']??0)>0){
+            $candidates[]=['veli',legacy_membership_profile_user_id($pdo,'veliler',(int)$row['veli_id'])];
+        }
+        if(isset($cols['ogretmen_id']) && (int)($row['ogretmen_id']??0)>0){
+            $candidates[]=['ogretmen',legacy_membership_profile_user_id($pdo,'ogretmenler',(int)$row['ogretmen_id'])];
+        }
+        if(isset($cols['ogrenci_id']) && (int)($row['ogrenci_id']??0)>0){
+            $candidates[]=['ogrenci',legacy_membership_profile_user_id($pdo,'ogrenciler',(int)$row['ogrenci_id'])];
+        }
+        if(isset($cols['yonetici_id']) && (int)($row['yonetici_id']??0)>0){
+            $candidates[]=['yonetici',legacy_membership_manager_user_id($pdo,(int)$row['yonetici_id'])];
+        }
+
+        foreach($candidates as [$role,$userId]){
+            $userId=(int)$userId;
+            if($userId<=0){
+                throw new RuntimeException('Legacy kurum üyeliği kullanıcı eşlemesi çözülemedi; satır '.((int)$index+1).' / rol '.$role.'.');
+            }
+            $userCheck->execute([$userId]);
+            $userExists=(bool)$userCheck->fetchColumn();
+            $userCheck->closeCursor();
+            if(!$userExists){
+                throw new RuntimeException('Legacy kurum üyeliği kullanıcı kaydı bulunamadı: '.$userId);
+            }
+            $key=$kurumId.':'.$userId.':'.$role;
+            if(!isset($members[$key])){
+                $members[$key]=[
+                    'kurum_id'=>$kurumId,'kullanici_id'=>$userId,'kurum_rolu'=>$role,
+                    'aktif'=>$aktif,'created'=>$created,
+                ];
+            }elseif($aktif===1){
+                $members[$key]['aktif']=1;
+            }
+            $resolvedForRow++;
+        }
+        if($resolvedForRow===0){
+            throw new RuntimeException('Legacy kurum üyeliği satırı hiçbir kullanıcıya eşlenemedi; satır '.((int)$index+1).'.');
+        }
+    }
+    $institutionCheck->closeCursor();
+    $userCheck->closeCursor();
+
+    $typeStmt=$pdo->prepare("SELECT COLUMN_TYPE FROM information_schema.columns
+      WHERE table_schema=DATABASE() AND table_name=? AND column_name='id' LIMIT 1");
     $typeStmt->execute(['kurumlar']);
     $kurumType=(string)($typeStmt->fetchColumn()?:'BIGINT UNSIGNED');
     $typeStmt->closeCursor();
     $typeStmt->execute(['kullanicilar']);
     $kullaniciType=(string)($typeStmt->fetchColumn()?:'BIGINT UNSIGNED');
     $typeStmt->closeCursor();
-
     foreach([$kurumType,$kullaniciType] as $columnType){
         if(!preg_match('/^[a-zA-Z0-9(), ]+$/',$columnType)){
-            throw new RuntimeException('Kurum kullanıcı şeması için geçersiz kolon tipi algılandı.');
+            throw new RuntimeException('Kurum üyeliği dönüşümü için geçersiz kolon tipi algılandı.');
         }
     }
 
-    // Buraya yalnız boş legacy tablo ulaşabilir; yeniden oluşturma veri kaybetmez.
-    $oldFk=(int)$pdo->query('SELECT @@FOREIGN_KEY_CHECKS')->fetchColumn();
+    $pdo->exec("CREATE TABLE {$stageTable} (
+        kurum_id {$kurumType} NOT NULL,
+        kullanici_id {$kullaniciType} NOT NULL,
+        kurum_rolu VARCHAR(30) NOT NULL,
+        aktif TINYINT(1) NOT NULL DEFAULT 1,
+        olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (kurum_id,kullanici_id,kurum_rolu),
+        KEY ix_kurum_kullanici_user (kullanici_id,aktif),
+        KEY ix_kurum_kullanici_role (kurum_id,kurum_rolu,aktif),
+        CONSTRAINT fk_kk_bridge_kurum FOREIGN KEY (kurum_id) REFERENCES kurumlar(id) ON DELETE CASCADE,
+        CONSTRAINT fk_kk_bridge_user FOREIGN KEY (kullanici_id) REFERENCES kullanicilar(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
+
     try{
-        $pdo->exec('SET FOREIGN_KEY_CHECKS=0');
-        $pdo->exec('DROP TABLE kurum_kullanicilari');
-        $pdo->exec("CREATE TABLE kurum_kullanicilari (
-            kurum_id {$kurumType} NOT NULL,
-            kullanici_id {$kullaniciType} NOT NULL,
-            kurum_rolu VARCHAR(30) NOT NULL,
-            aktif TINYINT(1) NOT NULL DEFAULT 1,
-            olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (kurum_id,kullanici_id,kurum_rolu),
-            KEY ix_kurum_kullanici_user (kullanici_id,aktif),
-            KEY ix_kurum_kullanici_role (kurum_id,kurum_rolu,aktif),
-            CONSTRAINT fk_kurum_kullanici_kurum FOREIGN KEY (kurum_id)
-                REFERENCES kurumlar(id) ON DELETE CASCADE,
-            CONSTRAINT fk_kurum_kullanici_user FOREIGN KEY (kullanici_id)
-                REFERENCES kullanicilar(id) ON DELETE CASCADE
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
-    }finally{
-        $pdo->exec('SET FOREIGN_KEY_CHECKS='.(string)$oldFk);
+        $insertDefault=$pdo->prepare("INSERT INTO {$stageTable}
+          (kurum_id,kullanici_id,kurum_rolu,aktif) VALUES (?,?,?,?)");
+        $insertCreated=$pdo->prepare("INSERT INTO {$stageTable}
+          (kurum_id,kullanici_id,kurum_rolu,aktif,olusturulma_tarihi) VALUES (?,?,?,?,?)");
+        foreach($members as $member){
+            if($member['created']!==''){
+                $insertCreated->execute([$member['kurum_id'],$member['kullanici_id'],$member['kurum_rolu'],$member['aktif'],$member['created']]);
+            }else{
+                $insertDefault->execute([$member['kurum_id'],$member['kullanici_id'],$member['kurum_rolu'],$member['aktif']]);
+            }
+        }
+        $insertDefault->closeCursor();
+        $insertCreated->closeCursor();
+
+        $stageCount=(int)($pdo->query("SELECT COUNT(*) FROM {$stageTable}")->fetchColumn()?:0);
+        if($stageCount!==count($members)){
+            throw new RuntimeException('Legacy kurum üyeliği staging doğrulaması başarısız.');
+        }
+
+        $pdo->exec("RENAME TABLE kurum_kullanicilari TO {$backupTable}, {$stageTable} TO kurum_kullanicilari");
+        $newCols=auth_column_map($pdo,'kurum_kullanicilari');
+        foreach($legacyColumns as $column){
+            if(isset($newCols[$column])){
+                throw new RuntimeException('Legacy kurum üyeliği kolonları dönüşüm sonrası kaldı.');
+            }
+        }
+        $liveCount=(int)($pdo->query('SELECT COUNT(*) FROM kurum_kullanicilari')->fetchColumn()?:0);
+        if($liveCount!==count($members)){
+            throw new RuntimeException('Legacy kurum üyeliği canlı tablo doğrulaması başarısız.');
+        }
+    }catch(Throwable $e){
+        if(auth_table_exists($pdo,$stageTable)){
+            try{$pdo->exec('DROP TABLE kurum_kullanicilari_v4_bridge');}catch(Throwable){}
+        }
+        throw $e;
     }
 }
 
@@ -904,6 +1046,7 @@ function install_github_update(string $root,array $gh,array $preserve): array {
         // önce çalışırsa kurulum bloklanabiliyor. Bu dar kapsamlı rescue yalnız
         // doğrulanmış history recovery ve 064 migrationını uygular.
         if(is_1_1_98_rescue_transition($localVersion,(string)$remote['version'])){
+            repair_legacy_institution_membership_schema($pdo);
             $migrations=apply_1_1_98_recovery($pdo,$sourceRoot);
         }else{
             if(!auth_table_exists($pdo,'ogrenciler')) ensure_student_auth_schema($pdo);
