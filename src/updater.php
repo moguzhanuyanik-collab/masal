@@ -172,6 +172,13 @@ function next_remote_version_info(array $gh,string $localVersion,int $localRevis
     if($localVersion==='') $localVersion='0.0.0';
     $localRevision=max(0,$localRevision);
 
+    // Özel 1.1.99 recovery checkpointinden sonra eski ara updater
+    // paketlerine geri dönme; güncel main paketine geç.
+    if($localVersion==='1.1.99' && $localRevision>=999){
+        $latest=remote_version_info($gh);
+        if(version_compare((string)($latest['version']??''),$localVersion,'>')) return $latest;
+    }
+
     $historyFile=version_compare($localVersion,'1.1.101','>=')?'update-release.json':'version.json';
     $next=null;
     $page=1;
@@ -1811,6 +1818,57 @@ function retired_automatic_migrations(): array {
     ];
 }
 
+function recover_missing_064_checkpoint_after_1_1_98_bridge(PDO $pdo,string $root,string $localVersion): array {
+    if($localVersion!=='1.1.98') return [];
+
+    $name='064_adimbot_rate_limit_ve_migration_checkpoint';
+    $check=$pdo->prepare('SELECT 1 FROM sistem_migrations WHERE migration=? LIMIT 1');
+    $check->execute([$name]);
+    $already=(bool)$check->fetchColumn();
+    $check->closeCursor();
+    if($already) return [];
+
+    $retired=retired_automatic_migrations();
+    $expected=[];
+    foreach(glob(rtrim($root,'/\\').'/database/migrations/*.sql')?:[] as $file){
+        $migration=basename($file,'.sql');
+        $number=migration_sequence_number($migration);
+        if($number<1 || $number>63 || isset($retired[$migration])) continue;
+        $expected[$migration]=true;
+    }
+
+    $history=[];
+    foreach($pdo->query('SELECT migration FROM sistem_migrations')?:[] as $row){
+        if(isset($row['migration'])) $history[(string)$row['migration']]=true;
+    }
+
+    $missing=[];
+    foreach(array_keys($expected) as $migration){
+        if(!isset($history[$migration])) $missing[]=$migration;
+    }
+    if($missing!==[]){
+        sort($missing,SORT_NATURAL);
+        throw new RuntimeException(
+            '1.1.98 köprü recovery yalnız 064 checkpointini tamamlayabilir. '
+            .'064 öncesinde eksik migration var: '.implode(', ',array_slice($missing,0,8))
+            .(count($missing)>8?' ...':'')
+        );
+    }
+
+    $path=rtrim($root,'/\\').'/database/migrations/'.$name.'.sql';
+    if(!is_file($path)){
+        throw new RuntimeException('064 checkpoint recovery dosyası güncelleme paketinde bulunamadı.');
+    }
+
+    assert_automatic_migration_safe($name,$path);
+    run_migration_sql($pdo,$path);
+
+    $insert=$pdo->prepare('INSERT IGNORE INTO sistem_migrations (migration) VALUES (?)');
+    $insert->execute([$name]);
+    $insert->closeCursor();
+    return [$name];
+}
+
 function assert_historical_migration_history(PDO $pdo,string $root,string $localVersion): void {
     if(version_compare($localVersion,'1.1.98','<')) return;
 
@@ -1844,10 +1902,11 @@ function assert_historical_migration_history(PDO $pdo,string $root,string $local
 }
 
 function run_pending_migrations(PDO $pdo,string $root,string $localVersion='0.0.0'): array {
+    $applied=recover_missing_064_checkpoint_after_1_1_98_bridge($pdo,$root,$localVersion);
     assert_historical_migration_history($pdo,$root,$localVersion);
     repair_legacy_institution_membership_schema($pdo);
     $retired=retired_automatic_migrations();
-    $applied=[]; $files=glob($root.'/database/migrations/*.sql')?:[]; sort($files,SORT_NATURAL);
+    $files=glob($root.'/database/migrations/*.sql')?:[]; sort($files,SORT_NATURAL);
     $check=$pdo->prepare('SELECT 1 FROM sistem_migrations WHERE migration=? LIMIT 1');
     $insert=$pdo->prepare('INSERT INTO sistem_migrations (migration) VALUES (?)');
     foreach($files as $file){
