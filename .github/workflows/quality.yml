@@ -9,6 +9,7 @@ on:
       - 'pwa-hardening-*'
       - 'updater-manifest-*'
       - 'db-ai-safety-*'
+      - 'update-197-recovery-*'
   pull_request:
 
 permissions:
@@ -56,3 +57,4 @@ jobs:
           node tests/pwa-95.cjs
           node tests/updater-manifest-96.cjs
           node tests/db-ai-safety-98.cjs
+          node tests/update-197-recovery-98.cjs

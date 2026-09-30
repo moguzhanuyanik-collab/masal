@@ -30,3 +30,16 @@ Migration geçmişi bozulduğunda eski veri/içerik migrationlarının yeniden �
 Kalıcı limiter bir sağlayıcı kota sistemi değildir; uygulama tarafında abuse/maliyet sınırıdır. Sağlayıcının kendi quota/rate-limit davranışı ve `Retry-After` aktarımı ayrıca korunur.
 
 Tam MySQL snapshot/restore halen sunucu altyapısı doğrulanmadan otomatikleştirilmemiştir.
+
+
+## 1.1.97 kurtarma ankrajı
+
+Bazı 1.1.97 kurulumlarında uygulama sürümü 1.1.97 olmasına rağmen `sistem_migrations` geçmişi tam kaydedilmediği için 1.1.98'in 064 checkpoint'i kurulumu durdurabiliyordu. Daha kötüsü, eski 1.1.97 updater eksik görünen geçmiş migrationları yeniden çalıştırmayı deneyebiliyordu.
+
+Bu yeniden-ankraj paketi:
+- en erken sırada çalışan `001_197_history_recovery.sql` köprüsünü ekler;
+- yalnız aktif işlem gerçekten 1.1.97 → 1.1.98 ise çalışır;
+- `giris_guvenlik`, `ders_bolumleri`, `ders_konulari`, `ders_sorulari` ve `sinif_dersleri` şema izleri yoksa fail-closed durur;
+- doğrulama geçerse 064 checkpoint'in beklediği 53 güvenli geçmiş migration kaydını `INSERT IGNORE` ile normalize eder;
+- kullanıcı verisi silmez, eski içerik migrationlarını yeniden çalıştırmaz;
+- 1.1.98 kurulduktan sonra updater'ı sabit 1.1.101 final ankrajına geçirir; oradan modern `update-release.json` zinciri devam eder.

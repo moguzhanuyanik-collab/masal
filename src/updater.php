@@ -91,6 +91,16 @@ function next_remote_version_info(array $gh,string $localVersion): array {
     $localVersion=trim($localVersion);
     if($localVersion==='') $localVersion='0.0.0';
 
+    // 1.1.97 kurtarma paketi 1.1.98'e ulaştıktan sonra, geçmişteki
+    // tekrar-ankraj commitlerine takılmadan modern final-release zincirine geç.
+    if($localVersion==='1.1.98'){
+        $bridge=remote_version_info_at_ref($gh,'14db8cf61b633d81937346f41758b39bf09a1706');
+        if((string)($bridge['version']??'')!=='1.1.101'){
+            throw new RuntimeException('1.1.98 kurtarma köprüsü doğrulanamadı.');
+        }
+        return $bridge;
+    }
+
     $next=null;
     $page=1;
     $maxPages=20;
