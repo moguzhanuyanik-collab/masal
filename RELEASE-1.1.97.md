@@ -32,12 +32,3 @@ Ders mantığı, menü, roller, veritabanı ve CSS değiştirilmedi. Öğrenci s
 ## Kurulum
 1.1.96 → 1.1.97. Kurulumdan sonra sohbet ekranını yenile, mikrofona dokunup kısa konuş ve durakla. Normal sohbet için Merhaba/Nasılsın/Sohbet edelim örneklerini dene; gerçek ses ve AI davranışı bu aşamada gözlenmeli.
 
-
-## 1.1.97 rev 2 — geçiş onarımı
-
-1.1.96 -> 1.1.97 farkında yeni bir veritabanı migrationı bulunmadığı doğrulandı.
-Bazı 1.1.96 kurulumlarında `sistem_migrations` geçmişi eksik olduğu için eski
-migrationlar 1.1.97 kurulurken yeniden çalıştırılabiliyordu. Rev 2 paketi,
-uygulama kodunu değiştirmeden önce `001_1_1_97_history_checkpoint.sql` ile
-1.1.96'ya kadar olan tarihsel migration adlarını checkpoint eder. Bu SQL şema
-ve kullanıcı verisini değiştirmez; yalnız migration geçmişini tamamlar.

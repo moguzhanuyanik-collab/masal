@@ -1,16 +1,50 @@
--- İlkAdım 1.1.97 tarihsel migration checkpoint'i.
--- 1.1.96 -> 1.1.97 uygulama farkında yeni DB migrationı yoktur.
--- Bu dosya, 1.1.96 şemasına zaten ulaşmış kurulumlarda eksik migration
--- geçmişi nedeniyle eski SQL dosyalarının tekrar çalıştırılmasını engeller.
--- Şema veya kullanıcı verisi değiştirmez; yalnız sistem_migrations geçmişini
--- mevcut 1.1.96 şemasının tarihsel baseline'ı olarak işaretler.
+-- İlkAdım 1.1.97 -> 1.1.98 migration-history recovery bridge.
+-- Yalnız aktif update gerçekten 1.1.97'den 1.1.98'e gidiyorsa ve
+-- 1.1.97'nin geç şema izleri mevcutsa eksik geçmiş kayıtlarını normalize eder.
+-- Kullanıcı verisini silmez veya içerik tablolarını yeniden üretmez.
+
+SET @ilkadim_197_active_update = (
+    SELECT COUNT(*)
+    FROM guncelleme_gecmisi
+    WHERE onceki_surumu='1.1.97'
+      AND yeni_surumu='1.1.98'
+      AND durum='basladi'
+);
+
+SET @ilkadim_197_schema_markers = (
+    SELECT COUNT(*)
+    FROM information_schema.tables
+    WHERE table_schema=DATABASE()
+      AND table_name IN (
+        'giris_guvenlik',
+        'ders_bolumleri',
+        'ders_konulari',
+        'ders_sorulari',
+        'sinif_dersleri'
+      )
+);
+
+SET @ilkadim_197_recovery_ok = IF(
+    @ilkadim_197_active_update >= 1
+    AND @ilkadim_197_schema_markers = 5,
+    1,
+    0
+);
+
+SET @ilkadim_197_guard_sql = IF(
+    @ilkadim_197_recovery_ok = 1,
+    'SELECT 1',
+    'SELECT * FROM __ilkadim_197_recovery_precondition_failed__ LIMIT 1'
+);
+PREPARE ilkadim_197_guard_stmt FROM @ilkadim_197_guard_sql;
+EXECUTE ilkadim_197_guard_stmt;
+DEALLOCATE PREPARE ilkadim_197_guard_stmt;
+
 INSERT IGNORE INTO sistem_migrations (migration) VALUES
-('000_v3_kurum_kullanicilari_onarim'),
 ('002_utf8mb4_unicode'),
 ('003_gercek_veri_takibi'),
 ('004_ogrenci_giris_sistemi'),
 ('005_auth_repair'),
-('007_icerik_paketi_geri_al'),
 ('008_kaliteli_1_sinif_ders_modulleri'),
 ('009_61_ozgun_1_sinif_modulu'),
 ('010_matematik_simge_ve_dersler_ui'),
@@ -26,15 +60,9 @@ INSERT IGNORE INTO sistem_migrations (migration) VALUES
 ('021_ogretmenim_icerikleri'),
 ('022_veli_ogretmen_telefon_uyumluluk'),
 ('023_yonetici_yetkileri'),
-('024_tek_aktif_super_admin'),
-('025_tek_super_admin_sert_temizlik'),
-('026_tek_aktif_super_admin_duzeltme'),
-('027_tek_super_admin_kesin_sifirlama'),
-('028_legacy_kurum_fk_temizlik'),
 ('029_sinif_bazli_icerik'),
 ('030_temel_egitim_1_8'),
 ('031_meb_soru_havuzu_aktivasyonu'),
-('032_test_ilerleme_sifirlama'),
 ('033_grade3_meb_icerik_aktivasyonu'),
 ('034_grade4_meb_icerik_aktivasyonu'),
 ('035_grade5_meb_icerik_aktivasyonu'),
