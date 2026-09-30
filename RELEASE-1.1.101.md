@@ -23,3 +23,7 @@ Bu sürüm yeni uygulama verisi silmez ve yeni veri migrationı eklemez. Mevcut 
 ## Yayın kuralı
 
 1.1.101 sonrasında bir sürüm ancak kod/test çalışması bittikten sonra `update-release.json` o sürüme güncellenerek final ankrajı oluşturulduğunda updater tarafından yayınlanmış sayılır.
+
+## Kalite kapısı revizyonu
+
+İlk 1.1.101 CI çalışmasında uygulama testleri geçmesine rağmen 1.1.100 recovery testinin yalnız tam `1.1.100` kabul eden eski sürüm beklentisi nedeniyle kalite kapısı düştü. Test 1.1.100 ve daha yeni sürümleri kabul edecek şekilde düzeltildi; uygulama davranışı değiştirilmedi.
