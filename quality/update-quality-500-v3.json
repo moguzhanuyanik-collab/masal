@@ -1,0 +1,4053 @@
+{
+  "format": 1,
+  "version": "1.1.113",
+  "release_revision": 1,
+  "range": "Q1001-Q1500",
+  "total": 500,
+  "implemented": 15,
+  "planned": 485,
+  "categories": [
+    {
+      "name": "Legacy Upgrade Recovery",
+      "count": 50
+    },
+    {
+      "name": "Schema Evolution Safety",
+      "count": 50
+    },
+    {
+      "name": "Tenant Data Preservation",
+      "count": 50
+    },
+    {
+      "name": "Release Chain Verification",
+      "count": 50
+    },
+    {
+      "name": "Rollback & Restore Drills",
+      "count": 50
+    },
+    {
+      "name": "Security Boundary Testing",
+      "count": 50
+    },
+    {
+      "name": "Database Performance Health",
+      "count": 50
+    },
+    {
+      "name": "API Failure Semantics",
+      "count": 50
+    },
+    {
+      "name": "PWA & Notification Recovery",
+      "count": 50
+    },
+    {
+      "name": "Operational Runbooks",
+      "count": 50
+    }
+  ],
+  "items": [
+    {
+      "id": "Q1001",
+      "category": "Legacy Upgrade Recovery",
+      "title": "installed-version exact guard — doğrulama 1",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "installed-version exact guard için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1002",
+      "category": "Legacy Upgrade Recovery",
+      "title": "legacy-column discovery — doğrulama 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "legacy-column discovery için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1003",
+      "category": "Legacy Upgrade Recovery",
+      "title": "preflight before mutation — doğrulama 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "preflight before mutation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1004",
+      "category": "Legacy Upgrade Recovery",
+      "title": "profile-to-user resolution — doğrulama 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "profile-to-user resolution için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1005",
+      "category": "Legacy Upgrade Recovery",
+      "title": "manager-role resolution — doğrulama 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "manager-role resolution için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1006",
+      "category": "Legacy Upgrade Recovery",
+      "title": "unresolved-row fail closed — doğrulama 1",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "unresolved-row fail closed için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1007",
+      "category": "Legacy Upgrade Recovery",
+      "title": "institution existence validation — doğrulama 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "institution existence validation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1008",
+      "category": "Legacy Upgrade Recovery",
+      "title": "duplicate membership collapse — doğrulama 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "duplicate membership collapse için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1009",
+      "category": "Legacy Upgrade Recovery",
+      "title": "atomic table rename — doğrulama 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "atomic table rename için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1010",
+      "category": "Legacy Upgrade Recovery",
+      "title": "legacy backup retention — doğrulama 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "legacy backup retention için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1011",
+      "category": "Legacy Upgrade Recovery",
+      "title": "installed-version exact guard — doğrulama 2",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "installed-version exact guard için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1012",
+      "category": "Legacy Upgrade Recovery",
+      "title": "legacy-column discovery — doğrulama 2",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "legacy-column discovery için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1013",
+      "category": "Legacy Upgrade Recovery",
+      "title": "preflight before mutation — doğrulama 2",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "preflight before mutation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1014",
+      "category": "Legacy Upgrade Recovery",
+      "title": "profile-to-user resolution — doğrulama 2",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "profile-to-user resolution için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1015",
+      "category": "Legacy Upgrade Recovery",
+      "title": "manager-role resolution — doğrulama 2",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "manager-role resolution için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1016",
+      "category": "Legacy Upgrade Recovery",
+      "title": "unresolved-row fail closed — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "unresolved-row fail closed için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1017",
+      "category": "Legacy Upgrade Recovery",
+      "title": "institution existence validation — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "institution existence validation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1018",
+      "category": "Legacy Upgrade Recovery",
+      "title": "duplicate membership collapse — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "duplicate membership collapse için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1019",
+      "category": "Legacy Upgrade Recovery",
+      "title": "atomic table rename — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "atomic table rename için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1020",
+      "category": "Legacy Upgrade Recovery",
+      "title": "legacy backup retention — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "legacy backup retention için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1021",
+      "category": "Legacy Upgrade Recovery",
+      "title": "installed-version exact guard — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "installed-version exact guard için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1022",
+      "category": "Legacy Upgrade Recovery",
+      "title": "legacy-column discovery — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "legacy-column discovery için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1023",
+      "category": "Legacy Upgrade Recovery",
+      "title": "preflight before mutation — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "preflight before mutation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1024",
+      "category": "Legacy Upgrade Recovery",
+      "title": "profile-to-user resolution — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "profile-to-user resolution için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1025",
+      "category": "Legacy Upgrade Recovery",
+      "title": "manager-role resolution — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manager-role resolution için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1026",
+      "category": "Legacy Upgrade Recovery",
+      "title": "unresolved-row fail closed — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "unresolved-row fail closed için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1027",
+      "category": "Legacy Upgrade Recovery",
+      "title": "institution existence validation — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "institution existence validation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1028",
+      "category": "Legacy Upgrade Recovery",
+      "title": "duplicate membership collapse — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "duplicate membership collapse için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1029",
+      "category": "Legacy Upgrade Recovery",
+      "title": "atomic table rename — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "atomic table rename için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1030",
+      "category": "Legacy Upgrade Recovery",
+      "title": "legacy backup retention — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "legacy backup retention için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1031",
+      "category": "Legacy Upgrade Recovery",
+      "title": "installed-version exact guard — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "installed-version exact guard için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1032",
+      "category": "Legacy Upgrade Recovery",
+      "title": "legacy-column discovery — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "legacy-column discovery için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1033",
+      "category": "Legacy Upgrade Recovery",
+      "title": "preflight before mutation — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "preflight before mutation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1034",
+      "category": "Legacy Upgrade Recovery",
+      "title": "profile-to-user resolution — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "profile-to-user resolution için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1035",
+      "category": "Legacy Upgrade Recovery",
+      "title": "manager-role resolution — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manager-role resolution için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1036",
+      "category": "Legacy Upgrade Recovery",
+      "title": "unresolved-row fail closed — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "unresolved-row fail closed için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1037",
+      "category": "Legacy Upgrade Recovery",
+      "title": "institution existence validation — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "institution existence validation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1038",
+      "category": "Legacy Upgrade Recovery",
+      "title": "duplicate membership collapse — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "duplicate membership collapse için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1039",
+      "category": "Legacy Upgrade Recovery",
+      "title": "atomic table rename — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "atomic table rename için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1040",
+      "category": "Legacy Upgrade Recovery",
+      "title": "legacy backup retention — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "legacy backup retention için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1041",
+      "category": "Legacy Upgrade Recovery",
+      "title": "installed-version exact guard — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "installed-version exact guard için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1042",
+      "category": "Legacy Upgrade Recovery",
+      "title": "legacy-column discovery — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "legacy-column discovery için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1043",
+      "category": "Legacy Upgrade Recovery",
+      "title": "preflight before mutation — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "preflight before mutation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1044",
+      "category": "Legacy Upgrade Recovery",
+      "title": "profile-to-user resolution — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "profile-to-user resolution için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1045",
+      "category": "Legacy Upgrade Recovery",
+      "title": "manager-role resolution — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manager-role resolution için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1046",
+      "category": "Legacy Upgrade Recovery",
+      "title": "unresolved-row fail closed — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "unresolved-row fail closed için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1047",
+      "category": "Legacy Upgrade Recovery",
+      "title": "institution existence validation — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "institution existence validation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1048",
+      "category": "Legacy Upgrade Recovery",
+      "title": "duplicate membership collapse — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "duplicate membership collapse için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1049",
+      "category": "Legacy Upgrade Recovery",
+      "title": "atomic table rename — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "atomic table rename için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1050",
+      "category": "Legacy Upgrade Recovery",
+      "title": "legacy backup retention — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "legacy backup retention için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1051",
+      "category": "Schema Evolution Safety",
+      "title": "column type validation — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "column type validation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1052",
+      "category": "Schema Evolution Safety",
+      "title": "foreign-key compatibility — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "foreign-key compatibility için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1053",
+      "category": "Schema Evolution Safety",
+      "title": "nullable transition staging — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "nullable transition staging için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1054",
+      "category": "Schema Evolution Safety",
+      "title": "primary-key preservation — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "primary-key preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1055",
+      "category": "Schema Evolution Safety",
+      "title": "index recreation — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "index recreation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1056",
+      "category": "Schema Evolution Safety",
+      "title": "constraint naming — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "constraint naming için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1057",
+      "category": "Schema Evolution Safety",
+      "title": "mixed-schema detection — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "mixed-schema detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1058",
+      "category": "Schema Evolution Safety",
+      "title": "partial-migration detection — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "partial-migration detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1059",
+      "category": "Schema Evolution Safety",
+      "title": "schema checksum evidence — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema checksum evidence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1060",
+      "category": "Schema Evolution Safety",
+      "title": "post-migration shape verification — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-migration shape verification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1061",
+      "category": "Schema Evolution Safety",
+      "title": "column type validation — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "column type validation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1062",
+      "category": "Schema Evolution Safety",
+      "title": "foreign-key compatibility — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "foreign-key compatibility için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1063",
+      "category": "Schema Evolution Safety",
+      "title": "nullable transition staging — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "nullable transition staging için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1064",
+      "category": "Schema Evolution Safety",
+      "title": "primary-key preservation — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "primary-key preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1065",
+      "category": "Schema Evolution Safety",
+      "title": "index recreation — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "index recreation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1066",
+      "category": "Schema Evolution Safety",
+      "title": "constraint naming — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "constraint naming için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1067",
+      "category": "Schema Evolution Safety",
+      "title": "mixed-schema detection — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "mixed-schema detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1068",
+      "category": "Schema Evolution Safety",
+      "title": "partial-migration detection — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "partial-migration detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1069",
+      "category": "Schema Evolution Safety",
+      "title": "schema checksum evidence — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema checksum evidence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1070",
+      "category": "Schema Evolution Safety",
+      "title": "post-migration shape verification — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-migration shape verification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1071",
+      "category": "Schema Evolution Safety",
+      "title": "column type validation — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "column type validation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1072",
+      "category": "Schema Evolution Safety",
+      "title": "foreign-key compatibility — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "foreign-key compatibility için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1073",
+      "category": "Schema Evolution Safety",
+      "title": "nullable transition staging — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "nullable transition staging için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1074",
+      "category": "Schema Evolution Safety",
+      "title": "primary-key preservation — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "primary-key preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1075",
+      "category": "Schema Evolution Safety",
+      "title": "index recreation — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "index recreation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1076",
+      "category": "Schema Evolution Safety",
+      "title": "constraint naming — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "constraint naming için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1077",
+      "category": "Schema Evolution Safety",
+      "title": "mixed-schema detection — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "mixed-schema detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1078",
+      "category": "Schema Evolution Safety",
+      "title": "partial-migration detection — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "partial-migration detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1079",
+      "category": "Schema Evolution Safety",
+      "title": "schema checksum evidence — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema checksum evidence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1080",
+      "category": "Schema Evolution Safety",
+      "title": "post-migration shape verification — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-migration shape verification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1081",
+      "category": "Schema Evolution Safety",
+      "title": "column type validation — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "column type validation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1082",
+      "category": "Schema Evolution Safety",
+      "title": "foreign-key compatibility — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "foreign-key compatibility için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1083",
+      "category": "Schema Evolution Safety",
+      "title": "nullable transition staging — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "nullable transition staging için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1084",
+      "category": "Schema Evolution Safety",
+      "title": "primary-key preservation — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "primary-key preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1085",
+      "category": "Schema Evolution Safety",
+      "title": "index recreation — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "index recreation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1086",
+      "category": "Schema Evolution Safety",
+      "title": "constraint naming — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "constraint naming için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1087",
+      "category": "Schema Evolution Safety",
+      "title": "mixed-schema detection — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "mixed-schema detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1088",
+      "category": "Schema Evolution Safety",
+      "title": "partial-migration detection — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "partial-migration detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1089",
+      "category": "Schema Evolution Safety",
+      "title": "schema checksum evidence — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema checksum evidence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1090",
+      "category": "Schema Evolution Safety",
+      "title": "post-migration shape verification — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-migration shape verification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1091",
+      "category": "Schema Evolution Safety",
+      "title": "column type validation — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "column type validation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1092",
+      "category": "Schema Evolution Safety",
+      "title": "foreign-key compatibility — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "foreign-key compatibility için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1093",
+      "category": "Schema Evolution Safety",
+      "title": "nullable transition staging — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "nullable transition staging için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1094",
+      "category": "Schema Evolution Safety",
+      "title": "primary-key preservation — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "primary-key preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1095",
+      "category": "Schema Evolution Safety",
+      "title": "index recreation — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "index recreation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1096",
+      "category": "Schema Evolution Safety",
+      "title": "constraint naming — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "constraint naming için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1097",
+      "category": "Schema Evolution Safety",
+      "title": "mixed-schema detection — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "mixed-schema detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1098",
+      "category": "Schema Evolution Safety",
+      "title": "partial-migration detection — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "partial-migration detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1099",
+      "category": "Schema Evolution Safety",
+      "title": "schema checksum evidence — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema checksum evidence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1100",
+      "category": "Schema Evolution Safety",
+      "title": "post-migration shape verification — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-migration shape verification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1101",
+      "category": "Tenant Data Preservation",
+      "title": "institution ownership continuity — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "institution ownership continuity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1102",
+      "category": "Tenant Data Preservation",
+      "title": "cross-tenant membership rejection — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cross-tenant membership rejection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1103",
+      "category": "Tenant Data Preservation",
+      "title": "inactive membership preservation — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "inactive membership preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1104",
+      "category": "Tenant Data Preservation",
+      "title": "role fidelity — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "role fidelity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1105",
+      "category": "Tenant Data Preservation",
+      "title": "duplicate tenant link handling — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "duplicate tenant link handling için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1106",
+      "category": "Tenant Data Preservation",
+      "title": "orphan user detection — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "orphan user detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1107",
+      "category": "Tenant Data Preservation",
+      "title": "orphan institution detection — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "orphan institution detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1108",
+      "category": "Tenant Data Preservation",
+      "title": "global-user isolation — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "global-user isolation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1109",
+      "category": "Tenant Data Preservation",
+      "title": "manager scope preservation — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manager scope preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1110",
+      "category": "Tenant Data Preservation",
+      "title": "student-parent-teacher relation preservation — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "student-parent-teacher relation preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1111",
+      "category": "Tenant Data Preservation",
+      "title": "institution ownership continuity — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "institution ownership continuity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1112",
+      "category": "Tenant Data Preservation",
+      "title": "cross-tenant membership rejection — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cross-tenant membership rejection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1113",
+      "category": "Tenant Data Preservation",
+      "title": "inactive membership preservation — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "inactive membership preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1114",
+      "category": "Tenant Data Preservation",
+      "title": "role fidelity — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "role fidelity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1115",
+      "category": "Tenant Data Preservation",
+      "title": "duplicate tenant link handling — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "duplicate tenant link handling için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1116",
+      "category": "Tenant Data Preservation",
+      "title": "orphan user detection — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "orphan user detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1117",
+      "category": "Tenant Data Preservation",
+      "title": "orphan institution detection — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "orphan institution detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1118",
+      "category": "Tenant Data Preservation",
+      "title": "global-user isolation — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "global-user isolation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1119",
+      "category": "Tenant Data Preservation",
+      "title": "manager scope preservation — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manager scope preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1120",
+      "category": "Tenant Data Preservation",
+      "title": "student-parent-teacher relation preservation — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "student-parent-teacher relation preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1121",
+      "category": "Tenant Data Preservation",
+      "title": "institution ownership continuity — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "institution ownership continuity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1122",
+      "category": "Tenant Data Preservation",
+      "title": "cross-tenant membership rejection — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cross-tenant membership rejection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1123",
+      "category": "Tenant Data Preservation",
+      "title": "inactive membership preservation — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "inactive membership preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1124",
+      "category": "Tenant Data Preservation",
+      "title": "role fidelity — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "role fidelity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1125",
+      "category": "Tenant Data Preservation",
+      "title": "duplicate tenant link handling — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "duplicate tenant link handling için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1126",
+      "category": "Tenant Data Preservation",
+      "title": "orphan user detection — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "orphan user detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1127",
+      "category": "Tenant Data Preservation",
+      "title": "orphan institution detection — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "orphan institution detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1128",
+      "category": "Tenant Data Preservation",
+      "title": "global-user isolation — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "global-user isolation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1129",
+      "category": "Tenant Data Preservation",
+      "title": "manager scope preservation — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manager scope preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1130",
+      "category": "Tenant Data Preservation",
+      "title": "student-parent-teacher relation preservation — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "student-parent-teacher relation preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1131",
+      "category": "Tenant Data Preservation",
+      "title": "institution ownership continuity — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "institution ownership continuity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1132",
+      "category": "Tenant Data Preservation",
+      "title": "cross-tenant membership rejection — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cross-tenant membership rejection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1133",
+      "category": "Tenant Data Preservation",
+      "title": "inactive membership preservation — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "inactive membership preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1134",
+      "category": "Tenant Data Preservation",
+      "title": "role fidelity — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "role fidelity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1135",
+      "category": "Tenant Data Preservation",
+      "title": "duplicate tenant link handling — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "duplicate tenant link handling için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1136",
+      "category": "Tenant Data Preservation",
+      "title": "orphan user detection — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "orphan user detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1137",
+      "category": "Tenant Data Preservation",
+      "title": "orphan institution detection — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "orphan institution detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1138",
+      "category": "Tenant Data Preservation",
+      "title": "global-user isolation — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "global-user isolation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1139",
+      "category": "Tenant Data Preservation",
+      "title": "manager scope preservation — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manager scope preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1140",
+      "category": "Tenant Data Preservation",
+      "title": "student-parent-teacher relation preservation — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "student-parent-teacher relation preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1141",
+      "category": "Tenant Data Preservation",
+      "title": "institution ownership continuity — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "institution ownership continuity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1142",
+      "category": "Tenant Data Preservation",
+      "title": "cross-tenant membership rejection — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cross-tenant membership rejection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1143",
+      "category": "Tenant Data Preservation",
+      "title": "inactive membership preservation — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "inactive membership preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1144",
+      "category": "Tenant Data Preservation",
+      "title": "role fidelity — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "role fidelity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1145",
+      "category": "Tenant Data Preservation",
+      "title": "duplicate tenant link handling — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "duplicate tenant link handling için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1146",
+      "category": "Tenant Data Preservation",
+      "title": "orphan user detection — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "orphan user detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1147",
+      "category": "Tenant Data Preservation",
+      "title": "orphan institution detection — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "orphan institution detection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1148",
+      "category": "Tenant Data Preservation",
+      "title": "global-user isolation — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "global-user isolation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1149",
+      "category": "Tenant Data Preservation",
+      "title": "manager scope preservation — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manager scope preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1150",
+      "category": "Tenant Data Preservation",
+      "title": "student-parent-teacher relation preservation — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "student-parent-teacher relation preservation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1151",
+      "category": "Release Chain Verification",
+      "title": "historical 1.1.97 anchor check — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "historical 1.1.97 anchor check için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1152",
+      "category": "Release Chain Verification",
+      "title": "historical 1.1.98 anchor check — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical 1.1.98 anchor check için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1153",
+      "category": "Release Chain Verification",
+      "title": "next-version deterministic selection — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "next-version deterministic selection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1154",
+      "category": "Release Chain Verification",
+      "title": "same-version revision ordering — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "same-version revision ordering için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1155",
+      "category": "Release Chain Verification",
+      "title": "release commit ancestry — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release commit ancestry için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1156",
+      "category": "Release Chain Verification",
+      "title": "manifest exact-tree contract — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "manifest exact-tree contract için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1157",
+      "category": "Release Chain Verification",
+      "title": "package version identity — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "package version identity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1158",
+      "category": "Release Chain Verification",
+      "title": "release metadata agreement — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "release metadata agreement için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1159",
+      "category": "Release Chain Verification",
+      "title": "bridge documentation presence — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "bridge documentation presence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1160",
+      "category": "Release Chain Verification",
+      "title": "upgrade-path regression — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "upgrade-path regression için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1161",
+      "category": "Release Chain Verification",
+      "title": "historical 1.1.97 anchor check — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "historical 1.1.97 anchor check için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1162",
+      "category": "Release Chain Verification",
+      "title": "historical 1.1.98 anchor check — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical 1.1.98 anchor check için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1163",
+      "category": "Release Chain Verification",
+      "title": "next-version deterministic selection — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "next-version deterministic selection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1164",
+      "category": "Release Chain Verification",
+      "title": "same-version revision ordering — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "same-version revision ordering için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1165",
+      "category": "Release Chain Verification",
+      "title": "release commit ancestry — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release commit ancestry için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1166",
+      "category": "Release Chain Verification",
+      "title": "manifest exact-tree contract — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "manifest exact-tree contract için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1167",
+      "category": "Release Chain Verification",
+      "title": "package version identity — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "package version identity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1168",
+      "category": "Release Chain Verification",
+      "title": "release metadata agreement — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "release metadata agreement için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1169",
+      "category": "Release Chain Verification",
+      "title": "bridge documentation presence — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "bridge documentation presence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1170",
+      "category": "Release Chain Verification",
+      "title": "upgrade-path regression — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "upgrade-path regression için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1171",
+      "category": "Release Chain Verification",
+      "title": "historical 1.1.97 anchor check — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "historical 1.1.97 anchor check için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1172",
+      "category": "Release Chain Verification",
+      "title": "historical 1.1.98 anchor check — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical 1.1.98 anchor check için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1173",
+      "category": "Release Chain Verification",
+      "title": "next-version deterministic selection — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "next-version deterministic selection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1174",
+      "category": "Release Chain Verification",
+      "title": "same-version revision ordering — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "same-version revision ordering için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1175",
+      "category": "Release Chain Verification",
+      "title": "release commit ancestry — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release commit ancestry için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1176",
+      "category": "Release Chain Verification",
+      "title": "manifest exact-tree contract — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "manifest exact-tree contract için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1177",
+      "category": "Release Chain Verification",
+      "title": "package version identity — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "package version identity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1178",
+      "category": "Release Chain Verification",
+      "title": "release metadata agreement — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "release metadata agreement için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1179",
+      "category": "Release Chain Verification",
+      "title": "bridge documentation presence — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "bridge documentation presence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1180",
+      "category": "Release Chain Verification",
+      "title": "upgrade-path regression — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "upgrade-path regression için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1181",
+      "category": "Release Chain Verification",
+      "title": "historical 1.1.97 anchor check — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "historical 1.1.97 anchor check için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1182",
+      "category": "Release Chain Verification",
+      "title": "historical 1.1.98 anchor check — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical 1.1.98 anchor check için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1183",
+      "category": "Release Chain Verification",
+      "title": "next-version deterministic selection — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "next-version deterministic selection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1184",
+      "category": "Release Chain Verification",
+      "title": "same-version revision ordering — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "same-version revision ordering için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1185",
+      "category": "Release Chain Verification",
+      "title": "release commit ancestry — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release commit ancestry için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1186",
+      "category": "Release Chain Verification",
+      "title": "manifest exact-tree contract — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "manifest exact-tree contract için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1187",
+      "category": "Release Chain Verification",
+      "title": "package version identity — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "package version identity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1188",
+      "category": "Release Chain Verification",
+      "title": "release metadata agreement — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "release metadata agreement için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1189",
+      "category": "Release Chain Verification",
+      "title": "bridge documentation presence — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "bridge documentation presence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1190",
+      "category": "Release Chain Verification",
+      "title": "upgrade-path regression — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "upgrade-path regression için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1191",
+      "category": "Release Chain Verification",
+      "title": "historical 1.1.97 anchor check — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "historical 1.1.97 anchor check için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1192",
+      "category": "Release Chain Verification",
+      "title": "historical 1.1.98 anchor check — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical 1.1.98 anchor check için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1193",
+      "category": "Release Chain Verification",
+      "title": "next-version deterministic selection — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "next-version deterministic selection için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1194",
+      "category": "Release Chain Verification",
+      "title": "same-version revision ordering — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "same-version revision ordering için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1195",
+      "category": "Release Chain Verification",
+      "title": "release commit ancestry — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release commit ancestry için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1196",
+      "category": "Release Chain Verification",
+      "title": "manifest exact-tree contract — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "manifest exact-tree contract için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1197",
+      "category": "Release Chain Verification",
+      "title": "package version identity — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "package version identity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1198",
+      "category": "Release Chain Verification",
+      "title": "release metadata agreement — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "release metadata agreement için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1199",
+      "category": "Release Chain Verification",
+      "title": "bridge documentation presence — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "bridge documentation presence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1200",
+      "category": "Release Chain Verification",
+      "title": "upgrade-path regression — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "upgrade-path regression için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1201",
+      "category": "Rollback & Restore Drills",
+      "title": "legacy table rollback — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy table rollback için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1202",
+      "category": "Rollback & Restore Drills",
+      "title": "rescue report persistence — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "rescue report persistence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1203",
+      "category": "Rollback & Restore Drills",
+      "title": "rollback version guard — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "rollback version guard için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1204",
+      "category": "Rollback & Restore Drills",
+      "title": "backup table existence — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup table existence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1205",
+      "category": "Rollback & Restore Drills",
+      "title": "post-rescue table quarantine — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-rescue table quarantine için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1206",
+      "category": "Rollback & Restore Drills",
+      "title": "restore count verification — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "restore count verification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1207",
+      "category": "Rollback & Restore Drills",
+      "title": "restore schema verification — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "restore schema verification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1208",
+      "category": "Rollback & Restore Drills",
+      "title": "failed-temp cleanup — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "failed-temp cleanup için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1209",
+      "category": "Rollback & Restore Drills",
+      "title": "manual recovery instructions — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manual recovery instructions için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1210",
+      "category": "Rollback & Restore Drills",
+      "title": "rollback audit evidence — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rollback audit evidence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1211",
+      "category": "Rollback & Restore Drills",
+      "title": "legacy table rollback — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy table rollback için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1212",
+      "category": "Rollback & Restore Drills",
+      "title": "rescue report persistence — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "rescue report persistence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1213",
+      "category": "Rollback & Restore Drills",
+      "title": "rollback version guard — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "rollback version guard için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1214",
+      "category": "Rollback & Restore Drills",
+      "title": "backup table existence — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup table existence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1215",
+      "category": "Rollback & Restore Drills",
+      "title": "post-rescue table quarantine — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-rescue table quarantine için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1216",
+      "category": "Rollback & Restore Drills",
+      "title": "restore count verification — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "restore count verification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1217",
+      "category": "Rollback & Restore Drills",
+      "title": "restore schema verification — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "restore schema verification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1218",
+      "category": "Rollback & Restore Drills",
+      "title": "failed-temp cleanup — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "failed-temp cleanup için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1219",
+      "category": "Rollback & Restore Drills",
+      "title": "manual recovery instructions — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manual recovery instructions için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1220",
+      "category": "Rollback & Restore Drills",
+      "title": "rollback audit evidence — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rollback audit evidence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1221",
+      "category": "Rollback & Restore Drills",
+      "title": "legacy table rollback — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy table rollback için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1222",
+      "category": "Rollback & Restore Drills",
+      "title": "rescue report persistence — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "rescue report persistence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1223",
+      "category": "Rollback & Restore Drills",
+      "title": "rollback version guard — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "rollback version guard için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1224",
+      "category": "Rollback & Restore Drills",
+      "title": "backup table existence — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup table existence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1225",
+      "category": "Rollback & Restore Drills",
+      "title": "post-rescue table quarantine — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-rescue table quarantine için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1226",
+      "category": "Rollback & Restore Drills",
+      "title": "restore count verification — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "restore count verification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1227",
+      "category": "Rollback & Restore Drills",
+      "title": "restore schema verification — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "restore schema verification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1228",
+      "category": "Rollback & Restore Drills",
+      "title": "failed-temp cleanup — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "failed-temp cleanup için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1229",
+      "category": "Rollback & Restore Drills",
+      "title": "manual recovery instructions — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manual recovery instructions için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1230",
+      "category": "Rollback & Restore Drills",
+      "title": "rollback audit evidence — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rollback audit evidence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1231",
+      "category": "Rollback & Restore Drills",
+      "title": "legacy table rollback — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy table rollback için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1232",
+      "category": "Rollback & Restore Drills",
+      "title": "rescue report persistence — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "rescue report persistence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1233",
+      "category": "Rollback & Restore Drills",
+      "title": "rollback version guard — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "rollback version guard için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1234",
+      "category": "Rollback & Restore Drills",
+      "title": "backup table existence — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup table existence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1235",
+      "category": "Rollback & Restore Drills",
+      "title": "post-rescue table quarantine — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-rescue table quarantine için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1236",
+      "category": "Rollback & Restore Drills",
+      "title": "restore count verification — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "restore count verification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1237",
+      "category": "Rollback & Restore Drills",
+      "title": "restore schema verification — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "restore schema verification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1238",
+      "category": "Rollback & Restore Drills",
+      "title": "failed-temp cleanup — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "failed-temp cleanup için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1239",
+      "category": "Rollback & Restore Drills",
+      "title": "manual recovery instructions — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manual recovery instructions için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1240",
+      "category": "Rollback & Restore Drills",
+      "title": "rollback audit evidence — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rollback audit evidence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1241",
+      "category": "Rollback & Restore Drills",
+      "title": "legacy table rollback — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy table rollback için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1242",
+      "category": "Rollback & Restore Drills",
+      "title": "rescue report persistence — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "rescue report persistence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1243",
+      "category": "Rollback & Restore Drills",
+      "title": "rollback version guard — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "rollback version guard için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1244",
+      "category": "Rollback & Restore Drills",
+      "title": "backup table existence — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup table existence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1245",
+      "category": "Rollback & Restore Drills",
+      "title": "post-rescue table quarantine — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-rescue table quarantine için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1246",
+      "category": "Rollback & Restore Drills",
+      "title": "restore count verification — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "restore count verification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1247",
+      "category": "Rollback & Restore Drills",
+      "title": "restore schema verification — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "restore schema verification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1248",
+      "category": "Rollback & Restore Drills",
+      "title": "failed-temp cleanup — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "failed-temp cleanup için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1249",
+      "category": "Rollback & Restore Drills",
+      "title": "manual recovery instructions — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manual recovery instructions için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1250",
+      "category": "Rollback & Restore Drills",
+      "title": "rollback audit evidence — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rollback audit evidence için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1251",
+      "category": "Security Boundary Testing",
+      "title": "CLI-only rescue execution — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "CLI-only rescue execution için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1252",
+      "category": "Security Boundary Testing",
+      "title": "DB credential non-disclosure — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "DB credential non-disclosure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1253",
+      "category": "Security Boundary Testing",
+      "title": "identifier whitelist — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "identifier whitelist için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1254",
+      "category": "Security Boundary Testing",
+      "title": "dynamic SQL confinement — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "dynamic SQL confinement için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1255",
+      "category": "Security Boundary Testing",
+      "title": "symlink-resistant report path — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "symlink-resistant report path için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1256",
+      "category": "Security Boundary Testing",
+      "title": "error message minimization — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "error message minimization için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1257",
+      "category": "Security Boundary Testing",
+      "title": "privileged migration scope — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "privileged migration scope için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1258",
+      "category": "Security Boundary Testing",
+      "title": "secret-free reports — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "secret-free reports için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1259",
+      "category": "Security Boundary Testing",
+      "title": "backup access restriction — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup access restriction için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1260",
+      "category": "Security Boundary Testing",
+      "title": "tamper-evident release metadata — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "tamper-evident release metadata için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1261",
+      "category": "Security Boundary Testing",
+      "title": "CLI-only rescue execution — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "CLI-only rescue execution için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1262",
+      "category": "Security Boundary Testing",
+      "title": "DB credential non-disclosure — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "DB credential non-disclosure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1263",
+      "category": "Security Boundary Testing",
+      "title": "identifier whitelist — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "identifier whitelist için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1264",
+      "category": "Security Boundary Testing",
+      "title": "dynamic SQL confinement — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "dynamic SQL confinement için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1265",
+      "category": "Security Boundary Testing",
+      "title": "symlink-resistant report path — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "symlink-resistant report path için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1266",
+      "category": "Security Boundary Testing",
+      "title": "error message minimization — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "error message minimization için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1267",
+      "category": "Security Boundary Testing",
+      "title": "privileged migration scope — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "privileged migration scope için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1268",
+      "category": "Security Boundary Testing",
+      "title": "secret-free reports — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "secret-free reports için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1269",
+      "category": "Security Boundary Testing",
+      "title": "backup access restriction — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup access restriction için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1270",
+      "category": "Security Boundary Testing",
+      "title": "tamper-evident release metadata — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "tamper-evident release metadata için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1271",
+      "category": "Security Boundary Testing",
+      "title": "CLI-only rescue execution — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "CLI-only rescue execution için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1272",
+      "category": "Security Boundary Testing",
+      "title": "DB credential non-disclosure — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "DB credential non-disclosure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1273",
+      "category": "Security Boundary Testing",
+      "title": "identifier whitelist — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "identifier whitelist için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1274",
+      "category": "Security Boundary Testing",
+      "title": "dynamic SQL confinement — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "dynamic SQL confinement için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1275",
+      "category": "Security Boundary Testing",
+      "title": "symlink-resistant report path — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "symlink-resistant report path için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1276",
+      "category": "Security Boundary Testing",
+      "title": "error message minimization — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "error message minimization için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1277",
+      "category": "Security Boundary Testing",
+      "title": "privileged migration scope — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "privileged migration scope için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1278",
+      "category": "Security Boundary Testing",
+      "title": "secret-free reports — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "secret-free reports için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1279",
+      "category": "Security Boundary Testing",
+      "title": "backup access restriction — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup access restriction için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1280",
+      "category": "Security Boundary Testing",
+      "title": "tamper-evident release metadata — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "tamper-evident release metadata için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1281",
+      "category": "Security Boundary Testing",
+      "title": "CLI-only rescue execution — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "CLI-only rescue execution için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1282",
+      "category": "Security Boundary Testing",
+      "title": "DB credential non-disclosure — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "DB credential non-disclosure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1283",
+      "category": "Security Boundary Testing",
+      "title": "identifier whitelist — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "identifier whitelist için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1284",
+      "category": "Security Boundary Testing",
+      "title": "dynamic SQL confinement — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "dynamic SQL confinement için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1285",
+      "category": "Security Boundary Testing",
+      "title": "symlink-resistant report path — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "symlink-resistant report path için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1286",
+      "category": "Security Boundary Testing",
+      "title": "error message minimization — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "error message minimization için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1287",
+      "category": "Security Boundary Testing",
+      "title": "privileged migration scope — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "privileged migration scope için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1288",
+      "category": "Security Boundary Testing",
+      "title": "secret-free reports — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "secret-free reports için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1289",
+      "category": "Security Boundary Testing",
+      "title": "backup access restriction — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup access restriction için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1290",
+      "category": "Security Boundary Testing",
+      "title": "tamper-evident release metadata — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "tamper-evident release metadata için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1291",
+      "category": "Security Boundary Testing",
+      "title": "CLI-only rescue execution — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "CLI-only rescue execution için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1292",
+      "category": "Security Boundary Testing",
+      "title": "DB credential non-disclosure — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "DB credential non-disclosure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1293",
+      "category": "Security Boundary Testing",
+      "title": "identifier whitelist — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "identifier whitelist için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1294",
+      "category": "Security Boundary Testing",
+      "title": "dynamic SQL confinement — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "dynamic SQL confinement için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1295",
+      "category": "Security Boundary Testing",
+      "title": "symlink-resistant report path — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "symlink-resistant report path için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1296",
+      "category": "Security Boundary Testing",
+      "title": "error message minimization — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "error message minimization için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1297",
+      "category": "Security Boundary Testing",
+      "title": "privileged migration scope — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "privileged migration scope için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1298",
+      "category": "Security Boundary Testing",
+      "title": "secret-free reports — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "secret-free reports için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1299",
+      "category": "Security Boundary Testing",
+      "title": "backup access restriction — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup access restriction için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1300",
+      "category": "Security Boundary Testing",
+      "title": "tamper-evident release metadata — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "tamper-evident release metadata için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1301",
+      "category": "Database Performance Health",
+      "title": "resolver query bound — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "resolver query bound için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1302",
+      "category": "Database Performance Health",
+      "title": "membership deduplication — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "membership deduplication için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1303",
+      "category": "Database Performance Health",
+      "title": "index selectivity — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "index selectivity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1304",
+      "category": "Database Performance Health",
+      "title": "foreign-key lookup index — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "foreign-key lookup index için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1305",
+      "category": "Database Performance Health",
+      "title": "migration row-count telemetry — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "migration row-count telemetry için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1306",
+      "category": "Database Performance Health",
+      "title": "large-table preflight — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "large-table preflight için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1307",
+      "category": "Database Performance Health",
+      "title": "batch insert readiness — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "batch insert readiness için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1308",
+      "category": "Database Performance Health",
+      "title": "information-schema query bound — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "information-schema query bound için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1309",
+      "category": "Database Performance Health",
+      "title": "backup storage estimate — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup storage estimate için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1310",
+      "category": "Database Performance Health",
+      "title": "lock-duration awareness — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "lock-duration awareness için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1311",
+      "category": "Database Performance Health",
+      "title": "resolver query bound — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "resolver query bound için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1312",
+      "category": "Database Performance Health",
+      "title": "membership deduplication — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "membership deduplication için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1313",
+      "category": "Database Performance Health",
+      "title": "index selectivity — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "index selectivity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1314",
+      "category": "Database Performance Health",
+      "title": "foreign-key lookup index — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "foreign-key lookup index için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1315",
+      "category": "Database Performance Health",
+      "title": "migration row-count telemetry — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "migration row-count telemetry için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1316",
+      "category": "Database Performance Health",
+      "title": "large-table preflight — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "large-table preflight için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1317",
+      "category": "Database Performance Health",
+      "title": "batch insert readiness — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "batch insert readiness için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1318",
+      "category": "Database Performance Health",
+      "title": "information-schema query bound — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "information-schema query bound için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1319",
+      "category": "Database Performance Health",
+      "title": "backup storage estimate — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup storage estimate için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1320",
+      "category": "Database Performance Health",
+      "title": "lock-duration awareness — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "lock-duration awareness için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1321",
+      "category": "Database Performance Health",
+      "title": "resolver query bound — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "resolver query bound için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1322",
+      "category": "Database Performance Health",
+      "title": "membership deduplication — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "membership deduplication için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1323",
+      "category": "Database Performance Health",
+      "title": "index selectivity — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "index selectivity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1324",
+      "category": "Database Performance Health",
+      "title": "foreign-key lookup index — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "foreign-key lookup index için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1325",
+      "category": "Database Performance Health",
+      "title": "migration row-count telemetry — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "migration row-count telemetry için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1326",
+      "category": "Database Performance Health",
+      "title": "large-table preflight — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "large-table preflight için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1327",
+      "category": "Database Performance Health",
+      "title": "batch insert readiness — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "batch insert readiness için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1328",
+      "category": "Database Performance Health",
+      "title": "information-schema query bound — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "information-schema query bound için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1329",
+      "category": "Database Performance Health",
+      "title": "backup storage estimate — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup storage estimate için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1330",
+      "category": "Database Performance Health",
+      "title": "lock-duration awareness — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "lock-duration awareness için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1331",
+      "category": "Database Performance Health",
+      "title": "resolver query bound — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "resolver query bound için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1332",
+      "category": "Database Performance Health",
+      "title": "membership deduplication — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "membership deduplication için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1333",
+      "category": "Database Performance Health",
+      "title": "index selectivity — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "index selectivity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1334",
+      "category": "Database Performance Health",
+      "title": "foreign-key lookup index — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "foreign-key lookup index için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1335",
+      "category": "Database Performance Health",
+      "title": "migration row-count telemetry — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "migration row-count telemetry için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1336",
+      "category": "Database Performance Health",
+      "title": "large-table preflight — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "large-table preflight için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1337",
+      "category": "Database Performance Health",
+      "title": "batch insert readiness — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "batch insert readiness için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1338",
+      "category": "Database Performance Health",
+      "title": "information-schema query bound — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "information-schema query bound için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1339",
+      "category": "Database Performance Health",
+      "title": "backup storage estimate — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup storage estimate için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1340",
+      "category": "Database Performance Health",
+      "title": "lock-duration awareness — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "lock-duration awareness için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1341",
+      "category": "Database Performance Health",
+      "title": "resolver query bound — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "resolver query bound için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1342",
+      "category": "Database Performance Health",
+      "title": "membership deduplication — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "membership deduplication için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1343",
+      "category": "Database Performance Health",
+      "title": "index selectivity — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "index selectivity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1344",
+      "category": "Database Performance Health",
+      "title": "foreign-key lookup index — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "foreign-key lookup index için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1345",
+      "category": "Database Performance Health",
+      "title": "migration row-count telemetry — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "migration row-count telemetry için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1346",
+      "category": "Database Performance Health",
+      "title": "large-table preflight — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "large-table preflight için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1347",
+      "category": "Database Performance Health",
+      "title": "batch insert readiness — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "batch insert readiness için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1348",
+      "category": "Database Performance Health",
+      "title": "information-schema query bound — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "information-schema query bound için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1349",
+      "category": "Database Performance Health",
+      "title": "backup storage estimate — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup storage estimate için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1350",
+      "category": "Database Performance Health",
+      "title": "lock-duration awareness — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "lock-duration awareness için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1351",
+      "category": "API Failure Semantics",
+      "title": "migration error classification — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "migration error classification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1352",
+      "category": "API Failure Semantics",
+      "title": "retry-safe response — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "retry-safe response için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1353",
+      "category": "API Failure Semantics",
+      "title": "conflict response mapping — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "conflict response mapping için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1354",
+      "category": "API Failure Semantics",
+      "title": "validation error clarity — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "validation error clarity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1355",
+      "category": "API Failure Semantics",
+      "title": "authorization error separation — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "authorization error separation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1356",
+      "category": "API Failure Semantics",
+      "title": "database error redaction — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "database error redaction için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1357",
+      "category": "API Failure Semantics",
+      "title": "partial failure prohibition — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "partial failure prohibition için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1358",
+      "category": "API Failure Semantics",
+      "title": "idempotent retry guidance — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "idempotent retry guidance için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1359",
+      "category": "API Failure Semantics",
+      "title": "recovery-required signal — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery-required signal için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1360",
+      "category": "API Failure Semantics",
+      "title": "operator action hint — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "operator action hint için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1361",
+      "category": "API Failure Semantics",
+      "title": "migration error classification — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "migration error classification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1362",
+      "category": "API Failure Semantics",
+      "title": "retry-safe response — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "retry-safe response için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1363",
+      "category": "API Failure Semantics",
+      "title": "conflict response mapping — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "conflict response mapping için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1364",
+      "category": "API Failure Semantics",
+      "title": "validation error clarity — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "validation error clarity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1365",
+      "category": "API Failure Semantics",
+      "title": "authorization error separation — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "authorization error separation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1366",
+      "category": "API Failure Semantics",
+      "title": "database error redaction — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "database error redaction için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1367",
+      "category": "API Failure Semantics",
+      "title": "partial failure prohibition — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "partial failure prohibition için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1368",
+      "category": "API Failure Semantics",
+      "title": "idempotent retry guidance — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "idempotent retry guidance için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1369",
+      "category": "API Failure Semantics",
+      "title": "recovery-required signal — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery-required signal için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1370",
+      "category": "API Failure Semantics",
+      "title": "operator action hint — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "operator action hint için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1371",
+      "category": "API Failure Semantics",
+      "title": "migration error classification — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "migration error classification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1372",
+      "category": "API Failure Semantics",
+      "title": "retry-safe response — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "retry-safe response için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1373",
+      "category": "API Failure Semantics",
+      "title": "conflict response mapping — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "conflict response mapping için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1374",
+      "category": "API Failure Semantics",
+      "title": "validation error clarity — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "validation error clarity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1375",
+      "category": "API Failure Semantics",
+      "title": "authorization error separation — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "authorization error separation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1376",
+      "category": "API Failure Semantics",
+      "title": "database error redaction — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "database error redaction için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1377",
+      "category": "API Failure Semantics",
+      "title": "partial failure prohibition — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "partial failure prohibition için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1378",
+      "category": "API Failure Semantics",
+      "title": "idempotent retry guidance — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "idempotent retry guidance için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1379",
+      "category": "API Failure Semantics",
+      "title": "recovery-required signal — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery-required signal için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1380",
+      "category": "API Failure Semantics",
+      "title": "operator action hint — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "operator action hint için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1381",
+      "category": "API Failure Semantics",
+      "title": "migration error classification — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "migration error classification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1382",
+      "category": "API Failure Semantics",
+      "title": "retry-safe response — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "retry-safe response için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1383",
+      "category": "API Failure Semantics",
+      "title": "conflict response mapping — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "conflict response mapping için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1384",
+      "category": "API Failure Semantics",
+      "title": "validation error clarity — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "validation error clarity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1385",
+      "category": "API Failure Semantics",
+      "title": "authorization error separation — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "authorization error separation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1386",
+      "category": "API Failure Semantics",
+      "title": "database error redaction — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "database error redaction için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1387",
+      "category": "API Failure Semantics",
+      "title": "partial failure prohibition — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "partial failure prohibition için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1388",
+      "category": "API Failure Semantics",
+      "title": "idempotent retry guidance — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "idempotent retry guidance için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1389",
+      "category": "API Failure Semantics",
+      "title": "recovery-required signal — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery-required signal için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1390",
+      "category": "API Failure Semantics",
+      "title": "operator action hint — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "operator action hint için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1391",
+      "category": "API Failure Semantics",
+      "title": "migration error classification — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "migration error classification için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1392",
+      "category": "API Failure Semantics",
+      "title": "retry-safe response — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "retry-safe response için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1393",
+      "category": "API Failure Semantics",
+      "title": "conflict response mapping — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "conflict response mapping için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1394",
+      "category": "API Failure Semantics",
+      "title": "validation error clarity — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "validation error clarity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1395",
+      "category": "API Failure Semantics",
+      "title": "authorization error separation — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "authorization error separation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1396",
+      "category": "API Failure Semantics",
+      "title": "database error redaction — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "database error redaction için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1397",
+      "category": "API Failure Semantics",
+      "title": "partial failure prohibition — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "partial failure prohibition için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1398",
+      "category": "API Failure Semantics",
+      "title": "idempotent retry guidance — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "idempotent retry guidance için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1399",
+      "category": "API Failure Semantics",
+      "title": "recovery-required signal — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery-required signal için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1400",
+      "category": "API Failure Semantics",
+      "title": "operator action hint — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "operator action hint için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1401",
+      "category": "PWA & Notification Recovery",
+      "title": "service-worker update after rescue — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "service-worker update after rescue için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1402",
+      "category": "PWA & Notification Recovery",
+      "title": "cache bust after upgrade — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cache bust after upgrade için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1403",
+      "category": "PWA & Notification Recovery",
+      "title": "offline stale-version warning — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "offline stale-version warning için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1404",
+      "category": "PWA & Notification Recovery",
+      "title": "push subscription continuity — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "push subscription continuity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1405",
+      "category": "PWA & Notification Recovery",
+      "title": "notification badge reset — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "notification badge reset için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1406",
+      "category": "PWA & Notification Recovery",
+      "title": "iOS standalone reload — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "iOS standalone reload için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1407",
+      "category": "PWA & Notification Recovery",
+      "title": "background sync after migration — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "background sync after migration için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1408",
+      "category": "PWA & Notification Recovery",
+      "title": "mobile update progress — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "mobile update progress için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1409",
+      "category": "PWA & Notification Recovery",
+      "title": "network-loss resume — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "network-loss resume için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1410",
+      "category": "PWA & Notification Recovery",
+      "title": "post-upgrade cache validation — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-upgrade cache validation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1411",
+      "category": "PWA & Notification Recovery",
+      "title": "service-worker update after rescue — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "service-worker update after rescue için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1412",
+      "category": "PWA & Notification Recovery",
+      "title": "cache bust after upgrade — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cache bust after upgrade için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1413",
+      "category": "PWA & Notification Recovery",
+      "title": "offline stale-version warning — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "offline stale-version warning için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1414",
+      "category": "PWA & Notification Recovery",
+      "title": "push subscription continuity — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "push subscription continuity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1415",
+      "category": "PWA & Notification Recovery",
+      "title": "notification badge reset — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "notification badge reset için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1416",
+      "category": "PWA & Notification Recovery",
+      "title": "iOS standalone reload — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "iOS standalone reload için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1417",
+      "category": "PWA & Notification Recovery",
+      "title": "background sync after migration — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "background sync after migration için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1418",
+      "category": "PWA & Notification Recovery",
+      "title": "mobile update progress — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "mobile update progress için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1419",
+      "category": "PWA & Notification Recovery",
+      "title": "network-loss resume — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "network-loss resume için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1420",
+      "category": "PWA & Notification Recovery",
+      "title": "post-upgrade cache validation — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-upgrade cache validation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1421",
+      "category": "PWA & Notification Recovery",
+      "title": "service-worker update after rescue — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "service-worker update after rescue için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1422",
+      "category": "PWA & Notification Recovery",
+      "title": "cache bust after upgrade — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cache bust after upgrade için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1423",
+      "category": "PWA & Notification Recovery",
+      "title": "offline stale-version warning — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "offline stale-version warning için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1424",
+      "category": "PWA & Notification Recovery",
+      "title": "push subscription continuity — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "push subscription continuity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1425",
+      "category": "PWA & Notification Recovery",
+      "title": "notification badge reset — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "notification badge reset için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1426",
+      "category": "PWA & Notification Recovery",
+      "title": "iOS standalone reload — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "iOS standalone reload için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1427",
+      "category": "PWA & Notification Recovery",
+      "title": "background sync after migration — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "background sync after migration için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1428",
+      "category": "PWA & Notification Recovery",
+      "title": "mobile update progress — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "mobile update progress için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1429",
+      "category": "PWA & Notification Recovery",
+      "title": "network-loss resume — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "network-loss resume için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1430",
+      "category": "PWA & Notification Recovery",
+      "title": "post-upgrade cache validation — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-upgrade cache validation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1431",
+      "category": "PWA & Notification Recovery",
+      "title": "service-worker update after rescue — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "service-worker update after rescue için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1432",
+      "category": "PWA & Notification Recovery",
+      "title": "cache bust after upgrade — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cache bust after upgrade için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1433",
+      "category": "PWA & Notification Recovery",
+      "title": "offline stale-version warning — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "offline stale-version warning için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1434",
+      "category": "PWA & Notification Recovery",
+      "title": "push subscription continuity — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "push subscription continuity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1435",
+      "category": "PWA & Notification Recovery",
+      "title": "notification badge reset — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "notification badge reset için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1436",
+      "category": "PWA & Notification Recovery",
+      "title": "iOS standalone reload — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "iOS standalone reload için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1437",
+      "category": "PWA & Notification Recovery",
+      "title": "background sync after migration — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "background sync after migration için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1438",
+      "category": "PWA & Notification Recovery",
+      "title": "mobile update progress — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "mobile update progress için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1439",
+      "category": "PWA & Notification Recovery",
+      "title": "network-loss resume — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "network-loss resume için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1440",
+      "category": "PWA & Notification Recovery",
+      "title": "post-upgrade cache validation — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-upgrade cache validation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1441",
+      "category": "PWA & Notification Recovery",
+      "title": "service-worker update after rescue — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "service-worker update after rescue için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1442",
+      "category": "PWA & Notification Recovery",
+      "title": "cache bust after upgrade — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cache bust after upgrade için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1443",
+      "category": "PWA & Notification Recovery",
+      "title": "offline stale-version warning — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "offline stale-version warning için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1444",
+      "category": "PWA & Notification Recovery",
+      "title": "push subscription continuity — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "push subscription continuity için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1445",
+      "category": "PWA & Notification Recovery",
+      "title": "notification badge reset — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "notification badge reset için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1446",
+      "category": "PWA & Notification Recovery",
+      "title": "iOS standalone reload — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "iOS standalone reload için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1447",
+      "category": "PWA & Notification Recovery",
+      "title": "background sync after migration — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "background sync after migration için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1448",
+      "category": "PWA & Notification Recovery",
+      "title": "mobile update progress — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "mobile update progress için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1449",
+      "category": "PWA & Notification Recovery",
+      "title": "network-loss resume — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "network-loss resume için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1450",
+      "category": "PWA & Notification Recovery",
+      "title": "post-upgrade cache validation — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-upgrade cache validation için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1451",
+      "category": "Operational Runbooks",
+      "title": "1.1.97 rescue runbook — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "1.1.97 rescue runbook için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1452",
+      "category": "Operational Runbooks",
+      "title": "dry-run first procedure — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "dry-run first procedure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1453",
+      "category": "Operational Runbooks",
+      "title": "apply procedure — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "apply procedure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1454",
+      "category": "Operational Runbooks",
+      "title": "rollback procedure — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rollback procedure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1455",
+      "category": "Operational Runbooks",
+      "title": "database backup prerequisite — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "database backup prerequisite için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1456",
+      "category": "Operational Runbooks",
+      "title": "verification checklist — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "verification checklist için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1457",
+      "category": "Operational Runbooks",
+      "title": "post-upgrade smoke test — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "post-upgrade smoke test için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1458",
+      "category": "Operational Runbooks",
+      "title": "incident log template — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "incident log template için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1459",
+      "category": "Operational Runbooks",
+      "title": "support escalation data — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "support escalation data için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1460",
+      "category": "Operational Runbooks",
+      "title": "release-chain audit checklist — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release-chain audit checklist için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1461",
+      "category": "Operational Runbooks",
+      "title": "1.1.97 rescue runbook — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "1.1.97 rescue runbook için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1462",
+      "category": "Operational Runbooks",
+      "title": "dry-run first procedure — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "dry-run first procedure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1463",
+      "category": "Operational Runbooks",
+      "title": "apply procedure — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "apply procedure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1464",
+      "category": "Operational Runbooks",
+      "title": "rollback procedure — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rollback procedure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1465",
+      "category": "Operational Runbooks",
+      "title": "database backup prerequisite — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "database backup prerequisite için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1466",
+      "category": "Operational Runbooks",
+      "title": "verification checklist — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "verification checklist için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1467",
+      "category": "Operational Runbooks",
+      "title": "post-upgrade smoke test — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "post-upgrade smoke test için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1468",
+      "category": "Operational Runbooks",
+      "title": "incident log template — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "incident log template için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1469",
+      "category": "Operational Runbooks",
+      "title": "support escalation data — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "support escalation data için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1470",
+      "category": "Operational Runbooks",
+      "title": "release-chain audit checklist — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release-chain audit checklist için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1471",
+      "category": "Operational Runbooks",
+      "title": "1.1.97 rescue runbook — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "1.1.97 rescue runbook için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1472",
+      "category": "Operational Runbooks",
+      "title": "dry-run first procedure — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "dry-run first procedure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1473",
+      "category": "Operational Runbooks",
+      "title": "apply procedure — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "apply procedure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1474",
+      "category": "Operational Runbooks",
+      "title": "rollback procedure — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rollback procedure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1475",
+      "category": "Operational Runbooks",
+      "title": "database backup prerequisite — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "database backup prerequisite için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1476",
+      "category": "Operational Runbooks",
+      "title": "verification checklist — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "verification checklist için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1477",
+      "category": "Operational Runbooks",
+      "title": "post-upgrade smoke test — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "post-upgrade smoke test için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1478",
+      "category": "Operational Runbooks",
+      "title": "incident log template — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "incident log template için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1479",
+      "category": "Operational Runbooks",
+      "title": "support escalation data — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "support escalation data için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1480",
+      "category": "Operational Runbooks",
+      "title": "release-chain audit checklist — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release-chain audit checklist için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1481",
+      "category": "Operational Runbooks",
+      "title": "1.1.97 rescue runbook — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "1.1.97 rescue runbook için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1482",
+      "category": "Operational Runbooks",
+      "title": "dry-run first procedure — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "dry-run first procedure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1483",
+      "category": "Operational Runbooks",
+      "title": "apply procedure — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "apply procedure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1484",
+      "category": "Operational Runbooks",
+      "title": "rollback procedure — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rollback procedure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1485",
+      "category": "Operational Runbooks",
+      "title": "database backup prerequisite — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "database backup prerequisite için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1486",
+      "category": "Operational Runbooks",
+      "title": "verification checklist — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "verification checklist için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1487",
+      "category": "Operational Runbooks",
+      "title": "post-upgrade smoke test — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "post-upgrade smoke test için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1488",
+      "category": "Operational Runbooks",
+      "title": "incident log template — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "incident log template için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1489",
+      "category": "Operational Runbooks",
+      "title": "support escalation data — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "support escalation data için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1490",
+      "category": "Operational Runbooks",
+      "title": "release-chain audit checklist — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release-chain audit checklist için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1491",
+      "category": "Operational Runbooks",
+      "title": "1.1.97 rescue runbook — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "1.1.97 rescue runbook için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1492",
+      "category": "Operational Runbooks",
+      "title": "dry-run first procedure — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "dry-run first procedure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1493",
+      "category": "Operational Runbooks",
+      "title": "apply procedure — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "apply procedure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1494",
+      "category": "Operational Runbooks",
+      "title": "rollback procedure — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rollback procedure için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1495",
+      "category": "Operational Runbooks",
+      "title": "database backup prerequisite — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "database backup prerequisite için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1496",
+      "category": "Operational Runbooks",
+      "title": "verification checklist — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "verification checklist için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1497",
+      "category": "Operational Runbooks",
+      "title": "post-upgrade smoke test — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "post-upgrade smoke test için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1498",
+      "category": "Operational Runbooks",
+      "title": "incident log template — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "incident log template için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1499",
+      "category": "Operational Runbooks",
+      "title": "support escalation data — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "support escalation data için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    },
+    {
+      "id": "Q1500",
+      "category": "Operational Runbooks",
+      "title": "release-chain audit checklist — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release-chain audit checklist için ölçülebilir ve tekrar çalıştırılabilir kontrol bulunmalı; başarısızlık veri kaybı oluşturmadan güvenli duruş üretmelidir."
+    }
+  ]
+}

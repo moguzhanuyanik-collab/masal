@@ -1,10 +1,10 @@
 {
   "format": 1,
-  "version": "1.1.112",
+  "version": "1.1.113",
   "release_revision": 1,
-  "total": 1000,
-  "implemented": 52,
-  "planned": 948,
+  "total": 1500,
+  "implemented": 67,
+  "planned": 1433,
   "catalogs": [
     {
       "path": "quality/update-quality-500.json",
@@ -14,6 +14,11 @@
     {
       "path": "quality/update-quality-500-v2.json",
       "range": "Q501-Q1000",
+      "total": 500
+    },
+    {
+      "path": "quality/update-quality-500-v3.json",
+      "range": "Q1001-Q1500",
       "total": 500
     }
   ]
