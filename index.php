@@ -3,6 +3,13 @@ declare(strict_types=1);
 require __DIR__ . '/src/bootstrap.php';
 require __DIR__ . '/src/auth.php';
 require_student_login();
+
+$assetVersion=static function(string $path): string {
+    $full=__DIR__.'/'.ltrim($path,'/');
+    if(!is_file($full)) return 'missing';
+    $hash=hash_file('sha256',$full);
+    return is_string($hash)&&$hash!==''?substr($hash,0,16):'unreadable';
+};
 ?>
 <!DOCTYPE html>
 <html lang="tr">
@@ -14,29 +21,29 @@ require_student_login();
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="description" content="İlkAdım: 1. sınıf için renkli dersler, eğlenceli oyunlar ve kişisel öğrenme yolculuğun.">
   <title>İlkAdım — Benim öğrenme dünyam</title>
-  <link rel="manifest" href="manifest.webmanifest?v=1.0.46">
+  <link rel="manifest" href="manifest.webmanifest?v=<?=$assetVersion('manifest.webmanifest')?>">
   <link rel="icon" href="ilkadim-logo.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="ilkadim-logo-192.png">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="v4-features.css?v=1.0.34">
-  <link rel="stylesheet" href="ogretmenim.css?v=1.0.48">
-  <link rel="stylesheet" href="adimbot-student.css?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-student.css'),0,16)?>">
-  <script src="api/bootstrap.js.php?v=1.1.56" defer></script>
-  <script src="test-progress-reset.js?v=1.1.32" defer></script>
-  <script src="activities-extra.js?v=1.0.31" defer></script>
-  <script src="app-runtime.js" defer></script>
-  <script src="curriculum-menu-bridge.js?v=1.1.31" defer></script>
-  <script src="completed-step-skip.js?v=1.1.30" defer></script>
-  <script src="adimbot-student.js?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-student.js'),0,16)?>" defer></script>
-  <script src="global-audio-feedback.js?v=1.1.77" defer></script>
-  <script src="adimbot-ai-bridge.js?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-ai-bridge.js'),0,16)?>" defer></script>
-  <script src="adimbot-chat-ui.js?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-chat-ui.js'),0,16)?>" defer></script>
-  <script src="lesson-ui-fix.js?v=1.0.32" defer></script>
-  <script src="settings-account.js" defer></script>
-  <script src="profile-update-link.js?v=1.1.3" defer></script>
-  <script src="v4-features.js?v=1.0.34" defer></script>
-  <script src="pwa-store.js?v=1.0.34" defer></script>
-  <script src="pwa-v4.js?v=1.0.34" defer></script>
+  <link rel="stylesheet" href="styles.css?v=<?=$assetVersion('styles.css')?>">
+  <link rel="stylesheet" href="v4-features.css?v=<?=$assetVersion('v4-features.css')?>">
+  <link rel="stylesheet" href="ogretmenim.css?v=<?=$assetVersion('ogretmenim.css')?>">
+  <link rel="stylesheet" href="adimbot-student.css?v=<?=$assetVersion('adimbot-student.css')?>">
+  <script src="api/bootstrap.js.php?v=<?=$assetVersion('api/bootstrap.js.php')?>" defer></script>
+  <script src="test-progress-reset.js?v=<?=$assetVersion('test-progress-reset.js')?>" defer></script>
+  <script src="activities-extra.js?v=<?=$assetVersion('activities-extra.js')?>" defer></script>
+  <script src="app-runtime.js?v=<?=$assetVersion('app-runtime.js')?>" defer></script>
+  <script src="curriculum-menu-bridge.js?v=<?=$assetVersion('curriculum-menu-bridge.js')?>" defer></script>
+  <script src="completed-step-skip.js?v=<?=$assetVersion('completed-step-skip.js')?>" defer></script>
+  <script src="adimbot-student.js?v=<?=$assetVersion('adimbot-student.js')?>" defer></script>
+  <script src="global-audio-feedback.js?v=<?=$assetVersion('global-audio-feedback.js')?>" defer></script>
+  <script src="adimbot-ai-bridge.js?v=<?=$assetVersion('adimbot-ai-bridge.js')?>" defer></script>
+  <script src="adimbot-chat-ui.js?v=<?=$assetVersion('adimbot-chat-ui.js')?>" defer></script>
+  <script src="lesson-ui-fix.js?v=<?=$assetVersion('lesson-ui-fix.js')?>" defer></script>
+  <script src="settings-account.js?v=<?=$assetVersion('settings-account.js')?>" defer></script>
+  <script src="profile-update-link.js?v=<?=$assetVersion('profile-update-link.js')?>" defer></script>
+  <script src="v4-features.js?v=<?=$assetVersion('v4-features.js')?>" defer></script>
+  <script src="pwa-store.js?v=<?=$assetVersion('pwa-store.js')?>" defer></script>
+  <script src="pwa-v4.js?v=<?=$assetVersion('pwa-v4.js')?>" defer></script>
 </head>
 <body>
   <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
