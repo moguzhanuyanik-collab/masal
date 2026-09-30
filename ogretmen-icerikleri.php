@@ -39,9 +39,13 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             $message=$active?'İçerik yeniden aktifleştirildi.':'İçerik pasife alındı.';
         }
     }catch(PDOException $e){
+        error_log('[IlkAdim][teacher-content-db] '.$e->getMessage());
         $error='İçerik işlemi veritabanında tamamlanamadı.';
-    }catch(Throwable $e){
+    }catch(RuntimeException $e){
         $error=$e->getMessage();
+    }catch(Throwable $e){
+        error_log('[IlkAdim][teacher-content] '.$e->getMessage());
+        $error='İçerik işlemi tamamlanamadı. Lütfen tekrar deneyin.';
     }
 }
 
