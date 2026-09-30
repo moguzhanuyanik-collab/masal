@@ -68,6 +68,7 @@ function update_public_error_message(Throwable $e): string {
         'İndirilen güncelleme',
         'Guncelleme paketi',
         'Güncelleme paketi',
+        'Güncelleme ZIP paketi',
         'Yedek ',
         'Onceki surum',
         'Önceki sürüm',
