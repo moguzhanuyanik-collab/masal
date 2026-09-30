@@ -11,7 +11,7 @@ const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
 
 assert(updater.includes('function normalized_packaged_manifest_files('));
 assert(updater.includes('function assert_packaged_manifest_matches_tree('));
-assert(updater.includes('manifestte tekrarlı kayıt'));
+assert(updater.includes('manifestinde tekrarlı kayıt'));
 assert(updater.includes('gerçek paket ağacıyla eşleşmiyor'));
 assert(
   updater.indexOf('assert_packaged_manifest_matches_tree($manifestData,$newManagedFiles)')

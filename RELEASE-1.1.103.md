@@ -25,3 +25,5 @@ Yeni migration yoktur. Kullanıcı ve kurum verileri değiştirilmez. Bu kontrol
 ## Doğrulama
 
 Sürüm önce `updater-manifest-103` dalında tam kalite kapısından geçirilir; yalnız yeşil sonuçtan sonra aynı doğrulanmış commit `main` dalına fast-forward edilir.
+
+İlk aday CI turunda PHP manifest davranış testi geçti. Node kaynak testindeki hata yalnız hata mesajı metninin yanlış eşleştirilmesiydi (`manifestte` yerine gerçek kaynakta `manifestinde`); test beklentisi düzeltildi, uygulama davranışı değiştirilmedi.
