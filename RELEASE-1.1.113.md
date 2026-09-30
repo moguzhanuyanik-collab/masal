@@ -41,3 +41,10 @@
 - Köprü commitinden hemen sonra 1.1.113 paket ağacı eksiksiz geri yüklenmiştir; main dalındaki güncel paket içeriği korunur.
 - Güncel release HEAD tekrar version.json + update-release.json + update-managed-files.json üçlü ankrajıyla rev 5 olarak sabitlenmiştir.
 
+## Rev 9 — 1.1.98 eksik 064 checkpoint recovery
+
+- 1.1.98 bridge sonrasında eksik kalan `064_adimbot_rate_limit_ve_migration_checkpoint` güvenli biçimde tamamlanır.
+- Yalnız 064 eksikse çalışır; 064 öncesinde başka eksik migration varsa SQL çalıştırmadan durur.
+- 1.1.99 rev999 recovery checkpointi güncel updater çekirdeğini taşır.
+- Recovery checkpointinden sonra eski 1.1.100–1.1.112 updater paketleri atlanır ve güncel main sürümüne geçilir.
+
