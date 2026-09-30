@@ -196,7 +196,9 @@ function create_project_backup(string $root,string $target): void {
         if(!$file->isFile()) continue;
         $path=$file->getPathname();
         $rel=ltrim(str_replace('\\','/',substr($path,strlen($root))),'/');
-        if(str_starts_with($rel,'storage/backups/')||str_starts_with($rel,'storage/updates/')) continue;
+        // Güncelleme geri dönüş yedeği yalnız uygulama kodunu taşır.
+        // Canlı sırlar ve çalışma verileri ayrı korunur; ZIP içine alınmaz.
+        if($rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')) continue;
         $zip->addFile($path,$rel);
     }
     $zip->close();
@@ -421,6 +423,19 @@ function repair_legacy_institution_membership_schema(PDO $pdo): void {
         if(isset($cols[$column])){$hasLegacy=true;break;}
     }
     if(!$hasLegacy) return;
+
+    // Eski tablo veri içeriyorsa otomatik DROP yasaktır. Bu kayıtların hangi
+    // kullanici_id ile eşleşeceği kurulumdan kuruluma değişebilir; tahmin ederek
+    // taşımak veri kaybı veya yanlış kurum eşleşmesi üretir.
+    $rowCount=(int)($pdo->query('SELECT COUNT(*) FROM kurum_kullanicilari')->fetchColumn()?:0);
+    if($rowCount>0){
+        throw new RuntimeException(
+            'Eski kurum_kullanicilari şeması '.$rowCount.' kayıt içeriyor. '
+            .'Veri kaybını önlemek için otomatik güncelleme durduruldu; '
+            .'kurum eşleşmeleri kontrollü migration ile dönüştürülmelidir.'
+        );
+    }
+
     if(!auth_table_exists($pdo,'kurumlar')||!auth_table_exists($pdo,'kullanicilar')){
         throw new RuntimeException('Eski kurum kullanıcısı şeması onarılamadı: temel tablolar eksik.');
     }
@@ -439,6 +454,7 @@ function repair_legacy_institution_membership_schema(PDO $pdo): void {
         }
     }
 
+    // Buraya yalnız boş legacy tablo ulaşabilir; yeniden oluşturma veri kaybetmez.
     $oldFk=(int)$pdo->query('SELECT @@FOREIGN_KEY_CHECKS')->fetchColumn();
     try{
         $pdo->exec('SET FOREIGN_KEY_CHECKS=0');
@@ -462,13 +478,32 @@ function repair_legacy_institution_membership_schema(PDO $pdo): void {
     }
 }
 
+function retired_automatic_migrations(): array {
+    return [
+        '000_v3_kurum_kullanicilari_onarim'=>true,
+        '024_tek_aktif_super_admin'=>true,
+        '025_tek_super_admin_sert_temizlik'=>true,
+        '026_tek_aktif_super_admin_duzeltme'=>true,
+        '027_tek_super_admin_kesin_sifirlama'=>true,
+        '028_legacy_kurum_fk_temizlik'=>true,
+    ];
+}
+
 function run_pending_migrations(PDO $pdo,string $root): array {
     repair_legacy_institution_membership_schema($pdo);
+    $retired=retired_automatic_migrations();
     $applied=[]; $files=glob($root.'/database/migrations/*.sql')?:[]; sort($files,SORT_NATURAL);
     $check=$pdo->prepare('SELECT 1 FROM sistem_migrations WHERE migration=? LIMIT 1');
     $insert=$pdo->prepare('INSERT INTO sistem_migrations (migration) VALUES (?)');
     foreach($files as $file){
-        $name=basename($file,'.sql'); $check->execute([$name]); if($check->fetchColumn()) continue;
+        $name=basename($file,'.sql');
+        $check->execute([$name]);
+        if($check->fetchColumn()) continue;
+
+        // Geçmişte tek seferlik veri temizliği amacıyla yazılmış bu migrationlar
+        // artık otomatik güncelleme zincirinde kesinlikle çalıştırılmaz.
+        if(isset($retired[$name])) continue;
+
         if($name==='004_ogrenci_giris_sistemi'){
             ensure_student_auth_schema($pdo);
         }else{
