@@ -33,3 +33,5 @@ Yeni migration yoktur. Kullanıcı, kurum, öğrenci, veli veya içerik verisi d
 ## Kalite kapısı revizyonu
 
 İlk 1.1.102 CI çalışmasında uygulama ve syntax kontrolleri geçti; yeni ZIP davranış testinin güvenli senaryosu 101 kayıt üretmesine rağmen test konfigürasyonu yanlışlıkla 10 kayıt sınırı kullanıyordu. Test güvenli senaryoda 200 kayıt sınırına düzeltilerek gerçek üretim alt sınırlarıyla uyumlu hale getirildi; uygulama davranışı değiştirilmedi.
+
+İkinci CI turunda yeni PHP paket güvenlik testi geçti. Eski 1.1.100 kaynak regresyonu `ready_before_mutation` durumunu yalnız array literal biçiminde aradığı için Node kapısı düştü; test hem eski literal hem yeni recovery-state assignment biçimini kabul edecek şekilde geriye uyumlu güncellendi. Uygulama davranışı değiştirilmedi.
