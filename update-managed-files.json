@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.98",
+  "version": "1.1.99",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -154,6 +154,7 @@
     "RELEASE-1.1.96.md",
     "RELEASE-1.1.97.md",
     "RELEASE-1.1.98.md",
+    "RELEASE-1.1.99.md",
     "YETKILENDIRME-1.0.35.md",
     "activities-extra.js",
     "adimbot-ai-bridge.js",
@@ -400,6 +401,8 @@
     "tests/adimbot-transcript-behavior.php",
     "tests/adimbot-voice-83.cjs",
     "tests/db-ai-safety-98.cjs",
+    "tests/db-backup-99.cjs",
+    "tests/db-backup-99.php",
     "tests/hardening-91.cjs",
     "tests/hardening-94.cjs",
     "tests/migration-safety-93.cjs",

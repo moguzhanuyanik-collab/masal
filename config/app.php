@@ -35,6 +35,9 @@ $defaults = [
         'max_requests_per_10_minutes' => 20,
     ],
     'update' => [
+        // Boş bırakılırsa updater yaygın sistem yollarında mysqldump arar.
+        // Shared hosting özel yol kullanıyorsa config/local.php içinden ayarlanabilir.
+        'mysqldump_path' => '',
         'preserve' => [
             'config/local.php',
             'storage',
