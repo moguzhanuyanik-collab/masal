@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.97",
+  "version": "1.1.98",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -153,6 +153,7 @@
     "RELEASE-1.1.95.md",
     "RELEASE-1.1.96.md",
     "RELEASE-1.1.97.md",
+    "RELEASE-1.1.98.md",
     "YETKILENDIRME-1.0.35.md",
     "activities-extra.js",
     "adimbot-ai-bridge.js",
@@ -247,7 +248,6 @@
     "database/content/grade8/30_diger_dersler_soru_havuzu.sql",
     "database/content/grade8/README.md",
     "database/migrations/000_v3_kurum_kullanicilari_onarim.sql",
-    "database/migrations/001_1_1_97_history_checkpoint.sql",
     "database/migrations/002_utf8mb4_unicode.sql",
     "database/migrations/003_gercek_veri_takibi.sql",
     "database/migrations/004_ogrenci_giris_sistemi.sql",
@@ -308,6 +308,7 @@
     "database/migrations/061_grade8_teknoloji_tasarim.sql",
     "database/migrations/062_grade8_diger.sql",
     "database/migrations/063_login_rate_limit.sql",
+    "database/migrations/064_adimbot_rate_limit_ve_migration_checkpoint.sql",
     "global-audio-feedback.js",
     "global-eslestirme.php",
     "global-ogrenciler.php",
@@ -368,6 +369,7 @@
     "settings-account.js",
     "sistem-durum.php",
     "src/adimbot_groq.php",
+    "src/adimbot_rate_limit.php",
     "src/adimbot_transcript.php",
     "src/auth.php",
     "src/kurum_rol_sayfasi.php",
@@ -392,10 +394,12 @@
     "tests/adimbot-notation-90.cjs",
     "tests/adimbot-position-86.cjs",
     "tests/adimbot-provider-speech-85.cjs",
+    "tests/adimbot-rate-limit-98.php",
     "tests/adimbot-safety-87.cjs",
     "tests/adimbot-speech-81.cjs",
     "tests/adimbot-transcript-behavior.php",
     "tests/adimbot-voice-83.cjs",
+    "tests/db-ai-safety-98.cjs",
     "tests/hardening-91.cjs",
     "tests/hardening-94.cjs",
     "tests/migration-safety-93.cjs",
@@ -414,6 +418,5 @@
     "yonetici-paneli.php",
     "yonetici-yetkileri.php",
     "yonetici.css"
-  ],
-  "release_revision": 2
+  ]
 }
