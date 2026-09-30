@@ -22,7 +22,7 @@ assert(auth.includes("ks.kurum_id=kt.kurum_id"));
 assert(auth.includes("ks.kurum_rolu='ogrenci'"));
 
 // Veli erişimi de aynı tenant sınırına tabidir.
-assert(auth.includes("INNER JOIN kurum_kullanicilari vk"));
+assert(auth.includes("FROM kurum_kullanicilari vk"));
 assert(auth.includes("vk.kurum_rolu='veli'"));
 assert(auth.includes("sk.kurum_id=vk.kurum_id"));
 assert(auth.includes("sk.kurum_rolu='ogrenci'"));
