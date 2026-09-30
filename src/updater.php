@@ -187,6 +187,31 @@ function delete_tree(string $path): void {
     @rmdir($path);
 }
 
+function ensure_runtime_storage_guard(string $root): void {
+    $storage=rtrim($root,'/\\').'/storage';
+    if(!is_dir($storage)&&!mkdir($storage,0750,true)&&!is_dir($storage)){
+        throw new RuntimeException('Storage klasörü hazırlanamadı.');
+    }
+
+    // Apache üzerinde doğrudan web erişimini engeller. Nginx bu dosyayı yok
+    // sayar; o ortamda aynı kural sunucu yapılandırmasında uygulanmalıdır.
+    $htaccess="<IfModule mod_authz_core.c>\nRequire all denied\n</IfModule>\n"
+        ."<IfModule !mod_authz_core.c>\nOrder allow,deny\nDeny from all\n</IfModule>\n";
+    $htPath=$storage.'/.htaccess';
+    if(!is_file($htPath) || trim((string)@file_get_contents($htPath))!==trim($htaccess)){
+        if(file_put_contents($htPath,$htaccess,LOCK_EX)===false){
+            throw new RuntimeException('Storage erişim koruması yazılamadı.');
+        }
+        @chmod($htPath,0640);
+    }
+
+    $index=$storage.'/index.html';
+    if(!is_file($index)){
+        @file_put_contents($index,'',LOCK_EX);
+        @chmod($index,0640);
+    }
+}
+
 function create_project_backup(string $root,string $target): void {
     if(!class_exists('ZipArchive')) throw new RuntimeException('PHP ZipArchive eklentisi gerekli.');
     $zip=new ZipArchive();
@@ -566,6 +591,7 @@ function install_github_update(string $root,array $gh,array $preserve): array {
     }
 
     $storage=$root.'/storage';
+    ensure_runtime_storage_guard($root);
     @mkdir($storage.'/updates',0775,true); @mkdir($storage.'/backups',0775,true);
     $updateLock=fopen($storage.'/updates/update.lock','c');
     if($updateLock===false || !flock($updateLock,LOCK_EX|LOCK_NB)){
