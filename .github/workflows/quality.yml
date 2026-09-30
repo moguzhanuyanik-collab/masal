@@ -55,6 +55,7 @@ jobs:
           php tests/update-manifest-contract-103.php
           php tests/update-activation-104.php
           php tests/update-release-revision-105.php
+          php tests/update-197-rescue-106.php
 
       - name: Node regression checks
         shell: bash
@@ -72,3 +73,4 @@ jobs:
           node tests/update-manifest-contract-103.cjs
           node tests/update-activation-104.cjs
           node tests/update-release-revision-105.cjs
+          node tests/update-197-rescue-106.cjs
