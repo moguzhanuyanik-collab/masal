@@ -12,3 +12,8 @@
 ## Amaç
 
 Güncelleme çekirdeğinin yarım etkinleşmesi, release anchor'ın erken bir committe kalması ve başarılı çekirdek handoff'unun ikincil log/recovery hataları nedeniyle kullanıcıya başarısız görünmesi engellenir.
+
+## Rev 2
+
+- Release HEAD invariant testinin parent commit farkını görebilmesi için CI checkout derinliği 2 olarak ayarlandı.
+- Rev 1 adayında uygulama/PHP testleri ve handoff rollback testleri geçti; yalnız shallow Git geçmişi nedeniyle anchor invariant testi parent diffini okuyamamıştı.

@@ -19,7 +19,7 @@ assert(workflow.includes('tests/update-core-handoff-rollback-109.cjs'));
 assert(workflow.includes('tests/update-release-head-anchor-109.cjs'));
 
 assert.strictEqual(version.version,'1.1.109');
-assert.strictEqual(version.release_revision,1);
+assert(Number.isInteger(version.release_revision) && version.release_revision>=1,'release revision must be positive');
 assert.strictEqual(anchor.version,version.version);
 assert.strictEqual(anchor.release_revision,version.release_revision);
 assert.strictEqual(manifest.version,version.version);
