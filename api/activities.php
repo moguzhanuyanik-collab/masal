@@ -69,5 +69,6 @@ try {
 
     json_response(['ok'=>true,'game'=>$gameCode,'completed'=>true]);
 } catch (Throwable $e) {
-    json_response(['ok'=>false,'message'=>'Etkinlik verileri alınamadı.','detail'=>$e->getMessage()],500);
+    error_log('[IlkAdim][activities] '.$e->getMessage());
+    json_response(['ok'=>false,'message'=>'Etkinlik verileri şu anda alınamadı. Lütfen tekrar deneyin.'],500);
 }
