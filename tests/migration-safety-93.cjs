@@ -35,9 +35,7 @@ for(const name of retired){
 assert(updater.includes("SELECT COUNT(*) FROM kurum_kullanicilari"));
 assert(updater.includes("if($rowCount>0)"));
 assert(updater.includes("assert_automatic_migration_safe($name,$file)"));
-assert(updater.includes("$rel==='config/local.php'"));
-assert(updater.includes("$rel==='.env'"));
-assert(updater.includes("str_starts_with($rel,'storage/')"));
+assert(updater.includes("$rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')"));
 
 assert(auth.includes("'email_ip'"));
 assert(auth.includes("INSERT IGNORE INTO giris_guvenlik"));
