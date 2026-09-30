@@ -161,25 +161,9 @@ function remote_release_info_at_ref(array $gh,string $ref): array {
     return remote_update_metadata_at_ref($gh,$ref,'update-release.json');
 }
 
-function github_branch_head_sha(array $gh): string {
-    [$owner,$repo,$branch]=github_repo_info($gh);
-    $cacheBuster=(string)round(microtime(true)*1000);
-    $url='https://api.github.com/repos/'.rawurlencode($owner).'/'.rawurlencode($repo)
-        .'/commits/'.rawurlencode($branch).'?cb='.$cacheBuster;
-    $data=json_decode((string)updater_http($url,$gh),true);
-    $sha=trim((string)($data['sha']??''));
-    if(!preg_match('/^[a-f0-9]{40}$/i',$sha)){
-        throw new RuntimeException('GitHub dal HEAD commit bilgisi çözümlenemedi.');
-    }
-    return $sha;
-}
-
 function remote_version_info(array $gh): array {
-    return remote_version_info_at_ref($gh,github_branch_head_sha($gh));
-}
-
-function remote_release_info(array $gh): array {
-    return remote_release_info_at_ref($gh,github_branch_head_sha($gh));
+    [,,$branch]=github_repo_info($gh);
+    return remote_version_info_at_ref($gh,$branch);
 }
 
 function next_remote_version_info(array $gh,string $localVersion,int $localRevision=0): array {
@@ -187,6 +171,13 @@ function next_remote_version_info(array $gh,string $localVersion,int $localRevis
     $localVersion=trim($localVersion);
     if($localVersion==='') $localVersion='0.0.0';
     $localRevision=max(0,$localRevision);
+
+    // Özel 1.1.99 recovery checkpointinden sonra eski ara updater
+    // paketlerine geri dönme; güncel main paketine geç.
+    if($localVersion==='1.1.99' && $localRevision>=999){
+        $latest=remote_version_info($gh);
+        if(version_compare((string)($latest['version']??''),$localVersion,'>')) return $latest;
+    }
 
     $historyFile=version_compare($localVersion,'1.1.101','>=')?'update-release.json':'version.json';
     $next=null;
@@ -225,7 +216,8 @@ function next_remote_version_info(array $gh,string $localVersion,int $localRevis
                     if(release_identity_should_replace_next($info,$next)) $next=$info;
                     continue;
                 }
-                continue;
+                $reachedInstalledOrOlder=true;
+                break;
             }
 
             if(release_identity_is_newer($info,$localVersion,$localRevision)){
@@ -233,17 +225,22 @@ function next_remote_version_info(array $gh,string $localVersion,int $localRevis
                 continue;
             }
 
-            continue;
+            $versionCmp=version_compare($candidateVersion,$localVersion);
+            $candidateRevision=normalize_release_revision($info['release_revision']??0);
+            if($versionCmp<0 || ($versionCmp===0 && $candidateRevision<=$localRevision)){
+                $reachedInstalledOrOlder=true;
+                break;
+            }
         }
 
-        if(count($rows)<100) break;
+        if($reachedInstalledOrOlder||count($rows)<100) break;
         $page++;
     }
 
     if($next!==null) return $next;
 
     $latest=$historyFile==='update-release.json'
-        ?remote_release_info($gh)
+        ?remote_release_info_at_ref($gh,$branch)
         :remote_version_info($gh);
 
     if($historyFile==='version.json'){
@@ -2066,10 +2063,7 @@ function install_github_update(
 
     $targetCommit=trim((string)($remote['commit']??''));
     if(!preg_match('/^[a-f0-9]{40}$/i',$targetCommit)){
-        // Eski updater sürümlerinde branch adı (ör. "main") commit alanına
-        // sızabiliyordu. Kurulumdan önce gerçek HEAD SHA'ya çözümle.
-        $targetCommit=github_branch_head_sha($gh);
-        $remote['commit']=$targetCommit;
+        throw new RuntimeException('Siradaki surumun GitHub commit bilgisi gecersiz.');
     }
 
     $storage=$root.'/storage';

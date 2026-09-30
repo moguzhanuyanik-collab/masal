@@ -408,13 +408,13 @@ function km_matching_rows(PDO $pdo,int $institutionId=0): array {
       INNER JOIN kurumlar k ON k.id=kks.kurum_id
       INNER JOIN kullanicilar us ON us.id=kks.kullanici_id
       INNER JOIN ogrenciler os ON os.kullanici_id=us.id
-      LEFT JOIN veli_ogrenci vo ON vo.ogrenci_id=os.id AND vo.kurum_id=k.id
+      LEFT JOIN veli_ogrenci vo ON vo.ogrenci_id=os.id
       LEFT JOIN veliler v ON v.id=vo.veli_id AND v.aktif=1
       LEFT JOIN kullanicilar uv ON uv.id=v.kullanici_id AND uv.aktif=1
       LEFT JOIN kurum_kullanicilari kkv
         ON kkv.kurum_id=k.id AND kkv.kullanici_id=uv.id
        AND kkv.kurum_rolu='veli' AND kkv.aktif=1
-      LEFT JOIN ogretmen_ogrenci oo ON oo.ogrenci_id=os.id AND oo.kurum_id=k.id
+      LEFT JOIN ogretmen_ogrenci oo ON oo.ogrenci_id=os.id
       LEFT JOIN ogretmenler og ON og.id=oo.ogretmen_id AND og.aktif=1
       LEFT JOIN kullanicilar uo ON uo.id=og.kullanici_id AND uo.aktif=1
       LEFT JOIN kurum_kullanicilari kko
@@ -553,8 +553,8 @@ function km_save_matching(PDO $pdo,array $actor,int $institutionId,int $studentI
           INNER JOIN kurum_kullanicilari kk
             ON kk.kullanici_id=v.kullanici_id
            AND kk.kurum_id=? AND kk.kurum_rolu='veli' AND kk.aktif=1
-          WHERE vo.ogrenci_id=? AND vo.kurum_id=?");
-        $stmt->execute([$institutionId,$studentId,$institutionId]);
+          WHERE vo.ogrenci_id=?");
+        $stmt->execute([$institutionId,$studentId]);
         $stmt->closeCursor();
 
         $stmt=$pdo->prepare("DELETE oo FROM ogretmen_ogrenci oo
@@ -562,18 +562,18 @@ function km_save_matching(PDO $pdo,array $actor,int $institutionId,int $studentI
           INNER JOIN kurum_kullanicilari kk
             ON kk.kullanici_id=og.kullanici_id
            AND kk.kurum_id=? AND kk.kurum_rolu='ogretmen' AND kk.aktif=1
-          WHERE oo.ogrenci_id=? AND oo.kurum_id=?");
-        $stmt->execute([$institutionId,$studentId,$institutionId]);
+          WHERE oo.ogrenci_id=?");
+        $stmt->execute([$institutionId,$studentId]);
         $stmt->closeCursor();
 
         if($parentIds){
-            $stmt=$pdo->prepare('INSERT IGNORE INTO veli_ogrenci (veli_id,ogrenci_id,kurum_id) VALUES (?,?,?)');
-            foreach($parentIds as $id) $stmt->execute([$id,$studentId,$institutionId]);
+            $stmt=$pdo->prepare('INSERT IGNORE INTO veli_ogrenci (veli_id,ogrenci_id) VALUES (?,?)');
+            foreach($parentIds as $id) $stmt->execute([$id,$studentId]);
             $stmt->closeCursor();
         }
         if($teacherIds){
-            $stmt=$pdo->prepare('INSERT IGNORE INTO ogretmen_ogrenci (ogretmen_id,ogrenci_id,kurum_id) VALUES (?,?,?)');
-            foreach($teacherIds as $id) $stmt->execute([$id,$studentId,$institutionId]);
+            $stmt=$pdo->prepare('INSERT IGNORE INTO ogretmen_ogrenci (ogretmen_id,ogrenci_id) VALUES (?,?)');
+            foreach($teacherIds as $id) $stmt->execute([$id,$studentId]);
             $stmt->closeCursor();
         }
         $pdo->commit();
