@@ -688,10 +688,10 @@ if (!function_exists('auth_accessible_student_ids')) {
             return array_values(array_map('intval',$rows?:[]));
         }
 
-        // Kurum izolasyonu: eşleştirme tablolarında kurum_id tutulmadığı için
-        // erişim yalnızca aktör ile öğrencinin aynı aktif kurum üyeliğini
-        // paylaşması halinde geçerlidir. Bu kontrol, kurum değişikliğinden sonra
-        // geçmiş eşleştirmelerin yeni kuruma sızmasını engeller.
+        // Kurum izolasyonu: ilişki satırının kendi kurum_id kapsamı ile aktör ve
+        // öğrencinin aktif kurum üyeliği aynı olmalıdır. Global (kurum_id=0)
+        // ilişkiler yalnızca kurum üyeliği olmayan global hesaplarda kullanılabilir.
+        // Böylece eski bir eşleştirme yeni kuruma taşındığında erişim açılmaz.
         if ($effective==='ogretmen'
             && auth_runtime_table_exists($pdo,'ogretmen_ogrenci')
             && auth_runtime_table_exists($pdo,'ogretmenler')
