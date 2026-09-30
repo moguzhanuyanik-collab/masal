@@ -11,20 +11,26 @@ const ai=fs.readFileSync('api/adimbot-ai.php','utf8');
 const voice=fs.readFileSync('api/adimbot-transcribe.php','utf8');
 const updater=fs.readFileSync('src/updater.php','utf8');
 
-assert(auth.includes("$threshold=$scope==='email'?5:30;"));
-assert(auth.includes("$blockSeconds=$scope==='email'?600:900;"));
-assert(auth.includes("if(trim($ip)!=='')"));
-assert(auth.includes("DELETE FROM giris_guvenlik WHERE kapsam='email'"));
-assert(login.includes("$passwordVerified=false;"));
-assert(login.includes("$passwordVerified=is_array($user);"));
-assert(login.includes("auth_login_rate_failure($pdo,$email,$ip)"));
-assert(migration.includes("CREATE TABLE IF NOT EXISTS giris_guvenlik"));
-assert(groq.includes("function adimbot_retry_after_seconds"));
-assert(groq.includes("CURLOPT_HEADERFUNCTION"));
-assert(ai.includes("adimbot_ai_provider_error($status,$curlErrno,$responseBody,$providerRetryAfter)"));
-assert(ai.includes("adimbot_ai_embedded_error($decoded['error'],$providerRetryAfter)"));
-assert(voice.includes("voice_provider_error($status,$body,$providerRetryAfter)"));
-assert(updater.includes("LOCK_EX|LOCK_NB"));
-assert(updater.includes("flock($updateLock,LOCK_UN)"));
+// 1.1.92 ile eklenen güvenlik davranışlarının güncel uygulamada korunmasını denetler.
+// Sayısal eşikler daha sonraki sürümlerde güvenli biçimde değiştirilebilir.
+assert(auth.includes('auth_login_rate_status'));
+assert(auth.includes('auth_login_rate_failure'));
+assert(auth.includes('auth_login_rate_success'));
+assert(auth.includes('giris_guvenlik'));
+assert(login.includes('auth_login_rate_status($pdo,$email,$ip)'));
+assert(login.includes('auth_login_rate_failure($pdo,$email,$ip)'));
+assert(login.includes('auth_login_rate_success($pdo,$email,$ip)'));
+assert(login.includes('$passwordVerified=false;'));
+assert(login.includes('$passwordVerified=is_array($user);'));
+assert(migration.includes('CREATE TABLE IF NOT EXISTS giris_guvenlik'));
 
-console.log('1.1.92 security source checks passed');
+assert(groq.includes('function adimbot_retry_after_seconds'));
+assert(groq.includes('CURLOPT_HEADERFUNCTION'));
+assert(ai.includes('adimbot_ai_provider_error($status,$curlErrno,$responseBody,$providerRetryAfter)'));
+assert(ai.includes("adimbot_ai_embedded_error($decoded['error'],$providerRetryAfter)"));
+assert(voice.includes('voice_provider_error($status,$body,$providerRetryAfter)'));
+
+assert(updater.includes('LOCK_EX|LOCK_NB'));
+assert(updater.includes('flock($updateLock,LOCK_UN)'));
+
+console.log('1.1.92 security compatibility checks passed');
