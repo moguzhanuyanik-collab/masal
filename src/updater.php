@@ -507,6 +507,11 @@ function install_github_update(string $root,array $gh,array $preserve): array {
 
     $storage=$root.'/storage';
     @mkdir($storage.'/updates',0775,true); @mkdir($storage.'/backups',0775,true);
+    $updateLock=fopen($storage.'/updates/update.lock','c');
+    if($updateLock===false || !flock($updateLock,LOCK_EX|LOCK_NB)){
+        if(is_resource($updateLock)) fclose($updateLock);
+        throw new RuntimeException('Baska bir guncelleme islemi halen devam ediyor.');
+    }
     $stamp=date('Ymd_His');
     $zipPath=$storage.'/updates/github_'.$stamp.'.zip';
     $extractDir=$storage.'/updates/extract_'.$stamp;
@@ -554,9 +559,12 @@ function install_github_update(string $root,array $gh,array $preserve): array {
         $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='basarili',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute(['Guncelleme tamamlandi. Yedek: '.$backupName,$logId]);
 
         @unlink($zipPath); delete_tree($extractDir);
+        flock($updateLock,LOCK_UN); fclose($updateLock);
         return ['updated'=>true,'message'=>'Guncelleme basariyla kuruldu.','remote'=>$remote,'local'=>$localVersion,'backup'=>$backupName,'migrations'=>$migrations];
     }catch(Throwable $e){
         try{ $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='hatali',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute([$e->getMessage(),$logId]); }catch(Throwable $ignored){}
-        @unlink($zipPath); delete_tree($extractDir); throw $e;
+        @unlink($zipPath); delete_tree($extractDir);
+        if(is_resource($updateLock)){flock($updateLock,LOCK_UN);fclose($updateLock);}
+        throw $e;
     }
 }
