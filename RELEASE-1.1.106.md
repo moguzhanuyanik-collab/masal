@@ -20,3 +20,9 @@ sağlamak ve tarihsel sürüm zincirini ara sürüm atlamadan yeniden kurmak.
 Canlı 1.1.96 updater normal repair-anchor ile kurulabiliyorsa rescue dosyasına
 gerek yoktur. Rescue yalnız eski updater checkpoint'e ulaşmadan legacy DB
 kontrolünde durduğu kurulumlar içindir.
+
+## Doğrulama
+
+Bu sürüm önce `update-197-rescue-106` aday dalında tam kalite kapısından geçirilir.
+Ayrıca Git commit geçmişi üzerinden 1.1.96 updater'ın sıradaki hedef olarak repair
+1.1.97 rev 2 commitini, 1.1.97 updater'ın ise 1.1.98'i seçtiği ayrı doğrulanır.
