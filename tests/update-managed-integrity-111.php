@@ -8,6 +8,7 @@ function check111(bool $ok,string $message): void {
 
 $root=sys_get_temp_dir().'/ilkadim-managed-integrity-'.bin2hex(random_bytes(6));
 @mkdir($root.'/storage/updates',0770,true);
+file_put_contents($root.'/version.json',json_encode(['version'=>'1.1.110','release_revision'=>4]));
 file_put_contents($root.'/stale.txt','original');
 file_put_contents($root.'/keep.txt','keep');
 

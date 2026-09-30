@@ -19,3 +19,8 @@
 - 10 yeni kategori × 50 madde.
 - Yeni maddelerin 12'si bu sürümde uygulanmış kritik kontrol; 488'i açık plan statüsünde.
 - Önceki Q001–Q500 korunur; toplam izlenebilir katalog 1000 maddedir.
+
+## Rev 2
+
+- 1.1.111 managed-integrity davranış testi yeni runtime manifest kimlik sözleşmesine uyumlu hale getirildi.
+- Test fixture artık yerel `version.json` sürüm/revision kimliğini kurarak hash baseline davranışını gerçek çalışma koşuluyla doğrular.
