@@ -28,3 +28,9 @@
 - Q1001–Q1500 katalog dosyası tarihsel 1.1.113 rev1 artefaktı olarak sabitlendi.
 - quality-index.json güncel 1.1.113 rev3 kimliğine taşındı.
 - 1.1.113 web-rescue Node testi sonraki sürümler için minimum sürüm sözleşmesine geçirildi.
+
+## Rev 4
+
+- Q001–Q1000 tarihsel kalite testi, toplam katalog büyüdüğünde yanlış negatif üretmeyecek şekilde genişletildi.
+- İlk iki katalog ve Q001–Q1000 sürekliliği zorunlu kalırken global quality-index değerlerinin büyümesine izin verildi.
+- quality-index güncel 1.1.113 rev4 kimliğine hizalandı.
