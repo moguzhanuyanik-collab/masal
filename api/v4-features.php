@@ -15,22 +15,31 @@ function v4_preference(PDO $db,int $sid): array {
  return $r ?: ['sac'=>'🟤','tisort'=>'💜','aksesuar'=>'✨','arka_plan'=>'','gece_okuma'=>0];
 }
 function v4_data(PDO $db,int $sid): array {
+ $scope=normalized_student_curriculum($db,$sid);
+ $stage=$scope['kademe_kodu'];
+ $grade=$scope['sinif_seviyesi'];
  $s=$db->prepare('SELECT odul_kodu FROM v4_odul_satin_alimlari WHERE ogrenci_id=? ORDER BY id');
  $s->execute([$sid]);
  $bought=$s->fetchAll(PDO::FETCH_COLUMN);
  $s=$db->prepare('SELECT COALESCE(SUM(yildiz_maliyeti),0) FROM v4_odul_satin_alimlari WHERE ogrenci_id=?');
  $s->execute([$sid]);
  $spent=(int)$s->fetchColumn();
- $s=$db->prepare('SELECT gun,ders_kodu,hedef,tamamlandi FROM v4_haftalik_plan WHERE ogrenci_id=? ORDER BY gun');
- $s->execute([$sid]);
+ $s=$db->prepare('SELECT p.gun,p.ders_kodu,p.hedef,p.tamamlandi
+   FROM v4_haftalik_plan p
+   INNER JOIN dersler d ON d.kod=p.ders_kodu AND d.aktif=1
+   INNER JOIN sinif_dersleri sd
+     ON sd.ders_id=d.id
+    AND sd.kademe_kodu=?
+    AND sd.sinif_seviyesi=?
+    AND sd.aktif=1
+   WHERE p.ogrenci_id=?
+   ORDER BY p.gun');
+ $s->execute([$stage,$grade,$sid]);
  $plan=$s->fetchAll(PDO::FETCH_ASSOC);
  $state=load_student_state($db,$sid);
  $stars=count($state['steps']??[])+count($state['games']??[])
    +count(array_unique(array_column($state['readings']??[],'id')))
    +2*count($state['claimed']??[]);
- $scope=normalized_student_curriculum($db,$sid);
- $stage=$scope['kademe_kodu'];
- $grade=$scope['sinif_seviyesi'];
  $complete=0;
  $s=$db->prepare("SELECT d.kod,d.ad,COUNT(DISTINCT m.id) AS toplam,
      COUNT(DISTINCT CASE WHEN oi.id IS NOT NULL AND oi.tamamlandi=1 THEN m.id END) AS tamamlanan
