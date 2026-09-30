@@ -1893,6 +1893,19 @@ function assert_historical_migration_history(PDO $pdo,string $root,string $local
     }
     if($missing!==[]){
         sort($missing,SORT_NATURAL);
+
+        // 1.1.98 bridge, eski 1.1.97 kilidini aşarken migration SQL'lerini
+        // bilinçli olarak paket dışı bırakmıştı. Bu nedenle yalnız 064
+        // checkpointinin eksik olması recovery için geçerli tek istisnadır.
+        // pending_migration_names bu kaydı "pending" görsün; böylece önce
+        // doğrulanmış DB yedeği alınır, ardından run_pending_migrations içindeki
+        // dar kapsamlı recovery 064'ü uygular. Başka tek bir eksik kayıt bile
+        // varsa yine fail-closed davranılır.
+        if($localVersion==='1.1.98'
+            && $missing===['064_adimbot_rate_limit_ve_migration_checkpoint']){
+            return;
+        }
+
         throw new RuntimeException(
             'Migration geçmişi eksik veya tutarsız. Eski migrationlar tekrar çalıştırılmadı. Eksik: '
             .implode(', ',array_slice($missing,0,8))
