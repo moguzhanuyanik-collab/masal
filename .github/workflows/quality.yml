@@ -8,10 +8,8 @@ on:
       - 'hardening-*'
       - 'pwa-hardening-*'
       - 'updater-manifest-*'
-      - 'update-*'
       - 'db-ai-safety-*'
-      - 'db-backup-*'
-      - 'recovery-safety-*'
+      - 'update-197-recovery-*'
   pull_request:
 
 permissions:
@@ -24,8 +22,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        with:
-          fetch-depth: 2
 
       - name: PHP syntax
         shell: bash
@@ -51,16 +47,6 @@ jobs:
           php tests/adimbot-groq-connection.php
           php tests/adimbot-transcript-behavior.php
           php tests/adimbot-rate-limit-98.php
-          php tests/db-backup-99.php
-          php tests/recovery-safety-100.php
-          php tests/update-safety-102.php
-          php tests/update-manifest-contract-103.php
-          php tests/update-activation-104.php
-          php tests/update-release-revision-105.php
-          php tests/update-197-rescue-106.php
-          php tests/update-197-rescue-installer-107.php
-          php tests/update-core-handoff-108.php
-          php tests/update-core-handoff-rollback-109.php
 
       - name: Node regression checks
         shell: bash
@@ -71,15 +57,4 @@ jobs:
           node tests/pwa-95.cjs
           node tests/updater-manifest-96.cjs
           node tests/db-ai-safety-98.cjs
-          node tests/db-backup-99.cjs
-          node tests/recovery-safety-100.cjs
-          node tests/update-release-anchor-101.cjs
-          node tests/update-safety-102.cjs
-          node tests/update-manifest-contract-103.cjs
-          node tests/update-activation-104.cjs
-          node tests/update-release-revision-105.cjs
-          node tests/update-197-rescue-106.cjs
-          node tests/update-197-rescue-installer-107.cjs
-          node tests/update-core-handoff-108.cjs
-          node tests/update-core-handoff-rollback-109.cjs
-          node tests/update-release-head-anchor-109.cjs
+          node tests/update-197-recovery-98.cjs

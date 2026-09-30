@@ -27,10 +27,7 @@ assert(updater.includes("path_is_preserved($relative,$preserve)"));
 assert(updater.includes("Güncelleme paketi sembolik bağlantı içeriyor"));
 assert(updater.includes("Güncelleme ZIP paketi yol kaçışı içeriyor"));
 assert(updater.includes("remove_stale_managed_files($root,$oldManagedFiles,$newManagedFiles,$preserve)"));
-assert(
-  updater.includes("write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version'])")
-  || updater.includes("write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version'],")
-);
+assert(updater.includes("write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version'])"));
 assert(updater.includes("'removed_files'=>$removedManagedFiles"));
 assert(updater.includes("'managed_files'=>count($newManagedFiles)"));
 
