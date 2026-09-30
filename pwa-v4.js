@@ -126,8 +126,11 @@
   evt.preventDefault();evt.stopImmediatePropagation();
   try{
    const pending=await store.getPending(sid);
-   if(pending.length&&!confirm(pending.length+' çevrimdışı kayıt henüz gönderilmedi. Çıkış yapılırsa bu cihazdaki bekleyen kayıtlar silinir. Yine de çıkış yapılsın mı?'))return;
-  }catch{}
+   if(pending.length&&!confirm(pending.length+' çevrimdışı kayıt henüz gönderilmedi. Kayıtlar bu cihazda korunacak ve aynı öğrenci tekrar giriş yaptığında eşitlenebilecek. Yine de çıkış yapılsın mı?'))return;
+   localStorage.removeItem('ilkadim-pwa34-active-student');
+  }catch{
+   try{localStorage.removeItem('ilkadim-pwa34-active-student');}catch{}
+  }
   location.href='logout.php';
  },true);
  let scheduled=null;const screen=q('#screen');
