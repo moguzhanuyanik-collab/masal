@@ -132,9 +132,13 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
             $message='Kullanıcı durumu güncellendi.';
         }
     } catch (PDOException $e) {
+        error_log('[IlkAdim][authorization-db] '.$e->getMessage());
         $error=$e->getCode()==='23000'?'Bu e-posta veya eşleştirme zaten kullanılıyor.':'Veritabanı işlemi tamamlanamadı.';
-    } catch (Throwable $e) {
+    } catch (RuntimeException $e) {
         $error=$e->getMessage();
+    } catch (Throwable $e) {
+        error_log('[IlkAdim][authorization] '.$e->getMessage());
+        $error='Yetkilendirme işlemi tamamlanamadı. Lütfen tekrar deneyin.';
     }
 }
 
