@@ -26,3 +26,7 @@ alınabilir biçimde rescue updater ile değiştirmek.
 
 Başarılı olduktan sonra yönetim panelindeki Güncelleme ekranından 1.1.97 tekrar
 kurulur. 1.1.97 kurulduğunda normal sürüm zinciri devam eder.
+
+## Doğrulama
+
+Sürüm önce `update-197-rescue-installer-107` aday dalında tam kalite kapısından geçirilir; yalnız başarılı sonuçtan sonra `main` dalına alınır.
