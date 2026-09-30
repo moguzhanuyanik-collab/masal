@@ -465,15 +465,21 @@ function run_migration_sql(PDO $pdo,string $path): void {
     if(trim($buffer)!=='') $pdo->exec($buffer);
 }
 
+function migration_sequence_number(string $name): int {
+    return preg_match('/^(\d{3})_/', $name, $m)===1 ? (int)$m[1] : 0;
+}
+
+function migration_sql_without_comments(string $raw): string {
+    $sql=preg_replace('/\/\*.*?\*\//s',' ',$raw) ?? $raw;
+    $sql=preg_replace('/^\s*--.*$/m',' ',$sql) ?? $sql;
+    return str_replace(chr(96),'',$sql);
+}
+
 function assert_automatic_migration_safe(string $name,string $path): void {
     $raw=file_get_contents($path);
     if(!is_string($raw)) throw new RuntimeException('Migration okunamadı: '.$name);
 
-    // Yorumları çıkar; yalnız çalıştırılabilir SQL üzerinde yüksek riskli kalıpları ara.
-    $sql=preg_replace('/\/\*.*?\*\//s',' ',$raw) ?? $raw;
-    $sql=preg_replace('/^\s*--.*$/m',' ',$sql) ?? $sql;
-    $sql=str_replace(chr(96),'',$sql);
-
+    $sql=migration_sql_without_comments($raw);
     $dangerous =
         preg_match('/\b(?:DROP|TRUNCATE)\s+TABLE\b/i',$sql)===1
         || preg_match('/\bDELETE\s+FROM\s+[A-Za-z0-9_]+\s*;/i',$sql)===1
@@ -485,6 +491,38 @@ function assert_automatic_migration_safe(string $name,string $path): void {
             .'Veri kaybını önlemek için kurulum durduruldu.'
         );
     }
+
+    // 065 ve sonrası için daha sıkı sözleşme: şema daraltan/dönüştüren ALTER
+    // otomatik zincirde çalışmaz. Veri silen migration yalnız açık marker ile,
+    // DDL içermeyen transaction-safe bir dosyada kabul edilir.
+    if(migration_sequence_number($name)>=65){
+        if(preg_match('/\bRENAME\s+TABLE\b/i',$sql)===1
+            || preg_match('/\bALTER\s+TABLE\b[^;]*\b(?:DROP|MODIFY|CHANGE|RENAME)\b/is',$sql)===1){
+            throw new RuntimeException(
+                'Migration '.$name.' otomatik güncellemede şema daraltma/dönüştürme içeriyor.'
+            );
+        }
+
+        $hasDelete=preg_match('/\bDELETE\s+(?:[A-Za-z0-9_]+\s+FROM|FROM)\b/i',$sql)===1;
+        if($hasDelete){
+            $allowDelete=str_contains($raw,'ILKADIM_ALLOW_TRANSACTIONAL_DELETE');
+            $hasDdl=preg_match('/\b(?:CREATE|ALTER|DROP|TRUNCATE|RENAME)\s+TABLE\b/i',$sql)===1;
+            if(!$allowDelete || $hasDdl){
+                throw new RuntimeException(
+                    'Migration '.$name.' veri silme içeriyor; transaction marker ve DDL ayrımı gerekli.'
+                );
+            }
+        }
+    }
+}
+
+function migration_should_run_transactionally(string $name,string $path): bool {
+    if(migration_sequence_number($name)<65) return false;
+    $raw=file_get_contents($path);
+    if(!is_string($raw)) return false;
+    $sql=migration_sql_without_comments($raw);
+    if(preg_match('/\b(?:CREATE|ALTER|DROP|TRUNCATE|RENAME)\s+TABLE\b/i',$sql)===1) return false;
+    return preg_match('/\b(?:INSERT|UPDATE|DELETE)\b/i',$sql)===1;
 }
 
 function ensure_updater_schema(PDO $pdo): void {
@@ -723,7 +761,40 @@ function retired_automatic_migrations(): array {
     ];
 }
 
-function run_pending_migrations(PDO $pdo,string $root): array {
+function assert_historical_migration_history(PDO $pdo,string $root,string $localVersion): void {
+    if(version_compare($localVersion,'1.1.98','<')) return;
+
+    $retired=retired_automatic_migrations();
+    $expected=[];
+    foreach(glob($root.'/database/migrations/*.sql')?:[] as $file){
+        $name=basename($file,'.sql');
+        $number=migration_sequence_number($name);
+        if($number<1 || $number>64 || isset($retired[$name])) continue;
+        $expected[$name]=true;
+    }
+    if($expected===[]) return;
+
+    $applied=[];
+    foreach($pdo->query('SELECT migration FROM sistem_migrations')?:[] as $row){
+        if(isset($row['migration'])) $applied[(string)$row['migration']]=true;
+    }
+
+    $missing=[];
+    foreach(array_keys($expected) as $name){
+        if(!isset($applied[$name])) $missing[]=$name;
+    }
+    if($missing!==[]){
+        sort($missing,SORT_NATURAL);
+        throw new RuntimeException(
+            'Migration geçmişi eksik veya tutarsız. Eski migrationlar tekrar çalıştırılmadı. Eksik: '
+            .implode(', ',array_slice($missing,0,8))
+            .(count($missing)>8?' ...':'')
+        );
+    }
+}
+
+function run_pending_migrations(PDO $pdo,string $root,string $localVersion='0.0.0'): array {
+    assert_historical_migration_history($pdo,$root,$localVersion);
     repair_legacy_institution_membership_schema($pdo);
     $retired=retired_automatic_migrations();
     $applied=[]; $files=glob($root.'/database/migrations/*.sql')?:[]; sort($files,SORT_NATURAL);
@@ -740,11 +811,29 @@ function run_pending_migrations(PDO $pdo,string $root): array {
 
         if($name==='004_ogrenci_giris_sistemi'){
             ensure_student_auth_schema($pdo);
+            $insert->execute([$name]);
         }else{
             assert_automatic_migration_safe($name,$file);
-            run_migration_sql($pdo,$file);
+            if(migration_should_run_transactionally($name,$file)){
+                $started=false;
+                try{
+                    if(!$pdo->inTransaction()){
+                        $pdo->beginTransaction();
+                        $started=true;
+                    }
+                    run_migration_sql($pdo,$file);
+                    $insert->execute([$name]);
+                    if($started)$pdo->commit();
+                }catch(Throwable $e){
+                    if($started && $pdo->inTransaction())$pdo->rollBack();
+                    throw $e;
+                }
+            }else{
+                run_migration_sql($pdo,$file);
+                $insert->execute([$name]);
+            }
         }
-        $insert->execute([$name]); $applied[]=$name;
+        $applied[]=$name;
     }
     return $applied;
 }
@@ -870,7 +959,7 @@ function install_github_update(string $root,array $gh,array $preserve): array {
         // Migration'lar önce staging paketinden uygulanır.
         // DB dönüşümü başarısızsa yeni uygulama dosyaları canlıya kopyalanmaz.
         if(!auth_table_exists($pdo,'ogrenciler')) ensure_student_auth_schema($pdo);
-        $migrations=run_pending_migrations($pdo,$sourceRoot);
+        $migrations=run_pending_migrations($pdo,$sourceRoot,$localVersion);
 
         // Şema başarıyla hazırlandıktan sonra yeni uygulama dosyalarını etkinleştir.
         copy_update_tree($sourceRoot,$root,$preserve);
