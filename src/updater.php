@@ -380,23 +380,44 @@ function prepare_updater_core_handoff(
         throw new RuntimeException('Updater çekirdeği yedeği bütünlük doğrulamasından geçemedi.');
     }
 
-    atomic_replace_update_file($source,$target,$relative);
-    $activatedHash=update_file_sha256($target,'Etkin updater çekirdeği');
-    if(!hash_equals($sourceHash,$activatedHash)){
-        @copy($backupPath,$target);
-        throw new RuntimeException('Updater çekirdeği etkinleştirme sonrası bütünlük doğrulamasından geçemedi.');
-    }
+    $activated=false;
+    try{
+        atomic_replace_update_file($source,$target,$relative);
+        $activated=true;
+        $activatedHash=update_file_sha256($target,'Etkin updater çekirdeği');
+        if(!hash_equals($sourceHash,$activatedHash)){
+            throw new RuntimeException('Updater çekirdeği etkinleştirme sonrası bütünlük doğrulamasından geçemedi.');
+        }
 
-    $state=[
-        'target_version'=>$targetVersion,
-        'target_commit'=>$targetCommit,
-        'application_backup'=>basename($applicationBackup),
-        'updater_backup'=>$backupName,
-        'old_sha256'=>$targetHash,
-        'new_sha256'=>$sourceHash,
-    ];
-    write_updater_core_handoff_marker($root,$state);
-    return $state;
+        $state=[
+            'target_version'=>$targetVersion,
+            'target_commit'=>$targetCommit,
+            'application_backup'=>basename($applicationBackup),
+            'updater_backup'=>$backupName,
+            'old_sha256'=>$targetHash,
+            'new_sha256'=>$sourceHash,
+        ];
+        write_updater_core_handoff_marker($root,$state);
+        return $state;
+    }catch(Throwable $handoffError){
+        if($activated){
+            try{
+                atomic_replace_update_file($backupPath,$target,$relative);
+                $rolledBackHash=update_file_sha256($target,'Geri yüklenen updater çekirdeği');
+                if(!hash_equals($targetHash,$rolledBackHash)){
+                    throw new RuntimeException('Updater çekirdeği rollback bütünlük doğrulamasından geçemedi.');
+                }
+                clear_updater_core_handoff_marker($root);
+            }catch(Throwable $rollbackError){
+                throw new RuntimeException(
+                    'Updater çekirdeği handoff başarısız oldu ve otomatik rollback tamamlanamadı.',
+                    0,
+                    $handoffError
+                );
+            }
+        }
+        throw $handoffError;
+    }
 }
 
 function copy_update_tree(string $source,string $destination,array $preserve,string $relative=''): void {
@@ -1775,10 +1796,19 @@ function install_github_update(
             $recoveryState['status']='retry_required';
             $recoveryState['stage']=$updateStage;
             $recoveryState['updater_core_handoff']=$coreHandoff;
-            $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+            try{
+                $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+            }catch(Throwable $handoffRecoveryError){
+                error_log('[IlkAdim][updater-core-handoff-recovery] '.$handoffRecoveryError->getMessage());
+                $recoveryManifestName='';
+            }
             $handoffMessage='Updater çekirdeği güvenli biçimde yenilendi; kurulum yeni çekirdekle yeniden başlatılacak.';
-            $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='yeniden_dene',mesaj=?,bitis_tarihi=NOW() WHERE id=?")
-                ->execute([$handoffMessage,$logId]);
+            try{
+                $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='yeniden_dene',mesaj=?,bitis_tarihi=NOW() WHERE id=?")
+                    ->execute([$handoffMessage,$logId]);
+            }catch(Throwable $handoffHistoryError){
+                error_log('[IlkAdim][updater-core-handoff-history] '.$handoffHistoryError->getMessage());
+            }
             @unlink($zipPath);
             delete_tree($extractDir);
             flock($updateLock,LOCK_UN);
