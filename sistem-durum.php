@@ -44,6 +44,10 @@ $aiKey=match ($aiProvider) {
 };
 $aiOk=$aiEnabled && in_array($aiProvider,['openai','groq','gemini'],true) && $aiModel!=='' && $aiKey!=='';
 $managedManifestReady=is_file(__DIR__.'/storage/updates/managed-files.json') || is_file(__DIR__.'/update-managed-files.json');
+$recoveryPath=__DIR__.'/storage/backups/recovery.json';
+$recoveryData=is_file($recoveryPath)?json_decode((string)file_get_contents($recoveryPath),true):null;
+$recoveryStatus=is_array($recoveryData)?trim((string)($recoveryData['status']??'')):'';
+$recoveryReady=$recoveryStatus!=='';
 
 $checks=[
     ['name'=>'Veritabanı','detail'=>'MySQL bağlantısı ve basit sorgu','status'=>sd_status($databaseOk,'Hazır','Bağlantı kurulamadı')],
@@ -61,6 +65,7 @@ $checks=[
     ['name'=>'Temiz kurulum şeması','detail'=>'database/schema.sql','status'=>sd_file_status(__DIR__.'/database/schema.sql','Hazır','GitHub/kurulum kaynağı eksik')],
     ['name'=>'Temiz kurulum başlangıç verisi','detail'=>'database/seed.sql','status'=>sd_file_status(__DIR__.'/database/seed.sql','Hazır','GitHub/kurulum kaynağı eksik')],
     ['name'=>'Yönetilen dosya manifesti','detail'=>'Updater yalnız kendi yönettiği eski dosyaları güvenle temizler','status'=>sd_status($managedManifestReady,'Baseline hazır','Manifest bulunamadı')],
+    ['name'=>'Recovery manifest','detail'=>$recoveryReady?'Son durum: '.$recoveryStatus:'Henüz recovery manifest oluşmadı','status'=>sd_status($recoveryReady,'Hazır','Henüz yok')],
     ['name'=>'AdımBot','detail'=>$aiProvider!=='' && $aiModel!==''?$aiProvider.' · '.$aiModel:'Sağlayıcı veya model seçilmedi','status'=>sd_status($aiOk,'Yapılandırıldı',$aiEnabled?'Eksik yapılandırma':'Kapalı')],
 ];
 $readyCount=count(array_filter($checks,static fn(array $check):bool=>(bool)$check['status']['ok']));
