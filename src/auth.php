@@ -73,6 +73,94 @@ if (!function_exists('auth_runtime_column_exists')) {
     }
 }
 
+if (!function_exists('auth_login_rate_status')) {
+    function auth_login_rate_status(PDO $pdo, string $email, string $ip): array {
+        if (!auth_runtime_table_exists($pdo,'giris_guvenlik')) return ['blocked'=>false,'retry_after'=>0];
+        $scopes=[
+            ['email',hash('sha256',mb_strtolower(trim($email),'UTF-8'))],
+            ['ip',hash('sha256',trim($ip))],
+        ];
+        $retryAfter=0;
+        try {
+            $stmt=$pdo->prepare("SELECT UNIX_TIMESTAMP(engel_bitis) engel_bitis
+                FROM giris_guvenlik
+                WHERE kapsam=? AND kapsam_hash=?
+                LIMIT 1");
+            $now=(int)($pdo->query('SELECT UNIX_TIMESTAMP(NOW())')->fetchColumn()?:time());
+            foreach($scopes as [$scope,$hash]){
+                $stmt->execute([$scope,$hash]);
+                $until=(int)($stmt->fetchColumn()?:0);
+                $stmt->closeCursor();
+                if($until>$now) $retryAfter=max($retryAfter,$until-$now);
+            }
+        } catch (Throwable) {
+            return ['blocked'=>false,'retry_after'=>0];
+        }
+        return ['blocked'=>$retryAfter>0,'retry_after'=>min(3600,$retryAfter)];
+    }
+}
+
+if (!function_exists('auth_login_rate_failure')) {
+    function auth_login_rate_failure(PDO $pdo, string $email, string $ip): void {
+        if (!auth_runtime_table_exists($pdo,'giris_guvenlik')) return;
+        $scopes=[
+            ['email',hash('sha256',mb_strtolower(trim($email),'UTF-8'))],
+            ['ip',hash('sha256',trim($ip))],
+        ];
+        $started=false;
+        try {
+            if(!$pdo->inTransaction()){$pdo->beginTransaction();$started=true;}
+            $now=(int)($pdo->query('SELECT UNIX_TIMESTAMP(NOW())')->fetchColumn()?:time());
+            $select=$pdo->prepare("SELECT deneme_sayisi,UNIX_TIMESTAMP(pencere_baslangici) pencere_baslangici
+                FROM giris_guvenlik WHERE kapsam=? AND kapsam_hash=? LIMIT 1 FOR UPDATE");
+            $insert=$pdo->prepare("INSERT INTO giris_guvenlik
+                (kapsam,kapsam_hash,deneme_sayisi,pencere_baslangici,engel_bitis,son_deneme)
+                VALUES (?,?,?,FROM_UNIXTIME(?),?,FROM_UNIXTIME(?))");
+            $update=$pdo->prepare("UPDATE giris_guvenlik
+                SET deneme_sayisi=?,pencere_baslangici=FROM_UNIXTIME(?),
+                    engel_bitis=?,son_deneme=FROM_UNIXTIME(?)
+                WHERE kapsam=? AND kapsam_hash=?");
+            foreach($scopes as [$scope,$hash]){
+                $select->execute([$scope,$hash]);
+                $row=$select->fetch(PDO::FETCH_ASSOC);
+                $select->closeCursor();
+                $count=1;
+                $windowStart=$now;
+                if(is_array($row)){
+                    $oldStart=(int)($row['pencere_baslangici']??0);
+                    if($oldStart>0 && $oldStart>=$now-900){
+                        $count=max(0,(int)($row['deneme_sayisi']??0))+1;
+                        $windowStart=$oldStart;
+                    }
+                }
+                $blockUntil=$count>=5 ? $now+600 : 0;
+                $blockValue=$blockUntil>0 ? date('Y-m-d H:i:s',$blockUntil) : null;
+                if(is_array($row)){
+                    $update->execute([$count,$windowStart,$blockValue,$now,$scope,$hash]);
+                }else{
+                    $insert->execute([$scope,$hash,$count,$windowStart,$blockValue,$now]);
+                }
+            }
+            if($started)$pdo->commit();
+        } catch (Throwable) {
+            if($started && $pdo->inTransaction())$pdo->rollBack();
+        }
+    }
+}
+
+if (!function_exists('auth_login_rate_success')) {
+    function auth_login_rate_success(PDO $pdo, string $email, string $ip): void {
+        if (!auth_runtime_table_exists($pdo,'giris_guvenlik')) return;
+        try {
+            $stmt=$pdo->prepare("DELETE FROM giris_guvenlik WHERE (kapsam='email' AND kapsam_hash=?) OR (kapsam='ip' AND kapsam_hash=?)");
+            $stmt->execute([
+                hash('sha256',mb_strtolower(trim($email),'UTF-8')),
+                hash('sha256',trim($ip))
+            ]);
+        } catch (Throwable) {}
+    }
+}
+
 if (!function_exists('auth_user_id_by_email')) {
     function auth_user_id_by_email(PDO $pdo, string $email): ?int {
         $email=mb_strtolower(trim($email));
