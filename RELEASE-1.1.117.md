@@ -20,3 +20,7 @@ Kurum eşleştirme modülünü mevcut tenant izolasyonunu bozmadan daha görün�
 
 - Regression testi, modülün diğer sorgularındaki kurum üyeliği JOIN'leri ile eşleştirme temizleme sorgularını birbirinden ayıracak şekilde sıkılaştırıldı.
 - Sürüm kimliği 1.1.117 rev 2 olarak yeniden ankrajlandı.
+
+## Rev 3 — release contract assertion fix
+
+- Regression testindeki release revision beklentisi 1.1.117 rev 3 ile eşitlendi.
