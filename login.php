@@ -27,9 +27,18 @@ try {
         $email=mb_strtolower(trim((string)($_POST['email']??'')));
         $password=(string)($_POST['password']??'');
         $remember=isset($_POST['remember']);
+        $ip=mb_substr((string)($_SERVER['REMOTE_ADDR']??''),0,45);
 
         if (!filter_var($email,FILTER_VALIDATE_EMAIL) || $password==='') {
             throw new RuntimeException('E-posta ve şifreyi kontrol edin.');
+        }
+
+        $rate=auth_login_rate_status($pdo,$email,$ip);
+        if(($rate['blocked']??false)===true){
+            $retryAfter=max(1,(int)($rate['retry_after']??600));
+            http_response_code(429);
+            header('Retry-After: '.$retryAfter);
+            throw new RuntimeException('Çok fazla başarısız giriş denemesi yapıldı. Birkaç dakika sonra tekrar deneyin.');
         }
 
         $user=null;
@@ -53,15 +62,23 @@ try {
         }
 
         if (!is_array($user) || empty($user['sifre_hash']) || !password_verify($password,(string)$user['sifre_hash'])) {
+            auth_login_rate_failure($pdo,$email,$ip);
+            $rate=auth_login_rate_status($pdo,$email,$ip);
             usleep(300000);
+            if(($rate['blocked']??false)===true){
+                $retryAfter=max(1,(int)($rate['retry_after']??600));
+                http_response_code(429);
+                header('Retry-After: '.$retryAfter);
+                throw new RuntimeException('Çok fazla başarısız giriş denemesi yapıldı. Birkaç dakika sonra tekrar deneyin.');
+            }
             throw new RuntimeException('E-posta veya şifre hatalı.');
         }
 
+        auth_login_rate_success($pdo,$email,$ip);
         $userId=(int)$user['id'];
         $sessionUser=auth_set_user_session($pdo,$userId,true);
         if (!$sessionUser) throw new RuntimeException('Kullanıcı oturumu açılamadı.');
 
-        $ip=mb_substr((string)($_SERVER['REMOTE_ADDR']??''),0,45);
         $pdo->prepare('UPDATE kullanicilar SET son_giris_tarihi=NOW(),son_giris_ip=? WHERE id=?')
             ->execute([$ip!==''?$ip:null,$userId]);
 
