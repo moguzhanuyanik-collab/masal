@@ -63,7 +63,7 @@ assert(updater.includes('ILKADIM_ALLOW_TRANSACTIONAL_DELETE'));
 assert(updater.includes('migration_should_run_transactionally'));
 
 assert(workflow.includes('tests/adimbot-rate-limit-98.php'));
-assert(workflow.includes('tests/adimbot-microphone-flow.cjs'));
+assert(workflow.includes('for file in tests/adimbot-*.cjs'));
 assert(workflow.includes('tests/adimbot-transcript-behavior.php'));
 
 assert.strictEqual(version.version,'1.1.98');
