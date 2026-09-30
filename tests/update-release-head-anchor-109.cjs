@@ -5,7 +5,11 @@ const cp=require('child_process');
 const assert=require('assert');
 
 const branch=String(process.env.GITHUB_REF_NAME||'');
-const protectedReleaseBranch=branch==='main' || branch.startsWith('update-');
+const eventName=String(process.env.GITHUB_EVENT_NAME||'');
+const protectedReleaseBranch=eventName==='push' && (
+  branch==='main'
+  || /^(?:update|recovery-safety|migration-safety|hardening|pwa-hardening|updater-manifest|db-ai-safety|db-backup)-/.test(branch)
+);
 
 const version=JSON.parse(fs.readFileSync('version.json','utf8'));
 const anchor=JSON.parse(fs.readFileSync('update-release.json','utf8'));

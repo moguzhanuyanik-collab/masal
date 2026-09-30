@@ -20,3 +20,9 @@
 - 1.1.98'e özel `001_197_history_recovery.sql` yalnız tarihsel 1.1.98 anchor paketinde tutuldu.
 - Güncel 1.1.110 paketinden bu tarihsel migration çıkarıldı; böylece 1..63 historical migration sayacı yeniden 53 kayıt sözleşmesiyle uyumlu.
 - 1.1.98 rescue updater hedef 1.1.98 commit paketindeki recovery dosyasını kullanmaya devam eder.
+
+## Rev 4
+
+- 1.1.109 rollback regresyon testi sonraki sürümleri kabul edecek şekilde geleceğe uyumlu hale getirildi.
+- 1.1.110 rescue regresyon testi de aynı nedenle minimum sürüm sözleşmesine geçirildi.
+- Release HEAD invariant kontrolü `recovery-safety-*` dahil Quality Gate'in release amaçlı push branchlerinde çalışacak şekilde genişletildi.
