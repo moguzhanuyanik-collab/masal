@@ -23,7 +23,7 @@ jobs:
     timeout-minutes: 15
     services:
       mariadb:
-        image: mariadb:11.4
+        image: mariadb:11.4.12
         env:
           MARIADB_ROOT_PASSWORD: root
           MARIADB_DATABASE: ilkadim_ci
@@ -34,6 +34,8 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 20
+          --health-start-period 10s
+
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -43,13 +45,21 @@ jobs:
       - name: PHP MySQL extension
         shell: bash
         run: |
-          if ! php -m | grep -qi '^pdo_mysql
-        run: |
           if ! command -v php >/dev/null 2>&1; then
             echo "PHP CLI is not available on this runner."
             exit 1
           fi
-          find . -type f -name '*.php' -not -path './vendor/*' -print0             | xargs -0 -n1 php -l
+          if ! php -m | grep -qi '^pdo_mysql$'; then
+            sudo apt-get update
+            sudo apt-get install -y php-mysql
+          fi
+          php -m | grep -qi '^pdo_mysql$'
+
+      - name: PHP syntax
+        shell: bash
+        run: |
+          find . -type f -name '*.php' -not -path './vendor/*' -print0 \
+            | xargs -0 -n1 php -l
 
       - name: JavaScript syntax
         shell: bash
@@ -123,146 +133,3 @@ jobs:
           node tests/web-rescue-197-198-113.cjs
           node tests/tenant-isolation-114.cjs
           node tests/tenant-relation-schema-115.cjs
-; then
-            sudo apt-get update
-            sudo apt-get install -y php-mysql
-          fi
-          php -m | grep -qi '^pdo_mysql
-        run: |
-          if ! command -v php >/dev/null 2>&1; then
-            echo "PHP CLI is not available on this runner."
-            exit 1
-          fi
-          find . -type f -name '*.php' -not -path './vendor/*' -print0             | xargs -0 -n1 php -l
-
-      - name: JavaScript syntax
-        shell: bash
-        run: |
-          find . -type f \( -name '*.js' -o -name '*.cjs' \) -not -path './node_modules/*' -print0 \
-            | xargs -0 -n1 node --check
-
-      - name: AdımBot regression checks
-        shell: bash
-        run: |
-          for file in tests/adimbot-*.cjs; do
-            node "$file"
-          done
-          php tests/adimbot-groq-connection.php
-          php tests/adimbot-transcript-behavior.php
-          php tests/adimbot-rate-limit-98.php
-          php tests/db-backup-99.php
-          php tests/recovery-safety-100.php
-          php tests/update-safety-102.php
-          php tests/update-manifest-contract-103.php
-          php tests/update-activation-104.php
-          php tests/update-release-revision-105.php
-          php tests/update-197-rescue-106.php
-          php tests/update-197-rescue-installer-107.php
-          php tests/update-core-handoff-108.php
-          php tests/update-core-handoff-rollback-109.php
-          php tests/update-198-rescue-110.php
-          php tests/update-managed-integrity-111.php
-          php tests/update-continuity-112.php
-          php tests/web-rescue-197-198-113.php
-
-      - name: Node regression checks
-        shell: bash
-        run: |
-          node tests/security-92.cjs
-          node tests/migration-safety-93.cjs
-          node tests/hardening-94.cjs
-          node tests/pwa-95.cjs
-          node tests/updater-manifest-96.cjs
-          node tests/db-ai-safety-98.cjs
-          node tests/db-backup-99.cjs
-          node tests/recovery-safety-100.cjs
-          node tests/update-release-anchor-101.cjs
-          node tests/update-safety-102.cjs
-          node tests/update-manifest-contract-103.cjs
-          node tests/update-activation-104.cjs
-          node tests/update-release-revision-105.cjs
-          node tests/update-197-rescue-106.cjs
-          node tests/update-197-rescue-installer-107.cjs
-          node tests/update-core-handoff-108.cjs
-          node tests/update-core-handoff-rollback-109.cjs
-          node tests/update-release-head-anchor-109.cjs
-          node tests/update-198-rescue-110.cjs
-          node tests/update-managed-integrity-111.cjs
-          node tests/update-quality-catalog-111.cjs
-          node tests/update-continuity-112.cjs
-          node tests/update-quality-catalog-112.cjs
-          node tests/update-legacy-bridge-113.cjs
-          node tests/update-quality-catalog-113.cjs
-          node tests/web-rescue-197-198-113.cjs
-          node tests/tenant-isolation-114.cjs
-
-
-      - name: PHP syntax
-        shell: bash
-        run: |
-          if ! command -v php >/dev/null 2>&1; then
-            echo "PHP CLI is not available on this runner."
-            exit 1
-          fi
-          find . -type f -name '*.php' -not -path './vendor/*' -print0             | xargs -0 -n1 php -l
-
-      - name: JavaScript syntax
-        shell: bash
-        run: |
-          find . -type f \( -name '*.js' -o -name '*.cjs' \) -not -path './node_modules/*' -print0 \
-            | xargs -0 -n1 node --check
-
-      - name: AdımBot regression checks
-        shell: bash
-        run: |
-          for file in tests/adimbot-*.cjs; do
-            node "$file"
-          done
-          php tests/adimbot-groq-connection.php
-          php tests/adimbot-transcript-behavior.php
-          php tests/adimbot-rate-limit-98.php
-          php tests/db-backup-99.php
-          php tests/recovery-safety-100.php
-          php tests/update-safety-102.php
-          php tests/update-manifest-contract-103.php
-          php tests/update-activation-104.php
-          php tests/update-release-revision-105.php
-          php tests/update-197-rescue-106.php
-          php tests/update-197-rescue-installer-107.php
-          php tests/update-core-handoff-108.php
-          php tests/update-core-handoff-rollback-109.php
-          php tests/update-198-rescue-110.php
-          php tests/update-managed-integrity-111.php
-          php tests/update-continuity-112.php
-          php tests/web-rescue-197-198-113.php
-
-      - name: Node regression checks
-        shell: bash
-        run: |
-          node tests/security-92.cjs
-          node tests/migration-safety-93.cjs
-          node tests/hardening-94.cjs
-          node tests/pwa-95.cjs
-          node tests/updater-manifest-96.cjs
-          node tests/db-ai-safety-98.cjs
-          node tests/db-backup-99.cjs
-          node tests/recovery-safety-100.cjs
-          node tests/update-release-anchor-101.cjs
-          node tests/update-safety-102.cjs
-          node tests/update-manifest-contract-103.cjs
-          node tests/update-activation-104.cjs
-          node tests/update-release-revision-105.cjs
-          node tests/update-197-rescue-106.cjs
-          node tests/update-197-rescue-installer-107.cjs
-          node tests/update-core-handoff-108.cjs
-          node tests/update-core-handoff-rollback-109.cjs
-          node tests/update-release-head-anchor-109.cjs
-          node tests/update-198-rescue-110.cjs
-          node tests/update-managed-integrity-111.cjs
-          node tests/update-quality-catalog-111.cjs
-          node tests/update-continuity-112.cjs
-          node tests/update-quality-catalog-112.cjs
-          node tests/update-legacy-bridge-113.cjs
-          node tests/update-quality-catalog-113.cjs
-          node tests/web-rescue-197-198-113.cjs
-          node tests/tenant-isolation-114.cjs
