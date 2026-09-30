@@ -35,3 +35,5 @@ Yeni migration yoktur. Kullanıcı, kurum, öğrenci veya içerik verileri deği
 ## Doğrulama
 
 Sürüm önce `update-release-revision-105` aday dalında tam kalite kapısından geçirilir; yalnız yeşil sonuçtan sonra aynı doğrulanmış commit `main` dalına fast-forward edilir.
+
+İlk aday CI turunda yeni PHP revision davranış testi geçti. Kalan hata 1.1.96 kaynak regresyonunun `write_managed_update_manifest` çağrısını yalnız eski 3 parametreli biçimde aramasıydı; test hem legacy çağrıyı hem revision taşıyan yeni çağrıyı kabul edecek şekilde güncellendi.
