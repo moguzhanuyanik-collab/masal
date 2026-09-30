@@ -30,3 +30,8 @@ Kurum eşleştirme modülünü mevcut tenant izolasyonunu bozmadan daha görün�
 - 1.1.116 şema guard testi artık sürüm numarasını tek bir release'e kilitlemek yerine 1.1.116 ve üzerini doğruluyor.
 - Böylece yeni güvenlik/regression release'lerinde eski guard testi gereksiz yere başarısız olmuyor.
 - Sürüm kimliği 1.1.117 rev 4 olarak ankrajlandı.
+
+## Rev 5 — regression revision decoupling
+
+- 1.1.117 regression testi artık sabit bir release revision numarasına kilitli değil; metadata içindeki revision eşleşmesini doğruluyor.
+- Sürüm kimliği 1.1.117 rev 5 olarak ankrajlandı.
