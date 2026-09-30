@@ -14,3 +14,9 @@
 
 - `database/migrations/001_197_history_recovery.sql` final managed-file manifestine eklendi.
 - Paket ağacı ile manifest birebir eşleştirildi.
+
+## Rev 3
+
+- 1.1.98'e özel `001_197_history_recovery.sql` yalnız tarihsel 1.1.98 anchor paketinde tutuldu.
+- Güncel 1.1.110 paketinden bu tarihsel migration çıkarıldı; böylece 1..63 historical migration sayacı yeniden 53 kayıt sözleşmesiyle uyumlu.
+- 1.1.98 rescue updater hedef 1.1.98 commit paketindeki recovery dosyasını kullanmaya devam eder.
