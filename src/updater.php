@@ -98,7 +98,7 @@ function next_remote_version_info(array $gh,string $localVersion): array {
     while($page<=$maxPages){
         $url='https://api.github.com/repos/'.rawurlencode($owner).'/'.rawurlencode($repo)
             .'/commits?sha='.rawurlencode($branch)
-            .'&path=version.json&per_page=100&page='.$page
+            .'&path='.rawurlencode(version_compare($localVersion,'1.1.101','>=')?'update-release.json':'version.json').'&per_page=100&page='.$page
             .'&cb='.(string)round(microtime(true)*1000);
 
         $rows=json_decode((string)updater_http($url,$gh),true);
