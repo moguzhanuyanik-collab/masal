@@ -180,6 +180,141 @@ function copy_update_tree(string $source,string $destination,array $preserve,str
     }
 }
 
+function managed_relative_path(string $relative): string {
+    $relative=ltrim(str_replace('\\','/',$relative),'/');
+    if($relative==='' || str_contains($relative,"\0")) throw new RuntimeException('Geçersiz yönetilen dosya yolu.');
+    $parts=explode('/',$relative);
+    foreach($parts as $part){
+        if($part===''||$part==='.'||$part==='..') throw new RuntimeException('Geçersiz yönetilen dosya yolu: '.$relative);
+    }
+    if($parts[0]==='.git') throw new RuntimeException('Git metadata yönetilen dosya olamaz.');
+    return implode('/',$parts);
+}
+
+function collect_managed_update_files(string $source,array $preserve,string $relative=''): array {
+    $files=[];
+    foreach(scandir($source)?:[] as $item){
+        if($item==='.'||$item==='..'||$item==='.git') continue;
+        $rel=ltrim($relative.'/'.$item,'/');
+        if(path_is_preserved($rel,$preserve)) continue;
+        $src=$source.'/'.$item;
+        if(is_dir($src) && !is_link($src)){
+            foreach(collect_managed_update_files($src,$preserve,$rel) as $nested) $files[]=$nested;
+            continue;
+        }
+        if(is_file($src) || is_link($src)) $files[]=managed_relative_path($rel);
+    }
+    sort($files,SORT_STRING);
+    return array_values(array_unique($files));
+}
+
+function managed_manifest_path(string $root): string {
+    return rtrim($root,'/\\').'/storage/updates/managed-files.json';
+}
+
+function read_managed_update_manifest(string $root): array {
+    $path=managed_manifest_path($root);
+    if(!is_file($path)) return [];
+    $decoded=json_decode((string)file_get_contents($path),true);
+    if(!is_array($decoded) || !is_array($decoded['files']??null)) return [];
+
+    $files=[];
+    foreach($decoded['files'] as $relative){
+        if(!is_string($relative)) continue;
+        try{$files[]=managed_relative_path($relative);}catch(Throwable){}
+    }
+    sort($files,SORT_STRING);
+    return array_values(array_unique($files));
+}
+
+function write_managed_update_manifest(string $root,array $files,string $version): void {
+    $path=managed_manifest_path($root);
+    $dir=dirname($path);
+    if(!is_dir($dir)&&!mkdir($dir,0750,true)&&!is_dir($dir)){
+        throw new RuntimeException('Yönetilen dosya manifest klasörü oluşturulamadı.');
+    }
+
+    $normalized=[];
+    foreach($files as $relative) $normalized[]=managed_relative_path((string)$relative);
+    sort($normalized,SORT_STRING);
+    $normalized=array_values(array_unique($normalized));
+
+    $json=json_encode([
+        'format'=>1,
+        'version'=>$version,
+        'written_at'=>date(DATE_ATOM),
+        'files'=>$normalized,
+    ],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
+    if(!is_string($json)) throw new RuntimeException('Yönetilen dosya manifesti kodlanamadı.');
+
+    $tmp=$path.'.tmp';
+    @unlink($tmp);
+    if(file_put_contents($tmp,$json."\n",LOCK_EX)===false){
+        throw new RuntimeException('Yönetilen dosya manifesti yazılamadı.');
+    }
+    @chmod($tmp,0600);
+    if(!@rename($tmp,$path)){
+        @unlink($tmp);
+        throw new RuntimeException('Yönetilen dosya manifesti etkinleştirilemedi.');
+    }
+    @chmod($path,0600);
+}
+
+function assert_managed_target_safe(string $root,string $relative): string {
+    $relative=managed_relative_path($relative);
+    $root=rtrim($root,'/\\');
+    $current=$root;
+    $parts=explode('/',$relative);
+    $last=array_pop($parts);
+    foreach($parts as $part){
+        $current.='/'.$part;
+        if(is_link($current)){
+            throw new RuntimeException('Yönetilen dosya yolu sembolik bağlantı içeriyor: '.$relative);
+        }
+    }
+    return $root.'/'.$relative;
+}
+
+function cleanup_empty_managed_parents(string $root,string $relative,array $preserve): void {
+    $root=rtrim($root,'/\\');
+    $dir=dirname($relative);
+    while($dir!=='.' && $dir!=='/' && $dir!==''){
+        $dir=managed_relative_path($dir);
+        if(path_is_preserved($dir,$preserve)) break;
+        $path=assert_managed_target_safe($root,$dir);
+        if(!is_dir($path) || is_link($path)) break;
+        $items=array_values(array_diff(scandir($path)?:[],['.','..']));
+        if($items!==[]) break;
+        if(!@rmdir($path)) break;
+        $parent=dirname($dir);
+        if($parent===$dir) break;
+        $dir=$parent;
+    }
+}
+
+function remove_stale_managed_files(string $root,array $oldFiles,array $newFiles,array $preserve): array {
+    if($oldFiles===[]) return [];
+    $newLookup=array_fill_keys($newFiles,true);
+    $removed=[];
+    foreach($oldFiles as $relative){
+        $relative=managed_relative_path((string)$relative);
+        if(isset($newLookup[$relative]) || path_is_preserved($relative,$preserve)) continue;
+
+        $target=assert_managed_target_safe($root,$relative);
+        if(!file_exists($target) && !is_link($target)) continue;
+        if(is_dir($target) && !is_link($target)){
+            throw new RuntimeException('Eski yönetilen yol dosya yerine klasör oldu; otomatik silme durduruldu: '.$relative);
+        }
+        if(!@unlink($target)){
+            throw new RuntimeException('Eski yönetilen dosya kaldırılamadı: '.$relative);
+        }
+        $removed[]=$relative;
+        cleanup_empty_managed_parents($root,$relative,$preserve);
+    }
+    sort($removed,SORT_STRING);
+    return $removed;
+}
+
 function delete_tree(string $path): void {
     if(!file_exists($path)) return;
     if(is_file($path)||is_link($path)){ @unlink($path); return; }
@@ -634,6 +769,11 @@ function install_github_update(string $root,array $gh,array $preserve): array {
             );
         }
 
+        // Yalnız updater'ın daha önce yönettiği dosyalar stale cleanup adayıdır.
+        // İlk manifest yoksa hiçbir canlı dosya silinmez; sadece yeni baseline kaydedilir.
+        $oldManagedFiles=read_managed_update_manifest($root);
+        $newManagedFiles=collect_managed_update_files($sourceRoot,$preserve);
+
         // Migration'lar önce staging paketinden uygulanır.
         // DB dönüşümü başarısızsa yeni uygulama dosyaları canlıya kopyalanmaz.
         if(!auth_table_exists($pdo,'ogrenciler')) ensure_student_auth_schema($pdo);
@@ -641,12 +781,26 @@ function install_github_update(string $root,array $gh,array $preserve): array {
 
         // Şema başarıyla hazırlandıktan sonra yeni uygulama dosyalarını etkinleştir.
         copy_update_tree($sourceRoot,$root,$preserve);
+        $removedManagedFiles=remove_stale_managed_files($root,$oldManagedFiles,$newManagedFiles,$preserve);
+        write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version']);
+
         $pdo->prepare("INSERT INTO sistem_ayarlar (ayar_anahtari,ayar_degeri) VALUES ('uygulama_surumu',?) ON DUPLICATE KEY UPDATE ayar_degeri=VALUES(ayar_degeri)")->execute([$remote['version']]);
-        $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='basarili',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute(['Guncelleme tamamlandi. Yedek: '.$backupName,$logId]);
+        $historyMessage='Guncelleme tamamlandi. Yedek: '.$backupName;
+        if($removedManagedFiles!==[]) $historyMessage.='; temizlenen eski dosya: '.count($removedManagedFiles);
+        $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='basarili',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute([$historyMessage,$logId]);
 
         @unlink($zipPath); delete_tree($extractDir);
         flock($updateLock,LOCK_UN); fclose($updateLock);
-        return ['updated'=>true,'message'=>'Guncelleme basariyla kuruldu.','remote'=>$remote,'local'=>$localVersion,'backup'=>$backupName,'migrations'=>$migrations];
+        return [
+            'updated'=>true,
+            'message'=>'Guncelleme basariyla kuruldu.',
+            'remote'=>$remote,
+            'local'=>$localVersion,
+            'backup'=>$backupName,
+            'migrations'=>$migrations,
+            'removed_files'=>$removedManagedFiles,
+            'managed_files'=>count($newManagedFiles),
+        ];
     }catch(Throwable $e){
         error_log('[IlkAdim][updater] '.$e->getMessage());
         try{ $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='hatali',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute(['Guncelleme hatayla sonlandi. Ayrintilar sunucu gunlugune kaydedildi.',$logId]); }catch(Throwable $ignored){}
