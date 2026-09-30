@@ -6,6 +6,7 @@
   const STORE='ilkadim-extra-games-v1';
   let extraGames=[];
   let completed=new Set();
+  let csrfToken='';
   const nativeFetch=window.fetch.bind(window);
 
   const readStored=()=>{
@@ -54,6 +55,7 @@
       .then(r=>r.ok?r.json():Promise.reject(new Error('HTTP '+r.status)))
       .then(data=>{
         if(!data||data.ok!==true||!Array.isArray(data.games))return;
+        csrfToken=typeof data.csrf==='string'?data.csrf:'';
         extraGames=data.games.filter(g=>EXTRA_IDS.includes(g.id));
         data.games.filter(g=>g.completed&&ALL_GAME_IDS.includes(g.id)).forEach(g=>completed.add(g.id));
         writeStored();
@@ -68,7 +70,7 @@
     if(EXTRA_IDS.includes(gameId))writeStored();
     nativeFetch('api/activities.php',{
       method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      headers:{'Content-Type':'application/json','Accept':'application/json',...(csrfToken?{'X-CSRF-Token':csrfToken}:{})},
       body:JSON.stringify({game:gameId}),
       credentials:'same-origin'
     }).catch(()=>{});
