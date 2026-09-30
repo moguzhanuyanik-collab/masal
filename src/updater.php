@@ -18,7 +18,7 @@ function updater_headers(array $gh): array {
     return $h;
 }
 
-function updater_http(string $url,array $gh,?string $target=null,int $maxBytes=0): string|array {
+function updater_http(string $url,array $gh,?string $target=null): string|array {
     if(!function_exists('curl_init')) throw new RuntimeException('PHP cURL eklentisi gerekli.');
     $ch=curl_init($url);
     if($ch===false) throw new RuntimeException('cURL baslatilamadi.');
@@ -33,21 +33,12 @@ function updater_http(string $url,array $gh,?string $target=null,int $maxBytes=0
         CURLOPT_FORBID_REUSE=>true,
     ];
     $fp=null;
-    $writtenBytes=0;
-    $downloadTooLarge=false;
     if($target!==null){
         $fp=fopen($target,'wb');
         if($fp===false){ curl_close($ch); throw new RuntimeException('Guncelleme paketi yazilamadi.'); }
         $opts[CURLOPT_RETURNTRANSFER]=false;
-        $opts[CURLOPT_WRITEFUNCTION]=static function($curl,string $data) use($fp,$maxBytes,&$writtenBytes,&$downloadTooLarge): int {
-            $length=strlen($data);
-            if($maxBytes>0 && $writtenBytes+$length>$maxBytes){
-                $downloadTooLarge=true;
-                return 0;
-            }
-            $n=fwrite($fp,$data);
-            if($n!==false) $writtenBytes+=$n;
-            return $n===false?0:$n;
+        $opts[CURLOPT_WRITEFUNCTION]=static function($curl,string $data) use($fp): int {
+            $n=fwrite($fp,$data); return $n===false?0:$n;
         };
     }else{
         $opts[CURLOPT_RETURNTRANSFER]=true;
@@ -59,10 +50,6 @@ function updater_http(string $url,array $gh,?string $target=null,int $maxBytes=0
     curl_close($ch);
     if(is_resource($fp)){ fflush($fp); fclose($fp); }
 
-    if($downloadTooLarge){
-        if($target!==null) @unlink($target);
-        throw new RuntimeException('Güncelleme paketi indirme boyutu güvenlik sınırını aşıyor.');
-    }
     if($body===false||$status<200||$status>=300){
         if($target!==null) @unlink($target);
         throw new RuntimeException('GitHub istegi basarisiz (HTTP '.$status.')'.($err!==''?': '.$err:''));
@@ -76,89 +63,22 @@ function updater_http(string $url,array $gh,?string $target=null,int $maxBytes=0
     return (string)$body;
 }
 
-function update_package_limits(array $updateConfig=[]): array {
-    $read=static function(string $key,int $default,int $minimum,int $maximum) use($updateConfig): int {
-        $value=(int)($updateConfig[$key]??$default);
-        if($value<$minimum) return $minimum;
-        if($value>$maximum) return $maximum;
-        return $value;
-    };
-    return [
-        'max_download_bytes'=>$read('max_package_download_bytes',64*1024*1024,8*1024*1024,1024*1024*1024),
-        'max_entries'=>$read('max_package_entries',5000,100,50000),
-        'max_uncompressed_bytes'=>$read('max_package_uncompressed_bytes',128*1024*1024,16*1024*1024,2*1024*1024*1024),
-        'max_file_bytes'=>$read('max_package_file_bytes',16*1024*1024,1024*1024,512*1024*1024),
-        'max_compression_ratio'=>$read('max_package_compression_ratio',250,10,2000),
-    ];
-}
-
-function normalize_release_revision(mixed $value): int {
-    if(is_int($value)) return max(0,$value);
-    if(is_string($value) && preg_match('/^\d+$/D',$value)===1) return max(0,(int)$value);
-    if(is_float($value) && floor($value)===$value) return max(0,(int)$value);
-    return 0;
-}
-
-function read_local_release_revision(string $root,string $expectedVersion=''): int {
-    $path=rtrim($root,'/\\').'/version.json';
-    if(!is_file($path) || !is_readable($path)) return 0;
-    $data=json_decode((string)file_get_contents($path),true);
-    if(!is_array($data)) return 0;
-    $version=trim((string)($data['version']??''));
-    if($expectedVersion!=='' && $version!==$expectedVersion) return 0;
-    return normalize_release_revision($data['release_revision']??0);
-}
-
-function release_identity_is_newer(array $candidate,string $localVersion,int $localRevision=0): bool {
-    $candidateVersion=trim((string)($candidate['version']??''));
-    if($candidateVersion==='') return false;
-    $cmp=version_compare($candidateVersion,$localVersion);
-    if($cmp>0) return true;
-    if($cmp<0) return false;
-    return normalize_release_revision($candidate['release_revision']??0)>max(0,$localRevision);
-}
-
-function release_identity_should_replace_next(array $candidate,?array $next): bool {
-    if($next===null) return true;
-    $candidateVersion=trim((string)($candidate['version']??''));
-    $nextVersion=trim((string)($next['version']??''));
-    $cmp=version_compare($candidateVersion,$nextVersion);
-    if($cmp<0) return true;
-    if($cmp>0) return false;
-    return normalize_release_revision($candidate['release_revision']??0)
-        > normalize_release_revision($next['release_revision']??0);
-}
-
-function remote_update_metadata_at_ref(array $gh,string $ref,string $metadataFile='version.json'): array {
+function remote_version_info_at_ref(array $gh,string $ref): array {
     [$owner,$repo,$branch]=github_repo_info($gh);
     $ref=trim($ref);
     if($ref==='') throw new RuntimeException('GitHub surum referansi bos olamaz.');
     if(!preg_match('/^[A-Za-z0-9_.\/-]+$/',$ref)) throw new RuntimeException('GitHub surum referansi gecersiz.');
-    if(!in_array($metadataFile,['version.json','update-release.json'],true)){
-        throw new RuntimeException('GitHub surum metadata dosyasi gecersiz.');
-    }
 
     $cacheBuster=(string)round(microtime(true)*1000);
-    $url='https://raw.githubusercontent.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/'.rawurlencode($ref).'/'.$metadataFile.'?cb='.$cacheBuster;
+    $url='https://raw.githubusercontent.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/'.rawurlencode($ref).'/version.json?cb='.$cacheBuster;
     $data=json_decode((string)updater_http($url,$gh),true);
-    if(!is_array($data)||empty($data['version'])){
-        throw new RuntimeException('GitHub '.$metadataFile.' okunamadi veya gecersiz.');
-    }
+    if(!is_array($data)||empty($data['version'])) throw new RuntimeException('GitHub version.json okunamadi veya gecersiz.');
 
     return [
         'version'=>(string)$data['version'],
-        'release_revision'=>normalize_release_revision($data['release_revision']??0),
         'name'=>(string)($data['name']??''),
         'commit'=>$ref,
     ];
-}
-
-function remote_version_info_at_ref(array $gh,string $ref): array {
-    return remote_update_metadata_at_ref($gh,$ref,'version.json');
-}
-
-function remote_release_info_at_ref(array $gh,string $ref): array {
-    return remote_update_metadata_at_ref($gh,$ref,'update-release.json');
 }
 
 function remote_version_info(array $gh): array {
@@ -166,13 +86,11 @@ function remote_version_info(array $gh): array {
     return remote_version_info_at_ref($gh,$branch);
 }
 
-function next_remote_version_info(array $gh,string $localVersion,int $localRevision=0): array {
+function next_remote_version_info(array $gh,string $localVersion): array {
     [$owner,$repo,$branch]=github_repo_info($gh);
     $localVersion=trim($localVersion);
     if($localVersion==='') $localVersion='0.0.0';
-    $localRevision=max(0,$localRevision);
 
-    $historyFile=version_compare($localVersion,'1.1.101','>=')?'update-release.json':'version.json';
     $next=null;
     $page=1;
     $maxPages=20;
@@ -180,7 +98,7 @@ function next_remote_version_info(array $gh,string $localVersion,int $localRevis
     while($page<=$maxPages){
         $url='https://api.github.com/repos/'.rawurlencode($owner).'/'.rawurlencode($repo)
             .'/commits?sha='.rawurlencode($branch)
-            .'&path='.rawurlencode($historyFile).'&per_page=100&page='.$page
+            .'&path=version.json&per_page=100&page='.$page
             .'&cb='.(string)round(microtime(true)*1000);
 
         $rows=json_decode((string)updater_http($url,$gh),true);
@@ -194,9 +112,7 @@ function next_remote_version_info(array $gh,string $localVersion,int $localRevis
             if(!preg_match('/^[a-f0-9]{40}$/i',$sha)) continue;
 
             try{
-                $info=$historyFile==='update-release.json'
-                    ?remote_release_info_at_ref($gh,$sha)
-                    :remote_version_info_at_ref($gh,$sha);
+                $info=remote_version_info_at_ref($gh,$sha);
             }catch(Throwable $ignored){
                 continue;
             }
@@ -204,45 +120,34 @@ function next_remote_version_info(array $gh,string $localVersion,int $localRevis
             $candidateVersion=trim((string)($info['version']??''));
             if($candidateVersion==='') continue;
 
-            if($historyFile==='version.json'){
-                if(version_compare($candidateVersion,$localVersion,'>')){
-                    if(release_identity_should_replace_next($info,$next)) $next=$info;
-                    continue;
+            if(version_compare($candidateVersion,$localVersion,'>')){
+                if($next===null||version_compare($candidateVersion,(string)$next['version'],'<')){
+                    $next=$info;
                 }
-                $reachedInstalledOrOlder=true;
-                break;
-            }
-
-            if(release_identity_is_newer($info,$localVersion,$localRevision)){
-                if(release_identity_should_replace_next($info,$next)) $next=$info;
                 continue;
             }
 
-            $versionCmp=version_compare($candidateVersion,$localVersion);
-            $candidateRevision=normalize_release_revision($info['release_revision']??0);
-            if($versionCmp<0 || ($versionCmp===0 && $candidateRevision<=$localRevision)){
-                $reachedInstalledOrOlder=true;
-                break;
-            }
+            $reachedInstalledOrOlder=true;
+            break;
         }
 
         if($reachedInstalledOrOlder||count($rows)<100) break;
         $page++;
     }
 
-    if($next!==null) return $next;
+    if($next!==null){
+        return $next;
+    }
 
-    $latest=$historyFile==='update-release.json'
-        ?remote_release_info_at_ref($gh,$branch)
-        :remote_version_info($gh);
+    $latest=remote_version_info($gh);
+    $latestVersion=trim((string)($latest['version']??''));
 
-    if($historyFile==='version.json'){
-        $latestVersion=trim((string)($latest['version']??''));
-        if($latestVersion===''||version_compare($latestVersion,$localVersion,'<=')) return $latest;
-    }elseif(!release_identity_is_newer($latest,$localVersion,$localRevision)){
+    if($latestVersion===''||version_compare($latestVersion,$localVersion,'<=')){
         return $latest;
     }
 
+    // Sürüm geçmişinden güvenli ara sürüm belirlenemiyorsa en son main sürümüne atlama.
+    // Böylece eksik bir ara paket yüzünden güncelleme zinciri bozulmaz.
     throw new RuntimeException(
         'Siradaki guncelleme guvenli bicimde belirlenemedi. '
         .'En son surume atlanmadi; ara surum zinciri kontrol edilmeli.'
@@ -258,47 +163,6 @@ function path_is_preserved(string $relative,array $preserve): bool {
     return false;
 }
 
-function update_file_sha256(string $path,string $label): string {
-    if(!is_file($path) || is_link($path)){
-        throw new RuntimeException($label.' normal dosya değil.');
-    }
-    $hash=hash_file('sha256',$path);
-    if(!is_string($hash) || strlen($hash)!==64){
-        throw new RuntimeException($label.' SHA-256 değeri üretilemedi.');
-    }
-    return $hash;
-}
-
-function atomic_replace_update_file(string $source,string $target,string $relative): void {
-    $parent=dirname($target);
-    if(!is_dir($parent)&&!mkdir($parent,0775,true)&&!is_dir($parent)){
-        throw new RuntimeException('Güncelleme hedef klasörü oluşturulamadı: '.$relative);
-    }
-    if(is_link($target)){
-        throw new RuntimeException('Güncelleme hedef dosyası sembolik bağlantı olamaz: '.$relative);
-    }
-
-    $tmp=$parent.'/.'.basename($target).'.ilkadim-update-'.bin2hex(random_bytes(6)).'.tmp';
-    @unlink($tmp);
-    try{
-        if(!copy($source,$tmp)){
-            throw new RuntimeException('Güncelleme dosyası geçici alana yazılamadı: '.$relative);
-        }
-        $sourceHash=update_file_sha256($source,'Kaynak güncelleme dosyası');
-        $tmpHash=update_file_sha256($tmp,'Geçici güncelleme dosyası');
-        if(!hash_equals($sourceHash,$tmpHash)){
-            throw new RuntimeException('Güncelleme dosyası geçici yazım bütünlüğü doğrulanamadı: '.$relative);
-        }
-        $mode=@fileperms($source);
-        if(is_int($mode)) @chmod($tmp,$mode&0777);
-        if(!@rename($tmp,$target)){
-            throw new RuntimeException('Güncelleme dosyası atomik olarak etkinleştirilemedi: '.$relative);
-        }
-    }finally{
-        if(is_file($tmp)||is_link($tmp)) @unlink($tmp);
-    }
-}
-
 function copy_update_tree(string $source,string $destination,array $preserve,string $relative=''): void {
     foreach(scandir($source)?:[] as $item){
         if($item==='.'||$item==='..'||$item==='.git') continue;
@@ -309,16 +173,13 @@ function copy_update_tree(string $source,string $destination,array $preserve,str
             throw new RuntimeException('Güncelleme paketi sembolik bağlantı içeriyor: '.$rel);
         }
         if(is_dir($src)){
-            if(!is_dir($dst)&&!mkdir($dst,0775,true)&&!is_dir($dst)){
-                throw new RuntimeException('Güncelleme hedef klasörü oluşturulamadı: '.$rel);
-            }
+            if(!is_dir($dst)&&!mkdir($dst,0775,true)&&!is_dir($dst)) throw new RuntimeException('Klasor olusturulamadi: '.$rel);
             copy_update_tree($src,$destination,$preserve,$rel);
-            continue;
+        }else{
+            $parent=dirname($dst);
+            if(!is_dir($parent)&&!mkdir($parent,0775,true)&&!is_dir($parent)) throw new RuntimeException('Klasor olusturulamadi: '.$rel);
+            if(!copy($src,$dst)) throw new RuntimeException('Dosya guncellenemedi: '.$rel);
         }
-        if(!is_file($src)){
-            throw new RuntimeException('Güncelleme paketi desteklenmeyen dosya türü içeriyor: '.$rel);
-        }
-        atomic_replace_update_file($src,$dst,$rel);
     }
 }
 
@@ -353,52 +214,6 @@ function collect_managed_update_files(string $source,array $preserve,string $rel
     return array_values(array_unique($files));
 }
 
-function normalized_packaged_manifest_files(array $manifestData): array {
-    if((int)($manifestData['format']??0)!==1){
-        throw new RuntimeException('Güncelleme paketi yönetilen dosya manifest formatı desteklenmiyor.');
-    }
-    $raw=$manifestData['files']??null;
-    if(!is_array($raw) || $raw===[]){
-        throw new RuntimeException('Güncelleme paketi yönetilen dosya manifesti boş veya geçersiz.');
-    }
-
-    $files=[];
-    $seen=[];
-    foreach($raw as $relative){
-        if(!is_string($relative) || trim($relative)===''){
-            throw new RuntimeException('Güncelleme paketi yönetilen dosya manifestinde geçersiz kayıt var.');
-        }
-        $normalized=managed_relative_path($relative);
-        if(isset($seen[$normalized])){
-            throw new RuntimeException('Güncelleme paketi yönetilen dosya manifestinde tekrarlı kayıt var: '.$normalized);
-        }
-        $seen[$normalized]=true;
-        $files[]=$normalized;
-    }
-    sort($files,SORT_STRING);
-    return $files;
-}
-
-function assert_packaged_manifest_matches_tree(array $manifestData,array $actualFiles): void {
-    $declared=normalized_packaged_manifest_files($manifestData);
-    $actual=[];
-    foreach($actualFiles as $relative) $actual[]=managed_relative_path((string)$relative);
-    sort($actual,SORT_STRING);
-    $actual=array_values(array_unique($actual));
-
-    if($declared===$actual) return;
-
-    $missing=array_values(array_diff($actual,$declared));
-    $phantom=array_values(array_diff($declared,$actual));
-    $parts=[];
-    if($missing!==[]) $parts[]='manifestte eksik: '.implode(', ',array_slice($missing,0,5)).(count($missing)>5?' ...':'');
-    if($phantom!==[]) $parts[]='pakette bulunmayan: '.implode(', ',array_slice($phantom,0,5)).(count($phantom)>5?' ...':'');
-    throw new RuntimeException(
-        'Güncelleme paketi yönetilen dosya manifesti gerçek paket ağacıyla eşleşmiyor'
-        .($parts!==[]?': '.implode('; ',$parts):'.')
-    );
-}
-
 function managed_manifest_path(string $root): string {
     return rtrim($root,'/\\').'/storage/updates/managed-files.json';
 }
@@ -426,7 +241,7 @@ function read_managed_update_manifest(string $root): array {
     return read_managed_file_list(rtrim($root,'/\\').'/update-managed-files.json');
 }
 
-function write_managed_update_manifest(string $root,array $files,string $version,int $releaseRevision=0): void {
+function write_managed_update_manifest(string $root,array $files,string $version): void {
     $path=managed_manifest_path($root);
     $dir=dirname($path);
     if(!is_dir($dir)&&!mkdir($dir,0750,true)&&!is_dir($dir)){
@@ -441,7 +256,6 @@ function write_managed_update_manifest(string $root,array $files,string $version
     $json=json_encode([
         'format'=>1,
         'version'=>$version,
-        'release_revision'=>max(0,$releaseRevision),
         'written_at'=>date(DATE_ATOM),
         'files'=>$normalized,
     ],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
@@ -528,102 +342,6 @@ function assert_managed_copy_type_safe(string $root,string $sourceRoot,array $ne
     }
 }
 
-function nearest_existing_update_directory(string $path,string $root): string {
-    $root=rtrim($root,'/\\');
-    $current=$path;
-    while(!is_dir($current)){
-        $parent=dirname($current);
-        if($parent===$current || strlen($parent)<strlen($root)){
-            throw new RuntimeException('Güncelleme hedef klasörü güvenli biçimde çözümlenemedi.');
-        }
-        $current=$parent;
-    }
-    return $current;
-}
-
-function assert_update_activation_preflight(
-    string $root,
-    string $sourceRoot,
-    array $newFiles,
-    array $oldFiles,
-    array $preserve
-): array {
-    $root=rtrim($root,'/\\');
-    $sourceRoot=rtrim($sourceRoot,'/\\');
-    $bytes=0;
-    $checkedDirectories=[];
-
-    $checkDirectory=static function(string $directory) use(&$checkedDirectories): void {
-        $key=str_replace('\\','/',$directory);
-        if(isset($checkedDirectories[$key])) return;
-        if(!is_dir($directory) || is_link($directory) || !is_writable($directory)){
-            throw new RuntimeException('Güncelleme hedef klasörü yazılabilir değil.');
-        }
-        $checkedDirectories[$key]=true;
-    };
-
-    foreach($newFiles as $relative){
-        $relative=managed_relative_path((string)$relative);
-        if(path_is_preserved($relative,$preserve)) continue;
-        $source=$sourceRoot.'/'.$relative;
-        if(!is_file($source) || is_link($source)){
-            throw new RuntimeException('Güncelleme kaynak dosyası geçersiz: '.$relative);
-        }
-        $bytes+=max(0,(int)(filesize($source)?:0));
-
-        $target=assert_managed_target_safe($root,$relative);
-        if(is_link($target)){
-            throw new RuntimeException('Güncelleme hedef dosyası sembolik bağlantı olamaz: '.$relative);
-        }
-        if(file_exists($target) && !is_file($target)){
-            throw new RuntimeException('Güncelleme hedef yolu normal dosya değil: '.$relative);
-        }
-        $parent=nearest_existing_update_directory(dirname($target),$root);
-        $checkDirectory($parent);
-    }
-
-    $newLookup=array_fill_keys($newFiles,true);
-    foreach($oldFiles as $relative){
-        $relative=managed_relative_path((string)$relative);
-        if(isset($newLookup[$relative]) || path_is_preserved($relative,$preserve)) continue;
-        $target=assert_managed_target_safe($root,$relative);
-        if(!file_exists($target) && !is_link($target)) continue;
-        if(is_link($target) || !is_file($target)){
-            throw new RuntimeException('Eski yönetilen hedef normal dosya değil: '.$relative);
-        }
-        $checkDirectory(dirname($target));
-    }
-
-    assert_backup_disk_space($root,$bytes,'Güncelleme dosya aktivasyonu');
-    return [
-        'files'=>count($newFiles),
-        'bytes'=>$bytes,
-        'directories'=>count($checkedDirectories),
-    ];
-}
-
-function verify_activated_update_files(string $sourceRoot,string $root,array $files,array $preserve): array {
-    $verified=0;
-    $bytes=0;
-    foreach($files as $relative){
-        $relative=managed_relative_path((string)$relative);
-        if(path_is_preserved($relative,$preserve)) continue;
-        $source=$sourceRoot.'/'.$relative;
-        $target=assert_managed_target_safe($root,$relative);
-        if(!is_file($target) || is_link($target)){
-            throw new RuntimeException('Güncelleme sonrası dosya bulunamadı veya geçersiz: '.$relative);
-        }
-        $sourceHash=update_file_sha256($source,'Kaynak güncelleme dosyası');
-        $targetHash=update_file_sha256($target,'Etkin güncelleme dosyası');
-        if(!hash_equals($sourceHash,$targetHash)){
-            throw new RuntimeException('Güncelleme sonrası dosya bütünlüğü doğrulanamadı: '.$relative);
-        }
-        $verified++;
-        $bytes+=max(0,(int)(filesize($target)?:0));
-    }
-    return ['files'=>$verified,'bytes'=>$bytes];
-}
-
 function remove_stale_managed_files(string $root,array $oldFiles,array $newFiles,array $preserve): array {
     if($oldFiles===[]) return [];
     $newLookup=array_fill_keys($newFiles,true);
@@ -679,111 +397,21 @@ function ensure_runtime_storage_guard(string $root): void {
     }
 }
 
-function project_backup_files(string $root,string $relative=''): Generator {
-    $base=$relative===''?$root:$root.'/'.$relative;
-    foreach(scandir($base)?:[] as $item){
-        if($item==='.'||$item==='..') continue;
-        $rel=ltrim($relative.'/'.$item,'/');
-        if($rel==='storage'||str_starts_with($rel,'storage/')
-            ||$rel==='.git'||str_starts_with($rel,'.git/')
-            ||$rel==='config/local.php'||$rel==='.env'){
-            continue;
-        }
-        $path=$root.'/'.$rel;
-        if(is_link($path)) continue;
-        if(is_dir($path)){
-            yield from project_backup_files($root,$rel);
-            continue;
-        }
-        if(is_file($path)){
-            yield ['path'=>$path,'relative'=>$rel,'bytes'=>(int)(filesize($path)?:0)];
-        }
-    }
-}
-
-function project_backup_source_bytes(string $root): int {
-    $total=0;
-    foreach(project_backup_files($root) as $file){
-        $total+=max(0,(int)($file['bytes']??0));
-    }
-    return $total;
-}
-
-function assert_backup_disk_space(string $path,int $estimatedBytes,string $label): void {
-    $dir=is_dir($path)?$path:dirname($path);
-    $free=@disk_free_space($dir);
-    if(!is_float($free) && !is_int($free)) return;
-    $required=max(16*1024*1024,(int)ceil(max(0,$estimatedBytes)*1.15));
-    if((int)$free<$required){
-        throw new RuntimeException(
-            $label.' için yeterli boş disk alanı yok. Gerekli yaklaşık: '
-            .number_format($required/1048576,1,'.','').' MB.'
-        );
-    }
-}
-
-function validate_project_backup(string $path): array {
-    if(!class_exists('ZipArchive')) throw new RuntimeException('PHP ZipArchive eklentisi gerekli.');
-    if(!is_file($path)||(int)(filesize($path)?:0)<128){
-        throw new RuntimeException('Uygulama yedeği boş veya geçersiz.');
-    }
-
-    $zip=new ZipArchive();
-    $flags=defined('ZipArchive::CHECKCONS')?(int)constant('ZipArchive::CHECKCONS'):0;
-    if($zip->open($path,$flags)!==true){
-        throw new RuntimeException('Uygulama yedeği tekrar açılamadı.');
-    }
-    try{
-        if($zip->numFiles<5) throw new RuntimeException('Uygulama yedeği beklenenden az dosya içeriyor.');
-        foreach(['version.json','src/updater.php','src/auth.php','login.php','index.php'] as $required){
-            if($zip->locateName($required)===false){
-                throw new RuntimeException('Uygulama yedeğinde kritik dosya eksik: '.$required);
-            }
-        }
-        foreach(['config/local.php','.env','.git/config'] as $secret){
-            if($zip->locateName($secret)!==false){
-                throw new RuntimeException('Uygulama yedeği gizli yapılandırma dosyası içeriyor: '.$secret);
-            }
-        }
-    }finally{
-        $zip->close();
-    }
-
-    $hash=hash_file('sha256',$path);
-    if(!is_string($hash)||strlen($hash)!==64){
-        throw new RuntimeException('Uygulama yedeği SHA-256 değeri üretilemedi.');
-    }
-    return [
-        'file'=>basename($path),
-        'bytes'=>(int)(filesize($path)?:0),
-        'sha256'=>$hash,
-    ];
-}
-
 function create_project_backup(string $root,string $target): void {
     if(!class_exists('ZipArchive')) throw new RuntimeException('PHP ZipArchive eklentisi gerekli.');
-    assert_backup_disk_space(dirname($target),project_backup_source_bytes($root),'Uygulama yedeği');
-
     $zip=new ZipArchive();
     if($zip->open($target,ZipArchive::CREATE|ZipArchive::OVERWRITE)!==true) throw new RuntimeException('Yedek ZIP olusturulamadi.');
-    try{
-        foreach(project_backup_files($root) as $file){
-            $path=(string)$file['path'];
-            $rel=(string)$file['relative'];
-            if(!$zip->addFile($path,$rel)){
-                throw new RuntimeException('Uygulama yedeğine dosya eklenemedi: '.$rel);
-            }
-        }
-    }catch(Throwable $e){
-        $zip->close();
-        @unlink($target);
-        throw $e;
+    $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root,FilesystemIterator::SKIP_DOTS));
+    foreach($it as $file){
+        if(!$file->isFile()) continue;
+        $path=$file->getPathname();
+        $rel=ltrim(str_replace('\\','/',substr($path,strlen($root))),'/');
+        // Güncelleme geri dönüş yedeği yalnız uygulama kodunu taşır.
+        // Canlı sırlar ve çalışma verileri ayrı korunur; ZIP içine alınmaz.
+        if($rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')) continue;
+        $zip->addFile($path,$rel);
     }
-    if(!$zip->close()){
-        @unlink($target);
-        throw new RuntimeException('Uygulama yedeği kapatılamadı.');
-    }
-    validate_project_backup($target);
+    $zip->close();
 }
 
 function create_single_previous_backup(string $root): string {
@@ -826,260 +454,6 @@ function create_single_previous_backup(string $root): string {
     return basename($final);
 }
 
-function normalize_db_backup_config(array $db): array {
-    $host=trim((string)($db['host']??'localhost'));
-    $port=max(1,min(65535,(int)($db['port']??3306)));
-    $name=trim((string)($db['name']??''));
-    $user=(string)($db['user']??'');
-    $pass=(string)($db['pass']??'');
-    foreach([$host,$name,$user] as $value){
-        if($value==='' || str_contains($value,"\0") || str_contains($value,"\n") || str_contains($value,"\r")){
-            throw new RuntimeException('Veritabanı yedeği için DB ayarları geçersiz.');
-        }
-    }
-    return ['host'=>$host,'port'=>$port,'name'=>$name,'user'=>$user,'pass'=>$pass];
-}
-
-function mysql_option_quote(string $value): string {
-    if(str_contains($value,"\0")) throw new RuntimeException('MySQL option değeri geçersiz.');
-    $value=str_replace(
-        ["\\","\"","\n","\r","\t"],
-        ["\\\\","\\\"","\\n","\\r","\\t"],
-        $value
-    );
-    return '"'.$value.'"';
-}
-
-function create_mysql_defaults_file(string $root,array $db): string {
-    $dir=rtrim($root,'/\\').'/storage/updates';
-    if(!is_dir($dir)&&!mkdir($dir,0750,true)&&!is_dir($dir)){
-        throw new RuntimeException('MySQL geçici ayar klasörü oluşturulamadı.');
-    }
-    $path=$dir.'/.mysqldump-'.bin2hex(random_bytes(12)).'.cnf';
-    $content="[client]\n"
-        ."host=".mysql_option_quote((string)$db['host'])."\n"
-        ."port=".(string)(int)$db['port']."\n"
-        ."user=".mysql_option_quote((string)$db['user'])."\n"
-        ."password=".mysql_option_quote((string)$db['pass'])."\n"
-        ."default-character-set=utf8mb4\n";
-    if(file_put_contents($path,$content,LOCK_EX)===false){
-        throw new RuntimeException('MySQL geçici ayar dosyası yazılamadı.');
-    }
-    @chmod($path,0600);
-    return $path;
-}
-
-function database_size_bytes(PDO $pdo): int {
-    try{
-        $stmt=$pdo->query("SELECT COALESCE(SUM(data_length+index_length),0)
-            FROM information_schema.tables WHERE table_schema=DATABASE()");
-        $size=(int)($stmt?$stmt->fetchColumn():0);
-        if($stmt)$stmt->closeCursor();
-        return max(0,$size);
-    }catch(Throwable){
-        return 0;
-    }
-}
-
-function find_mysqldump_binary(array $updateConfig=[]): ?string {
-    $configured=trim((string)($updateConfig['mysqldump_path']??''));
-    $candidates=[];
-    if($configured!=='') $candidates[]=$configured;
-    foreach([
-        '/usr/bin/mysqldump',
-        '/usr/local/bin/mysqldump',
-        '/usr/local/mysql/bin/mysqldump',
-        '/opt/homebrew/bin/mysqldump',
-    ] as $candidate) $candidates[]=$candidate;
-
-    foreach(array_values(array_unique($candidates)) as $candidate){
-        if(is_file($candidate) && is_executable($candidate)) return $candidate;
-    }
-    return null;
-}
-
-function create_database_backup(
-    string $root,
-    array $dbConfig,
-    array $updateConfig=[],
-    ?PDO $pdo=null
-): string {
-    if(!function_exists('proc_open')){
-        throw new RuntimeException('Migration için veritabanı yedeği alınamıyor: proc_open kullanılamıyor.');
-    }
-    $binary=find_mysqldump_binary($updateConfig);
-    if($binary===null){
-        throw new RuntimeException(
-            'Migration için veritabanı yedeği zorunlu; mysqldump bulunamadı. '
-            .'update.mysqldump_path ayarlanmalı veya sunucuya mysqldump kurulmalı.'
-        );
-    }
-
-    $db=normalize_db_backup_config($dbConfig);
-    $dir=rtrim($root,'/\\').'/storage/backups';
-    if(!is_dir($dir)&&!mkdir($dir,0750,true)&&!is_dir($dir)){
-        throw new RuntimeException('Veritabanı yedek klasörü oluşturulamadı.');
-    }
-
-    $final=$dir.'/onceki_veritabani.sql';
-    $tmp=$dir.'/onceki_veritabani.tmp.sql';
-    $old=$dir.'/onceki_veritabani.old.sql';
-    $stderrPath=$dir.'/onceki_veritabani.stderr.tmp';
-    @unlink($tmp);
-    @unlink($old);
-    @unlink($stderrPath);
-
-    if($pdo instanceof PDO){
-        assert_backup_disk_space($dir,database_size_bytes($pdo),'Veritabanı yedeği');
-    }
-
-    $defaultsFile=create_mysql_defaults_file($root,$db);
-    $cmd=[
-        $binary,
-        '--defaults-extra-file='.$defaultsFile,
-        '--single-transaction',
-        '--quick',
-        '--triggers',
-        '--hex-blob',
-        '--skip-lock-tables',
-        $db['name'],
-    ];
-
-    $descriptors=[
-        0=>['pipe','r'],
-        1=>['file',$tmp,'wb'],
-        2=>['file',$stderrPath,'wb'],
-    ];
-    $process=null;
-    $exit=1;
-    try{
-        $process=@proc_open($cmd,$descriptors,$pipes,null,null,['bypass_shell'=>true]);
-        if(!is_resource($process)){
-            throw new RuntimeException('mysqldump işlemi başlatılamadı.');
-        }
-        if(isset($pipes[0])&&is_resource($pipes[0])) fclose($pipes[0]);
-        $exit=proc_close($process);
-        $process=null;
-    }finally{
-        if(is_resource($process)){
-            @proc_terminate($process);
-            @proc_close($process);
-        }
-        @unlink($defaultsFile);
-    }
-    $stderr=is_file($stderrPath)?(string)file_get_contents($stderrPath,false,null,0,8192):'';
-    @unlink($stderrPath);
-
-    $size=is_file($tmp)?(int)(filesize($tmp)?:0):0;
-    $head='';
-    if($size>0){
-        $fh=@fopen($tmp,'rb');
-        if(is_resource($fh)){
-            $head=(string)fread($fh,16384);
-            fclose($fh);
-        }
-    }
-    $looksLikeDump=$size>512 && (
-        stripos($head,'MySQL dump')!==false
-        || stripos($head,'MariaDB dump')!==false
-        || stripos($head,'CREATE TABLE')!==false
-    );
-    if($exit!==0 || !$looksLikeDump){
-        @unlink($tmp);
-        error_log('[IlkAdim][db-backup] mysqldump exit='.(string)$exit.' '.mb_substr(trim($stderr),0,1000));
-        throw new RuntimeException('Migration öncesi veritabanı yedeği doğrulanamadı; güncelleme durduruldu.');
-    }
-    @chmod($tmp,0600);
-
-    if(is_file($final)&&!@rename($final,$old)){
-        @unlink($tmp);
-        throw new RuntimeException('Mevcut veritabanı yedeği güvenli biçimde değiştirilemedi.');
-    }
-    if(!@rename($tmp,$final)){
-        if(is_file($old)) @rename($old,$final);
-        @unlink($tmp);
-        throw new RuntimeException('Yeni veritabanı yedeği etkinleştirilemedi.');
-    }
-    @chmod($final,0600);
-    @unlink($old);
-    return basename($final);
-}
-
-function backup_artifact_metadata(string $root,string $filename): ?array {
-    $filename=basename(trim($filename));
-    if($filename==='') return null;
-    $path=rtrim($root,'/\\').'/storage/backups/'.$filename;
-    if(!is_file($path)) return null;
-    $hash=hash_file('sha256',$path);
-    if(!is_string($hash)||strlen($hash)!==64){
-        throw new RuntimeException('Yedek bütünlük SHA-256 değeri üretilemedi: '.$filename);
-    }
-    return [
-        'file'=>$filename,
-        'bytes'=>(int)(filesize($path)?:0),
-        'sha256'=>$hash,
-    ];
-}
-
-function write_recovery_manifest(string $root,array $state): string {
-    $dir=rtrim($root,'/\\').'/storage/backups';
-    if(!is_dir($dir)&&!mkdir($dir,0750,true)&&!is_dir($dir)){
-        throw new RuntimeException('Recovery manifest klasörü oluşturulamadı.');
-    }
-    $path=$dir.'/recovery.json';
-    $tmp=$path.'.tmp';
-    $payload=[
-        'format'=>1,
-        'updated_at'=>date(DATE_ATOM),
-    ]+$state;
-    $json=json_encode($payload,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
-    if(!is_string($json)) throw new RuntimeException('Recovery manifest oluşturulamadı.');
-    @unlink($tmp);
-    if(file_put_contents($tmp,$json."\n",LOCK_EX)===false){
-        throw new RuntimeException('Recovery manifest yazılamadı.');
-    }
-    @chmod($tmp,0600);
-    if(!@rename($tmp,$path)){
-        @unlink($tmp);
-        throw new RuntimeException('Recovery manifest etkinleştirilemedi.');
-    }
-    @chmod($path,0600);
-    return basename($path);
-}
-
-function legacy_membership_repair_needed(PDO $pdo): bool {
-    if(!auth_table_exists($pdo,'kurum_kullanicilari')) return false;
-    $cols=auth_column_map($pdo,'kurum_kullanicilari');
-    foreach(['veli_id','ogretmen_id','ogrenci_id','yonetici_id'] as $column){
-        if(isset($cols[$column])) return true;
-    }
-    return false;
-}
-
-function pending_migration_names(PDO $pdo,string $root,string $localVersion='0.0.0'): array {
-    assert_historical_migration_history($pdo,$root,$localVersion);
-    $retired=retired_automatic_migrations();
-    $files=glob($root.'/database/migrations/*.sql')?:[];
-    sort($files,SORT_NATURAL);
-    $check=$pdo->prepare('SELECT 1 FROM sistem_migrations WHERE migration=? LIMIT 1');
-    $pending=[];
-    foreach($files as $file){
-        $name=basename($file,'.sql');
-        if(isset($retired[$name])) continue;
-        $check->execute([$name]);
-        $exists=(bool)$check->fetchColumn();
-        $check->closeCursor();
-        if(!$exists) $pending[]=$name;
-    }
-    return $pending;
-}
-
-function database_update_requires_backup(PDO $pdo,string $root,string $localVersion='0.0.0'): bool {
-    if(!auth_table_exists($pdo,'ogrenciler')) return true;
-    if(legacy_membership_repair_needed($pdo)) return true;
-    return pending_migration_names($pdo,$root,$localVersion)!==[];
-}
-
 function run_migration_sql(PDO $pdo,string $path): void {
     $buffer='';
     foreach(file($path,FILE_IGNORE_NEW_LINES)?:[] as $line){
@@ -1091,21 +465,15 @@ function run_migration_sql(PDO $pdo,string $path): void {
     if(trim($buffer)!=='') $pdo->exec($buffer);
 }
 
-function migration_sequence_number(string $name): int {
-    return preg_match('/^(\d{3})_/', $name, $m)===1 ? (int)$m[1] : 0;
-}
-
-function migration_sql_without_comments(string $raw): string {
-    $sql=preg_replace('/\/\*.*?\*\//s',' ',$raw) ?? $raw;
-    $sql=preg_replace('/^\s*--.*$/m',' ',$sql) ?? $sql;
-    return str_replace(chr(96),'',$sql);
-}
-
 function assert_automatic_migration_safe(string $name,string $path): void {
     $raw=file_get_contents($path);
     if(!is_string($raw)) throw new RuntimeException('Migration okunamadı: '.$name);
 
-    $sql=migration_sql_without_comments($raw);
+    // Yorumları çıkar; yalnız çalıştırılabilir SQL üzerinde yüksek riskli kalıpları ara.
+    $sql=preg_replace('/\/\*.*?\*\//s',' ',$raw) ?? $raw;
+    $sql=preg_replace('/^\s*--.*$/m',' ',$sql) ?? $sql;
+    $sql=str_replace(chr(96),'',$sql);
+
     $dangerous =
         preg_match('/\b(?:DROP|TRUNCATE)\s+TABLE\b/i',$sql)===1
         || preg_match('/\bDELETE\s+FROM\s+[A-Za-z0-9_]+\s*;/i',$sql)===1
@@ -1117,38 +485,6 @@ function assert_automatic_migration_safe(string $name,string $path): void {
             .'Veri kaybını önlemek için kurulum durduruldu.'
         );
     }
-
-    // 065 ve sonrası için daha sıkı sözleşme: şema daraltan/dönüştüren ALTER
-    // otomatik zincirde çalışmaz. Veri silen migration yalnız açık marker ile,
-    // DDL içermeyen transaction-safe bir dosyada kabul edilir.
-    if(migration_sequence_number($name)>=65){
-        if(preg_match('/\bRENAME\s+TABLE\b/i',$sql)===1
-            || preg_match('/\bALTER\s+TABLE\b[^;]*\b(?:DROP|MODIFY|CHANGE|RENAME)\b/is',$sql)===1){
-            throw new RuntimeException(
-                'Migration '.$name.' otomatik güncellemede şema daraltma/dönüştürme içeriyor.'
-            );
-        }
-
-        $hasDelete=preg_match('/\bDELETE\s+(?:[A-Za-z0-9_]+\s+FROM|FROM)\b/i',$sql)===1;
-        if($hasDelete){
-            $allowDelete=str_contains($raw,'ILKADIM_ALLOW_TRANSACTIONAL_DELETE');
-            $hasDdl=preg_match('/\b(?:CREATE|ALTER|DROP|TRUNCATE|RENAME)\s+TABLE\b/i',$sql)===1;
-            if(!$allowDelete || $hasDdl){
-                throw new RuntimeException(
-                    'Migration '.$name.' veri silme içeriyor; transaction marker ve DDL ayrımı gerekli.'
-                );
-            }
-        }
-    }
-}
-
-function migration_should_run_transactionally(string $name,string $path): bool {
-    if(migration_sequence_number($name)<65) return false;
-    $raw=file_get_contents($path);
-    if(!is_string($raw)) return false;
-    $sql=migration_sql_without_comments($raw);
-    if(preg_match('/\b(?:CREATE|ALTER|DROP|TRUNCATE|RENAME)\s+TABLE\b/i',$sql)===1) return false;
-    return preg_match('/\b(?:INSERT|UPDATE|DELETE)\b/i',$sql)===1;
 }
 
 function ensure_updater_schema(PDO $pdo): void {
@@ -1276,9 +612,37 @@ function ensure_student_auth_schema(PDO $pdo): void {
         }
     }
 
-    // Şema onarımı kullanıcı kimliği, e-posta veya parola üretmez/değiştirmez.
-    // Test/demo hesapları updater sorumluluğu değildir.
+    $email='masal@gmail.com';
+    $passwordHash=password_hash('12345678',PASSWORD_DEFAULT);
+    if(!is_string($passwordHash)||$passwordHash===''){
+        throw new RuntimeException('Test ogrenci sifresi olusturulamadi.');
+    }
 
+    $stmt=$pdo->prepare('SELECT id FROM ogrenciler WHERE email=? LIMIT 1');
+    $stmt->execute([$email]);
+    $studentId=(int)($stmt->fetchColumn()?:0);
+
+    if($studentId<=0){
+        $old=$pdo->prepare('SELECT id FROM ogrenciler WHERE email=? LIMIT 1');
+        $old->execute(['test@ilkadim.local']);
+        $studentId=(int)($old->fetchColumn()?:0);
+    }
+
+    if($studentId<=0){
+        $first=$pdo->query('SELECT id FROM ogrenciler WHERE aktif=1 ORDER BY id LIMIT 1');
+        $studentId=(int)($first?$first->fetchColumn():0);
+    }
+
+    if($studentId>0){
+        $pdo->prepare("UPDATE ogrenciler
+            SET ad=CASE WHEN ad IS NULL OR ad='' THEN 'Test Ogrenci' ELSE ad END,
+                email=?,sifre_hash=?,aktif=1
+            WHERE id=?")
+            ->execute([$email,$passwordHash,$studentId]);
+    }else{
+        $pdo->prepare("INSERT INTO ogrenciler (ad,email,sifre_hash,avatar,aktif) VALUES (?,?,?,?,1)")
+            ->execute(['Test Ogrenci',$email,$passwordHash,'🌞']);
+    }
 }
 
 function repair_legacy_institution_membership_schema(PDO $pdo): void {
@@ -1359,40 +723,7 @@ function retired_automatic_migrations(): array {
     ];
 }
 
-function assert_historical_migration_history(PDO $pdo,string $root,string $localVersion): void {
-    if(version_compare($localVersion,'1.1.98','<')) return;
-
-    $retired=retired_automatic_migrations();
-    $expected=[];
-    foreach(glob($root.'/database/migrations/*.sql')?:[] as $file){
-        $name=basename($file,'.sql');
-        $number=migration_sequence_number($name);
-        if($number<1 || $number>64 || isset($retired[$name])) continue;
-        $expected[$name]=true;
-    }
-    if($expected===[]) return;
-
-    $applied=[];
-    foreach($pdo->query('SELECT migration FROM sistem_migrations')?:[] as $row){
-        if(isset($row['migration'])) $applied[(string)$row['migration']]=true;
-    }
-
-    $missing=[];
-    foreach(array_keys($expected) as $name){
-        if(!isset($applied[$name])) $missing[]=$name;
-    }
-    if($missing!==[]){
-        sort($missing,SORT_NATURAL);
-        throw new RuntimeException(
-            'Migration geçmişi eksik veya tutarsız. Eski migrationlar tekrar çalıştırılmadı. Eksik: '
-            .implode(', ',array_slice($missing,0,8))
-            .(count($missing)>8?' ...':'')
-        );
-    }
-}
-
-function run_pending_migrations(PDO $pdo,string $root,string $localVersion='0.0.0'): array {
-    assert_historical_migration_history($pdo,$root,$localVersion);
+function run_pending_migrations(PDO $pdo,string $root): array {
     repair_legacy_institution_membership_schema($pdo);
     $retired=retired_automatic_migrations();
     $applied=[]; $files=glob($root.'/database/migrations/*.sql')?:[]; sort($files,SORT_NATURAL);
@@ -1409,29 +740,11 @@ function run_pending_migrations(PDO $pdo,string $root,string $localVersion='0.0.
 
         if($name==='004_ogrenci_giris_sistemi'){
             ensure_student_auth_schema($pdo);
-            $insert->execute([$name]);
         }else{
             assert_automatic_migration_safe($name,$file);
-            if(migration_should_run_transactionally($name,$file)){
-                $started=false;
-                try{
-                    if(!$pdo->inTransaction()){
-                        $pdo->beginTransaction();
-                        $started=true;
-                    }
-                    run_migration_sql($pdo,$file);
-                    $insert->execute([$name]);
-                    if($started)$pdo->commit();
-                }catch(Throwable $e){
-                    if($started && $pdo->inTransaction())$pdo->rollBack();
-                    throw $e;
-                }
-            }else{
-                run_migration_sql($pdo,$file);
-                $insert->execute([$name]);
-            }
+            run_migration_sql($pdo,$file);
         }
-        $applied[]=$name;
+        $insert->execute([$name]); $applied[]=$name;
     }
     return $applied;
 }
@@ -1451,16 +764,8 @@ function detect_update_root(string $extractDir): string {
     throw new RuntimeException('GitHub paket koku anlasilamadi. version.json bulunamadi.');
 }
 
-function assert_update_zip_safe(ZipArchive $zip,array $updateConfig=[]): array {
-    $limits=update_package_limits($updateConfig);
-    $entries=(int)$zip->numFiles;
-    if($entries<=0) throw new RuntimeException('Güncelleme paketi boş.');
-    if($entries>$limits['max_entries']){
-        throw new RuntimeException('Güncelleme paketi dosya sayısı güvenlik sınırını aşıyor.');
-    }
-
-    $totalBytes=0;
-    for($i=0;$i<$entries;$i++){
+function assert_update_zip_safe(ZipArchive $zip): void {
+    for($i=0;$i<$zip->numFiles;$i++){
         $name=(string)$zip->getNameIndex($i);
         $normalized=str_replace('\\','/',$name);
         if($normalized==='' || str_contains($normalized,"\0")
@@ -1472,60 +777,25 @@ function assert_update_zip_safe(ZipArchive $zip,array $updateConfig=[]): array {
             if($part==='..') throw new RuntimeException('Güncelleme ZIP paketi yol kaçışı içeriyor.');
         }
 
-        $stat=$zip->statIndex($i);
-        if(!is_array($stat)) throw new RuntimeException('Güncelleme paketi dosya bilgisi okunamadı.');
-        $size=max(0,(int)($stat['size']??0));
-        $compressed=max(0,(int)($stat['comp_size']??0));
-        if($size>$limits['max_file_bytes']){
-            throw new RuntimeException('Güncelleme paketi tek dosya boyutu güvenlik sınırını aşıyor: '.$normalized);
-        }
-        $totalBytes+=$size;
-        if($totalBytes>$limits['max_uncompressed_bytes']){
-            throw new RuntimeException('Güncelleme paketi açılmış toplam boyutu güvenlik sınırını aşıyor.');
-        }
-        if($size>=1024*1024 && $compressed>0 && ($size/$compressed)>$limits['max_compression_ratio']){
-            throw new RuntimeException('Güncelleme paketi olağandışı sıkıştırma oranı içeriyor: '.$normalized);
-        }
-
         if(method_exists($zip,'getExternalAttributesIndex')){
             $opsys=0;$attributes=0;
             $unixOpsys=defined('ZipArchive::OPSYS_UNIX')?(int)constant('ZipArchive::OPSYS_UNIX'):3;
-            if($zip->getExternalAttributesIndex($i,$opsys,$attributes) && $opsys===$unixOpsys){
+            if($zip->getExternalAttributesIndex($i,$opsys,$attributes)
+                && $opsys===$unixOpsys){
                 $mode=($attributes>>16)&0170000;
                 if($mode===0120000){
                     throw new RuntimeException('Güncelleme ZIP paketi sembolik bağlantı içeriyor.');
                 }
-                if($mode!==0 && $mode!==0100000 && $mode!==0040000){
-                    throw new RuntimeException('Güncelleme ZIP paketi desteklenmeyen dosya türü içeriyor.');
-                }
             }
         }
     }
-
-    return ['entries'=>$entries,'uncompressed_bytes'=>$totalBytes];
 }
 
-function install_github_update(
-    string $root,
-    array $gh,
-    array $preserve,
-    array $dbConfig=[],
-    array $updateConfig=[]
-): array {
+function install_github_update(string $root,array $gh,array $preserve): array {
     [$owner,$repo,$branch]=github_repo_info($gh);
     $localVersion=read_app_version();
-    $localRevision=read_local_release_revision($root,$localVersion);
-    $remote=next_remote_version_info($gh,$localVersion,$localRevision);
-    if(!release_identity_is_newer($remote,$localVersion,$localRevision)){
-        return [
-            'updated'=>false,
-            'message'=>'Zaten guncel surum kullaniliyor.',
-            'remote'=>$remote,
-            'local'=>$localVersion,
-            'local_revision'=>$localRevision,
-            'migrations'=>[],
-        ];
-    }
+    $remote=next_remote_version_info($gh,$localVersion);
+    if(version_compare($remote['version'],$localVersion,'<=')) return ['updated'=>false,'message'=>'Zaten guncel surum kullaniliyor.','remote'=>$remote,'local'=>$localVersion,'migrations'=>[]];
 
     $targetCommit=trim((string)($remote['commit']??''));
     if(!preg_match('/^[a-f0-9]{40}$/i',$targetCommit)){
@@ -1546,54 +816,19 @@ function install_github_update(
     $backupPath=$storage.'/backups/onceki_surum.zip';
 
     $pdo=db(); ensure_updater_schema($pdo);
-    $packageLimits=update_package_limits($updateConfig);
-    $recoveryState=null;
-    $recoveryManifestName='';
-    $databaseMutationStarted=false;
-    $fileActivationStarted=false;
-    $updateStage='preparing';
     $log=$pdo->prepare("INSERT INTO guncelleme_gecmisi (onceki_surumu,yeni_surumu,github_commit,durum) VALUES (?,?,?,'basladi')");
     $log->execute([$localVersion,$remote['version'],$remote['commit']]); $logId=(int)$pdo->lastInsertId();
 
     try{
-        $recoveryState=[
-            'from_version'=>$localVersion,
-            'from_revision'=>$localRevision,
-            'to_version'=>(string)$remote['version'],
-            'to_revision'=>normalize_release_revision($remote['release_revision']??0),
-            'target_commit'=>$targetCommit,
-            'status'=>'preparing',
-            'stage'=>$updateStage,
-            'application_backup'=>null,
-            'database_backup'=>null,
-            'pending_migrations'=>[],
-            'legacy_membership_repair'=>false,
-            'student_schema_missing'=>false,
-            'manual_restore_only'=>true,
-        ];
-        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
-
-        $updateStage='application_backup';
         $backupName=create_single_previous_backup($root);
-        $recoveryState['status']='application_backup_ready';
-        $recoveryState['stage']=$updateStage;
-        $recoveryState['application_backup']=backup_artifact_metadata($root,$backupName);
-        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
         // En son main paketini degil, siradaki surumun sabit commit paketini indir.
         $downloadUrl='https://codeload.github.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/zip/'.rawurlencode($targetCommit).'?cb='.(string)round(microtime(true)*1000);
-        $updateStage='download';
-        $recoveryState['stage']=$updateStage;
-        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
-        updater_http($downloadUrl,$gh,$zipPath,$packageLimits['max_download_bytes']);
+        updater_http($downloadUrl,$gh,$zipPath);
 
         if(!class_exists('ZipArchive')) throw new RuntimeException('PHP ZipArchive eklentisi gerekli.');
         $zip=new ZipArchive();
         if($zip->open($zipPath)!==true) throw new RuntimeException('GitHub ZIP paketi acilamadi.');
-        $updateStage='package_validation';
-        $recoveryState['stage']=$updateStage;
-        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
-        $zipStats=assert_update_zip_safe($zip,$updateConfig);
-        assert_backup_disk_space(dirname($extractDir),(int)$zipStats['uncompressed_bytes'],'Güncelleme paketi açılımı');
+        assert_update_zip_safe($zip);
         if(!is_dir($extractDir)&&!mkdir($extractDir,0775,true)&&!is_dir($extractDir)){ $zip->close(); throw new RuntimeException('Gecici klasor olusturulamadi.'); }
         if(!$zip->extractTo($extractDir)){ $zip->close(); throw new RuntimeException('GitHub paketi acilamadi.'); }
         $zip->close();
@@ -1614,8 +849,6 @@ function install_github_update(
 
         $requiredPackageFiles=[
             'version.json',
-            'update-release.json',
-            'update-managed-files.json',
             'config/app.php',
             'src/updater.php',
             'src/auth.php',
@@ -1628,105 +861,26 @@ function install_github_update(
             }
         }
 
-        $releaseData=json_decode((string)file_get_contents($sourceRoot.'/update-release.json'),true);
-        $manifestData=json_decode((string)file_get_contents($sourceRoot.'/update-managed-files.json'),true);
-        $releaseVersion=is_array($releaseData)?trim((string)($releaseData['version']??'')):'';
-        $manifestVersion=is_array($manifestData)?trim((string)($manifestData['version']??'')):'';
-        $packageRevision=is_array($packageVersionData)?normalize_release_revision($packageVersionData['release_revision']??0):0;
-        $releaseRevision=is_array($releaseData)?normalize_release_revision($releaseData['release_revision']??0):0;
-        $manifestRevision=is_array($manifestData)?normalize_release_revision($manifestData['release_revision']??0):0;
-        $expectedRevision=normalize_release_revision($remote['release_revision']??0);
-        if($releaseVersion!==$packageVersion || $manifestVersion!==$packageVersion){
-            throw new RuntimeException(
-                'Güncelleme paketi sürüm metadata dosyaları birbiriyle eşleşmiyor.'
-            );
-        }
-        if(version_compare($packageVersion,'1.1.105','>=') && (
-            $packageRevision<1
-            || $releaseRevision!==$packageRevision
-            || $manifestRevision!==$packageRevision
-            || $expectedRevision!==$packageRevision
-        )){
-            throw new RuntimeException(
-                'Güncelleme paketi release revision metadata değerleri birbiriyle eşleşmiyor.'
-            );
-        }
-        if(!is_array($manifestData['files']??null)){
-            throw new RuntimeException('Güncelleme paketi yönetilen dosya manifesti geçersiz.');
-        }
-
         // Yalnız updater'ın daha önce yönettiği dosyalar stale cleanup adayıdır.
         // İlk manifest yoksa hiçbir canlı dosya silinmez; sadece yeni baseline kaydedilir.
         $oldManagedFiles=read_managed_update_manifest($root);
         $newManagedFiles=collect_managed_update_files($sourceRoot,$preserve);
-        assert_packaged_manifest_matches_tree($manifestData,$newManagedFiles);
         assert_managed_copy_type_safe($root,$sourceRoot,$newManagedFiles,$oldManagedFiles,$preserve);
-        $activationPreflight=assert_update_activation_preflight(
-            $root,$sourceRoot,$newManagedFiles,$oldManagedFiles,$preserve
-        );
-        $recoveryState['activation_preflight']=$activationPreflight;
-        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
-
-        // Migration/legacy şema onarımı gerekiyorsa önce gerçek DB snapshot alınır.
-        // mysqldump yoksa veri dönüştüren güncelleme fail-closed durur.
-        $pendingMigrations=pending_migration_names($pdo,$sourceRoot,$localVersion);
-        $legacyRepairNeeded=legacy_membership_repair_needed($pdo);
-        $studentSchemaMissing=!auth_table_exists($pdo,'ogrenciler');
-        $requiresDbBackup=$studentSchemaMissing || $legacyRepairNeeded || $pendingMigrations!==[];
-
-        $dbBackupName='';
-        $updateStage='database_backup';
-        $recoveryState['stage']=$updateStage;
-        $recoveryState['pending_migrations']=$pendingMigrations;
-        $recoveryState['legacy_membership_repair']=$legacyRepairNeeded;
-        $recoveryState['student_schema_missing']=$studentSchemaMissing;
-        if($requiresDbBackup){
-            $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
-            $dbBackupName=create_database_backup($root,$dbConfig,$updateConfig,$pdo);
-        }
-
-        $recoveryState['status']='ready_before_mutation';
-        $recoveryState['stage']='ready_before_mutation';
-        $recoveryState['database_backup']=backup_artifact_metadata($root,$dbBackupName);
-        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
 
         // Migration'lar önce staging paketinden uygulanır.
         // DB dönüşümü başarısızsa yeni uygulama dosyaları canlıya kopyalanmaz.
-        $updateStage='database_mutation';
-        $recoveryState['stage']=$updateStage;
-        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
-        $databaseMutationStarted=$requiresDbBackup;
-        if($studentSchemaMissing) ensure_student_auth_schema($pdo);
-        $migrations=run_pending_migrations($pdo,$sourceRoot,$localVersion);
+        if(!auth_table_exists($pdo,'ogrenciler')) ensure_student_auth_schema($pdo);
+        $migrations=run_pending_migrations($pdo,$sourceRoot);
 
         // Şema başarıyla hazırlandıktan sonra yeni uygulama dosyalarını etkinleştir.
-        $updateStage='file_activation';
-        $recoveryState['stage']=$updateStage;
-        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
-        $fileActivationStarted=true;
         copy_update_tree($sourceRoot,$root,$preserve);
-        $activationVerification=verify_activated_update_files(
-            $sourceRoot,$root,$newManagedFiles,$preserve
-        );
-        $recoveryState['activation_verification']=$activationVerification;
-        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
         $removedManagedFiles=remove_stale_managed_files($root,$oldManagedFiles,$newManagedFiles,$preserve);
-        write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version'],normalize_release_revision($remote['release_revision']??0));
+        write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version']);
 
         $pdo->prepare("INSERT INTO sistem_ayarlar (ayar_anahtari,ayar_degeri) VALUES ('uygulama_surumu',?) ON DUPLICATE KEY UPDATE ayar_degeri=VALUES(ayar_degeri)")->execute([$remote['version']]);
-        $historyMessage='Guncelleme tamamlandi. Surum: '.(string)$remote['version'].' rev '.normalize_release_revision($remote['release_revision']??0).'; Yedek: '.$backupName;
-        if($dbBackupName!=='') $historyMessage.='; DB yedek: '.$dbBackupName;
+        $historyMessage='Guncelleme tamamlandi. Yedek: '.$backupName;
         if($removedManagedFiles!==[]) $historyMessage.='; temizlenen eski dosya: '.count($removedManagedFiles);
         $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='basarili',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute([$historyMessage,$logId]);
-
-        if(is_array($recoveryState)){
-            $recoveryState['status']='update_completed';
-            $recoveryState['stage']='completed';
-            $recoveryState['completed_at']=date(DATE_ATOM);
-            $recoveryState['applied_migrations']=$migrations;
-            $recoveryState['removed_files']=$removedManagedFiles;
-            $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
-        }
 
         @unlink($zipPath); delete_tree($extractDir);
         flock($updateLock,LOCK_UN); fclose($updateLock);
@@ -1735,29 +889,13 @@ function install_github_update(
             'message'=>'Guncelleme basariyla kuruldu.',
             'remote'=>$remote,
             'local'=>$localVersion,
-            'local_revision'=>$localRevision,
-            'installed_revision'=>normalize_release_revision($remote['release_revision']??0),
             'backup'=>$backupName,
-            'database_backup'=>$dbBackupName,
-            'recovery_manifest'=>$recoveryManifestName,
             'migrations'=>$migrations,
             'removed_files'=>$removedManagedFiles,
             'managed_files'=>count($newManagedFiles),
         ];
     }catch(Throwable $e){
         error_log('[IlkAdim][updater] '.$e->getMessage());
-        if(is_array($recoveryState)){
-            $recoveryState['status']=$fileActivationStarted
-                ?'update_failed_during_file_activation'
-                :($databaseMutationStarted?'update_failed_after_database_mutation':'update_failed_before_mutation');
-            $recoveryState['failed_at']=date(DATE_ATOM);
-            $recoveryState['failure_stage']=$updateStage;
-            $recoveryState['stage']='failed';
-            $recoveryState['manual_review_required']=true;
-            try{$recoveryManifestName=write_recovery_manifest($root,$recoveryState);}catch(Throwable $manifestError){
-                error_log('[IlkAdim][recovery-manifest] '.$manifestError->getMessage());
-            }
-        }
         try{ $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='hatali',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute(['Guncelleme hatayla sonlandi. Ayrintilar sunucu gunlugune kaydedildi.',$logId]); }catch(Throwable $ignored){}
         @unlink($zipPath); delete_tree($extractDir);
         if(is_resource($updateLock)){flock($updateLock,LOCK_UN);fclose($updateLock);}
