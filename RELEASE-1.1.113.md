@@ -27,3 +27,8 @@
 
 - 1.1.112 continuity testi sonraki sürümleri kabul edecek minimum sürüm sözleşmesine geçirildi.
 - Q1001–Q1500 katalog ve quality-index dosyaları tarihsel 1.1.113 rev1 artefaktı olarak sabitlendi; aynı sürüm içi test düzeltme revisionları kataloğu bozmayacak.
+
+## Rev 3
+
+- Q501–Q1000 tarihsel testi global kalite indexinin büyüyebilmesini destekleyecek şekilde geleceğe uyumlu hale getirildi.
+- İlk iki katalog yine kendi içinde tam 1000 kesintisiz maddeyi doğrularken, global index için alt sınır ve katalog üyeliği kontrol edilir.
