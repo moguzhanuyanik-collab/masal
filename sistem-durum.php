@@ -39,6 +39,7 @@ $aiKey=match ($aiProvider) {
     default=>trim((string)(getenv('OPENAI_API_KEY')?:($ai['api_key']??''))),
 };
 $aiOk=$aiEnabled && in_array($aiProvider,['openai','groq','gemini'],true) && $aiModel!=='' && $aiKey!=='';
+$managedManifestReady=is_file(__DIR__.'/storage/updates/managed-files.json') || is_file(__DIR__.'/update-managed-files.json');
 
 $checks=[
     ['name'=>'Veritabanı','detail'=>'MySQL bağlantısı ve basit sorgu','status'=>sd_status($databaseOk,'Hazır','Bağlantı kurulamadı')],
@@ -54,7 +55,7 @@ $checks=[
     ['name'=>'Uygulama runtime','detail'=>'Canlı uygulamanın app-runtime.js dosyası','status'=>sd_file_status(__DIR__.'/app-runtime.js')],
     ['name'=>'Temiz kurulum şeması','detail'=>'database/schema.sql','status'=>sd_file_status(__DIR__.'/database/schema.sql','Hazır','GitHub/kurulum kaynağı eksik')],
     ['name'=>'Temiz kurulum başlangıç verisi','detail'=>'database/seed.sql','status'=>sd_file_status(__DIR__.'/database/seed.sql','Hazır','GitHub/kurulum kaynağı eksik')],
-    ['name'=>'Yönetilen dosya manifesti','detail'=>'Updater yalnız kendi yönettiği eski dosyaları güvenle temizler','status'=>sd_file_status(__DIR__.'/storage/updates/managed-files.json','Aktif','İlk 1.1.96+ güncellemede oluşacak')],
+    ['name'=>'Yönetilen dosya manifesti','detail'=>'Updater yalnız kendi yönettiği eski dosyaları güvenle temizler','status'=>sd_status($managedManifestReady,'Baseline hazır','Manifest bulunamadı')],
     ['name'=>'AdımBot','detail'=>$aiProvider!=='' && $aiModel!==''?$aiProvider.' · '.$aiModel:'Sağlayıcı veya model seçilmedi','status'=>sd_status($aiOk,'Yapılandırıldı',$aiEnabled?'Eksik yapılandırma':'Kapalı')],
 ];
 $readyCount=count(array_filter($checks,static fn(array $check):bool=>(bool)$check['status']['ok']));
