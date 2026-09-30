@@ -43,7 +43,13 @@
   }catch(err){message=err.message||'Eşitleme için internet gerekli.';}
   finally{busy=false;if(view==='sync')await render();}
  };
- const today=()=>new Date().toISOString().slice(0,10);
+ const today=()=>{
+  const d=new Date();
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+ };
  const lesson=()=>{
    const course=pack.lessons.find(l=>l.id===subject);
    if(!course){view='lessons';return render();}
