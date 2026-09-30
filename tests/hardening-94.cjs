@@ -37,6 +37,6 @@ assert(!kurumApi.includes("['ok'=>false,'message'=>$e->getMessage()]"));
 assert(login.includes("catch (PDOException $e)"));
 assert(login.includes("catch (RuntimeException $e)"));
 
-assert.strictEqual(version.version,'1.1.94');
+assert(/^1\.1\.(?:9[4-9]|[1-9][0-9]{2,})$/.test(String(version.version)),'version must be 1.1.94 or newer');
 
 console.log('1.1.94 hardening checks passed');
