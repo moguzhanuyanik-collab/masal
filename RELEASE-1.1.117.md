@@ -35,3 +35,8 @@ Kurum eşleştirme modülünü mevcut tenant izolasyonunu bozmadan daha görün�
 
 - 1.1.117 regression testi artık sabit bir release revision numarasına kilitli değil; metadata içindeki revision eşleşmesini doğruluyor.
 - Sürüm kimliği 1.1.117 rev 5 olarak ankrajlandı.
+
+## Rev 6 — forward-compatible release revision guard
+
+- 1.1.116 tenant schema guard testi release revision değerini sabit 1 yerine sürüm metadata'larıyla eşleşecek şekilde doğruluyor.
+- Sürüm kimliği 1.1.117 rev 6 olarak ankrajlandı.
