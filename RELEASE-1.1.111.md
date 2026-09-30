@@ -16,3 +16,7 @@
 
 - 1.1.96'dan kalan updater manifest regresyon testi, stale-file silme fonksiyonunun yeni hash parametresini kabul edecek şekilde geleceğe uyumlu hale getirildi.
 - 1.1.111 release revision testi sabit revizyon yerine pozitif revision sözleşmesini doğruluyor.
+
+## Rev 3
+
+- 1.1.104 aktivasyon regresyon testi yeni hash-korumalı stale-file çağrısını fonksiyon imzasına bağımlı olmadan doğrulayacak şekilde güncellendi.
