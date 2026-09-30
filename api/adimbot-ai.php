@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/src/auth.php';
 require_once dirname(__DIR__) . '/src/adimbot_groq.php';
-require_once dirname(__DIR__) . '/src/adimbot_rate_limit.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, max-age=0');
@@ -295,55 +294,18 @@ if ($modelInvalid) {
 
 $now=time();
 $window=600;
+$requests=is_array($_SESSION['adimbot_ai_requests'] ?? null)?$_SESSION['adimbot_ai_requests']:[];
+$requests=array_values(array_filter(array_map('intval',$requests),static fn(int $ts):bool=>$ts>$now-$window));
 $limit=max(3,min(60,(int)($ai['max_requests_per_10_minutes'] ?? 20)));
-$rateResult=['persistent'=>false,'blocked'=>false,'retry_after'=>0];
-if(function_exists('db')){
-    try{
-        $rateResult=adimbot_rate_limit_check_and_record(
-            db(),
-            'chat',
-            $studentId,
-            mb_substr((string)($_SERVER['REMOTE_ADDR'] ?? ''),0,45),
-            $limit,
-            $window
-        );
-    }catch(Throwable){
-        $rateResult=['persistent'=>false,'blocked'=>false,'retry_after'=>0];
-    }
-}
-
-if(($rateResult['persistent']??false)===true){
-    unset($_SESSION['adimbot_ai_requests']);
-    session_write_close();
-    if(($rateResult['blocked']??false)===true){
-        $retryAfter=max(1,min($window,(int)($rateResult['retry_after']??$window)));
-        header('Retry-After: '.$retryAfter);
-        adimbot_ai_json([
-            'ok'=>false,
-            'message'=>'AdımBot biraz dinlensin. Birkaç dakika sonra tekrar deneyebilirsin.',
-            'reason'=>'rate_limit',
-            'retry_after'=>$retryAfter
-        ],429);
-    }
-}else{
-    // DB limiter yoksa mevcut session koruması güvenli fallback olarak kalır.
-    $requests=is_array($_SESSION['adimbot_ai_requests'] ?? null)?$_SESSION['adimbot_ai_requests']:[];
-    $requests=array_values(array_filter(array_map('intval',$requests),static fn(int $ts):bool=>$ts>$now-$window));
-    if(count($requests)>=$limit){
-        $_SESSION['adimbot_ai_requests']=$requests;
-        $retryAfter=max(1,min($window,$requests[0]+$window-$now));
-        header('Retry-After: '.$retryAfter);
-        adimbot_ai_json([
-            'ok'=>false,
-            'message'=>'AdımBot biraz dinlensin. Birkaç dakika sonra tekrar deneyebilirsin.',
-            'reason'=>'rate_limit',
-            'retry_after'=>$retryAfter
-        ],429);
-    }
-    $requests[]=$now;
+if (count($requests)>=$limit) {
     $_SESSION['adimbot_ai_requests']=$requests;
-    session_write_close();
+    $retryAfter=max(1,min($window,$requests[0]+$window-$now));
+    header('Retry-After: '.$retryAfter);
+    adimbot_ai_json(['ok'=>false,'message'=>'AdımBot biraz dinlensin. Birkaç dakika sonra tekrar deneyebilirsin.','reason'=>'rate_limit','retry_after'=>$retryAfter],429);
 }
+$requests[]=$now;
+$_SESSION['adimbot_ai_requests']=$requests;
+session_write_close();
 
 $context=is_array($payload['context'] ?? null)?$payload['context']:[];
 $allowed=[];

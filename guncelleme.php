@@ -87,7 +87,6 @@ try{
 }
 
 $gh = app_config('github');
-$dbCfg = app_config('db');
 $updateCfg = app_config('update');
 $updateCsrf = csrf_token();
 
@@ -151,9 +150,7 @@ if ($isAjax) {
             $result = install_github_update(
                 __DIR__,
                 $gh,
-                (array)($updateCfg['preserve'] ?? []),
-                is_array($dbCfg)?$dbCfg:[],
-                is_array($updateCfg)?$updateCfg:[]
+                (array)($updateCfg['preserve'] ?? [])
             );
 
             $newLocal = read_app_version();
@@ -176,8 +173,6 @@ if ($isAjax) {
                 'action' => 'install',
                 'message' => $message,
                 'backup' => (string)($result['backup'] ?? ''),
-                'database_backup' => (string)($result['database_backup'] ?? ''),
-                'recovery_manifest' => (string)($result['recovery_manifest'] ?? ''),
                 'local_version' => $newLocal,
                 'remote_version' => (string)($remote['version'] ?? ''),
                 'remote_name' => (string)($remote['name'] ?? ''),
@@ -295,7 +290,7 @@ $local = read_app_version();
                 Güncellemeyi Şimdi Kur
             </button>
 
-            <p class="little-note">Sunucuda yalnızca bir önceki uygulama sürümünün tek yedeği tutulur. Migration varsa ayrıca doğrulanmış DB snapshot ve SHA-256 recovery manifest oluşturulur. Otomatik restore yapılmaz; recovery bilgisi kontrollü geri dönüş içindir.</p>
+            <p class="little-note">Sunucuda yalnızca bir önceki uygulama sürümünün tek yedeği tutulur. Canlı ayarlar ve storage verileri yedeğe eklenmez. Repoda izlenen CSS dosyaları güncellenir; canlı runtime verileri korunur.</p>
         </div>
     </main>
 
@@ -438,12 +433,8 @@ $local = read_app_version();
             statusTitle.textContent = 'Güncelleme tamamlandı';
             statusText.textContent = data.message || 'Güncelleme başarıyla kuruldu.';
 
-            const backupParts = [];
-            if (data.backup) backupParts.push('Uygulama: ' + data.backup);
-            if (data.database_backup) backupParts.push('DB: ' + data.database_backup);
-            if (data.recovery_manifest) backupParts.push('Recovery: ' + data.recovery_manifest);
-            if (backupParts.length) {
-                backupText.textContent = backupParts.join(' · ');
+            if (data.backup) {
+                backupText.textContent = 'Yedek: ' + data.backup;
                 backupText.hidden = false;
             }
 
