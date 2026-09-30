@@ -9,10 +9,27 @@ function normalized_column_exists(PDO $pdo,string $table,string $column):bool{
     $s=$pdo->prepare("SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name=? AND column_name=?");
     $s->execute([$table,$column]);return (int)$s->fetchColumn()>0;
 }
+function normalized_student_curriculum(PDO $pdo,int $studentId):array{
+    $scope=['kademe_kodu'=>'temel_egitim','sinif_seviyesi'=>1];
+    if($studentId<=0||!normalized_table_exists($pdo,'ogrenciler'))return $scope;
+    $hasGrade=normalized_column_exists($pdo,'ogrenciler','sinif_seviyesi');
+    $hasStage=normalized_column_exists($pdo,'ogrenciler','egitim_kademesi');
+    if(!$hasGrade&&!$hasStage)return $scope;
+    $columns=[];
+    if($hasStage)$columns[]='egitim_kademesi';
+    if($hasGrade)$columns[]='sinif_seviyesi';
+    $s=$pdo->prepare('SELECT '.implode(',',$columns).' FROM ogrenciler WHERE id=? AND aktif=1 LIMIT 1');
+    $s->execute([$studentId]);
+    $row=$s->fetch(PDO::FETCH_ASSOC)?:[];
+    if($hasStage){
+        $stage=trim((string)($row['egitim_kademesi']??''));
+        if($stage!=='')$scope['kademe_kodu']=mb_substr($stage,0,30);
+    }
+    if($hasGrade)$scope['sinif_seviyesi']=max(1,min(8,(int)($row['sinif_seviyesi']??1)));
+    return $scope;
+}
 function normalized_student_grade(PDO $pdo,int $studentId):int{
-    if($studentId<=0||!normalized_column_exists($pdo,'ogrenciler','sinif_seviyesi'))return 1;
-    $s=$pdo->prepare('SELECT sinif_seviyesi FROM ogrenciler WHERE id=? LIMIT 1');$s->execute([$studentId]);
-    return max(1,min(8,(int)($s->fetchColumn()?:1)));
+    return normalized_student_curriculum($pdo,$studentId)['sinif_seviyesi'];
 }
 function normalized_datetime(mixed $v):string{
     $ms=is_numeric($v)?(int)$v:(int)(microtime(true)*1000);
