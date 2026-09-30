@@ -24,3 +24,12 @@
 ## Rev 3
 
 - Q1001–Q1500 katalog ve 1500-madde index dosyaları tarihsel rev1 artefaktı olarak sabitlendi; aynı sürüm içindeki düzeltme revisionları katalog süreklilik testini bozmaz.
+
+## Rev 4 — canlı 1.1.97 web rescue
+
+- Canlı 1.1.97 kurulumunun lossless 1.1.98 updater çekirdeğine ulaşabilmesi için tek dosyalık tarayıcı kurtarma köprüsü eklendi.
+- Köprü yalnız Süper Admin + CSRF + tam 1.1.97 sürümünde çalışır.
+- Yalnız src/updater.php değiştirilir; önce SHA-256 doğrulamalı yedek alınır.
+- Gömülü payload mevcut rev3 lossless rescue updater ile birebir aynıdır.
+- Etkinleştirme başarısızlığında eski updater atomik restore edilir.
+- 1.1.98 kurulumu sonrasında kurum_kullanicilari dönüşümü mevcut lossless staging + doğrulama + atomik RENAME TABLE akışıyla devam eder.

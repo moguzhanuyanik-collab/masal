@@ -388,6 +388,7 @@
     "quality/update-quality-500-v2.json",
     "quality/update-quality-500-v3.json",
     "quality/update-quality-500.json",
+    "rescue-1.1.97-to-1.1.98.php",
     "rol-paneli.php",
     "service-worker.js",
     "settings-account.js",
@@ -462,6 +463,8 @@
     "tests/update-safety-102.cjs",
     "tests/update-safety-102.php",
     "tests/updater-manifest-96.cjs",
+    "tests/web-rescue-197-198-113.cjs",
+    "tests/web-rescue-197-198-113.php",
     "tools/1.1.97-history-checkpoint.sql",
     "tools/apply-updater-1.1.97-rescue.php",
     "tools/apply-updater-1.1.98-rescue.php",
@@ -482,5 +485,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 3
+  "release_revision": 4
 }

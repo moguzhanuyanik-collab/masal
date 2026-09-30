@@ -64,6 +64,7 @@ jobs:
           php tests/update-198-rescue-110.php
           php tests/update-managed-integrity-111.php
           php tests/update-continuity-112.php
+          php tests/web-rescue-197-198-113.php
 
       - name: Node regression checks
         shell: bash
@@ -93,3 +94,4 @@ jobs:
           node tests/update-quality-catalog-112.cjs
           node tests/update-legacy-bridge-113.cjs
           node tests/update-quality-catalog-113.cjs
+          node tests/web-rescue-197-198-113.cjs
