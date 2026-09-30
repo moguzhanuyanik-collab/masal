@@ -1,5 +1,5 @@
 {
-  "version": "1.1.117",
-  "name": "Kurum eşleştirme görünürlüğü, stale ilişki temizliği ve 1452 hata ayrıştırması",
-  "release_revision": 6
+  "version": "1.1.118",
+  "name": "1.1.99 bootstrap recovery ve updater çekirdeği sürekliliği",
+  "release_revision": 1
 }

@@ -60,6 +60,9 @@ function update_public_error_message(Throwable $e): string {
         'Başka bir güncelleme',
         'Siradaki guncelleme',
         'Sıradaki güncelleme',
+        'Siradaki surumun',
+        'Sıradaki sürümün',
+        'Güncelleme kurtarma köprüsü',
         'Migration ',
         'Eski kurum_kullanicilari',
         'Eski kurum kullanıcı',
@@ -290,7 +293,7 @@ $localRevision = read_local_release_revision(__DIR__,$local);
                 <div class="history-item">
                     <span><svg><use href="#sa-cloud"/></svg></span>
                     <div>
-                        <strong>GitHub sürümü</strong>
+                        <strong>Sıradaki sürüm</strong>
                         <small><span id="remoteVersion">Kontrol ediliyor...</span><span id="remoteName"></span></small>
                     </div>
                     <svg aria-hidden="true"><use href="#i-refresh"/></svg>
@@ -299,7 +302,7 @@ $localRevision = read_local_release_revision(__DIR__,$local);
                 <div class="history-item">
                     <span><svg><use href="#sa-code"/></svg></span>
                     <div>
-                        <strong>Commit</strong>
+                        <strong>Hedef commit</strong>
                         <small id="commit">-</small>
                     </div>
                     <svg aria-hidden="true"><use href="#i-check"/></svg>
@@ -308,7 +311,7 @@ $localRevision = read_local_release_revision(__DIR__,$local);
 
             <section class="weekly-summary" id="statusBox">
                 <strong id="statusTitle">Güncelleme kontrol ediliyor</strong>
-                <p id="statusText">GitHub sürümü kontrol ediliyor...</p>
+                <p id="statusText">Sıradaki güvenli sürüm kontrol ediliyor...</p>
                 <small id="backupText" hidden></small>
             </section>
 

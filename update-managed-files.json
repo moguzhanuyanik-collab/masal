@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.117",
+  "version": "1.1.118",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -81,6 +81,7 @@
     "RELEASE-1.1.115.md",
     "RELEASE-1.1.116.md",
     "RELEASE-1.1.117.md",
+    "RELEASE-1.1.118.md",
     "RELEASE-1.1.12.md",
     "RELEASE-1.1.13.md",
     "RELEASE-1.1.14.md",
@@ -455,6 +456,8 @@
     "tests/update-activation-104.php",
     "tests/update-continuity-112.cjs",
     "tests/update-continuity-112.php",
+    "tests/update-core-generation-118.cjs",
+    "tests/update-core-generation-118.php",
     "tests/update-core-handoff-108.cjs",
     "tests/update-core-handoff-108.php",
     "tests/update-core-handoff-rollback-109.cjs",
@@ -497,5 +500,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 6
+  "release_revision": 1
 }
