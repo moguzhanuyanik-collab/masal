@@ -92,10 +92,17 @@ if ($provider==='groq') {
 } else {
     $url='https://generativelanguage.googleapis.com/v1beta/models/'.rawurlencode($geminiModel).':generateContent';
     $headers=['x-goog-api-key: '.$key,'Content-Type: application/json'];
-    $request=json_encode(['contents'=>[['parts'=>[
-        ['text'=>'Bu Türkçe ses kaydını yalnızca yazıya çevir. Yorum, yanıt veya ek açıklama yazma.'],
-        ['inline_data'=>['mime_type'=>$detected==='video/webm'?'audio/webm':($detected==='video/mp4'?'audio/mp4':$detected),'data'=>base64_encode($audioBytes)]],
-    ]]]]],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+    $request=json_encode([
+        'contents'=>[[
+            'parts'=>[
+                ['text'=>'Bu Türkçe ses kaydını yalnızca yazıya çevir. Yorum, yanıt veya ek açıklama yazma.'],
+                ['inline_data'=>[
+                    'mime_type'=>$detected==='video/webm'?'audio/webm':($detected==='video/mp4'?'audio/mp4':$detected),
+                    'data'=>base64_encode($audioBytes),
+                ]],
+            ],
+        ]],
+    ],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 }
 $providerRetryAfter=0;
 $ch=curl_init($url);
