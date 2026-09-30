@@ -546,6 +546,47 @@ function normalize_db_backup_config(array $db): array {
     return ['host'=>$host,'port'=>$port,'name'=>$name,'user'=>$user,'pass'=>$pass];
 }
 
+function mysql_option_quote(string $value): string {
+    if(str_contains($value,"\0")) throw new RuntimeException('MySQL option değeri geçersiz.');
+    $value=str_replace(
+        ["\\","\"","\n","\r","\t"],
+        ["\\\\","\\\"","\\n","\\r","\\t"],
+        $value
+    );
+    return '"'.$value.'"';
+}
+
+function create_mysql_defaults_file(string $root,array $db): string {
+    $dir=rtrim($root,'/\\').'/storage/updates';
+    if(!is_dir($dir)&&!mkdir($dir,0750,true)&&!is_dir($dir)){
+        throw new RuntimeException('MySQL geçici ayar klasörü oluşturulamadı.');
+    }
+    $path=$dir.'/.mysqldump-'.bin2hex(random_bytes(12)).'.cnf';
+    $content="[client]\n"
+        ."host=".mysql_option_quote((string)$db['host'])."\n"
+        ."port=".(string)(int)$db['port']."\n"
+        ."user=".mysql_option_quote((string)$db['user'])."\n"
+        ."password=".mysql_option_quote((string)$db['pass'])."\n"
+        ."default-character-set=utf8mb4\n";
+    if(file_put_contents($path,$content,LOCK_EX)===false){
+        throw new RuntimeException('MySQL geçici ayar dosyası yazılamadı.');
+    }
+    @chmod($path,0600);
+    return $path;
+}
+
+function database_size_bytes(PDO $pdo): int {
+    try{
+        $stmt=$pdo->query("SELECT COALESCE(SUM(data_length+index_length),0)
+            FROM information_schema.tables WHERE table_schema=DATABASE()");
+        $size=(int)($stmt?$stmt->fetchColumn():0);
+        if($stmt)$stmt->closeCursor();
+        return max(0,$size);
+    }catch(Throwable){
+        return 0;
+    }
+}
+
 function find_mysqldump_binary(array $updateConfig=[]): ?string {
     $configured=trim((string)($updateConfig['mysqldump_path']??''));
     $candidates=[];
@@ -563,7 +604,12 @@ function find_mysqldump_binary(array $updateConfig=[]): ?string {
     return null;
 }
 
-function create_database_backup(string $root,array $dbConfig,array $updateConfig=[]): string {
+function create_database_backup(
+    string $root,
+    array $dbConfig,
+    array $updateConfig=[],
+    ?PDO $pdo=null
+): string {
     if(!function_exists('proc_open')){
         throw new RuntimeException('Migration için veritabanı yedeği alınamıyor: proc_open kullanılamıyor.');
     }
@@ -584,44 +630,51 @@ function create_database_backup(string $root,array $dbConfig,array $updateConfig
     $final=$dir.'/onceki_veritabani.sql';
     $tmp=$dir.'/onceki_veritabani.tmp.sql';
     $old=$dir.'/onceki_veritabani.old.sql';
+    $stderrPath=$dir.'/onceki_veritabani.stderr.tmp';
     @unlink($tmp);
     @unlink($old);
+    @unlink($stderrPath);
 
+    if($pdo instanceof PDO){
+        assert_backup_disk_space($dir,database_size_bytes($pdo),'Veritabanı yedeği');
+    }
+
+    $defaultsFile=create_mysql_defaults_file($root,$db);
     $cmd=[
         $binary,
+        '--defaults-extra-file='.$defaultsFile,
         '--single-transaction',
         '--quick',
         '--triggers',
         '--hex-blob',
         '--skip-lock-tables',
-        '--default-character-set=utf8mb4',
-        '--host='.$db['host'],
-        '--port='.(string)$db['port'],
-        '--user='.$db['user'],
         $db['name'],
     ];
 
     $descriptors=[
         0=>['pipe','r'],
         1=>['file',$tmp,'wb'],
-        2=>['pipe','w'],
+        2=>['file',$stderrPath,'wb'],
     ];
-    $env=getenv();
-    if(!is_array($env)) $env=[];
-    $env['MYSQL_PWD']=$db['pass'];
-
-    $process=@proc_open($cmd,$descriptors,$pipes,null,$env,['bypass_shell'=>true]);
-    if(!is_resource($process)){
-        @unlink($tmp);
-        throw new RuntimeException('mysqldump işlemi başlatılamadı.');
+    $process=null;
+    $exit=1;
+    try{
+        $process=@proc_open($cmd,$descriptors,$pipes,null,null,['bypass_shell'=>true]);
+        if(!is_resource($process)){
+            throw new RuntimeException('mysqldump işlemi başlatılamadı.');
+        }
+        if(isset($pipes[0])&&is_resource($pipes[0])) fclose($pipes[0]);
+        $exit=proc_close($process);
+        $process=null;
+    }finally{
+        if(is_resource($process)){
+            @proc_terminate($process);
+            @proc_close($process);
+        }
+        @unlink($defaultsFile);
     }
-    if(isset($pipes[0])&&is_resource($pipes[0])) fclose($pipes[0]);
-    $stderr='';
-    if(isset($pipes[2])&&is_resource($pipes[2])){
-        $stderr=stream_get_contents($pipes[2],8192) ?: '';
-        fclose($pipes[2]);
-    }
-    $exit=proc_close($process);
+    $stderr=is_file($stderrPath)?(string)file_get_contents($stderrPath,false,null,0,8192):'';
+    @unlink($stderrPath);
 
     $size=is_file($tmp)?(int)(filesize($tmp)?:0):0;
     $head='';
@@ -1176,7 +1229,7 @@ function install_github_update(
         $dbBackupName='';
         $requiresDbBackup=database_update_requires_backup($pdo,$sourceRoot,$localVersion);
         if($requiresDbBackup){
-            $dbBackupName=create_database_backup($root,$dbConfig,$updateConfig);
+            $dbBackupName=create_database_backup($root,$dbConfig,$updateConfig,$pdo);
         }
 
         // Migration'lar önce staging paketinden uygulanır.
