@@ -29,3 +29,7 @@ Güncelleme paketinin indirme/açılım kaynak tüketimini fail-closed sınırla
 ## Veri güvenliği
 
 Yeni migration yoktur. Kullanıcı, kurum, öğrenci, veli veya içerik verisi değiştirilmez. Mevcut uygulama yedeği, DB snapshot, managed-file ve release-anchor davranışları korunur.
+
+## Kalite kapısı revizyonu
+
+İlk 1.1.102 CI çalışmasında uygulama ve syntax kontrolleri geçti; yeni ZIP davranış testinin güvenli senaryosu 101 kayıt üretmesine rağmen test konfigürasyonu yanlışlıkla 10 kayıt sınırı kullanıyordu. Test güvenli senaryoda 200 kayıt sınırına düzeltilerek gerçek üretim alt sınırlarıyla uyumlu hale getirildi; uygulama davranışı değiştirilmedi.
