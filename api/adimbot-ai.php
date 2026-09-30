@@ -177,7 +177,7 @@ function adimbot_ai_repeats_previous(string $reply, array $previous): bool {
     return false;
 }
 
-function adimbot_ai_provider_error(int $status, int $curlErrno, mixed $body=null): never {
+function adimbot_ai_provider_error(int $status, int $curlErrno, mixed $body=null, int $retryAfter=0): never {
     if ($curlErrno===CURLE_OPERATION_TIMEDOUT || $status===408 || $status===504) {
         adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ yanıtı zamanında gelmedi.','reason'=>'provider_timeout'],504);
     }
@@ -185,6 +185,11 @@ function adimbot_ai_provider_error(int $status, int $curlErrno, mixed $body=null
         adimbot_ai_json(['ok'=>false,'message'=>'Yapay zekâ sağlayıcısına bağlantı kurulamadı.','reason'=>'provider_connection_error'],502);
     }
     $reason=adimbot_provider_reason($status,$body);
+    if($reason==='provider_rate_limit' && $retryAfter>0){
+        $retryAfter=max(1,min(600,$retryAfter));
+        header('Retry-After: '.$retryAfter);
+        adimbot_ai_json(['ok'=>false,'reason'=>$reason,'retry_after'=>$retryAfter],429);
+    }
     adimbot_ai_json(['ok'=>false,'reason'=>$reason],$reason==='provider_rate_limit'?429:502);
 }
 
@@ -373,11 +378,13 @@ $endpoint=match ($provider) {
     'gemini'=>'https://generativelanguage.googleapis.com/v1beta/models/'.rawurlencode($model).':generateContent',
     default=>'https://api.openai.com/v1/responses',
 };
+$providerRetryAfter=0;
 if ($provider==='groq') {
     $groqResult=adimbot_groq_request($request,$apiKey,$timeout);
     $responseBody=$groqResult['body'];
     $status=$groqResult['status'];
     $curlErrno=$groqResult['errno'];
+    $providerRetryAfter=(int)($groqResult['retry_after'] ?? 0);
     $model=$groqResult['model'];
 } else {
     $ch=curl_init($endpoint);
@@ -397,6 +404,14 @@ if ($provider==='groq') {
         CURLOPT_HTTPHEADER=>$provider==='gemini'
             ?['x-goog-api-key: '.$apiKey,'Content-Type: application/json']
             :['Authorization: Bearer '.$apiKey,'Content-Type: application/json'],
+        CURLOPT_HEADERFUNCTION=>static function($curl,string $line) use (&$providerRetryAfter): int {
+            $length=strlen($line);
+            $parts=explode(':',$line,2);
+            if(count($parts)===2 && strcasecmp(trim($parts[0]),'Retry-After')===0){
+                $providerRetryAfter=adimbot_retry_after_seconds(trim($parts[1]));
+            }
+            return $length;
+        },
         CURLOPT_POSTFIELDS=>$encodedRequest,
     ])) {
         curl_close($ch);
@@ -410,7 +425,7 @@ if ($provider==='groq') {
 }
 
 if (!is_string($responseBody) || $responseBody==='' || $status<200 || $status>=300) {
-    adimbot_ai_provider_error($status,$curlErrno,$responseBody);
+    adimbot_ai_provider_error($status,$curlErrno,$responseBody,$providerRetryAfter);
 }
 
 $decoded=json_decode($responseBody,true);
