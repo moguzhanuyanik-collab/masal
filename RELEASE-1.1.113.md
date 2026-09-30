@@ -56,3 +56,12 @@
 - 064 dışında başka herhangi bir geçmiş migration eksikse sistem yine fail-closed durur.
 - Yeni ara ankraj `1.1.99 rev1000` olarak yayınlandı.
 
+## Rev 11 — 064 idempotent recovery
+
+- 1.1.98 bridge sonrasında yalnız 064 checkpointi eksikse eski migration SQL'i tekrar oynatılmaz.
+- Tüm 064 öncesi non-retired migration kayıtları önce doğrulanır; başka eksik varsa hiçbir değişiklik yapılmaz.
+- `adimbot_rate_limitleri` yalnız `CREATE TABLE IF NOT EXISTS` ile hazırlanır ve 064 kaydı `INSERT IGNORE` ile tamamlanır.
+- Kullanıcı, kurum, öğrenci, veli ve öğretmen verileri bu recovery tarafından değiştirilmez.
+- Bu dar recovery veri dönüştürmediği için normal pending-migration DB snapshot kapısına takılmadan önce tamamlanır.
+- Yeni tarihsel geçiş ankrajı `1.1.99 rev1001` olarak yayınlandı.
+
