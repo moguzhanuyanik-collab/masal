@@ -1439,20 +1439,37 @@ function assert_automatic_migration_safe(string $name,string $path): void {
     }
 
     // 065 ve sonrası için daha sıkı sözleşme: şema daraltan/dönüştüren ALTER
-    // otomatik zincirde çalışmaz. Veri silen migration yalnız açık marker ile,
-    // DDL içermeyen transaction-safe bir dosyada kabul edilir.
+    // otomatik zincirde çalışmaz. 065, kurum kapsamlı ilişki şemasını güvenli
+    // biçimde tamamlamak için yalnızca açık marker ile iki dar kapsamlı ALTER
+    // ailesine izin verir; bunun dışındaki DROP/MODIFY/CHANGE/RENAME yine fail-closed.
     if(migration_sequence_number($name)>=65){
-        if(preg_match('/\bRENAME\s+TABLE\b/i',$sql)===1
-            || preg_match('/\bALTER\s+TABLE\b[^;]*\b(?:DROP|MODIFY|CHANGE|RENAME)\b/is',$sql)===1){
+        $allowTenantSchemaAlter=str_contains($raw,'ILKADIM_ALLOW_SAFE_TENANT_SCHEMA_ALTER');
+        if($allowTenantSchemaAlter){
+            $schemaScan=$sql;
+            foreach([
+                '/\\bALTER\\s+TABLE\\s+(?:veli_ogrenci|ogretmen_ogrenci)\\s+DROP\\s+PRIMARY\\s+KEY\\s*,\\s*ADD\\s+PRIMARY\\s+KEY\\s*\\([^;]*\\bkurum_id\\b[^;]*\\)/i',
+                '/\\bALTER\\s+TABLE\\s+(?:veli_ogrenci|ogretmen_ogrenci)\\s+MODIFY\\s+COLUMN\\s+kurum_id\\b[^;]*\\bNOT\\s+NULL\\b[^;]*\\bDEFAULT\\s+0\\b/i',
+            ] as $allowedPattern){
+                $schemaScan=preg_replace($allowedPattern,' ',$schemaScan)??$schemaScan;
+            }
+
+            if(preg_match('/\\bRENAME\\s+TABLE\\b/i',$schemaScan)===1
+                || preg_match('/\\bALTER\\s+TABLE\\b[^;]*\\b(?:DROP|MODIFY|CHANGE|RENAME)\\b/is',$schemaScan)===1){
+                throw new RuntimeException(
+                    'Migration '.$name.' otomatik güncellemede izin verilmeyen şema dönüşümü içeriyor.'
+                );
+            }
+        }elseif(preg_match('/\\bRENAME\\s+TABLE\\b/i',$sql)===1
+            || preg_match('/\\bALTER\\s+TABLE\\b[^;]*\\b(?:DROP|MODIFY|CHANGE|RENAME)\\b/is',$sql)===1){
             throw new RuntimeException(
                 'Migration '.$name.' otomatik güncellemede şema daraltma/dönüştürme içeriyor.'
             );
         }
 
-        $hasDelete=preg_match('/\bDELETE\s+(?:[A-Za-z0-9_]+\s+FROM|FROM)\b/i',$sql)===1;
+        $hasDelete=preg_match('/\\bDELETE\\s+(?:[A-Za-z0-9_]+\\s+FROM|FROM)\\b/i',$sql)===1;
         if($hasDelete){
             $allowDelete=str_contains($raw,'ILKADIM_ALLOW_TRANSACTIONAL_DELETE');
-            $hasDdl=preg_match('/\b(?:CREATE|ALTER|DROP|TRUNCATE|RENAME)\s+TABLE\b/i',$sql)===1;
+            $hasDdl=preg_match('/\\b(?:CREATE|ALTER|DROP|TRUNCATE|RENAME)\\s+TABLE\\b/i',$sql)===1;
             if(!$allowDelete || $hasDdl){
                 throw new RuntimeException(
                     'Migration '.$name.' veri silme içeriyor; transaction marker ve DDL ayrımı gerekli.'
