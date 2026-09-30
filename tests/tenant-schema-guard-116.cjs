@@ -19,9 +19,12 @@ assert(migration.includes('__ilkadim_tenant_relation_schema_guard_failed__'),'gu
 assert(migration.includes('SET @ilkadim_relation_guard_passed = 1'),'successful guard path must not return an unbuffered result set');
 assert(dbTest.includes('066_kurum_eslestirme_schema_guard.sql'),'DB integration test must execute migration 066');
 assert(workflow.includes('node tests/tenant-schema-guard-116.cjs'),'CI must run the schema guard regression');
-assert.strictEqual(version.version,'1.1.116');
-assert.strictEqual(release.version,'1.1.116');
-assert.strictEqual(manifest.version,'1.1.116');
+{
+  const parts=String(version.version).split('.').map(Number);
+  assert(parts.length===3 && parts[0]===1 && parts[1]===1 && Number.isInteger(parts[2]) && parts[2]>=116,'version must be 1.1.116 or newer');
+}
+assert.strictEqual(release.version,version.version);
+assert.strictEqual(manifest.version,version.version);
 assert.strictEqual(version.release_revision,1);
 assert.strictEqual(release.release_revision,1);
 assert.strictEqual(manifest.release_revision,1);

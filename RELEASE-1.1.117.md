@@ -24,3 +24,9 @@ Kurum eşleştirme modülünü mevcut tenant izolasyonunu bozmadan daha görün�
 ## Rev 3 — release contract assertion fix
 
 - Regression testindeki release revision beklentisi 1.1.117 rev 3 ile eşitlendi.
+
+## Rev 4 — release test continuity
+
+- 1.1.116 şema guard testi artık sürüm numarasını tek bir release'e kilitlemek yerine 1.1.116 ve üzerini doğruluyor.
+- Böylece yeni güvenlik/regression release'lerinde eski guard testi gereksiz yere başarısız olmuyor.
+- Sürüm kimliği 1.1.117 rev 4 olarak ankrajlandı.
