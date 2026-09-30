@@ -72,3 +72,10 @@
 - 1.1.99 recovery checkpointinden güncel main sürümüne geçiş artık branch adıyla değil sabit commit SHA ile kurulur.
 - Kurulum aşamasında eski bir updater yine branch adı üretirse hedef commit son kez gerçek HEAD SHA'ya normalize edilir.
 
+## Rev 13 — sıralı güncelleme zinciri
+
+- 1.1.99'dan doğrudan en güncel sürüme atlayan kısayol kaldırıldı.
+- Bridge/recovery commitleri güncelleme geçmişi taramasını artık erken kesmez.
+- Güncelleyici kurulu sürümden sonraki en küçük sürümü seçer: 1.1.99 → 1.1.100 → 1.1.101 → ...
+- Hedef paket gerçek GitHub commit SHA ile sabitlenir.
+

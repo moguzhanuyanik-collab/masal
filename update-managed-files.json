@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.114",
+  "version": "1.1.113",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -490,5 +490,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 2
+  "release_revision": 13
 }
