@@ -83,5 +83,6 @@ try {
 
     json_response(['ok'=>true,'student_id'=>$studentId,'saved_at'=>date(DATE_ATOM),'summary'=>normalized_summary($pdo,$studentId),'storage'=>'mysql']);
 }catch(Throwable $e){
-    json_response(['ok'=>false,'message'=>'Veritabanı işlemi başarısız.','detail'=>$e->getMessage()],500);
+    error_log('[IlkAdim][state] '.$e->getMessage());
+    json_response(['ok'=>false,'message'=>'Öğrenci verisi şu anda kaydedilemedi. Lütfen tekrar deneyin.'],500);
 }
