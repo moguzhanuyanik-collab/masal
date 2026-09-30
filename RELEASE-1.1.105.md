@@ -31,3 +31,7 @@ Aynı semantik sürüm numarası altında yayınlanan doğrulanmış hotfix revi
 ## Veri güvenliği
 
 Yeni migration yoktur. Kullanıcı, kurum, öğrenci veya içerik verileri değiştirilmez.
+
+## Doğrulama
+
+Sürüm önce `update-release-revision-105` aday dalında tam kalite kapısından geçirilir; yalnız yeşil sonuçtan sonra aynı doğrulanmış commit `main` dalına fast-forward edilir.
