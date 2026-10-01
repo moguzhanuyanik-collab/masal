@@ -42,6 +42,39 @@ function tf_contract_paid(PDO $pdo,int $contractId): string {
     return $paid;
 }
 
+function tf_contract_payment_counts(PDO $pdo,int $contractId): array {
+    $stmt=$pdo->prepare("SELECT
+        COUNT(*) toplam,
+        SUM(CASE WHEN durum='aktif' THEN 1 ELSE 0 END) aktif
+        FROM kurum_tahsilatlari
+        WHERE sozlesme_id=?");
+    $stmt->execute([$contractId]);
+    $row=$stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return [
+        'toplam'=>max(0,(int)($row['toplam']??0)),
+        'aktif'=>max(0,(int)($row['aktif']??0)),
+    ];
+}
+
+function tf_normalize_contract_status(string $requested,string $total,string $paid,array $paymentCounts): string {
+    $history=max(0,(int)($paymentCounts['toplam']??0));
+    $active=max(0,(int)($paymentCounts['aktif']??0));
+    $isFullyPaid=tf_decimal_compare($paid,$total)>=0;
+
+    if($requested==='iptal'){
+        if($active>0) throw new RuntimeException('Aktif tahsilatı olan sözleşme iptal edilemez. Önce aktif tahsilatları iptal et.');
+        return 'iptal';
+    }
+
+    if($requested==='taslak'){
+        if($history>0) throw new RuntimeException('Tahsilat geçmişi olan sözleşme taslak durumuna alınamaz.');
+        return 'taslak';
+    }
+
+    return $isFullyPaid?'tamamlandi':'aktif';
+}
+
 function tf_contract_rows(PDO $pdo,int $limit=200): array {
     if(!tf_tables_ready($pdo)) return [];
     $limit=max(1,min(500,$limit));
@@ -87,9 +120,10 @@ function tf_payment_rows(PDO $pdo,int $limit=100): array {
     $sql="SELECT
         t.id,t.sozlesme_id,t.kurum_id,t.tahsilat_tarihi,t.tutar,t.para_birimi,t.odeme_yontemi,
         t.referans_no,t.notlar,t.durum,t.iptal_nedeni,t.iptal_tarihi,t.olusturulma_tarihi,
-        s.sozlesme_no,k.ad kurum_adi
+        s.sozlesme_no,k.ad kurum_adi,
+        CASE WHEN s.kurum_id<>t.kurum_id THEN 1 ELSE 0 END kurum_tutarsiz
         FROM kurum_tahsilatlari t
-        INNER JOIN kurum_sozlesmeleri s ON s.id=t.sozlesme_id AND s.kurum_id=t.kurum_id
+        INNER JOIN kurum_sozlesmeleri s ON s.id=t.sozlesme_id
         INNER JOIN kurumlar k ON k.id=t.kurum_id
         ORDER BY t.tahsilat_tarihi DESC,t.id DESC
         LIMIT {$limit}";
@@ -103,10 +137,16 @@ function tf_financial_summary(PDO $pdo): array {
     if(!tf_tables_ready($pdo)) return [];
     $stmt=$pdo->query("SELECT
         s.para_birimi,
-        COALESCE(SUM(CASE WHEN s.durum IN ('aktif','tamamlandi') THEN s.toplam_tutar ELSE 0 END),0) sozlesme_toplami,
-        COALESCE(SUM(CASE WHEN t.durum='aktif' THEN t.tutar ELSE 0 END),0) tahsil_edilen
+        COALESCE(SUM(s.toplam_tutar),0) sozlesme_toplami,
+        COALESCE(SUM(COALESCE(p.tahsil_edilen,0)),0) tahsil_edilen
         FROM kurum_sozlesmeleri s
-        LEFT JOIN kurum_tahsilatlari t ON t.sozlesme_id=s.id
+        LEFT JOIN (
+            SELECT sozlesme_id,COALESCE(SUM(tutar),0) tahsil_edilen
+            FROM kurum_tahsilatlari
+            WHERE durum='aktif'
+            GROUP BY sozlesme_id
+        ) p ON p.sozlesme_id=s.id
+        WHERE s.durum IN ('aktif','tamamlandi')
         GROUP BY s.para_birimi
         ORDER BY FIELD(s.para_birimi,'TRY','USD','EUR'),s.para_birimi");
     $rows=$stmt?$stmt->fetchAll(PDO::FETCH_ASSOC):[];
@@ -121,6 +161,55 @@ function tf_financial_summary(PDO $pdo): array {
     }
     unset($row);
     return $rows;
+}
+
+function tf_integrity_issues(PDO $pdo): array {
+    if(!tf_tables_ready($pdo)) return [];
+    $issues=[];
+
+    $stmt=$pdo->query("SELECT COUNT(*)
+        FROM kurum_tahsilatlari t
+        INNER JOIN kurum_sozlesmeleri s ON s.id=t.sozlesme_id
+        WHERE t.kurum_id<>s.kurum_id");
+    $mismatch=(int)($stmt?$stmt->fetchColumn():0);
+    if($stmt)$stmt->closeCursor();
+    if($mismatch>0)$issues[]=[
+        'kod'=>'payment_institution_mismatch',
+        'adet'=>$mismatch,
+        'mesaj'=>'Tahsilat kurumu ile sözleşme kurumu eşleşmeyen geçmiş kayıt var.',
+    ];
+
+    $stmt=$pdo->query("SELECT COUNT(DISTINCT s.id)
+        FROM kurum_sozlesmeleri s
+        INNER JOIN kurum_tahsilatlari t ON t.sozlesme_id=s.id AND t.durum='aktif'
+        WHERE s.durum='iptal'");
+    $cancelledWithActive=(int)($stmt?$stmt->fetchColumn():0);
+    if($stmt)$stmt->closeCursor();
+    if($cancelledWithActive>0)$issues[]=[
+        'kod'=>'cancelled_contract_active_payment',
+        'adet'=>$cancelledWithActive,
+        'mesaj'=>'İptal durumda olup aktif tahsilatı bulunan sözleşme var.',
+    ];
+
+    $stmt=$pdo->query("SELECT COUNT(*) FROM (
+        SELECT s.id,s.durum,s.toplam_tutar,
+               COALESCE(SUM(CASE WHEN t.durum='aktif' THEN t.tutar ELSE 0 END),0) paid
+        FROM kurum_sozlesmeleri s
+        LEFT JOIN kurum_tahsilatlari t ON t.sozlesme_id=s.id
+        WHERE s.durum IN ('aktif','tamamlandi')
+        GROUP BY s.id,s.durum,s.toplam_tutar
+        HAVING (s.durum='tamamlandi' AND paid+0.009<s.toplam_tutar)
+            OR (s.durum='aktif' AND paid+0.009>=s.toplam_tutar)
+    ) x");
+    $statusMismatch=(int)($stmt?$stmt->fetchColumn():0);
+    if($stmt)$stmt->closeCursor();
+    if($statusMismatch>0)$issues[]=[
+        'kod'=>'contract_status_balance_mismatch',
+        'adet'=>$statusMismatch,
+        'mesaj'=>'Tahsilat bakiyesi ile sözleşme durumu uyuşmayan kayıt var.',
+    ];
+
+    return $issues;
 }
 
 function tf_license_renewal_rows(PDO $pdo,int $days=30): array {
@@ -193,15 +282,18 @@ function tf_save_contract(PDO $pdo,array $actor,array $input): int {
         }
 
         if($id>0){
-            $lock=$pdo->prepare('SELECT id,kurum_id,para_birimi FROM kurum_sozlesmeleri WHERE id=? LIMIT 1 FOR UPDATE');
+            $lock=$pdo->prepare('SELECT id,kurum_id,para_birimi,durum,toplam_tutar FROM kurum_sozlesmeleri WHERE id=? LIMIT 1 FOR UPDATE');
             $lock->execute([$id]);
             $old=$lock->fetch(PDO::FETCH_ASSOC);
             $lock->closeCursor();
             if(!is_array($old)) throw new RuntimeException('Sözleşme bulunamadı.');
 
             $paid=tf_contract_paid($pdo,$id);
+            $paymentCounts=tf_contract_payment_counts($pdo,$id);
             if(tf_decimal_compare($total,$paid)<0) throw new RuntimeException('Sözleşme tutarı, tahsil edilmiş tutarın altına indirilemez.');
-            if((float)$paid>0.009 && (string)$old['para_birimi']!==$currency) throw new RuntimeException('Tahsilatı olan sözleşmenin para birimi değiştirilemez.');
+            if((int)$paymentCounts['toplam']>0 && (int)$old['kurum_id']!==$institutionId) throw new RuntimeException('Tahsilat geçmişi olan sözleşmenin kurumu değiştirilemez.');
+            if((int)$paymentCounts['toplam']>0 && (string)$old['para_birimi']!==$currency) throw new RuntimeException('Tahsilat geçmişi olan sözleşmenin para birimi değiştirilemez.');
+            $status=tf_normalize_contract_status($status,$total,$paid,$paymentCounts);
 
             $stmt=$pdo->prepare("UPDATE kurum_sozlesmeleri
                 SET kurum_id=?,paket_id=?,sozlesme_no=?,baslangic_tarihi=?,bitis_tarihi=?,vade_tarihi=?,
@@ -214,6 +306,7 @@ function tf_save_contract(PDO $pdo,array $actor,array $input): int {
             $stmt->closeCursor();
             $action='ticari_sozlesme_guncelle';
         }else{
+            $status=tf_normalize_contract_status($status,$total,'0.00',['toplam'=>0,'aktif'=>0]);
             $stmt=$pdo->prepare("INSERT INTO kurum_sozlesmeleri
                 (kurum_id,paket_id,sozlesme_no,baslangic_tarihi,bitis_tarihi,vade_tarihi,toplam_tutar,para_birimi,durum,notlar)
                 VALUES (?,?,?,?,?,?,?,?,?,?)");
@@ -281,11 +374,12 @@ function tf_record_payment(PDO $pdo,array $actor,array $input): int {
         $stmt->closeCursor();
 
         $newPaid=(float)$paid+(float)$amount;
-        if($newPaid+0.009>=(float)$contract['toplam_tutar'] && (string)$contract['durum']==='aktif'){
-            $stmt=$pdo->prepare("UPDATE kurum_sozlesmeleri SET durum='tamamlandi' WHERE id=? AND durum='aktif'");
-            $stmt->execute([$contractId]);
-            $stmt->closeCursor();
-        }
+        $newStatus=$newPaid+0.009>=(float)$contract['toplam_tutar']?'tamamlandi':'aktif';
+        $stmt=$pdo->prepare("UPDATE kurum_sozlesmeleri
+            SET durum=?
+            WHERE id=? AND durum IN ('aktif','tamamlandi')");
+        $stmt->execute([$newStatus,$contractId]);
+        $stmt->closeCursor();
 
         if($started) $pdo->commit();
     }catch(Throwable $e){
@@ -325,11 +419,17 @@ function tf_cancel_payment(PDO $pdo,array $actor,int $paymentId,string $reason):
         $stmt->closeCursor();
 
         $contractId=(int)$row['sozlesme_id'];
-        $stmt=$pdo->prepare("UPDATE kurum_sozlesmeleri
-            SET durum='aktif'
-            WHERE id=? AND durum='tamamlandi' AND toplam_tutar>(SELECT COALESCE(SUM(tutar),0) FROM kurum_tahsilatlari WHERE sozlesme_id=? AND durum='aktif')");
-        $stmt->execute([$contractId,$contractId]);
+        $stmt=$pdo->prepare("SELECT toplam_tutar,durum FROM kurum_sozlesmeleri WHERE id=? LIMIT 1 FOR UPDATE");
+        $stmt->execute([$contractId]);
+        $contract=$stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
+        if(is_array($contract) && in_array((string)$contract['durum'],['aktif','tamamlandi'],true)){
+            $remainingPaid=(float)tf_contract_paid($pdo,$contractId);
+            $newStatus=$remainingPaid+0.009>=(float)$contract['toplam_tutar']?'tamamlandi':'aktif';
+            $stmt=$pdo->prepare("UPDATE kurum_sozlesmeleri SET durum=? WHERE id=? AND durum IN ('aktif','tamamlandi')");
+            $stmt->execute([$newStatus,$contractId]);
+            $stmt->closeCursor();
+        }
 
         if($started) $pdo->commit();
     }catch(Throwable $e){

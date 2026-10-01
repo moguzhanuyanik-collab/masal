@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.43",
+  "version": "1.2.44",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -216,6 +216,7 @@
     "RELEASE-1.2.41.md",
     "RELEASE-1.2.42.md",
     "RELEASE-1.2.43.md",
+    "RELEASE-1.2.44.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
@@ -544,6 +545,8 @@
     "tests/adimbot-voice-83.cjs",
     "tests/commercial-finance-163.cjs",
     "tests/commercial-finance-db-163.php",
+    "tests/commercial-finance-integrity-169.cjs",
+    "tests/commercial-finance-integrity-db-169.php",
     "tests/db-ai-safety-98.cjs",
     "tests/db-backup-99.cjs",
     "tests/db-backup-99.php",
@@ -701,5 +704,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Versiyonlu yasal belge ve açık onay merkezi"
+  "name": "Ticari finans veri bütünlüğü sertleştirmesi"
 }
