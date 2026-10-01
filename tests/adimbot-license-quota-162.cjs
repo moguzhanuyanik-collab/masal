@@ -16,7 +16,9 @@ assert(domain.includes('function kl_ai_usage_ready('),'AI usage table readiness 
 assert(domain.includes('function kl_ai_quota_institution('),'AI quota institution resolver missing');
 assert(domain.includes('function kl_ai_quota_reserve('),'atomic quota reservation missing');
 assert(domain.includes("kk.kurum_rolu='ogrenci'"),'quota institution resolution must use student membership');
-assert(domain.includes("count($licensed)===1?$licensed[0]:null"),'ambiguous multi-institution users must not be assigned arbitrarily');
+assert(domain.includes('function kl_ai_entitlement('),'AI entitlement resolver missing');
+assert(domain.includes("'ambiguous_active_licenses'"),'ambiguous active licenses must have explicit blocked reason');
+assert(domain.includes("'no_eligible_license'"),'non-eligible license state must have explicit blocked reason');
 assert(domain.includes('LIMIT 1 FOR UPDATE'),'AI quota usage row must be locked atomically');
 assert(domain.includes("if($enforced && $used>=$limit)"),'quota exhaustion guard missing');
 assert(domain.includes("'reason'=>'quota_exhausted'"),'quota exhaustion result missing');
@@ -27,6 +29,8 @@ assert(domain.includes("return [\n            'tracked'=>false,'enforced'=>false
 assert(api.includes("require_once dirname(__DIR__) . '/src/kurum_lisanslari.php';"),'AdımBot API must load package/license quota domain');
 assert(api.includes('$quotaResult=kl_ai_quota_reserve($pdo,$userId,$studentId,$provider,$model);'),'AdımBot provider path must reserve monthly quota');
 assert(api.includes("'reason'=>'institution_ai_quota'"),'quota exhausted API reason missing');
+assert(api.includes("'reason'=>'institution_ai_license'"),'license access block API reason missing');
+assert(api.includes("'license_reason'=>$quotaReason"),'license block detail missing');
 assert(api.includes("'quota'=>$quotaPublic"),'AdımBot response must expose public quota state');
 assert(api.indexOf('adimbot_rate_limit_check_and_record(') < api.indexOf('$quotaResult=kl_ai_quota_reserve('),
   'short-window rate limit must run before monthly quota reservation');

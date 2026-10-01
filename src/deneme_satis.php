@@ -94,8 +94,9 @@ function st_create_trial(PDO $pdo,array $actor,array $input): int {
             $institutionId,$packageId,$start,$end,
             $days.' günlük demo / satış denemesi'
         ]);
+        $licenseId=(int)$pdo->lastInsertId();
         $stmt->closeCursor();
-
+        if($licenseId<=0) throw new RuntimeException('Demo lisansı oluşturulamadı.');
         $stmt=$pdo->prepare("INSERT INTO kurum_deneme_satislari
             (kurum_id,deneme_paket_id,deneme_baslangic_tarihi,deneme_bitis_tarihi,durum,kaynak,
              sorumlu_kullanici_id,son_temas_tarihi,olusturan_kullanici_id,guncelleyen_kullanici_id)
@@ -106,6 +107,14 @@ function st_create_trial(PDO $pdo,array $actor,array $input): int {
         ]);
         $salesId=(int)$pdo->lastInsertId();
         $stmt->closeCursor();
+
+        if(function_exists('kl_record_license_history')){
+            $licenseAfter=kl_license_state($pdo,$institutionId,false);
+            kl_record_license_history(
+                $pdo,$licenseId,$institutionId,null,$licenseAfter,(int)$actor['id'],
+                'demo_deneme','Demo satış #'.$salesId
+            );
+        }
 
         st_add_note_row(
             $pdo,$salesId,$institutionId,(int)$actor['id'],'durum',
@@ -280,6 +289,7 @@ function st_convert(PDO $pdo,array $actor,int $salesId,int $packageId,?string $l
         if((string)$license['durum']!=='deneme') throw new RuntimeException('Demo lisansı artık deneme durumunda değil. Lisans ve satış kaydını önce uzlaştır.');
         $licenseId=(int)$license['id'];
 
+        $licenseBefore=kl_license_state($pdo,(int)$sales['kurum_id'],false);
         $stmt=$pdo->prepare("UPDATE kurum_lisanslari
             SET paket_id=?,baslangic_tarihi=CURDATE(),bitis_tarihi=?,durum='aktif',
                 notlar=?
@@ -290,6 +300,13 @@ function st_convert(PDO $pdo,array $actor,int $salesId,int $packageId,?string $l
             $licenseId
         ]);
         $stmt->closeCursor();
+        if(function_exists('kl_record_license_history')){
+            $licenseAfter=kl_license_state($pdo,(int)$sales['kurum_id'],false);
+            kl_record_license_history(
+                $pdo,$licenseId,(int)$sales['kurum_id'],$licenseBefore,$licenseAfter,(int)$actor['id'],
+                'demo_donusum','Demo satış #'.$salesId.' ücretliye dönüştü'
+            );
+        }
 
         $stmt=$pdo->prepare("UPDATE kurum_deneme_satislari
             SET durum='donustu',donusum_paket_id=?,donusum_tarihi=NOW(),
@@ -335,12 +352,20 @@ function st_mark_lost(PDO $pdo,array $actor,int $salesId,string $reason): void {
         if(!is_array($license)) throw new RuntimeException('Demo lisansı bulunamadı.');
         if((string)$license['durum']!=='deneme') throw new RuntimeException('Demo lisansı artık deneme durumunda değil. Lisans ve satış kaydını önce uzlaştır.');
 
+        $licenseBefore=kl_license_state($pdo,(int)$sales['kurum_id'],false);
         $stmt=$pdo->prepare("UPDATE kurum_lisanslari
             SET durum='iptal',notlar=?
             WHERE id=? AND durum='deneme'");
         $stmt->execute(['Demo satış kaybedildi: '.$reason,(int)$license['id']]);
         if($stmt->rowCount()!==1) throw new RuntimeException('Demo lisansı kapatılamadı.');
         $stmt->closeCursor();
+        if(function_exists('kl_record_license_history')){
+            $licenseAfter=kl_license_state($pdo,(int)$sales['kurum_id'],false);
+            kl_record_license_history(
+                $pdo,(int)$license['id'],(int)$sales['kurum_id'],$licenseBefore,$licenseAfter,(int)$actor['id'],
+                'demo_kayip','Demo satış #'.$salesId.' kaybedildi'
+            );
+        }
 
         $stmt=$pdo->prepare("UPDATE kurum_deneme_satislari
             SET durum='kaybedildi',kayip_nedeni=?,son_temas_tarihi=CURDATE(),

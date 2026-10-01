@@ -6,6 +6,90 @@ function kl_tables_ready(PDO $pdo): bool {
         && auth_runtime_table_exists($pdo,'kurum_lisanslari');
 }
 
+function kl_history_ready(PDO $pdo): bool {
+    return auth_runtime_table_exists($pdo,'kurum_lisans_gecmisi');
+}
+
+function kl_license_state(PDO $pdo,int $institutionId,bool $forUpdate=false): ?array {
+    if($institutionId<=0 || !kl_tables_ready($pdo)) return null;
+    $sql="SELECT
+        kl.id,kl.kurum_id,kl.paket_id,kl.baslangic_tarihi,kl.bitis_tarihi,kl.durum,kl.notlar,
+        p.id paket_var,p.kod paket_kodu,p.ad paket_adi,p.ai_aylik_kota,p.aktif paket_aktif
+        FROM kurum_lisanslari kl
+        LEFT JOIN paketler p ON p.id=kl.paket_id
+        WHERE kl.kurum_id=? LIMIT 1".($forUpdate?' FOR UPDATE':'');
+    $stmt=$pdo->prepare($sql);
+    $stmt->execute([$institutionId]);
+    $row=$stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    if(!is_array($row)) return null;
+    $row['etkin_durum']=kl_effective_status($row);
+    return $row;
+}
+
+function kl_license_history_snapshot(?array $row): array {
+    if(!$row) return [
+        'paket_id'=>null,'durum'=>null,'baslangic_tarihi'=>null,'bitis_tarihi'=>null,'not_hash'=>null
+    ];
+    $note=(string)($row['notlar']??'');
+    return [
+        'paket_id'=>isset($row['paket_id'])?(int)$row['paket_id']:null,
+        'durum'=>(string)($row['durum']??''),
+        'baslangic_tarihi'=>$row['baslangic_tarihi']??null,
+        'bitis_tarihi'=>$row['bitis_tarihi']??null,
+        'not_hash'=>$note!==''?hash('sha256',$note):null,
+    ];
+}
+
+function kl_record_license_history(
+    PDO $pdo,
+    int $licenseId,
+    int $institutionId,
+    ?array $before,
+    ?array $after,
+    int $userId,
+    string $action,
+    string $description=''
+): void {
+    if($licenseId<=0 || $institutionId<=0 || !kl_history_ready($pdo)) return;
+    $old=kl_license_history_snapshot($before);
+    $new=kl_license_history_snapshot($after);
+    if($before!==null && $old===$new) return;
+
+    $stmt=$pdo->prepare("INSERT INTO kurum_lisans_gecmisi
+        (lisans_id,kurum_id,islem,eski_paket_id,yeni_paket_id,eski_durum,yeni_durum,
+         eski_baslangic_tarihi,yeni_baslangic_tarihi,eski_bitis_tarihi,yeni_bitis_tarihi,
+         eski_not_hash,yeni_not_hash,kullanici_id,aciklama)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+    $stmt->execute([
+        $licenseId,$institutionId,mb_substr($action,0,40),
+        $old['paket_id'],$new['paket_id'],$old['durum']?:null,$new['durum']?:null,
+        $old['baslangic_tarihi'],$new['baslangic_tarihi'],$old['bitis_tarihi'],$new['bitis_tarihi'],
+        $old['not_hash'],$new['not_hash'],$userId>0?$userId:null,
+        $description!==''?mb_substr($description,0,500):null
+    ]);
+    $stmt->closeCursor();
+}
+
+function kl_license_history_rows(PDO $pdo,int $institutionId,int $limit=100): array {
+    if($institutionId<=0 || !kl_history_ready($pdo)) return [];
+    $limit=max(1,min(500,$limit));
+    $stmt=$pdo->prepare("SELECT
+        g.*,COALESCE(u.ad_soyad,'Sistem') kullanici_adi,
+        ep.ad eski_paket_adi,yp.ad yeni_paket_adi
+        FROM kurum_lisans_gecmisi g
+        LEFT JOIN kullanicilar u ON u.id=g.kullanici_id
+        LEFT JOIN paketler ep ON ep.id=g.eski_paket_id
+        LEFT JOIN paketler yp ON yp.id=g.yeni_paket_id
+        WHERE g.kurum_id=?
+        ORDER BY g.id DESC
+        LIMIT {$limit}");
+    $stmt->execute([$institutionId]);
+    $rows=$stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return is_array($rows)?$rows:[];
+}
+
 function kl_slug(string $value): string {
     $value=mb_strtolower(trim($value),'UTF-8');
     $value=strtr($value,['ç'=>'c','ğ'=>'g','ı'=>'i','ö'=>'o','ş'=>'s','ü'=>'u']);
@@ -172,16 +256,29 @@ function kl_save_package(PDO $pdo,array $actor,array $input): int {
     $id=max(0,(int)($input['paket_id']??0));
 
     if($id>0){
-        $stmt=$pdo->prepare("UPDATE paketler
-            SET kod=?,ad=?,aciklama=?,ogrenci_limiti=?,ogretmen_limiti=?,veli_limiti=?,ai_aylik_kota=?,aylik_fiyat=?,para_birimi=?
-            WHERE id=?");
-        $stmt->execute([
-            $code,$name,$description!==''?$description:null,
-            $limits['ogrenci_limiti'],$limits['ogretmen_limiti'],$limits['veli_limiti'],$limits['ai_aylik_kota'],
-            number_format($price,2,'.',''),$currency,$id
-        ]);
-        $stmt->closeCursor();
-        if($id<=0) throw new RuntimeException('Paket bulunamadı.');
+        $started=false;
+        try{
+            if(!$pdo->inTransaction()){$pdo->beginTransaction();$started=true;}
+            $lock=$pdo->prepare('SELECT id FROM paketler WHERE id=? LIMIT 1 FOR UPDATE');
+            $lock->execute([$id]);
+            $exists=(int)($lock->fetchColumn()?:0);
+            $lock->closeCursor();
+            if($exists<=0) throw new RuntimeException('Paket bulunamadı.');
+
+            $stmt=$pdo->prepare("UPDATE paketler
+                SET kod=?,ad=?,aciklama=?,ogrenci_limiti=?,ogretmen_limiti=?,veli_limiti=?,ai_aylik_kota=?,aylik_fiyat=?,para_birimi=?
+                WHERE id=?");
+            $stmt->execute([
+                $code,$name,$description!==''?$description:null,
+                $limits['ogrenci_limiti'],$limits['ogretmen_limiti'],$limits['veli_limiti'],$limits['ai_aylik_kota'],
+                number_format($price,2,'.',''),$currency,$id
+            ]);
+            $stmt->closeCursor();
+            if($started)$pdo->commit();
+        }catch(Throwable $e){
+            if($started && $pdo->inTransaction())$pdo->rollBack();
+            throw $e;
+        }
         $action='paket_guncelle';
     }else{
         $stmt=$pdo->prepare("INSERT INTO paketler
@@ -203,19 +300,39 @@ function kl_save_package(PDO $pdo,array $actor,array $input): int {
 
 function kl_set_package_active(PDO $pdo,array $actor,int $packageId,bool $active): void {
     if($packageId<=0) throw new RuntimeException('Paket bulunamadı.');
-    if(!$active){
-        $stmt=$pdo->prepare("SELECT COUNT(*) FROM kurum_lisanslari
-            WHERE paket_id=? AND durum IN ('aktif','deneme')
-              AND baslangic_tarihi<=CURDATE()
-              AND (bitis_tarihi IS NULL OR bitis_tarihi>=CURDATE())");
-        $stmt->execute([$packageId]);
-        $inUse=(int)($stmt->fetchColumn()?:0);
-        $stmt->closeCursor();
-        if($inUse>0) throw new RuntimeException('Bu paket aktif/deneme lisanslarında kullanılıyor. Önce kurum lisanslarını değiştir.');
+    $started=false;
+    try{
+        if(!$pdo->inTransaction()){$pdo->beginTransaction();$started=true;}
+        $lock=$pdo->prepare('SELECT id,aktif FROM paketler WHERE id=? LIMIT 1 FOR UPDATE');
+        $lock->execute([$packageId]);
+        $row=$lock->fetch(PDO::FETCH_ASSOC);
+        $lock->closeCursor();
+        if(!is_array($row)) throw new RuntimeException('Paket bulunamadı.');
+
+        if(!$active){
+            $stmt=$pdo->prepare("SELECT COUNT(*) FROM kurum_lisanslari
+                WHERE paket_id=? AND durum IN ('aktif','deneme')
+                  AND baslangic_tarihi<=CURDATE()
+                  AND (bitis_tarihi IS NULL OR bitis_tarihi>=CURDATE())");
+            $stmt->execute([$packageId]);
+            $inUse=(int)($stmt->fetchColumn()?:0);
+            $stmt->closeCursor();
+            if($inUse>0) throw new RuntimeException('Bu paket aktif/deneme lisanslarında kullanılıyor. Önce kurum lisanslarını değiştir.');
+        }
+
+        $desired=$active?1:0;
+        if((int)$row['aktif']!==$desired){
+            $stmt=$pdo->prepare('UPDATE paketler SET aktif=? WHERE id=? AND aktif<>?');
+            $stmt->execute([$desired,$packageId,$desired]);
+            $changed=$stmt->rowCount();
+            $stmt->closeCursor();
+            if($changed!==1) throw new RuntimeException('Paket aktiflik durumu güncellenemedi.');
+        }
+        if($started)$pdo->commit();
+    }catch(Throwable $e){
+        if($started && $pdo->inTransaction())$pdo->rollBack();
+        throw $e;
     }
-    $stmt=$pdo->prepare('UPDATE paketler SET aktif=? WHERE id=?');
-    $stmt->execute([$active?1:0,$packageId]);
-    $stmt->closeCursor();
     auth_audit($pdo,(int)$actor['id'],null,$active?'paket_aktif':'paket_pasif','Paket #'.$packageId);
 }
 
@@ -245,27 +362,150 @@ function kl_save_license(PDO $pdo,array $actor,array $input): int {
     $stmt->closeCursor();
     if(!$packageOk) throw new RuntimeException('Aktif paket bulunamadı.');
 
-    $stmt=$pdo->prepare("INSERT INTO kurum_lisanslari
-        (kurum_id,paket_id,baslangic_tarihi,bitis_tarihi,durum,notlar)
-        VALUES (?,?,?,?,?,?)
-        ON DUPLICATE KEY UPDATE
-          paket_id=VALUES(paket_id),
-          baslangic_tarihi=VALUES(baslangic_tarihi),
-          bitis_tarihi=VALUES(bitis_tarihi),
-          durum=VALUES(durum),
-          notlar=VALUES(notlar)");
-    $stmt->execute([$institutionId,$packageId,$start,$end,$status,$notes!==''?$notes:null]);
-    $stmt->closeCursor();
+    $started=false;
+    try{
+        if(!$pdo->inTransaction()){$pdo->beginTransaction();$started=true;}
+        $before=kl_license_state($pdo,$institutionId,true);
 
-    $stmt=$pdo->prepare('SELECT id FROM kurum_lisanslari WHERE kurum_id=? LIMIT 1');
-    $stmt->execute([$institutionId]);
-    $id=(int)($stmt->fetchColumn()?:0);
-    $stmt->closeCursor();
+        if($before){
+            $id=(int)$before['id'];
+            $stmt=$pdo->prepare("UPDATE kurum_lisanslari
+                SET paket_id=?,baslangic_tarihi=?,bitis_tarihi=?,durum=?,notlar=?
+                WHERE id=?");
+            $stmt->execute([$packageId,$start,$end,$status,$notes!==''?$notes:null,$id]);
+            $stmt->closeCursor();
+            $historyAction='guncelle';
+        }else{
+            $stmt=$pdo->prepare("INSERT INTO kurum_lisanslari
+                (kurum_id,paket_id,baslangic_tarihi,bitis_tarihi,durum,notlar)
+                VALUES (?,?,?,?,?,?)");
+            $stmt->execute([$institutionId,$packageId,$start,$end,$status,$notes!==''?$notes:null]);
+            $id=(int)$pdo->lastInsertId();
+            $stmt->closeCursor();
+            if($id<=0) throw new RuntimeException('Kurum lisansı oluşturulamadı.');
+            $historyAction='olustur';
+        }
+
+        $after=kl_license_state($pdo,$institutionId,false);
+        if(!$after || (int)$after['id']!==$id) throw new RuntimeException('Kurum lisansı doğrulanamadı.');
+        kl_record_license_history(
+            $pdo,$id,$institutionId,$before,$after,(int)$actor['id'],$historyAction,
+            'Paket #'.$packageId.' durum '.$status
+        );
+
+        if($started)$pdo->commit();
+    }catch(Throwable $e){
+        if($started && $pdo->inTransaction())$pdo->rollBack();
+        throw $e;
+    }
 
     auth_audit($pdo,(int)$actor['id'],null,'kurum_lisans_guncelle','Kurum #'.$institutionId.' paket #'.$packageId.' durum '.$status);
     return $id;
 }
 
+
+function kl_ai_access_from_license(?array $license): array {
+    if($license===null) return ['allowed'=>true,'has_license'=>false,'reason'=>'legacy_unlicensed','license'=>null];
+    if(empty($license['paket_var'])) return ['allowed'=>false,'has_license'=>true,'reason'=>'license_package_missing','license'=>$license];
+    if((int)($license['paket_aktif']??0)!==1) return ['allowed'=>false,'has_license'=>true,'reason'=>'package_inactive','license'=>$license];
+
+    $effective=(string)($license['etkin_durum']??kl_effective_status($license));
+    if(in_array($effective,['aktif','deneme'],true)){
+        return ['allowed'=>true,'has_license'=>true,'reason'=>'licensed','license'=>$license];
+    }
+    $reason=match($effective){
+        'askida'=>'license_suspended',
+        'iptal'=>'license_cancelled',
+        'suresi_doldu'=>'license_expired',
+        'bekliyor'=>'license_not_started',
+        default=>'license_inactive',
+    };
+    return ['allowed'=>false,'has_license'=>true,'reason'=>$reason,'license'=>$license];
+}
+
+function kl_ai_entitlement(PDO $pdo,int $userId): array {
+    $ids=kl_student_institution_ids($pdo,$userId);
+    if(!$ids){
+        return ['allowed'=>true,'blocked'=>false,'institution_id'=>null,'license'=>null,'reason'=>'institution_unresolved'];
+    }
+
+    if(count($ids)===1){
+        $institutionId=$ids[0];
+        $access=kl_ai_access_from_license(kl_license_state($pdo,$institutionId,false));
+        return [
+            'allowed'=>(bool)$access['allowed'],
+            'blocked'=>!(bool)$access['allowed'],
+            'institution_id'=>$institutionId,
+            'license'=>$access['license'],
+            'reason'=>(string)$access['reason'],
+        ];
+    }
+
+    $eligible=[];
+    $licensedSeen=false;
+    foreach($ids as $institutionId){
+        $access=kl_ai_access_from_license(kl_license_state($pdo,$institutionId,false));
+        if((bool)$access['has_license'])$licensedSeen=true;
+        if((bool)$access['allowed'] && (bool)$access['has_license']){
+            $eligible[]=[
+                'institution_id'=>$institutionId,
+                'license'=>$access['license'],
+                'reason'=>(string)$access['reason'],
+            ];
+        }
+    }
+
+    if(count($eligible)===1){
+        return [
+            'allowed'=>true,'blocked'=>false,
+            'institution_id'=>(int)$eligible[0]['institution_id'],
+            'license'=>$eligible[0]['license'],
+            'reason'=>'licensed',
+        ];
+    }
+
+    return [
+        'allowed'=>false,'blocked'=>true,'institution_id'=>null,'license'=>null,
+        'reason'=>count($eligible)>1?'ambiguous_active_licenses':($licensedSeen?'no_eligible_license':'ambiguous_institutions'),
+    ];
+}
+
+function kl_license_integrity_issues(PDO $pdo): array {
+    if(!kl_tables_ready($pdo)) return [];
+    $issues=[];
+
+    $stmt=$pdo->query("SELECT COUNT(*) FROM kurum_lisanslari kl LEFT JOIN paketler p ON p.id=kl.paket_id WHERE p.id IS NULL");
+    $missingPackage=(int)($stmt?$stmt->fetchColumn():0);
+    if($stmt)$stmt->closeCursor();
+    if($missingPackage>0)$issues[]=[
+        'kod'=>'missing_package','adet'=>$missingPackage,
+        'mesaj'=>'Paket kaydı bulunmayan kurum lisansı var.'
+    ];
+
+    $stmt=$pdo->query("SELECT COUNT(*) FROM kurum_lisanslari kl
+        INNER JOIN paketler p ON p.id=kl.paket_id
+        WHERE kl.durum IN ('aktif','deneme') AND p.aktif=0
+          AND kl.baslangic_tarihi<=CURDATE()
+          AND (kl.bitis_tarihi IS NULL OR kl.bitis_tarihi>=CURDATE())");
+    $inactivePackage=(int)($stmt?$stmt->fetchColumn():0);
+    if($stmt)$stmt->closeCursor();
+    if($inactivePackage>0)$issues[]=[
+        'kod'=>'inactive_package_live_license','adet'=>$inactivePackage,
+        'mesaj'=>'Aktif/deneme lisansında pasif paket kullanılıyor.'
+    ];
+
+    $stmt=$pdo->query("SELECT COUNT(*) FROM kurum_lisanslari kl
+        INNER JOIN kurumlar k ON k.id=kl.kurum_id
+        WHERE kl.durum IN ('aktif','deneme') AND k.aktif=0");
+    $inactiveInstitution=(int)($stmt?$stmt->fetchColumn():0);
+    if($stmt)$stmt->closeCursor();
+    if($inactiveInstitution>0)$issues[]=[
+        'kod'=>'inactive_institution_live_license','adet'=>$inactiveInstitution,
+        'mesaj'=>'Pasif kurum üzerinde aktif/deneme lisansı var.'
+    ];
+
+    return $issues;
+}
 
 function kl_ai_usage_ready(PDO $pdo): bool {
     return auth_runtime_table_exists($pdo,'adimbot_ai_kullanimlari');
@@ -291,15 +531,10 @@ function kl_student_institution_ids(PDO $pdo,int $userId): array {
 }
 
 function kl_ai_quota_institution(PDO $pdo,int $userId): ?int {
-    $ids=kl_student_institution_ids($pdo,$userId);
-    if(count($ids)===1) return $ids[0];
-    if(count($ids)<2) return null;
-
-    $licensed=[];
-    foreach($ids as $institutionId){
-        if(kl_active_license($pdo,$institutionId)!==null) $licensed[]=$institutionId;
-    }
-    return count($licensed)===1?$licensed[0]:null;
+    $entitlement=kl_ai_entitlement($pdo,$userId);
+    if(($entitlement['allowed']??false)!==true) return null;
+    $institutionId=$entitlement['institution_id']??null;
+    return is_int($institutionId) && $institutionId>0?$institutionId:null;
 }
 
 function kl_ai_period_start(?string $date=null): string {
@@ -361,9 +596,18 @@ function kl_ai_quota_reserve(
     string $provider,
     string $model
 ): array {
-    $institutionId=kl_ai_quota_institution($pdo,$userId);
+    $entitlement=kl_ai_entitlement($pdo,$userId);
     $periodStart=kl_ai_period_start();
-    if($institutionId===null){
+    if(($entitlement['blocked']??false)===true){
+        return [
+            'tracked'=>false,'enforced'=>true,'blocked'=>true,
+            'institution_id'=>$entitlement['institution_id']??null,'period_start'=>$periodStart,
+            'used'=>0,'limit'=>0,'remaining'=>0,'reason'=>(string)($entitlement['reason']??'license_inactive')
+        ];
+    }
+
+    $institutionId=$entitlement['institution_id']??null;
+    if(!is_int($institutionId) || $institutionId<=0){
         return [
             'tracked'=>false,'enforced'=>false,'blocked'=>false,
             'institution_id'=>null,'period_start'=>$periodStart,
@@ -390,7 +634,7 @@ function kl_ai_quota_reserve(
             $started=true;
         }
 
-        $license=kl_active_license($pdo,$institutionId);
+        $license=is_array($entitlement['license']??null)?$entitlement['license']:null;
         $limit=$license?max(0,(int)($license['ai_aylik_kota']??0)):0;
         $enforced=$license!==null && $limit>0;
 

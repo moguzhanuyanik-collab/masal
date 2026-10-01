@@ -60,6 +60,7 @@ $activePackages=$ready?kl_package_rows($pdo,false):[];
 $institutions=kl_active_institutions($pdo);
 $licenses=$ready?kl_license_rows($pdo):[];
 $aiUsageReady=$ready?kl_ai_usage_ready($pdo):false;
+$integrityIssues=$ready?kl_license_integrity_issues($pdo):[];
 
 $editPackageId=max(0,(int)($_GET['paket_id']??0));
 $editPackage=null;
@@ -68,6 +69,7 @@ foreach($packages as $row) if((int)$row['id']===$editPackageId){$editPackage=$ro
 $editInstitutionId=max(0,(int)($_GET['kurum_id']??0));
 $editLicense=null;
 foreach($licenses as $row) if((int)$row['kurum_id']===$editInstitutionId){$editLicense=$row;break;}
+$licenseHistory=$editInstitutionId>0?kl_license_history_rows($pdo,$editInstitutionId,100):[];
 ?>
 <!doctype html>
 <html lang="tr">
@@ -105,6 +107,17 @@ foreach($licenses as $row) if((int)$row['kurum_id']===$editInstitutionId){$editL
 <?php if($success!==''):?><div class="role-note"><span>✅</span><p><?=pl_h($success)?></p></div><?php endif;?>
 
 <?php if($ready):?>
+<?php if($integrityIssues):?>
+<section class="role-section">
+<div class="role-section-head"><div><span class="eyeline">PAKET / LİSANS BÜTÜNLÜĞÜ</span><h2>Geçmiş Veri Uyarıları</h2></div><span class="role-pill"><?=count($integrityIssues)?></span></div>
+<div class="role-list">
+<?php foreach($integrityIssues as $issue):?>
+<div class="role-row"><span>⚠️</span><div><strong><?=pl_h((string)$issue['mesaj'])?></strong><small><?=(int)$issue['adet']?> kayıt · Yeni işlemler daha sıkı doğrulanıyor; geçmiş veri otomatik değiştirilmez.</small></div><span class="role-pill"><?=(int)$issue['adet']?></span></div>
+<?php endforeach;?>
+</div>
+</section>
+<?php endif;?>
+
 <section class="role-section">
 <div class="role-section-head"><div><span class="eyeline">PAKET TANIMI</span><h2><?=$editPackage?'Paketi Düzenle':'Yeni Paket'?></h2></div><?php if($editPackage):?><a class="role-pill" href="paketler.php">Yeni paket</a><?php endif;?></div>
 <form class="role-form" method="post">
@@ -205,6 +218,8 @@ $aiUsage=kl_ai_usage_summary($pdo,(int)$license['kurum_id']);
 $aiLimit=max(0,(int)$license['ai_aylik_kota']);
 $aiUsed=max(0,(int)$aiUsage['used']);
 $aiRemaining=$aiLimit>0?max(0,$aiLimit-$aiUsed):null;
+$aiEffective=(string)$license['etkin_durum'];
+$aiEligible=in_array($aiEffective,['aktif','deneme'],true) && (int)$license['paket_aktif']===1;
 ?>
 <div class="role-row">
 <span>🤖</span>
@@ -215,7 +230,9 @@ Bu ay <?=$aiUsed?> kullanım · Kota <?=$aiLimit>0?$aiLimit:'Sınırsız'?><?php
 <?php if((string)$aiUsage['last_provider']!==''):?> · Son sağlayıcı <?=pl_h((string)$aiUsage['last_provider'])?><?php endif;?>
 </small>
 </div>
-<span class="role-pill <?=($aiLimit===0 || $aiUsed<$aiLimit)?'ok':''?>"><?=$aiLimit===0?'Sınırsız':($aiUsed>=$aiLimit?'Kota doldu':'Aktif')?></span>
+<span class="role-pill <?=$aiEligible && ($aiLimit===0 || $aiUsed<$aiLimit)?'ok':''?>"><?=
+!$aiEligible?'AI Kapalı':($aiLimit===0?'Sınırsız':($aiUsed>=$aiLimit?'Kota doldu':'Aktif'))
+?></span>
 </div>
 <?php endforeach;?>
 </div>
@@ -245,7 +262,30 @@ Veli <?=(int)$license['veli_sayisi']?> / <?=pl_limit((int)$license['veli_limiti'
 </div>
 </section>
 
-<div class="role-note"><span>ℹ️</span><p>Lisansı olmayan kurumlar etkilenmez. Aktif/deneme lisansı bulunan kurumlarda kullanıcı limitleri yeni ekleme, başka kuruma taşıma ve yeniden aktifleştirme sırasında uygulanır. AI aylık kotası AdımBot isteklerine bağlıdır. Kota, sağlayıcıya gönderilecek istek atomik olarak rezerve edildiğinde tüketilir; lisansı olmayan kurumlarda kullanım kısıtlanmaz.</p></div>
+<?php if($editInstitutionId>0):?>
+<section class="role-section">
+<div class="role-section-head"><div><span class="eyeline">LİSANS DEĞİŞİKLİK GEÇMİŞİ</span><h2><?=pl_h((string)($editLicense['kurum_adi']??'Kurum'))?></h2></div><span class="role-pill"><?=count($licenseHistory)?></span></div>
+<div class="role-list">
+<?php if(!$licenseHistory):?><div class="role-empty"><span>🧾</span>079 migrationından sonra yapılmış lisans değişikliği bulunmuyor.</div><?php endif;?>
+<?php foreach($licenseHistory as $history):?>
+<div class="role-row">
+<span>🧾</span>
+<div>
+<strong><?=pl_h((string)$history['islem'])?> · <?=pl_h((string)$history['kullanici_adi'])?></strong>
+<small>
+<?=pl_h((string)($history['eski_paket_adi']??'—'))?> / <?=pl_h((string)($history['eski_durum']??'—'))?>
+→
+<?=pl_h((string)($history['yeni_paket_adi']??'—'))?> / <?=pl_h((string)($history['yeni_durum']??'—'))?>
+· <?=pl_h(date('d.m.Y H:i',strtotime((string)$history['olusturulma_tarihi'])))?>
+</small>
+</div>
+</div>
+<?php endforeach;?>
+</div>
+</section>
+<?php endif;?>
+
+<div class="role-note"><span>ℹ️</span><p>Hiç lisans tanımlanmamış tek kurum geriye uyumluluk için AdımBot kullanımına açık kalır. Ancak lisansı askıda, iptal, henüz başlamamış veya süresi dolmuş kurumlarda AI erişimi kapalıdır. Bir öğrenci birden fazla kuruma bağlıysa ve hangi aktif lisansın kullanılacağı kesin belirlenemiyorsa AI isteği güvenli şekilde engellenir.</p></div>
 <?php endif;?>
 </main>
 
