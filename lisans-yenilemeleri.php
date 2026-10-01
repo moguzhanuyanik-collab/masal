@@ -152,7 +152,7 @@ $history=$selected?ly_history_rows($pdo,$selectedId):[];
 
 <?php if($ready):?>
 <section class="ly-summary">
-<a href="lisans-yenilemeleri.php?durum=acik"><strong><?=(int)($summary['acik']??0)?></strong><span>Açık Vaka</span></a>
+<a href="lisans-yenilemeleri.php?durum=open"><strong><?=(int)($summary['acik']??0)?></strong><span>Açık Vaka</span></a>
 <a href="lisans-yenilemeleri.php?aciliyet=expired"><strong><?=(int)($summary['expired']??0)?></strong><span>Süresi Geçti</span></a>
 <a href="lisans-yenilemeleri.php?aciliyet=1"><strong><?=(int)($summary['gun_1']??0)?></strong><span>0–1 Gün</span></a>
 <a href="lisans-yenilemeleri.php?aciliyet=7"><strong><?=(int)($summary['gun_7']??0)?></strong><span>2–7 Gün</span></a>
@@ -187,6 +187,7 @@ $history=$selected?ly_history_rows($pdo,$selectedId):[];
 <form class="ly-filter" method="get">
 <select name="durum">
 <option value="">Tüm durumlar</option>
+<option value="open" <?=$filters['durum']==='open'?'selected':''?>>Tüm açık vakalar</option>
 <?php foreach(ly_status_labels() as $value=>$label):?><option value="<?=$value?>" <?=$filters['durum']===$value?'selected':''?>><?=lyh($label)?></option><?php endforeach;?>
 </select>
 <select name="aciliyet">
