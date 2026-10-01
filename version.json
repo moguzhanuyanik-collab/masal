@@ -1,5 +1,5 @@
 {
   "version": "1.2.15",
-  "name": "1.1.97 → 1.2.1 functional source parity and recovery evidence hardening",
-  "release_revision": 1
+  "name": "1.1.97 → 1.2.1 immutable recovery chain ancestry lock",
+  "release_revision": 2
 }

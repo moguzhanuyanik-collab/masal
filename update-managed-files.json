@@ -10,6 +10,7 @@
     "QUALITY-500.md",
     "README.md",
     "REBUILD-1.1.97-1.2.1-FUNCTIONAL.json",
+    "RECOVERY-1.1.97-1.2.1-CHAIN.json",
     "RECOVERY-1.1.97-1.2.1-EVIDENCE.json",
     "RELEASE-1.0.11.md",
     "RELEASE-1.0.12.md",
@@ -462,6 +463,7 @@
     "tests/pwa-95.cjs",
     "tests/rebuild-release-121.cjs",
     "tests/recovery-097-chain-gate-134.cjs",
+    "tests/recovery-chain-ancestry-141.cjs",
     "tests/recovery-chain-order-135.cjs",
     "tests/recovery-direct-097-121-136.cjs",
     "tests/recovery-functional-source-parity-140.cjs",
@@ -536,5 +538,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 1
+  "release_revision": 2
 }
