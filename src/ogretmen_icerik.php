@@ -361,6 +361,19 @@ function oi_set_homework_completed(PDO $pdo,int $studentId,int $contentId,bool $
     $s->closeCursor();
 }
 
+function oi_record_question_reward(PDO $pdo,int $studentId,int $contentId,int $stars): int {
+    $stars=max(0,min(20,$stars));
+    if($studentId<=0 || $contentId<=0 || $stars<=0) return 0;
+
+    $award=$pdo->prepare("INSERT IGNORE INTO ogretmen_icerik_yildiz_odulleri
+      (icerik_id,ogrenci_id,yildiz_degeri,kazanma_tarihi)
+      VALUES (?,?,?,NOW())");
+    $award->execute([$contentId,$studentId,$stars]);
+    $inserted=$award->rowCount()>0;
+    $award->closeCursor();
+    return $inserted?$stars:0;
+}
+
 function oi_answer_question(PDO $pdo,int $studentId,int $contentId,int $selectedIndex,?int &$awardedStars=null): bool {
     $awardedStars=0;
     $rows=oi_student_contents($pdo,$studentId,$contentId);
@@ -388,12 +401,7 @@ function oi_answer_question(PDO $pdo,int $studentId,int $contentId,int $selected
         $s->closeCursor();
 
         if($correct && $reward>0){
-            $award=$pdo->prepare("INSERT IGNORE INTO ogretmen_icerik_yildiz_odulleri
-              (icerik_id,ogrenci_id,yildiz_degeri,kazanma_tarihi)
-              VALUES (?,?,?,NOW())");
-            $award->execute([$contentId,$studentId,$reward]);
-            if($award->rowCount()>0) $awardedStars=$reward;
-            $award->closeCursor();
+            $awardedStars=oi_record_question_reward($pdo,$studentId,$contentId,$reward);
         }
 
         if($ownsTransaction) $pdo->commit();
