@@ -1,0 +1,9 @@
+.teacher-homework-detail-shell{display:grid;gap:16px}
+.teacher-homework-text{margin:0;color:#655d6d;font-size:10px;line-height:1.6}
+.teacher-homework-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.teacher-homework-stats .role-stat{min-height:92px}
+.teacher-homework-student-list{display:grid;gap:8px}
+.teacher-homework-student{text-decoration:none;color:inherit}
+.teacher-homework-student>div{min-width:0;flex:1}
+.role-pill.warn{background:#fff0e8;color:#9b5536}
+@media(min-width:560px){.teacher-homework-stats{grid-template-columns:repeat(4,minmax(0,1fr))}}

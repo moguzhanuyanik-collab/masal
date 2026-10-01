@@ -73,6 +73,6 @@ try{
 <a class="role-row" href="ogretmen-odev-detay.php?id=<?=(int)$homework['id']?>"><span>📝</span><div><strong><?=oo_h((string)$homework['baslik'])?></strong><small><?=oo_h((string)$homework['kurum_adi'])?> · <?=oo_h((string)$homework['ders_adi'])?> · Teslim: <?=oo_h($dueText)?></small><small><?=(string)$homework['hedef_turu']==='tum_ogrenciler'?'Bu kurumda bağlı tüm öğrenciler':(int)$homework['secili_sayisi'].' seçili öğrenci'?> · Teslim durumlarını aç →</small></div><span class="role-pill <?=((int)$homework['aktif']===1?'ok':'off')?>"><?=((int)$homework['aktif']===1?'Yayında':'Pasif')?></span></a>
 <?php endforeach;?>
 </div></section>
-<div class="role-note"><span>ℹ️</span><p>Ödev ayrıntısında hedef öğrencilerin tamamlandı/bekliyor durumunu ve teslim zamanını takip edebilirsin.</p></div>
+<div class="role-note"><span>ℹ️</span><p>Ödev ayrıntısında hedef öğrencilerin tamamlandı, gecikti ve bekliyor durumlarını teslim zamanıyla birlikte takip edebilirsin.</p></div>
 </main><nav class="role-bottom"><a href="ogretmen-paneli.php"><span>⌂</span>Panel</a><a href="ogretmen-ogrencilerim.php"><span>🎒</span>Öğrenciler</a><a class="active" href="ogretmen-odevleri.php"><span>📝</span>Ödevler</a><a href="ogretmen-icerikleri.php"><span>⭐</span>İçeriklerim</a></nav>
 </div></body></html>
