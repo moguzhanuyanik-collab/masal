@@ -152,7 +152,7 @@ function kr_group_label(array $group): string {
     $overdue=(int)$row['odev_geciken'];
     $homeworkPercent=$assigned>0?(int)round($completed*100/$assigned):null;
 ?>
-<a class="institution-report-student" href="ogrenci-raporu.php?id=<?=(int)$row['id']?>">
+<a class="institution-report-student" href="ogrenci-raporu.php?id=<?=(int)$row['id']?>&amp;kurum_id=<?=$institutionId?>">
 <div class="institution-report-student-head">
 <span class="institution-report-avatar">🎒</span>
 <div>
