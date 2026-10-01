@@ -76,53 +76,13 @@ if(!in_array($status,['tum','pending','overdue','completed'],true)) $status='tum
 $allHomeworks=[];
 if($childId>0){
     try{
-        $sql="SELECT DISTINCT oi.id,oi.kurum_id,oi.baslik,oi.icerik_metni,oi.teslim_tarihi,oi.olusturulma_tarihi,
-            COALESCE(od.tamamlandi,0) tamamlandi,od.tamamlanma_tarihi,
-            k.ad kurum_adi,d.ad ders_adi,
-            COALESCE(NULLIF(TRIM(og.ad_soyad),''),tu.ad_soyad) ogretmen_adi
-            FROM ogretmen_icerikleri oi
-            INNER JOIN kurumlar k ON k.id=oi.kurum_id AND k.aktif=1
-            INNER JOIN dersler d ON d.id=oi.ders_id AND d.aktif=1
-            INNER JOIN ogretmenler og ON og.id=oi.ogretmen_id AND og.aktif=1
-            INNER JOIN kullanicilar tu ON tu.id=og.kullanici_id AND tu.aktif=1
-            INNER JOIN kurum_kullanicilari tk ON tk.kurum_id=oi.kurum_id
-                AND tk.kullanici_id=tu.id AND tk.kurum_rolu='ogretmen' AND tk.aktif=1
-            INNER JOIN ogrenciler os ON os.id=? AND os.aktif=1
-            INNER JOIN kullanicilar su ON su.id=os.kullanici_id AND su.aktif=1
-            INNER JOIN kurum_kullanicilari sk ON sk.kurum_id=oi.kurum_id
-                AND sk.kullanici_id=os.kullanici_id AND sk.kurum_rolu='ogrenci' AND sk.aktif=1
-            INNER JOIN ogretmen_ogrenci oo ON oo.ogretmen_id=og.id AND oo.ogrenci_id=os.id AND oo.kurum_id=oi.kurum_id
-            LEFT JOIN ogretmen_icerik_hedefleri h ON h.icerik_id=oi.id AND h.ogrenci_id=os.id
-            LEFT JOIN ogrenci_odev_durumlari od ON od.icerik_id=oi.id AND od.ogrenci_id=os.id
-            WHERE oi.icerik_turu='odev' AND oi.aktif=1
-              AND EXISTS (
-                  SELECT 1
-                  FROM veli_ogrenci vo
-                  INNER JOIN veliler v ON v.id=vo.veli_id AND v.aktif=1
-                  INNER JOIN kurum_kullanicilari vk ON vk.kullanici_id=v.kullanici_id
-                    AND vk.kurum_id=oi.kurum_id AND vk.kurum_rolu='veli' AND vk.aktif=1
-                  WHERE vo.ogrenci_id=os.id
-                    AND vo.kurum_id=oi.kurum_id
-                    AND v.kullanici_id=?
-              )
-              AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)";
-        $params=[$childId,(int)$user['id']];
-        if($institutionId>0){
-            $sql.=' AND oi.kurum_id=?';
-            $params[]=$institutionId;
-        }
-        $sql.=' ORDER BY oi.olusturulma_tarihi DESC,oi.id DESC LIMIT 100';
-        $stmt=$pdo->prepare($sql);
-        $stmt->execute($params);
-        $allHomeworks=$stmt->fetchAll();
-        $stmt->closeCursor();
+        $allHomeworks=vi_parent_contents($pdo,(int)$user['id'],$childId,$institutionId,'odev');
     }catch(Throwable){
         http_response_code(503);
         echo 'Ödevler şu anda okunamıyor.';
         exit;
     }
 }
-
 $summary=hw_summary($allHomeworks);
 $homeworks=$status==='tum'?$allHomeworks:hw_filter($allHomeworks,$status);
 ?><!doctype html>
@@ -213,7 +173,7 @@ $homeworks=$status==='tum'?$allHomeworks:hw_filter($allHomeworks,$status);
 <?php if(trim((string)$homework['icerik_metni'])!==''):?><p><?=nl2br(vo_h((string)$homework['icerik_metni']))?></p><?php endif;?>
 <div class="parent-homework-meta">
 <span>⏰ Teslim: <?=vo_h(vo_date($homework['teslim_tarihi']??null))?></span>
-<?php if($itemStatus==='completed' && !empty($homework['tamamlanma_tarihi'])):?><span>✅ Tamamlandı: <?=vo_h(vo_date((string)$homework['tamamlanma_tarihi'],'—'))?></span><?php endif;?>
+<?php if($itemStatus==='completed' && !empty($homework['odev_tamamlanma_tarihi'])):?><span>✅ Tamamlandı: <?=vo_h(vo_date((string)$homework['odev_tamamlanma_tarihi'],'—'))?></span><?php endif;?>
 <?php if($itemStatus==='overdue'):?><span>⚠️ Teslim tarihi geçti</span><?php endif;?>
 </div>
 </article>
