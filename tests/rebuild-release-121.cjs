@@ -59,7 +59,12 @@ for(const required of [
 
 assert(updater.includes('ILKADIM_UPDATER_CORE_GENERATION = 121'));
 assert(updater.includes('function github_branch_head_sha'));
-assert(updater.includes('return remote_release_info($gh);'));
+const nextStart=updater.indexOf('function next_remote_version_info(');
+const nextEnd=updater.indexOf('\nfunction ',nextStart+10);
+const nextBlock=updater.slice(nextStart,nextEnd);
+assert(nextBlock.includes('/commits?sha='));
+assert(nextBlock.includes('release_identity_should_replace_next($info,$next)'));
+assert(!nextBlock.includes('return remote_release_info($gh);'));
 assert(updater.includes('ILKADIM_ALLOW_SAFE_TENANT_SCHEMA_ALTER'));
 assert(!updater.includes('recovery_bridge_target_info'));
 assert(workflow.includes('node tests/update-recovery-119.cjs'));
