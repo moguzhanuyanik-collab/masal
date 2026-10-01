@@ -9,7 +9,7 @@
  const route=()=>location.hash.replace(/^#\/?/,'');
  const renderMenu=()=>{
    const menu=q('.profile-menu');if(!menu)return;
-   const entries=[['🎨','Avatar Oluşturucu','Saç, kıyafet ve aksesuarını seç','#/v4/avatar'],['🎁','Yıldız Dükkânı','Başarılarından kazandığın yıldızları kullan','#/v4/magaza'],['📅','Haftalık Planım','Kendi çalışma hedeflerini belirle','#/v4/plan'],['🏅','Başarı Sertifikam','Tamamladığın dersleri kutla','#/v4/sertifika']];
+   const entries=[['📝','Ödevlerim','Teslim tarihlerini ve tamamlanma durumunu takip et','ogrenci-odevleri.php'],['🎨','Avatar Oluşturucu','Saç, kıyafet ve aksesuarını seç','#/v4/avatar'],['🎁','Yıldız Dükkânı','Başarılarından kazandığın yıldızları kullan','#/v4/magaza'],['📅','Haftalık Planım','Kendi çalışma hedeflerini belirle','#/v4/plan'],['🏅','Başarı Sertifikam','Tamamladığın dersleri kutla','#/v4/sertifika']];
    if(!optionalDesignChecked){
      optionalDesignChecked=true;
      fetch('v4/index.php',{method:'HEAD',credentials:'same-origin',cache:'no-store'})

@@ -8,15 +8,19 @@ $pdo=db();
 function vo_h(string $value): string { return htmlspecialchars($value,ENT_QUOTES,'UTF-8'); }
 
 try{
-    $stmt=$pdo->prepare("SELECT DISTINCT o.id,o.ad,o.email,o.sinif_seviyesi
-        FROM veli_ogrenci vo
-        INNER JOIN veliler v ON v.id=vo.veli_id AND v.aktif=1
-        INNER JOIN ogrenciler o ON o.id=vo.ogrenci_id AND o.aktif=1
-        INNER JOIN kullanicilar su ON su.id=o.kullanici_id AND su.aktif=1
-        WHERE v.kullanici_id=? ORDER BY o.ad,o.id");
-    $stmt->execute([(int)$user['id']]);
-    $children=$stmt->fetchAll();
-    $stmt->closeCursor();
+    $accessibleChildIds=auth_accessible_student_ids($pdo,(int)$user['id']);
+    $children=[];
+    if($accessibleChildIds!==[]){
+        $placeholders=implode(',',array_fill(0,count($accessibleChildIds),'?'));
+        $stmt=$pdo->prepare("SELECT o.id,o.ad,o.email,o.sinif_seviyesi
+            FROM ogrenciler o
+            INNER JOIN kullanicilar su ON su.id=o.kullanici_id AND su.aktif=1
+            WHERE o.aktif=1 AND o.id IN ({$placeholders})
+            ORDER BY o.ad,o.id");
+        $stmt->execute($accessibleChildIds);
+        $children=$stmt->fetchAll();
+        $stmt->closeCursor();
+    }
 }catch(Throwable){
     http_response_code(503);
     echo 'Çocuk bilgileri şu anda okunamıyor.';
@@ -36,7 +40,8 @@ foreach($children as $child){if((int)$child['id']===$childId){$selectedChild=$ch
 $homeworks=[];
 if($childId>0){
     try{
-        $stmt=$pdo->prepare("SELECT DISTINCT oi.id,oi.baslik,oi.icerik_metni,oi.olusturulma_tarihi,
+        $stmt=$pdo->prepare("SELECT DISTINCT oi.id,oi.baslik,oi.icerik_metni,oi.teslim_tarihi,oi.olusturulma_tarihi,
+            COALESCE(od.tamamlandi,0) tamamlandi,od.tamamlanma_tarihi,
             k.ad kurum_adi,d.ad ders_adi,
             COALESCE(NULLIF(TRIM(og.ad_soyad),''),tu.ad_soyad) ogretmen_adi
             FROM ogretmen_icerikleri oi
@@ -50,12 +55,15 @@ if($childId>0){
             INNER JOIN kullanicilar su ON su.id=os.kullanici_id AND su.aktif=1
             INNER JOIN kurum_kullanicilari sk ON sk.kurum_id=oi.kurum_id
                 AND sk.kullanici_id=os.kullanici_id AND sk.kurum_rolu='ogrenci' AND sk.aktif=1
-            INNER JOIN ogretmen_ogrenci oo ON oo.ogretmen_id=og.id AND oo.ogrenci_id=os.id
+            INNER JOIN ogretmen_ogrenci oo ON oo.ogretmen_id=og.id AND oo.ogrenci_id=os.id AND oo.kurum_id=oi.kurum_id
             LEFT JOIN ogretmen_icerik_hedefleri h ON h.icerik_id=oi.id AND h.ogrenci_id=os.id
+            LEFT JOIN ogrenci_odev_durumlari od ON od.icerik_id=oi.id AND od.ogrenci_id=os.id
             WHERE oi.icerik_turu='odev' AND oi.aktif=1
               AND EXISTS (SELECT 1 FROM veli_ogrenci vo
                   INNER JOIN veliler v ON v.id=vo.veli_id AND v.aktif=1
-                  WHERE vo.ogrenci_id=os.id AND v.kullanici_id=?)
+                  INNER JOIN kurum_kullanicilari vk ON vk.kullanici_id=v.kullanici_id
+                    AND vk.kurum_id=oi.kurum_id AND vk.kurum_rolu='veli' AND vk.aktif=1
+                  WHERE vo.ogrenci_id=os.id AND vo.kurum_id=oi.kurum_id AND v.kullanici_id=?)
               AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
             ORDER BY oi.olusturulma_tarihi DESC,oi.id DESC LIMIT 100");
         $stmt->execute([$childId,(int)$user['id']]);
@@ -79,6 +87,9 @@ if($childId>0){
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">ÖDEVLER</span><h2><?=vo_h((string)($selectedChild['ad']??'Yayınlanan ödevler'))?></h2></div><span class="role-pill"><?=count($homeworks)?></span></div><div class="role-list">
 <?php if(!$children):?><div class="role-empty">Henüz hesabına öğrenci eşleştirilmedi.</div>
 <?php elseif(!$homeworks):?><div class="role-empty">Bu çocuk için yayınlanmış ödev bulunamadı.</div><?php endif;?>
-<?php foreach($homeworks as $homework):?><div class="role-row"><span>📝</span><div><strong><?=vo_h((string)$homework['baslik'])?></strong><small><?=vo_h((string)$homework['kurum_adi'])?> · <?=vo_h((string)$homework['ders_adi'])?> · <?=vo_h((string)$homework['ogretmen_adi'])?></small><p><?=nl2br(vo_h((string)$homework['icerik_metni']))?></p><small><?=vo_h((string)$homework['olusturulma_tarihi'])?></small></div></div><?php endforeach;?>
-</div></section><div class="role-note"><span>ℹ️</span><p>En yeni 100 ödev gösterilir. Tamamlama durumu ve teslim tarihi henüz sistemde kaydedilmiyor; bu liste ödevin verildiğini gösterir.</p></div>
+<?php foreach($homeworks as $homework):?>
+<?php $done=(int)($homework['tamamlandi']??0)===1;$due=!empty($homework['teslim_tarihi'])?date('d.m.Y H:i',strtotime((string)$homework['teslim_tarihi'])):'Süre yok'; ?>
+<div class="role-row"><span><?=$done?'✅':'📝'?></span><div><strong><?=vo_h((string)$homework['baslik'])?></strong><small><?=vo_h((string)$homework['kurum_adi'])?> · <?=vo_h((string)$homework['ders_adi'])?> · <?=vo_h((string)$homework['ogretmen_adi'])?></small><p><?=nl2br(vo_h((string)$homework['icerik_metni']))?></p><small>Teslim: <?=vo_h($due)?><?=$done && !empty($homework['tamamlanma_tarihi'])?' · Tamamlandı: '.vo_h(date('d.m.Y H:i',strtotime((string)$homework['tamamlanma_tarihi']))):''?></small></div><span class="role-pill <?=$done?'ok':'off'?>"><?=$done?'Tamamlandı':'Bekliyor'?></span></div>
+<?php endforeach;?>
+</div></section><div class="role-note"><span>ℹ️</span><p>Tamamlanma durumu öğrencinin kendi Ödevlerim ekranındaki işaretlemesine göre gösterilir.</p></div>
 </main><nav class="role-bottom"><a href="veli-paneli.php"><span>⌂</span>Panel</a><a href="veli-paneli.php#cocuklar"><span>🎒</span>Çocuklar</a><a class="active" href="veli-odevleri.php"><span>📝</span>Ödevler</a><a href="hesap-guvenligi.php"><span>⚙️</span>Hesap</a></nav></div></body></html>

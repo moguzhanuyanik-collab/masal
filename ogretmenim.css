@@ -41,3 +41,4 @@
 .teacher-explanation{margin-top:7px;padding:8px 10px;border-left:3px solid #d8c9f5;background:#faf8fd;border-radius:8px;font-size:9px;color:#6e6578}
 .teacher-flash{margin:0 14px 12px;padding:11px 13px;border-radius:14px;background:#eef9f2;border:1px solid #d4efdd;color:#2f7652;font-size:10px;font-weight:800}
 @media(max-width:430px){.app-nav-five>a{font-size:9px}.teacher-hero h1{font-size:22px}.teacher-hero p{max-width:86%}}
+.teacher-homework-link{display:inline-flex;margin-top:12px;padding:9px 12px;border-radius:12px;background:#fff;color:#6d52a5;border:1px solid #e2d8f3;font-size:9px;font-weight:950;box-shadow:0 5px 14px #5b3a7a0a}

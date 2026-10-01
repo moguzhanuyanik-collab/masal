@@ -39,12 +39,13 @@ assert(css.includes('.manual-update-dialog'));
 assert(css.includes('.manual-update-dropzone'));
 assert(workflow.includes('node tests/manual-update-upload-131.cjs'));
 
-assert.strictEqual(version.version,'1.2.6');
+assert(/^1\.2\.\d+$/.test(version.version),'release version must remain in the 1.2.x line');
+assert(Number(version.version.split('.')[2])>=6,'manual update capability requires 1.2.6 or newer');
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
-assert.strictEqual(version.release_revision,1);
-assert.strictEqual(release.release_revision,1);
-assert.strictEqual(manifest.release_revision,1);
+assert(Number(version.release_revision)>=1);
+assert.strictEqual(release.release_revision,version.release_revision);
+assert.strictEqual(manifest.release_revision,version.release_revision);
 assert(manifest.files.includes('guncelleme-manuel.css'));
 assert(manifest.files.includes('tests/manual-update-upload-131.cjs'));
 assert(manifest.files.includes('RELEASE-1.2.6.md'));

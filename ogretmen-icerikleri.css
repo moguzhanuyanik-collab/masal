@@ -21,3 +21,6 @@
 .teacher-content-action.off{color:#b84848;background:#fff1f1}
 .teacher-content-action.on{color:#267553;background:#edf9f2}
 @media(max-width:560px){.teacher-content-grid,.teacher-content-options,.teacher-content-targets{grid-template-columns:1fr}.teacher-content-item{grid-template-columns:auto 1fr}.teacher-content-actions{grid-column:1/-1;justify-content:flex-end}}
+.teacher-content-homework{margin:10px 0 0;padding:12px;border-radius:14px;background:#faf8fd;border:1px solid #ebe5f3}
+.teacher-content-homework[hidden]{display:none}
+.teacher-content-help{display:block;margin-top:6px;color:#81788d;font-size:9px;line-height:1.45}

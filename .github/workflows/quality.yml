@@ -110,6 +110,7 @@ jobs:
           node tests/update-migration-execution-128.cjs
           node tests/global-scope-integrity-129.cjs
           node tests/manual-update-upload-131.cjs
+          node tests/homework-completion-132.cjs
 
   tenant-db-integration:
     name: Tenant DB integration
@@ -160,4 +161,5 @@ jobs:
           php tests/tenant-isolation-db-115.php
           php tests/legacy-064-integrity-124.php
           php tests/tenant-recovery-postcondition-125.php
+          php tests/homework-completion-db-132.php
 

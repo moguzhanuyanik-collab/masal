@@ -70,9 +70,9 @@ function oi_teacher_students(PDO $pdo,int $teacherId,int $institutionId): array 
              AND kk.kurum_id=?
              AND kk.kurum_rolu='ogrenci'
              AND kk.aktif=1
-            WHERE oo.ogretmen_id=?
+            WHERE oo.ogretmen_id=? AND oo.kurum_id=?
             ORDER BY o.ad,o.id");
-        $s->execute([$institutionId,$teacherId]);
+        $s->execute([$institutionId,$teacherId,$institutionId]);
         $rows=$s->fetchAll();
         $s->closeCursor();
         return is_array($rows)?$rows:[];
@@ -127,6 +127,16 @@ function oi_create_content(PDO $pdo,array $user,array $input,array $targetStuden
     $question=trim((string)($input['soru']??''));
     $explanation=trim((string)($input['aciklama']??''));
     $star=max(0,min(20,(int)($input['yildiz_degeri']??0)));
+    $dueAt=null;
+    $dueRaw=trim((string)($input['teslim_tarihi']??''));
+    if($type==='odev' && $dueRaw!==''){
+        $due=DateTimeImmutable::createFromFormat('!Y-m-d\\TH:i',$dueRaw);
+        $errors=DateTimeImmutable::getLastErrors();
+        if(!$due || (is_array($errors) && (($errors['warning_count']??0)>0 || ($errors['error_count']??0)>0))){
+            throw new RuntimeException('Teslim tarihini kontrol et.');
+        }
+        $dueAt=$due->format('Y-m-d H:i:s');
+    }
 
     if(!oi_teacher_can_use_institution($pdo,(int)$user['id'],$institutionId)){
         throw new RuntimeException('Bu kurum için içerik ekleme yetkin yok.');
@@ -180,12 +190,12 @@ function oi_create_content(PDO $pdo,array $user,array $input,array $targetStuden
     $pdo->beginTransaction();
     try{
         $s=$pdo->prepare("INSERT INTO ogretmen_icerikleri
-          (kurum_id,ogretmen_id,ders_id,ders_modulu_id,konu_basligi,icerik_turu,baslik,icerik_metni,soru,secenekler_json,dogru_cevap_indeksi,aciklama,yildiz_degeri,hedef_turu,aktif)
-          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,1)");
+          (kurum_id,ogretmen_id,ders_id,ders_modulu_id,konu_basligi,icerik_turu,baslik,icerik_metni,soru,secenekler_json,dogru_cevap_indeksi,aciklama,yildiz_degeri,hedef_turu,teslim_tarihi,aktif)
+          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1)");
         $s->execute([
             $institutionId,(int)$teacher['id'],$lessonId,$moduleId>0?$moduleId:null,$topic,$type,$title,
             $body!==''?$body:null,$question!==''?$question:null,$options?json_encode($options,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES):null,
-            $correct,$explanation!==''?$explanation:null,$star,$targetType
+            $correct,$explanation!==''?$explanation:null,$star,$targetType,$dueAt
         ]);
         $contentId=(int)$pdo->lastInsertId();
         $s->closeCursor();
@@ -209,7 +219,7 @@ function oi_teacher_contents(PDO $pdo,int $teacherId): array {
     if($teacherId<=0) return [];
     try{
         $s=$pdo->prepare("SELECT oi.id,oi.kurum_id,oi.ders_id,oi.ders_modulu_id,oi.konu_basligi,
-          oi.icerik_turu,oi.baslik,oi.icerik_metni,oi.soru,oi.hedef_turu,oi.aktif,oi.olusturulma_tarihi,
+          oi.icerik_turu,oi.baslik,oi.icerik_metni,oi.soru,oi.hedef_turu,oi.teslim_tarihi,oi.aktif,oi.olusturulma_tarihi,
           k.ad kurum_adi,d.ad ders_adi,d.emoji ders_emoji,
           COALESCE(dm.baslik,oi.konu_basligi,'Genel') konu_adi,
           COUNT(DISTINCT h.ogrenci_id) hedef_sayisi,
@@ -262,7 +272,7 @@ function oi_student_teachers(PDO $pdo,int $studentId): array {
            AND kks.kurum_id=kko.kurum_id
            AND kks.kurum_rolu='ogrenci' AND kks.aktif=1
           INNER JOIN kurumlar k ON k.id=kko.kurum_id AND k.aktif=1
-          WHERE oo.ogrenci_id=?
+          WHERE oo.ogrenci_id=? AND oo.kurum_id=kko.kurum_id
           ORDER BY ku.ad_soyad,k.ad");
         $s->execute([$studentId]);
         $rows=$s->fetchAll();
@@ -280,14 +290,15 @@ function oi_student_contents(PDO $pdo,int $studentId,?int $contentId=null): arra
           COALESCE(NULLIF(TRIM(og.ad_soyad),''),ktu.ad_soyad) ogretmen_adi,
           k.ad kurum_adi,d.ad ders_adi,d.kod ders_kodu,d.emoji ders_emoji,
           COALESCE(dm.baslik,oi.konu_basligi,'Genel') konu_adi,
-          c.secilen_cevap_indeksi,c.dogru cevap_dogru,c.deneme_sayisi,c.guncellenme_tarihi cevap_tarihi
+          c.secilen_cevap_indeksi,c.dogru cevap_dogru,c.deneme_sayisi,c.guncellenme_tarihi cevap_tarihi,
+          COALESCE(od.tamamlandi,0) odev_tamamlandi,od.tamamlanma_tarihi odev_tamamlanma_tarihi
           FROM ogretmen_icerikleri oi
           INNER JOIN ogretmenler og ON og.id=oi.ogretmen_id AND og.aktif=1
           INNER JOIN kullanicilar ktu ON ktu.id=og.kullanici_id AND ktu.aktif=1
           INNER JOIN kurumlar k ON k.id=oi.kurum_id AND k.aktif=1
           INNER JOIN dersler d ON d.id=oi.ders_id AND d.aktif=1
           LEFT JOIN ders_modulleri dm ON dm.id=oi.ders_modulu_id
-          INNER JOIN ogretmen_ogrenci oo ON oo.ogretmen_id=oi.ogretmen_id AND oo.ogrenci_id=?
+          INNER JOIN ogretmen_ogrenci oo ON oo.ogretmen_id=oi.ogretmen_id AND oo.ogrenci_id=? AND oo.kurum_id=oi.kurum_id
           INNER JOIN ogrenciler os ON os.id=? AND os.aktif=1
           INNER JOIN kullanicilar ksu ON ksu.id=os.kullanici_id AND ksu.aktif=1
           INNER JOIN kurum_kullanicilari kks
@@ -304,9 +315,11 @@ function oi_student_contents(PDO $pdo,int $studentId,?int $contentId=null): arra
             ON h.icerik_id=oi.id AND h.ogrenci_id=?
           LEFT JOIN ogretmen_icerik_cevaplari c
             ON c.icerik_id=oi.id AND c.ogrenci_id=?
+          LEFT JOIN ogrenci_odev_durumlari od
+            ON od.icerik_id=oi.id AND od.ogrenci_id=?
           WHERE oi.aktif=1
             AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)";
-        $params=[$studentId,$studentId,$studentId,$studentId];
+        $params=[$studentId,$studentId,$studentId,$studentId,$studentId];
         if($contentId!==null){
             $sql.=' AND oi.id=?';
             $params[]=$contentId;
@@ -320,6 +333,29 @@ function oi_student_contents(PDO $pdo,int $studentId,?int $contentId=null): arra
     }catch(Throwable){
         return [];
     }
+}
+
+function oi_set_homework_completed(PDO $pdo,int $studentId,int $contentId,bool $completed): void {
+    if($studentId<=0 || $contentId<=0) throw new RuntimeException('Ödev bulunamadı.');
+    $rows=oi_student_contents($pdo,$studentId,$contentId);
+    $content=$rows[0]??null;
+    if(!is_array($content) || (string)($content['icerik_turu']??'')!=='odev'){
+        throw new RuntimeException('Ödev bulunamadı veya artık erişilemiyor.');
+    }
+
+    $s=$pdo->prepare("INSERT INTO ogrenci_odev_durumlari
+      (icerik_id,ogrenci_id,tamamlandi,tamamlanma_tarihi)
+      VALUES (?,?,?,?)
+      ON DUPLICATE KEY UPDATE
+        tamamlandi=VALUES(tamamlandi),
+        tamamlanma_tarihi=VALUES(tamamlanma_tarihi)");
+    $s->execute([
+        $contentId,
+        $studentId,
+        $completed?1:0,
+        $completed?date('Y-m-d H:i:s'):null
+    ]);
+    $s->closeCursor();
 }
 
 function oi_answer_question(PDO $pdo,int $studentId,int $contentId,int $selectedIndex): bool {

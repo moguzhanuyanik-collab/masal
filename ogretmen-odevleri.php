@@ -34,7 +34,7 @@ if($institutionId>0 && !in_array($institutionId,$institutionIds,true)){
 }
 $status=(string)($_GET['durum']??'tum');
 if(!in_array($status,['tum','aktif','pasif'],true)) $status='tum';
-$sql="SELECT oi.id,oi.baslik,oi.icerik_metni,oi.hedef_turu,oi.aktif,oi.olusturulma_tarihi,
+$sql="SELECT oi.id,oi.baslik,oi.icerik_metni,oi.hedef_turu,oi.teslim_tarihi,oi.aktif,oi.olusturulma_tarihi,
     k.ad kurum_adi,d.ad ders_adi,COUNT(DISTINCT h.ogrenci_id) secili_sayisi
     FROM ogretmen_icerikleri oi
     INNER JOIN kurumlar k ON k.id=oi.kurum_id AND k.aktif=1
@@ -68,8 +68,11 @@ try{
 <label for="durum">Yayın durumu</label><select class="role-input" name="durum" id="durum"><option value="tum" <?=$status==='tum'?'selected':''?>>Tümü</option><option value="aktif" <?=$status==='aktif'?'selected':''?>>Yayında</option><option value="pasif" <?=$status==='pasif'?'selected':''?>>Pasif</option></select><button class="role-button" type="submit">Ödevleri Göster</button></form></section>
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">ÖDEVLER</span><h2>Liste</h2></div><span class="role-pill"><?=count($homeworks)?></span></div><div class="role-list">
 <?php if(!$homeworks):?><div class="role-empty">Bu filtrede ödev bulunamadı.</div><?php endif;?>
-<?php foreach($homeworks as $homework):?><a class="role-row" href="ogretmen-odev-detay.php?id=<?=(int)$homework['id']?>"><span>📝</span><div><strong><?=oo_h((string)$homework['baslik'])?></strong><small><?=oo_h((string)$homework['kurum_adi'])?> · <?=oo_h((string)$homework['ders_adi'])?> · <?=oo_h((string)$homework['olusturulma_tarihi'])?></small><small><?=(string)$homework['hedef_turu']==='tum_ogrenciler'?'Bu kurumda bağlı tüm öğrenciler':(int)$homework['secili_sayisi'].' seçili öğrenci'?> · Ayrıntıları aç →</small></div><span class="role-pill <?=((int)$homework['aktif']===1?'ok':'off')?>"><?=((int)$homework['aktif']===1?'Yayında':'Pasif')?></span></a><?php endforeach;?>
+<?php foreach($homeworks as $homework):?>
+<?php $dueText=!empty($homework['teslim_tarihi'])?date('d.m.Y H:i',strtotime((string)$homework['teslim_tarihi'])):'Süre yok'; ?>
+<a class="role-row" href="ogretmen-odev-detay.php?id=<?=(int)$homework['id']?>"><span>📝</span><div><strong><?=oo_h((string)$homework['baslik'])?></strong><small><?=oo_h((string)$homework['kurum_adi'])?> · <?=oo_h((string)$homework['ders_adi'])?> · Teslim: <?=oo_h($dueText)?></small><small><?=(string)$homework['hedef_turu']==='tum_ogrenciler'?'Bu kurumda bağlı tüm öğrenciler':(int)$homework['secili_sayisi'].' seçili öğrenci'?> · Teslim durumlarını aç →</small></div><span class="role-pill <?=((int)$homework['aktif']===1?'ok':'off')?>"><?=((int)$homework['aktif']===1?'Yayında':'Pasif')?></span></a>
+<?php endforeach;?>
 </div></section>
-<div class="role-note"><span>ℹ️</span><p>Bu liste yayın durumunu gösterir. Teslim tarihi ve öğrencinin ödevi tamamlama takibi henüz eklenmedi.</p></div>
+<div class="role-note"><span>ℹ️</span><p>Ödev ayrıntısında hedef öğrencilerin tamamlandı/bekliyor durumunu ve teslim zamanını takip edebilirsin.</p></div>
 </main><nav class="role-bottom"><a href="ogretmen-paneli.php"><span>⌂</span>Panel</a><a href="ogretmen-ogrencilerim.php"><span>🎒</span>Öğrenciler</a><a class="active" href="ogretmen-odevleri.php"><span>📝</span>Ödevler</a><a href="ogretmen-icerikleri.php"><span>⭐</span>İçeriklerim</a></nav>
 </div></body></html>
