@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.15",
+  "version": "1.2.16",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -12,6 +12,7 @@
     "REBUILD-1.1.97-1.2.1-FUNCTIONAL.json",
     "RECOVERY-1.1.97-1.2.1-CHAIN.json",
     "RECOVERY-1.1.97-1.2.1-EVIDENCE.json",
+    "RECOVERY-1.1.97-1.2.1-PACKAGE.json",
     "RELEASE-1.0.11.md",
     "RELEASE-1.0.12.md",
     "RELEASE-1.0.16.md",
@@ -188,6 +189,7 @@
     "RELEASE-1.2.13.md",
     "RELEASE-1.2.14.md",
     "RELEASE-1.2.15.md",
+    "RELEASE-1.2.16.md",
     "RELEASE-1.2.2.md",
     "RELEASE-1.2.3.md",
     "RELEASE-1.2.4.md",
@@ -467,6 +469,7 @@
     "tests/recovery-chain-order-135.cjs",
     "tests/recovery-direct-097-121-136.cjs",
     "tests/recovery-functional-source-parity-140.cjs",
+    "tests/recovery-package-lock-142.cjs",
     "tests/recovery-release-postcondition-131.cjs",
     "tests/recovery-release-postcondition-131.php",
     "tests/recovery-safety-100.cjs",
@@ -538,5 +541,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 2
+  "release_revision": 1
 }
