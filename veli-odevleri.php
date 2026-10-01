@@ -51,13 +51,15 @@ if($childId>0){
             INNER JOIN kullanicilar su ON su.id=os.kullanici_id AND su.aktif=1
             INNER JOIN kurum_kullanicilari sk ON sk.kurum_id=oi.kurum_id
                 AND sk.kullanici_id=os.kullanici_id AND sk.kurum_rolu='ogrenci' AND sk.aktif=1
-            INNER JOIN ogretmen_ogrenci oo ON oo.ogretmen_id=og.id AND oo.ogrenci_id=os.id
+            INNER JOIN ogretmen_ogrenci oo ON oo.ogretmen_id=og.id AND oo.ogrenci_id=os.id AND oo.kurum_id=oi.kurum_id
             LEFT JOIN ogretmen_icerik_hedefleri h ON h.icerik_id=oi.id AND h.ogrenci_id=os.id
             LEFT JOIN ogrenci_odev_durumlari od ON od.icerik_id=oi.id AND od.ogrenci_id=os.id
             WHERE oi.icerik_turu='odev' AND oi.aktif=1
               AND EXISTS (SELECT 1 FROM veli_ogrenci vo
                   INNER JOIN veliler v ON v.id=vo.veli_id AND v.aktif=1
-                  WHERE vo.ogrenci_id=os.id AND v.kullanici_id=?)
+                  INNER JOIN kurum_kullanicilari vk ON vk.kullanici_id=v.kullanici_id
+                    AND vk.kurum_id=oi.kurum_id AND vk.kurum_rolu='veli' AND vk.aktif=1
+                  WHERE vo.ogrenci_id=os.id AND vo.kurum_id=oi.kurum_id AND v.kullanici_id=?)
               AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
             ORDER BY oi.olusturulma_tarihi DESC,oi.id DESC LIMIT 100");
         $stmt->execute([$childId,(int)$user['id']]);
