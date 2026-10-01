@@ -1822,7 +1822,32 @@ function recover_missing_064_checkpoint_after_1_1_98_bridge(PDO $pdo,string $roo
     $check->execute([$name]);
     $already=(bool)$check->fetchColumn();
     $check->closeCursor();
-    if($already) return [];
+
+    // Migration kaydı var ama 064'ün gerçek tabloyu içermediği bozuk bir
+    // legacy durumda yalnız kayıt var diye recovery'yi atlama. Tablo eksikse
+    // CREATE TABLE IF NOT EXISTS ile veri silmeden idempotent şema onarımı yap.
+    // Tablo zaten varsa mevcut migration kaydına dokunma.
+    if($already){
+        if(auth_table_exists($pdo,'adimbot_rate_limitleri')) return [];
+
+        $pdo->exec("CREATE TABLE IF NOT EXISTS adimbot_rate_limitleri (
+            kanal VARCHAR(16) NOT NULL,
+            kapsam VARCHAR(16) NOT NULL,
+            kapsam_hash CHAR(64) NOT NULL,
+            deneme_sayisi SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+            pencere_baslangici DATETIME NOT NULL,
+            engel_bitis DATETIME NULL,
+            son_deneme DATETIME NOT NULL,
+            PRIMARY KEY (kanal,kapsam,kapsam_hash),
+            KEY ix_adimbot_rate_engel (engel_bitis),
+            KEY ix_adimbot_rate_son (son_deneme)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+        if(!auth_table_exists($pdo,'adimbot_rate_limitleri')){
+            throw new RuntimeException('064 migration kaydı mevcut ancak adimbot_rate_limitleri tablosu güvenli biçimde yeniden oluşturulamadı.');
+        }
+        return [];
+    }
 
     // Yalnız 064 eksikse onar. 064 öncesindeki bütün non-retired geçmiş
     // eksiksiz değilse hiçbir değişiklik yapmadan dur.
