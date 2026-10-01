@@ -30,3 +30,4 @@
 .teacher-content-actions form{margin:0}
 .teacher-content-action.edit{color:var(--role-accent);text-decoration:none}
 .teacher-content-action.copy{color:#665078;background:#f8f3fb}
+.teacher-content-action.detail{color:#385f91;background:#eef5fc;text-decoration:none}
