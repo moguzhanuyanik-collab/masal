@@ -29,3 +29,9 @@ GitHub'da 1.1.97 → 1.2.1 source zinciri yeniden doğrulandı:
 - Legacy kurum üyeliği dönüşümü staging + postcondition + rollback ile korunuyor.
 - 065 tenant izolasyonu ve 066 schema guard zinciri korunuyor.
 - Production veritabanına bu GitHub çalışması sırasında doğrudan müdahale edilmiyor.
+
+## Rev 2 — immutable bootstrap re-anchor
+
+- 1.1.97 rescue bootstrap artık 1.2.16 rev1 commitine sabitlendi: `ea5ddda3a90cdc0ace01729cee827a532d673fe9`.
+- Rescue scripti mutable branch HEAD kullanmıyor.
+- 1.2.1 recovery source authority değişmedi: commit `6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c`, tree `9665e2754d02db81f8ca07a97b95506397103e1e`, revision 15.
