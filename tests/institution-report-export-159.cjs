@@ -22,7 +22,7 @@ assert(page.includes("http_build_query($exportParams,'','&',PHP_QUERY_RFC3986)")
 assert(!page.includes("email','Sınıf"),'CSV must not add student e-mail as a new export column');
 
 assert(workflow.includes('node tests/institution-report-export-159.cjs'),'CSV export source regression must run in quality gate');
-assert(/^1\\.2\\.\\d+$/.test(version.version),'release version must remain in the 1.2.x line');
+assert(version.version.startsWith('1.2.'),'release version must remain in the 1.2.x line');
 assert(Number(version.version.split('.')[2])>=34,'institution report CSV export requires 1.2.34 or newer');
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
