@@ -162,6 +162,7 @@ $selectedContract=$selected&&$commercialReady?lyt_contract_relation($pdo,$select
 <div class="sa-page-actions">
 <a class="sa-page-action" href="paketler.php" aria-label="Paket & Lisanslar"><svg><use href="#sa-database"/></svg></a>
 <a class="sa-page-action" href="ticari-finans.php" aria-label="Ticari Finans"><svg><use href="#sa-card"/></svg></a>
+<a class="sa-page-action" href="tahsilat-risk.php" aria-label="Tahsilat Risk Merkezi"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
 </header>
@@ -445,6 +446,7 @@ $days=(int)$selected['kalan_gun'];
 <a href="paketler.php"><span>💼</span>Paketler</a>
 <a class="active" href="lisans-yenilemeleri.php"><span>⏳</span>Yenileme</a>
 <a href="ticari-finans.php"><span>₺</span>Finans</a>
+<a href="tahsilat-risk.php"><span>⚠️</span>Risk</a>
 </nav>
 </div>
 </body>
