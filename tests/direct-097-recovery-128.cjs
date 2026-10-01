@@ -9,6 +9,7 @@ const workflow=fs.readFileSync('.github/workflows/quality.yml','utf8');
 const version=JSON.parse(fs.readFileSync('version.json','utf8'));
 const release=JSON.parse(fs.readFileSync('update-release.json','utf8'));
 const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
+const testPath='tests/direct-097-recovery-128.cjs';
 
 assert(rescue.includes("installed!=='1.1.97'"),'Direct rescue yalnız 1.1.97 için çalışmalı.');
 assert(rescue.includes('rescue_branch_head_sha'), 'Rescue gerçek branch HEAD SHA çözümlemeli.');
