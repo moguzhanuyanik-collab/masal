@@ -10,12 +10,17 @@ $institutionNames=[];
 if($institutionIds){$ph=implode(',',array_fill(0,count($institutionIds),'?'));try{$s=$pdo->prepare("SELECT id,ad FROM kurumlar WHERE id IN ($ph) ORDER BY ad");$s->execute($institutionIds);$institutionNames=$s->fetchAll();$s->closeCursor();}catch(Throwable){}}
 $students=[];
 try{
- $s=$pdo->prepare("SELECT o.id,o.ad,o.email FROM ogretmen_ogrenci oo
-   INNER JOIN ogretmenler og ON og.id=oo.ogretmen_id
-   INNER JOIN ogrenciler o ON o.id=oo.ogrenci_id
-   WHERE og.kullanici_id=? AND og.aktif=1 AND o.aktif=1 ORDER BY o.ad,o.id");
- $s->execute([(int)$user['id']]);$rows=$s->fetchAll();$s->closeCursor();
- foreach($rows as $r){$sid=(int)$r['id'];try{$sum=normalized_summary($pdo,$sid);}catch(Throwable){$sum=['completed_steps'=>0,'games'=>0,'stars'=>0];}$r['summary']=$sum;$students[]=$r;}
+ $accessibleStudentIds=auth_accessible_student_ids($pdo,(int)$user['id']);
+ if($accessibleStudentIds){
+  $ph=implode(',',array_fill(0,count($accessibleStudentIds),'?'));
+  $s=$pdo->prepare("SELECT o.id,o.ad,o.email
+    FROM ogrenciler o
+    INNER JOIN kullanicilar ku ON ku.id=o.kullanici_id AND ku.aktif=1
+    WHERE o.id IN ($ph) AND o.aktif=1
+    ORDER BY o.ad,o.id");
+  $s->execute($accessibleStudentIds);$rows=$s->fetchAll();$s->closeCursor();
+  foreach($rows as $r){$sid=(int)$r['id'];try{$sum=normalized_summary($pdo,$sid);}catch(Throwable){$sum=['completed_steps'=>0,'games'=>0,'stars'=>0];}$r['summary']=$sum;$students[]=$r;}
+ }
 }catch(Throwable){}
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Öğretmen Paneli — İlkAdım</title>
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="ogretmen.css?v=1.0.42"></head><body class="role-page"><div class="role-shell">

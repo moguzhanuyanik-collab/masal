@@ -42,11 +42,15 @@ try {
                 'questions'=>$questions,
             ];
         }
-        json_response(['ok'=>true,'games'=>$out]);
+        json_response(['ok'=>true,'games'=>$out,'csrf'=>csrf_token()]);
     }
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         json_response(['ok'=>false,'message'=>'Yalnızca GET ve POST desteklenir.'],405);
+    }
+
+    if (!verify_csrf($_SERVER['HTTP_X_CSRF_TOKEN'] ?? null)) {
+        json_response(['ok'=>false,'message'=>'Güvenlik doğrulaması başarısız. Sayfayı yenileyip tekrar deneyin.'],403);
     }
 
     $raw = file_get_contents('php://input');
