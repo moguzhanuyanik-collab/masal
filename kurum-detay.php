@@ -4,6 +4,7 @@ require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
 require __DIR__.'/src/kurum_yonetimi.php';
 require __DIR__.'/src/yonetici_yetkileri.php';
+require __DIR__.'/src/kurum_hazirlik.php';
 
 $user=require_role(['yonetici','super_admin']);
 $pdo=db();
@@ -37,6 +38,7 @@ $counts=[
     'ogrenci'=>kd_count($pdo,$institutionId,'ogrenci'),
 ];
 $isSuper=auth_user_has_role($user,'super_admin');
+$readiness=kh_status($pdo,$institutionId);
 ?><!doctype html><html lang="tr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title><?=ky_h((string)$institution['ad'])?> — İlkAdım</title>
@@ -53,6 +55,23 @@ $isSuper=auth_user_has_role($user,'super_admin');
 <h1><?=ky_h((string)$institution['ad'])?></h1>
 <p>İçerik kaynağı: <?=ky_h((string)$institution['icerik_kaynagi'])?> · Kullanıcı türleri ayrı sayfalardan yönetilir.</p>
 <span class="role-hero-art">🏫</span>
+</section>
+
+<section class="role-section">
+<div class="role-section-head"><div><span class="eyeline">KURULUM DURUMU</span><h2>Kurum Hazırlık</h2></div><span class="role-pill <?=$readiness['percent']===100?'ok':''?>"><?=$readiness['percent']?>%</span></div>
+<div class="role-list">
+<?php foreach($readiness['items'] as $item):
+    $href='kurum-detay.php?kurum_id='.$institutionId;
+    if($item['key']==='ogretmen') $href=$isSuper?'kurumlar.php?sekme=ogretmenler&kurum_id='.$institutionId:'kurum-ogretmenleri.php?kurum_id='.$institutionId;
+    elseif($item['key']==='ogrenci') $href=$isSuper?'kurumlar.php?sekme=ogrenciler&kurum_id='.$institutionId:'kurum-ogrencileri.php?kurum_id='.$institutionId;
+    elseif($item['key']==='veli') $href=$isSuper?'kurumlar.php?sekme=veliler&kurum_id='.$institutionId:'kurum-velileri.php?kurum_id='.$institutionId;
+    elseif(in_array($item['key'],['sinif','sinif_ogrenci'],true)) $href='kurum-siniflari.php?kurum_id='.$institutionId;
+    elseif($item['key']==='icerik') $href='kurum-icerikleri.php?kurum_id='.$institutionId;
+?>
+<a class="role-row" href="<?=ky_h($href)?>"><span><?=$item['ready']?'✅':'○'?></span><div><strong><?=ky_h((string)$item['label'])?></strong><small><?=ky_h((string)$item['description'])?></small></div><span class="role-pill <?=$item['ready']?'ok':''?>"><?=$item['ready']?'Tamam':'Eksik'?></span></a>
+<?php endforeach;?>
+</div>
+<div class="role-note"><span>ℹ️</span><p><?=$readiness['done']?> / <?=$readiness['total']?> temel kurulum adımı tamamlandı. Hazırlık göstergesi salt okunurdur ve kurum verisini değiştirmez.</p></div>
 </section>
 
 <section class="role-section">

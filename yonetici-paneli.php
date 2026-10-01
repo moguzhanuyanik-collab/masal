@@ -3,6 +3,7 @@ declare(strict_types=1);
 require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
 require __DIR__.'/src/yonetici_yetkileri.php';
+require __DIR__.'/src/kurum_hazirlik.php';
 
 $user=require_role('yonetici');
 $pdo=db();
@@ -26,6 +27,7 @@ $canManageTeachers=yy_can($pdo,$user,'ogretmen_yonet');
 $canManageParents=yy_can($pdo,$user,'veli_yonet');
 $canManageStudents=yy_can($pdo,$user,'ogrenci_yonet');
 $hasInstitution=$institutionId>0 && is_array($institution);
+$readiness=$hasInstitution?kh_status($pdo,$institutionId):['percent'=>0,'done'=>0,'total'=>6,'items'=>[],'metrics'=>[]];
 
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Yönetici Paneli — İlkAdım</title>
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="yonetici.css?v=1.0.42"></head>
@@ -40,6 +42,23 @@ $hasInstitution=$institutionId>0 && is_array($institution);
 <?php foreach($ids as $id): try{$s=$pdo->prepare('SELECT ad FROM kurumlar WHERE id=?');$s->execute([$id]);$name=(string)($s->fetchColumn()?:('Kurum #'.$id));$s->closeCursor();}catch(Throwable){$name='Kurum #'.$id;}?>
 <a class="role-row" href="yonetici-paneli.php?kurum_id=<?=$id?>"><span>🏫</span><div><strong><?=yp_h($name)?></strong><small>Kurum panelini aç</small></div><?=($id===$institutionId?'<span class="role-pill ok">Seçili</span>':'')?></a>
 <?php endforeach;?></div></section><?php endif;?>
+
+<?php if($canView && $hasInstitution):?><section class="role-section">
+<div class="role-section-head"><div><span class="eyeline">KURULUM DURUMU</span><h2>Kurum Hazırlık</h2></div><span class="role-pill <?=$readiness['percent']===100?'ok':''?>"><?=$readiness['percent']?>%</span></div>
+<div class="role-list">
+<?php foreach($readiness['items'] as $item):
+    $href='kurum-detay.php?kurum_id='.$institutionId;
+    if($item['key']==='ogretmen' && $canManageTeachers) $href='kurum-ogretmenleri.php?kurum_id='.$institutionId;
+    elseif($item['key']==='ogrenci' && $canManageStudents) $href='kurum-ogrencileri.php?kurum_id='.$institutionId;
+    elseif($item['key']==='veli' && $canManageParents) $href='kurum-velileri.php?kurum_id='.$institutionId;
+    elseif(in_array($item['key'],['sinif','sinif_ogrenci'],true)) $href='kurum-siniflari.php?kurum_id='.$institutionId;
+    elseif($item['key']==='icerik') $href='kurum-icerikleri.php?kurum_id='.$institutionId;
+?>
+<a class="role-row" href="<?=yp_h($href)?>"><span><?=$item['ready']?'✅':'○'?></span><div><strong><?=yp_h((string)$item['label'])?></strong><small><?=yp_h((string)$item['description'])?></small></div><span class="role-pill <?=$item['ready']?'ok':''?>"><?=$item['ready']?'Tamam':'Eksik'?></span></a>
+<?php endforeach;?>
+</div>
+<div class="role-note"><span>ℹ️</span><p><?=$readiness['done']?> / <?=$readiness['total']?> temel kurulum adımı tamamlandı. Bu gösterge salt okunurdur; mevcut kullanıcı veya içerik kayıtlarını değiştirmez.</p></div>
+</section><?php endif;?>
 
 <?php if($canView && $hasInstitution):?><section class="role-section"><div class="role-section-head"><div><span class="eyeline">GENEL BAKIŞ</span><h2>Kurum Özeti</h2></div></div><div class="role-stats">
 <?php if($canManageStudents):?><a class="role-stat" href="kurum-ogrencileri.php?kurum_id=<?=$institutionId?>"><span>🎒</span><strong><?=$stats['ogrenci']?></strong><small>Öğrencileri aç →</small></a><?php endif;?>
