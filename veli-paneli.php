@@ -38,7 +38,7 @@ try{
 }
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Veli Paneli — İlkAdım</title>
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="veli.css?v=1.0.42"></head><body class="role-page"><div class="role-shell">
-<header class="role-topbar"><a class="role-brand" href="veli-paneli.php"><span>👪</span><span><strong>Veli</strong><small>ÇOCUK TAKİBİ</small></span></a><div class="role-actions"><a class="role-icon" href="veli-paneli.php">👪</a><a class="role-icon" href="bildirimler.php" title="Bildirimler">🔔<?=$notificationUnread>0?' '.$notificationUnread:''?></a><a class="role-icon" href="hesap-guvenligi.php">⚙️</a></div></header>
+<header class="role-topbar"><a class="role-brand" href="veli-paneli.php"><span>👪</span><span><strong>Veli</strong><small>ÇOCUK TAKİBİ</small></span></a><div class="role-actions"><a class="role-icon" href="veli-paneli.php">👪</a><a class="role-icon" href="bildirimler.php" title="Bildirimler">🔔<?=$notificationUnread>0?' '.$notificationUnread:''?></a><a class="role-icon" href="destek.php" title="Destek">🎧</a><a class="role-icon" href="hesap-guvenligi.php">⚙️</a></div></header>
 <main class="role-content">
 <section class="role-hero"><span class="eyeline">VELİ ALANI</span><h1>Çocuğunun gelişimini izle.</h1><p><?=vp_h((string)$user['ad_soyad'])?> · <?=count($children)?> bağlı öğrenci</p><span class="role-hero-art">💜</span></section>
 <section class="role-section" id="cocuklar"><div class="role-section-head"><div><span class="eyeline">ÇOCUKLARIM</span><h2>Öğrenci Raporları</h2></div></div><div class="role-list">
@@ -49,6 +49,7 @@ try{
 <a class="role-module" href="veli-odevleri.php"><span>📝</span><div><strong>Yalnız Ödevler</strong><small>Bağlı çocuğunu seçerek öğretmeninin verdiği ödevleri teslim durumuyla gör.</small></div><b>→</b></a>
 </div></section>
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">BİLDİRİMLER</span><h2>Kurum Mesajları</h2></div></div><div class="role-modules"><a class="role-module" href="bildirimler.php"><span>🔔</span><div><strong>Bildirimlerim</strong><small><?=$notificationUnread?> okunmamış duyuru veya ödev bildirimi.</small></div><b>→</b></a></div></section>
+<section class="role-section"><div class="role-section-head"><div><span class="eyeline">DESTEK</span><h2>Yardım & Talep</h2></div></div><div class="role-modules"><a class="role-module" href="destek.php"><span>🎧</span><div><strong>Destek Merkezi</strong><small>Hesap, içerik veya paket sorununu destek ekibine ilet.</small></div><b>→</b></a></div></section>
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">KURUM BİLGİSİ</span><h2>Bağlı Kurum</h2></div></div><div class="role-list">
 <?php if(!$institutionNames):?><div class="role-row"><span>🌞</span><div><strong>İlkAdım Doğrudan Kullanıcı</strong><small>Okula bağlı olmayan hesap · Sistem içerikleri</small></div><span class="role-pill">Sistem</span></div>
 <?php else:foreach($institutionNames as $k):?><div class="role-row"><span><?=$k['tur']==='platform'?'🌞':'🏫'?></span><div><strong><?=vp_h((string)$k['ad'])?></strong><small><?=vp_h((string)$k['tur'])?></small></div><span class="role-pill ok">Aktif</span></div><?php endforeach;endif;?>
