@@ -119,6 +119,7 @@ jobs:
           node tests/institution-reporting-137.cjs
           node tests/student-report-detail-138.cjs
           node tests/teacher-content-edit-copy-139.cjs
+          node tests/teacher-content-detail-140.cjs
 
   tenant-db-integration:
     name: Tenant DB integration
@@ -175,4 +176,5 @@ jobs:
           php tests/institution-class-edit-db-136.php
           php tests/institution-reporting-db-137.php
           php tests/teacher-content-edit-copy-db-139.php
+          php tests/teacher-content-detail-db-140.php
 
