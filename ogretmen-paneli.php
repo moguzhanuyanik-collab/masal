@@ -3,7 +3,9 @@ declare(strict_types=1);
 require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
 require __DIR__.'/src/normalized.php';
+require __DIR__.'/src/bildirimler.php';
 $user=require_role('ogretmen');$pdo=db();
+$notificationUnread=bd_unread_count($pdo,(int)$user['id']);
 function tp_h(string $v):string{return htmlspecialchars($v,ENT_QUOTES,'UTF-8');}
 $institutionIds=auth_user_institution_ids($pdo,(int)$user['id'],'ogretmen');
 $institutionNames=[];
@@ -24,13 +26,14 @@ try{
 }catch(Throwable){}
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Öğretmen Paneli — İlkAdım</title>
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="ogretmen.css?v=1.0.42"></head><body class="role-page"><div class="role-shell">
-<header class="role-topbar"><a class="role-brand" href="ogretmen-paneli.php"><span>👩‍🏫</span><span><strong>Öğretmen</strong><small>ÖĞRENCİ TAKİBİ</small></span></a><div class="role-actions"><a class="role-icon" href="ogretmen-paneli.php">👩‍🏫</a><a class="role-icon" href="hesap-guvenligi.php">⚙️</a></div></header>
+<header class="role-topbar"><a class="role-brand" href="ogretmen-paneli.php"><span>👩‍🏫</span><span><strong>Öğretmen</strong><small>ÖĞRENCİ TAKİBİ</small></span></a><div class="role-actions"><a class="role-icon" href="ogretmen-paneli.php">👩‍🏫</a><a class="role-icon" href="bildirimler.php" title="Bildirimler">🔔<?=$notificationUnread>0?' '.$notificationUnread:''?></a><a class="role-icon" href="hesap-guvenligi.php">⚙️</a></div></header>
 <main class="role-content">
 <section class="role-hero"><span class="eyeline">ÖĞRETMEN ALANI</span><h1>Öğrencilerini takip et.</h1><p><?=tp_h((string)$user['ad_soyad'])?> · <?=count($institutionNames)?> kurum · <?=count($students)?> öğrenci</p><span class="role-hero-art">📚</span></section>
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">ÖĞRETMENİM</span><h2>Özel İçerikler</h2></div></div>
 <div class="role-modules"><a class="role-module" href="ogretmen-icerikleri.php"><span>⭐</span><div><strong>İçeriklerim</strong><small>Ders ve konu seçerek soru, tekrar, ödev veya not yayınla. Yalnızca sana bağlı öğrenciler görür.</small></div><b>→</b></a></div></section>
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">ÖDEVLERİM</span><h2>Ödev Listesi</h2></div></div><div class="role-modules"><a class="role-module" href="ogretmen-odevleri.php"><span>📝</span><div><strong>Ödevlerim</strong><small>Yayınladığın ödevleri kurum ve duruma göre gör.</small></div><b>→</b></a></div></section>
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">SORU PERFORMANSI</span><h2>Soru Takibi</h2></div></div><div class="role-modules"><a class="role-module" href="ogretmen-sorulari.php"><span>❓</span><div><strong>Soru Performansı</strong><small>Cevaplanma, doğruluk, yanlışlar, bekleyenler ve dağıtılan yıldızları toplu gör.</small></div><b>→</b></a></div></section>
+<section class="role-section"><div class="role-section-head"><div><span class="eyeline">BİLDİRİMLER</span><h2>Kurum Mesajları</h2></div></div><div class="role-modules"><a class="role-module" href="bildirimler.php"><span>🔔</span><div><strong>Bildirimlerim</strong><small><?=$notificationUnread?> okunmamış kurum duyurusu veya sistem bildirimi.</small></div><b>→</b></a></div></section>
 <section class="role-section"><div class="role-section-head"><div><span class="eyeline">KURUMLARIM</span><h2>Bağlı Kurumlar</h2></div></div><div class="role-list">
 <?php if(!$institutionNames):?><div class="role-empty"><span>🏫</span>Henüz kuruma bağlanmadın.</div><?php else:foreach($institutionNames as $k):?><div class="role-row"><span>🏫</span><div><strong><?=tp_h((string)$k['ad'])?></strong><small>Öğretmen üyeliği</small></div><span class="role-pill ok">Aktif</span></div><?php endforeach;endif;?>
 </div></section>

@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__.'/bildirimler.php';
+
 function oi_h(string $value): string {
     return htmlspecialchars($value,ENT_QUOTES,'UTF-8');
 }
@@ -426,6 +428,13 @@ function oi_create_content(PDO $pdo,array $user,array $input,array $targetStuden
     $targetStudentIds=$targetPlan['student_ids'];
     $targetGroupRows=$targetPlan['group_targets'];
     $targetType=$targetStudentIds?'secili_ogrenciler':'tum_ogrenciler';
+    $notificationStudentIds=$targetStudentIds;
+    if(!$notificationStudentIds){
+        $notificationStudentIds=array_values(array_filter(array_map(
+            static fn(array $row):int=>(int)($row['id']??0),
+            oi_teacher_students($pdo,(int)$teacher['id'],$institutionId)
+        ),static fn(int $id):bool=>$id>0));
+    }
 
     $pdo->beginTransaction();
     try{
@@ -453,6 +462,9 @@ function oi_create_content(PDO $pdo,array $user,array $input,array $targetStuden
     }
 
     auth_audit($pdo,(int)$user['id'],null,'ogretmen_icerik_olustur','İçerik #'.$contentId.' / '.$type.' / kurum '.$institutionId);
+    bd_notify_teacher_content(
+        $pdo,$institutionId,(int)$user['id'],$contentId,$type,$title,$notificationStudentIds,$dueAt
+    );
     return $contentId;
 }
 

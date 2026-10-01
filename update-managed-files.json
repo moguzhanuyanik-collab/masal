@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.38",
+  "version": "1.2.39",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -210,6 +210,7 @@
     "RELEASE-1.2.36.md",
     "RELEASE-1.2.37.md",
     "RELEASE-1.2.38.md",
+    "RELEASE-1.2.39.md",
     "RELEASE-1.2.4.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.6.md",
@@ -237,6 +238,9 @@
     "api/report.php",
     "api/state.php",
     "api/v4-features.php",
+    "bildirimler-shortcut.css",
+    "bildirimler.css",
+    "bildirimler.php",
     "completed-question-guard.js",
     "completed-step-skip.js",
     "config/app.php",
@@ -380,6 +384,7 @@
     "database/migrations/071_paket_ve_kurum_lisanslari.sql",
     "database/migrations/072_adimbot_kurum_ai_kotasi.sql",
     "database/migrations/073_ticari_finans_ve_tahsilat.sql",
+    "database/migrations/074_merkezi_bildirim_ve_duyurular.sql",
     "global-arsiv.php",
     "global-audio-feedback.js",
     "global-eslestirme.php",
@@ -474,6 +479,7 @@
     "src/adimbot_rate_limit.php",
     "src/adimbot_transcript.php",
     "src/auth.php",
+    "src/bildirimler.php",
     "src/kurum_hazirlik.php",
     "src/kurum_icerik_dashboard.php",
     "src/kurum_icerik_detay.php",
@@ -549,6 +555,8 @@
     "tests/institution-license-db-161.php",
     "tests/institution-member-crud-135.cjs",
     "tests/institution-member-crud-db-135.php",
+    "tests/institution-notifications-164.cjs",
+    "tests/institution-notifications-db-164.php",
     "tests/institution-readiness-160.cjs",
     "tests/institution-readiness-db-160.php",
     "tests/institution-report-export-159.cjs",
@@ -666,5 +674,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Ticari finans sözleşme ve tahsilat merkezi"
+  "name": "Merkezi bildirim ve duyuru sistemi"
 }

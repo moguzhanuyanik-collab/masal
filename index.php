@@ -2,7 +2,10 @@
 declare(strict_types=1);
 require __DIR__ . '/src/bootstrap.php';
 require __DIR__ . '/src/auth.php';
+require __DIR__ . '/src/bildirimler.php';
 require_student_login();
+$notificationUser=authenticated_user();
+$notificationUnread=$notificationUser?bd_unread_count(db(),(int)$notificationUser['id']):0;
 
 $assetVersion=static function(string $path): string {
     $full=__DIR__.'/'.ltrim($path,'/');
@@ -27,6 +30,7 @@ $assetVersion=static function(string $path): string {
   <link rel="stylesheet" href="styles.css?v=<?=$assetVersion('styles.css')?>">
   <link rel="stylesheet" href="v4-features.css?v=<?=$assetVersion('v4-features.css')?>">
   <link rel="stylesheet" href="ogretmenim.css?v=<?=$assetVersion('ogretmenim.css')?>">
+  <link rel="stylesheet" href="bildirimler-shortcut.css?v=<?=$assetVersion('bildirimler-shortcut.css')?>">
   <link rel="stylesheet" href="adimbot-student.css?v=<?=$assetVersion('adimbot-student.css')?>">
   <script src="api/bootstrap.js.php?v=<?=$assetVersion('api/bootstrap.js.php')?>" defer></script>
   <script src="test-progress-reset.js?v=<?=$assetVersion('test-progress-reset.js')?>" defer></script>
@@ -62,6 +66,7 @@ $assetVersion=static function(string $path): string {
   <a class="skip-link" href="#screen">İçeriğe geç</a>
   <div class="app-shell">
     <header class="app-topbar" id="app-topbar"></header>
+    <a class="bildirim-shortcut" href="bildirimler.php" aria-label="Bildirimler" data-empty="<?=$notificationUnread>0?'0':'1'?>">🔔<b><?=$notificationUnread?></b></a>
     <main id="screen" tabindex="-1"><noscript>İlkAdım’ı kullanmak için tarayıcında JavaScript’i etkinleştir.</noscript></main>
     <nav class="app-nav app-nav-five" aria-label="Uygulama menüsü">
       <a href="#/anasayfa" data-tab="anasayfa"><span><svg><use href="#home"/></svg></span>Anasayfa</a>
