@@ -36,3 +36,8 @@ Production veritabanına doğrudan müdahale edilmez.
 
 - Release metadata, version ve managed manifest aynı 1.2.12 rev2 final ankrajında yeniden hizalanacak şekilde release-head sözleşmesi tamamlandı.
 - Recovery lineage koruması bu final ankrajdan sonra değişmeden korunur.
+
+## Rev 3 — CI revision-contract hardening
+
+- Tarihsel regression testleri release revision değerini sabit 1'e bağlamayacak şekilde future-proof hale getirildi.
+- Final release head yeniden tek metadata ankrajında sabitlenecek.
