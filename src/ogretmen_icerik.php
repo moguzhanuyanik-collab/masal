@@ -909,7 +909,7 @@ function oi_duplicate_content(PDO $pdo,array $user,int $contentId): int {
     return $newId;
 }
 
-function oi_teacher_content_detail(PDO $pdo,array $user,int $contentId): ?array {
+function oi_teacher_content_detail(PDO $pdo,array $user,int $contentId,int $groupId=0): ?array {
     $teacher=oi_teacher_profile($pdo,(int)$user['id']);
     if(!$teacher || $contentId<=0) return null;
 
@@ -929,6 +929,29 @@ function oi_teacher_content_detail(PDO $pdo,array $user,int $contentId): ?array 
 
     $institutionId=(int)$content['kurum_id'];
     if(!oi_teacher_can_use_institution($pdo,(int)$user['id'],$institutionId)) return null;
+
+    $groupId=max(0,$groupId);
+    $groupContext=null;
+    $groupStudentCondition='';
+    if($groupId>0){
+        if(!oi_table_exists($pdo,'ogretmen_icerik_hedef_gruplari')) return null;
+        $groupStmt=$pdo->prepare("SELECT kurum_sinif_id id,kurum_id,grup_adi ad,grup_turu tur,sinif_seviyesi
+            FROM ogretmen_icerik_hedef_gruplari
+            WHERE icerik_id=? AND kurum_sinif_id=? AND kurum_id=?
+            ORDER BY ogrenci_id
+            LIMIT 1");
+        $groupStmt->execute([$contentId,$groupId,$institutionId]);
+        $groupContext=$groupStmt->fetch();
+        $groupStmt->closeCursor();
+        if(!is_array($groupContext)) return null;
+
+        $groupStudentCondition=" AND EXISTS (
+            SELECT 1 FROM ogretmen_icerik_hedef_gruplari ghs
+            WHERE ghs.icerik_id=oi.id
+              AND ghs.kurum_sinif_id={$groupId}
+              AND ghs.ogrenci_id=o.id
+        )";
+    }
 
     $rewardSelect=oi_table_exists($pdo,'ogretmen_icerik_yildiz_odulleri')
         ?'yr.yildiz_degeri kazanilan_yildiz'
@@ -971,6 +994,7 @@ function oi_teacher_content_detail(PDO $pdo,array $user,int $contentId): ?array 
       WHERE oi.id=?
         AND oi.ogretmen_id=?
         AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
+        {$groupStudentCondition}
       ORDER BY o.sinif_seviyesi,o.ad,o.id");
     $s->execute([$contentId,(int)$teacher['id']]);
     $students=$s->fetchAll();
@@ -1023,6 +1047,6 @@ function oi_teacher_content_detail(PDO $pdo,array $user,int $contentId): ?array 
         $summary['waiting']=$summary['targeted'];
     }
 
-    return ['content'=>$content,'students'=>$students,'summary'=>$summary];
+    return ['content'=>$content,'students'=>$students,'summary'=>$summary,'group_context'=>$groupContext];
 }
 
