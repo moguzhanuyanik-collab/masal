@@ -95,6 +95,7 @@ $editRenewal=$edit&&isset($contractRenewals[(int)$edit['id']])?$contractRenewals
 <div class="sa-page-actions">
 <a class="sa-page-action" href="paketler.php" aria-label="Paketler"><svg><use href="#sa-database"/></svg></a>
 <a class="sa-page-action" href="lisans-yenilemeleri.php" aria-label="Lisans Yenilemeleri"><svg><use href="#sa-refresh"/></svg></a>
+<a class="sa-page-action" href="tahsilat-risk.php" aria-label="Tahsilat Risk Merkezi"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
 </header>
@@ -143,7 +144,12 @@ $editRenewal=$edit&&isset($contractRenewals[(int)$edit['id']])?$contractRenewals
 
 <section class="role-section">
 <div class="role-section-head"><div><span class="eyeline">LİSANS YENİLEME</span><h2>Yenileme Operasyon Merkezi</h2></div><a class="role-pill ok" href="lisans-yenilemeleri.php">Merkezi Aç →</a></div>
-<div class="role-note"><span>⏳</span><p>30/15/7/1 gün uyarıları, süresi geçmiş lisanslar, kurum yöneticisi bildirimleri, takip notları ve gerçek lisans uzatma işlemleri artık Lisans Yenilemeleri merkezinde tutulur.</p></div>
+<div class="role-note"><span>⏳</span><p>30/15/7/1 gün uyarıları, süresi geçmiş lisanslar, kurum yöneticisi bildirimleri, takip notları ve gerçek lisans uzatma işlemleri Lisans Yenilemeleri merkezinde tutulur.</p></div>
+</section>
+
+<section class="role-section">
+<div class="role-section-head"><div><span class="eyeline">TAHSİLAT RİSKİ</span><h2>Vade & Açık Bakiye Operasyonu</h2></div><a class="role-pill ok" href="tahsilat-risk.php">Risk Merkezini Aç →</a></div>
+<div class="role-note"><span>⚠️</span><p>7 gün içinde yaklaşan vadeler, gecikme yaşlandırması, yenileme kaynaklı ödeme gecikmeleri ve takip notları Tahsilat Risk Merkezi’nde yönetilir.</p></div>
 </section>
 
 <section class="role-section">
@@ -271,6 +277,7 @@ $editRenewal=$edit&&isset($contractRenewals[(int)$edit['id']])?$contractRenewals
 <a href="paketler.php"><span>💼</span>Paketler</a>
 <a href="lisans-yenilemeleri.php"><span>⏳</span>Yenileme</a>
 <a class="active" href="ticari-finans.php"><span>₺</span>Finans</a>
+<a href="tahsilat-risk.php"><span>⚠️</span>Risk</a>
 <a href="guncelleme.php"><span>↻</span>Güncelle</a>
 </nav>
 </div>

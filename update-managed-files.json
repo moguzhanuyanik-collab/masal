@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.49",
+  "version": "1.2.50",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -223,6 +223,7 @@
     "RELEASE-1.2.48.md",
     "RELEASE-1.2.49.md",
     "RELEASE-1.2.5.md",
+    "RELEASE-1.2.50.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
@@ -402,6 +403,7 @@
     "database/migrations/079_paket_lisans_butunlugu.sql",
     "database/migrations/080_lisans_yenileme_operasyon_merkezi.sql",
     "database/migrations/081_yenileme_sozlesme_tahsilat_baglantisi.sql",
+    "database/migrations/082_ticari_tahsilat_risk_merkezi.sql",
     "demo-satis.css",
     "demo-satis.php",
     "destek.css",
@@ -533,6 +535,7 @@
     "src/ogretmen_soru_dashboard.php",
     "src/password_reset.php",
     "src/super_admin_icons.php",
+    "src/tahsilat_risk.php",
     "src/ticari_finans.php",
     "src/updater.php",
     "src/veli_icerik_dashboard.php",
@@ -543,6 +546,8 @@
     "super-admin-profil.php",
     "super-admin.css",
     "super-admin.php",
+    "tahsilat-risk.css",
+    "tahsilat-risk.php",
     "test-progress-reset.js",
     "tests/adimbot-api-auth-130.cjs",
     "tests/adimbot-audio-88.cjs",
@@ -565,6 +570,8 @@
     "tests/commercial-finance-db-163.php",
     "tests/commercial-finance-integrity-169.cjs",
     "tests/commercial-finance-integrity-db-169.php",
+    "tests/commercial-risk-center-175.cjs",
+    "tests/commercial-risk-center-db-175.php",
     "tests/db-ai-safety-98.cjs",
     "tests/db-backup-99.cjs",
     "tests/db-backup-99.php",
@@ -732,5 +739,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Yenileme sözleşme ve tahsilat bağlantısı"
+  "name": "Ticari operasyon ve tahsilat risk merkezi"
 }
