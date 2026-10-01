@@ -46,7 +46,7 @@ assert(css.includes('.teacher-homework-dashboard-card.overdue'),'overdue dashboa
 assert(css.includes('.teacher-homework-progress'),'homework progress metric styling missing');
 
 assert(workflow.includes('node tests/teacher-homework-dashboard-148.cjs'),'source regression must run');
-assert(workflow.includes('php tests/teacher-homework-dashboard-db-147.php'),'DB regression must run');
+assert(workflow.includes('php tests/teacher-homework-dashboard-db-148.php'),'DB regression must run');
 
 assert(/^1\.2\.\d+$/.test(version.version),'release version must remain in 1.2.x line');
 assert(Number(version.version.split('.')[2]) >=23,'teacher homework dashboard requires 1.2.23 or newer');
@@ -61,7 +61,7 @@ for(const path of [
   'src/ogretmen_odev_dashboard.php',
   'ogretmen-odevleri.css',
   'tests/teacher-homework-dashboard-148.cjs',
-  'tests/teacher-homework-dashboard-db-147.php'
+  'tests/teacher-homework-dashboard-db-148.php'
 ]) assert(manifest.files.includes(path),'manifest missing '+path);
 
 console.log('PASS: teacher homework delivery dashboard source contract');
