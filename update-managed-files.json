@@ -478,6 +478,8 @@
     "tests/update-rebuild-122.cjs",
     "tests/update-recovery-119.cjs",
     "tests/update-release-anchor-101.cjs",
+    "tests/update-release-chain-cache-127.cjs",
+    "tests/update-release-chain-cache-127.php",
     "tests/update-release-head-anchor-109.cjs",
     "tests/update-release-revision-105.cjs",
     "tests/update-release-revision-105.php",
@@ -507,5 +509,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 20
+  "release_revision": 21
 }
