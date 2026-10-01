@@ -25,3 +25,10 @@ Sıralı updater `update-release.json` geçmişinden aday seçtiği için bu ara
 ### Veritabanı
 
 Yeni migration yoktur. 064, 065 ve 066 migration zinciri değişmeden korunur.
+
+
+### Rev2 release-head anchor
+
+PR #40 normal merge ile recovery commitlerini korudu; ancak merge commitinin kendisi `update-release.json` değiştirmediği için release-head regression kuralı main HEAD'i son release anchor olarak kabul etmedi.
+
+Rev2, aynı 1.2.5 kodunu korur ve final squash commitinin doğrudan release anchor olmasını sağlar. Uygulama kodu, migration zinciri ve recovery anchor değişmez.
