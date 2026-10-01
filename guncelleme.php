@@ -101,6 +101,7 @@ if ($isAjax) {
         $action = (string)($_GET['action'] ?? 'check');
         $local = read_app_version();
         $localRevision = read_local_release_revision(__DIR__,$local);
+        $localApplicationGeneration = read_local_application_generation(__DIR__,$local);
 
         if ($action === 'check') {
             $remote = next_remote_version_info($gh,$local,$localRevision);
@@ -114,7 +115,10 @@ if ($isAjax) {
                 'remote_revision' => normalize_release_revision($remote['release_revision'] ?? 0),
                 'remote_name' => (string)($remote['name'] ?? ''),
                 'commit' => (string)($remote['commit'] ?? ''),
-                'update_available' => release_identity_is_newer($remote,$local,$localRevision),
+                'application_generation' => normalize_application_generation($remote['application_generation'] ?? 0),
+                'local_application_generation' => $localApplicationGeneration,
+                'update_available' => release_application_generation_is_safe($remote,$localApplicationGeneration)
+                    && release_identity_is_newer($remote,$local,$localRevision),
             ]);
         }
 
@@ -135,7 +139,8 @@ if ($isAjax) {
 
             $remoteBefore = next_remote_version_info($gh,$local,$localRevision);
 
-            if (!release_identity_is_newer($remoteBefore,$local,$localRevision)) {
+            if (!release_application_generation_is_safe($remoteBefore,$localApplicationGeneration)
+                || !release_identity_is_newer($remoteBefore,$local,$localRevision)) {
                 ajax_response([
                     'ok' => true,
                     'action' => 'install',
@@ -180,6 +185,7 @@ if ($isAjax) {
 
             $newLocal = read_app_version();
             $newLocalRevision = read_local_release_revision(__DIR__,$newLocal);
+            $newLocalApplicationGeneration = read_local_application_generation(__DIR__,$newLocal);
 
             // Kurulum başarıyla tamamlandıktan sonraki GitHub kontrolü ikincil bir adımdır.
             // Bu ağ isteği başarısız olsa bile tamamlanmış kurulumu kullanıcıya hatalı gösterme.
@@ -193,7 +199,8 @@ if ($isAjax) {
             $hasNext = false;
             try {
                 $remote = next_remote_version_info($gh,$newLocal,$newLocalRevision);
-                $hasNext = release_identity_is_newer($remote,$newLocal,$newLocalRevision);
+                $hasNext = release_application_generation_is_safe($remote,$newLocalApplicationGeneration)
+                    && release_identity_is_newer($remote,$newLocal,$newLocalRevision);
                 if ($hasNext) {
                     $message .= ' Sıradaki güncelleme '.(string)$remote['version'].' rev '.normalize_release_revision($remote['release_revision']??0).' kuruluma hazır.';
                 }
@@ -215,6 +222,8 @@ if ($isAjax) {
                 'remote_revision' => normalize_release_revision($remote['release_revision'] ?? 0),
                 'remote_name' => (string)($remote['name'] ?? ''),
                 'commit' => (string)($remote['commit'] ?? ''),
+                'application_generation' => normalize_application_generation($remote['application_generation'] ?? 0),
+                'local_application_generation' => $newLocalApplicationGeneration,
                 'update_available' => $hasNext,
             ]);
         }
