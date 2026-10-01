@@ -8,11 +8,11 @@ $needles=[
  'auth_effective_role($user)!==\'super_admin\'',
  'verify_csrf($_POST[\'csrf\']??null)',
  '$installed!==\'1.1.97\'',
- 'rescue_branch_head_sha',
+ 'rescue_bootstrap_commit',
  'rescue_ref_file',
  'hash_equals($oldHash,$backupHash)',
  'rescue_atomic_replace($payload,$target)',
- '\'mode\'=>\'direct-updater-core-recovery\'',
+ '\'mode\'=>\'direct-updater-core-recovery-pinned\'',
  '\'database_changed\'=>false',
  '\'migrations_run\'=>false',
 ];

@@ -22,13 +22,15 @@ assert(updater.indexOf("if($localVersion==='1.1.97'){") < updater.indexOf("$hist
   '1.1.97 direct recovery must run before historical chain scanning.');
 assert(workflow.includes('node tests/recovery-direct-097-121-136.cjs'));
 
-assert.strictEqual(version.version,'1.2.9');
-assert.strictEqual(release.version,'1.2.9');
-assert.strictEqual(manifest.version,'1.2.9');
+const parts=String(version.version).split('.').map(Number);
+const atLeast129=parts[0]>1 || (parts[0]===1 && (parts[1]>2 || (parts[1]===2 && parts[2]>=9)));
+assert(atLeast129,'Direct recovery release must remain 1.2.9 or newer.');
+assert.strictEqual(release.version,version.version);
+assert.strictEqual(manifest.version,version.version);
 assert.strictEqual(version.release_revision,1);
 assert.strictEqual(release.release_revision,1);
 assert.strictEqual(manifest.release_revision,1);
-assert(manifest.files.includes('RELEASE-1.2.9.md'));
+assert(manifest.files.includes('RELEASE-'+version.version+'.md'));
 assert(manifest.files.includes('tests/recovery-direct-097-121-136.cjs'));
 
 console.log('PASS: direct 1.1.97 -> immutable 1.2.1 recovery contract');

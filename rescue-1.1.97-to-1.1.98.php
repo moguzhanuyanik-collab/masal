@@ -85,17 +85,15 @@ function rescue_http(string $url,array $gh): string {
     return (string)$body;
 }
 
-function rescue_branch_head_sha(array $gh): string {
-    [$owner,$repo,$branch]=rescue_github_info($gh);
-    $cb=(string)round(microtime(true)*1000);
-    $url='https://api.github.com/repos/'.rawurlencode($owner).'/'.rawurlencode($repo)
-        .'/commits/'.rawurlencode($branch).'?cb='.$cb;
-    $data=json_decode(rescue_http($url,$gh),true);
-    $sha=trim((string)($data['sha']??''));
-    if(!preg_match('/^[a-f0-9]{40}$/i',$sha)){
-        throw new RuntimeException('GitHub dal HEAD commit SHA değeri çözümlenemedi.');
+const ILKADIM_LEGACY_097_BOOTSTRAP_COMMIT='2c86df240cde635812e12d35cafbb10fe99471d1';
+const ILKADIM_LEGACY_097_TARGET_COMMIT='6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c';
+
+function rescue_bootstrap_commit(): string {
+    $commit=ILKADIM_LEGACY_097_BOOTSTRAP_COMMIT;
+    if(!preg_match('/^[a-f0-9]{40}$/i',$commit)){
+        throw new RuntimeException('Sabit recovery bootstrap commit SHA değeri geçersiz.');
     }
-    return $sha;
+    return $commit;
 }
 
 function rescue_ref_file(array $gh,string $ref,string $path): string {
@@ -107,50 +105,6 @@ function rescue_ref_file(array $gh,string $ref,string $path): string {
     return rescue_http($url,$gh);
 }
 
-function rescue_validate_historical_sequence(array $history,array $expected,array $ignored=[]): void {
-    $collapsed=[];
-    foreach($history as $value){
-        $value=trim((string)$value);
-        if($value==='' || in_array($value,$ignored,true)) continue;
-        if($collapsed===[] || $collapsed[count($collapsed)-1]!==$value) $collapsed[]=$value;
-    }
-    $expectedCount=count($expected);
-    if($expectedCount===0) return;
-    $limit=count($collapsed)-$expectedCount;
-    for($start=0;$start<=$limit;$start++){
-        $matches=true;
-        for($offset=0;$offset<$expectedCount;$offset++){
-            if(($collapsed[$start+$offset]??null)!==$expected[$offset]){$matches=false;break;}
-        }
-        if($matches) return;
-    }
-    throw new RuntimeException('1.1.97 recovery zinciri eksik, atlanmış veya sırası bozulmuş. Updater çekirdeği değiştirilmedi.');
-}
-
-function rescue_validate_historical_chain(array $gh): void {
-    [$owner,$repo,$branch]=rescue_github_info($gh);
-    // Aktif zincir: 1.1.98 -> 1.1.99 -> ... -> 1.1.117 -> 1.2.1.
-    // 1.1.118 yoktur. 1.1.119 recovery-only artifact olarak tutulur.
-    $expected=['1.1.98','1.1.99','1.1.100','1.1.101','1.1.102','1.1.103','1.1.104','1.1.105','1.1.106','1.1.107','1.1.108','1.1.109','1.1.110','1.1.111','1.1.112','1.1.113','1.1.114','1.1.115','1.1.116','1.1.117','1.2.1'];
-    $recoveryOnly=['1.1.119'];
-    $historyNewestFirst=[];$page=1;
-    while($page<=20){
-        $url='https://api.github.com/repos/'.rawurlencode($owner).'/'.rawurlencode($repo).'/commits?sha='.rawurlencode($branch).'&path=version.json&per_page=100&page='.$page.'&cb='.(string)round(microtime(true)*1000);
-        $rows=json_decode(rescue_http($url,$gh),true);
-        if(!is_array($rows)) throw new RuntimeException('GitHub tarihsel sürüm geçmişi okunamadı.');
-        if($rows===[]) break;
-        foreach($rows as $row){
-            $sha=trim((string)($row['sha']??''));
-            if(!preg_match('/^[a-f0-9]{40}$/i',$sha)) continue;
-            try{$data=json_decode(rescue_ref_file($gh,$sha,'version.json'),true);}catch(Throwable){continue;}
-            $v=is_array($data)?trim((string)($data['version']??'')):'';
-            if($v!=='') $historyNewestFirst[]=$v;
-        }
-        if(count($rows)<100) break;
-        $page++;
-    }
-    rescue_validate_historical_sequence(array_reverse($historyNewestFirst),$expected,$recoveryOnly);
-}
 function rescue_atomic_replace(string $source,string $target): void {
     $tmp=$target.'.ilkadim-direct-rescue-'.bin2hex(random_bytes(6)).'.tmp';
     @unlink($tmp);
@@ -192,21 +146,40 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $gh=app_config('github');
         if(!is_array($gh)) throw new RuntimeException('GitHub ayarları okunamadı.');
 
-        $targetCommit=rescue_branch_head_sha($gh);
-        rescue_validate_historical_chain($gh);
+        // 1.1.97 rescue mutable main HEAD'e veya tarihsel commit taramasına
+        // güvenmez. Bootstrap updater immutable SHA'dan alınır.
+        $targetCommit=rescue_bootstrap_commit();
         $versionData=json_decode(rescue_ref_file($gh,$targetCommit,'version.json'),true);
         $releaseData=json_decode(rescue_ref_file($gh,$targetCommit,'update-release.json'),true);
-        if(!is_array($versionData)||!is_array($releaseData)){
-            throw new RuntimeException('GitHub hedef sürüm metadata dosyaları okunamadı.');
+        $manifestData=json_decode(rescue_ref_file($gh,$targetCommit,'update-managed-files.json'),true);
+        if(!is_array($versionData)||!is_array($releaseData)||!is_array($manifestData)){
+            throw new RuntimeException('Sabit recovery bootstrap metadata dosyaları okunamadı.');
         }
 
         $targetVersion=trim((string)($versionData['version']??''));
         $releaseVersion=trim((string)($releaseData['version']??''));
-        if($targetVersion===''||$targetVersion!==$releaseVersion){
-            throw new RuntimeException('GitHub hedef sürüm metadata değerleri eşleşmiyor.');
+        $manifestVersion=trim((string)($manifestData['version']??''));
+        $targetRevision=(int)($versionData['release_revision']??0);
+        $releaseRevision=(int)($releaseData['release_revision']??0);
+        $manifestRevision=(int)($manifestData['release_revision']??0);
+        if($targetVersion!=='1.2.9'
+            || $releaseVersion!==$targetVersion
+            || $manifestVersion!==$targetVersion
+            || $targetRevision<1
+            || $releaseRevision!==$targetRevision
+            || $manifestRevision!==$targetRevision){
+            throw new RuntimeException('Sabit recovery bootstrap 1.2.9 metadata doğrulaması başarısız.');
         }
-        if(version_compare($targetVersion,'1.2.2','<')){
-            throw new RuntimeException('GitHub HEAD güvenli recovery updater sürümünden eski: '.$targetVersion);
+
+        $manifestFiles=is_array($manifestData['files']??null)?$manifestData['files']:[];
+        foreach([
+            'src/updater.php',
+            'RELEASE-1.2.9.md',
+            'tests/recovery-direct-097-121-136.cjs',
+        ] as $required){
+            if(!in_array($required,$manifestFiles,true)){
+                throw new RuntimeException('Sabit recovery bootstrap managed manifest eksik: '.$required);
+            }
         }
 
         $payload=rescue_ref_file($gh,$targetCommit,'src/updater.php');
@@ -215,11 +188,12 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         }
 
         foreach([
-            'function github_branch_head_sha',
             'function run_legacy_1_1_97_to_1_2_1_recovery',
             'function prepare_updater_core_handoff',
             'function run_pending_migrations',
             'function next_remote_version_info',
+            "const ILKADIM_LEGACY_097_RECOVERY_121_COMMIT='6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c';",
+            'function legacy_097_direct_121_recovery_release',
         ] as $signature){
             if(strpos($payload,$signature)===false){
                 throw new RuntimeException('Hedef updater güvenlik imzası eksik: '.$signature);
@@ -288,7 +262,9 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                 'installed_version'=>'1.1.97',
                 'target_version'=>$targetVersion,
                 'target_commit'=>$targetCommit,
-                'mode'=>'direct-updater-core-recovery',
+                'mode'=>'direct-updater-core-recovery-pinned',
+                'bootstrap_commit'=>ILKADIM_LEGACY_097_BOOTSTRAP_COMMIT,
+                'target_121_commit'=>ILKADIM_LEGACY_097_TARGET_COMMIT,
                 'backup'=>$backupName,
                 'old_sha256'=>$oldHash,
                 'new_sha256'=>$newHash,
