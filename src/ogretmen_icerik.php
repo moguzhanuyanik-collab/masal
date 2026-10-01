@@ -646,6 +646,7 @@ function oi_teacher_content_detail(PDO $pdo,array $user,int $contentId): ?array 
     $s=$pdo->prepare("SELECT DISTINCT o.id,o.ad,o.email,o.sinif_seviyesi,
       c.secilen_cevap_indeksi,c.dogru cevap_dogru,c.deneme_sayisi,
       c.cevap_tarihi,c.guncellenme_tarihi cevap_guncellenme_tarihi,
+      yr.yildiz_degeri kazanilan_yildiz,
       COALESCE(od.tamamlandi,0) odev_tamamlandi,
       od.tamamlanma_tarihi odev_tamamlanma_tarihi
       FROM ogretmen_icerikleri oi
@@ -672,6 +673,9 @@ function oi_teacher_content_detail(PDO $pdo,array $user,int $contentId): ?array 
       LEFT JOIN ogrenci_odev_durumlari od
         ON od.icerik_id=oi.id
        AND od.ogrenci_id=o.id
+      LEFT JOIN ogretmen_icerik_yildiz_odulleri yr
+        ON yr.icerik_id=oi.id
+       AND yr.ogrenci_id=o.id
       WHERE oi.id=?
         AND oi.ogretmen_id=?
         AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
@@ -689,6 +693,8 @@ function oi_teacher_content_detail(PDO $pdo,array $user,int $contentId): ?array 
         'waiting'=>0,
         'completed'=>0,
         'overdue'=>0,
+        'rewarded'=>0,
+        'reward_stars'=>0,
     ];
 
     $type=(string)$content['icerik_turu'];
@@ -701,6 +707,10 @@ function oi_teacher_content_detail(PDO $pdo,array $user,int $contentId): ?array 
             $summary['answered']++;
             if((int)$student['cevap_dogru']===1)$summary['correct']++;
             else $summary['wrong']++;
+            if((int)($student['kazanilan_yildiz']??0)>0){
+                $summary['rewarded']++;
+                $summary['reward_stars']+=(int)$student['kazanilan_yildiz'];
+            }
         }
     }elseif($type==='odev'){
         $now=new DateTimeImmutable('now');
