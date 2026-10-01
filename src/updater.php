@@ -208,80 +208,10 @@ function remote_release_info(array $gh): array {
 }
 
 function next_remote_version_info(array $gh,string $localVersion,int $localRevision=0): array {
-    [$owner,$repo,$branch]=github_repo_info($gh);
-    $localVersion=trim($localVersion);
-    if($localVersion==='') $localVersion='0.0.0';
-    $localRevision=max(0,$localRevision);
-
-    $historyFile=version_compare($localVersion,'1.1.101','>=')?'update-release.json':'version.json';
-    $next=null;
-    $page=1;
-    $maxPages=20;
-
-    while($page<=$maxPages){
-        $url='https://api.github.com/repos/'.rawurlencode($owner).'/'.rawurlencode($repo)
-            .'/commits?sha='.rawurlencode($branch)
-            .'&path='.rawurlencode($historyFile).'&per_page=100&page='.$page
-            .'&cb='.(string)round(microtime(true)*1000);
-
-        $rows=json_decode((string)updater_http($url,$gh),true);
-        if(!is_array($rows)) throw new RuntimeException('GitHub surum gecmisi okunamadi.');
-        if($rows===[]) break;
-
-        $reachedInstalledOrOlder=false;
-
-        foreach($rows as $row){
-            $sha=trim((string)($row['sha']??''));
-            if(!preg_match('/^[a-f0-9]{40}$/i',$sha)) continue;
-
-            try{
-                $info=$historyFile==='update-release.json'
-                    ?remote_release_info_at_ref($gh,$sha)
-                    :remote_version_info_at_ref($gh,$sha);
-            }catch(Throwable $ignored){
-                continue;
-            }
-
-            $candidateVersion=trim((string)($info['version']??''));
-            if($candidateVersion==='') continue;
-
-            if($historyFile==='version.json'){
-                if(version_compare($candidateVersion,$localVersion,'>')){
-                    if(release_identity_should_replace_next($info,$next)) $next=$info;
-                    continue;
-                }
-                continue;
-            }
-
-            if(release_identity_is_newer($info,$localVersion,$localRevision)){
-                if(release_identity_should_replace_next($info,$next)) $next=$info;
-                continue;
-            }
-
-            continue;
-        }
-
-        if(count($rows)<100) break;
-        $page++;
-    }
-
-    if($next!==null) return $next;
-
-    $latest=$historyFile==='update-release.json'
-        ?remote_release_info($gh)
-        :remote_version_info($gh);
-
-    if($historyFile==='version.json'){
-        $latestVersion=trim((string)($latest['version']??''));
-        if($latestVersion===''||version_compare($latestVersion,$localVersion,'<=')) return $latest;
-    }elseif(!release_identity_is_newer($latest,$localVersion,$localRevision)){
-        return $latest;
-    }
-
-    throw new RuntimeException(
-        'Siradaki guncelleme guvenli bicimde belirlenemedi. '
-        .'En son surume atlanmadi; ara surum zinciri kontrol edilmeli.'
-    );
+    // Release zinciri artık sürüm geçmişini tarayarak ara paket seçmez.
+    // Yalnızca main HEAD'in update-release.json metadata'sı adaydır.
+    // Kurulum ayrıca application_generation ve release revision sözleşmelerini doğrular.
+    return remote_release_info($gh);
 }
 
 function path_is_preserved(string $relative,array $preserve): bool {
