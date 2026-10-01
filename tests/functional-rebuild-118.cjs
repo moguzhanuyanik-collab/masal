@@ -69,9 +69,9 @@ const atLeastRecovery=currentParts[0]>1 || (currentParts[0]===1 && (currentParts
 assert(atLeastRecovery,'Functional rebuild koruma sürümü 1.2.11 veya daha yeni olmalı.');
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
-assert.strictEqual(version.release_revision,1);
-assert.strictEqual(release.release_revision,1);
-assert.strictEqual(manifest.release_revision,1);
+assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
+assert.strictEqual(release.release_revision,version.release_revision);
+assert.strictEqual(manifest.release_revision,version.release_revision);
 
 assert(manifest.files.includes('RELEASE-1.2.11.md'));
 assert(manifest.files.includes('tests/functional-rebuild-118.cjs'));
