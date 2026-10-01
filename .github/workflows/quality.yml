@@ -118,6 +118,7 @@ jobs:
           node tests/institution-member-crud-135.cjs
           node tests/institution-class-edit-136.cjs
           node tests/institution-reporting-137.cjs
+          node tests/institution-report-export-159.cjs
           node tests/student-report-detail-138.cjs
           node tests/teacher-content-edit-copy-139.cjs
           node tests/teacher-content-detail-140.cjs
