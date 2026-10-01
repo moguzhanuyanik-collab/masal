@@ -14,13 +14,32 @@ if ($studentId<=0 || !can_access_student((int)$user['id'],$studentId)) {
     exit;
 }
 
-$stmt=$pdo->prepare('SELECT id,email,egitim_kademesi,sinif_seviyesi FROM ogrenciler WHERE id=? AND aktif=1 LIMIT 1');
+$stmt=$pdo->prepare('SELECT id,ad,email,egitim_kademesi,sinif_seviyesi,kullanici_id FROM ogrenciler WHERE id=? AND aktif=1 LIMIT 1');
 $stmt->execute([$studentId]);
 $student=$stmt->fetch();
 if (!is_array($student)) {
     http_response_code(404);
     echo 'Öğrenci bulunamadı.';
     exit;
+}
+
+$reportInstitutionId=max(0,(int)($_GET['kurum_id']??0));
+$reportBack=$roleHome;
+if($reportInstitutionId>0 && in_array(auth_effective_role($user),['yonetici','super_admin'],true)){
+    try{
+        $scope=$pdo->prepare("SELECT 1
+            FROM kurum_kullanicilari kk
+            INNER JOIN kurumlar k ON k.id=kk.kurum_id AND k.aktif=1
+            WHERE kk.kurum_id=?
+              AND kk.kullanici_id=?
+              AND kk.kurum_rolu='ogrenci'
+              AND kk.aktif=1
+            LIMIT 1");
+        $scope->execute([$reportInstitutionId,(int)$student['kullanici_id']]);
+        $inInstitution=(bool)$scope->fetchColumn();
+        $scope->closeCursor();
+        if($inInstitution)$reportBack='kurum-raporlari.php?kurum_id='.$reportInstitutionId;
+    }catch(Throwable){}
 }
 
 $summary=normalized_summary($pdo,$studentId);
@@ -48,7 +67,7 @@ function h_report(string $v): string { return htmlspecialchars($v,ENT_QUOTES,'UT
 <body>
 <div class="app-shell">
 <header class="app-topbar">
-<a class="icon-button" href="<?=h_report($roleHome)?>" aria-label="Geri">←</a>
+<a class="icon-button" href="<?=h_report($reportBack)?>" aria-label="Geri">←</a>
 <span class="topbar-title">Öğrenci Raporu</span>
 <a class="mini-avatar" href="logout.php" aria-label="Çıkış">🚪</a>
 </header>
@@ -56,7 +75,7 @@ function h_report(string $v): string { return htmlspecialchars($v,ENT_QUOTES,'UT
 <div class="screen-content settings-screen">
 <section class="subpage-intro">
 <span>📊</span>
-<h1><?=h_report((string)($student['email']?:'Öğrenci #'.$studentId))?></h1>
+<h1><?=h_report((string)($student['ad']?:$student['email']?:'Öğrenci #'.$studentId))?></h1>
 <p>Temel Eğitim · <?=$studentGrade?>. sınıf · Bu rapor yalnızca hesabına yetkilendirilmiş öğrenci için görüntülenebilir.</p>
 </section>
 
@@ -87,7 +106,7 @@ $total=(int)$lesson['toplam_modul'];$done=(int)$lesson['tamamlanan_modul'];$perc
 <?php endforeach; ?>
 </section>
 
-<a class="button soft full" href="<?=h_report($roleHome)?>">Panelime Dön</a>
+<a class="button soft full" href="<?=h_report($reportBack)?>"><?=$reportBack===$roleHome?'Panelime Dön':'Kurum Raporuna Dön'?></a>
 </div>
 </main>
 </div>
