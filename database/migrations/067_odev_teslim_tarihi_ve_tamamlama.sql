@@ -12,7 +12,7 @@ SET @has_due = (
 SET @sql = IF(
   @has_due=0,
   'ALTER TABLE ogretmen_icerikleri ADD COLUMN teslim_tarihi DATETIME NULL AFTER hedef_turu',
-  'SELECT 1'
+  'SET @ilkadim_067_noop = 1'
 );
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
@@ -27,7 +27,7 @@ SET @has_due_index = (
 SET @sql = IF(
   @has_due_index=0,
   'ALTER TABLE ogretmen_icerikleri ADD KEY ix_oi_odev_teslim (icerik_turu,aktif,teslim_tarihi)',
-  'SELECT 1'
+  'SET @ilkadim_067_noop = 1'
 );
 PREPARE stmt FROM @sql;
 EXECUTE stmt;
