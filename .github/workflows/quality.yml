@@ -9,6 +9,7 @@ on:
       - 'pwa-hardening-*'
       - 'updater-manifest-*'
       - 'update-*'
+      - 'fix/**'
       - 'db-ai-safety-*'
       - 'db-backup-*'
       - 'recovery-safety-*'
