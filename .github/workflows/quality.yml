@@ -1,6 +1,7 @@
 name: Quality Gate
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -67,6 +68,7 @@ jobs:
           php tests/update-managed-integrity-111.php
           php tests/update-continuity-112.php
           php tests/web-rescue-197-198-113.php
+          php tests/recovery-release-postcondition-131.php
 
       - name: Node regression checks
         shell: bash
@@ -107,6 +109,7 @@ jobs:
           node tests/update-chain-rebuild-126.cjs
           node tests/update-pending-migrations-127.cjs
           node tests/direct-097-recovery-128.cjs
+          node tests/recovery-release-postcondition-131.cjs
 
   tenant-db-integration:
     name: Tenant DB integration
