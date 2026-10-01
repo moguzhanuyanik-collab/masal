@@ -14,6 +14,18 @@ if(!mkdir($root.'/storage/backups',0770,true) && !is_dir($root.'/storage/backups
 $fake=$root.'/fake-mysqldump';
 $script=<<<'SH'
 #!/bin/sh
+if [ -n "${MYSQL_PWD+x}" ]; then
+  echo 'MYSQL_PWD must not be exported' >&2
+  exit 41
+fi
+for arg in "$@"; do
+  case "$arg" in
+    *very-secret*)
+      echo 'password leaked to argv' >&2
+      exit 42
+      ;;
+  esac
+done
 echo '-- MySQL dump 10.13'
 echo 'CREATE TABLE `sample` (`id` int);'
 i=0
