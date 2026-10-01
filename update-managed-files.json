@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.32",
+  "version": "1.2.33",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -204,6 +204,7 @@
     "RELEASE-1.2.30.md",
     "RELEASE-1.2.31.md",
     "RELEASE-1.2.32.md",
+    "RELEASE-1.2.33.md",
     "RELEASE-1.2.4.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.6.md",
@@ -371,6 +372,7 @@
     "database/migrations/068_kurum_siniflari_ve_gruplar.sql",
     "database/migrations/069_ogretmen_soru_yildiz_odulleri.sql",
     "database/migrations/070_ogretmen_icerik_grup_hedef_snapshot.sql",
+    "global-arsiv.php",
     "global-audio-feedback.js",
     "global-eslestirme.php",
     "global-ogrenciler.php",
@@ -507,6 +509,8 @@
     "tests/db-ai-safety-98.cjs",
     "tests/db-backup-99.cjs",
     "tests/db-backup-99.php",
+    "tests/global-archive-158.cjs",
+    "tests/global-archive-db-158.php",
     "tests/global-scope-integrity-129.cjs",
     "tests/hardening-91.cjs",
     "tests/hardening-94.cjs",
