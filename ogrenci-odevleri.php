@@ -4,6 +4,8 @@ declare(strict_types=1);
 require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
 require __DIR__.'/src/ogretmen_icerik.php';
+require __DIR__.'/src/odev_durumu.php';
+require __DIR__.'/src/ogrenci_odev_dashboard.php';
 
 $studentId=require_student_login();
 $pdo=db();
@@ -29,35 +31,47 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     }
 }
 
-$contents=oi_student_contents($pdo,$studentId);
-$homeworks=array_values(array_filter(
-    $contents,
-    static fn(array $item): bool => (string)($item['icerik_turu']??'')==='odev'
-));
+try{
+    $contents=oi_student_contents($pdo,$studentId);
+}catch(Throwable){
+    http_response_code(503);
+    echo 'Ödevler şu anda okunamıyor.';
+    exit;
+}
 
-usort($homeworks,static function(array $a,array $b): int {
-    $ad=(int)($a['odev_tamamlandi']??0);
-    $bd=(int)($b['odev_tamamlandi']??0);
-    if($ad!==$bd) return $ad<=>$bd;
-    $at=trim((string)($a['teslim_tarihi']??''));
-    $bt=trim((string)($b['teslim_tarihi']??''));
-    if($at==='' && $bt!=='') return 1;
-    if($at!=='' && $bt==='') return -1;
-    if($at!==$bt) return strcmp($at,$bt);
-    return (int)$b['id']<=>(int)$a['id'];
-});
+$allHomeworks=sod_homeworks($contents);
+$institutions=sod_institutions($allHomeworks);
+$institutionIds=array_map('intval',array_column($institutions,'id'));
+
+$institutionId=max(0,(int)($_GET['kurum_id']??0));
+if($institutionId>0 && !in_array($institutionId,$institutionIds,true)){
+    http_response_code(403);
+    echo 'Bu kurum için aktif ödev erişimin yok.';
+    exit;
+}
+
+$status=(string)($_GET['durum']??'tum');
+if(!in_array($status,['tum','pending','overdue','completed'],true)) $status='tum';
+
+$institutionHomeworks=sod_filter($allHomeworks,$institutionId,'tum');
+$summary=sod_summary($institutionHomeworks);
+$homeworks=sod_filter($allHomeworks,$institutionId,$status);
 
 function oh_h(string $value): string {
     return htmlspecialchars($value,ENT_QUOTES,'UTF-8');
 }
 function oh_due_label(?string $due): string {
     $due=trim((string)$due);
-    return $due!==''?date('d.m.Y H:i',strtotime($due)):'Süre sınırı yok';
+    if($due==='') return 'Süre sınırı yok';
+    try{return (new DateTimeImmutable($due))->format('d.m.Y H:i');}
+    catch(Throwable){return 'Süre sınırı yok';}
 }
-function oh_is_late(array $item): bool {
-    $due=trim((string)($item['teslim_tarihi']??''));
-    if($due==='' || (int)($item['odev_tamamlandi']??0)===1) return false;
-    return strtotime($due)!==false && strtotime($due)<time();
+function oh_status_class(string $status): string {
+    return match($status){
+        'completed'=>'done',
+        'overdue'=>'late',
+        default=>'pending',
+    };
 }
 ?><!doctype html>
 <html lang="tr">
@@ -69,7 +83,7 @@ function oh_is_late(array $item): bool {
 <link rel="icon" href="ilkadim-logo.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="ilkadim-logo-192.png">
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="ogrenci-odevleri.css?v=1.2.7">
+<link rel="stylesheet" href="ogrenci-odevleri.css?v=1.2.24">
 </head>
 <body>
 <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -89,8 +103,8 @@ function oh_is_late(array $item): bool {
 <main id="screen" class="homework-page">
 <section class="homework-hero">
 <small>📝 ÖDEVLERİM</small>
-<h1>Bugün neyi tamamlayacaksın?</h1>
-<p>Öğretmenlerinin gönderdiği ödevleri ve teslim tarihlerini burada takip edebilirsin.</p>
+<h1>Önceliğini gör, ödevini tamamla.</h1>
+<p>Gecikenleri, bekleyenleri ve tamamladıklarını ayrı takip et. En acil ödevler listenin üstünde.</p>
 <span class="homework-hero-art">✅</span>
 </section>
 
@@ -98,31 +112,79 @@ function oh_is_late(array $item): bool {
 <div class="homework-flash <?=$flashType==='bad'?'bad':''?>"><?=oh_h($flash)?></div>
 <?php endif;?>
 
-<?php if(!$homeworks):?>
-<div class="homework-empty"><span>🎉</span><strong>Bekleyen ödevin yok.</strong><p>Yeni ödev geldiğinde burada görünecek.</p></div>
+<section class="homework-dashboard">
+<div class="homework-dashboard-head">
+<div><small>TESLİM ÖZETİ</small><strong>Ödev Durumum</strong></div>
+<?php if($summary['next_due'] instanceof DateTimeImmutable):?>
+<span>⏰ Sıradaki: <?=oh_h($summary['next_due']->format('d.m.Y H:i'))?></span>
+<?php endif;?>
+</div>
+<div class="homework-stats">
+<div class="homework-stat"><span>📝</span><strong><?=$summary['total']?></strong><small>Toplam</small></div>
+<div class="homework-stat"><span>⏳</span><strong><?=$summary['pending']?></strong><small>Bekliyor</small></div>
+<div class="homework-stat"><span>⏰</span><strong><?=$summary['overdue']?></strong><small>Gecikti</small></div>
+<div class="homework-stat"><span>✅</span><strong><?=$summary['completed']?></strong><small>Tamamlandı</small></div>
+<div class="homework-stat homework-stat-wide"><span>📈</span><strong>%<?=$summary['completion_rate']?></strong><small>Tamamlama oranı</small></div>
+</div>
+</section>
+
+<?php if($allHomeworks):?>
+<section class="homework-filter-section">
+<div class="homework-filter-title"><small>FİLTRELER</small><strong>Kurum ve Durum</strong></div>
+<form method="get" class="homework-filter">
+<label for="kurum">Kurum</label>
+<select id="kurum" name="kurum_id">
+<option value="0">Tüm kurumlarım</option>
+<?php foreach($institutions as $institution):?>
+<option value="<?=(int)$institution['id']?>" <?=((int)$institution['id']===$institutionId?'selected':'')?>><?=oh_h((string)$institution['ad'])?></option>
+<?php endforeach;?>
+</select>
+
+<label for="durum">Teslim durumu</label>
+<select id="durum" name="durum">
+<option value="tum" <?=$status==='tum'?'selected':''?>>Tümü</option>
+<option value="overdue" <?=$status==='overdue'?'selected':''?>>Gecikenler</option>
+<option value="pending" <?=$status==='pending'?'selected':''?>>Bekleyenler</option>
+<option value="completed" <?=$status==='completed'?'selected':''?>>Tamamladıklarım</option>
+</select>
+
+<button type="submit">Ödevleri Göster</button>
+</form>
+</section>
+<?php endif;?>
+
+<?php if(!$allHomeworks):?>
+<div class="homework-empty"><span>🎉</span><strong>Aktif ödevin yok.</strong><p>Yeni ödev geldiğinde burada görünecek.</p></div>
+<?php elseif(!$homeworks):?>
+<div class="homework-empty"><span>🔎</span><strong>Bu filtrede ödev yok.</strong><p>Farklı kurum veya teslim durumu seçebilirsin.</p></div>
 <?php else:?>
 <div class="homework-list">
 <?php foreach($homeworks as $item):
-    $done=(int)($item['odev_tamamlandi']??0)===1;
-    $late=oh_is_late($item);
+    $itemStatus=hw_status($item);
+    $done=$itemStatus==='completed';
 ?>
-<article class="homework-card <?=$done?'done':($late?'late':'')?>">
+<article class="homework-card <?=oh_status_class($itemStatus)?>">
 <div class="homework-card-head">
 <span class="homework-subject"><?=oh_h((string)($item['ders_emoji']??'📚'))?></span>
 <div>
 <small><?=oh_h((string)$item['ders_adi'])?> · <?=oh_h((string)$item['ogretmen_adi'])?></small>
 <h2><?=oh_h((string)$item['baslik'])?></h2>
 </div>
-<span class="homework-status <?=$done?'done':($late?'late':'pending')?>"><?=$done?'Tamamlandı':($late?'Süresi geçti':'Bekliyor')?></span>
+<span class="homework-status <?=oh_status_class($itemStatus)?>"><?=oh_h(hw_status_label($itemStatus))?></span>
 </div>
 
 <?php if(!empty($item['icerik_metni'])):?><p class="homework-text"><?=nl2br(oh_h((string)$item['icerik_metni']))?></p><?php endif;?>
 
 <div class="homework-meta">
 <span>🏫 <?=oh_h((string)$item['kurum_adi'])?></span>
+<span>📌 <?=oh_h((string)($item['konu_adi']??'Genel'))?></span>
 <span>⏰ <?=oh_h(oh_due_label($item['teslim_tarihi']??null))?></span>
-<?php if($done && !empty($item['odev_tamamlanma_tarihi'])):?><span>✅ <?=oh_h(date('d.m.Y H:i',strtotime((string)$item['odev_tamamlanma_tarihi'])))?></span><?php endif;?>
+<?php if($done && !empty($item['odev_tamamlanma_tarihi'])):?><span>✅ <?=oh_h(oh_due_label((string)$item['odev_tamamlanma_tarihi']))?></span><?php endif;?>
 </div>
+
+<?php if($itemStatus==='overdue'):?>
+<div class="homework-warning">⚠️ Teslim tarihi geçti. Tamamladıysan aşağıdaki butonla durumunu güncelleyebilirsin.</div>
+<?php endif;?>
 
 <form method="post" class="homework-action">
 <input type="hidden" name="csrf" value="<?=oh_h(csrf_token())?>">
