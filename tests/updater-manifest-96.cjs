@@ -55,7 +55,13 @@ const tracked=execFileSync('git',['ls-files'],{encoding:'utf8'})
 const listed=[...manifest.files].sort();
 assert.deepStrictEqual(listed,tracked,'update-managed-files.json must match deploy-managed tracked files');
 assert.strictEqual(manifest.format,1);
-assert(/^1\.1\.(?:9[6-9]|[1-9][0-9]{2,})$/.test(String(manifest.version)) || String(version.version)==='1.2.1','manifest version must be 1.1.96 or newer');
+const manifestParts=String(manifest.version).split('.').map(Number);
+assert(manifestParts.length===3 && manifestParts.every(Number.isFinite),'manifest version must be semver-like');
+const manifestAtLeast196=
+  manifestParts[0]>1
+  || (manifestParts[0]===1 && manifestParts[1]>1)
+  || (manifestParts[0]===1 && manifestParts[1]===1 && manifestParts[2]>=96);
+assert(manifestAtLeast196,'manifest version must be 1.1.96 or newer');
 assert(listed.includes('update-managed-files.json'));
 assert(listed.includes('src/updater.php'));
 assert(listed.includes('version.json'));
