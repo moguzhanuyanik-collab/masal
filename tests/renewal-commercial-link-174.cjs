@@ -47,7 +47,7 @@ assert(domain.includes("'tamam'"),
 
 assert(renewalPage.includes("require __DIR__.'/src/lisans_yenileme_ticari.php';"),
   'renewal center must load commercial linkage domain');
-assert(renewalPage.includes("action' value=\"contract_draft\""),
+assert(renewalPage.includes('name="action" value="contract_draft"'),
   'renewal center contract-draft action missing');
 assert(renewalPage.includes('Sözleşme Taslağı Oluştur'),
   'renewal center contract draft UI missing');
