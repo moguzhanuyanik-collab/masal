@@ -66,5 +66,5 @@ assert(workflow.includes('tests/adimbot-rate-limit-98.php'));
 assert(workflow.includes('for file in tests/adimbot-*.cjs'));
 assert(workflow.includes('tests/adimbot-transcript-behavior.php'));
 
-assert(/^1\.1\.(?:9[8-9]|[1-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.1','version must be 1.1.98 or newer');
+assert(/^1\.1\.(?:9[8-9]|[1-9][0-9]{2,})$/.test(String(version.version)) || /^1\.2\.\d+$/.test(String(version.version)),'version must be 1.1.98 or newer');
 console.log('1.1.98 DB and AI safety checks passed');
