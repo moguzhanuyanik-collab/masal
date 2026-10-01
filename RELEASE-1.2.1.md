@@ -62,3 +62,11 @@ Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına 
 - Tablo yeniden oluşturulamazsa süreç fail-closed duruyor.
 - Gerçek MariaDB regression testi eklendi: 064 kaydı eksik → oluşturma, tablo sonradan kaybolmuş → yeniden oluşturma ve migration kaydının tekil kalması doğrulanıyor.
 - Sürüm 1.2.1 rev9 olarak yeniden ankrajlandı.
+
+## Rev 10 — legacy recovery postcondition hardening
+
+- 1.1.97 → 1.2.1 recovery'de migration checkpoint'i mevcut olsa bile tenant ilişki şemasının gerçekten doğru olduğu artık ayrıca doğrulanıyor.
+- 066 schema guard, 065/066 migration kayıtları daha önce yazılmış olsa dahi recovery sonunda yeniden çalıştırılıyor; bozuk/eksik şema checkpoint nedeniyle sessizce atlanamıyor.
+- DB mutation sınırı recovery manifestine açıkça yazılıyor ve hata durumunda yanlışlıkla "database mutation olmadı" raporlanması engelleniyor.
+- Gerçek MariaDB regression testi bozuk primary key ve eksik tenant index senaryolarının fail-closed yakalandığını doğruluyor.
+- Sürüm ankrajı 1.2.1 rev10 olarak güncellendi.
