@@ -110,6 +110,17 @@ function oi_teacher_target_groups(PDO $pdo,int $teacherId,int $institutionId): a
             ON oo.ogrenci_id=kso.ogrenci_id
            AND oo.kurum_id=ks.kurum_id
            AND oo.ogretmen_id=?
+          INNER JOIN ogretmenler og
+            ON og.id=oo.ogretmen_id
+           AND og.aktif=1
+          INNER JOIN kullanicilar tu
+            ON tu.id=og.kullanici_id
+           AND tu.aktif=1
+          INNER JOIN kurum_kullanicilari tk
+            ON tk.kullanici_id=tu.id
+           AND tk.kurum_id=ks.kurum_id
+           AND tk.kurum_rolu='ogretmen'
+           AND tk.aktif=1
           INNER JOIN ogrenciler o
             ON o.id=kso.ogrenci_id
            AND o.aktif=1
@@ -147,6 +158,17 @@ function oi_teacher_group_student_ids(PDO $pdo,int $teacherId,int $institutionId
           ON oo.ogrenci_id=kso.ogrenci_id
          AND oo.kurum_id=ks.kurum_id
          AND oo.ogretmen_id=?
+        INNER JOIN ogretmenler og
+          ON og.id=oo.ogretmen_id
+         AND og.aktif=1
+        INNER JOIN kullanicilar tu
+          ON tu.id=og.kullanici_id
+         AND tu.aktif=1
+        INNER JOIN kurum_kullanicilari tk
+          ON tk.kullanici_id=tu.id
+         AND tk.kurum_id=ks.kurum_id
+         AND tk.kurum_rolu='ogretmen'
+         AND tk.aktif=1
         INNER JOIN ogrenciler o
           ON o.id=kso.ogrenci_id
          AND o.aktif=1
