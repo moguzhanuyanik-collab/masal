@@ -26,3 +26,11 @@ Bu sürüm 1.2.2 migration yürütme düzeltmesinin üstünde, legacy Sistem Rol
 - Gereksiz manifest satır taşımaları kaldırıldı.
 - 1.2.3 release metadata rev2 olarak yeniden ankrajlandı.
 - Ana dala squash merge zorunluluğu korunarak release HEAD ile update-release ankrajının aynı commit olması hedeflendi.
+
+## Rev 3 — merkezi kullanıcı ve rol bütünlüğü
+
+- Legacy Sistem Rolleri kullanıcı oluşturma akışı merkezi `ky_create_user()` servisine bağlandı.
+- Global öğrenci oluşturulurken kademe/sınıf varsayımları merkezi servisle tutarlı hale getirildi.
+- Kuruma bağlı kullanıcıya legacy ek-rol verme yolu kapatıldı; kurum rolleri Kurumlar modülünden yönetilir.
+- `super_admin` rolünü legacy ek-rol ekranından verme yolu kapatıldı.
+- Regression kapsamı bu iş kurallarını da doğrulayacak şekilde genişletildi.
