@@ -39,7 +39,8 @@ function v4_data(PDO $db,int $sid): array {
  $state=load_student_state($db,$sid);
  $stars=count($state['steps']??[])+count($state['games']??[])
    +count(array_unique(array_column($state['readings']??[],'id')))
-   +2*count($state['claimed']??[]);
+   +2*count($state['claimed']??[])
+   +normalized_teacher_reward_stars($db,$sid);
  $complete=0;
  $s=$db->prepare("SELECT d.kod,d.ad,COUNT(DISTINCT m.id) AS toplam,
      COUNT(DISTINCT CASE WHEN oi.id IS NOT NULL AND oi.tamamlandi=1 THEN m.id END) AS tamamlanan

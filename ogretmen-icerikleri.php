@@ -233,6 +233,9 @@ function oi_type_icon(string $type): string {
 </select>
 <label>Cevap açıklaması</label>
 <textarea class="role-input" name="aciklama"><?=oi_h((string)($editContent['aciklama']??''))?></textarea>
+<label>Doğru cevap yıldız ödülü <small>(0–20)</small></label>
+<input class="role-input" type="number" name="yildiz_degeri" min="0" max="20" value="<?=max(0,min(20,(int)($editContent['yildiz_degeri']??0)))?>">
+<small class="teacher-content-help">Öğrenci bu soruyu ilk kez doğru çözdüğünde ödül bir kez kazanılır.</small>
 </div>
 
 <label>Hedef öğrenciler <small>(hiçbirini seçmezsen bu kurumdaki sana bağlı tüm öğrenciler görür)</small></label>
@@ -324,6 +327,9 @@ function oi_type_icon(string $type): string {
 </select>
 <label>Cevap açıklaması</label>
 <textarea class="role-input" name="aciklama" placeholder="Doğru cevabı kısa şekilde açıkla"></textarea>
+<label>Doğru cevap yıldız ödülü <small>(0–20)</small></label>
+<input class="role-input" type="number" name="yildiz_degeri" min="0" max="20" value="0">
+<small class="teacher-content-help">İstersen ilk doğru cevap için yıldız ödülü belirleyebilirsin.</small>
 </div>
 
 <label>Hedef öğrenciler <small>(hiçbirini seçmezsen bu kurumdaki sana bağlı tüm öğrenciler görür)</small></label>
@@ -352,7 +358,7 @@ function oi_type_icon(string $type): string {
 <span class="teacher-content-icon"><?=oi_type_icon((string)$item['icerik_turu'])?></span>
 <div>
 <strong><?=oi_h((string)$item['baslik'])?></strong>
-<small><?=oi_h((string)$item['kurum_adi'])?> · <?=oi_h((string)$item['ders_adi'])?> / <?=oi_h((string)$item['konu_adi'])?> · <?=oi_h($types[(string)$item['icerik_turu']]??'Diğer')?> · <?=$item['hedef_turu']==='tum_ogrenciler'?'Tüm bağlı öğrenciler':(int)$item['hedef_sayisi'].' öğrenci'?><?=(string)$item['icerik_turu']==='soru'?' · '.(int)$item['cevap_sayisi'].' cevap':''?><?=(string)$item['icerik_turu']==='odev'?' · '.(int)$item['odev_durum_sayisi'].' durum kaydı':''?><?=(string)$item['icerik_turu']==='odev' && !empty($item['teslim_tarihi'])?' · Teslim: '.oi_h(date('d.m.Y H:i',strtotime((string)$item['teslim_tarihi']))):''?></small>
+<small><?=oi_h((string)$item['kurum_adi'])?> · <?=oi_h((string)$item['ders_adi'])?> / <?=oi_h((string)$item['konu_adi'])?> · <?=oi_h($types[(string)$item['icerik_turu']]??'Diğer')?> · <?=$item['hedef_turu']==='tum_ogrenciler'?'Tüm bağlı öğrenciler':(int)$item['hedef_sayisi'].' öğrenci'?><?=(string)$item['icerik_turu']==='soru'?' · '.(int)$item['cevap_sayisi'].' cevap'.((int)($item['yildiz_degeri']??0)>0?' · ⭐ '.(int)$item['yildiz_degeri'].' ödül':''):''?><?=(string)$item['icerik_turu']==='odev'?' · '.(int)$item['odev_durum_sayisi'].' durum kaydı':''?><?=(string)$item['icerik_turu']==='odev' && !empty($item['teslim_tarihi'])?' · Teslim: '.oi_h(date('d.m.Y H:i',strtotime((string)$item['teslim_tarihi']))):''?></small>
 </div>
 <div class="teacher-content-actions">
 <span class="role-pill <?=((int)$item['aktif']===1?'ok':'off')?>"><?=((int)$item['aktif']===1?'Aktif':'Pasif')?></span>

@@ -127,6 +127,7 @@ jobs:
           node tests/parent-report-tenant-scope-144.cjs
           node tests/manager-report-tenant-scope-145.cjs
           node tests/homework-status-consistency-146.cjs
+          node tests/teacher-question-star-reward-147.cjs
 
   tenant-db-integration:
     name: Tenant DB integration
@@ -189,4 +190,5 @@ jobs:
           php tests/teacher-group-filter-db-143.php
           php tests/parent-report-tenant-scope-db-144.php
           php tests/manager-report-tenant-scope-db-145.php
+          php tests/teacher-question-star-reward-db-147.php
 

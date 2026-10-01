@@ -15,8 +15,13 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         if((string)($_POST['action']??'')==='answer'){
             $contentId=(int)($_POST['icerik_id']??0);
             $selected=(int)($_POST['secenek']??-1);
-            $correct=oi_answer_question($pdo,$studentId,$contentId,$selected);
-            $flash=$correct?'Harika! Doğru cevap. ⭐':'Tekrar deneyebilirsin. Öğretmenin açıklamasına göz at.';
+            $awardedStars=0;
+            $correct=oi_answer_question($pdo,$studentId,$contentId,$selected,$awardedStars);
+            if($correct && $awardedStars>0){
+                $flash='Harika! Doğru cevap. ⭐ +'.$awardedStars.' yıldız kazandın!';
+            }else{
+                $flash=$correct?'Harika! Doğru cevap. ⭐':'Tekrar deneyebilirsin. Öğretmenin açıklamasına göz at.';
+            }
             $flashType=$correct?'ok':'bad';
         }
     }catch(RuntimeException $e){
@@ -147,6 +152,7 @@ function ois_icon(string $type): string {
 <div class="teacher-content-badges">
 <span class="teacher-from">⭐ <?=oi_h((string)$item['ogretmen_adi'])?>'den</span>
 <span class="teacher-type"><?=ois_icon($type)?> <?=oi_h($types[$type]??'İçerik')?></span>
+<?php if($type==='soru' && (int)($item['yildiz_degeri']??0)>0):?><span class="teacher-type">⭐ <?=min(20,(int)$item['yildiz_degeri'])?> yıldız</span><?php endif;?>
 </div>
 <h3><?=oi_h((string)$item['baslik'])?></h3>
 <?php if(!empty($item['icerik_metni'])):?><p><?=nl2br(oi_h((string)$item['icerik_metni']))?></p><?php endif;?>

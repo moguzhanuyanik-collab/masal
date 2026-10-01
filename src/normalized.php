@@ -31,6 +31,24 @@ function normalized_student_curriculum(PDO $pdo,int $studentId):array{
 function normalized_student_grade(PDO $pdo,int $studentId):int{
     return normalized_student_curriculum($pdo,$studentId)['sinif_seviyesi'];
 }
+function normalized_teacher_reward_stars(PDO $pdo,int $studentId):int{
+    if($studentId<=0)return 0;
+    try{
+        $check=$pdo->prepare("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name=?");
+        $check->execute(['ogretmen_icerik_yildiz_odulleri']);
+        $exists=(int)$check->fetchColumn()>0;
+        $check->closeCursor();
+        if(!$exists)return 0;
+
+        $s=$pdo->prepare('SELECT COALESCE(SUM(yildiz_degeri),0) FROM ogretmen_icerik_yildiz_odulleri WHERE ogrenci_id=?');
+        $s->execute([$studentId]);
+        $value=(int)($s->fetchColumn()?:0);
+        $s->closeCursor();
+        return max(0,$value);
+    }catch(Throwable){
+        return 0;
+    }
+}
 function normalized_datetime(mixed $v):string{
     $ms=is_numeric($v)?(int)$v:(int)(microtime(true)*1000);
     if($ms<946684800000||$ms>4102444800000)$ms=(int)(microtime(true)*1000);
@@ -144,5 +162,6 @@ function normalized_summary(PDO $pdo,int $studentId):array{
     ];
     foreach($q as $k=>$sql){$x=$pdo->prepare($sql);$x->execute(str_contains($sql,'sinif_seviyesi=?')?[$studentId,$grade]:[$studentId]);$out[$k]=(int)$x->fetchColumn();}
     $x=$pdo->prepare('SELECT toplam_yildiz FROM ogrenci_yildizlari WHERE ogrenci_id=? LIMIT 1');$x->execute([$studentId]);$out['stars']=(int)($x->fetchColumn()?:0);
+    $out['stars']+=normalized_teacher_reward_stars($pdo,$studentId);
     return $out;
 }

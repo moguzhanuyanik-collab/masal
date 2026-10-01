@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.21",
+  "version": "1.2.22",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -192,6 +192,7 @@
     "RELEASE-1.2.2.md",
     "RELEASE-1.2.20.md",
     "RELEASE-1.2.21.md",
+    "RELEASE-1.2.22.md",
     "RELEASE-1.2.3.md",
     "RELEASE-1.2.4.md",
     "RELEASE-1.2.5.md",
@@ -358,6 +359,7 @@
     "database/migrations/066_kurum_eslestirme_schema_guard.sql",
     "database/migrations/067_odev_teslim_tarihi_ve_tamamlama.sql",
     "database/migrations/068_kurum_siniflari_ve_gruplar.sql",
+    "database/migrations/069_ogretmen_soru_yildiz_odulleri.sql",
     "global-audio-feedback.js",
     "global-eslestirme.php",
     "global-ogrenciler.php",
@@ -523,6 +525,8 @@
     "tests/teacher-content-edit-copy-db-139.php",
     "tests/teacher-group-filter-143.cjs",
     "tests/teacher-group-filter-db-143.php",
+    "tests/teacher-question-star-reward-147.cjs",
+    "tests/teacher-question-star-reward-db-147.php",
     "tests/tenant-isolation-114.cjs",
     "tests/tenant-isolation-db-115.php",
     "tests/tenant-matching-crud-117.cjs",
