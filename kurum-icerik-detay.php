@@ -11,6 +11,7 @@ $user=require_role(['yonetici','super_admin']);
 $pdo=db();
 $institutionId=max(0,(int)($_GET['kurum_id']??0));
 $contentId=max(0,(int)($_GET['id']??0));
+$groupId=max(0,(int)($_GET['grup_id']??0));
 
 try{
     $institution=ky_assert_manageable($pdo,$user,$institutionId);
@@ -21,7 +22,7 @@ try{
     exit;
 }
 
-$detail=kid_content_detail($pdo,$institutionId,$contentId);
+$detail=kid_content_detail($pdo,$institutionId,$contentId,$groupId);
 if(!$detail){
     http_response_code(404);
     echo 'İçerik bulunamadı veya bu kuruma ait değil.';
@@ -31,7 +32,9 @@ if(!$detail){
 $content=$detail['content'];
 $students=$detail['students'];
 $summary=$detail['summary'];
+$groupContext=$detail['group_context']??null;
 $type=(string)$content['icerik_turu'];
+$returnUrl='kurum-icerikleri.php?kurum_id='.$institutionId.($groupId>0?'&grup_id='.$groupId:'');
 
 function kid_h(string $value): string {
     return htmlspecialchars($value,ENT_QUOTES,'UTF-8');
@@ -60,6 +63,13 @@ function kid_type_icon(string $type): string {
         'diger'=>'📌',
     ][$type]??'📌';
 }
+
+function kid_group_label(?array $group): string {
+    if(!is_array($group)) return '';
+    $type=(string)($group['tur']??'sinif')==='grup'?'Grup':'Sınıf';
+    $grade=$group['sinif_seviyesi']!==null?(int)$group['sinif_seviyesi']:0;
+    return $type.' · '.(string)($group['ad']??'').($grade>0?' · '.$grade.'. sınıf':'');
+}
 ?><!doctype html>
 <html lang="tr">
 <head>
@@ -73,7 +83,7 @@ function kid_type_icon(string $type): string {
 <body class="role-page">
 <div class="role-shell">
 <header class="role-topbar">
-<a class="role-icon" href="kurum-icerikleri.php?kurum_id=<?=$institutionId?>">←</a>
+<a class="role-icon" href="<?=kid_h($returnUrl)?>">←</a>
 <span class="role-brand"><span><?=kid_type_icon($type)?></span><span><strong>İçerik Detayı</strong><small><?=kid_h((string)$institution['ad'])?></small></span></span>
 <a class="role-icon" href="hesap-guvenligi.php">⚙️</a>
 </header>
@@ -82,7 +92,7 @@ function kid_type_icon(string $type): string {
 <section class="role-hero">
 <span class="eyeline"><?=kid_h(kid_type_label($type))?> / <?=kid_h((string)$content['ders_adi'])?></span>
 <h1><?=kid_h((string)$content['baslik'])?></h1>
-<p><?=kid_h((string)$content['ogretmen_adi'])?> · <?=kid_h((string)$content['konu_adi'])?> · <?=((int)$content['aktif']===1?'Aktif yayın':'Pasif yayın')?> · <?=kid_h(kid_date((string)$content['olusturulma_tarihi']))?></p>
+<p><?=kid_h((string)$content['ogretmen_adi'])?> · <?=kid_h((string)$content['konu_adi'])?> · <?=((int)$content['aktif']===1?'Aktif yayın':'Pasif yayın')?> · <?=kid_h(kid_date((string)$content['olusturulma_tarihi']))?><?php if($groupContext):?> · <?=kid_h(kid_group_label($groupContext))?><?php endif;?></p>
 <span class="role-hero-art"><?=kid_type_icon($type)?></span>
 </section>
 
@@ -192,7 +202,7 @@ if(is_array($options) && $options):
 
 <nav class="role-bottom">
 <a href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>🏫</span>Kurum</a>
-<a class="active" href="kurum-icerikleri.php?kurum_id=<?=$institutionId?>"><span>📚</span>İçerikler</a>
+<a class="active" href="<?=kid_h($returnUrl)?>"><span>📚</span>İçerikler</a>
 <a href="kurum-siniflari.php?kurum_id=<?=$institutionId?>"><span>🏷️</span>Sınıflar</a>
 <a href="kurum-raporlari.php?kurum_id=<?=$institutionId?>"><span>📊</span>Raporlar</a>
 </nav>
