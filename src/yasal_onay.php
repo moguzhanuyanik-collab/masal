@@ -208,10 +208,10 @@ function yl_pending_documents(PDO $pdo,array $user): array {
     $role=(string)(auth_effective_role($user)??'');
     $docs=yl_active_required_for_role($pdo,$role);
     if(!$docs) return [];
-    $stmt=$pdo->prepare('SELECT 1 FROM yasal_belge_onaylari WHERE belge_id=? AND kullanici_id=? LIMIT 1');
+    $stmt=$pdo->prepare('SELECT 1 FROM yasal_belge_onaylari WHERE belge_id=? AND kullanici_id=? AND belge_hash=? LIMIT 1');
     $pending=[];
     foreach($docs as $doc){
-        $stmt->execute([(int)$doc['id'],(int)$user['id']]);
+        $stmt->execute([(int)$doc['id'],(int)$user['id'],(string)$doc['icerik_hash']]);
         $accepted=(bool)$stmt->fetchColumn();
         $stmt->closeCursor();
         if(!$accepted)$pending[]=$doc;
