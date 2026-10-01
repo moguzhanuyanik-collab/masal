@@ -124,14 +124,14 @@ function ly_sync_cases(PDO $pdo,?array $actor=null,int $days=30): array {
             $code=null;
             $note=null;
 
-            if($currentEnd==='' || $currentEnd>$target){
-                $newStatus='yenilendi';
-                $code='harici_yenileme';
-                $note=$currentEnd===''?'Lisans harici işlemle süresiz hale getirildi.':'Lisans harici işlemle '.$currentEnd.' tarihine uzatıldı.';
-            }elseif($licenseStatus==='iptal'){
+            if($licenseStatus==='iptal'){
                 $newStatus='yenilenmedi';
                 $code='lisans_iptal';
                 $note='Lisans iptal edildiği için yenileme vakası kapatıldı.';
+            }elseif($currentEnd==='' || $currentEnd>$target){
+                $newStatus='yenilendi';
+                $code='harici_yenileme';
+                $note=$currentEnd===''?'Lisans harici işlemle süresiz hale getirildi.':'Lisans harici işlemle '.$currentEnd.' tarihine uzatıldı.';
             }
 
             if($newStatus!==null){
@@ -165,12 +165,17 @@ function ly_queue_rows(PDO $pdo,array $filters=[],int $limit=300): array {
     $params=[];
 
     $status=trim((string)($filters['durum']??''));
-    if($status!=='' && array_key_exists($status,ly_status_labels())){
+    if($status==='open'){
+        $where[]="y.durum IN ('acik','temas','teklif')";
+    }elseif($status!=='' && array_key_exists($status,ly_status_labels())){
         $where[]='y.durum=?';
         $params[]=$status;
     }
 
     $urgency=trim((string)($filters['aciliyet']??''));
+    if(in_array($urgency,['expired','1','7','15','30'],true)){
+        $where[]="y.durum IN ('acik','temas','teklif')";
+    }
     if($urgency==='expired') $where[]='y.hedef_bitis_tarihi<CURDATE()';
     elseif($urgency==='1') $where[]='DATEDIFF(y.hedef_bitis_tarihi,CURDATE()) BETWEEN 0 AND 1';
     elseif($urgency==='7') $where[]='DATEDIFF(y.hedef_bitis_tarihi,CURDATE()) BETWEEN 2 AND 7';
