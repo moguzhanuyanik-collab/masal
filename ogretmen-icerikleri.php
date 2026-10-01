@@ -86,6 +86,7 @@ $types=oi_content_types();
 
 $editOptions=[];
 $editTargets=[];
+$editGroups=[];
 $editDue='';
 $editLocked=false;
 if(is_array($editContent)){
@@ -94,6 +95,7 @@ if(is_array($editContent)){
     while(count($editOptions)<6) $editOptions[]='';
     $editOptions=array_slice($editOptions,0,6);
     $editTargets=array_map('intval',$editContent['hedef_ogrenciler']??[]);
+    $editGroups=array_map('intval',$editContent['hedef_gruplar']??[]);
     if(!empty($editContent['teslim_tarihi'])){
         try{$editDue=(new DateTimeImmutable((string)$editContent['teslim_tarihi']))->format('Y-m-d\TH:i');}catch(Throwable){}
     }
@@ -123,8 +125,8 @@ function oi_target_group_label(array $group): string {
 <title>İçeriklerim — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="ogretmen.css?v=1.0.42">
-<link rel="stylesheet" href="ogretmen-icerikleri.css?v=1.2.30">
-<script src="ogretmen-icerikleri.js?v=1.2.30" defer></script>
+<link rel="stylesheet" href="ogretmen-icerikleri.css?v=1.2.31">
+<script src="ogretmen-icerikleri.js?v=1.2.31" defer></script>
 </head>
 <body class="role-page">
 <div class="role-shell">
@@ -255,7 +257,7 @@ function oi_target_group_label(array $group): string {
 <div class="teacher-content-group-targets">
 <?php foreach($targetGroups as $group):?>
 <label class="teacher-content-group-target">
-<input type="checkbox" name="hedef_gruplar[]" value="<?=(int)$group['id']?>">
+<input type="checkbox" name="hedef_gruplar[]" value="<?=(int)$group['id']?>" <?=in_array((int)$group['id'],$editGroups,true)?'checked':''?>>
 <span><strong><?=oi_h(oi_target_group_label($group))?></strong><small><?=(int)$group['ogrenci_sayisi']?> bağlı öğrenci</small></span>
 </label>
 <?php endforeach;?>
