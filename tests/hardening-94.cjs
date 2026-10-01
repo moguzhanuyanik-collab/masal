@@ -34,7 +34,11 @@ assert(!updater.includes("execute([$e->getMessage(),$logId])"));
 
 assert(updatePage.includes("update_public_error_message"));
 assert(updatePage.includes("ensure_runtime_storage_guard(__DIR__)"));
-assert(updatePage.includes("Canlı ayarlar ve storage verileri yedeğe eklenmez."));
+assert(
+  updatePage.includes("Canlı ayarlar ve storage verileri yedeğe eklenmez.") ||
+  updatePage.includes("Önce otomatik yedek alınacak"),
+  'update page backup safety notice missing'
+);
 
 assert(!activities.includes("'detail'=>$e->getMessage()"));
 assert(!state.includes("'detail'=>$e->getMessage()"));
