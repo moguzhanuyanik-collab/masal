@@ -19,8 +19,8 @@ assert(updater.includes('function assert_stale_managed_files_safe('));
 assert(updater.includes('güvenilir hash baseline yok'));
 assert(updater.includes('kurulumdan sonra değiştirilmiş'));
 assert(
-  updater.indexOf('assert_stale_managed_files_safe(')
-  < updater.indexOf('$pendingMigrations=pending_migration_names(')
+  updater.indexOf('$stalePreflight=assert_stale_managed_files_safe(')
+  < updater.indexOf("$updateStage='database_recovery_skip';")
 );
 assert(workflow.includes('tests/update-managed-integrity-111.php'));
 assert(workflow.includes('tests/update-managed-integrity-111.cjs'));
