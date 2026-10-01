@@ -288,7 +288,7 @@ ok_175((string)$pdo->query("SELECT kapanma_kodu FROM ticari_tahsilat_takipleri W
 
 tf_save_contract($pdo,$actor,[
     'sozlesme_id'=>$cCancel,'kurum_id'=>90,'paket_id'=>1,'sozlesme_no'=>'RISK-CANCEL',
-    'baslangic_tarihi'=>$today->format('Y-m-d'),'bitis_tarihi'=>$today->modify('+1 year')->format('Y-m-d'),
+    'baslangic_tarihi'=>$today->modify('-1 year')->format('Y-m-d'),'bitis_tarihi'=>$today->modify('+1 year')->format('Y-m-d'),
     'vade_tarihi'=>$today->modify('-5 days')->format('Y-m-d'),'toplam_tutar'=>'1000',
     'para_birimi'=>'TRY','durum'=>'iptal','notlar'=>'Sözleşme iptal'
 ]);
