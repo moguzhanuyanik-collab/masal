@@ -40,9 +40,20 @@ assert.strictEqual(evidence.reconstructed_release_sequence.at(-1),'1.2.1');
 assert.deepStrictEqual(evidence.excluded_from_active_sequence,['1.1.118','1.1.120']);
 assert.deepStrictEqual(evidence.recovery_only,['1.1.119']);
 
-assert.strictEqual(version.version,'1.2.14');
-assert.strictEqual(release.version,'1.2.14');
+const currentParts=String(version.version).split('.').map(Number);
+assert(
+  currentParts[0]>1
+  || (currentParts[0]===1 && (currentParts[1]>2 || (currentParts[1]===2 && currentParts[2]>=14))),
+  'Recovery lineage integrity test 1.2.14 veya daha yeni bir koruma sürümünde çalışmalı.'
+);
+assert.strictEqual(release.version,version.version);
 assert.strictEqual(version.release_revision,release.release_revision);
-assert.strictEqual(version.release_revision,1);
+assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
+
+const evidenceTree=String(evidence.source.source_tree||'');
+const actualTree=git(['show','-s','--format=%T',source]);
+assert.strictEqual(evidenceTree,actualTree,'Evidence source_tree, 1.2.1 source commit tree ile eşleşmiyor.');
+const actualParent=git(['show','-s','--format=%P',source]).split(/\s+/)[0]||'';
+assert.strictEqual(evidence.source.parent_commit,actualParent,'Evidence parent_commit, 1.2.1 source commit parentı ile eşleşmiyor.');
 
 console.log('PASS: 1.1.97 -> 1.2.1 immutable recovery source integrity');
