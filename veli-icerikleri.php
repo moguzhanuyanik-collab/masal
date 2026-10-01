@@ -203,17 +203,28 @@ $reportInstitutionId=$institutionId>0?$institutionId:(count($institutions)===1?(
 
     if($itemType==='soru'){
         if($item['secilen_cevap_indeksi']===null){
+            $status='Bekliyor';
             $detail='Henüz cevap vermedi.';
+        }elseif((int)$item['cevap_dogru']===1){
+            $status='Doğru';
+            $detail=(int)($item['deneme_sayisi']??1).' deneme · '.vi_date((string)($item['cevap_tarihi']??''));
         }else{
+            $status='Yanlış';
             $detail=(int)($item['deneme_sayisi']??1).' deneme · '.vi_date((string)($item['cevap_tarihi']??''));
         }
     }elseif($itemType==='odev'){
         if((int)($item['odev_tamamlandi']??0)===1){
+            $status='Tamamlandı';
             $detail='Tamamlanma: '.vi_date((string)($item['tamamlanma_tarihi']??''));
+        }elseif($normalizedStatus==='attention'){
+            $status='Gecikti';
+            $detail='Teslim: '.vi_date((string)($item['teslim_tarihi']??''));
         }else{
+            $status='Bekliyor';
             $detail='Teslim: '.vi_date((string)($item['teslim_tarihi']??''));
         }
     }else{
+        $status='Yayınlandı';
         $detail='Yayın: '.vi_date((string)$item['olusturulma_tarihi']);
     }
 ?>
