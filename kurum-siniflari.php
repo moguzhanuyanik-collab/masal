@@ -222,7 +222,7 @@ $back=$isSuper?'kurum-detay.php?kurum_id='.$institutionId:'yonetici-paneli.php?k
 <title>Sınıflar / Gruplar — <?=ks_h((string)$institution['ad'])?></title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="kurum.css?v=1.2.9">
-<link rel="stylesheet" href="kurum-siniflari.css?v=1.2.9">
+<link rel="stylesheet" href="kurum-siniflari.css?v=1.2.11">
 </head>
 <body class="role-page"><div class="role-shell">
 <header class="role-topbar">
