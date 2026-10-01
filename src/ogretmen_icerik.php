@@ -7,7 +7,11 @@ function oi_h(string $value): string {
 function oi_table_exists(PDO $pdo,string $table): bool {
     if(!preg_match('/^[A-Za-z0-9_]+$/',$table)) return false;
     try{
-        $s=$pdo->prepare('SHOW TABLES LIKE ?');
+        $s=$pdo->prepare("SELECT 1
+            FROM information_schema.tables
+            WHERE table_schema=DATABASE()
+              AND table_name=?
+            LIMIT 1");
         $s->execute([$table]);
         $exists=(bool)$s->fetchColumn();
         $s->closeCursor();
