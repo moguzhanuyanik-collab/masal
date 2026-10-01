@@ -2088,7 +2088,11 @@ function recover_missing_064_checkpoint_after_1_1_98_bridge(PDO $pdo,string $roo
 }
 
 function assert_historical_migration_history(PDO $pdo,string $root,string $localVersion): void {
-    if(version_compare($localVersion,'1.1.98','<')) return;
+    // 1.1.97 -> 1.2.1 doğrudan recovery de eski migration geçmişini
+    // doğrulamak zorundadır. 1.1.97 için önceki guard'ın erken return etmesi,
+    // 064 checkpoint mevcut görünse bile 001-063 arasındaki eksik kayıtların
+    // fark edilmeden 065/066'ya geçmesine izin veriyordu.
+    if(version_compare($localVersion,'1.1.97','<')) return;
 
     $retired=retired_automatic_migrations();
     $expected=[];
@@ -2119,8 +2123,11 @@ function assert_historical_migration_history(PDO $pdo,string $root,string $local
         // doğrulanmış DB yedeği alınır, ardından run_pending_migrations içindeki
         // dar kapsamlı recovery 064'ü uygular. Başka tek bir eksik kayıt bile
         // varsa yine fail-closed davranılır.
-        if($localVersion==='1.1.98'
+        if(in_array($localVersion,['1.1.97','1.1.98'],true)
             && $missing===['064_adimbot_rate_limit_ve_migration_checkpoint']){
+            // 064, 1.1.97 -> 1.2.1 recovery'nin kendisi tarafından
+            // doğrulanmış idempotent biçimde oluşturulacaktır. 001-063'ten
+            // herhangi birinin eksik olması ise kesinlikle kabul edilmez.
             return;
         }
 
@@ -2229,6 +2236,10 @@ function validate_tenant_relation_schema_guard(PDO $pdo,string $migrationRoot): 
 
 function run_legacy_1_1_97_to_1_2_1_recovery(PDO $pdo,string $migrationRoot,string $localVersion): array {
     if($localVersion!=='1.1.97') return [];
+
+    // 064 mevcut olsa bile 001-063 geçmişini önce doğrula. Böylece bozuk
+    // checkpoint yalnız var diye kabul edilip tenant migrationlarına geçilemez.
+    assert_historical_migration_history($pdo,$migrationRoot,$localVersion);
 
     // Önce mevcut 1.1.97 tarihsel geçmişini doğrula ve yalnız eksik 064 checkpointini
     // idempotent biçimde tamamla. 001-063 hiçbir koşulda tekrar oynatılmaz.
