@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require __DIR__ . '/src/bootstrap.php';
 require __DIR__ . '/src/auth.php';
+require __DIR__ . '/src/kurum_yonetimi.php';
 
 $user=require_role('super_admin');
 $pdo=db();
@@ -30,37 +31,19 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
             $role=(string)($_POST['rol']??'');
 
             if ($role==='yonetici') throw new RuntimeException('Yönetici hesabını Kurumlar bölümünden bir kuruma bağlayarak oluştur.');
-            $allowed=['ogrenci','veli','ogretmen'];
-            if (!in_array($role,$allowed,true)) throw new RuntimeException('Bu rolü oluşturma yetkin yok.');
-            if (mb_strlen($name)<2 || mb_strlen($name)>190) throw new RuntimeException('Ad soyad bilgisini kontrol et.');
-            if (!filter_var($email,FILTER_VALIDATE_EMAIL)) throw new RuntimeException('Geçerli bir e-posta yaz.');
-            if (mb_strlen($password)<8) throw new RuntimeException('Şifre en az 8 karakter olmalı.');
+            if (!in_array($role,['ogrenci','veli','ogretmen'],true)) throw new RuntimeException('Bu rolü oluşturma yetkin yok.');
 
-            $hash=password_hash($password,PASSWORD_DEFAULT);
-            if (!is_string($hash)||$hash==='') throw new RuntimeException('Şifre oluşturulamadı.');
-
-            $pdo->beginTransaction();
-            try {
-                $stmt=$pdo->prepare('INSERT INTO kullanicilar (email,sifre_hash,ad_soyad,ana_rol,aktif) VALUES (?,?,?,?,1)');
-                $stmt->execute([$email,$hash,$name,$role]);
-                $targetId=(int)$pdo->lastInsertId();
-                $pdo->prepare('INSERT INTO kullanici_rolleri (kullanici_id,rol) VALUES (?,?)')->execute([$targetId,$role]);
-                if ($role==='ogrenci') {
-                    $pdo->prepare("INSERT INTO ogrenciler (kullanici_id,ad,email,sifre_hash,avatar,aktif) VALUES (?,?,?,?,?,1)")
-                        ->execute([$targetId,$name,$email,$hash,'🌞']);
-                } elseif ($role==='veli') {
-                    $pdo->prepare('INSERT INTO veliler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')->execute([$targetId,$name]);
-                } elseif ($role==='ogretmen') {
-                    $pdo->prepare('INSERT INTO ogretmenler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')->execute([$targetId,$name]);
-                }
-
-                $pdo->commit();
-            } catch (Throwable $e) {
-                if ($pdo->inTransaction()) $pdo->rollBack();
-                throw $e;
-            }
-            auth_audit($pdo,(int)$user['id'],$targetId,'kullanici_olustur','Rol: '.$role);
-            $message='Yeni kullanıcı hesabı oluşturuldu.';
+            $targetId=ky_create_user(
+                $pdo,
+                $user,
+                $role,
+                $name,
+                $email,
+                $password,
+                null,
+                $role==='ogrenci'?1:null
+            );
+            $message='Yeni global kullanıcı hesabı oluşturuldu.';
         }
 
         if ($action==='add_role') {
@@ -68,9 +51,13 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
             $targetId=(int)($_POST['kullanici_id']??0);
             $role=(string)($_POST['rol']??'');
             if ($role==='yonetici') throw new RuntimeException('Yönetici rolü Kurumlar bölümünden kurum üyeliğiyle birlikte verilmelidir.');
-            if (!in_array($role,['veli','ogretmen','super_admin'],true)) throw new RuntimeException('Geçersiz rol.');
+            if ($role==='super_admin') throw new RuntimeException('Süper Admin rolü bu ekrandan verilemez.');
+            if (!in_array($role,['veli','ogretmen'],true)) throw new RuntimeException('Geçersiz rol.');
             $target=auth_fetch_user($pdo,$targetId);
             if (!$target) throw new RuntimeException('Kullanıcı bulunamadı.');
+            $globalCheck=$pdo->prepare("SELECT 1 FROM kullanicilar k WHERE k.id=? AND k.aktif=1 AND NOT EXISTS (SELECT 1 FROM kurum_kullanicilari kk WHERE kk.kullanici_id=k.id AND kk.aktif=1) LIMIT 1");
+            $globalCheck->execute([$targetId]);
+            if (!$globalCheck->fetchColumn()) throw new RuntimeException('Kurum kullanıcısının rolünü Kurumlar bölümünden yönetin.');
             $pdo->prepare('INSERT IGNORE INTO kullanici_rolleri (kullanici_id,rol) VALUES (?,?)')->execute([$targetId,$role]);
             if ($role==='veli') $pdo->prepare('INSERT IGNORE INTO veliler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')->execute([$targetId,(string)$target['ad_soyad']]);
             if ($role==='ogretmen') $pdo->prepare('INSERT IGNORE INTO ogretmenler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')->execute([$targetId,(string)$target['ad_soyad']]);
@@ -321,11 +308,10 @@ if($relationScopeReady){
 <input type="hidden" name="action" value="add_role">
 <h2>Mevcut kullanıcıya ek rol</h2>
 <select class="text-input" name="kullanici_id" required>
-<?php foreach ($users as $u): ?><option value="<?=(int)$u['id']?>"><?=h_auth((string)$u['email'])?></option><?php endforeach; ?>
+<?php foreach ($globalUsers as $u): ?><option value="<?=(int)$u['id']?>"><?=h_auth((string)$u['email'])?></option><?php endforeach; ?>
 </select>
 <select class="text-input" name="rol" required>
 <option value="veli">Veli</option><option value="ogretmen">Öğretmen</option>
-<option value="super_admin">Süper Admin</option>
 </select>
 <button class="button soft full" type="submit">Rol Ekle</button>
 </form>
