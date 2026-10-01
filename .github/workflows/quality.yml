@@ -110,6 +110,7 @@ jobs:
           node tests/update-sequential-release-selection-133.cjs
           node tests/direct-097-recovery-128.cjs
           node tests/recovery-097-chain-gate-134.cjs
+          node tests/recovery-chain-order-135.cjs
           node tests/recovery-release-postcondition-131.cjs
 
   tenant-db-integration:
