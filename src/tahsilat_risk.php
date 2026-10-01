@@ -51,6 +51,15 @@ function tr_history_add(
 
 function tr_contract_financial_state(PDO $pdo,int $contractId,bool $forUpdate=false): ?array {
     if(!tf_tables_ready($pdo) || $contractId<=0) return null;
+
+    if($forUpdate){
+        $lock=$pdo->prepare('SELECT id FROM kurum_sozlesmeleri WHERE id=? LIMIT 1 FOR UPDATE');
+        $lock->execute([$contractId]);
+        $exists=(bool)$lock->fetchColumn();
+        $lock->closeCursor();
+        if(!$exists) return null;
+    }
+
     $sql="SELECT
         s.id sozlesme_id,s.kurum_id,s.sozlesme_no,s.paket_id,s.vade_tarihi,s.bitis_tarihi,
         s.toplam_tutar,s.para_birimi,s.durum sozlesme_durum,
@@ -72,7 +81,7 @@ function tr_contract_financial_state(PDO $pdo,int $contractId,bool $forUpdate=fa
           GROUP BY sozlesme_id
         ) pay ON pay.sozlesme_id=s.id
         WHERE s.id=?
-        LIMIT 1".($forUpdate?' FOR UPDATE':'');
+        LIMIT 1";
     $stmt=$pdo->prepare($sql);
     $stmt->execute([$contractId]);
     $row=$stmt->fetch(PDO::FETCH_ASSOC);
