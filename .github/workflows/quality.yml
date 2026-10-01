@@ -130,6 +130,7 @@ jobs:
           node tests/teacher-question-star-reward-147.cjs
           node tests/teacher-homework-dashboard-148.cjs
           node tests/student-homework-dashboard-149.cjs
+          node tests/teacher-question-correct-lock-150.cjs
 
   tenant-db-integration:
     name: Tenant DB integration
@@ -195,4 +196,5 @@ jobs:
           php tests/teacher-question-star-reward-db-147.php
           php tests/teacher-homework-dashboard-db-148.php
           php tests/student-homework-dashboard-db-149.php
+          php tests/teacher-question-correct-lock-db-150.php
 
