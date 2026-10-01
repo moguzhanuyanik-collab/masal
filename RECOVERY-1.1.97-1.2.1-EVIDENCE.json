@@ -6,7 +6,9 @@
   "source": {
     "version": "1.2.1",
     "release_revision": 15,
-    "commit": "6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c"
+    "commit": "6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c",
+    "source_tree": "9665e2754d02db81f8ca07a97b95506397103e1e",
+    "parent_commit": "e077d07a193f34844069696584c3e4cdc8adf89b"
   },
   "source_compare": {
     "baseline_to_source_commit_count": 30,
@@ -45,5 +47,7 @@
     "1.1.119"
   ],
   "functional_rebuild_artifact": "REBUILD-1.1.97-1.2.1-FUNCTIONAL.json",
-  "purpose": "Prevent a future reset or updater failure from silently removing the recovered 1.1.97 -> 1.2.1 source lineage."
+  "purpose": "Prevent a future reset or updater failure from silently removing the recovered 1.1.97 -> 1.2.1 source lineage.",
+  "verification_contract": "tests/recovery-source-integrity-139.cjs",
+  "last_recovery_hardening_version": "1.2.14"
 }

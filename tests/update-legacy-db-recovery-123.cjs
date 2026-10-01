@@ -31,6 +31,13 @@ const helperBlock=updater.slice(helperStart,helperEnd);
 assert(helperBlock.indexOf('recover_missing_064_checkpoint_after_1_1_98_bridge') < helperBlock.indexOf('repair_legacy_institution_membership_schema'));
 assert(helperBlock.indexOf("'065_kurum_bazli_eslestirme_izolasyonu'") < helperBlock.indexOf("'066_kurum_eslestirme_schema_guard'"));
 assert(helperBlock.includes('001-063') || updater.includes('001-063'));
+const repairStart=updater.indexOf('function repair_legacy_institution_membership_schema');
+const repairEnd=updater.indexOf('function retired_automatic_migrations',repairStart);
+assert(repairStart>=0 && repairEnd>repairStart);
+const repairBlock=updater.slice(repairStart,repairEnd);
+assert(repairBlock.includes('RENAME TABLE kurum_kullanicilari TO {$backupTable}, {$stageTable} TO kurum_kullanicilari'));
+assert(repairBlock.includes('RENAME TABLE kurum_kullanicilari TO {$stageTable}, {$backupTable} TO kurum_kullanicilari'));
+assert(repairBlock.includes('otomatik rollback de başarısız oldu'));
 
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);

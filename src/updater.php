@@ -1885,6 +1885,7 @@ function repair_legacy_institution_membership_schema(PDO $pdo): void {
         CONSTRAINT fk_kk_bridge_user FOREIGN KEY (kullanici_id) REFERENCES kullanicilar(id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
 
+    $swapped=false;
     try{
         $insertDefault=$pdo->prepare("INSERT INTO {$stageTable}
           (kurum_id,kullanici_id,kurum_rolu,aktif) VALUES (?,?,?,?)");
@@ -1905,7 +1906,24 @@ function repair_legacy_institution_membership_schema(PDO $pdo): void {
             throw new RuntimeException('Legacy kurum üyeliği staging doğrulaması başarısız.');
         }
 
+        // RENAME öncesi şema postconditionını staging üzerinde doğrula. Böylece
+        // canlı tabloya geçtikten sonra sürpriz bir şema hatası nedeniyle eski
+        // tablonun yalnızca backup adına taşınmış halde kalma riski azaltılır.
+        $stageColumns=auth_column_map($pdo,$stageTable);
+        foreach(['kurum_id','kullanici_id','kurum_rolu','aktif'] as $requiredColumn){
+            if(!isset($stageColumns[$requiredColumn])){
+                throw new RuntimeException('Legacy kurum üyeliği staging zorunlu kolonu eksik: '.$requiredColumn);
+            }
+        }
+        foreach($legacyColumns as $column){
+            if(isset($stageColumns[$column])){
+                throw new RuntimeException('Legacy kurum üyeliği staging tablosunda eski kolon kaldı: '.$column);
+            }
+        }
+
         $pdo->exec("RENAME TABLE kurum_kullanicilari TO {$backupTable}, {$stageTable} TO kurum_kullanicilari");
+        $swapped=true;
+
         $newCols=auth_column_map($pdo,'kurum_kullanicilari');
         foreach($legacyColumns as $column){
             if(isset($newCols[$column])){
@@ -1917,8 +1935,26 @@ function repair_legacy_institution_membership_schema(PDO $pdo): void {
             throw new RuntimeException('Legacy kurum üyeliği canlı tablo doğrulaması başarısız.');
         }
     }catch(Throwable $e){
+        if($swapped){
+            try{
+                if(auth_table_exists($pdo,'kurum_kullanicilari')
+                    && auth_table_exists($pdo,$backupTable)
+                    && !auth_table_exists($pdo,$stageTable)){
+                    // Çoklu RENAME atomik olduğundan swap başarılı olduysa,
+                    // aynı isimlerle ters RENAME ile legacy canlı tabloyu geri al.
+                    $pdo->exec("RENAME TABLE kurum_kullanicilari TO {$stageTable}, {$backupTable} TO kurum_kullanicilari");
+                }
+            }catch(Throwable $rollbackError){
+                throw new RuntimeException(
+                    'Legacy kurum üyeliği dönüşümü başarısız oldu ve otomatik rollback de başarısız oldu.',
+                    0,
+                    $rollbackError
+                );
+            }
+        }
+
         if(auth_table_exists($pdo,$stageTable)){
-            try{$pdo->exec('DROP TABLE kurum_kullanicilari_v4_bridge');}catch(Throwable){}
+            try{$pdo->exec("DROP TABLE {$stageTable}");}catch(Throwable){}
         }
         throw $e;
     }
