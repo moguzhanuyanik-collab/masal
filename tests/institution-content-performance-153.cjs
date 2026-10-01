@@ -13,7 +13,7 @@ const release=JSON.parse(fs.readFileSync('update-release.json','utf8'));
 
 assert(page.includes("require __DIR__.'/src/kurum_icerik_dashboard.php';"),'institution content dashboard domain missing');
 assert(page.includes('name="performans"'),'performance filter missing');
-assert(page.includes('kic_contents($pdo,$institutionId,$teacherId,$type,$publication)'),'institution content list must use dashboard domain');
+assert(/kic_contents\(\$pdo,\$institutionId,\$teacherId,\$type,\$publication(?:,\$groupId)?\)/.test(page),'institution content list must use dashboard domain');
 assert(page.includes('kic_filter_performance($allContents,$performance)'),'performance filter pipeline missing');
 assert(page.includes('kic_summary($contents)'),'dashboard summary missing');
 assert(page.includes('Dikkat gereken yayın'),'attention summary stat missing');
