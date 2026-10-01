@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.18",
+  "version": "1.2.19",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -188,6 +188,7 @@
     "RELEASE-1.2.16.md",
     "RELEASE-1.2.17.md",
     "RELEASE-1.2.18.md",
+    "RELEASE-1.2.19.md",
     "RELEASE-1.2.2.md",
     "RELEASE-1.2.3.md",
     "RELEASE-1.2.4.md",
@@ -497,6 +498,8 @@
     "tests/legacy-064-integrity-124.php",
     "tests/manual-update-upload-131.cjs",
     "tests/migration-safety-93.cjs",
+    "tests/parent-report-tenant-scope-144.cjs",
+    "tests/parent-report-tenant-scope-db-144.php",
     "tests/parent-teacher-content-142.cjs",
     "tests/parent-teacher-content-db-142.php",
     "tests/pwa-95.cjs",
