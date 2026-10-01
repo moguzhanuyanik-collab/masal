@@ -471,6 +471,7 @@
     "tests/update-quality-catalog-111.cjs",
     "tests/update-quality-catalog-112.cjs",
     "tests/update-quality-catalog-113.cjs",
+    "tests/update-rebuild-122.cjs",
     "tests/update-recovery-119.cjs",
     "tests/update-release-anchor-101.cjs",
     "tests/update-release-head-anchor-109.cjs",
@@ -501,5 +502,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 1
+  "release_revision": 2
 }

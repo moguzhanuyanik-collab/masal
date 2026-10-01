@@ -35,3 +35,8 @@ Bu sürüm, GitHub geçmişindeki 1.1.97 tabanı ile korunmuş ara branch/commit
 ### Önemli
 
 Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına otomatik rollback veya doğrudan deploy yapılmaz.
+
+## Rev 2 — recovery tree continuity
+
+- 1.1.119 ana dalından taşınan `tests/update-rebuild-122.cjs` kalite ağacına dahil edildi.
+- Managed-file manifest, sürüm ve release ankrajı aynı committe 1.2.1 rev2 olarak eşitlendi.
