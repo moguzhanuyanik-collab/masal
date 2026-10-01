@@ -199,7 +199,7 @@ $home=auth_role_home($user);
 <?php endforeach;?>
 </div>
 
-<?php if($isAdmin && (string)$selected['durum']!=='kapali':?>
+<?php if($isAdmin && (string)$selected['durum']!=='kapali'): ?>
 <div class="ds-admin-grid">
 <form class="ds-form" method="post">
 <input type="hidden" name="csrf" value="<?=dsh(csrf_token())?>">
@@ -219,7 +219,7 @@ $home=auth_role_home($user);
 <button type="submit">Durumu Güncelle</button>
 </form>
 </div>
-<?php elseif(!$isAdmin && (string)$selected['durum']!=='kapali':?>
+<?php elseif(!$isAdmin && (string)$selected['durum']!=='kapali'): ?>
 <form class="ds-form ds-reply" method="post">
 <input type="hidden" name="csrf" value="<?=dsh(csrf_token())?>">
 <input type="hidden" name="action" value="user_reply">
