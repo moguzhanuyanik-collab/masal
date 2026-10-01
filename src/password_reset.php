@@ -223,6 +223,51 @@ function pr_smtp_command($socket,string $command,array $expected): void {
     if(!in_array($code,$expected,true)) throw new RuntimeException('SMTP sunucusu isteği kabul etmedi.');
 }
 
+function pr_smtp_probe(array $config): bool {
+    $host=trim((string)($config['host']??''));
+    $port=max(1,min(65535,(int)($config['port']??587)));
+    $encryption=strtolower(trim((string)($config['encryption']??'tls')));
+    $username=(string)($config['username']??'');
+    $password=(string)($config['password']??'');
+    $timeout=max(3,min(30,(int)($config['timeout_seconds']??10)));
+
+    if($host==='' || !in_array($encryption,['none','tls','ssl'],true)) return false;
+
+    $remote=($encryption==='ssl'?'ssl://':'').$host.':'.$port;
+    $errno=0;$errstr='';
+    $socket=@stream_socket_client($remote,$errno,$errstr,$timeout,STREAM_CLIENT_CONNECT);
+    if(!is_resource($socket)) return false;
+    stream_set_timeout($socket,$timeout);
+
+    try{
+        pr_smtp_command($socket,'',[220]);
+        $hello=parse_url((string)(pr_base_url()??''),PHP_URL_HOST);
+        $hello=is_string($hello)&&$hello!==''?$hello:'localhost';
+        pr_smtp_command($socket,'EHLO '.$hello,[250]);
+
+        if($encryption==='tls'){
+            pr_smtp_command($socket,'STARTTLS',[220]);
+            if(!stream_socket_enable_crypto($socket,true,STREAM_CRYPTO_METHOD_TLS_CLIENT)){
+                throw new RuntimeException('SMTP TLS başlatılamadı.');
+            }
+            pr_smtp_command($socket,'EHLO '.$hello,[250]);
+        }
+
+        if($username!==''){
+            pr_smtp_command($socket,'AUTH LOGIN',[334]);
+            pr_smtp_command($socket,base64_encode($username),[334]);
+            pr_smtp_command($socket,base64_encode($password),[235]);
+        }
+
+        @fwrite($socket,"QUIT\r\n");
+        fclose($socket);
+        return true;
+    }catch(Throwable){
+        if(is_resource($socket)) fclose($socket);
+        return false;
+    }
+}
+
 function pr_smtp_send(string $to,string $subject,string $body,array $config): bool {
     $host=trim((string)($config['host']??''));
     $port=max(1,min(65535,(int)($config['port']??587)));
@@ -292,19 +337,19 @@ function pr_smtp_send(string $to,string $subject,string $body,array $config): bo
     }
 }
 
-function pr_send_reset_email(string $email,string $url): bool {
-    $config=pr_mail_config();
+function pr_send_plain_email(string $email,string $subject,string $body,?array $configOverride=null): bool {
+    $config=$configOverride??pr_mail_config();
     $transport=strtolower(trim((string)($config['transport']??'disabled')));
     $from=trim((string)($config['from_email']??''));
     $fromName=pr_header_value((string)($config['from_name']??'İlkAdım'));
     if(!filter_var($email,FILTER_VALIDATE_EMAIL) || !filter_var($from,FILTER_VALIDATE_EMAIL)) return false;
 
-    $subject='İlkAdım şifre sıfırlama bağlantısı';
-    $body="Merhaba,\n\nİlkAdım hesabın için şifre sıfırlama talebi alındı.\n\n".
-        "Bağlantı 30 dakika boyunca ve yalnızca bir kez kullanılabilir:\n".$url."\n\n".
-        "Bu talebi sen yapmadıysan bu e-postayı yok sayabilirsin. Şifren değişmeyecektir.\n\nİlkAdım";
-
-    if($transport==='smtp') return pr_smtp_send($email,$subject,$body,array_merge($config,is_array($config['smtp']??null)?$config['smtp']:[]));
+    if($transport==='smtp'){
+        return pr_smtp_send(
+            $email,$subject,$body,
+            array_merge($config,is_array($config['smtp']??null)?$config['smtp']:$config)
+        );
+    }
 
     if($transport==='mail'){
         $headers=[
@@ -315,7 +360,16 @@ function pr_send_reset_email(string $email,string $url): bool {
         ];
         return @mail($email,pr_mail_subject($subject),$body,implode("\r\n",$headers));
     }
+
     return false;
+}
+
+function pr_send_reset_email(string $email,string $url): bool {
+    $subject='İlkAdım şifre sıfırlama bağlantısı';
+    $body="Merhaba,\n\nİlkAdım hesabın için şifre sıfırlama talebi alındı.\n\n".
+        "Bağlantı 30 dakika boyunca ve yalnızca bir kez kullanılabilir:\n".$url."\n\n".
+        "Bu talebi sen yapmadıysan bu e-postayı yok sayabilirsin. Şifren değişmeyecektir.\n\nİlkAdım";
+    return pr_send_plain_email($email,$subject,$body);
 }
 
 function pr_request_reset(PDO $pdo,string $email,string $ip): void {

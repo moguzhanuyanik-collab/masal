@@ -78,6 +78,20 @@ if (is_file($localFile)) {
     }
 }
 
+$mailSettingsFile = dirname(__DIR__) . '/storage/mail-settings.php';
+if (is_file($mailSettingsFile)) {
+    if (function_exists('opcache_invalidate')) @opcache_invalidate($mailSettingsFile, true);
+    $mailSettings = require $mailSettingsFile;
+    if (is_array($mailSettings)) {
+        if (is_array($mailSettings['app'] ?? null)) {
+            $defaults['app'] = array_replace($defaults['app'], $mailSettings['app']);
+        }
+        if (is_array($mailSettings['mail'] ?? null)) {
+            $defaults['mail'] = array_replace_recursive($defaults['mail'], $mailSettings['mail']);
+        }
+    }
+}
+
 $adimbotSettingsFile = dirname(__DIR__) . '/storage/adimbot-ai.php';
 if (is_file($adimbotSettingsFile)) {
     // Panel settings are mutable even when OPcache timestamp validation is disabled.

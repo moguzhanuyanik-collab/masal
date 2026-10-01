@@ -76,6 +76,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
   <p class="sa-sidebar-label">YETKİLENDİRME</p>
   <a href="yonetici-yetkileri.php"><svg><use href="#sa-shield"/></svg>Yönetici Yetkileri</a>
   <p class="sa-sidebar-label">SİSTEM</p>
+  <a href="eposta-ayarlari.php"><svg><use href="#sa-settings"/></svg>E-posta & SMTP</a>
   <a href="adimbot-ayarlari.php"><svg><use href="#sa-settings"/></svg>AdımBot AI Ayarları</a>
   <a href="sistem-durum.php"><svg><use href="#sa-database"/></svg>Sistem Durumu</a>
   <a href="guncelleme.php"><svg><use href="#sa-refresh"/></svg>Güncellemeler</a>
@@ -152,6 +153,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
     <a href="paketler.php"><span class="sa-menu-icon"><svg><use href="#sa-database"/></svg></span><span><strong>Paket & Lisanslar</strong><small>Kurum planları, kapasite limitleri ve lisans tarihleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="ticari-finans.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Ticari Finans</strong><small>Sözleşmeler, tahsilatlar, vadeler ve lisans yenilemeleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="bildirimler.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Bildirim & Duyurular</strong><small>Kurum duyuruları, sistem bildirimleri ve okunma takibi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="eposta-ayarlari.php"><span class="sa-menu-icon"><svg><use href="#sa-settings"/></svg></span><span><strong>E-posta & SMTP</strong><small>Şifre kurtarma, SMTP bağlantısı ve test e-postası</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="adimbot-ayarlari.php"><span class="sa-menu-icon"><svg><use href="#sa-settings"/></svg></span><span><strong>AdımBot AI Ayarları</strong><small>Groq API anahtarı, model ve kullanım sınırı</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
    </div>
    <div class="sa-status-list">
