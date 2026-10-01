@@ -305,12 +305,35 @@ function updater_core_handoff_marker_path(string $root): string {
 
 function read_updater_core_handoff_marker(string $root,string $targetCommit): ?array {
     $path=updater_core_handoff_marker_path($root);
-    if(!is_file($path) || !is_readable($path)) return null;
+    if(!is_file($path) || !is_readable($path) || is_link($path)) return null;
     $data=json_decode((string)file_get_contents($path),true);
     if(!is_array($data)) return null;
     if(trim((string)($data['target_commit']??''))!==$targetCommit) return null;
-    $backup=basename(trim((string)($data['application_backup']??'')));
-    if($backup==='' || !is_file(rtrim($root,'/\\').'/storage/backups/'.$backup)) return null;
+
+    $rawBackup=trim((string)($data['application_backup']??''));
+    $backup=basename($rawBackup);
+    if($backup==='' || $rawBackup!==$backup) return null;
+    $backupPath=rtrim($root,'/\\').'/storage/backups/'.$backup;
+    if(!is_file($backupPath) || is_link($backupPath)) return null;
+
+    $actualHash=update_file_sha256($backupPath,'Handoff uygulama yedeği');
+    $actualBytes=max(0,(int)(filesize($backupPath)?:0));
+    if($actualBytes<1) return null;
+
+    $format=max(1,(int)($data['format']??1));
+    if($format>=2){
+        $expectedHash=strtolower(trim((string)($data['application_backup_sha256']??'')));
+        $expectedBytes=max(0,(int)($data['application_backup_bytes']??0));
+        if(!preg_match('/^[a-f0-9]{64}$/',$expectedHash)) return null;
+        if($expectedBytes<1 || $expectedBytes!==$actualBytes) return null;
+        if(!hash_equals($expectedHash,$actualHash)) return null;
+    }else{
+        // Eski marker'larda kayıtlı hash yoktur. Dosyayı yalnız mevcut haliyle
+        // yeniden fingerprint edip bu istek için geçici olarak doğrulanmış kabul et.
+        $data['application_backup_sha256']=$actualHash;
+        $data['application_backup_bytes']=$actualBytes;
+        $data['legacy_marker']=true;
+    }
     return $data;
 }
 
@@ -322,7 +345,7 @@ function write_updater_core_handoff_marker(string $root,array $state): void {
     }
     $tmp=$path.'.tmp';
     $json=json_encode(
-        ['format'=>1,'updated_at'=>date(DATE_ATOM)]+$state,
+        ['format'=>2,'updated_at'=>date(DATE_ATOM)]+$state,
         JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT
     );
     if(!is_string($json)) throw new RuntimeException('Updater çekirdeği handoff kaydı oluşturulamadı.');
@@ -389,10 +412,17 @@ function prepare_updater_core_handoff(
             throw new RuntimeException('Updater çekirdeği etkinleştirme sonrası bütünlük doğrulamasından geçemedi.');
         }
 
+        $applicationBackupMeta=backup_artifact_metadata($root,$applicationBackup);
+        if($applicationBackupMeta===null || (int)($applicationBackupMeta['bytes']??0)<1){
+            throw new RuntimeException('Handoff uygulama yedeği bütünlük metadata değeri üretilemedi.');
+        }
+
         $state=[
             'target_version'=>$targetVersion,
             'target_commit'=>$targetCommit,
             'application_backup'=>basename($applicationBackup),
+            'application_backup_sha256'=>(string)$applicationBackupMeta['sha256'],
+            'application_backup_bytes'=>(int)$applicationBackupMeta['bytes'],
             'updater_backup'=>$backupName,
             'old_sha256'=>$targetHash,
             'new_sha256'=>$sourceHash,
@@ -547,6 +577,29 @@ function read_managed_update_manifest(string $root): array {
     return read_managed_file_list(rtrim($root,'/\\').'/update-managed-files.json');
 }
 
+function read_managed_file_hashes(string $path): array {
+    if(!is_file($path) || is_link($path)) return [];
+    $decoded=json_decode((string)file_get_contents($path),true);
+    if(!is_array($decoded) || !is_array($decoded['hashes']??null)) return [];
+
+    $hashes=[];
+    foreach($decoded['hashes'] as $relative=>$hash){
+        if(!is_string($relative) || !is_string($hash)) continue;
+        try{$relative=managed_relative_path($relative);}catch(Throwable){continue;}
+        $hash=strtolower(trim($hash));
+        if(preg_match('/^[a-f0-9]{64}$/',$hash)!==1) continue;
+        $hashes[$relative]=$hash;
+    }
+    ksort($hashes,SORT_STRING);
+    return $hashes;
+}
+
+function read_managed_update_hashes(string $root): array {
+    // Hash baseline yalnız runtime manifestinden okunur. Paket manifestinde hash
+    // olmaması eski kurulumlarda yanlış güven varsayımı üretmemelidir.
+    return read_managed_file_hashes(managed_manifest_path($root));
+}
+
 function write_managed_update_manifest(string $root,array $files,string $version,int $releaseRevision=0): void {
     $path=managed_manifest_path($root);
     $dir=dirname($path);
@@ -559,12 +612,22 @@ function write_managed_update_manifest(string $root,array $files,string $version
     sort($normalized,SORT_STRING);
     $normalized=array_values(array_unique($normalized));
 
+    $hashes=[];
+    foreach($normalized as $relative){
+        $target=assert_managed_target_safe($root,$relative);
+        if(!is_file($target) || is_link($target)){
+            throw new RuntimeException('Yönetilen dosya hash baseline oluşturulamadı: '.$relative);
+        }
+        $hashes[$relative]=update_file_sha256($target,'Yönetilen dosya');
+    }
+
     $json=json_encode([
-        'format'=>1,
+        'format'=>2,
         'version'=>$version,
         'release_revision'=>max(0,$releaseRevision),
         'written_at'=>date(DATE_ATOM),
         'files'=>$normalized,
+        'hashes'=>$hashes,
     ],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
     if(!is_string($json)) throw new RuntimeException('Yönetilen dosya manifesti kodlanamadı.');
 
@@ -745,7 +808,51 @@ function verify_activated_update_files(string $sourceRoot,string $root,array $fi
     return ['files'=>$verified,'bytes'=>$bytes];
 }
 
-function remove_stale_managed_files(string $root,array $oldFiles,array $newFiles,array $preserve): array {
+function assert_stale_managed_files_safe(
+    string $root,
+    array $oldFiles,
+    array $newFiles,
+    array $preserve,
+    array $oldHashes
+): array {
+    if($oldFiles===[]) return [];
+    $newLookup=array_fill_keys($newFiles,true);
+    $candidates=[];
+    foreach($oldFiles as $relative){
+        $relative=managed_relative_path((string)$relative);
+        if(isset($newLookup[$relative]) || path_is_preserved($relative,$preserve)) continue;
+
+        $target=assert_managed_target_safe($root,$relative);
+        if(!file_exists($target) && !is_link($target)) continue;
+        if(is_link($target) || !is_file($target)){
+            throw new RuntimeException('Eski yönetilen hedef normal dosya değil; otomatik silme durduruldu: '.$relative);
+        }
+
+        $expected=strtolower(trim((string)($oldHashes[$relative]??'')));
+        if(preg_match('/^[a-f0-9]{64}$/',$expected)!==1){
+            throw new RuntimeException(
+                'Eski yönetilen dosya için güvenilir hash baseline yok; otomatik silme durduruldu: '.$relative
+            );
+        }
+        $actual=update_file_sha256($target,'Eski yönetilen dosya');
+        if(!hash_equals($expected,$actual)){
+            throw new RuntimeException(
+                'Eski yönetilen dosya kurulumdan sonra değiştirilmiş; otomatik silme durduruldu: '.$relative
+            );
+        }
+        $candidates[]=$relative;
+    }
+    sort($candidates,SORT_STRING);
+    return $candidates;
+}
+
+function remove_stale_managed_files(
+    string $root,
+    array $oldFiles,
+    array $newFiles,
+    array $preserve,
+    array $oldHashes=[]
+): array {
     if($oldFiles===[]) return [];
     $newLookup=array_fill_keys($newFiles,true);
     $removed=[];
@@ -755,9 +862,23 @@ function remove_stale_managed_files(string $root,array $oldFiles,array $newFiles
 
         $target=assert_managed_target_safe($root,$relative);
         if(!file_exists($target) && !is_link($target)) continue;
-        if(is_dir($target) && !is_link($target)){
-            throw new RuntimeException('Eski yönetilen yol dosya yerine klasör oldu; otomatik silme durduruldu: '.$relative);
+        if(is_link($target) || !is_file($target)){
+            throw new RuntimeException('Eski yönetilen hedef normal dosya değil; otomatik silme durduruldu: '.$relative);
         }
+
+        $expected=strtolower(trim((string)($oldHashes[$relative]??'')));
+        if(preg_match('/^[a-f0-9]{64}$/',$expected)!==1){
+            throw new RuntimeException(
+                'Eski yönetilen dosya için güvenilir hash baseline yok; otomatik silme durduruldu: '.$relative
+            );
+        }
+        $actual=update_file_sha256($target,'Eski yönetilen dosya');
+        if(!hash_equals($expected,$actual)){
+            throw new RuntimeException(
+                'Eski yönetilen dosya silme öncesinde değiştirilmiş; otomatik silme durduruldu: '.$relative
+            );
+        }
+
         if(!@unlink($target)){
             throw new RuntimeException('Eski yönetilen dosya kaldırılamadı: '.$relative);
         }
@@ -1782,8 +1903,14 @@ function install_github_update(
         // Yalnız updater'ın daha önce yönettiği dosyalar stale cleanup adayıdır.
         // İlk manifest yoksa hiçbir canlı dosya silinmez; sadece yeni baseline kaydedilir.
         $oldManagedFiles=read_managed_update_manifest($root);
+        $oldManagedHashes=read_managed_update_hashes($root);
         $newManagedFiles=collect_managed_update_files($sourceRoot,$preserve);
         assert_packaged_manifest_matches_tree($manifestData,$newManagedFiles);
+        $stalePreflight=assert_stale_managed_files_safe(
+            $root,$oldManagedFiles,$newManagedFiles,$preserve,$oldManagedHashes
+        );
+        $recoveryState['stale_file_preflight']=$stalePreflight;
+        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
 
         // DB/migration aşamasından önce updater çekirdeğini güvenli biçimde el değiştir.
         // Bu PHP isteği bellekte eski kodla devam ettiği için burada temiz biçimde biter;
@@ -1878,7 +2005,9 @@ function install_github_update(
         );
         $recoveryState['activation_verification']=$activationVerification;
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
-        $removedManagedFiles=remove_stale_managed_files($root,$oldManagedFiles,$newManagedFiles,$preserve);
+        $removedManagedFiles=remove_stale_managed_files(
+            $root,$oldManagedFiles,$newManagedFiles,$preserve,$oldManagedHashes
+        );
         write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version'],normalize_release_revision($remote['release_revision']??0));
 
         $pdo->prepare("INSERT INTO sistem_ayarlar (ayar_anahtari,ayar_degeri) VALUES ('uygulama_surumu',?) ON DUPLICATE KEY UPDATE ayar_degeri=VALUES(ayar_degeri)")->execute([$remote['version']]);
