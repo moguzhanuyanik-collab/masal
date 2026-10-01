@@ -8,6 +8,7 @@ on:
       - 'hardening-*'
       - 'pwa-hardening-*'
       - 'updater-manifest-*'
+      - 'update-*'
       - 'db-ai-safety-*'
       - 'db-backup-*'
       - 'recovery-safety-*'
@@ -52,6 +53,7 @@ jobs:
           php tests/recovery-safety-100.php
           php tests/update-safety-102.php
           php tests/update-manifest-contract-103.php
+          php tests/update-activation-104.php
 
       - name: Node regression checks
         shell: bash
@@ -67,3 +69,4 @@ jobs:
           node tests/update-release-anchor-101.cjs
           node tests/update-safety-102.cjs
           node tests/update-manifest-contract-103.cjs
+          node tests/update-activation-104.cjs
