@@ -6,6 +6,8 @@ require __DIR__.'/src/auth.php';
 require __DIR__.'/src/kurum_lisanslari.php';
 require __DIR__.'/src/bildirimler.php';
 require __DIR__.'/src/lisans_yenileme.php';
+require __DIR__.'/src/ticari_finans.php';
+require __DIR__.'/src/lisans_yenileme_ticari.php';
 
 $user=require_role('super_admin');
 $pdo=db();
@@ -98,6 +100,12 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             exit;
         }
 
+        if($action==='contract_draft'){
+            $contractId=lyt_create_contract_draft($pdo,$user,$renewalId,$_POST);
+            header('Location: lisans-yenilemeleri.php?yenileme_id='.$renewalId.'&ok='.rawurlencode('Yenileme için sözleşme taslağı oluşturuldu (#'.$contractId.').'));
+            exit;
+        }
+
         throw new RuntimeException('Geçersiz işlem.');
     }catch(Throwable $e){
         $error=$e->getMessage();
@@ -111,10 +119,15 @@ $filters=[
 $summary=$ready?ly_summary($pdo):[];
 $rows=$ready?ly_queue_rows($pdo,$filters):[];
 $packages=kl_tables_ready($pdo)?kl_package_rows($pdo,false):[];
+$commercialReady=lyt_tables_ready($pdo);
+$commercialSummary=$commercialReady?lyt_gap_summary($pdo):[];
+$commercialRevenue=$commercialReady?lyt_revenue_summary($pdo):[];
+$commercialRows=$commercialReady?lyt_gap_rows($pdo,200):[];
 
 $selectedId=max(0,(int)($_GET['yenileme_id']??0));
 $selected=$selectedId>0&&$ready?ly_case_row($pdo,$selectedId):null;
 $history=$selected?ly_history_rows($pdo,$selectedId):[];
+$selectedContract=$selected&&$commercialReady?lyt_contract_relation($pdo,$selectedId):null;
 ?>
 <!doctype html>
 <html lang="tr">
@@ -124,7 +137,7 @@ $history=$selected?ly_history_rows($pdo,$selectedId):[];
 <title>Lisans Yenilemeleri — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
-<link rel="stylesheet" href="lisans-yenilemeleri.css?v=1.2.48">
+<link rel="stylesheet" href="lisans-yenilemeleri.css?v=1.2.49">
 </head>
 <body class="role-page sa-subpage">
 <?php require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -161,6 +174,47 @@ $history=$selected?ly_history_rows($pdo,$selectedId):[];
 <a href="lisans-yenilemeleri.php?durum=yenilendi"><strong><?=(int)($summary['yenilendi']??0)?></strong><span>Yenilendi</span></a>
 <a href="lisans-yenilemeleri.php?durum=yenilenmedi"><strong><?=(int)($summary['yenilenmedi']??0)?></strong><span>Yenilenmedi</span></a>
 </section>
+
+<?php if($commercialReady):?>
+<section class="role-section">
+<div class="role-section-head"><div><span class="eyeline">TİCARİ TAMAMLAMA</span><h2>Yenileme → Sözleşme → Tahsilat</h2></div><span class="role-pill"><?=count($commercialRows)?> yenilenmiş vaka</span></div>
+<div class="role-stats">
+<div class="role-stat"><span>📄</span><strong><?=(int)($commercialSummary['sozlesme_yok']??0)?></strong><small>Yenilendi · sözleşme yok</small></div>
+<div class="role-stat"><span>📝</span><strong><?=(int)($commercialSummary['sozlesme_taslak']??0)?></strong><small>Sözleşme taslak</small></div>
+<div class="role-stat"><span>₺</span><strong><?=(int)($commercialSummary['tahsilat_yok']??0)?></strong><small>Aktif sözleşme · tahsilat yok</small></div>
+<div class="role-stat"><span>◐</span><strong><?=(int)($commercialSummary['kismi_tahsilat']??0)?></strong><small>Kısmi tahsilat</small></div>
+<div class="role-stat"><span>✓</span><strong><?=(int)($commercialSummary['tamam']??0)?></strong><small>Ticari akış tamam</small></div>
+</div>
+
+<?php if($commercialRevenue):?>
+<div class="ly-revenue-grid">
+<?php foreach($commercialRevenue as $revenue):?>
+<div class="ly-revenue-card">
+<span><?=lyh((string)$revenue['para_birimi'])?></span>
+<strong><?=number_format((float)$revenue['tahsil_edilen'],2,',','.')?> / <?=number_format((float)$revenue['sozlesme_toplami'],2,',','.')?></strong>
+<small>Tahsilat / yenileme sözleşmesi · Kalan <?=number_format((float)$revenue['kalan_tutar'],2,',','.')?> · <?=(int)$revenue['yenileme_sayisi']?> yenileme</small>
+</div>
+<?php endforeach;?>
+</div>
+<?php endif;?>
+
+<div class="role-list ly-commercial-list">
+<?php foreach($commercialRows as $commercial): if((string)$commercial['ticari_durum']==='tamam') continue;?>
+<a class="role-row" href="lisans-yenilemeleri.php?yenileme_id=<?=(int)$commercial['yenileme_id']?>">
+<span><?=in_array((string)$commercial['ticari_durum'],['sozlesme_yok','sozlesme_kaydi_yok','sozlesme_iptal'],true)?'⚠️':'₺'?></span>
+<div><strong><?=lyh((string)$commercial['kurum_adi'])?> · <?=lyh((string)$commercial['paket_adi'])?></strong>
+<small><?=lyh(lyt_gap_label((string)$commercial['ticari_durum']))?>
+<?php if(!empty($commercial['sozlesme_no'])):?> · <?=lyh((string)$commercial['sozlesme_no'])?><?php endif;?>
+<?php if(!empty($commercial['para_birimi'])):?> · <?=number_format((float)$commercial['tahsil_edilen'],2,',','.')?> / <?=number_format((float)$commercial['toplam_tutar'],2,',','.')?> <?=lyh((string)$commercial['para_birimi'])?><?php endif;?>
+</small></div>
+<span class="role-pill"><?=lyh(lyt_gap_label((string)$commercial['ticari_durum']))?></span>
+</a>
+<?php endforeach;?>
+</div>
+</section>
+<?php else:?>
+<div class="role-note"><span>ℹ️</span><p>Yenileme–sözleşme ticari bağlantısı 081 migration kurulduğunda otomatik açılır.</p></div>
+<?php endif;?>
 
 <section class="role-section">
 <div class="role-section-head">
@@ -308,6 +362,49 @@ $days=(int)$selected['kalan_gun'];
 <textarea class="role-input" name="neden" minlength="3" maxlength="1000" rows="3" required placeholder="Bütçe, kurum kararı, hizmet sonlandırma..."></textarea>
 <button class="role-button ly-danger" type="submit">Yenilenmedi Olarak Kapat</button>
 </form>
+<?php endif;?>
+
+<?php if($status==='yenilendi'):?>
+<div class="ly-commercial-detail">
+<h3>Ticari Bağlantı</h3>
+<?php if(!$commercialReady):?>
+<div class="role-note"><span>ℹ️</span><p>081 migration kurulunca yenileme vakasını sözleşmeye bağlayabilirsin.</p></div>
+<?php elseif($selectedContract):?>
+<div class="ly-detail-grid">
+<div><span>Sözleşme</span><strong><?=lyh((string)$selectedContract['sozlesme_no'])?></strong></div>
+<div><span>Durum</span><strong><?=lyh(tf_status((string)$selectedContract['durum']))?></strong></div>
+<div><span>Toplam</span><strong><?=number_format((float)$selectedContract['toplam_tutar'],2,',','.')?> <?=lyh((string)$selectedContract['para_birimi'])?></strong></div>
+<div><span>Tahsil Edilen</span><strong><?=number_format((float)$selectedContract['tahsil_edilen'],2,',','.')?> <?=lyh((string)$selectedContract['para_birimi'])?></strong></div>
+<div><span>Kalan</span><strong><?=number_format((float)$selectedContract['kalan_tutar'],2,',','.')?> <?=lyh((string)$selectedContract['para_birimi'])?></strong></div>
+<div><span>Vade</span><strong><?=lyh((string)($selectedContract['vade_tarihi']?:'—'))?></strong></div>
+</div>
+<div class="ly-links">
+<a class="role-pill ok" href="ticari-finans.php?sozlesme_id=<?=(int)$selectedContract['sozlesme_id']?>">Sözleşmeyi Aç →</a>
+</div>
+<?php else:?>
+<form class="role-form ly-card ly-contract-draft" method="post">
+<input type="hidden" name="csrf" value="<?=lyh(csrf_token())?>">
+<input type="hidden" name="action" value="contract_draft">
+<input type="hidden" name="yenileme_id" value="<?=(int)$selected['id']?>">
+<h3>Sözleşme Taslağı Oluştur</h3>
+<div class="role-note"><span>📄</span><p>Sözleşme başlangıcı otomatik olarak eski lisans bitişinin ertesi günü, bitişi ise yenilenen lisansın yeni bitiş tarihi olur. Toplam tutar otomatik hesaplanmaz; ticari anlaşmadaki gerçek tutarı gir.</p></div>
+<label>Sözleşme numarası</label>
+<input class="role-input" name="sozlesme_no" maxlength="80" required value="<?=lyh('IA-YEN-'.(string)$selected['id'].'-'.date('Y'))?>">
+<label>Toplam sözleşme tutarı</label>
+<input class="role-input" inputmode="decimal" name="toplam_tutar" required placeholder="0,00">
+<label>Para birimi</label>
+<select class="role-input" name="para_birimi">
+<option value="TRY">TRY</option><option value="USD">USD</option><option value="EUR">EUR</option>
+</select>
+<label>Vade tarihi <small>İsteğe bağlı</small></label>
+<input class="role-input" type="date" name="vade_tarihi">
+<label>Not <small>İsteğe bağlı</small></label>
+<textarea class="role-input" name="notlar" rows="3" maxlength="1600"></textarea>
+<button class="role-button" type="submit">Sözleşme Taslağını Oluştur</button>
+<small>Taslak sözleşmeye tahsilat girilemez. Ticari Finans ekranında kontrol edip “Aktif” durumuna aldıktan sonra tahsilat kaydedebilirsin.</small>
+</form>
+<?php endif;?>
+</div>
 <?php endif;?>
 
 <div class="ly-history">
