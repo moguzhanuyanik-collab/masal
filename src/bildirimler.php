@@ -1,9 +1,22 @@
 <?php
 declare(strict_types=1);
 
+function bd_table_exists(PDO $pdo,string $table): bool {
+    if(!preg_match('/^[A-Za-z0-9_]+$/D',$table)) return false;
+    try{
+        $stmt=$pdo->prepare('SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name=?');
+        $stmt->execute([$table]);
+        $exists=(int)$stmt->fetchColumn()>0;
+        $stmt->closeCursor();
+        return $exists;
+    }catch(Throwable){
+        return false;
+    }
+}
+
 function bd_tables_ready(PDO $pdo): bool {
-    return auth_runtime_table_exists($pdo,'kurum_duyurulari')
-        && auth_runtime_table_exists($pdo,'kurum_duyuru_alicilari');
+    return bd_table_exists($pdo,'kurum_duyurulari')
+        && bd_table_exists($pdo,'kurum_duyuru_alicilari');
 }
 
 function bd_recipient_roles(): array {
@@ -184,7 +197,7 @@ function bd_target_student_recipients(PDO $pdo,int $institutionId,array $student
     $stmt->closeCursor();
     if(!is_array($recipients)) $recipients=[];
 
-    if($includeParents && auth_runtime_table_exists($pdo,'veli_ogrenci') && auth_runtime_table_exists($pdo,'veliler')){
+    if($includeParents && bd_table_exists($pdo,'veli_ogrenci') && bd_table_exists($pdo,'veliler')){
         $params=array_merge([$institutionId,$institutionId],$studentIds);
         $stmt=$pdo->prepare("SELECT DISTINCT v.kullanici_id,'veli' kurum_rolu
             FROM veli_ogrenci vo
