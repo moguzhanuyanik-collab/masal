@@ -31,7 +31,7 @@ $error='';
 $success=trim((string)($_GET['ok']??''));
 $ready=ly_tables_ready($pdo);
 
-if($ready){
+if($ready && $_SERVER['REQUEST_METHOD']!=='POST'){
     try{
         ly_sync_cases($pdo,$user,30);
     }catch(Throwable $e){
@@ -44,6 +44,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         if(!verify_csrf($_POST['csrf']??null)) throw new RuntimeException('Güvenlik doğrulaması başarısız. Sayfayı yenileyip tekrar dene.');
         if(!$ready) throw new RuntimeException('Lisans yenileme migrationı henüz kurulmamış.');
 
+        ly_sync_cases($pdo,$user,30);
         $action=(string)($_POST['action']??'');
         $renewalId=max(0,(int)($_POST['yenileme_id']??0));
 
