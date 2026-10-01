@@ -56,13 +56,33 @@ function thd_teacher_homeworks(
     int $teacherUserId,
     int $institutionId=0,
     string $publication='tum',
-    string $delivery='tum'
+    string $delivery='tum',
+    int $groupId=0
 ): array {
     $teacherId=thd_teacher_profile_id($pdo,$teacherUserId);
     if($teacherId<=0) return [];
 
     if(!in_array($publication,['tum','aktif','pasif'],true)) $publication='tum';
     if(!in_array($delivery,['tum','pending','overdue','completed','no_target'],true)) $delivery='tum';
+    $groupId=max(0,$groupId);
+
+    if($groupId>0 && !oi_table_exists($pdo,'ogretmen_icerik_hedef_gruplari')) return [];
+
+    $groupStudentCondition='';
+    $groupContentCondition='';
+    if($groupId>0){
+        $groupStudentCondition=" AND EXISTS (
+            SELECT 1 FROM ogretmen_icerik_hedef_gruplari ghs
+            WHERE ghs.icerik_id=oi.id
+              AND ghs.kurum_sinif_id={$groupId}
+              AND ghs.ogrenci_id=os.id
+        )";
+        $groupContentCondition=" AND EXISTS (
+            SELECT 1 FROM ogretmen_icerik_hedef_gruplari ghc
+            WHERE ghc.icerik_id=oi.id
+              AND ghc.kurum_sinif_id={$groupId}
+        )";
+    }
 
     $sql="SELECT oi.id,oi.kurum_id,oi.baslik,oi.icerik_metni,oi.hedef_turu,
         oi.teslim_tarihi,oi.aktif,oi.olusturulma_tarihi,
@@ -72,12 +92,14 @@ function thd_teacher_homeworks(
              AND su.id IS NOT NULL
              AND sk.kullanici_id IS NOT NULL
              AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
+             {$groupStudentCondition}
             THEN os.id END) hedef_sayisi,
         COUNT(DISTINCT CASE
             WHEN os.id IS NOT NULL
              AND su.id IS NOT NULL
              AND sk.kullanici_id IS NOT NULL
              AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
+             {$groupStudentCondition}
              AND COALESCE(od.tamamlandi,0)=1
             THEN os.id END) tamamlanan_sayisi,
         COUNT(DISTINCT CASE
@@ -85,6 +107,7 @@ function thd_teacher_homeworks(
              AND su.id IS NOT NULL
              AND sk.kullanici_id IS NOT NULL
              AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
+             {$groupStudentCondition}
              AND COALESCE(od.tamamlandi,0)=0
              AND oi.teslim_tarihi IS NOT NULL
              AND oi.teslim_tarihi<NOW()
@@ -122,7 +145,8 @@ function thd_teacher_homeworks(
           ON od.icerik_id=oi.id
          AND od.ogrenci_id=os.id
         WHERE oi.ogretmen_id=?
-          AND oi.icerik_turu='odev'";
+          AND oi.icerik_turu='odev'
+          {$groupContentCondition}";
     $params=[$teacherUserId,$teacherId];
 
     if($institutionId>0){
