@@ -138,6 +138,7 @@ jobs:
           node tests/teacher-group-targeting-155.cjs
           node tests/teacher-dashboard-group-filter-156.cjs
           node tests/institution-group-performance-157.cjs
+          node tests/global-archive-158.cjs
 
   tenant-db-integration:
     name: Tenant DB integration
@@ -211,4 +212,5 @@ jobs:
           php tests/teacher-group-targeting-db-155.php
           php tests/teacher-dashboard-group-filter-db-156.php
           php tests/institution-group-performance-db-157.php
+          php tests/global-archive-db-158.php
 

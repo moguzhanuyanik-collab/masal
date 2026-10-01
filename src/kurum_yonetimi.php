@@ -307,6 +307,112 @@ function ky_deactivate_global_user(PDO $pdo,array $actor,string $role,int $userI
     auth_audit($pdo,(int)$actor['id'],$userId,'global_kullanici_pasif','Rol: '.$role);
 }
 
+
+function ky_global_archived_users(PDO $pdo,string $role='tum'): array {
+    if(!in_array($role,['tum','ogrenci','veli'],true)) $role='tum';
+    $rows=[];
+
+    if($role==='tum' || $role==='ogrenci'){
+        $s=$pdo->query("SELECT 'ogrenci' rol,
+            k.id kullanici_id,k.ad_soyad,k.email,k.aktif kullanici_aktif,
+            o.id profil_id,o.aktif profil_aktif,o.ad,o.sinif_seviyesi,
+            GROUP_CONCAT(DISTINCT pv.ad_soyad ORDER BY pv.ad_soyad SEPARATOR ', ') bagli_adlar
+          FROM kullanicilar k
+          INNER JOIN ogrenciler o ON o.kullanici_id=k.id
+          LEFT JOIN veli_ogrenci vo ON vo.ogrenci_id=o.id AND vo.kurum_id=0
+          LEFT JOIN veliler v ON v.id=vo.veli_id
+          LEFT JOIN kullanicilar pv ON pv.id=v.kullanici_id
+          WHERE (k.aktif=0 OR o.aktif=0)
+            AND NOT EXISTS (
+              SELECT 1 FROM kurum_kullanicilari kk
+              WHERE kk.kullanici_id=k.id AND kk.aktif=1
+            )
+          GROUP BY k.id,k.ad_soyad,k.email,k.aktif,o.id,o.aktif,o.ad,o.sinif_seviyesi");
+        $studentRows=$s?$s->fetchAll():[];
+        if($s)$s->closeCursor();
+        if(is_array($studentRows)) $rows=array_merge($rows,$studentRows);
+    }
+
+    if($role==='tum' || $role==='veli'){
+        $s=$pdo->query("SELECT 'veli' rol,
+            k.id kullanici_id,k.ad_soyad,k.email,k.aktif kullanici_aktif,
+            v.id profil_id,v.aktif profil_aktif,k.ad_soyad ad,NULL sinif_seviyesi,
+            GROUP_CONCAT(DISTINCT o.ad ORDER BY o.ad SEPARATOR ', ') bagli_adlar
+          FROM kullanicilar k
+          INNER JOIN veliler v ON v.kullanici_id=k.id
+          LEFT JOIN veli_ogrenci vo ON vo.veli_id=v.id AND vo.kurum_id=0
+          LEFT JOIN ogrenciler o ON o.id=vo.ogrenci_id
+          WHERE (k.aktif=0 OR v.aktif=0)
+            AND NOT EXISTS (
+              SELECT 1 FROM kurum_kullanicilari kk
+              WHERE kk.kullanici_id=k.id AND kk.aktif=1
+            )
+          GROUP BY k.id,k.ad_soyad,k.email,k.aktif,v.id,v.aktif");
+        $parentRows=$s?$s->fetchAll():[];
+        if($s)$s->closeCursor();
+        if(is_array($parentRows)) $rows=array_merge($rows,$parentRows);
+    }
+
+    usort($rows,static function(array $a,array $b): int {
+        $roleOrder=['ogrenci'=>0,'veli'=>1];
+        $ra=$roleOrder[(string)($a['rol']??'')]??9;
+        $rb=$roleOrder[(string)($b['rol']??'')]??9;
+        if($ra!==$rb) return $ra<=>$rb;
+        return strcasecmp((string)($a['ad_soyad']??''),(string)($b['ad_soyad']??''));
+    });
+
+    return $rows;
+}
+
+function ky_restore_global_user(PDO $pdo,array $actor,string $role,int $userId): void {
+    if(!auth_user_has_role($actor,'super_admin')) throw new RuntimeException('Bu işlem yalnızca Süper Admin içindir.');
+    if($userId<=0 || !in_array($role,['ogrenci','veli'],true)) throw new RuntimeException('Geçersiz global kullanıcı.');
+
+    if($role==='ogrenci'){
+        $s=$pdo->prepare("SELECT k.id kullanici_id,o.id profil_id
+          FROM kullanicilar k
+          INNER JOIN ogrenciler o ON o.kullanici_id=k.id
+          WHERE k.id=?
+            AND (k.aktif=0 OR o.aktif=0)
+            AND NOT EXISTS (
+              SELECT 1 FROM kurum_kullanicilari kk
+              WHERE kk.kullanici_id=k.id AND kk.aktif=1
+            )
+          LIMIT 1");
+    }else{
+        $s=$pdo->prepare("SELECT k.id kullanici_id,v.id profil_id
+          FROM kullanicilar k
+          INNER JOIN veliler v ON v.kullanici_id=k.id
+          WHERE k.id=?
+            AND (k.aktif=0 OR v.aktif=0)
+            AND NOT EXISTS (
+              SELECT 1 FROM kurum_kullanicilari kk
+              WHERE kk.kullanici_id=k.id AND kk.aktif=1
+            )
+          LIMIT 1");
+    }
+    $s->execute([$userId]);
+    $row=$s->fetch();
+    $s->closeCursor();
+    if(!is_array($row)) throw new RuntimeException('Arşivlenmiş global kullanıcı bulunamadı veya hesap artık bir kuruma bağlı.');
+
+    $pdo->beginTransaction();
+    try{
+        $pdo->prepare('UPDATE kullanicilar SET aktif=1 WHERE id=?')->execute([$userId]);
+        if($role==='ogrenci'){
+            $pdo->prepare('UPDATE ogrenciler SET aktif=1 WHERE id=?')->execute([(int)$row['profil_id']]);
+        }else{
+            $pdo->prepare('UPDATE veliler SET aktif=1 WHERE id=?')->execute([(int)$row['profil_id']]);
+        }
+        $pdo->commit();
+    }catch(Throwable $e){
+        if($pdo->inTransaction()) $pdo->rollBack();
+        throw $e;
+    }
+
+    auth_audit($pdo,(int)$actor['id'],$userId,'global_kullanici_aktif','Rol: '.$role);
+}
+
 function ky_manager_student_report_contexts(PDO $pdo,array $user,int $studentId): array {
     if($studentId<=0 || !yy_can($pdo,$user,'kurum_goruntule')) return [];
 

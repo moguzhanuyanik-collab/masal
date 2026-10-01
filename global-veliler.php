@@ -31,7 +31,7 @@ $parents=ky_global_parents($pdo);
 <?php if($error):?><div class="role-note"><span><svg><use href="#sa-alert"/></svg></span><p><?=ky_h($error)?></p></div><?php endif;?>
 
 <section class="role-section">
-<div class="sa-data-toolbar"><div><span class="eyeline">VELİLER</span><h2>Global Veli Listesi</h2><small><?=count($parents)?> kayıt</small></div><div class="sa-data-actions"><a class="sa-secondary-btn" href="global-eslestirme.php">Eşleştirme</a><button class="sa-primary-btn" type="button" data-open-create>+ Yeni Veli</button></div></div>
+<div class="sa-data-toolbar"><div><span class="eyeline">VELİLER</span><h2>Global Veli Listesi</h2><small><?=count($parents)?> kayıt</small></div><div class="sa-data-actions"><a class="sa-secondary-btn" href="global-arsiv.php?rol=veli">Arşiv</a><a class="sa-secondary-btn" href="global-eslestirme.php">Eşleştirme</a><button class="sa-primary-btn" type="button" data-open-create>+ Yeni Veli</button></div></div>
 <div class="sa-table-card"><div class="sa-table-scroll"><table class="sa-data-table"><thead><tr><th>Veli</th><th>E-posta</th><th>Öğrenci</th><th>Durum</th><th class="sa-actions-col">İşlemler</th></tr></thead><tbody>
 <?php if(!$parents):?><tr><td colspan="5" class="sa-empty-cell">Henüz global veli yok.</td></tr><?php endif;?>
 <?php foreach($parents as $p):?><tr>
