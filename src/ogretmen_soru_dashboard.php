@@ -26,8 +26,12 @@ function tsd_teacher_questions(
     elseif($publication==='pasif') $where[]='oi.aktif=0';
 
     $rewardSelect=oi_table_exists($pdo,'ogretmen_icerik_yildiz_odulleri')
-        ?",COUNT(DISTINCT CASE WHEN yr.ogrenci_id IS NOT NULL THEN o.id END) odullendirilen_sayisi,
-           COALESCE(SUM(CASE WHEN o.id IS NOT NULL THEN yr.yildiz_degeri ELSE 0 END),0) dagitilan_yildiz"
+        ?",COUNT(DISTINCT CASE
+             WHEN o.id IS NOT NULL AND su.id IS NOT NULL AND sk.kullanici_id IS NOT NULL AND yr.ogrenci_id IS NOT NULL
+             THEN o.id END) odullendirilen_sayisi,
+           COALESCE(SUM(CASE
+             WHEN o.id IS NOT NULL AND su.id IS NOT NULL AND sk.kullanici_id IS NOT NULL
+             THEN COALESCE(yr.yildiz_degeri,0) ELSE 0 END),0) dagitilan_yildiz"
         :",0 odullendirilen_sayisi,0 dagitilan_yildiz";
     $rewardJoin=oi_table_exists($pdo,'ogretmen_icerik_yildiz_odulleri')
         ?"LEFT JOIN ogretmen_icerik_yildiz_odulleri yr
@@ -40,20 +44,28 @@ function tsd_teacher_questions(
         COALESCE(dm.baslik,oi.konu_basligi,'Genel') konu_adi,
         COUNT(DISTINCT CASE
           WHEN o.id IS NOT NULL
+           AND su.id IS NOT NULL
+           AND sk.kullanici_id IS NOT NULL
            AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
           THEN o.id END) hedef_sayisi,
         COUNT(DISTINCT CASE
           WHEN o.id IS NOT NULL
+           AND su.id IS NOT NULL
+           AND sk.kullanici_id IS NOT NULL
            AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
            AND c.secilen_cevap_indeksi IS NOT NULL
           THEN o.id END) cevaplayan_sayisi,
         COUNT(DISTINCT CASE
           WHEN o.id IS NOT NULL
+           AND su.id IS NOT NULL
+           AND sk.kullanici_id IS NOT NULL
            AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
            AND c.dogru=1
           THEN o.id END) dogru_sayisi,
         COUNT(DISTINCT CASE
           WHEN o.id IS NOT NULL
+           AND su.id IS NOT NULL
+           AND sk.kullanici_id IS NOT NULL
            AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
            AND c.secilen_cevap_indeksi IS NOT NULL
            AND c.dogru=0
@@ -92,7 +104,6 @@ function tsd_teacher_questions(
          AND c.ogrenci_id=o.id
         {$rewardJoin}
         WHERE ".implode(' AND ',$where)."
-          AND (o.id IS NULL OR (su.id IS NOT NULL AND sk.kullanici_id IS NOT NULL))
         GROUP BY oi.id,oi.kurum_id,oi.baslik,oi.soru,oi.yildiz_degeri,oi.aktif,oi.olusturulma_tarihi,
                  k.ad,d.ad,d.emoji,dm.baslik,oi.konu_basligi
         ORDER BY oi.aktif DESC,oi.olusturulma_tarihi DESC,oi.id DESC";
