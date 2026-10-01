@@ -22,7 +22,10 @@ assert(domain.includes("'ogrenci'=>'ogrenci_limiti'"),'student capacity mapping 
 assert(domain.includes("'ogretmen'=>'ogretmen_limiti'"),'teacher capacity mapping missing');
 assert(domain.includes("'veli'=>'veli_limiti'"),'parent capacity mapping missing');
 assert(domain.includes("if($limit===0) return;"),'zero package limit must mean unlimited');
-assert(domain.includes("ON DUPLICATE KEY UPDATE"),'institution license must update safely instead of duplicate');
+assert(domain.includes("SELECT id,kurum_id,kl.paket_id") || domain.includes("function kl_license_state("),
+      'institution license state resolver/lock missing');
+assert(domain.includes("if($before){"),'institution license update must distinguish existing current row');
+assert(domain.includes("INSERT INTO kurum_lisanslari"),'institution license create path missing');
 
 assert(management.includes("require_once __DIR__.'/kurum_lisanslari.php';"),'institution member domain must load license guard');
 assert(management.includes('kl_assert_member_capacity($pdo,$institutionId,$role);'),'member create must enforce active license capacity');
