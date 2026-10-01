@@ -14,6 +14,7 @@
   "purpose": "Immutable recovery package lock. A 1.1.97 installation must recover to this exact 1.2.1 source authority; mutable main HEAD is never the recovery target.",
   "bootstrap": {
     "version": "1.2.16",
-    "release_revision": 1
+    "release_revision": 1,
+    "commit": "ea5ddda3a90cdc0ace01729cee827a532d673fe9"
   }
 }
