@@ -994,6 +994,9 @@ if (!function_exists('auth_accessible_student_ids')) {
             && auth_runtime_table_exists($pdo,'kurumlar')
             && auth_runtime_column_exists($pdo,'ogretmenler','kullanici_id')) {
             try {
+                $institutionIds=auth_user_institution_ids($pdo,$userId,'ogretmen');
+                if(!$institutionIds) return [];
+                $ph=implode(',',array_fill(0,count($institutionIds),'?'));
                 $stmt=$pdo->prepare("SELECT DISTINCT oo.ogrenci_id
                     FROM ogretmen_ogrenci oo
                     INNER JOIN ogretmenler o
@@ -1019,8 +1022,9 @@ if (!function_exists('auth_accessible_student_ids')) {
                      AND ks.kurum_rolu='ogrenci'
                      AND ks.aktif=1
                     WHERE oo.kurum_id=kt.kurum_id
+                      AND kt.kurum_id IN ({$ph})
                     ORDER BY oo.ogrenci_id");
-                $stmt->execute([$userId]);
+                $stmt->execute(array_merge([$userId],$institutionIds));
                 $ids=array_map('intval',$stmt->fetchAll(PDO::FETCH_COLUMN)?:[]);
                 $stmt->closeCursor();
                 return array_values(array_filter($ids,static fn(int $id):bool=>$id>0));
@@ -1036,65 +1040,63 @@ if (!function_exists('auth_accessible_student_ids')) {
             && auth_runtime_table_exists($pdo,'kurumlar')
             && auth_runtime_column_exists($pdo,'veliler','kullanici_id')) {
             try {
-                // Kuruma bağlı veliler yalnızca çocuklarıyla ortak aktif kurumda
-                // erişebilir. Eski/bağımsız platform hesapları için, hem veli hem
-                // öğrenci hiçbir aktif kuruma bağlı değilse doğrudan eşleştirme
-                // korunur; bu, kurumlar arası erişim sağlamaz.
-                $stmt=$pdo->prepare("SELECT DISTINCT vo.ogrenci_id
-                    FROM veli_ogrenci vo
-                    INNER JOIN veliler v
-                      ON v.id=vo.veli_id
-                     AND v.kullanici_id=?
-                     AND v.aktif=1
-                    INNER JOIN ogrenciler s
-                      ON s.id=vo.ogrenci_id
-                     AND s.aktif=1
-                    INNER JOIN kullanicilar su
-                      ON su.id=s.kullanici_id
-                     AND su.aktif=1
-                    WHERE (
-                        EXISTS (
-                            SELECT 1
-                            FROM kurum_kullanicilari vk
-                            INNER JOIN kurum_kullanicilari sk
-                              ON sk.kurum_id=vk.kurum_id
-                             AND sk.kullanici_id=s.kullanici_id
-                             AND sk.kurum_rolu='ogrenci'
-                             AND sk.aktif=1
-                            INNER JOIN kurumlar k
-                              ON k.id=vk.kurum_id
-                             AND k.aktif=1
-                            WHERE vk.kullanici_id=v.kullanici_id
-                              AND vk.kurum_rolu='veli'
-                              AND vk.aktif=1
-                              AND vo.kurum_id=vk.kurum_id
-                        )
-                        OR (
-                            NOT EXISTS (
-                                SELECT 1
-                                FROM kurum_kullanicilari vk0
-                                INNER JOIN kurumlar k0
-                                  ON k0.id=vk0.kurum_id
-                                 AND k0.aktif=1
-                                WHERE vk0.kullanici_id=v.kullanici_id
-                                  AND vk0.kurum_rolu='veli'
-                                  AND vk0.aktif=1
-                            )
-                            AND NOT EXISTS (
-                                SELECT 1
-                                FROM kurum_kullanicilari sk0
-                                INNER JOIN kurumlar k1
-                                  ON k1.id=sk0.kurum_id
-                                 AND k1.aktif=1
-                                WHERE sk0.kullanici_id=s.kullanici_id
-                                  AND sk0.kurum_rolu='ogrenci'
-                                  AND sk0.aktif=1
-                            )
-                            AND vo.kurum_id=0
-                        )
-                    )
-                    ORDER BY vo.ogrenci_id");
-                $stmt->execute([$userId]);
+                $rawInstitutionIds=auth_user_institution_ids_raw($pdo,$userId,'veli');
+                if($rawInstitutionIds){
+                    $institutionIds=auth_user_institution_ids($pdo,$userId,'veli');
+                    if(!$institutionIds) return [];
+                    $ph=implode(',',array_fill(0,count($institutionIds),'?'));
+                    $stmt=$pdo->prepare("SELECT DISTINCT vo.ogrenci_id
+                        FROM veli_ogrenci vo
+                        INNER JOIN veliler v
+                          ON v.id=vo.veli_id
+                         AND v.kullanici_id=?
+                         AND v.aktif=1
+                        INNER JOIN ogrenciler s
+                          ON s.id=vo.ogrenci_id
+                         AND s.aktif=1
+                        INNER JOIN kullanicilar su
+                          ON su.id=s.kullanici_id
+                         AND su.aktif=1
+                        INNER JOIN kurum_kullanicilari vk
+                          ON vk.kullanici_id=v.kullanici_id
+                         AND vk.kurum_rolu='veli'
+                         AND vk.aktif=1
+                        INNER JOIN kurum_kullanicilari sk
+                          ON sk.kurum_id=vk.kurum_id
+                         AND sk.kullanici_id=s.kullanici_id
+                         AND sk.kurum_rolu='ogrenci'
+                         AND sk.aktif=1
+                        INNER JOIN kurumlar k
+                          ON k.id=vk.kurum_id
+                         AND k.aktif=1
+                        WHERE vo.kurum_id=vk.kurum_id
+                          AND vk.kurum_id IN ({$ph})
+                        ORDER BY vo.ogrenci_id");
+                    $stmt->execute(array_merge([$userId],$institutionIds));
+                }else{
+                    $stmt=$pdo->prepare("SELECT DISTINCT vo.ogrenci_id
+                        FROM veli_ogrenci vo
+                        INNER JOIN veliler v
+                          ON v.id=vo.veli_id
+                         AND v.kullanici_id=?
+                         AND v.aktif=1
+                        INNER JOIN ogrenciler s
+                          ON s.id=vo.ogrenci_id
+                         AND s.aktif=1
+                        INNER JOIN kullanicilar su
+                          ON su.id=s.kullanici_id
+                         AND su.aktif=1
+                        WHERE vo.kurum_id=0
+                          AND NOT EXISTS (
+                            SELECT 1 FROM kurum_kullanicilari sk0
+                            INNER JOIN kurumlar k0 ON k0.id=sk0.kurum_id AND k0.aktif=1
+                            WHERE sk0.kullanici_id=s.kullanici_id
+                              AND sk0.kurum_rolu='ogrenci'
+                              AND sk0.aktif=1
+                          )
+                        ORDER BY vo.ogrenci_id");
+                    $stmt->execute([$userId]);
+                }
                 $ids=array_map('intval',$stmt->fetchAll(PDO::FETCH_COLUMN)?:[]);
                 $stmt->closeCursor();
                 return array_values(array_filter($ids,static fn(int $id):bool=>$id>0));
