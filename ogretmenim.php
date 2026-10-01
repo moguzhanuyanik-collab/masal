@@ -98,6 +98,7 @@ function ois_icon(string $type): string {
 <small>⭐ ÖĞRETMENİMDEN</small>
 <h1>Öğretmenim</h1>
 <p>Öğretmenin senin için hazırladığı soru, tekrar, ödev ve özel çalışmaları burada bulabilirsin.</p>
+<a class="teacher-homework-link" href="ogrenci-odevleri.php">📝 Ödevlerimi Aç →</a>
 <span class="teacher-star">⭐</span>
 </section>
 
