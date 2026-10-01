@@ -2592,33 +2592,40 @@ function install_github_update(
         $recoveryState['activation_preflight']=$activationPreflight;
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
 
-        // 1.2.1 temiz recovery yalnız uygulama kodu/updater çekirdeğini yeniler.
-        // 1.2.1 temiz recovery davranışı korunur; ancak 1.1.97'den gelen
-        // kurulumlar için kod ağacını güncellemek tek başına yeterli değildir.
-        // Bu özel legacy hattı yalnız doğrulanmış 001-063 geçmişi + 064 checkpoint
-        // + legacy kurum üyeliği dönüşümü + 065 + 066 sırasını uygular.
-        $isLegacy097Recovery=((string)($localVersion)==='1.1.97'
+        // Veritabanı güncellemeleri artık yalnız 1.1.97 -> 1.2.1 özel recovery'sine
+        // bağlı değildir. Sıralı updater her release paketinin kendi migration setini
+        // çalıştırmalıdır. Böylece 1.1.97 -> 1.1.98 (064), 1.1.113 -> 1.1.114
+        // (065) ve 1.1.114 -> 1.1.115 (066) geçişleri dosya ağacından kopmaz.
+        $isLegacy097Recovery=((string)$localVersion==='1.1.97'
             && version_compare((string)($remote['version']??''),'1.2.1','>='));
-        $isClean121Recovery=!$isLegacy097Recovery && ((string)($remote['version']??''))==='1.2.1';
-        $preflightRecoveredMigrations=[];
-        $pendingMigrations=[];
-        $legacyRepairNeeded=false;
-        $studentSchemaMissing=false;
-        $requiresDbBackup=$isLegacy097Recovery;
+
+        $databasePlan=database_update_plan($pdo,$sourceRoot,$localVersion);
+        $pendingMigrations=(array)($databasePlan['pending_migrations']??[]);
+        $legacyRepairNeeded=(bool)($databasePlan['legacy_membership_repair']??false);
+        $studentSchemaMissing=(bool)($databasePlan['student_schema_missing']??false);
+        $requiresDbBackup=$isLegacy097Recovery
+            || (bool)($databasePlan['requires_backup']??false);
+
         $dbBackupName='';
         $migrations=[];
+        $databaseWorkRequired=$isLegacy097Recovery
+            || $requiresDbBackup
+            || $pendingMigrations!==[]
+            || $legacyRepairNeeded
+            || $studentSchemaMissing;
 
-        $updateStage=$isLegacy097Recovery?'database_recovery_preflight':'database_recovery_skip';
+        $updateStage=$databaseWorkRequired?'database_recovery_preflight':'database_recovery_skip';
         $recoveryState['stage']=$updateStage;
-        $recoveryState['pending_migrations']=[];
-        $recoveryState['legacy_membership_repair']=$isLegacy097Recovery;
-        $recoveryState['student_schema_missing']=false;
+        $recoveryState['pending_migrations']=$pendingMigrations;
+        $recoveryState['legacy_membership_repair']=$legacyRepairNeeded;
+        $recoveryState['student_schema_missing']=$studentSchemaMissing;
         $recoveryState['database_backup']=null;
         $recoveryState['legacy_097_recovery']=$isLegacy097Recovery;
+        $recoveryState['database_mutation_started']=false;
         $recoveryState['status']='ready_before_mutation';
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
 
-        if($isLegacy097Recovery){
+        if($requiresDbBackup){
             $updateStage='database_backup';
             $recoveryState['stage']=$updateStage;
             $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
@@ -2626,7 +2633,12 @@ function install_github_update(
             $recoveryState['database_backup']=backup_artifact_metadata($root,$dbBackupName);
             $recoveryState['status']='database_backup_ready';
             $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+        }
 
+        if($isLegacy097Recovery){
+            // Doğrudan 1.2.1'e ulaşan çok eski kurulumlar için mevcut güvenli
+            // bridge'i koru. Normal sıralı geçişler aşağıdaki genel migration
+            // yolunu kullanır.
             $updateStage='legacy_database_recovery';
             $recoveryState['stage']=$updateStage;
             $recoveryState['database_mutation_started']=true;
@@ -2636,8 +2648,22 @@ function install_github_update(
             $recoveryState['pending_migrations']=$migrations;
             $recoveryState['status']='database_recovery_complete';
             $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
-        }
+        }elseif($databaseWorkRequired){
+            $updateStage='database_migration';
+            $recoveryState['stage']=$updateStage;
+            $recoveryState['database_mutation_started']=true;
+            $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+            $databaseMutationStarted=true;
 
+            if($studentSchemaMissing){
+                ensure_student_auth_schema($pdo);
+            }
+
+            $migrations=run_pending_migrations($pdo,$sourceRoot,$localVersion);
+            $recoveryState['pending_migrations']=$migrations;
+            $recoveryState['status']='database_recovery_complete';
+            $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+        }
         // Şema başarıyla hazırlandıktan sonra yeni uygulama dosyalarını etkinleştir.
         $updateStage='file_activation';
         $recoveryState['stage']=$updateStage;
