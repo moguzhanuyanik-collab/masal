@@ -180,6 +180,7 @@ $reportInstitutionId=$institutionId>0?$institutionId:(count($institutions)===1?(
 <div class="role-stat"><span>📈</span><strong><?=$questionRate!==null?$questionRate.'%':'—'?></strong><small>Soru doğruluğu</small></div>
 <div class="role-stat"><span>❌</span><strong><?=$summary['wrong']?></strong><small>Yanlış soru</small></div>
 <div class="role-stat"><span>📝</span><strong><?=$summary['completed']?> / <?=$summary['homeworks']?></strong><small>Tamamlanan ödev</small></div>
+<div class="role-stat"><span>✅</span><strong><?=$homeworkRate!==null?$homeworkRate.'%':'—'?></strong><small>Ödev tamamlama</small></div>
 <div class="role-stat"><span>⏰</span><strong><?=$summary['overdue']?></strong><small>Geciken ödev</small></div>
 </div>
 </section>
