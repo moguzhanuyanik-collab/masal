@@ -27,8 +27,12 @@ assert(domain.includes('function ly_notification_milestone('),'renewal notificat
 assert(domain.includes('function ly_history_has_code('),'notification/history dedupe helper missing');
 
 assert(domain.includes("DATEDIFF(kl.bitis_tarihi,CURDATE())<=?"),'30-day queue source query missing');
+assert(domain.includes("$status==='open'"),'aggregate open-case filter missing');
+assert(domain.includes("y.durum IN ('acik','temas','teklif')"),'urgency filters must stay inside open action queue');
 assert(domain.includes("'yenilendi'"),'renewed lifecycle state missing');
 assert(domain.includes("'yenilenmedi'"),'not-renewed lifecycle state missing');
+assert(domain.indexOf("if($licenseStatus==='iptal')") < domain.indexOf("elseif($currentEnd==='' || $currentEnd>$target)"),
+  'external cancellation must win over null/extended-end renewal reconciliation');
 assert(domain.includes("'gun_'.$milestone"),'30/15/7/1/expired notification code generation missing');
 assert(domain.includes("if($remainingDays<=1) return 1;"),'1-day milestone missing');
 assert(domain.includes("if($remainingDays<=7) return 7;"),'7-day milestone missing');
