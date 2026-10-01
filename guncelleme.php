@@ -107,7 +107,7 @@ if ($isAjax) {
         $localRevision = read_local_release_revision(__DIR__,$local);
 
         if ($action === 'check') {
-            $remote = next_remote_version_info($gh,$local,$localRevision);
+            $remote = next_remote_version_info($gh,$local,$localRevision,__DIR__);
 
             ajax_response([
                 'ok' => true,
@@ -137,7 +137,7 @@ if ($isAjax) {
                 ], 403);
             }
 
-            $remoteBefore = next_remote_version_info($gh,$local,$localRevision);
+            $remoteBefore = next_remote_version_info($gh,$local,$localRevision,__DIR__);
 
             if (!release_identity_is_newer($remoteBefore,$local,$localRevision)) {
                 ajax_response([
@@ -196,7 +196,7 @@ if ($isAjax) {
             ];
             $hasNext = false;
             try {
-                $remote = next_remote_version_info($gh,$newLocal,$newLocalRevision);
+                $remote = next_remote_version_info($gh,$newLocal,$newLocalRevision,__DIR__);
                 $hasNext = release_identity_is_newer($remote,$newLocal,$newLocalRevision);
                 if ($hasNext) {
                     $message .= ' Sıradaki güncelleme '.(string)$remote['version'].' rev '.normalize_release_revision($remote['release_revision']??0).' kuruluma hazır.';
