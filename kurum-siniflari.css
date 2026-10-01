@@ -12,3 +12,10 @@
 .class-member-option strong{display:block;font-size:10px}
 .class-member-option small{display:block;margin-top:2px;color:var(--role-muted);font-size:8px}
 @media(max-width:430px){.class-member-grid{grid-template-columns:1fr}}
+.class-group-edit-btn{border:0;background:transparent;color:var(--role-accent);font:inherit;font-size:8px;font-weight:950;padding:0;cursor:pointer}
+.class-group-edit-dialog{width:min(92vw,520px);max-height:88dvh;padding:0;border:0;border-radius:22px;background:transparent}
+.class-group-edit-dialog::backdrop{background:#241c306e;backdrop-filter:blur(4px)}
+.class-group-edit-form{max-height:88dvh;overflow:auto;margin:0;border-radius:22px;box-shadow:0 25px 70px #241c3040}
+.class-group-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.class-group-dialog-head h2{margin-top:3px}
+.class-group-dialog-head button{width:34px;height:34px;border:1px solid var(--role-line);border-radius:11px;background:#fff;color:var(--role-muted);font-size:22px;line-height:1;cursor:pointer}

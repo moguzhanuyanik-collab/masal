@@ -4,6 +4,7 @@ const fs=require('fs');
 const assert=require('assert');
 
 const page=fs.readFileSync('kurum-siniflari.php','utf8');
+const domain=fs.readFileSync('src/kurum_siniflari.php','utf8');
 const migration=fs.readFileSync('database/migrations/068_kurum_siniflari_ve_gruplar.sql','utf8');
 const detail=fs.readFileSync('kurum-detay.php','utf8');
 const manager=fs.readFileSync('yonetici-paneli.php','utf8');
@@ -22,7 +23,7 @@ assert(page.includes('WHERE id=? AND kurum_id=?'),'group lookup must be institut
 assert(page.includes("kk.kurum_id=? AND kk.kurum_rolu='ogrenci'"),'student choices must be institution scoped');
 assert(page.includes('DELETE FROM kurum_sinif_ogrencileri WHERE kurum_sinif_id=? AND kurum_id=?'),'membership replacement must stay institution scoped');
 assert(page.includes('Seçilen öğrencilerden biri bu sınıf / grup için uygun değil.'),'server-side student eligibility check missing');
-assert(page.includes("if($type==='sinif' && ($grade<1 || $grade>8))"),'class grade validation missing');
+assert(domain.includes("if($type==='sinif' && ($grade<1 || $grade>8))"),'class grade validation missing');
 assert(page.includes('sinif_seviyesi'), 'grade-aware group support missing');
 assert(page.includes('auth_audit('),'class/group changes must be audited');
 

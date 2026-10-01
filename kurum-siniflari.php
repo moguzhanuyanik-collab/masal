@@ -5,6 +5,7 @@ require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
 require __DIR__.'/src/kurum_yonetimi.php';
 require __DIR__.'/src/yonetici_yetkileri.php';
+require __DIR__.'/src/kurum_siniflari.php';
 
 $user=require_role(['yonetici','super_admin']);
 $pdo=db();
@@ -33,6 +34,7 @@ function ks_group_type_label(string $type): string {
     return $type==='grup'?'Grup':'Sınıf';
 }
 
+
 if($_SERVER['REQUEST_METHOD']==='POST'){
     try{
         if(!$canManage) throw new RuntimeException('Sınıf ve grup düzenlemek için öğrenci yönetimi yetkisi gerekli.');
@@ -41,22 +43,19 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $action=(string)($_POST['action']??'');
 
         if($action==='create'){
-            $name=trim((string)($_POST['ad']??''));
-            $type=(string)($_POST['tur']??'sinif');
-            $grade=(int)($_POST['sinif_seviyesi']??0);
-
-            if(mb_strlen($name)<2 || mb_strlen($name)>120) throw new RuntimeException('Sınıf / grup adını kontrol et.');
-            if(!in_array($type,['sinif','grup'],true)) throw new RuntimeException('Geçersiz sınıf / grup türü.');
-            if($type==='sinif' && ($grade<1 || $grade>8)) throw new RuntimeException('Sınıf için 1 ile 8 arasında seviye seç.');
-            if($type==='grup' && ($grade<0 || $grade>8)) throw new RuntimeException('Grup sınıf seviyesi geçersiz.');
+            [$name,$type,$grade]=ksg_validate_input($_POST);
 
             $stmt=$pdo->prepare('INSERT INTO kurum_siniflari (kurum_id,ad,tur,sinif_seviyesi,aktif) VALUES (?,?,?,?,1)');
-            $stmt->execute([$institutionId,$name,$type,$grade>0?$grade:null]);
+            $stmt->execute([$institutionId,$name,$type,$grade]);
             $groupId=(int)$pdo->lastInsertId();
             $stmt->closeCursor();
 
             auth_audit($pdo,(int)$user['id'],null,'kurum_sinif_olustur','Kurum '.$institutionId.' / Sınıf-Grup #'.$groupId.' / '.$type);
             $message=ks_group_type_label($type).' oluşturuldu.';
+        }elseif($action==='update'){
+            $groupId=(int)($_POST['sinif_id']??0);
+            ksg_update($pdo,$user,$institutionId,$groupId,$_POST);
+            $message='Sınıf / grup bilgileri güncellendi.';
         }elseif($action==='toggle'){
             $groupId=(int)($_POST['sinif_id']??0);
             $active=(int)($_POST['aktif']??0)===1;
@@ -223,7 +222,7 @@ $back=$isSuper?'kurum-detay.php?kurum_id='.$institutionId:'yonetici-paneli.php?k
 <title>Sınıflar / Gruplar — <?=ks_h((string)$institution['ad'])?></title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="kurum.css?v=1.2.9">
-<link rel="stylesheet" href="kurum-siniflari.css?v=1.2.9">
+<link rel="stylesheet" href="kurum-siniflari.css?v=1.2.11">
 </head>
 <body class="role-page"><div class="role-shell">
 <header class="role-topbar">
@@ -291,6 +290,12 @@ $back=$isSuper?'kurum-detay.php?kurum_id='.$institutionId:'yonetici-paneli.php?k
 <div class="class-group-actions">
 <?php if((int)$group['aktif']===1):?><a href="kurum-siniflari.php?kurum_id=<?=$institutionId?>&amp;sinif_id=<?=(int)$group['id']?>">Üyeleri düzenle</a><?php endif;?>
 <?php if($canManage):?>
+<button type="button" class="class-group-edit-btn"
+ data-class-edit
+ data-id="<?=(int)$group['id']?>"
+ data-name="<?=ks_h((string)$group['ad'])?>"
+ data-type="<?=ks_h((string)$group['tur'])?>"
+ data-grade="<?=$group['sinif_seviyesi']!==null?(int)$group['sinif_seviyesi']:0?>">Düzenle</button>
 <form method="post">
 <input type="hidden" name="csrf" value="<?=ks_h(csrf_token())?>">
 <input type="hidden" name="action" value="toggle">
@@ -334,10 +339,34 @@ $back=$isSuper?'kurum-detay.php?kurum_id='.$institutionId:'yonetici-paneli.php?k
 <?php if(!$canManage):?><div class="role-note"><span>ℹ️</span><p>Bu sayfayı görüntüleyebilirsin. Sınıf/grup oluşturma ve öğrenci atama için öğrenci yönetimi yetkisi gerekir.</p></div><?php endif;?>
 </main>
 
+<dialog class="class-group-edit-dialog" data-class-dialog>
+<form class="role-form class-group-edit-form" method="post">
+<input type="hidden" name="csrf" value="<?=ks_h(csrf_token())?>">
+<input type="hidden" name="action" value="update">
+<input type="hidden" name="kurum_id" value="<?=$institutionId?>">
+<input type="hidden" name="sinif_id" value="0" data-class-id>
+<div class="class-group-dialog-head"><div><span class="eyeline">KAYIT DÜZENLE</span><h2>Sınıf / Grup Bilgileri</h2></div><button type="button" data-class-close aria-label="Kapat">×</button></div>
+<label>Ad</label>
+<input class="role-input" name="ad" data-class-name required maxlength="120">
+<label>Tür</label>
+<select class="role-input" name="tur" data-class-type>
+<option value="sinif">Sınıf</option>
+<option value="grup">Grup</option>
+</select>
+<label>Sınıf seviyesi</label>
+<select class="role-input" name="sinif_seviyesi" data-class-grade>
+<option value="0">Karma / seviye sınırı yok</option>
+<?php for($grade=1;$grade<=8;$grade++):?><option value="<?=$grade?>"><?=$grade?>. sınıf</option><?php endfor;?>
+</select>
+<small class="class-group-help">Sınıf türünde seviye zorunludur. Yeni seviye mevcut üyelerle uyuşmuyorsa önce uygun olmayan öğrencileri gruptan çıkar.</small>
+<button class="role-button" type="submit">Bilgileri Güncelle</button>
+</form>
+</dialog>
+
 <nav class="role-bottom">
 <a href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>⌂</span>Kurum</a>
 <a href="kurum-icerikleri.php?kurum_id=<?=$institutionId?>"><span>📚</span>İçerikler</a>
 <a class="active" href="kurum-siniflari.php?kurum_id=<?=$institutionId?>"><span>🏷️</span>Sınıflar</a>
 <a href="kurum-raporlari.php?kurum_id=<?=$institutionId?>"><span>📊</span>Raporlar</a>
 </nav>
-</div></body></html>
+</div><script src="kurum-siniflari.js?v=1.2.11" defer></script></body></html>
