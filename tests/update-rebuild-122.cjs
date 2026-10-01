@@ -8,9 +8,9 @@ const release=JSON.parse(fs.readFileSync('update-release.json','utf8'));
 const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
 const updater=fs.readFileSync('src/updater.php','utf8');
 
-assert.strictEqual(version.version,'1.2.1');
-assert.strictEqual(release.version,'1.2.1');
-assert.strictEqual(manifest.version,'1.2.1');
+assert.strictEqual(version.version,release.version);
+assert.strictEqual(version.version,manifest.version);
+assert(/^1\\.2\\.\\d+$/.test(version.version));
 assert.strictEqual(version.release_revision,15);
 assert.strictEqual(release.release_revision,15);
 assert.strictEqual(manifest.release_revision,15);

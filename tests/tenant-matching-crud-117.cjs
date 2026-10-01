@@ -28,9 +28,9 @@ assert(api.includes('$mysqlError=(int)($e->errorInfo[1]??0);'));
 assert(api.includes("if($mysqlError===1452)"));
 assert(api.includes("elseif($mysqlError===1062)"));
 
-assert(['1.1.117','1.2.1'].includes(version.version));
-assert(['1.1.117','1.2.1'].includes(release.version));
-assert(['1.1.117','1.2.1'].includes(manifest.version));
+assert(['1.1.117','1.2.1','1.2.2'].includes(version.version));
+assert.strictEqual(release.version,version.version);
+assert.strictEqual(manifest.version,version.version);
 assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
 assert.strictEqual(release.release_revision,version.release_revision);
 assert.strictEqual(manifest.release_revision,version.release_revision);

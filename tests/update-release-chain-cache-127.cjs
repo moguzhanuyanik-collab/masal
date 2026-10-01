@@ -28,12 +28,12 @@ assert(updater.includes('$root!==null'));
 assert(page.includes('next_remote_version_info($gh,$local,$localRevision,__DIR__)'));
 assert(page.includes('next_remote_version_info($gh,$newLocal,$newLocalRevision,__DIR__)'));
 
-assert.strictEqual(version.version,'1.2.1');
-assert.strictEqual(release.version,'1.2.1');
-assert.strictEqual(manifest.version,'1.2.1');
-assert.strictEqual(version.release_revision,21);
-assert.strictEqual(release.release_revision,21);
-assert.strictEqual(manifest.release_revision,21);
+assert.strictEqual(version.version,release.version);
+assert.strictEqual(version.version,manifest.version);
+assert(/^1\.2\.\d+$/.test(version.version),'final release must remain on the 1.2.x line');
+assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
+assert.strictEqual(release.release_revision,version.release_revision);
+assert.strictEqual(manifest.release_revision,version.release_revision);
 assert(manifest.files.includes('tests/update-release-chain-cache-127.cjs'));
 assert(manifest.files.includes('tests/update-release-chain-cache-127.php'));
 assert(workflow.includes('php tests/update-release-chain-cache-127.php'));

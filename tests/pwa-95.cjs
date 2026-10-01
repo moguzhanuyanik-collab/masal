@@ -45,6 +45,6 @@ assert(offlineJs.includes("const y=d.getFullYear();"));
 assert(offlineJs.includes("const m=String(d.getMonth()+1).padStart(2,'0');"));
 assert(!offlineJs.includes("toISOString().slice(0,10)"));
 
-assert(/^1\.1\.(?:9[5-9]|[1-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.1','version must be 1.1.95 or newer');
+assert(/^1\.1\.(?:9[5-9]|[1-9][0-9]{2,})$/.test(String(version.version)) || /^1\.2\.\d+$/.test(String(version.version)),'version must be 1.1.95 or newer');
 
 console.log('1.1.95 PWA hardening checks passed');

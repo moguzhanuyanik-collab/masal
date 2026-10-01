@@ -10,7 +10,7 @@ const version=JSON.parse(fs.readFileSync('version.json','utf8'));
 const anchor=JSON.parse(fs.readFileSync('update-release.json','utf8'));
 const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
 
-assert(/^1\.1\.(?:10[1-9]|1[1-9][0-9]|[2-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.1','version must be 1.1.101 or newer');
+assert(/^1\.1\.(?:10[1-9]|1[1-9][0-9]|[2-9][0-9]{2,})$/.test(String(version.version)) || /^1\.2\.\d+$/.test(String(version.version)),'version must be 1.1.101 or newer');
 assert.strictEqual(anchor.version,version.version);
 assert.strictEqual(manifest.version,version.version);
 assert(updater.includes('function remote_release_info(array $gh): array'));

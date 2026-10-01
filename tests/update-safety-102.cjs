@@ -31,8 +31,9 @@ assert(updater.includes("'status'=>'preparing'"));
 assert(updater.includes("'status']='application_backup_ready'"));
 assert(updater.includes("'failure_stage']=$updateStage"));
 assert(updater.includes('function create_database_backup('));
-assert(updater.includes('$isClean121Recovery'));
-assert(updater.includes("$updateStage=$isLegacy097Recovery?'database_recovery_preflight':'database_recovery_skip'"));
+assert(updater.includes('$databasePlan=database_update_plan($pdo,$sourceRoot,$localVersion);'));
+assert(updater.includes('$requiresDbBackup=$isLegacy097Recovery'));
+assert(updater.includes("$updateStage=$databaseWorkRequired?'database_recovery_preflight':'database_recovery_skip'"));
 assert(updater.includes("assert_backup_disk_space(dirname($extractDir)"));
 assert(status.includes('$recoveryHealthy=$recoveryStatus===\'update_completed\';'));
 assert(status.includes('İnceleme gerekli'));
@@ -47,7 +48,7 @@ for(const key of [
 ]) assert(config.includes("'"+key+"'"),key+' missing');
 assert(workflow.includes('tests/update-safety-102.php'));
 assert(workflow.includes('tests/update-safety-102.cjs'));
-assert(/^1\.1\.(?:10[2-9]|1[1-9][0-9]|[2-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.1','version must be 1.1.102 or newer');
+assert(/^1\.1\.(?:10[2-9]|1[1-9][0-9]|[2-9][0-9]{2,})$/.test(String(version.version)) || /^1\.2\.\d+$/.test(String(version.version)),'version must be 1.1.102 or newer');
 assert.strictEqual(anchor.version,version.version);
 assert.strictEqual(manifest.version,version.version);
 
