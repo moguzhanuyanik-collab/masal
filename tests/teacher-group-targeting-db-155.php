@@ -22,7 +22,7 @@ try{
 }catch(Throwable $e){ fail_155('MariaDB bağlantısı kurulamadı: '.$e->getMessage()); }
 
 $tables=[
-    'ogretmen_icerik_hedefleri','ogretmen_icerikleri','ders_modulleri','dersler',
+    'ogretmen_icerik_hedef_gruplari','ogretmen_icerik_hedefleri','ogretmen_icerikleri','ders_modulleri','dersler',
     'kurum_sinif_ogrencileri','kurum_siniflari','ogretmen_ogrenci',
     'ogrenciler','kurum_kullanicilari','kurumlar','ogretmenler','kullanicilar'
 ];
@@ -83,6 +83,12 @@ $pdo->exec("CREATE TABLE ogretmen_icerikleri (
 $pdo->exec("CREATE TABLE ogretmen_icerik_hedefleri (
  icerik_id BIGINT UNSIGNED NOT NULL, ogrenci_id BIGINT UNSIGNED NOT NULL,
  PRIMARY KEY(icerik_id,ogrenci_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+$pdo->exec("CREATE TABLE ogretmen_icerik_hedef_gruplari (
+ icerik_id BIGINT UNSIGNED NOT NULL, kurum_sinif_id BIGINT UNSIGNED NOT NULL, kurum_id BIGINT UNSIGNED NOT NULL,
+ ogrenci_id BIGINT UNSIGNED NOT NULL, grup_adi VARCHAR(120) NOT NULL, grup_turu VARCHAR(20) NOT NULL,
+ sinif_seviyesi TINYINT UNSIGNED NULL, olusturulma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ PRIMARY KEY(icerik_id,kurum_sinif_id,ogrenci_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
 $pdo->exec("INSERT INTO kullanicilar(id,ad_soyad,aktif) VALUES
