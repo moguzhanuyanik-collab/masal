@@ -19,9 +19,9 @@ assert(updater.includes("updater_core_generation_from_file($liveUpdater)"));
 assert(updater.includes("validate_tenant_relation_schema_guard($pdo,$sourceRoot)"));
 assert(updater.includes("assert_recovered_release_postconditions($pdo,$root,$sourceRoot,$remote)"));
 
-assert.strictEqual(version.version,'1.2.3');
-assert.strictEqual(release.version,'1.2.3');
-assert.strictEqual(manifest.version,'1.2.3');
+assert.strictEqual(version.version,'1.2.4');
+assert.strictEqual(release.version,'1.2.4');
+assert.strictEqual(manifest.version,'1.2.4');
 assert(manifest.files.includes('tests/recovery-release-postcondition-131.php'));
 assert(manifest.files.includes('tests/recovery-release-postcondition-131.cjs'));
 assert(workflow.includes('php tests/recovery-release-postcondition-131.php'));
