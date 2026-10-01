@@ -18,6 +18,8 @@ function td_currency_kpis(PDO $pdo): array {
         COUNT(DISTINCT s.kurum_id) kurum_sayisi,
         SUM(CASE WHEN s.durum='aktif' THEN 1 ELSE 0 END) aktif_sozlesme,
         SUM(CASE WHEN s.durum='tamamlandi' THEN 1 ELSE 0 END) tamamlanan_sozlesme,
+        COALESCE(SUM(CASE WHEN s.durum='aktif' THEN s.toplam_tutar ELSE 0 END),0) aktif_sozlesme_toplami,
+        COALESCE(SUM(CASE WHEN s.durum='tamamlandi' THEN s.toplam_tutar ELSE 0 END),0) tamamlanan_sozlesme_toplami,
         COALESCE(SUM(s.toplam_tutar),0) sozlesme_toplami,
         COALESCE(SUM(COALESCE(pay.tahsil_edilen,0)),0) tahsil_edilen,
         COALESCE(SUM(
@@ -67,6 +69,8 @@ function td_currency_kpis(PDO $pdo): array {
         $renewalTotal=(float)$row['yenileme_sozlesme_toplami'];
         $renewalPaid=(float)$row['yenileme_tahsil_edilen'];
 
+        $row['aktif_sozlesme_toplami']=number_format((float)$row['aktif_sozlesme_toplami'],2,'.','');
+        $row['tamamlanan_sozlesme_toplami']=number_format((float)$row['tamamlanan_sozlesme_toplami'],2,'.','');
         $row['sozlesme_toplami']=number_format($total,2,'.','');
         $row['tahsil_edilen']=number_format($paid,2,'.','');
         $row['kalan_tutar']=number_format($remaining,2,'.','');
