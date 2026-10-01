@@ -18,12 +18,15 @@ assert(domain.includes('function tf_cancel_payment('),'payment cancellation miss
 assert(domain.includes('function tf_license_renewal_rows('),'license renewal radar missing');
 assert(domain.includes("FOR UPDATE"),'commercial write flows must use row locks');
 assert(domain.includes("Sözleşme tutarı, tahsil edilmiş tutarın altına indirilemez."),'contract total may not drop below paid total');
-assert(domain.includes("Tahsilatı olan sözleşmenin para birimi değiştirilemez."),'contract currency mutation guard missing');
+assert(domain.includes("Tahsilat geçmişi olan sözleşmenin para birimi değiştirilemez."),'contract currency mutation guard missing');
 assert(domain.includes("Tahsilat sözleşmenin kalan tutarını aşamaz."),'overpayment guard missing');
 assert(domain.includes("SET durum='iptal',iptal_nedeni=?,iptal_tarihi=NOW()"),'payment cancellation must preserve history');
 assert(!domain.includes('DELETE FROM kurum_tahsilatlari'),'payments must never be physically deleted');
-assert(domain.includes("SET durum='tamamlandi'"),'fully paid contract should close automatically');
-assert(domain.includes("SET durum='aktif'"),'cancelled payment should reopen previously completed contract when balance returns');
+assert(domain.includes('function tf_normalize_contract_status('),'contract status normalization missing');
+assert(domain.includes("$newStatus=$newPaid+0.009>=(float)$contract['toplam_tutar']?'tamamlandi':'aktif';"),
+  'payment writes must normalize completed/active status from balance');
+assert(domain.includes("$newStatus=$remainingPaid+0.009>=(float)$contract['toplam_tutar']?'tamamlandi':'aktif';"),
+  'payment cancellation must normalize contract status from remaining active payments');
 
 assert(page.includes("require_role('super_admin')"),'commercial finance page must be Super Admin only');
 assert(page.includes("verify_csrf($_POST['csrf']??null)"),'commercial writes must require CSRF');
