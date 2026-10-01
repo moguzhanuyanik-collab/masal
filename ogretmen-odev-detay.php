@@ -35,9 +35,10 @@ try{
         LEFT JOIN ogretmen_icerik_hedefleri h ON h.icerik_id=? AND h.ogrenci_id=os.id
         LEFT JOIN ogrenci_odev_durumlari od ON od.icerik_id=? AND od.ogrenci_id=os.id
         WHERE oo.ogretmen_id=(SELECT ogretmen_id FROM ogretmen_icerikleri WHERE id=?)
+            AND oo.kurum_id=?
             AND (?='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
         ORDER BY os.sinif_seviyesi,os.ad,os.id");
-    $stmt->execute([(int)$homework['kurum_id'],$homeworkId,$homeworkId,$homeworkId,(string)$homework['hedef_turu']]);
+    $stmt->execute([(int)$homework['kurum_id'],$homeworkId,$homeworkId,$homeworkId,(int)$homework['kurum_id'],(string)$homework['hedef_turu']]);
     $students=$stmt->fetchAll();
     $stmt->closeCursor();
 }catch(Throwable){
