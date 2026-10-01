@@ -122,6 +122,7 @@ jobs:
           node tests/teacher-content-detail-140.cjs
           node tests/institution-content-detail-141.cjs
           node tests/parent-teacher-content-142.cjs
+          node tests/teacher-group-filter-143.cjs
 
   tenant-db-integration:
     name: Tenant DB integration
@@ -181,4 +182,5 @@ jobs:
           php tests/teacher-content-detail-db-140.php
           php tests/institution-content-detail-db-141.php
           php tests/parent-teacher-content-db-142.php
+          php tests/teacher-group-filter-db-143.php
 
