@@ -124,7 +124,7 @@ $unlicensed=kl_ai_quota_reserve($pdo,2001,601,'openai','test-model');
 ok_162(($unlicensed['blocked']??true)===false,'lisansı olmayan kurum AI kullanımında kilitlenmemeli.');
 ok_162(($unlicensed['enforced']??true)===false,'lisansı olmayan kurumda kota uygulanmamalı.');
 ok_162((int)$unlicensed['used']===1,'lisansı olmayan kurum kullanımı yine izlenmeli.');
-ok_162(($unlicensed['remaining']??'x')===null,'sınırsız kullanımda kalan hak null olmalı.');
+ok_162(array_key_exists('remaining',$unlicensed) && $unlicensed['remaining']===null,'sınırsız kullanımda kalan hak null olmalı.');
 
 $singleLicensed=kl_ai_quota_institution($pdo,3001);
 ok_162($singleLicensed===10,'çoklu üyelikte yalnız bir aktif lisans varsa o kurum seçilmeli.');
