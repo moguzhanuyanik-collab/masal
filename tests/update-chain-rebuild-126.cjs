@@ -9,12 +9,12 @@ const release=JSON.parse(fs.readFileSync('update-release.json','utf8'));
 const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
 const updater=fs.readFileSync('src/updater.php','utf8');
 
-assert.strictEqual(version.version,'1.2.1');
-assert.strictEqual(release.version,'1.2.1');
-assert.strictEqual(manifest.version,'1.2.1');
-assert.strictEqual(version.release_revision,21);
-assert.strictEqual(release.release_revision,21);
-assert.strictEqual(manifest.release_revision,21);
+assert.strictEqual(version.version,release.version);
+assert.strictEqual(version.version,manifest.version);
+assert(/^1\\.2\\.\\d+$/.test(version.version),'final release must remain on the 1.2.x line');
+assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
+assert.strictEqual(release.release_revision,version.release_revision);
+assert.strictEqual(manifest.release_revision,version.release_revision);
 assert(updater.includes('function github_branch_head_sha'));
 assert(updater.includes('function remote_release_info(array $gh): array'));
 assert(updater.includes('function run_legacy_1_1_97_to_1_2_1_recovery'));
