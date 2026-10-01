@@ -8,7 +8,8 @@ require __DIR__.'/src/ogretmen_icerik.php';
 $user=require_role('ogretmen');
 $pdo=db();
 $contentId=max(0,(int)($_GET['id']??0));
-$detail=oi_teacher_content_detail($pdo,$user,$contentId);
+$groupId=max(0,(int)($_GET['grup_id']??0));
+$detail=oi_teacher_content_detail($pdo,$user,$contentId,$groupId);
 
 if(!$detail){
     http_response_code(404);
@@ -19,7 +20,12 @@ if(!$detail){
 $content=$detail['content'];
 $students=$detail['students'];
 $summary=$detail['summary'];
+$groupContext=$detail['group_context']??null;
 $type=(string)$content['icerik_turu'];
+$returnUrl='ogretmen-icerikleri.php?kurum_id='.(int)$content['kurum_id'];
+if($groupId>0 && $type==='soru'){
+    $returnUrl='ogretmen-sorulari.php?kurum_id='.(int)$content['kurum_id'].'&grup_id='.$groupId;
+}
 $types=oi_content_types();
 
 function oid_h(string $value): string {
@@ -43,6 +49,13 @@ function oid_type_icon(string $type): string {
         default=>'📌'
     };
 }
+
+function oid_group_label(?array $group): string {
+    if(!is_array($group)) return '';
+    $type=(string)($group['tur']??'sinif')==='grup'?'Grup':'Sınıf';
+    $grade=$group['sinif_seviyesi']!==null?(int)$group['sinif_seviyesi']:0;
+    return $type.' · '.(string)($group['ad']??'').($grade>0?' · '.$grade.'. sınıf':'');
+}
 ?><!doctype html>
 <html lang="tr">
 <head>
@@ -51,12 +64,12 @@ function oid_type_icon(string $type): string {
 <title>İçerik Detayı — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="ogretmen.css?v=1.0.42">
-<link rel="stylesheet" href="ogretmen-icerik-detay.css?v=1.2.15">
+<link rel="stylesheet" href="ogretmen-icerik-detay.css?v=1.2.31">
 </head>
 <body class="role-page">
 <div class="role-shell">
 <header class="role-topbar">
-<a class="role-icon" href="ogretmen-icerikleri.php?kurum_id=<?=(int)$content['kurum_id']?>">←</a>
+<a class="role-icon" href="<?=oid_h($returnUrl)?>">←</a>
 <span class="role-brand"><span><?=oid_type_icon($type)?></span><span><strong>İçerik Detayı</strong><small><?=oid_h((string)$content['kurum_adi'])?></small></span></span>
 <a class="role-icon" href="hesap-guvenligi.php">⚙️</a>
 </header>
@@ -65,7 +78,7 @@ function oid_type_icon(string $type): string {
 <section class="role-hero">
 <span class="eyeline"><?=oid_h($types[$type]??'İçerik')?> / <?=oid_h((string)$content['ders_adi'])?></span>
 <h1><?=oid_h((string)$content['baslik'])?></h1>
-<p><?=oid_h((string)$content['konu_adi'])?> · <?=((int)$content['aktif']===1?'Aktif yayın':'Pasif yayın')?> · Yayın: <?=oid_h(oid_date((string)$content['olusturulma_tarihi']))?></p>
+<p><?=oid_h((string)$content['konu_adi'])?> · <?=((int)$content['aktif']===1?'Aktif yayın':'Pasif yayın')?> · Yayın: <?=oid_h(oid_date((string)$content['olusturulma_tarihi']))?><?php if($groupContext):?> · <?=oid_h(oid_group_label($groupContext))?><?php endif;?></p>
 <span class="role-hero-art"><?=oid_type_icon($type)?></span>
 </section>
 
@@ -163,7 +176,7 @@ if(is_array($options) && $options):
         $detailText='Bu içerik hedef listesinde.';
     }
 ?>
-<a class="teacher-detail-student" href="ogrenci-raporu.php?id=<?=(int)$student['id']?>">
+<a class="teacher-detail-student" href="ogrenci-raporu.php?id=<?=(int)$student['id']?>&amp;kurum_id=<?=(int)$content['kurum_id']?>">
 <span class="teacher-detail-avatar">🎒</span>
 <div>
 <strong><?=oid_h((string)($student['ad']?:$student['email']))?></strong>
@@ -177,7 +190,7 @@ if(is_array($options) && $options):
 
 <div class="teacher-detail-actions">
 <a class="button soft full" href="ogretmen-icerikleri.php?kurum_id=<?=(int)$content['kurum_id']?>&amp;duzenle=<?=$contentId?>#icerik-duzenle">İçeriği Aç</a>
-<a class="button soft full" href="ogretmen-icerikleri.php?kurum_id=<?=(int)$content['kurum_id']?>">İçeriklerime Dön</a>
+<a class="button soft full" href="<?=oid_h($returnUrl)?>"><?=$groupId>0?'Filtreli Performansa Dön':'İçeriklerime Dön'?></a>
 </div>
 </main>
 
