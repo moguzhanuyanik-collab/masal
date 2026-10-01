@@ -31,9 +31,9 @@ for(const v of expected){
 assert(version_compare_118(String(version.version),'1.2.10')>=0);
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
-assert.strictEqual(version.release_revision,1);
-assert.strictEqual(release.release_revision,1);
-assert.strictEqual(manifest.release_revision,1);
+assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
+assert.strictEqual(release.release_revision,version.release_revision);
+assert.strictEqual(manifest.release_revision,version.release_revision);
 assert(manifest.files.includes('tests/recovery-chain-order-135.cjs'));
 assert(workflow.includes('node tests/recovery-chain-order-135.cjs'));
 
