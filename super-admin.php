@@ -65,6 +65,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
   <a href="kurumlar.php"><svg><use href="#sa-building"/></svg>Kurum Yönetimi</a>
   <a href="paketler.php"><svg><use href="#sa-database"/></svg>Paket & Lisanslar</a>
   <a href="ticari-finans.php"><svg><use href="#sa-chart"/></svg>Ticari Finans</a>
+  <a href="bildirimler.php"><svg><use href="#sa-users"/></svg>Bildirim & Duyurular</a>
   <a href="kurumlar.php?sekme=yoneticiler"><svg><use href="#sa-shield"/></svg>Kurum Yöneticileri</a>
   <a href="kurumlar.php?sekme=ogretmenler"><svg><use href="#sa-users"/></svg>Öğretmenler</a>
   <a href="kurumlar.php?sekme=veliler"><svg><use href="#sa-users"/></svg>Veliler</a>
@@ -149,7 +150,9 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
    <div class="sa-section-title"><div><small>SİSTEM</small><h2>Durum</h2></div><a class="sa-update-link" href="guncelleme.php"><svg><use href="#sa-refresh"/></svg>Sistemi Güncelle</a></div>
    <div class="sa-menu-grid">
     <a href="paketler.php"><span class="sa-menu-icon"><svg><use href="#sa-database"/></svg></span><span><strong>Paket & Lisanslar</strong><small>Kurum planları, kapasite limitleri ve lisans tarihleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-finans.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Ticari Finans</strong><small>Sözleşmeler, tahsilatlar, vadeler ve lisans yenilemeleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>\n    <a href="adimbot-ayarlari.php"><span class="sa-menu-icon"><svg><use href="#sa-settings"/></svg></span><span><strong>AdımBot AI Ayarları</strong><small>Groq API anahtarı, model ve kullanım sınırı</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="ticari-finans.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Ticari Finans</strong><small>Sözleşmeler, tahsilatlar, vadeler ve lisans yenilemeleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="bildirimler.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Bildirim & Duyurular</strong><small>Kurum duyuruları, sistem bildirimleri ve okunma takibi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="adimbot-ayarlari.php"><span class="sa-menu-icon"><svg><use href="#sa-settings"/></svg></span><span><strong>AdımBot AI Ayarları</strong><small>Groq API anahtarı, model ve kullanım sınırı</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
    </div>
    <div class="sa-status-list">
     <div><span class="sa-status-icon"><svg><use href="#sa-database"/></svg></span><p><strong>MySQL</strong><small>Veritabanı bağlantısı</small></p><b><i></i>Çalışıyor</b></div>
