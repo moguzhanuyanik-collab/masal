@@ -406,7 +406,6 @@ function km_restore_member(PDO $pdo,array $actor,string $role,int $userId,int $i
     $membership=$stmt->fetchColumn();
     $stmt->closeCursor();
     if($membership===false) throw new RuntimeException('Kurum üyeliği bulunamadı.');
-    if((int)$membership===1) throw new RuntimeException('Kurum üyeliği zaten aktif.');
 
     $pdo->beginTransaction();
     try{
