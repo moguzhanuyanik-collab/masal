@@ -1145,6 +1145,29 @@ if (!function_exists('require_api_student_access')) {
             if (function_exists('json_response')) json_response(['ok'=>false,'message'=>'Oturum süresi doldu.','auth_required'=>true],401);
             http_response_code(401); exit;
         }
+
+        $role=(string)(auth_effective_role($user)??'');
+        if(in_array($role,['ogrenci','veli','ogretmen'],true)){
+            $licenseAccess=auth_operational_access_summary($pdo,$user);
+            if(($licenseAccess['restricted']??false)===true){
+                $reasons=[];
+                foreach(($licenseAccess['institutions']??[]) as $institution){
+                    $reason=(string)($institution['reason']??'license_inactive');
+                    if($reason!=='') $reasons[]=$reason;
+                }
+                $reasons=array_values(array_unique($reasons));
+                if (function_exists('json_response')) {
+                    json_response([
+                        'ok'=>false,
+                        'message'=>'Kurum lisansı operasyonel kullanıma açık değil.',
+                        'institution_license_required'=>true,
+                        'license_reasons'=>$reasons
+                    ],403);
+                }
+                http_response_code(403); exit;
+            }
+        }
+
         $ids=auth_accessible_student_ids($pdo,(int)$user['id']);
         $studentId=$requestedStudentId && $requestedStudentId>0 ? $requestedStudentId : ($ids[0]??0);
         if ($studentId<=0 || !in_array($studentId,$ids,true)) {
@@ -1157,6 +1180,10 @@ if (!function_exists('require_api_student_access')) {
 
 if (!function_exists('auth_post_login_url')) {
     function auth_post_login_url(array $user): string {
+        try{
+            $summary=auth_operational_access_summary(db(),$user);
+            if(($summary['restricted']??false)===true) return 'lisans-erisim.php';
+        }catch(Throwable){}
         return auth_role_home($user);
     }
 }
