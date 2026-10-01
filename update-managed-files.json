@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.44",
+  "version": "1.2.45",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -217,6 +217,7 @@
     "RELEASE-1.2.42.md",
     "RELEASE-1.2.43.md",
     "RELEASE-1.2.44.md",
+    "RELEASE-1.2.45.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
@@ -393,6 +394,9 @@
     "database/migrations/075_guvenli_sifre_kurtarma.sql",
     "database/migrations/076_destek_talep_merkezi.sql",
     "database/migrations/077_yasal_belge_onay_merkezi.sql",
+    "database/migrations/078_demo_satis_donusum_merkezi.sql",
+    "demo-satis.css",
+    "demo-satis.php",
     "destek.css",
     "destek.php",
     "eposta-ayarlari.php",
@@ -493,6 +497,7 @@
     "src/adimbot_transcript.php",
     "src/auth.php",
     "src/bildirimler.php",
+    "src/deneme_satis.php",
     "src/destek.php",
     "src/kurum_hazirlik.php",
     "src/kurum_icerik_dashboard.php",
@@ -635,6 +640,8 @@
     "tests/tenant-recovery-postcondition-125.php",
     "tests/tenant-relation-schema-115.cjs",
     "tests/tenant-schema-guard-116.cjs",
+    "tests/trial-sales-170.cjs",
+    "tests/trial-sales-db-170.php",
     "tests/update-197-rescue-106.cjs",
     "tests/update-197-rescue-106.php",
     "tests/update-197-rescue-installer-107.cjs",
@@ -704,5 +711,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Ticari finans veri bütünlüğü sertleştirmesi"
+  "name": "Demo deneme kurumu ve satış dönüşüm merkezi"
 }
