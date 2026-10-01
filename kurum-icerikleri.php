@@ -245,7 +245,7 @@ $back=$isSuper?'kurum-detay.php?kurum_id='.$institutionId:'yonetici-paneli.php?k
 <nav class="role-bottom">
 <a href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>⌂</span>Kurum</a>
 <a class="active" href="kurum-icerikleri.php?kurum_id=<?=$institutionId?>"><span>📚</span>İçerikler</a>
+<a href="kurum-siniflari.php?kurum_id=<?=$institutionId?>"><span>🏷️</span>Sınıflar</a>
 <a href="kurum-raporlari.php?kurum_id=<?=$institutionId?>"><span>📊</span>Raporlar</a>
-<a href="hesap-guvenligi.php"><span>⚙️</span>Hesap</a>
 </nav>
 </div></body></html>
