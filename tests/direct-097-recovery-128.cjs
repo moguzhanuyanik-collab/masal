@@ -19,8 +19,8 @@ assert(rescue.includes('function run_legacy_1_1_97_to_1_2_1_recovery'), 'Rescue 
 assert(rescue.includes('hash_file(\'sha256\',$target)'), 'Canlı updater SHA-256 ile doğrulanmalı.');
 assert(rescue.includes('hash_file(\'sha256\',$backup)'), 'Updater yedeği SHA-256 ile doğrulanmalı.');
 assert(rescue.includes('rescue_atomic_replace'), 'Updater atomik olarak etkinleştirilmeli.');
-assert(rescue.includes('database_changed'=>false), 'Rescue DB değişikliği yapmamalı.');
-assert(rescue.includes('migrations_run'=>false), 'Rescue migration çalıştırmamalı.');
+assert(rescue.includes("'database_changed'=>false"), 'Rescue DB değişikliği yapmamalı.');
+assert(rescue.includes("'migrations_run'=>false"), 'Rescue migration çalıştırmamalı.');
 assert(!/\\b(?:DROP|TRUNCATE)\\s+TABLE\\b/i.test(rescue),'Rescue DROP TABLE içermemeli.');
 assert(!/\\bDELETE\\s+FROM\\b/i.test(rescue),'Rescue DELETE FROM içermemeli.');
 assert(!/\\bALTER\\s+TABLE\\b/i.test(rescue),'Rescue ALTER TABLE içermemeli.');
