@@ -155,6 +155,9 @@ function yl_publish(PDO $pdo,array $admin,int $id): void {
         $doc=$lock->fetch(PDO::FETCH_ASSOC);
         $lock->closeCursor();
         if(!is_array($doc) || (string)$doc['durum']!=='taslak') throw new RuntimeException('Yalnız taslak belge yayınlanabilir.');
+        if(!empty($doc['yururluk_tarihi']) && (string)$doc['yururluk_tarihi']>date('Y-m-d')){
+            throw new RuntimeException('Gelecek tarihli belge yürürlük tarihinden önce yayınlanamaz. Taslak olarak saklayıp yürürlük tarihinde yayınla.');
+        }
         if(yl_hash_content((string)$doc['baslik'],(string)$doc['icerik'])!==(string)$doc['icerik_hash']){
             throw new RuntimeException('Belge bütünlük kontrolü başarısız.');
         }
@@ -280,16 +283,23 @@ function yl_admin_report(PDO $pdo): array {
     if($docs)$docs->closeCursor();
     if(!is_array($rows)) return [];
 
+    $hasRoleTable=auth_runtime_table_exists($pdo,'kullanici_rolleri');
     foreach($rows as &$doc){
         $targetRoles=array_filter(array_map('trim',explode(',',(string)$doc['hedef_roller'])));
         if(!$targetRoles){$doc['hedef_kullanici']=0;$doc['onaylayan']=0;$doc['bekleyen']=0;continue;}
         $ph=implode(',',array_fill(0,count($targetRoles),'?'));
-        $stmt=$pdo->prepare("SELECT COUNT(DISTINCT k.id)
-            FROM kullanicilar k
-            LEFT JOIN kullanici_rolleri kr ON kr.kullanici_id=k.id
-            WHERE k.aktif=1
-              AND (k.ana_rol IN ($ph) OR kr.rol IN ($ph))");
-        $params=array_merge($targetRoles,$targetRoles);
+        if($hasRoleTable){
+            $stmt=$pdo->prepare("SELECT COUNT(DISTINCT k.id)
+                FROM kullanicilar k
+                LEFT JOIN kullanici_rolleri kr ON kr.kullanici_id=k.id
+                WHERE k.aktif=1
+                  AND (k.ana_rol IN ($ph) OR kr.rol IN ($ph))");
+            $params=array_merge($targetRoles,$targetRoles);
+        }else{
+            $stmt=$pdo->prepare("SELECT COUNT(*) FROM kullanicilar k
+                WHERE k.aktif=1 AND k.ana_rol IN ($ph)");
+            $params=$targetRoles;
+        }
         $stmt->execute($params);
         $target=(int)($stmt->fetchColumn()?:0);
         $stmt->closeCursor();
