@@ -70,9 +70,9 @@ $isSuper=auth_user_has_role($user,'super_admin');
 <?php if(!$isSuper && yy_can($pdo,$user,'ogrenci_yonet') && yy_can($pdo,$user,'veli_yonet') && yy_can($pdo,$user,'ogretmen_yonet')):?><section class="role-section"><div class="role-section-head"><div><span class="eyeline">BAĞLANTILAR</span><h2>Öğrenci Eşleştirmeleri</h2></div></div><div class="role-modules"><a class="role-module" href="kurum-eslestirmeleri.php?kurum_id=<?=$institutionId?>"><span>🔗</span><div><strong>Veli ve öğretmenleri bağla</strong><small>Bu kurumdaki öğrenci eşleştirmelerini yönet.</small></div><b>→</b></a></div></section><?php endif;?>
 
 <section class="role-section">
-<div class="role-section-head"><div><span class="eyeline">KURUMA AİT BÖLÜMLER</span><h2>Sonraki Aşama</h2></div></div>
+<div class="role-section-head"><div><span class="eyeline">KURUM MODÜLLERİ</span><h2>Dersler, İçerikler ve Raporlar</h2></div></div>
 <div class="role-list">
-<div class="role-row"><span>📚</span><div><strong>Dersler / İçerikler</strong><small>Kuruma özel içerik yönetimini daha sonra ayrı modül yapacağız.</small></div><span class="role-pill off">Sonra</span></div>
+<a class="role-row" href="kurum-icerikleri.php?kurum_id=<?=$institutionId?>"><span>📚</span><div><strong>Dersler / İçerikler</strong><small>Öğretmenlerin bu kurum için yayınladığı soru, tekrar, ödev ve notları izle.</small></div><span class="role-pill ok">Aç</span></a>
 <div class="role-row"><span>🏷️</span><div><strong>Sınıflar / Gruplar</strong><small>Kurum sınıf ve grup yapısını daha sonra ekleyeceğiz.</small></div><span class="role-pill off">Sonra</span></div>
 <a class="role-row" href="kurum-raporlari.php?kurum_id=<?=$institutionId?>"><span>📊</span><div><strong>Raporlar</strong><small>Sınıf ve tarihe göre öğrenci yanıt özeti.</small></div><span class="role-pill ok">Aç</span></a>
 </div>
