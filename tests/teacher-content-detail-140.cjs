@@ -14,12 +14,12 @@ const release=JSON.parse(fs.readFileSync('update-release.json','utf8'));
 
 assert(list.includes('ogretmen-icerik-detay.php?id=<?=(int)$item[\'id\']?>'),'teacher content list must link detail page');
 assert(page.includes("require_role('ogretmen')"),'detail page must require teacher role');
-assert(page.includes('oi_teacher_content_detail($pdo,$user,$contentId)'),'detail page must use teacher-owned detail domain');
+assert(/oi_teacher_content_detail\(\$pdo,\$user,\$contentId(?:,\$groupId)?\)/.test(page),'detail page must use teacher-owned detail domain');
 assert(page.includes('ogrenci-raporu.php?id=<?=(int)$student[\'id\']?>'),'teacher must be able to drill into authorized student report');
 assert(page.includes('Cevapladı'),'question summary missing');
 assert(page.includes('Gecikti'),'homework overdue state missing');
 assert(page.includes('deneme'),'question attempt detail missing');
-assert(page.includes('ogretmen-icerik-detay.css?v=1.2.15'),'detail CSS must be versioned');
+assert(/ogretmen-icerik-detay\.css\?v=1\.2\.(?:1[5-9]|[2-9]\d)/.test(page),'detail CSS must be versioned at 1.2.15 or newer');
 
 assert(domain.includes('function oi_teacher_content_detail('),'teacher content detail domain helper missing');
 assert(domain.includes("WHERE oi.id=? AND oi.ogretmen_id=?"),'content detail must enforce teacher ownership');
