@@ -23,8 +23,8 @@ assert(matching.includes('oo.kurum_id=k.id'),'teacher matching list must be inst
 assert(matching.includes('INSERT IGNORE INTO veli_ogrenci (veli_id,ogrenci_id,kurum_id)'),'parent matching writes institution');
 assert(fs.readFileSync('src/kurum_yonetimi.php','utf8').includes('INSERT IGNORE INTO veli_ogrenci (veli_id,ogrenci_id,kurum_id) VALUES (?,?,0)'),'global parent relation must use scope zero');
 assert(matching.includes('INSERT IGNORE INTO ogretmen_ogrenci (ogretmen_id,ogrenci_id,kurum_id)'),'teacher matching writes institution');
-assert(matching.includes('WHERE vo.ogrenci_id=? AND vo.kurum_id=?'),'parent matching delete must stay in institution');
-assert(matching.includes('WHERE oo.ogrenci_id=? AND oo.kurum_id=?'),'teacher matching delete must stay in institution');
+assert(matching.includes('DELETE FROM veli_ogrenci WHERE ogrenci_id=? AND kurum_id=?'),'parent matching delete must stay in institution');
+assert(matching.includes('DELETE FROM ogretmen_ogrenci WHERE ogrenci_id=? AND kurum_id=?'),'teacher matching delete must stay in institution');
 
 assert(workflow.includes('mariadb:11.4'),'CI must provide MariaDB integration service');
 assert(workflow.includes('tests/tenant-isolation-db-115.php'),'CI must run DB tenant integration');
