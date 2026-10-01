@@ -16,8 +16,8 @@ assert(page.includes("require __DIR__.'/src/odev_durumu.php';"),'student homewor
 assert(page.includes("require __DIR__.'/src/ogrenci_odev_dashboard.php';"),'student homework dashboard domain missing');
 assert(page.includes('sod_homeworks($contents)'),'student homework list must derive from accessible teacher contents');
 assert(page.includes('sod_institutions($allHomeworks)'),'institution filter must derive from accessible homework rows');
-assert(page.includes("name="kurum_id""),'institution filter missing');
-assert(page.includes("name="durum""),'status filter missing');
+assert(page.includes('name="kurum_id"'),'institution filter missing');
+assert(page.includes('name="durum"'),'status filter missing');
 assert(page.includes("'pending','overdue','completed'"),'supported status filters missing');
 assert(page.includes("http_response_code(403);\n    echo 'Bu kurum için aktif ödev erişimin yok.'"),'foreign institution filter must be rejected');
 assert(page.includes('$summary=sod_summary($institutionHomeworks);'),'dashboard summary missing');
