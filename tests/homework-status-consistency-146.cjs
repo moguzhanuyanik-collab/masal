@@ -18,8 +18,8 @@ assert(parent.includes("require __DIR__.'/src/odev_durumu.php';"),'parent homewo
 assert(parent.includes("require __DIR__.'/src/veli_icerikleri.php';"),'parent homework page must use tenant-safe parent content domain');
 assert(parent.includes("vi_parent_contents($pdo,(int)$user['id'],$childId,$institutionId,'odev')"),'parent homework list must use tenant-safe provider');
 assert(parent.includes("vi_parent_child_institutions($pdo,(int)$user['id'],$childId)"),'parent homework institution filter must be parent-child scoped');
-assert(parent.includes("name="durum""),'parent homework status filter missing');
-assert(parent.includes("value="overdue""),'parent homework overdue filter missing');
+assert(parent.includes('name="durum"'),'parent homework status filter missing');
+assert(parent.includes('value="overdue"'),'parent homework overdue filter missing');
 assert(parent.includes("$summary=hw_summary($allHomeworks);"),'parent homework summary must use shared status domain');
 assert(parent.includes("hw_filter($allHomeworks,$status)"),'parent homework status filter must use shared status domain');
 assert(parent.includes("hw_status($homework)"),'parent homework cards must use shared status calculation');
