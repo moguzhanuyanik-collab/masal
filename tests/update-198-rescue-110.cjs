@@ -10,6 +10,6 @@ assert(rescue.includes("'064_adimbot_rate_limit_ve_migration_checkpoint'"));
 assert(apply.includes("installed!=='1.1.97'"));
 {
   const parts=String(release.version).split('.').map(Number);
-  assert((parts.length===3 && parts[0]===1 && parts[1]===1 && Number.isInteger(parts[2]) && parts[2]>=110) || /^1\.2\.\d+$/.test(String(version.version)),'version must be 1.1.110 or newer');
+  assert((parts.length===3 && parts[0]===1 && parts[1]===1 && Number.isInteger(parts[2]) && parts[2]>=110) || /^1\.2\.\d+$/.test(String(release.version)),'version must be 1.1.110 or newer');
 }
 console.log('1.1.110 1.1.98 rescue checks passed');
