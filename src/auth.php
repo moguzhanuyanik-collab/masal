@@ -644,10 +644,55 @@ if (!function_exists('authenticated_student_id')) {
     }
 }
 
+if (!function_exists('auth_legal_pending_count')) {
+    function auth_legal_pending_count(PDO $pdo, int $userId, string $role): int {
+        if ($userId<=0 || $role==='' || !auth_runtime_table_exists($pdo,'yasal_belgeler')
+            || !auth_runtime_table_exists($pdo,'yasal_belge_onaylari')) return 0;
+        try {
+            $stmt=$pdo->prepare("SELECT COUNT(*)
+                FROM yasal_belgeler b
+                WHERE b.durum='yayinda'
+                  AND b.zorunlu=1
+                  AND (b.yururluk_tarihi IS NULL OR b.yururluk_tarihi<=CURDATE())
+                  AND FIND_IN_SET(?,b.hedef_roller)>0
+                  AND NOT EXISTS (
+                    SELECT 1 FROM yasal_belge_onaylari o
+                    WHERE o.belge_id=b.id AND o.kullanici_id=?
+                  )");
+            $stmt->execute([$role,$userId]);
+            $count=max(0,(int)($stmt->fetchColumn()?:0));
+            $stmt->closeCursor();
+            return $count;
+        } catch (Throwable) {
+            auth_security_log_once('legal_consent_check_failed');
+            return 0;
+        }
+    }
+}
+
+if (!function_exists('auth_enforce_legal_consent')) {
+    function auth_enforce_legal_consent(array $user): void {
+        $script=basename((string)($_SERVER['SCRIPT_NAME']??''));
+        if (in_array($script,['yasal-onay.php','logout.php','login.php','sifremi-unuttum.php','sifre-sifirla.php'],true)) return;
+        try {
+            $role=(string)(auth_effective_role($user)??'');
+            if (auth_legal_pending_count(db(),(int)$user['id'],$role)>0) {
+                header('Location: yasal-onay.php');
+                exit;
+            }
+        } catch (Throwable) {
+            auth_security_log_once('legal_consent_enforce_failed');
+        }
+    }
+}
+
 if (!function_exists('require_login')) {
     function require_login(): array {
         $user=authenticated_user();
-        if ($user) return $user;
+        if ($user) {
+            auth_enforce_legal_consent($user);
+            return $user;
+        }
         header('Location: login.php');
         exit;
     }
@@ -663,9 +708,12 @@ if (!function_exists('require_role')) {
 
 if (!function_exists('require_student_login')) {
     function require_student_login(): int {
-        $id=authenticated_student_id();
-        if ($id!==null) return $id;
         $user=authenticated_user();
+        if ($user && auth_effective_role($user)==='ogrenci') {
+            auth_enforce_legal_consent($user);
+            $id=auth_student_id_for_user(db(),(int)$user['id']);
+            if ($id!==null) return $id;
+        }
         if ($user) auth_redirect_to_role_home($user);
         header('Location: login.php');
         exit;
