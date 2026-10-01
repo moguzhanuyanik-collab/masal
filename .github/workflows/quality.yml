@@ -119,6 +119,7 @@ jobs:
           node tests/institution-readiness-160.cjs
           node tests/institution-license-161.cjs
           node tests/adimbot-license-quota-162.cjs
+          node tests/commercial-finance-163.cjs
           node tests/institution-class-edit-136.cjs
           node tests/institution-reporting-137.cjs
           node tests/institution-report-export-159.cjs
@@ -199,6 +200,7 @@ jobs:
           php tests/institution-readiness-db-160.php
           php tests/institution-license-db-161.php
           php tests/adimbot-license-quota-db-162.php
+          php tests/commercial-finance-db-163.php
           php tests/institution-class-edit-db-136.php
           php tests/institution-reporting-db-137.php
           php tests/teacher-content-edit-copy-db-139.php
