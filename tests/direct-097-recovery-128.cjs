@@ -35,15 +35,15 @@ assert(updater.includes('$migrations=run_pending_migrations($pdo,$sourceRoot,$lo
 assert(updater.includes('function prepare_updater_core_handoff'));
 
 const versionParts=String(version.version).split('.').map(Number);
-const versionAtLeast116=versionParts[0]>1 || (versionParts[0]===1 && (versionParts[1]>2 || (versionParts[1]===2 && versionParts[2]>=3)));
-assert(versionAtLeast123,'Release must remain 1.2.16 or newer.');
+const versionAtLeast116=versionParts[0]>1 || (versionParts[0]===1 && (versionParts[1]>2 || (versionParts[1]===2 && versionParts[2]>=16)));
+assert(versionAtLeast116,'Release must remain 1.2.16 or newer.');
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
 assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
 assert.strictEqual(release.release_revision,version.release_revision);
 assert.strictEqual(manifest.release_revision,version.release_revision);
 assert(manifest.files.includes(testPath));
-assert(manifest.files.includes('RELEASE-1.2.3.md'));
+assert(manifest.files.includes('RELEASE-1.2.16.md'));
 assert(workflow.includes('node tests/direct-097-recovery-128.cjs'));
 
 console.log('PASS: direct 1.1.97 recovery contract');
