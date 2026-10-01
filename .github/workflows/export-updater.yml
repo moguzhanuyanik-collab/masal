@@ -1,0 +1,21 @@
+name: Export updater
+
+on:
+  push:
+    branches:
+      - deliver-updater-119
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/upload-artifact@v4
+        with:
+          name: updater-119
+          path: src/updater.php
+          if-no-files-found: error
