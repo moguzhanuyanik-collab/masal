@@ -33,9 +33,9 @@ assert(checkpointCall>historyCall,'historical gate 064 checkpoint recoveryden ö
 assert.strictEqual(version.version,'1.2.17');
 assert.strictEqual(release.version,'1.2.17');
 assert.strictEqual(manifest.version,'1.2.17');
-assert.strictEqual(version.release_revision,1);
-assert.strictEqual(release.release_revision,1);
-assert.strictEqual(manifest.release_revision,1);
+assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
+assert.strictEqual(release.release_revision,version.release_revision);
+assert.strictEqual(manifest.release_revision,version.release_revision);
 assert(manifest.files.includes('tests/recovery-097-historical-gate-143.cjs'));
 assert(manifest.files.includes('RELEASE-1.2.17.md'));
 assert(workflow.includes('node tests/recovery-097-historical-gate-143.cjs'));

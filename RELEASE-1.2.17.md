@@ -44,3 +44,7 @@ Bu düzeltme mevcut kullanıcı, öğrenci, kurum veya içerik verisini değişt
 
 - Recovery package lock testi, 1.2.16 bootstrap rev1 ile mevcut daha yeni 1.2.x revizyonlarını karşılaştırmalı olarak doğrulayacak şekilde gevşetildi.
 - Mevcut release/manifest revision değerlerinin bootstrap revizyonuyla eşit veya daha yeni olması zorunlu tutuldu.
+
+## Rev 5 — release-aware regression test
+
+- Yeni historical-gate regression testi mevcut 1.2.17 revizyonlarını sabit rev1'e kilitlemeden, release/manifest eşleşmesini ve pozitif revision sözleşmesini doğrulayacak şekilde düzeltildi.
