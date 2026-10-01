@@ -86,3 +86,9 @@ Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına 
 - Son regression düzeltmesi release head kuralını bozmayacak şekilde aynı 1.2.1 sürümünün yeni revision ankrajına alındı.
 - `tests/update-legacy-db-recovery-123.cjs` rev12 ile hizalandı.
 - Release metadata, version ve managed manifest aynı revision değerinde tutuluyor.
+
+
+## Rev 13 — final release-head anchor
+
+- 1.2.1 release head, version metadata ve legacy recovery regression testi tek son ankraj commitinde hizalandı.
+- Bu committen sonra release-head sözleşmesini bozan ek dosya commitleri bırakılmayacak.
