@@ -64,9 +64,11 @@ assert(updater.includes('run_legacy_1_1_97_to_1_2_1_recovery'));
 assert(updater.includes('065_kurum_bazli_eslestirme_izolasyonu'));
 assert(updater.includes('066_kurum_eslestirme_schema_guard'));
 
-assert.strictEqual(version.version,'1.2.11');
-assert.strictEqual(release.version,'1.2.11');
-assert.strictEqual(manifest.version,'1.2.11');
+const currentParts=String(version.version).split('.').map(Number);
+const atLeastRecovery=currentParts[0]>1 || (currentParts[0]===1 && (currentParts[1]>2 || (currentParts[1]===2 && currentParts[2]>=11)));
+assert(atLeastRecovery,'Functional rebuild koruma sürümü 1.2.11 veya daha yeni olmalı.');
+assert.strictEqual(release.version,version.version);
+assert.strictEqual(manifest.version,version.version);
 assert.strictEqual(version.release_revision,1);
 assert.strictEqual(release.release_revision,1);
 assert.strictEqual(manifest.release_revision,1);
