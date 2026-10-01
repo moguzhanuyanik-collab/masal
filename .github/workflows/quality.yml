@@ -138,6 +138,7 @@ jobs:
           node tests/recovery-release-postcondition-131.cjs
           node tests/functional-rebuild-118.cjs
           node tests/recovery-source-anchor-138.cjs
+          node tests/recovery-source-integrity-139.cjs
 
   tenant-db-integration:
     name: Tenant DB integration
