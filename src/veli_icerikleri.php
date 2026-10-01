@@ -219,3 +219,48 @@ function vi_parent_summary(array $contents,?DateTimeImmutable $now=null): array 
 
     return $summary;
 }
+
+function vi_parent_report_context(PDO $pdo,int $parentUserId,int $studentId,int $institutionId): ?array {
+    if($parentUserId<=0 || $studentId<=0 || $institutionId<=0) return null;
+
+    $stmt=$pdo->prepare("SELECT k.id,k.ad
+        FROM veli_ogrenci vo
+        INNER JOIN veliler v
+          ON v.id=vo.veli_id
+         AND v.kullanici_id=?
+         AND v.aktif=1
+        INNER JOIN ogrenciler o
+          ON o.id=vo.ogrenci_id
+         AND o.aktif=1
+        INNER JOIN kullanicilar su
+          ON su.id=o.kullanici_id
+         AND su.aktif=1
+        INNER JOIN kurumlar k
+          ON k.id=vo.kurum_id
+         AND k.aktif=1
+        INNER JOIN kurum_kullanicilari vk
+          ON vk.kullanici_id=v.kullanici_id
+         AND vk.kurum_id=vo.kurum_id
+         AND vk.kurum_rolu='veli'
+         AND vk.aktif=1
+        INNER JOIN kurum_kullanicilari sk
+          ON sk.kullanici_id=o.kullanici_id
+         AND sk.kurum_id=vo.kurum_id
+         AND sk.kurum_rolu='ogrenci'
+         AND sk.aktif=1
+        WHERE vo.ogrenci_id=?
+          AND vo.kurum_id=?
+        LIMIT 1");
+    $stmt->execute([$parentUserId,$studentId,$institutionId]);
+    $row=$stmt->fetch();
+    $stmt->closeCursor();
+
+    if(!is_array($row)) return null;
+    return [
+        'institution_id'=>(int)$row['id'],
+        'institution_name'=>(string)$row['ad'],
+        'back'=>'veli-paneli.php#cocuklar',
+        'back_label'=>'Çocuklarıma Dön',
+    ];
+}
+

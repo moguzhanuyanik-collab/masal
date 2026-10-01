@@ -97,6 +97,7 @@ if($childId>0){
 $summary=vi_parent_summary($contents);
 $questionRate=$summary['answered']>0?(int)round($summary['correct']*100/$summary['answered']):null;
 $homeworkRate=$summary['homeworks']>0?(int)round($summary['completed']*100/$summary['homeworks']):null;
+$reportInstitutionId=$institutionId>0?$institutionId:(count($institutions)===1?(int)$institutions[0]['id']:0);
 ?><!doctype html>
 <html lang="tr">
 <head>
@@ -247,7 +248,7 @@ if($preview!==''):
 
 <?php if($selectedChild):?>
 <div class="parent-content-actions">
-<a class="button soft full" href="ogrenci-raporu.php?id=<?=$childId?>">📊 Çocuğumun Raporunu Aç</a>
+<a class="button soft full" href="ogrenci-raporu.php?id=<?=$childId?><?=$reportInstitutionId>0?'&amp;kurum_id='.$reportInstitutionId:''?>">📊 Çocuğumun Raporunu Aç</a>
 <a class="button soft full" href="veli-odevleri.php?cocuk_id=<?=$childId?>">📝 Yalnız Ödevleri Aç</a>
 </div>
 <?php endif;?>

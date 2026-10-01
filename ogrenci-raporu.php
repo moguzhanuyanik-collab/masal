@@ -7,6 +7,7 @@ require __DIR__ . '/src/normalized.php';
 require __DIR__ . '/src/ogretmen_icerik.php';
 require __DIR__ . '/src/ogrenci_rapor_detay.php';
 require __DIR__ . '/src/ogretmen_ogrenci_listesi.php';
+require __DIR__ . '/src/veli_icerikleri.php';
 
 $user=require_login();
 $pdo=db();
@@ -33,6 +34,8 @@ $reportInstitutionId=max(0,(int)($_GET['kurum_id']??0));
 $reportInstitutionScoped=false;
 $reportInstitutionName='';
 $reportBack=$roleHome;
+$reportBackLabel='Panelime Dön';
+$parentInstitutionChoices=[];
 
 $effectiveRole=auth_effective_role($user);
 if($reportInstitutionId>0 && in_array($effectiveRole,['yonetici','super_admin'],true)){
@@ -52,6 +55,7 @@ if($reportInstitutionId>0 && in_array($effectiveRole,['yonetici','super_admin'],
             $reportInstitutionScoped=true;
             $reportInstitutionName=$institutionName;
             $reportBack='kurum-raporlari.php?kurum_id='.$reportInstitutionId;
+            $reportBackLabel='Kurum Raporuna Dön';
         }
     }catch(Throwable){}
 }elseif($reportInstitutionId>0 && $effectiveRole==='ogretmen'){
@@ -61,8 +65,81 @@ if($reportInstitutionId>0 && in_array($effectiveRole,['yonetici','super_admin'],
             $reportInstitutionScoped=true;
             $reportInstitutionName=(string)$teacherContext['institution_name'];
             $reportBack=(string)$teacherContext['back'];
+            $reportBackLabel='Öğrencilerime Dön';
         }
     }catch(Throwable){}
+}elseif($effectiveRole==='veli'){
+    try{
+        $parentInstitutionChoices=vi_parent_child_institutions($pdo,(int)$user['id'],$studentId);
+
+        if($reportInstitutionId>0){
+            $parentContext=vi_parent_report_context($pdo,(int)$user['id'],$studentId,$reportInstitutionId);
+            if(!is_array($parentContext)){
+                http_response_code(403);
+                echo 'Bu kurum için öğrenci raporuna erişim yetkiniz yok.';
+                exit;
+            }
+            $reportInstitutionScoped=true;
+            $reportInstitutionName=(string)$parentContext['institution_name'];
+            $reportBack=(string)$parentContext['back'];
+            $reportBackLabel=(string)$parentContext['back_label'];
+        }elseif(count($parentInstitutionChoices)===1){
+            $reportInstitutionId=(int)$parentInstitutionChoices[0]['id'];
+            $parentContext=vi_parent_report_context($pdo,(int)$user['id'],$studentId,$reportInstitutionId);
+            if(is_array($parentContext)){
+                $reportInstitutionScoped=true;
+                $reportInstitutionName=(string)$parentContext['institution_name'];
+                $reportBack=(string)$parentContext['back'];
+                $reportBackLabel=(string)$parentContext['back_label'];
+            }
+        }elseif(count($parentInstitutionChoices)>1){
+            ?><!doctype html>
+            <html lang="tr">
+            <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+            <title>Rapor Kurumu Seç — İlkAdım</title>
+            <link rel="stylesheet" href="styles.css">
+            <link rel="stylesheet" href="veli.css?v=1.0.42">
+            <link rel="stylesheet" href="ogrenci-raporu.css?v=1.2.19">
+            </head>
+            <body class="role-page">
+            <div class="role-shell">
+            <header class="role-topbar">
+            <a class="role-icon" href="veli-paneli.php#cocuklar">←</a>
+            <span class="role-brand"><span>📊</span><span><strong>Öğrenci Raporu</strong><small>KURUM SEÇİMİ</small></span></span>
+            </header>
+            <main class="role-content">
+            <section class="role-hero">
+            <span class="eyeline">ÇOCUK RAPORU</span>
+            <h1><?=htmlspecialchars((string)($student['ad']?:$student['email']),ENT_QUOTES,'UTF-8')?></h1>
+            <p>Bu öğrenci için birden fazla yetkili kurum bağlantın var. Öğretmen soru ve ödevlerinin karışmaması için raporu hangi kurum kapsamında açacağını seç.</p>
+            <span class="role-hero-art">🏫</span>
+            </section>
+            <section class="role-section">
+            <div class="role-section-head"><div><span class="eyeline">YETKİLİ KURUMLAR</span><h2>Rapor Kurumu</h2></div></div>
+            <div class="role-list">
+            <?php foreach($parentInstitutionChoices as $choice):?>
+            <a class="role-row" href="ogrenci-raporu.php?id=<?=$studentId?>&amp;kurum_id=<?=(int)$choice['id']?>">
+            <span>🏫</span>
+            <div><strong><?=htmlspecialchars((string)$choice['ad'],ENT_QUOTES,'UTF-8')?></strong><small>Bu kurumun öğretmen içerikleriyle raporu aç →</small></div>
+            <b>→</b>
+            </a>
+            <?php endforeach;?>
+            </div>
+            </section>
+            </main>
+            </div>
+            </body>
+            </html><?php
+            exit;
+        }
+    }catch(Throwable $e){
+        error_log('[IlkAdim][parent-report-context] '.$e->getMessage());
+        http_response_code(503);
+        echo 'Veli rapor kapsamı şu anda doğrulanamıyor.';
+        exit;
+    }
 }
 
 $summary=normalized_summary($pdo,$studentId);
@@ -139,7 +216,7 @@ function or_group_label(array $group): string {
 <meta name="theme-color" content="#f8f7fc">
 <title>Öğrenci Raporu — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="ogrenci-raporu.css?v=1.2.13">
+<link rel="stylesheet" href="ogrenci-raporu.css?v=1.2.19">
 </head>
 <body>
 <div class="app-shell">
@@ -263,7 +340,7 @@ $percent=$total>0?(int)round($done/$total*100):0;
 <?php endforeach;?>
 </section>
 
-<a class="button soft full" href="<?=h_report($reportBack)?>"><?=$reportBack===$roleHome?'Panelime Dön':'Kurum Raporuna Dön'?></a>
+<a class="button soft full" href="<?=h_report($reportBack)?>"><?=h_report($reportBackLabel)?></a>
 </div>
 </main>
 </div>
