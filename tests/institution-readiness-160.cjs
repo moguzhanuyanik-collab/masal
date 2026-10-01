@@ -21,7 +21,8 @@ assert(domain.includes('WHERE oi.kurum_id=? AND oi.aktif=1'),'content readiness 
 assert(domain.includes("'percent'=>$percent"),'readiness percentage missing');
 
 assert(manager.includes("require __DIR__.'/src/kurum_hazirlik.php';"),'manager panel readiness dependency missing');
-assert(manager.includes('$readiness=$hasInstitution?kh_status($pdo,$institutionId)'), 'manager readiness computation missing');
+assert(manager.includes('$readiness=$canOperate?kh_status($pdo,$institutionId)'), 'manager readiness computation must run only for operationally licensed institution');
+assert(manager.includes('$canOperate=$canView && $hasInstitution && $operationalOpen;'), 'manager readiness must be gated by operational license access');
 assert(manager.includes('KURULUM DURUMU') && manager.includes('Kurum Hazırlık'),'manager readiness UI missing');
 assert(detail.includes("require __DIR__.'/src/kurum_hazirlik.php';"),'institution detail readiness dependency missing');
 assert(detail.includes('$readiness=kh_status($pdo,$institutionId);'),'institution detail readiness computation missing');
