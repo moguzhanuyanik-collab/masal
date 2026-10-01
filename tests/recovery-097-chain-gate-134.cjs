@@ -28,13 +28,15 @@ assert(rescue.includes("$recoveryOnly=['1.1.119']"));
 assert(updater.includes('/commits?sha='));
 assert(updater.includes('Sıradaki güncelleme güvenli biçimde belirlenemedi.'));
 
-assert.strictEqual(version.version,'1.2.8');
-assert.strictEqual(release.version,'1.2.8');
-assert.strictEqual(manifest.version,'1.2.8');
+const parts=String(version.version).split('.').map(Number);
+const atLeast128=parts[0]>1 || (parts[0]===1 && (parts[1]>2 || (parts[1]===2 && parts[2]>=8)));
+assert(atLeast128,'Recovery chain gate requires 1.2.8 or newer.');
+assert.strictEqual(release.version,version.version);
+assert.strictEqual(manifest.version,version.version);
 assert.strictEqual(version.release_revision,1);
 assert.strictEqual(release.release_revision,1);
 assert.strictEqual(manifest.release_revision,1);
-assert(manifest.files.includes('RELEASE-1.2.8.md'));
+assert(manifest.files.includes('RELEASE-'+version.version+'.md'));
 assert(manifest.files.includes('tests/recovery-097-chain-gate-134.cjs'));
 assert(workflow.includes('node tests/recovery-097-chain-gate-134.cjs'));
 
