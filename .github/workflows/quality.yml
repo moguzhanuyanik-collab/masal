@@ -100,6 +100,8 @@ jobs:
           node tests/tenant-relation-schema-115.cjs
           node tests/tenant-schema-guard-116.cjs
           node tests/tenant-matching-crud-117.cjs
+          node tests/update-recovery-119.cjs
+          node tests/rebuild-release-121.cjs
 
   tenant-db-integration:
     name: Tenant DB integration
