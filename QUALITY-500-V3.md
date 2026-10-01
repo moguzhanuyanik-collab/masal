@@ -1,0 +1,534 @@
+# İlkAdım — Yeni 500 Güncelleme Maddesi (Q1001–Q1500)
+
+Bu üçüncü katalog Q001–Q1000 maddelerini korur ve 500 yeni madde ekler.
+
+## Legacy Upgrade Bridges
+
+- [x] **Q1001** — legacy membership preflight — kontrol 1 (P0) — legacy membership preflight için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1002** — profile-to-user mapping — kontrol 1 (P1) — profile-to-user mapping için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1003** — manager identity resolution — kontrol 1 (P1) — manager identity resolution için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1004** — staging table verification — kontrol 1 (P2) — staging table verification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1005** — atomic table swap — kontrol 1 (P2) — atomic table swap için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1006** — legacy backup retention — kontrol 1 (P0) — legacy backup retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1007** — unresolved row fail-closed — kontrol 1 (P1) — unresolved row fail-closed için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1008** — hybrid schema preservation — kontrol 1 (P1) — hybrid schema preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1009** — duplicate membership merge — kontrol 1 (P2) — duplicate membership merge için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1010** — bridge rerun guard — kontrol 1 (P2) — bridge rerun guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1011** — legacy membership preflight — kontrol 2 (P0) — legacy membership preflight için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1012** — profile-to-user mapping — kontrol 2 (P1) — profile-to-user mapping için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1013** — manager identity resolution — kontrol 2 (P1) — manager identity resolution için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1014** — staging table verification — kontrol 2 (P2) — staging table verification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1015** — atomic table swap — kontrol 2 (P2) — atomic table swap için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1016** — legacy backup retention — kontrol 2 (P0) — legacy backup retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1017** — unresolved row fail-closed — kontrol 2 (P1) — unresolved row fail-closed için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1018** — hybrid schema preservation — kontrol 2 (P1) — hybrid schema preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1019** — duplicate membership merge — kontrol 2 (P2) — duplicate membership merge için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [x] **Q1020** — bridge rerun guard — kontrol 2 (P2) — bridge rerun guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1021** — legacy membership preflight — kontrol 3 (P0) — legacy membership preflight için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1022** — profile-to-user mapping — kontrol 3 (P1) — profile-to-user mapping için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1023** — manager identity resolution — kontrol 3 (P1) — manager identity resolution için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1024** — staging table verification — kontrol 3 (P2) — staging table verification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1025** — atomic table swap — kontrol 3 (P2) — atomic table swap için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1026** — legacy backup retention — kontrol 3 (P0) — legacy backup retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1027** — unresolved row fail-closed — kontrol 3 (P1) — unresolved row fail-closed için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1028** — hybrid schema preservation — kontrol 3 (P1) — hybrid schema preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1029** — duplicate membership merge — kontrol 3 (P2) — duplicate membership merge için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1030** — bridge rerun guard — kontrol 3 (P2) — bridge rerun guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1031** — legacy membership preflight — kontrol 4 (P0) — legacy membership preflight için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1032** — profile-to-user mapping — kontrol 4 (P1) — profile-to-user mapping için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1033** — manager identity resolution — kontrol 4 (P1) — manager identity resolution için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1034** — staging table verification — kontrol 4 (P2) — staging table verification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1035** — atomic table swap — kontrol 4 (P2) — atomic table swap için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1036** — legacy backup retention — kontrol 4 (P0) — legacy backup retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1037** — unresolved row fail-closed — kontrol 4 (P1) — unresolved row fail-closed için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1038** — hybrid schema preservation — kontrol 4 (P1) — hybrid schema preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1039** — duplicate membership merge — kontrol 4 (P2) — duplicate membership merge için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1040** — bridge rerun guard — kontrol 4 (P2) — bridge rerun guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1041** — legacy membership preflight — kontrol 5 (P0) — legacy membership preflight için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1042** — profile-to-user mapping — kontrol 5 (P1) — profile-to-user mapping için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1043** — manager identity resolution — kontrol 5 (P1) — manager identity resolution için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1044** — staging table verification — kontrol 5 (P2) — staging table verification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1045** — atomic table swap — kontrol 5 (P2) — atomic table swap için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1046** — legacy backup retention — kontrol 5 (P0) — legacy backup retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1047** — unresolved row fail-closed — kontrol 5 (P1) — unresolved row fail-closed için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1048** — hybrid schema preservation — kontrol 5 (P1) — hybrid schema preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1049** — duplicate membership merge — kontrol 5 (P2) — duplicate membership merge için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1050** — bridge rerun guard — kontrol 5 (P2) — bridge rerun guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+
+## Schema Evolution Safety
+
+- [ ] **Q1051** — column type derivation — kontrol 1 (P0) — column type derivation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1052** — foreign-key inbound guard — kontrol 1 (P1) — foreign-key inbound guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1053** — DDL staging isolation — kontrol 1 (P1) — DDL staging isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1054** — schema postcondition check — kontrol 1 (P2) — schema postcondition check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1055** — index preservation — kontrol 1 (P2) — index preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1056** — collation consistency — kontrol 1 (P0) — collation consistency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1057** — nullable legacy handling — kontrol 1 (P1) — nullable legacy handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1058** — default timestamp preservation — kontrol 1 (P1) — default timestamp preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1059** — primary-key uniqueness — kontrol 1 (P2) — primary-key uniqueness için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1060** — schema rollback evidence — kontrol 1 (P2) — schema rollback evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1061** — column type derivation — kontrol 2 (P0) — column type derivation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1062** — foreign-key inbound guard — kontrol 2 (P1) — foreign-key inbound guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1063** — DDL staging isolation — kontrol 2 (P1) — DDL staging isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1064** — schema postcondition check — kontrol 2 (P2) — schema postcondition check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1065** — index preservation — kontrol 2 (P2) — index preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1066** — collation consistency — kontrol 2 (P0) — collation consistency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1067** — nullable legacy handling — kontrol 2 (P1) — nullable legacy handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1068** — default timestamp preservation — kontrol 2 (P1) — default timestamp preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1069** — primary-key uniqueness — kontrol 2 (P2) — primary-key uniqueness için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1070** — schema rollback evidence — kontrol 2 (P2) — schema rollback evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1071** — column type derivation — kontrol 3 (P0) — column type derivation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1072** — foreign-key inbound guard — kontrol 3 (P1) — foreign-key inbound guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1073** — DDL staging isolation — kontrol 3 (P1) — DDL staging isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1074** — schema postcondition check — kontrol 3 (P2) — schema postcondition check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1075** — index preservation — kontrol 3 (P2) — index preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1076** — collation consistency — kontrol 3 (P0) — collation consistency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1077** — nullable legacy handling — kontrol 3 (P1) — nullable legacy handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1078** — default timestamp preservation — kontrol 3 (P1) — default timestamp preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1079** — primary-key uniqueness — kontrol 3 (P2) — primary-key uniqueness için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1080** — schema rollback evidence — kontrol 3 (P2) — schema rollback evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1081** — column type derivation — kontrol 4 (P0) — column type derivation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1082** — foreign-key inbound guard — kontrol 4 (P1) — foreign-key inbound guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1083** — DDL staging isolation — kontrol 4 (P1) — DDL staging isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1084** — schema postcondition check — kontrol 4 (P2) — schema postcondition check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1085** — index preservation — kontrol 4 (P2) — index preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1086** — collation consistency — kontrol 4 (P0) — collation consistency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1087** — nullable legacy handling — kontrol 4 (P1) — nullable legacy handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1088** — default timestamp preservation — kontrol 4 (P1) — default timestamp preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1089** — primary-key uniqueness — kontrol 4 (P2) — primary-key uniqueness için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1090** — schema rollback evidence — kontrol 4 (P2) — schema rollback evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1091** — column type derivation — kontrol 5 (P0) — column type derivation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1092** — foreign-key inbound guard — kontrol 5 (P1) — foreign-key inbound guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1093** — DDL staging isolation — kontrol 5 (P1) — DDL staging isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1094** — schema postcondition check — kontrol 5 (P2) — schema postcondition check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1095** — index preservation — kontrol 5 (P2) — index preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1096** — collation consistency — kontrol 5 (P0) — collation consistency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1097** — nullable legacy handling — kontrol 5 (P1) — nullable legacy handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1098** — default timestamp preservation — kontrol 5 (P1) — default timestamp preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1099** — primary-key uniqueness — kontrol 5 (P2) — primary-key uniqueness için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1100** — schema rollback evidence — kontrol 5 (P2) — schema rollback evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+
+## Tenant Data Preservation
+
+- [ ] **Q1101** — institution existence validation — kontrol 1 (P0) — institution existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1102** — cross-tenant mapping guard — kontrol 1 (P1) — cross-tenant mapping guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1103** — membership role preservation — kontrol 1 (P1) — membership role preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1104** — inactive membership preservation — kontrol 1 (P2) — inactive membership preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1105** — institution id stability — kontrol 1 (P2) — institution id stability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1106** — user existence validation — kontrol 1 (P0) — user existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1107** — profile ownership validation — kontrol 1 (P1) — profile ownership validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1108** — duplicate tenant membership handling — kontrol 1 (P1) — duplicate tenant membership handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1109** — orphan tenant detection — kontrol 1 (P2) — orphan tenant detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1110** — tenant backup evidence — kontrol 1 (P2) — tenant backup evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1111** — institution existence validation — kontrol 2 (P0) — institution existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1112** — cross-tenant mapping guard — kontrol 2 (P1) — cross-tenant mapping guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1113** — membership role preservation — kontrol 2 (P1) — membership role preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1114** — inactive membership preservation — kontrol 2 (P2) — inactive membership preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1115** — institution id stability — kontrol 2 (P2) — institution id stability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1116** — user existence validation — kontrol 2 (P0) — user existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1117** — profile ownership validation — kontrol 2 (P1) — profile ownership validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1118** — duplicate tenant membership handling — kontrol 2 (P1) — duplicate tenant membership handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1119** — orphan tenant detection — kontrol 2 (P2) — orphan tenant detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1120** — tenant backup evidence — kontrol 2 (P2) — tenant backup evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1121** — institution existence validation — kontrol 3 (P0) — institution existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1122** — cross-tenant mapping guard — kontrol 3 (P1) — cross-tenant mapping guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1123** — membership role preservation — kontrol 3 (P1) — membership role preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1124** — inactive membership preservation — kontrol 3 (P2) — inactive membership preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1125** — institution id stability — kontrol 3 (P2) — institution id stability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1126** — user existence validation — kontrol 3 (P0) — user existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1127** — profile ownership validation — kontrol 3 (P1) — profile ownership validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1128** — duplicate tenant membership handling — kontrol 3 (P1) — duplicate tenant membership handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1129** — orphan tenant detection — kontrol 3 (P2) — orphan tenant detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1130** — tenant backup evidence — kontrol 3 (P2) — tenant backup evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1131** — institution existence validation — kontrol 4 (P0) — institution existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1132** — cross-tenant mapping guard — kontrol 4 (P1) — cross-tenant mapping guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1133** — membership role preservation — kontrol 4 (P1) — membership role preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1134** — inactive membership preservation — kontrol 4 (P2) — inactive membership preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1135** — institution id stability — kontrol 4 (P2) — institution id stability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1136** — user existence validation — kontrol 4 (P0) — user existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1137** — profile ownership validation — kontrol 4 (P1) — profile ownership validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1138** — duplicate tenant membership handling — kontrol 4 (P1) — duplicate tenant membership handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1139** — orphan tenant detection — kontrol 4 (P2) — orphan tenant detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1140** — tenant backup evidence — kontrol 4 (P2) — tenant backup evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1141** — institution existence validation — kontrol 5 (P0) — institution existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1142** — cross-tenant mapping guard — kontrol 5 (P1) — cross-tenant mapping guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1143** — membership role preservation — kontrol 5 (P1) — membership role preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1144** — inactive membership preservation — kontrol 5 (P2) — inactive membership preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1145** — institution id stability — kontrol 5 (P2) — institution id stability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1146** — user existence validation — kontrol 5 (P0) — user existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1147** — profile ownership validation — kontrol 5 (P1) — profile ownership validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1148** — duplicate tenant membership handling — kontrol 5 (P1) — duplicate tenant membership handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1149** — orphan tenant detection — kontrol 5 (P2) — orphan tenant detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1150** — tenant backup evidence — kontrol 5 (P2) — tenant backup evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+
+## Updater Failure Recovery
+
+- [ ] **Q1151** — pre-mutation validation — kontrol 1 (P0) — pre-mutation validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1152** — download cleanup — kontrol 1 (P1) — download cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1153** — extraction cleanup — kontrol 1 (P1) — extraction cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1154** — failed bridge cleanup — kontrol 1 (P2) — failed bridge cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1155** — backup table retention — kontrol 1 (P2) — backup table retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1156** — recovery log clarity — kontrol 1 (P0) — recovery log clarity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1157** — retry idempotency — kontrol 1 (P1) — retry idempotency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1158** — partial DDL detection — kontrol 1 (P1) — partial DDL detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1159** — manual recovery path — kontrol 1 (P2) — manual recovery path için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1160** — failure stage classification — kontrol 1 (P2) — failure stage classification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1161** — pre-mutation validation — kontrol 2 (P0) — pre-mutation validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1162** — download cleanup — kontrol 2 (P1) — download cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1163** — extraction cleanup — kontrol 2 (P1) — extraction cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1164** — failed bridge cleanup — kontrol 2 (P2) — failed bridge cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1165** — backup table retention — kontrol 2 (P2) — backup table retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1166** — recovery log clarity — kontrol 2 (P0) — recovery log clarity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1167** — retry idempotency — kontrol 2 (P1) — retry idempotency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1168** — partial DDL detection — kontrol 2 (P1) — partial DDL detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1169** — manual recovery path — kontrol 2 (P2) — manual recovery path için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1170** — failure stage classification — kontrol 2 (P2) — failure stage classification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1171** — pre-mutation validation — kontrol 3 (P0) — pre-mutation validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1172** — download cleanup — kontrol 3 (P1) — download cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1173** — extraction cleanup — kontrol 3 (P1) — extraction cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1174** — failed bridge cleanup — kontrol 3 (P2) — failed bridge cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1175** — backup table retention — kontrol 3 (P2) — backup table retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1176** — recovery log clarity — kontrol 3 (P0) — recovery log clarity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1177** — retry idempotency — kontrol 3 (P1) — retry idempotency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1178** — partial DDL detection — kontrol 3 (P1) — partial DDL detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1179** — manual recovery path — kontrol 3 (P2) — manual recovery path için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1180** — failure stage classification — kontrol 3 (P2) — failure stage classification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1181** — pre-mutation validation — kontrol 4 (P0) — pre-mutation validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1182** — download cleanup — kontrol 4 (P1) — download cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1183** — extraction cleanup — kontrol 4 (P1) — extraction cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1184** — failed bridge cleanup — kontrol 4 (P2) — failed bridge cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1185** — backup table retention — kontrol 4 (P2) — backup table retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1186** — recovery log clarity — kontrol 4 (P0) — recovery log clarity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1187** — retry idempotency — kontrol 4 (P1) — retry idempotency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1188** — partial DDL detection — kontrol 4 (P1) — partial DDL detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1189** — manual recovery path — kontrol 4 (P2) — manual recovery path için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1190** — failure stage classification — kontrol 4 (P2) — failure stage classification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1191** — pre-mutation validation — kontrol 5 (P0) — pre-mutation validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1192** — download cleanup — kontrol 5 (P1) — download cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1193** — extraction cleanup — kontrol 5 (P1) — extraction cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1194** — failed bridge cleanup — kontrol 5 (P2) — failed bridge cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1195** — backup table retention — kontrol 5 (P2) — backup table retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1196** — recovery log clarity — kontrol 5 (P0) — recovery log clarity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1197** — retry idempotency — kontrol 5 (P1) — retry idempotency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1198** — partial DDL detection — kontrol 5 (P1) — partial DDL detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1199** — manual recovery path — kontrol 5 (P2) — manual recovery path için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1200** — failure stage classification — kontrol 5 (P2) — failure stage classification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+
+## Release Chain Integrity
+
+- [ ] **Q1201** — 1.1.97 bridge coverage — kontrol 1 (P0) — 1.1.97 bridge coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1202** — 1.1.98 recovery ordering — kontrol 1 (P1) — 1.1.98 recovery ordering için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1203** — historical anchor continuity — kontrol 1 (P1) — historical anchor continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1204** — revision monotonicity — kontrol 1 (P2) — revision monotonicity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1205** — release metadata agreement — kontrol 1 (P2) — release metadata agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1206** — managed-tree agreement — kontrol 1 (P0) — managed-tree agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1207** — next-version determinism — kontrol 1 (P1) — next-version determinism için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1208** — post-release mutation guard — kontrol 1 (P1) — post-release mutation guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1209** — candidate-main parity — kontrol 1 (P2) — candidate-main parity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1210** — chain regression coverage — kontrol 1 (P2) — chain regression coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1211** — 1.1.97 bridge coverage — kontrol 2 (P0) — 1.1.97 bridge coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1212** — 1.1.98 recovery ordering — kontrol 2 (P1) — 1.1.98 recovery ordering için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1213** — historical anchor continuity — kontrol 2 (P1) — historical anchor continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1214** — revision monotonicity — kontrol 2 (P2) — revision monotonicity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1215** — release metadata agreement — kontrol 2 (P2) — release metadata agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1216** — managed-tree agreement — kontrol 2 (P0) — managed-tree agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1217** — next-version determinism — kontrol 2 (P1) — next-version determinism için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1218** — post-release mutation guard — kontrol 2 (P1) — post-release mutation guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1219** — candidate-main parity — kontrol 2 (P2) — candidate-main parity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1220** — chain regression coverage — kontrol 2 (P2) — chain regression coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1221** — 1.1.97 bridge coverage — kontrol 3 (P0) — 1.1.97 bridge coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1222** — 1.1.98 recovery ordering — kontrol 3 (P1) — 1.1.98 recovery ordering için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1223** — historical anchor continuity — kontrol 3 (P1) — historical anchor continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1224** — revision monotonicity — kontrol 3 (P2) — revision monotonicity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1225** — release metadata agreement — kontrol 3 (P2) — release metadata agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1226** — managed-tree agreement — kontrol 3 (P0) — managed-tree agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1227** — next-version determinism — kontrol 3 (P1) — next-version determinism için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1228** — post-release mutation guard — kontrol 3 (P1) — post-release mutation guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1229** — candidate-main parity — kontrol 3 (P2) — candidate-main parity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1230** — chain regression coverage — kontrol 3 (P2) — chain regression coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1231** — 1.1.97 bridge coverage — kontrol 4 (P0) — 1.1.97 bridge coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1232** — 1.1.98 recovery ordering — kontrol 4 (P1) — 1.1.98 recovery ordering için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1233** — historical anchor continuity — kontrol 4 (P1) — historical anchor continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1234** — revision monotonicity — kontrol 4 (P2) — revision monotonicity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1235** — release metadata agreement — kontrol 4 (P2) — release metadata agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1236** — managed-tree agreement — kontrol 4 (P0) — managed-tree agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1237** — next-version determinism — kontrol 4 (P1) — next-version determinism için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1238** — post-release mutation guard — kontrol 4 (P1) — post-release mutation guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1239** — candidate-main parity — kontrol 4 (P2) — candidate-main parity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1240** — chain regression coverage — kontrol 4 (P2) — chain regression coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1241** — 1.1.97 bridge coverage — kontrol 5 (P0) — 1.1.97 bridge coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1242** — 1.1.98 recovery ordering — kontrol 5 (P1) — 1.1.98 recovery ordering için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1243** — historical anchor continuity — kontrol 5 (P1) — historical anchor continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1244** — revision monotonicity — kontrol 5 (P2) — revision monotonicity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1245** — release metadata agreement — kontrol 5 (P2) — release metadata agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1246** — managed-tree agreement — kontrol 5 (P0) — managed-tree agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1247** — next-version determinism — kontrol 5 (P1) — next-version determinism için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1248** — post-release mutation guard — kontrol 5 (P1) — post-release mutation guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1249** — candidate-main parity — kontrol 5 (P2) — candidate-main parity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1250** — chain regression coverage — kontrol 5 (P2) — chain regression coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+
+## Backup Verification
+
+- [ ] **Q1251** — legacy table backup — kontrol 1 (P0) — legacy table backup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1252** — application backup hash — kontrol 1 (P1) — application backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1253** — database backup hash — kontrol 1 (P1) — database backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1254** — backup byte validation — kontrol 1 (P2) — backup byte validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1255** — backup path confinement — kontrol 1 (P2) — backup path confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1256** — backup symlink rejection — kontrol 1 (P0) — backup symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1257** — backup restore evidence — kontrol 1 (P1) — backup restore evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1258** — backup overwrite protection — kontrol 1 (P1) — backup overwrite protection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1259** — backup retention rule — kontrol 1 (P2) — backup retention rule için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1260** — backup audit metadata — kontrol 1 (P2) — backup audit metadata için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1261** — legacy table backup — kontrol 2 (P0) — legacy table backup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1262** — application backup hash — kontrol 2 (P1) — application backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1263** — database backup hash — kontrol 2 (P1) — database backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1264** — backup byte validation — kontrol 2 (P2) — backup byte validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1265** — backup path confinement — kontrol 2 (P2) — backup path confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1266** — backup symlink rejection — kontrol 2 (P0) — backup symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1267** — backup restore evidence — kontrol 2 (P1) — backup restore evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1268** — backup overwrite protection — kontrol 2 (P1) — backup overwrite protection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1269** — backup retention rule — kontrol 2 (P2) — backup retention rule için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1270** — backup audit metadata — kontrol 2 (P2) — backup audit metadata için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1271** — legacy table backup — kontrol 3 (P0) — legacy table backup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1272** — application backup hash — kontrol 3 (P1) — application backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1273** — database backup hash — kontrol 3 (P1) — database backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1274** — backup byte validation — kontrol 3 (P2) — backup byte validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1275** — backup path confinement — kontrol 3 (P2) — backup path confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1276** — backup symlink rejection — kontrol 3 (P0) — backup symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1277** — backup restore evidence — kontrol 3 (P1) — backup restore evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1278** — backup overwrite protection — kontrol 3 (P1) — backup overwrite protection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1279** — backup retention rule — kontrol 3 (P2) — backup retention rule için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1280** — backup audit metadata — kontrol 3 (P2) — backup audit metadata için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1281** — legacy table backup — kontrol 4 (P0) — legacy table backup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1282** — application backup hash — kontrol 4 (P1) — application backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1283** — database backup hash — kontrol 4 (P1) — database backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1284** — backup byte validation — kontrol 4 (P2) — backup byte validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1285** — backup path confinement — kontrol 4 (P2) — backup path confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1286** — backup symlink rejection — kontrol 4 (P0) — backup symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1287** — backup restore evidence — kontrol 4 (P1) — backup restore evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1288** — backup overwrite protection — kontrol 4 (P1) — backup overwrite protection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1289** — backup retention rule — kontrol 4 (P2) — backup retention rule için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1290** — backup audit metadata — kontrol 4 (P2) — backup audit metadata için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1291** — legacy table backup — kontrol 5 (P0) — legacy table backup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1292** — application backup hash — kontrol 5 (P1) — application backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1293** — database backup hash — kontrol 5 (P1) — database backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1294** — backup byte validation — kontrol 5 (P2) — backup byte validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1295** — backup path confinement — kontrol 5 (P2) — backup path confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1296** — backup symlink rejection — kontrol 5 (P0) — backup symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1297** — backup restore evidence — kontrol 5 (P1) — backup restore evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1298** — backup overwrite protection — kontrol 5 (P1) — backup overwrite protection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1299** — backup retention rule — kontrol 5 (P2) — backup retention rule için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1300** — backup audit metadata — kontrol 5 (P2) — backup audit metadata için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+
+## Security Boundary Tests
+
+- [ ] **Q1301** — SQL identifier confinement — kontrol 1 (P0) — SQL identifier confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1302** — role mapping whitelist — kontrol 1 (P1) — role mapping whitelist için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1303** — IDOR-safe institution validation — kontrol 1 (P1) — IDOR-safe institution validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1304** — symlink rejection — kontrol 1 (P2) — symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1305** — path traversal rejection — kontrol 1 (P2) — path traversal rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1306** — CSRF update entrypoint — kontrol 1 (P0) — CSRF update entrypoint için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1307** — super-admin authorization — kontrol 1 (P1) — super-admin authorization için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1308** — error detail redaction — kontrol 1 (P1) — error detail redaction için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1309** — secret exclusion — kontrol 1 (P2) — secret exclusion için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1310** — fail-closed ambiguity — kontrol 1 (P2) — fail-closed ambiguity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1311** — SQL identifier confinement — kontrol 2 (P0) — SQL identifier confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1312** — role mapping whitelist — kontrol 2 (P1) — role mapping whitelist için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1313** — IDOR-safe institution validation — kontrol 2 (P1) — IDOR-safe institution validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1314** — symlink rejection — kontrol 2 (P2) — symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1315** — path traversal rejection — kontrol 2 (P2) — path traversal rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1316** — CSRF update entrypoint — kontrol 2 (P0) — CSRF update entrypoint için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1317** — super-admin authorization — kontrol 2 (P1) — super-admin authorization için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1318** — error detail redaction — kontrol 2 (P1) — error detail redaction için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1319** — secret exclusion — kontrol 2 (P2) — secret exclusion için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1320** — fail-closed ambiguity — kontrol 2 (P2) — fail-closed ambiguity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1321** — SQL identifier confinement — kontrol 3 (P0) — SQL identifier confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1322** — role mapping whitelist — kontrol 3 (P1) — role mapping whitelist için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1323** — IDOR-safe institution validation — kontrol 3 (P1) — IDOR-safe institution validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1324** — symlink rejection — kontrol 3 (P2) — symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1325** — path traversal rejection — kontrol 3 (P2) — path traversal rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1326** — CSRF update entrypoint — kontrol 3 (P0) — CSRF update entrypoint için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1327** — super-admin authorization — kontrol 3 (P1) — super-admin authorization için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1328** — error detail redaction — kontrol 3 (P1) — error detail redaction için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1329** — secret exclusion — kontrol 3 (P2) — secret exclusion için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1330** — fail-closed ambiguity — kontrol 3 (P2) — fail-closed ambiguity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1331** — SQL identifier confinement — kontrol 4 (P0) — SQL identifier confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1332** — role mapping whitelist — kontrol 4 (P1) — role mapping whitelist için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1333** — IDOR-safe institution validation — kontrol 4 (P1) — IDOR-safe institution validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1334** — symlink rejection — kontrol 4 (P2) — symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1335** — path traversal rejection — kontrol 4 (P2) — path traversal rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1336** — CSRF update entrypoint — kontrol 4 (P0) — CSRF update entrypoint için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1337** — super-admin authorization — kontrol 4 (P1) — super-admin authorization için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1338** — error detail redaction — kontrol 4 (P1) — error detail redaction için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1339** — secret exclusion — kontrol 4 (P2) — secret exclusion için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1340** — fail-closed ambiguity — kontrol 4 (P2) — fail-closed ambiguity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1341** — SQL identifier confinement — kontrol 5 (P0) — SQL identifier confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1342** — role mapping whitelist — kontrol 5 (P1) — role mapping whitelist için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1343** — IDOR-safe institution validation — kontrol 5 (P1) — IDOR-safe institution validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1344** — symlink rejection — kontrol 5 (P2) — symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1345** — path traversal rejection — kontrol 5 (P2) — path traversal rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1346** — CSRF update entrypoint — kontrol 5 (P0) — CSRF update entrypoint için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1347** — super-admin authorization — kontrol 5 (P1) — super-admin authorization için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1348** — error detail redaction — kontrol 5 (P1) — error detail redaction için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1349** — secret exclusion — kontrol 5 (P2) — secret exclusion için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1350** — fail-closed ambiguity — kontrol 5 (P2) — fail-closed ambiguity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+
+## Runtime Compatibility
+
+- [ ] **Q1351** — PHP version syntax — kontrol 1 (P0) — PHP version syntax için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1352** — MySQL rename semantics — kontrol 1 (P1) — MySQL rename semantics için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1353** — MariaDB compatibility — kontrol 1 (P1) — MariaDB compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1354** — UTF8MB4 collation — kontrol 1 (P2) — UTF8MB4 collation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1355** — PDO buffered query safety — kontrol 1 (P2) — PDO buffered query safety için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1356** — ZipArchive availability — kontrol 1 (P0) — ZipArchive availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1357** — cURL availability — kontrol 1 (P1) — cURL availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1358** — filesystem permission check — kontrol 1 (P1) — filesystem permission check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1359** — OPcache refresh behavior — kontrol 1 (P2) — OPcache refresh behavior için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1360** — shared-host compatibility — kontrol 1 (P2) — shared-host compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1361** — PHP version syntax — kontrol 2 (P0) — PHP version syntax için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1362** — MySQL rename semantics — kontrol 2 (P1) — MySQL rename semantics için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1363** — MariaDB compatibility — kontrol 2 (P1) — MariaDB compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1364** — UTF8MB4 collation — kontrol 2 (P2) — UTF8MB4 collation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1365** — PDO buffered query safety — kontrol 2 (P2) — PDO buffered query safety için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1366** — ZipArchive availability — kontrol 2 (P0) — ZipArchive availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1367** — cURL availability — kontrol 2 (P1) — cURL availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1368** — filesystem permission check — kontrol 2 (P1) — filesystem permission check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1369** — OPcache refresh behavior — kontrol 2 (P2) — OPcache refresh behavior için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1370** — shared-host compatibility — kontrol 2 (P2) — shared-host compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1371** — PHP version syntax — kontrol 3 (P0) — PHP version syntax için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1372** — MySQL rename semantics — kontrol 3 (P1) — MySQL rename semantics için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1373** — MariaDB compatibility — kontrol 3 (P1) — MariaDB compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1374** — UTF8MB4 collation — kontrol 3 (P2) — UTF8MB4 collation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1375** — PDO buffered query safety — kontrol 3 (P2) — PDO buffered query safety için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1376** — ZipArchive availability — kontrol 3 (P0) — ZipArchive availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1377** — cURL availability — kontrol 3 (P1) — cURL availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1378** — filesystem permission check — kontrol 3 (P1) — filesystem permission check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1379** — OPcache refresh behavior — kontrol 3 (P2) — OPcache refresh behavior için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1380** — shared-host compatibility — kontrol 3 (P2) — shared-host compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1381** — PHP version syntax — kontrol 4 (P0) — PHP version syntax için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1382** — MySQL rename semantics — kontrol 4 (P1) — MySQL rename semantics için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1383** — MariaDB compatibility — kontrol 4 (P1) — MariaDB compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1384** — UTF8MB4 collation — kontrol 4 (P2) — UTF8MB4 collation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1385** — PDO buffered query safety — kontrol 4 (P2) — PDO buffered query safety için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1386** — ZipArchive availability — kontrol 4 (P0) — ZipArchive availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1387** — cURL availability — kontrol 4 (P1) — cURL availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1388** — filesystem permission check — kontrol 4 (P1) — filesystem permission check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1389** — OPcache refresh behavior — kontrol 4 (P2) — OPcache refresh behavior için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1390** — shared-host compatibility — kontrol 4 (P2) — shared-host compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1391** — PHP version syntax — kontrol 5 (P0) — PHP version syntax için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1392** — MySQL rename semantics — kontrol 5 (P1) — MySQL rename semantics için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1393** — MariaDB compatibility — kontrol 5 (P1) — MariaDB compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1394** — UTF8MB4 collation — kontrol 5 (P2) — UTF8MB4 collation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1395** — PDO buffered query safety — kontrol 5 (P2) — PDO buffered query safety için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1396** — ZipArchive availability — kontrol 5 (P0) — ZipArchive availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1397** — cURL availability — kontrol 5 (P1) — cURL availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1398** — filesystem permission check — kontrol 5 (P1) — filesystem permission check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1399** — OPcache refresh behavior — kontrol 5 (P2) — OPcache refresh behavior için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1400** — shared-host compatibility — kontrol 5 (P2) — shared-host compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+
+## Operational Diagnostics
+
+- [ ] **Q1401** — legacy row count report — kontrol 1 (P0) — legacy row count report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1402** — unresolved mapping report — kontrol 1 (P1) — unresolved mapping report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1403** — bridge readiness check — kontrol 1 (P1) — bridge readiness check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1404** — backup location report — kontrol 1 (P2) — backup location report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1405** — target version report — kontrol 1 (P2) — target version report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1406** — migration history report — kontrol 1 (P0) — migration history report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1407** — storage capacity report — kontrol 1 (P1) — storage capacity report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1408** — lock status report — kontrol 1 (P1) — lock status report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1409** — last failure stage report — kontrol 1 (P2) — last failure stage report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1410** — recovery artifact report — kontrol 1 (P2) — recovery artifact report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1411** — legacy row count report — kontrol 2 (P0) — legacy row count report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1412** — unresolved mapping report — kontrol 2 (P1) — unresolved mapping report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1413** — bridge readiness check — kontrol 2 (P1) — bridge readiness check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1414** — backup location report — kontrol 2 (P2) — backup location report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1415** — target version report — kontrol 2 (P2) — target version report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1416** — migration history report — kontrol 2 (P0) — migration history report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1417** — storage capacity report — kontrol 2 (P1) — storage capacity report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1418** — lock status report — kontrol 2 (P1) — lock status report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1419** — last failure stage report — kontrol 2 (P2) — last failure stage report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1420** — recovery artifact report — kontrol 2 (P2) — recovery artifact report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1421** — legacy row count report — kontrol 3 (P0) — legacy row count report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1422** — unresolved mapping report — kontrol 3 (P1) — unresolved mapping report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1423** — bridge readiness check — kontrol 3 (P1) — bridge readiness check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1424** — backup location report — kontrol 3 (P2) — backup location report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1425** — target version report — kontrol 3 (P2) — target version report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1426** — migration history report — kontrol 3 (P0) — migration history report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1427** — storage capacity report — kontrol 3 (P1) — storage capacity report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1428** — lock status report — kontrol 3 (P1) — lock status report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1429** — last failure stage report — kontrol 3 (P2) — last failure stage report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1430** — recovery artifact report — kontrol 3 (P2) — recovery artifact report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1431** — legacy row count report — kontrol 4 (P0) — legacy row count report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1432** — unresolved mapping report — kontrol 4 (P1) — unresolved mapping report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1433** — bridge readiness check — kontrol 4 (P1) — bridge readiness check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1434** — backup location report — kontrol 4 (P2) — backup location report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1435** — target version report — kontrol 4 (P2) — target version report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1436** — migration history report — kontrol 4 (P0) — migration history report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1437** — storage capacity report — kontrol 4 (P1) — storage capacity report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1438** — lock status report — kontrol 4 (P1) — lock status report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1439** — last failure stage report — kontrol 4 (P2) — last failure stage report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1440** — recovery artifact report — kontrol 4 (P2) — recovery artifact report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1441** — legacy row count report — kontrol 5 (P0) — legacy row count report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1442** — unresolved mapping report — kontrol 5 (P1) — unresolved mapping report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1443** — bridge readiness check — kontrol 5 (P1) — bridge readiness check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1444** — backup location report — kontrol 5 (P2) — backup location report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1445** — target version report — kontrol 5 (P2) — target version report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1446** — migration history report — kontrol 5 (P0) — migration history report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1447** — storage capacity report — kontrol 5 (P1) — storage capacity report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1448** — lock status report — kontrol 5 (P1) — lock status report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1449** — last failure stage report — kontrol 5 (P2) — last failure stage report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1450** — recovery artifact report — kontrol 5 (P2) — recovery artifact report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+
+## Long-term Maintainability
+
+- [ ] **Q1451** — bridge code isolation — kontrol 1 (P0) — bridge code isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1452** — historical test immutability — kontrol 1 (P1) — historical test immutability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1453** — future-version test compatibility — kontrol 1 (P1) — future-version test compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1454** — single-source mapping rules — kontrol 1 (P2) — single-source mapping rules için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1455** — release note traceability — kontrol 1 (P2) — release note traceability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1456** — quality catalog continuity — kontrol 1 (P0) — quality catalog continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1457** — dead rescue retirement plan — kontrol 1 (P1) — dead rescue retirement plan için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1458** — migration documentation — kontrol 1 (P1) — migration documentation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1459** — support runbook linkage — kontrol 1 (P2) — support runbook linkage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1460** — technical debt ownership — kontrol 1 (P2) — technical debt ownership için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1461** — bridge code isolation — kontrol 2 (P0) — bridge code isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1462** — historical test immutability — kontrol 2 (P1) — historical test immutability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1463** — future-version test compatibility — kontrol 2 (P1) — future-version test compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1464** — single-source mapping rules — kontrol 2 (P2) — single-source mapping rules için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1465** — release note traceability — kontrol 2 (P2) — release note traceability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1466** — quality catalog continuity — kontrol 2 (P0) — quality catalog continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1467** — dead rescue retirement plan — kontrol 2 (P1) — dead rescue retirement plan için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1468** — migration documentation — kontrol 2 (P1) — migration documentation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1469** — support runbook linkage — kontrol 2 (P2) — support runbook linkage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1470** — technical debt ownership — kontrol 2 (P2) — technical debt ownership için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1471** — bridge code isolation — kontrol 3 (P0) — bridge code isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1472** — historical test immutability — kontrol 3 (P1) — historical test immutability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1473** — future-version test compatibility — kontrol 3 (P1) — future-version test compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1474** — single-source mapping rules — kontrol 3 (P2) — single-source mapping rules için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1475** — release note traceability — kontrol 3 (P2) — release note traceability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1476** — quality catalog continuity — kontrol 3 (P0) — quality catalog continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1477** — dead rescue retirement plan — kontrol 3 (P1) — dead rescue retirement plan için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1478** — migration documentation — kontrol 3 (P1) — migration documentation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1479** — support runbook linkage — kontrol 3 (P2) — support runbook linkage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1480** — technical debt ownership — kontrol 3 (P2) — technical debt ownership için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1481** — bridge code isolation — kontrol 4 (P0) — bridge code isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1482** — historical test immutability — kontrol 4 (P1) — historical test immutability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1483** — future-version test compatibility — kontrol 4 (P1) — future-version test compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1484** — single-source mapping rules — kontrol 4 (P2) — single-source mapping rules için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1485** — release note traceability — kontrol 4 (P2) — release note traceability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1486** — quality catalog continuity — kontrol 4 (P0) — quality catalog continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1487** — dead rescue retirement plan — kontrol 4 (P1) — dead rescue retirement plan için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1488** — migration documentation — kontrol 4 (P1) — migration documentation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1489** — support runbook linkage — kontrol 4 (P2) — support runbook linkage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1490** — technical debt ownership — kontrol 4 (P2) — technical debt ownership için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1491** — bridge code isolation — kontrol 5 (P0) — bridge code isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1492** — historical test immutability — kontrol 5 (P1) — historical test immutability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1493** — future-version test compatibility — kontrol 5 (P1) — future-version test compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1494** — single-source mapping rules — kontrol 5 (P2) — single-source mapping rules için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1495** — release note traceability — kontrol 5 (P2) — release note traceability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1496** — quality catalog continuity — kontrol 5 (P0) — quality catalog continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1497** — dead rescue retirement plan — kontrol 5 (P1) — dead rescue retirement plan için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1498** — migration documentation — kontrol 5 (P1) — migration documentation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1499** — support runbook linkage — kontrol 5 (P2) — support runbook linkage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+- [ ] **Q1500** — technical debt ownership — kontrol 5 (P2) — technical debt ownership için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır.
+
