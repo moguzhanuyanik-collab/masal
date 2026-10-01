@@ -31,9 +31,9 @@ assert(helperBlock.indexOf('recover_missing_064_checkpoint_after_1_1_98_bridge')
 assert(helperBlock.indexOf("'065_kurum_bazli_eslestirme_izolasyonu'") < helperBlock.indexOf("'066_kurum_eslestirme_schema_guard'"));
 assert(helperBlock.includes('001-063') || updater.includes('001-063'));
 
-assert.strictEqual(version.version,'1.2.1');
-assert.strictEqual(release.version,'1.2.1');
-assert.strictEqual(manifest.version,'1.2.1');
+assert(/^1\.2\.\d+$/.test(version.version));
+assert.strictEqual(release.version,version.version);
+assert.strictEqual(manifest.version,version.version);
 assert.strictEqual(version.release_revision,release.release_revision);
 assert.strictEqual(version.release_revision,manifest.release_revision);
 assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
