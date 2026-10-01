@@ -34,9 +34,10 @@ assert(rescue.includes("$targetVersion!=='1.2.16'"));
 assert.strictEqual(version.version,'1.2.16');
 assert.strictEqual(release.version,'1.2.16');
 assert.strictEqual(manifest.version,'1.2.16');
-assert.strictEqual(version.release_revision,1);
-assert.strictEqual(release.release_revision,1);
-assert.strictEqual(manifest.release_revision,1);
+assert.strictEqual(version.release_revision,2);
+assert.strictEqual(pkg.bootstrap.release_revision,1);
+assert.strictEqual(release.release_revision,2);
+assert.strictEqual(manifest.release_revision,2);
 assert(manifest.files.includes('RECOVERY-1.1.97-1.2.1-PACKAGE.json'));
 assert(manifest.files.includes('tests/recovery-package-lock-142.cjs'));
 
