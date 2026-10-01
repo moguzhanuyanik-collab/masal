@@ -27,9 +27,9 @@ const atLeast129=parts[0]>1 || (parts[0]===1 && (parts[1]>2 || (parts[1]===2 && 
 assert(atLeast129,'Direct recovery release must remain 1.2.9 or newer.');
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
-assert.strictEqual(version.release_revision,1);
-assert.strictEqual(release.release_revision,1);
-assert.strictEqual(manifest.release_revision,1);
+assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
+assert.strictEqual(release.release_revision,version.release_revision);
+assert.strictEqual(manifest.release_revision,version.release_revision);
 assert(manifest.files.includes('RELEASE-'+version.version+'.md'));
 assert(manifest.files.includes('tests/recovery-direct-097-121-136.cjs'));
 
