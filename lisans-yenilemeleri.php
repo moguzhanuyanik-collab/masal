@@ -117,6 +117,11 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         }
 
         throw new RuntimeException('Geçersiz işlem.');
+    }catch(PDOException $e){
+        $mysqlError=(int)($e->errorInfo[1]??0);
+        $error=$mysqlError===1062
+            ?'Sözleşme numarası veya yenileme-sözleşme bağlantısı zaten kullanılıyor.'
+            :'Veritabanı işlemi tamamlanamadı.';
     }catch(Throwable $e){
         $error=$e->getMessage();
     }
