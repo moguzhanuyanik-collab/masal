@@ -1,11 +1,12 @@
 {
   "format": 1,
-  "version": "1.1.112",
+  "version": "1.1.113",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
     "HOTFIX-1.1.97.md",
     "QUALITY-500-V2.md",
+    "QUALITY-500-V3.md",
     "QUALITY-500.md",
     "README.md",
     "RELEASE-1.0.11.md",
@@ -75,6 +76,7 @@
     "RELEASE-1.1.110.md",
     "RELEASE-1.1.111.md",
     "RELEASE-1.1.112.md",
+    "RELEASE-1.1.113.md",
     "RELEASE-1.1.12.md",
     "RELEASE-1.1.13.md",
     "RELEASE-1.1.14.md",
@@ -381,8 +383,10 @@
     "pwa-icon-512.png",
     "pwa-store.js",
     "pwa-v4.js",
+    "quality/quality-index-1500.json",
     "quality/quality-index.json",
     "quality/update-quality-500-v2.json",
+    "quality/update-quality-500-v3.json",
     "quality/update-quality-500.json",
     "rol-paneli.php",
     "service-worker.js",
@@ -443,12 +447,14 @@
     "tests/update-core-handoff-108.php",
     "tests/update-core-handoff-rollback-109.cjs",
     "tests/update-core-handoff-rollback-109.php",
+    "tests/update-legacy-bridge-113.cjs",
     "tests/update-managed-integrity-111.cjs",
     "tests/update-managed-integrity-111.php",
     "tests/update-manifest-contract-103.cjs",
     "tests/update-manifest-contract-103.php",
     "tests/update-quality-catalog-111.cjs",
     "tests/update-quality-catalog-112.cjs",
+    "tests/update-quality-catalog-113.cjs",
     "tests/update-release-anchor-101.cjs",
     "tests/update-release-head-anchor-109.cjs",
     "tests/update-release-revision-105.cjs",
@@ -476,5 +482,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 5
+  "release_revision": 3
 }
