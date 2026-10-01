@@ -21,7 +21,9 @@ assert(updater.includes("'066_kurum_eslestirme_schema_guard'"));
 assert(updater.includes('$requiresDbBackup=$isLegacy097Recovery'));
 assert(updater.includes('$dbBackupName=create_database_backup($root,$dbConfig,$updateConfig,$pdo);'));
 assert(updater.includes('$migrations=run_legacy_1_1_97_to_1_2_1_recovery($pdo,$sourceRoot,$localVersion);'));
-assert(updater.includes('$isClean121Recovery=!$isLegacy097Recovery'));
+assert(updater.includes('$databasePlan=database_update_plan($pdo,$sourceRoot,$localVersion);'));
+assert(updater.includes("$updateStage=$databaseWorkRequired?'database_recovery_preflight':'database_recovery_skip';"));
+assert(!updater.includes('$isClean121Recovery=!$isLegacy097Recovery'));
 
 const helperStart=updater.indexOf('function run_legacy_1_1_97_to_1_2_1_recovery');
 const helperEnd=updater.indexOf('function run_pending_migrations',helperStart);
