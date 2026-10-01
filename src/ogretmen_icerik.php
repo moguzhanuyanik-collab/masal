@@ -190,7 +190,7 @@ function oi_teacher_group_student_ids(PDO $pdo,int $teacherId,int $institutionId
     return array_values(array_unique($ids));
 }
 
-function oi_resolve_content_target_ids(PDO $pdo,int $teacherId,int $institutionId,array $input,array $targetStudentIds=[]): array {
+function oi_resolve_content_target_plan(PDO $pdo,int $teacherId,int $institutionId,array $input,array $targetStudentIds=[]): array {
     $availableStudents=oi_teacher_students($pdo,$teacherId,$institutionId);
     $availableIds=array_map('intval',array_column($availableStudents,'id'));
 
@@ -205,11 +205,35 @@ function oi_resolve_content_target_ids(PDO $pdo,int $teacherId,int $institutionI
         array_map('intval',$groupIds),
         static fn(int $id):bool=>$id>0
     )));
+    sort($groupIds,SORT_NUMERIC);
 
+    $availableGroups=oi_teacher_target_groups($pdo,$teacherId,$institutionId);
+    $groupMap=[];
+    foreach($availableGroups as $group){
+        $groupMap[(int)$group['id']]=$group;
+    }
+
+    $groupTargets=[];
     foreach($groupIds as $groupId){
+        $group=$groupMap[$groupId]??null;
+        if(!is_array($group)){
+            throw new RuntimeException('Seçilen sınıf / gruplardan biri bu kurumda sana bağlı aktif öğrenci içermiyor.');
+        }
+
         $groupStudentIds=oi_teacher_group_student_ids($pdo,$teacherId,$institutionId,$groupId);
         if(!$groupStudentIds){
             throw new RuntimeException('Seçilen sınıf / gruplardan biri bu kurumda sana bağlı aktif öğrenci içermiyor.');
+        }
+
+        foreach($groupStudentIds as $studentId){
+            $groupTargets[]=[
+                'kurum_sinif_id'=>$groupId,
+                'kurum_id'=>$institutionId,
+                'ogrenci_id'=>$studentId,
+                'grup_adi'=>(string)$group['ad'],
+                'grup_turu'=>(string)$group['tur'],
+                'sinif_seviyesi'=>$group['sinif_seviyesi']!==null?(int)$group['sinif_seviyesi']:null,
+            ];
         }
         $targetStudentIds=array_merge($targetStudentIds,$groupStudentIds);
     }
@@ -223,7 +247,78 @@ function oi_resolve_content_target_ids(PDO $pdo,int $teacherId,int $institutionI
         }
     }
 
-    return $targetStudentIds;
+    return [
+        'student_ids'=>$targetStudentIds,
+        'group_ids'=>$groupIds,
+        'group_targets'=>$groupTargets,
+    ];
+}
+
+function oi_resolve_content_target_ids(PDO $pdo,int $teacherId,int $institutionId,array $input,array $targetStudentIds=[]): array {
+    $plan=oi_resolve_content_target_plan($pdo,$teacherId,$institutionId,$input,$targetStudentIds);
+    return $plan['student_ids'];
+}
+
+function oi_store_content_group_targets(PDO $pdo,int $contentId,array $groupTargets): void {
+    if($contentId<=0 || !$groupTargets) return;
+    if(!oi_table_exists($pdo,'ogretmen_icerik_hedef_gruplari')){
+        throw new RuntimeException('Sınıf / grup hedef snapshot tablosu hazır değil.');
+    }
+
+    $insert=$pdo->prepare("INSERT INTO ogretmen_icerik_hedef_gruplari
+      (icerik_id,kurum_sinif_id,kurum_id,ogrenci_id,grup_adi,grup_turu,sinif_seviyesi)
+      VALUES (?,?,?,?,?,?,?)");
+    foreach($groupTargets as $row){
+        $insert->execute([
+            $contentId,
+            (int)$row['kurum_sinif_id'],
+            (int)$row['kurum_id'],
+            (int)$row['ogrenci_id'],
+            (string)$row['grup_adi'],
+            (string)$row['grup_turu'],
+            $row['sinif_seviyesi']!==null?(int)$row['sinif_seviyesi']:null,
+        ]);
+    }
+    $insert->closeCursor();
+}
+
+function oi_teacher_dashboard_target_groups(PDO $pdo,int $teacherUserId,int $institutionId=0,?string $contentType=null): array {
+    $teacher=oi_teacher_profile($pdo,$teacherUserId);
+    if(!$teacher || !oi_table_exists($pdo,'ogretmen_icerik_hedef_gruplari')) return [];
+    if($institutionId>0 && !oi_teacher_can_use_institution($pdo,$teacherUserId,$institutionId)) return [];
+
+    $where=['oi.ogretmen_id=?'];
+    $params=[(int)$teacher['id']];
+    if($institutionId>0){
+        $where[]='gh.kurum_id=?';
+        $params[]=$institutionId;
+    }
+    if($contentType!==null && $contentType!==''){
+        $where[]='oi.icerik_turu=?';
+        $params[]=$contentType;
+    }
+
+    $s=$pdo->prepare("SELECT gh.kurum_sinif_id id,gh.kurum_id,
+      SUBSTRING_INDEX(GROUP_CONCAT(gh.grup_adi ORDER BY oi.id DESC SEPARATOR '||'),'||',1) ad,
+      SUBSTRING_INDEX(GROUP_CONCAT(gh.grup_turu ORDER BY oi.id DESC SEPARATOR '||'),'||',1) tur,
+      MAX(gh.sinif_seviyesi) sinif_seviyesi,
+      k.ad kurum_adi,
+      COUNT(DISTINCT gh.icerik_id) icerik_sayisi
+      FROM ogretmen_icerik_hedef_gruplari gh
+      INNER JOIN ogretmen_icerikleri oi ON oi.id=gh.icerik_id
+      INNER JOIN kurumlar k ON k.id=gh.kurum_id AND k.aktif=1
+      INNER JOIN kurum_kullanicilari tk
+        ON tk.kurum_id=gh.kurum_id
+       AND tk.kullanici_id=?
+       AND tk.kurum_rolu='ogretmen'
+       AND tk.aktif=1
+      WHERE ".implode(' AND ',$where)."
+      GROUP BY gh.kurum_sinif_id,gh.kurum_id,k.ad
+      ORDER BY k.ad,MAX(gh.sinif_seviyesi),ad,gh.kurum_sinif_id");
+    $s->execute(array_merge([$teacherUserId],$params));
+    $rows=$s->fetchAll();
+    $s->closeCursor();
+    return is_array($rows)?$rows:[];
 }
 
 function oi_lessons(PDO $pdo): array {
