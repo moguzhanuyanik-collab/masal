@@ -19,3 +19,10 @@ Bu sürüm 1.2.2 migration yürütme düzeltmesinin üstünde, legacy Sistem Rol
 - Yeni `tests/global-scope-integrity-129.cjs` regression testi eklendi.
 - Mevcut PHP/JS syntax, updater, migration, AdımBot ve MariaDB tenant testleri korunur.
 - Bu sürüm yeni veritabanı migrationı gerektirmez.
+
+## Rev 2 — manifest ve release-head temizliği
+
+- Managed-file manifest mevcut sırasını koruyacak şekilde yalnız 1.2.3 dosyalarıyla genişletildi.
+- Gereksiz manifest satır taşımaları kaldırıldı.
+- 1.2.3 release metadata rev2 olarak yeniden ankrajlandı.
+- Ana dala squash merge zorunluluğu korunarak release HEAD ile update-release ankrajının aynı commit olması hedeflendi.
