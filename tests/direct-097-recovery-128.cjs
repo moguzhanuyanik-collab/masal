@@ -30,9 +30,11 @@ assert(updater.includes('function run_legacy_1_1_97_to_1_2_1_recovery'));
 assert(updater.includes('$migrations=run_pending_migrations($pdo,$sourceRoot,$localVersion);'));
 assert(updater.includes('function prepare_updater_core_handoff'));
 
-assert.strictEqual(version.version,'1.2.3');
-assert.strictEqual(release.version,'1.2.3');
-assert.strictEqual(manifest.version,'1.2.3');
+const versionParts=String(version.version).split('.').map(Number);
+const versionAtLeast123=versionParts[0]>1 || (versionParts[0]===1 && (versionParts[1]>2 || (versionParts[1]===2 && versionParts[2]>=3)));
+assert(versionAtLeast123,'Release must remain 1.2.3 or newer.');
+assert.strictEqual(release.version,version.version);
+assert.strictEqual(manifest.version,version.version);
 assert.strictEqual(version.release_revision,1);
 assert.strictEqual(release.release_revision,1);
 assert.strictEqual(manifest.release_revision,1);
