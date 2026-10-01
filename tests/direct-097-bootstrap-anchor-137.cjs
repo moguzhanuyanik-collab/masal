@@ -31,8 +31,8 @@ assert(updater.includes("if($localVersion==='1.1.97'){"));
 assert(workflow.includes('node tests/direct-097-bootstrap-anchor-137.cjs'));
 
 assert(version_compare_118(String(version.version),'1.2.10')>=0);
-assert.strictEqual(release.version,'1.2.10');
-assert.strictEqual(manifest.version,'1.2.10');
+assert.strictEqual(release.version,version.version);
+assert.strictEqual(manifest.version,version.version);
 assert.strictEqual(version.release_revision,1);
 assert.strictEqual(release.release_revision,1);
 assert.strictEqual(manifest.release_revision,1);
