@@ -78,6 +78,9 @@ $modules=oi_modules($pdo);
 $students=$selectedInstitutionId>0
     ?oi_teacher_students($pdo,(int)$teacher['id'],$selectedInstitutionId)
     :[];
+$targetGroups=$selectedInstitutionId>0
+    ?oi_teacher_target_groups($pdo,(int)$teacher['id'],$selectedInstitutionId)
+    :[];
 $contents=oi_teacher_contents($pdo,(int)$teacher['id']);
 $types=oi_content_types();
 
@@ -106,6 +109,12 @@ function oi_type_icon(string $type): string {
         default=>'📌'
     };
 }
+
+function oi_target_group_label(array $group): string {
+    $type=(string)($group['tur']??'sinif')==='grup'?'Grup':'Sınıf';
+    $grade=$group['sinif_seviyesi']!==null?(int)$group['sinif_seviyesi']:0;
+    return $type.' · '.(string)($group['ad']??'').($grade>0?' · '.$grade.'. sınıf':'');
+}
 ?><!doctype html>
 <html lang="tr">
 <head>
@@ -114,8 +123,8 @@ function oi_type_icon(string $type): string {
 <title>İçeriklerim — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="ogretmen.css?v=1.0.42">
-<link rel="stylesheet" href="ogretmen-icerikleri.css?v=1.2.14">
-<script src="ogretmen-icerikleri.js?v=1.2.14" defer></script>
+<link rel="stylesheet" href="ogretmen-icerikleri.css?v=1.2.30">
+<script src="ogretmen-icerikleri.js?v=1.2.30" defer></script>
 </head>
 <body class="role-page">
 <div class="role-shell">
@@ -238,6 +247,23 @@ function oi_type_icon(string $type): string {
 <small class="teacher-content-help">Öğrenci bu soruyu ilk kez doğru çözdüğünde ödül bir kez kazanılır.</small>
 </div>
 
+<div class="teacher-content-group-target-box">
+<label>Sınıf / grup hızlı hedefleme <small>(isteğe bağlı)</small></label>
+<?php if(!$targetGroups):?>
+<div class="role-empty"><span>🏷️</span>Bu kurumda sana bağlı aktif öğrencisi bulunan sınıf / grup yok.</div>
+<?php else:?>
+<div class="teacher-content-group-targets">
+<?php foreach($targetGroups as $group):?>
+<label class="teacher-content-group-target">
+<input type="checkbox" name="hedef_gruplar[]" value="<?=(int)$group['id']?>">
+<span><strong><?=oi_h(oi_target_group_label($group))?></strong><small><?=(int)$group['ogrenci_sayisi']?> bağlı öğrenci</small></span>
+</label>
+<?php endforeach;?>
+</div>
+<small class="teacher-content-help">Seçilen grupların mevcut aktif ve sana bağlı öğrencileri bu kayıtta hedef listesine eklenir. Grup üyeliği sonradan değişse bile eski yayının hedefi otomatik değişmez.</small>
+<?php endif;?>
+</div>
+
 <label>Hedef öğrenciler <small>(hiçbirini seçmezsen bu kurumdaki sana bağlı tüm öğrenciler görür)</small></label>
 <div class="teacher-content-targets">
 <?php if(!$students):?>
@@ -330,6 +356,23 @@ function oi_type_icon(string $type): string {
 <label>Doğru cevap yıldız ödülü <small>(0–20)</small></label>
 <input class="role-input" type="number" name="yildiz_degeri" min="0" max="20" value="0">
 <small class="teacher-content-help">İstersen ilk doğru cevap için yıldız ödülü belirleyebilirsin.</small>
+</div>
+
+<div class="teacher-content-group-target-box">
+<label>Sınıf / grup hızlı hedefleme <small>(isteğe bağlı)</small></label>
+<?php if(!$targetGroups):?>
+<div class="role-empty"><span>🏷️</span>Bu kurumda sana bağlı aktif öğrencisi bulunan sınıf / grup yok.</div>
+<?php else:?>
+<div class="teacher-content-group-targets">
+<?php foreach($targetGroups as $group):?>
+<label class="teacher-content-group-target">
+<input type="checkbox" name="hedef_gruplar[]" value="<?=(int)$group['id']?>">
+<span><strong><?=oi_h(oi_target_group_label($group))?></strong><small><?=(int)$group['ogrenci_sayisi']?> bağlı öğrenci</small></span>
+</label>
+<?php endforeach;?>
+</div>
+<small class="teacher-content-help">Bir veya daha fazla sınıf / grup seçebilirsin. Seçtiğin grupların mevcut öğrencileri ile aşağıda ayrıca işaretlediğin öğrenciler birleştirilir.</small>
+<?php endif;?>
 </div>
 
 <label>Hedef öğrenciler <small>(hiçbirini seçmezsen bu kurumdaki sana bağlı tüm öğrenciler görür)</small></label>
