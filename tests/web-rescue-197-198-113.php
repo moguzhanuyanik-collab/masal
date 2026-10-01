@@ -12,7 +12,7 @@ $needles=[
  'rescue_ref_file',
  'hash_equals($oldHash,$backupHash)',
  'rescue_atomic_replace($payload,$target)',
- '\'mode\'=>\'direct-updater-core-recovery\'',
+ '\'mode\'=>\'direct-updater-core-recovery-pinned\'',
  '\'database_changed\'=>false',
  '\'migrations_run\'=>false',
 ];
