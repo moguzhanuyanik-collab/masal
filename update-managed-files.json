@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.48",
+  "version": "1.2.49",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -221,6 +221,7 @@
     "RELEASE-1.2.46.md",
     "RELEASE-1.2.47.md",
     "RELEASE-1.2.48.md",
+    "RELEASE-1.2.49.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
@@ -400,6 +401,7 @@
     "database/migrations/078_demo_satis_donusum_merkezi.sql",
     "database/migrations/079_paket_lisans_butunlugu.sql",
     "database/migrations/080_lisans_yenileme_operasyon_merkezi.sql",
+    "database/migrations/081_yenileme_sozlesme_tahsilat_baglantisi.sql",
     "demo-satis.css",
     "demo-satis.php",
     "destek.css",
@@ -518,6 +520,7 @@
     "src/kurum_yonetimi.php",
     "src/kurumlar_modulu.php",
     "src/lisans_yenileme.php",
+    "src/lisans_yenileme_ticari.php",
     "src/mail_settings.php",
     "src/normalized.php",
     "src/odev_durumu.php",
@@ -623,6 +626,8 @@
     "tests/rebuild-release-121.cjs",
     "tests/recovery-safety-100.cjs",
     "tests/recovery-safety-100.php",
+    "tests/renewal-commercial-link-174.cjs",
+    "tests/renewal-commercial-link-db-174.php",
     "tests/security-92.cjs",
     "tests/student-homework-dashboard-149.cjs",
     "tests/student-homework-dashboard-db-149.php",
@@ -727,5 +732,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Lisans yenileme ve süre sonu operasyon merkezi"
+  "name": "Yenileme sözleşme ve tahsilat bağlantısı"
 }
