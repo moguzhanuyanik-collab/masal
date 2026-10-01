@@ -272,11 +272,13 @@ function st_convert(PDO $pdo,array $actor,int $salesId,int $packageId,?string $l
         $stmt->closeCursor();
         if(!is_array($package)) throw new RuntimeException('Aktif dönüşüm paketi bulunamadı.');
 
-        $stmt=$pdo->prepare('SELECT id FROM kurum_lisanslari WHERE kurum_id=? LIMIT 1 FOR UPDATE');
+        $stmt=$pdo->prepare('SELECT id,durum FROM kurum_lisanslari WHERE kurum_id=? LIMIT 1 FOR UPDATE');
         $stmt->execute([(int)$sales['kurum_id']]);
-        $licenseId=(int)($stmt->fetchColumn()?:0);
+        $license=$stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
-        if($licenseId<=0) throw new RuntimeException('Demo lisansı bulunamadı.');
+        if(!is_array($license)) throw new RuntimeException('Demo lisansı bulunamadı.');
+        if((string)$license['durum']!=='deneme') throw new RuntimeException('Demo lisansı artık deneme durumunda değil. Lisans ve satış kaydını önce uzlaştır.');
+        $licenseId=(int)$license['id'];
 
         $stmt=$pdo->prepare("UPDATE kurum_lisanslari
             SET paket_id=?,baslangic_tarihi=CURDATE(),bitis_tarihi=?,durum='aktif',
@@ -326,10 +328,18 @@ function st_mark_lost(PDO $pdo,array $actor,int $salesId,string $reason): void {
         if(!$sales) throw new RuntimeException('Satış kaydı bulunamadı.');
         if((string)$sales['durum']!=='deneme') throw new RuntimeException('Yalnız deneme aşamasındaki satış kaybedildi olarak işaretlenebilir.');
 
+        $stmt=$pdo->prepare('SELECT id,durum FROM kurum_lisanslari WHERE kurum_id=? LIMIT 1 FOR UPDATE');
+        $stmt->execute([(int)$sales['kurum_id']]);
+        $license=$stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        if(!is_array($license)) throw new RuntimeException('Demo lisansı bulunamadı.');
+        if((string)$license['durum']!=='deneme') throw new RuntimeException('Demo lisansı artık deneme durumunda değil. Lisans ve satış kaydını önce uzlaştır.');
+
         $stmt=$pdo->prepare("UPDATE kurum_lisanslari
             SET durum='iptal',notlar=?
-            WHERE kurum_id=? AND durum='deneme'");
-        $stmt->execute(['Demo satış kaybedildi: '.$reason,(int)$sales['kurum_id']]);
+            WHERE id=? AND durum='deneme'");
+        $stmt->execute(['Demo satış kaybedildi: '.$reason,(int)$license['id']]);
+        if($stmt->rowCount()!==1) throw new RuntimeException('Demo lisansı kapatılamadı.');
         $stmt->closeCursor();
 
         $stmt=$pdo->prepare("UPDATE kurum_deneme_satislari
