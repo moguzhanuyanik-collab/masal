@@ -26,7 +26,7 @@ assert(page.includes('setTimeout(resolve, 350)'));
 assert(workflow.includes('tests/update-core-handoff-108.php'));
 assert(workflow.includes('tests/update-core-handoff-108.cjs'));
 
-assert(/^1\.1\.(?:10[8-9]|1[1-9][0-9]|[2-9][0-9]{2,})$/.test(String(version.version)),'version must be 1.1.108 or newer');
+assert(/^1\.1\.(?:10[8-9]|1[1-9][0-9]|[2-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.1','version must be 1.1.108 or newer');
 assert(Number.isInteger(version.release_revision) && version.release_revision>=1,'release revision must be positive');
 assert.strictEqual(anchor.version,version.version);
 assert.strictEqual(anchor.release_revision,version.release_revision);

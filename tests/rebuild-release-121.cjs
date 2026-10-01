@@ -47,7 +47,10 @@ for(const required of [
   'tests/tenant-schema-guard-116.cjs',
   'tests/tenant-matching-crud-117.cjs',
   'tests/update-recovery-119.cjs'
-]) assert(manifest.files.includes(required), 'Managed manifest missing: '+required);
+]) {
+  assert(manifest.files.includes(required), 'Managed manifest missing: '+required);
+  assert(fs.existsSync(required), 'Recovered file missing from tree: '+required);
+}
 
 assert(updater.includes('ILKADIM_UPDATER_CORE_GENERATION = 121'));
 assert(updater.includes('function github_branch_head_sha'));
