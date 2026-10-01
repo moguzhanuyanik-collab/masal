@@ -12,7 +12,7 @@ const version=JSON.parse(fs.readFileSync('version.json','utf8'));
 const release=JSON.parse(fs.readFileSync('update-release.json','utf8'));
 
 assert(page.includes("require_role('ogretmen')"),'question dashboard must require teacher role');
-assert(page.includes('tsd_teacher_questions($pdo,(int)$user[\'id\'],$institutionId,$publication)'),'dashboard must use teacher-scoped question domain');
+assert(/tsd_teacher_questions\(\$pdo,\(int\)\$user\['id'\],\$institutionId,\$publication(?:,\$groupId)?\)/.test(page),'dashboard must use teacher-scoped question domain');
 assert(page.includes('name="kurum_id"'),'institution filter missing');
 assert(page.includes('name="yayin"'),'publication filter missing');
 assert(page.includes('name="performans"'),'performance filter missing');
@@ -20,7 +20,7 @@ assert(page.includes('Cevaplanma'),'answer-rate metric missing');
 assert(page.includes('Doğruluk'),'accuracy metric missing');
 assert(page.includes('Dağıtılan yıldız'),'reward total metric missing');
 assert(page.includes('ogretmen-icerik-detay.php?id=<?=(int)$question[\'id\']?>'),'question card must drill into per-student detail');
-assert(page.includes('ogretmen-sorulari.css?v=1.2.26'),'question dashboard CSS must be versioned');
+assert(/ogretmen-sorulari\.css\?v=1\.2\.(?:2[6-9]|[3-9]\d)/.test(page),'question dashboard CSS must be versioned at 1.2.26 or newer');
 assert(panel.includes('href="ogretmen-sorulari.php"'),'teacher panel must link question dashboard');
 
 assert(domain.includes('function tsd_teacher_questions('),'question dashboard provider missing');
