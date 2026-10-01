@@ -42,6 +42,12 @@ function ki_type_icon(string $type): string {
     ][$type]??'📌';
 }
 
+function ki_group_label(array $group): string {
+    $type=(string)($group['tur']??'sinif')==='grup'?'Grup':'Sınıf';
+    $grade=$group['sinif_seviyesi']!==null?(int)$group['sinif_seviyesi']:0;
+    return $type.' · '.(string)($group['ad']??'').($grade>0?' · '.$grade.'. sınıf':'');
+}
+
 $type=(string)($_GET['tur']??'tum');
 $publication=(string)($_GET['durum']??'tum');
 $performance=(string)($_GET['performans']??'tum');
@@ -72,7 +78,20 @@ $teacherIds=array_map('intval',array_column($teachers,'id'));
 if($teacherId>0 && !in_array($teacherId,$teacherIds,true)) $teacherId=0;
 
 try{
-    $allContents=kic_contents($pdo,$institutionId,$teacherId,$type,$publication);
+    $groups=kic_target_groups($pdo,$institutionId);
+}catch(Throwable){
+    $groups=[];
+}
+$groupIds=array_map('intval',array_column($groups,'id'));
+$groupId=max(0,(int)($_GET['grup_id']??0));
+if($groupId>0 && !in_array($groupId,$groupIds,true)){
+    http_response_code(403);
+    echo 'Bu sınıf / grup kurum içerik performansı kapsamında değil.';
+    exit;
+}
+
+try{
+    $allContents=kic_contents($pdo,$institutionId,$teacherId,$type,$publication,$groupId);
     $contents=kic_filter_performance($allContents,$performance);
     $stats=kic_summary($contents);
 }catch(Throwable $e){
@@ -135,6 +154,13 @@ $back=$isSuper?'kurum-detay.php?kurum_id='.$institutionId:'yonetici-paneli.php?k
 <option value="<?=(int)$teacher['id']?>" <?=((int)$teacher['id']===$teacherId?'selected':'')?>><?=ki_h((string)$teacher['ad_soyad'])?></option>
 <?php endforeach;?>
 </select>
+<label for="grup">Sınıf / grup</label>
+<select class="role-input" id="grup" name="grup_id">
+<option value="0">Tüm sınıf / grup hedefleri</option>
+<?php foreach($groups as $group):?>
+<option value="<?=(int)$group['id']?>" <?=((int)$group['id']===$groupId?'selected':'')?>><?=ki_h(ki_group_label($group))?></option>
+<?php endforeach;?>
+</select>
 <label for="tur">İçerik türü</label>
 <select class="role-input" id="tur" name="tur">
 <option value="tum" <?=$type==='tum'?'selected':''?>>Tüm türler</option>
@@ -186,7 +212,7 @@ $back=$isSuper?'kurum-detay.php?kurum_id='.$institutionId:'yonetici-paneli.php?k
 <?php if($contentText!==''):?><p class="institution-content-preview"><?=nl2br(ki_h($contentText))?></p><?php endif;?>
 
 <div class="institution-content-meta">
-<a class="institution-content-detail-link" href="kurum-icerik-detay.php?kurum_id=<?=$institutionId?>&amp;id=<?=(int)$item['id']?>">Detay</a>
+<a class="institution-content-detail-link" href="kurum-icerik-detay.php?kurum_id=<?=$institutionId?>&amp;id=<?=(int)$item['id']?><?=$groupId>0?'&amp;grup_id='.$groupId:''?>">Detay</a>
 <span>🎯 <?=(int)$item['hedef_sayisi']?> hedef</span>
 <?php if((string)$item['icerik_turu']==='soru'):?>
 <span>💬 <?=(int)$item['cevaplayan_sayisi']?> cevap</span>
