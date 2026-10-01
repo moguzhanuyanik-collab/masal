@@ -41,3 +41,9 @@ Production veritabanına doğrudan müdahale edilmez.
 
 - Tarihsel regression testleri release revision değerini sabit 1'e bağlamayacak şekilde future-proof hale getirildi.
 - Final release head yeniden tek metadata ankrajında sabitlenecek.
+
+## Rev 4 — final historical regression alignment
+
+- 1.1.97 direct recovery regression testi de release revision değerini future-proof biçimde doğruluyor.
+- Tüm tarihsel recovery revision kontrolleri sabit revizyon numarasından çıkarıldı.
+- Son metadata ankrajı 1.2.12 rev4 olarak sabitleniyor.
