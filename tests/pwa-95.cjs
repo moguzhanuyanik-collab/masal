@@ -45,6 +45,8 @@ assert(offlineJs.includes("const y=d.getFullYear();"));
 assert(offlineJs.includes("const m=String(d.getMonth()+1).padStart(2,'0');"));
 assert(!offlineJs.includes("toISOString().slice(0,10)"));
 
-assert(/^1\.1\.(?:9[5-9]|[1-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.1','version must be 1.1.95 or newer');
+const vp=String(version.version).split('.').map(Number);
+assert(vp.length===3 && vp.every(Number.isFinite),'version must be semver-like');
+assert(vp[0]>1 || (vp[0]===1 && vp[1]>1) || (vp[0]===1 && vp[1]===1 && vp[2]>=95),'version must be 1.1.95 or newer');
 
 console.log('1.1.95 PWA hardening checks passed');
