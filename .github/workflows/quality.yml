@@ -124,6 +124,7 @@ jobs:
           node tests/password-recovery-165.cjs
           node tests/mail-settings-166.cjs
           node tests/support-center-167.cjs
+          node tests/legal-consent-168.cjs
           node tests/institution-class-edit-136.cjs
           node tests/institution-reporting-137.cjs
           node tests/institution-report-export-159.cjs
@@ -209,6 +210,7 @@ jobs:
           php tests/password-recovery-db-165.php
           php tests/mail-settings-166.php
           php tests/support-center-db-167.php
+          php tests/legal-consent-db-168.php
           php tests/institution-class-edit-db-136.php
           php tests/institution-reporting-db-137.php
           php tests/teacher-content-edit-copy-db-139.php
