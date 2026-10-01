@@ -149,5 +149,7 @@ jobs:
           ILKADIM_DB_NAME: ilkadim_ci
           ILKADIM_DB_USER: root
           ILKADIM_DB_PASSWORD: root
-        run: php tests/tenant-isolation-db-115.php
+        run: |
+          php tests/tenant-isolation-db-115.php
+          php tests/legacy-064-integrity-124.php
 
