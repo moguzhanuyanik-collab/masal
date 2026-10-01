@@ -97,6 +97,135 @@ function oi_teacher_students(PDO $pdo,int $teacherId,int $institutionId): array 
     }
 }
 
+function oi_teacher_target_groups(PDO $pdo,int $teacherId,int $institutionId): array {
+    if($teacherId<=0 || $institutionId<=0) return [];
+    try{
+        $s=$pdo->prepare("SELECT ks.id,ks.ad,ks.tur,ks.sinif_seviyesi,
+          COUNT(DISTINCT o.id) ogrenci_sayisi
+          FROM kurum_siniflari ks
+          INNER JOIN kurum_sinif_ogrencileri kso
+            ON kso.kurum_sinif_id=ks.id
+           AND kso.kurum_id=ks.kurum_id
+          INNER JOIN ogretmen_ogrenci oo
+            ON oo.ogrenci_id=kso.ogrenci_id
+           AND oo.kurum_id=ks.kurum_id
+           AND oo.ogretmen_id=?
+          INNER JOIN ogretmenler og
+            ON og.id=oo.ogretmen_id
+           AND og.aktif=1
+          INNER JOIN kullanicilar tu
+            ON tu.id=og.kullanici_id
+           AND tu.aktif=1
+          INNER JOIN kurum_kullanicilari tk
+            ON tk.kullanici_id=tu.id
+           AND tk.kurum_id=ks.kurum_id
+           AND tk.kurum_rolu='ogretmen'
+           AND tk.aktif=1
+          INNER JOIN ogrenciler o
+            ON o.id=kso.ogrenci_id
+           AND o.aktif=1
+          INNER JOIN kullanicilar su
+            ON su.id=o.kullanici_id
+           AND su.aktif=1
+          INNER JOIN kurum_kullanicilari sk
+            ON sk.kullanici_id=o.kullanici_id
+           AND sk.kurum_id=ks.kurum_id
+           AND sk.kurum_rolu='ogrenci'
+           AND sk.aktif=1
+          WHERE ks.kurum_id=?
+            AND ks.aktif=1
+          GROUP BY ks.id,ks.ad,ks.tur,ks.sinif_seviyesi
+          HAVING COUNT(DISTINCT o.id)>0
+          ORDER BY COALESCE(ks.sinif_seviyesi,99),ks.tur,ks.ad,ks.id");
+        $s->execute([$teacherId,$institutionId]);
+        $rows=$s->fetchAll();
+        $s->closeCursor();
+        return is_array($rows)?$rows:[];
+    }catch(Throwable){
+        return [];
+    }
+}
+
+function oi_teacher_group_student_ids(PDO $pdo,int $teacherId,int $institutionId,int $groupId): array {
+    if($teacherId<=0 || $institutionId<=0 || $groupId<=0) return [];
+
+    $s=$pdo->prepare("SELECT DISTINCT o.id
+        FROM kurum_siniflari ks
+        INNER JOIN kurum_sinif_ogrencileri kso
+          ON kso.kurum_sinif_id=ks.id
+         AND kso.kurum_id=ks.kurum_id
+        INNER JOIN ogretmen_ogrenci oo
+          ON oo.ogrenci_id=kso.ogrenci_id
+         AND oo.kurum_id=ks.kurum_id
+         AND oo.ogretmen_id=?
+        INNER JOIN ogretmenler og
+          ON og.id=oo.ogretmen_id
+         AND og.aktif=1
+        INNER JOIN kullanicilar tu
+          ON tu.id=og.kullanici_id
+         AND tu.aktif=1
+        INNER JOIN kurum_kullanicilari tk
+          ON tk.kullanici_id=tu.id
+         AND tk.kurum_id=ks.kurum_id
+         AND tk.kurum_rolu='ogretmen'
+         AND tk.aktif=1
+        INNER JOIN ogrenciler o
+          ON o.id=kso.ogrenci_id
+         AND o.aktif=1
+        INNER JOIN kullanicilar su
+          ON su.id=o.kullanici_id
+         AND su.aktif=1
+        INNER JOIN kurum_kullanicilari sk
+          ON sk.kullanici_id=o.kullanici_id
+         AND sk.kurum_id=ks.kurum_id
+         AND sk.kurum_rolu='ogrenci'
+         AND sk.aktif=1
+        WHERE ks.id=?
+          AND ks.kurum_id=?
+          AND ks.aktif=1
+        ORDER BY o.id");
+    $s->execute([$teacherId,$groupId,$institutionId]);
+    $ids=array_map('intval',$s->fetchAll(PDO::FETCH_COLUMN)?:[]);
+    $s->closeCursor();
+    return array_values(array_unique($ids));
+}
+
+function oi_resolve_content_target_ids(PDO $pdo,int $teacherId,int $institutionId,array $input,array $targetStudentIds=[]): array {
+    $availableStudents=oi_teacher_students($pdo,$teacherId,$institutionId);
+    $availableIds=array_map('intval',array_column($availableStudents,'id'));
+
+    $targetStudentIds=array_values(array_unique(array_filter(
+        array_map('intval',$targetStudentIds),
+        static fn(int $id):bool=>$id>0
+    )));
+
+    $groupIds=$input['hedef_gruplar']??[];
+    if(!is_array($groupIds)) $groupIds=[];
+    $groupIds=array_values(array_unique(array_filter(
+        array_map('intval',$groupIds),
+        static fn(int $id):bool=>$id>0
+    )));
+
+    foreach($groupIds as $groupId){
+        $groupStudentIds=oi_teacher_group_student_ids($pdo,$teacherId,$institutionId,$groupId);
+        if(!$groupStudentIds){
+            throw new RuntimeException('Seçilen sınıf / gruplardan biri bu kurumda sana bağlı aktif öğrenci içermiyor.');
+        }
+        $targetStudentIds=array_merge($targetStudentIds,$groupStudentIds);
+    }
+
+    $targetStudentIds=array_values(array_unique($targetStudentIds));
+    sort($targetStudentIds,SORT_NUMERIC);
+
+    foreach($targetStudentIds as $studentId){
+        if(!in_array($studentId,$availableIds,true)){
+            throw new RuntimeException('Seçilen öğrencilerden biri bu kurumda sana bağlı değil.');
+        }
+    }
+
+    return $targetStudentIds;
+}
+
 function oi_lessons(PDO $pdo): array {
     try{
         $s=$pdo->query("SELECT id,kod,ad,emoji FROM dersler WHERE aktif=1 ORDER BY sira,id");
@@ -196,12 +325,9 @@ function oi_create_content(PDO $pdo,array $user,array $input,array $targetStuden
         throw new RuntimeException('İçerik metnini yaz.');
     }
 
-    $availableStudents=oi_teacher_students($pdo,(int)$teacher['id'],$institutionId);
-    $availableIds=array_map('intval',array_column($availableStudents,'id'));
-    $targetStudentIds=array_values(array_unique(array_filter(array_map('intval',$targetStudentIds),static fn(int $id):bool=>$id>0)));
-    foreach($targetStudentIds as $studentId){
-        if(!in_array($studentId,$availableIds,true)) throw new RuntimeException('Seçilen öğrencilerden biri bu kurumda sana bağlı değil.');
-    }
+    $targetStudentIds=oi_resolve_content_target_ids(
+        $pdo,(int)$teacher['id'],$institutionId,$input,$targetStudentIds
+    );
     $targetType=$targetStudentIds?'secili_ogrenciler':'tum_ogrenciler';
 
     $pdo->beginTransaction();
@@ -537,14 +663,9 @@ function oi_normalize_content_input(PDO $pdo,int $teacherId,int $institutionId,a
         if($type!=='odev') $dueAt=null;
     }
 
-    $availableStudents=oi_teacher_students($pdo,$teacherId,$institutionId);
-    $availableIds=array_map('intval',array_column($availableStudents,'id'));
-    $targetStudentIds=array_values(array_unique(array_filter(array_map('intval',$targetStudentIds),static fn(int $id):bool=>$id>0)));
-    foreach($targetStudentIds as $studentId){
-        if(!in_array($studentId,$availableIds,true)){
-            throw new RuntimeException('Seçilen öğrencilerden biri bu kurumda sana bağlı değil.');
-        }
-    }
+    $targetStudentIds=oi_resolve_content_target_ids(
+        $pdo,$teacherId,$institutionId,$input,$targetStudentIds
+    );
 
     return [
         'ders_id'=>$lessonId,
