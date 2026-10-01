@@ -33,7 +33,8 @@ const expected=[
 ];
 const commits=cp.execFileSync('git',['log','--format=%H','--','version.json'],{encoding:'utf8'})
  .trim().split(/\s+/).filter(Boolean);
-const versions=[];\nconst recoveryOnly=new Set(['1.1.119']);
+const versions=[];
+const recoveryOnly=new Set(['1.1.119']);
 for(const sha of commits){
  try{
   const raw=cp.execFileSync('git',['show',sha+':version.json'],{encoding:'utf8',stdio:['ignore','pipe','ignore']});
