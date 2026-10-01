@@ -22,7 +22,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 }
 $students=ky_global_students($pdo);
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Global Öğrenciler — İlkAdım</title>
-<link rel="stylesheet" href="super-admin-pages.css?v=1.0.72"></head>
+<link rel="stylesheet" href="super-admin-pages.css?v=1.2.33"></head>
 <body class="sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?><div class="app-shell">
 <header class="app-topbar"><a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a><div class="sa-page-actions"><a class="sa-page-action" href="super-admin-profil.php"><svg><use href="#sa-user"/></svg></a></div></header>
 <main id="screen"><div class="screen-content">
@@ -31,7 +31,7 @@ $students=ky_global_students($pdo);
 <?php if($error):?><div class="role-note"><span><svg><use href="#sa-alert"/></svg></span><p><?=ky_h($error)?></p></div><?php endif;?>
 
 <section class="role-section">
-<div class="sa-data-toolbar"><div><span class="eyeline">ÖĞRENCİLER</span><h2>Global Öğrenci Listesi</h2><small><?=count($students)?> kayıt</small></div><div class="sa-data-actions"><a class="sa-secondary-btn" href="global-eslestirme.php">Eşleştirme</a><button class="sa-primary-btn" type="button" data-open-create>+ Yeni Öğrenci</button></div></div>
+<div class="sa-data-toolbar"><div><span class="eyeline">ÖĞRENCİLER</span><h2>Global Öğrenci Listesi</h2><small><?=count($students)?> kayıt</small></div><div class="sa-data-actions"><a class="sa-secondary-btn" href="global-arsiv.php?rol=ogrenci">Arşiv</a><a class="sa-secondary-btn" href="global-eslestirme.php">Eşleştirme</a><button class="sa-primary-btn" type="button" data-open-create>+ Yeni Öğrenci</button></div></div>
 <div class="sa-table-card"><div class="sa-table-scroll"><table class="sa-data-table"><thead><tr><th>Öğrenci</th><th>Kademe / Sınıf</th><th>E-posta</th><th>Veli</th><th>Durum</th><th class="sa-actions-col">İşlemler</th></tr></thead><tbody>
 <?php if(!$students):?><tr><td colspan="6" class="sa-empty-cell">Henüz global öğrenci yok.</td></tr><?php endif;?>
 <?php foreach($students as $s):?><tr>
