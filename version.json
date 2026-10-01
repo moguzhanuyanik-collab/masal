@@ -1,5 +1,5 @@
 {
-  "version": "1.2.2",
-  "name": "Non-legacy pending migration recovery and DB update safety",
+  "version": "1.2.3",
+  "name": "1.1.97 direct updater recovery and migration-safe update handoff",
   "release_revision": 1
 }

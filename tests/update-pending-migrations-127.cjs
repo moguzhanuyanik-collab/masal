@@ -31,14 +31,14 @@ const genericRecoveryPos=installBlock.indexOf('$migrations=run_pending_migration
 assert(legacyPos>=0 && pendingPos>legacyPos,'Legacy tespitinden sonra pending migration preflight gelmeli.');
 assert(legacyRecoveryPos>=0 && genericRecoveryPos>legacyRecoveryPos,'1.1.97 özel recovery generic migration akışından önce kalmalı.');
 
-assert.strictEqual(version.version,'1.2.2');
-assert.strictEqual(release.version,'1.2.2');
-assert.strictEqual(manifest.version,'1.2.2');
+assert.strictEqual(version.version,'1.2.3');
+assert.strictEqual(release.version,'1.2.3');
+assert.strictEqual(manifest.version,'1.2.3');
 assert.strictEqual(version.release_revision,1);
 assert.strictEqual(release.release_revision,1);
 assert.strictEqual(manifest.release_revision,1);
 assert(manifest.files.includes('tests/update-pending-migrations-127.cjs'));
-assert(manifest.files.includes('RELEASE-1.2.2.md'));
+assert(manifest.files.includes('RELEASE-1.2.3.md'));
 assert(workflow.includes('node tests/update-pending-migrations-127.cjs'));
 
-console.log('PASS: 1.2.2 pending database migration contract');
+console.log('PASS: 1.2.3 pending database migration contract');
