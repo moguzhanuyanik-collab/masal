@@ -35,7 +35,7 @@ assert(domain.includes("tk.kurum_id=ks.kurum_id"),'teacher membership must match
 assert(domain.includes("sk.kurum_id=ks.kurum_id"),'student membership must match group institution');
 assert(domain.includes("kso.kurum_id=?"),'student group filter must be institution scoped');
 assert(domain.includes("kso.kurum_sinif_id=?"),'student group filter must target exact group');
-assert(domain.includes("WHERE oo.kurum_id=?"),'teacher students must be institution scoped');
+assert(domain.includes("'oo.kurum_id=?'"),'teacher students must be institution scoped');
 assert(domain.includes("'back'=>'ogretmen-ogrencilerim.php?kurum_id='.$institutionId"),'verified report back target missing');
 
 assert(css.includes('.teacher-student-groups'),'student group chip styling missing');
