@@ -4,7 +4,6 @@ const assert=require('assert');
 
 const catalog=JSON.parse(fs.readFileSync('quality/update-quality-500.json','utf8'));
 const md=fs.readFileSync('QUALITY-500.md','utf8');
-const version=JSON.parse(fs.readFileSync('version.json','utf8'));
 
 assert.strictEqual(catalog.format,1);
 assert.strictEqual(catalog.total,500);
@@ -18,7 +17,7 @@ assert.strictEqual(catalog.items.filter(x=>x.status==='planned').length,460);
 assert(catalog.items.every(x=>['P0','P1','P2'].includes(x.priority)));
 assert(catalog.items.every(x=>typeof x.acceptance==='string' && x.acceptance.length>20));
 assert(md.includes('Q001') && md.includes('Q500'));
-assert.strictEqual(catalog.version,version.version);
-assert.strictEqual(catalog.release_revision,version.release_revision);
+assert.strictEqual(catalog.version,'1.1.111');
+assert.strictEqual(catalog.release_revision,4);
 
 console.log('PASS: 500-item quality/update catalog contract');
