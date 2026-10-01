@@ -1,7 +1,21 @@
 <?php
 declare(strict_types=1);
 
-function kid_content_detail(PDO $pdo,int $institutionId,int $contentId): ?array {
+function kid_table_exists(PDO $pdo,string $table): bool {
+    if(!preg_match('/^[A-Za-z0-9_]+$/',$table)) return false;
+    try{
+        $s=$pdo->prepare("SELECT 1 FROM information_schema.tables
+            WHERE table_schema=DATABASE() AND table_name=? LIMIT 1");
+        $s->execute([$table]);
+        $exists=(bool)$s->fetchColumn();
+        $s->closeCursor();
+        return $exists;
+    }catch(Throwable){
+        return false;
+    }
+}
+
+function kid_content_detail(PDO $pdo,int $institutionId,int $contentId,int $groupId=0): ?array {
     if($institutionId<=0 || $contentId<=0) return null;
 
     $s=$pdo->prepare("SELECT oi.*,
@@ -26,6 +40,31 @@ function kid_content_detail(PDO $pdo,int $institutionId,int $contentId): ?array 
     $s->closeCursor();
     if(!is_array($content)) return null;
 
+    $groupId=max(0,$groupId);
+    $groupContext=null;
+    $groupJoin='';
+    $groupTargetCondition='';
+    if($groupId>0){
+        if(!kid_table_exists($pdo,'ogretmen_icerik_hedef_gruplari')) return null;
+
+        $groupStmt=$pdo->prepare("SELECT kurum_sinif_id id,kurum_id,grup_adi ad,grup_turu tur,sinif_seviyesi
+            FROM ogretmen_icerik_hedef_gruplari
+            WHERE icerik_id=? AND kurum_sinif_id=? AND kurum_id=?
+            ORDER BY ogrenci_id
+            LIMIT 1");
+        $groupStmt->execute([$contentId,$groupId,$institutionId]);
+        $groupContext=$groupStmt->fetch();
+        $groupStmt->closeCursor();
+        if(!is_array($groupContext)) return null;
+
+        $groupJoin="LEFT JOIN ogretmen_icerik_hedef_gruplari gh
+          ON gh.icerik_id=oi.id
+         AND gh.kurum_id=oi.kurum_id
+         AND gh.kurum_sinif_id={$groupId}
+         AND gh.ogrenci_id=o.id";
+        $groupTargetCondition=" AND gh.ogrenci_id IS NOT NULL";
+    }
+
     $s=$pdo->prepare("SELECT DISTINCT o.id,o.ad,o.email,o.sinif_seviyesi,
       c.secilen_cevap_indeksi,c.dogru cevap_dogru,c.deneme_sayisi,
       c.cevap_tarihi,c.guncellenme_tarihi cevap_guncellenme_tarihi,
@@ -49,6 +88,7 @@ function kid_content_detail(PDO $pdo,int $institutionId,int $contentId): ?array 
       LEFT JOIN ogretmen_icerik_hedefleri h
         ON h.icerik_id=oi.id
        AND h.ogrenci_id=o.id
+      {$groupJoin}
       LEFT JOIN ogretmen_icerik_cevaplari c
         ON c.icerik_id=oi.id
        AND c.ogrenci_id=o.id
@@ -58,6 +98,7 @@ function kid_content_detail(PDO $pdo,int $institutionId,int $contentId): ?array 
       WHERE oi.id=?
         AND oi.kurum_id=?
         AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
+        {$groupTargetCondition}
       ORDER BY o.sinif_seviyesi,o.ad,o.id");
     $s->execute([$contentId,$institutionId]);
     $students=$s->fetchAll();
@@ -104,5 +145,5 @@ function kid_content_detail(PDO $pdo,int $institutionId,int $contentId): ?array 
         $summary['waiting']=$summary['targeted'];
     }
 
-    return ['content'=>$content,'students'=>$students,'summary'=>$summary];
+    return ['content'=>$content,'students'=>$students,'summary'=>$summary,'group_context'=>$groupContext];
 }
