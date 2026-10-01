@@ -99,6 +99,30 @@ function normalize_release_revision(mixed $value): int {
     return 0;
 }
 
+function normalize_application_generation(mixed $value): int {
+    if(is_int($value)) return max(0,$value);
+    if(is_string($value) && preg_match('/^\d+$/D',$value)===1) return max(0,(int)$value);
+    if(is_float($value) && floor($value)===$value) return max(0,(int)$value);
+    return 0;
+}
+
+function read_local_application_generation(string $root,string $expectedVersion=''): int {
+    $path=rtrim($root,'/\\').'/version.json';
+    if(!is_file($path) || !is_readable($path)) return 0;
+    $data=json_decode((string)file_get_contents($path),true);
+    if(!is_array($data)) return 0;
+    $version=trim((string)($data['version']??''));
+    if($expectedVersion!=='' && $version!==$expectedVersion) return 0;
+    return normalize_application_generation($data['application_generation']??0);
+}
+
+function release_application_generation_is_safe(array $candidate,int $localGeneration): bool {
+    $candidateGeneration=normalize_application_generation($candidate['application_generation']??0);
+    if($localGeneration<=0) return $candidateGeneration>0;
+    if($candidateGeneration<=0) return false;
+    return $candidateGeneration >= $localGeneration;
+}
+
 function read_local_release_revision(string $root,string $expectedVersion=''): int {
     $path=rtrim($root,'/\\').'/version.json';
     if(!is_file($path) || !is_readable($path)) return 0;
@@ -148,6 +172,7 @@ function remote_update_metadata_at_ref(array $gh,string $ref,string $metadataFil
     return [
         'version'=>(string)$data['version'],
         'release_revision'=>normalize_release_revision($data['release_revision']??0),
+        'application_generation'=>normalize_application_generation($data['application_generation']??0),
         'name'=>(string)($data['name']??''),
         'commit'=>$ref,
     ];
@@ -183,80 +208,10 @@ function remote_release_info(array $gh): array {
 }
 
 function next_remote_version_info(array $gh,string $localVersion,int $localRevision=0): array {
-    [$owner,$repo,$branch]=github_repo_info($gh);
-    $localVersion=trim($localVersion);
-    if($localVersion==='') $localVersion='0.0.0';
-    $localRevision=max(0,$localRevision);
-
-    $historyFile=version_compare($localVersion,'1.1.101','>=')?'update-release.json':'version.json';
-    $next=null;
-    $page=1;
-    $maxPages=20;
-
-    while($page<=$maxPages){
-        $url='https://api.github.com/repos/'.rawurlencode($owner).'/'.rawurlencode($repo)
-            .'/commits?sha='.rawurlencode($branch)
-            .'&path='.rawurlencode($historyFile).'&per_page=100&page='.$page
-            .'&cb='.(string)round(microtime(true)*1000);
-
-        $rows=json_decode((string)updater_http($url,$gh),true);
-        if(!is_array($rows)) throw new RuntimeException('GitHub surum gecmisi okunamadi.');
-        if($rows===[]) break;
-
-        $reachedInstalledOrOlder=false;
-
-        foreach($rows as $row){
-            $sha=trim((string)($row['sha']??''));
-            if(!preg_match('/^[a-f0-9]{40}$/i',$sha)) continue;
-
-            try{
-                $info=$historyFile==='update-release.json'
-                    ?remote_release_info_at_ref($gh,$sha)
-                    :remote_version_info_at_ref($gh,$sha);
-            }catch(Throwable $ignored){
-                continue;
-            }
-
-            $candidateVersion=trim((string)($info['version']??''));
-            if($candidateVersion==='') continue;
-
-            if($historyFile==='version.json'){
-                if(version_compare($candidateVersion,$localVersion,'>')){
-                    if(release_identity_should_replace_next($info,$next)) $next=$info;
-                    continue;
-                }
-                continue;
-            }
-
-            if(release_identity_is_newer($info,$localVersion,$localRevision)){
-                if(release_identity_should_replace_next($info,$next)) $next=$info;
-                continue;
-            }
-
-            continue;
-        }
-
-        if(count($rows)<100) break;
-        $page++;
-    }
-
-    if($next!==null) return $next;
-
-    $latest=$historyFile==='update-release.json'
-        ?remote_release_info($gh)
-        :remote_version_info($gh);
-
-    if($historyFile==='version.json'){
-        $latestVersion=trim((string)($latest['version']??''));
-        if($latestVersion===''||version_compare($latestVersion,$localVersion,'<=')) return $latest;
-    }elseif(!release_identity_is_newer($latest,$localVersion,$localRevision)){
-        return $latest;
-    }
-
-    throw new RuntimeException(
-        'Siradaki guncelleme guvenli bicimde belirlenemedi. '
-        .'En son surume atlanmadi; ara surum zinciri kontrol edilmeli.'
-    );
+    // Release zinciri artık sürüm geçmişini tarayarak ara paket seçmez.
+    // Yalnızca main HEAD'in update-release.json metadata'sı adaydır.
+    // Kurulum ayrıca application_generation ve release revision sözleşmelerini doğrular.
+    return remote_release_info($gh);
 }
 
 function path_is_preserved(string $relative,array $preserve): bool {
@@ -2069,7 +2024,11 @@ function install_github_update(
     [$owner,$repo,$branch]=github_repo_info($gh);
     $localVersion=read_app_version();
     $localRevision=read_local_release_revision($root,$localVersion);
+    $localApplicationGeneration=read_local_application_generation($root,$localVersion);
     $remote=next_remote_version_info($gh,$localVersion,$localRevision);
+    if(!release_application_generation_is_safe($remote,$localApplicationGeneration)){
+        throw new RuntimeException('Güncelleme paketi uygulama neslini geriye götürüyor veya application_generation bilgisi eksik. Kurulum güvenlik nedeniyle durduruldu.');
+    }
     if(!release_identity_is_newer($remote,$localVersion,$localRevision)){
         return [
             'updated'=>false,
@@ -2195,7 +2154,17 @@ function install_github_update(
         $packageRevision=is_array($packageVersionData)?normalize_release_revision($packageVersionData['release_revision']??0):0;
         $releaseRevision=is_array($releaseData)?normalize_release_revision($releaseData['release_revision']??0):0;
         $manifestRevision=is_array($manifestData)?normalize_release_revision($manifestData['release_revision']??0):0;
+        $packageApplicationGeneration=is_array($packageVersionData)?normalize_application_generation($packageVersionData['application_generation']??0):0;
+        $releaseApplicationGeneration=is_array($releaseData)?normalize_application_generation($releaseData['application_generation']??0):0;
+        $manifestApplicationGeneration=is_array($manifestData)?normalize_application_generation($manifestData['application_generation']??0):0;
         $expectedRevision=normalize_release_revision($remote['release_revision']??0);
+        $expectedApplicationGeneration=normalize_application_generation($remote['application_generation']??0);
+        if(!release_application_generation_is_safe(['application_generation'=>$packageApplicationGeneration],$localApplicationGeneration)
+            || $releaseApplicationGeneration!==$packageApplicationGeneration
+            || $manifestApplicationGeneration!==$packageApplicationGeneration
+            || $expectedApplicationGeneration!==$packageApplicationGeneration){
+            throw new RuntimeException('Güncelleme paketi application_generation metadata değerleri birbiriyle eşleşmiyor veya uygulama nesli geriye gidiyor.');
+        }
         if($releaseVersion!==$packageVersion || $manifestVersion!==$packageVersion){
             throw new RuntimeException(
                 'Güncelleme paketi sürüm metadata dosyaları birbiriyle eşleşmiyor.'

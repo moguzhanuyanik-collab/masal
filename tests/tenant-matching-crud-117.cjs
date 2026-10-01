@@ -17,21 +17,24 @@ assert(!api.includes("$rows=[];\\n                $matchingOptions=['ogrenciler'
 
 assert(matching.includes("DELETE FROM veli_ogrenci WHERE ogrenci_id=? AND kurum_id=?"));
 assert(matching.includes("DELETE FROM ogretmen_ogrenci WHERE ogrenci_id=? AND kurum_id=?"));
-assert(!matching.includes("kk.kurum_rolu='veli' AND kk.aktif=1"));
-assert(!matching.includes("kk.kurum_rolu='ogretmen' AND kk.aktif=1"));
+const saveStart=matching.indexOf('function km_save_matching');
+const deleteStart=matching.indexOf('function km_delete_matching',saveStart);
+assert(saveStart>=0 && deleteStart>saveStart,'km_save_matching sınırları bulunamadı.');
+const saveBlock=matching.slice(saveStart,deleteStart);
+assert(!saveBlock.includes('INNER JOIN kurum_kullanicilari'),'eşleştirme temizliği pasif üyelik JOIN\'ine bağlı olmamalı.');
 
 assert(api.includes('$mysqlError=(int)($e->errorInfo[1]??0);'));
 assert(api.includes("if($mysqlError===1452)"));
 assert(api.includes("elseif($mysqlError===1062)"));
 
-assert.strictEqual(version.version,'1.1.117');
-assert.strictEqual(release.version,'1.1.117');
-assert.strictEqual(manifest.version,'1.1.117');
-assert.strictEqual(version.release_revision,1);
-assert.strictEqual(release.release_revision,1);
-assert.strictEqual(manifest.release_revision,1);
+assert.strictEqual(version.version,'1.1.119');
+assert.strictEqual(release.version,'1.1.119');
+assert.strictEqual(manifest.version,'1.1.119');
+assert(version.release_revision>=1);
+assert.strictEqual(release.release_revision,version.release_revision);
+assert.strictEqual(manifest.release_revision,version.release_revision);
 assert(manifest.files.includes('tests/tenant-matching-crud-117.cjs'));
 assert(manifest.files.includes('RELEASE-1.1.117.md'));
 assert(workflow.includes('node tests/tenant-matching-crud-117.cjs'));
 
-console.log('PASS: 1.1.117 tenant matching CRUD regression contract');
+console.log('PASS: tenant matching CRUD regression contract');
