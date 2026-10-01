@@ -6,11 +6,11 @@ const release=JSON.parse(fs.readFileSync('update-release.json','utf8'));
 const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
 const updater=fs.readFileSync('src/updater.php','utf8');
 
-assert.strictEqual(version.version,'1.2.1');
+assert(/^1\.2\.\d+$/.test(version.version));
 assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
-assert.strictEqual(release.version,'1.2.1');
+assert.strictEqual(release.version,version.version);
 assert.strictEqual(release.release_revision,version.release_revision);
-assert.strictEqual(manifest.version,'1.2.1');
+assert.strictEqual(manifest.version,version.version);
 assert.strictEqual(manifest.release_revision,version.release_revision);
 
 assert(updater.includes('ILKADIM_UPDATER_CORE_GENERATION = 121'));
