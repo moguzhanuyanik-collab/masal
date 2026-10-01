@@ -253,7 +253,7 @@ function release_chain_cache_secret(string $root): ?string {
         $secret=bin2hex(random_bytes(32));
         $tmp=$path.'.tmp';
         @unlink($tmp);
-        if(file_put_contents($tmp,$secret."\\n",LOCK_EX)===false){
+        if(file_put_contents($tmp,$secret."\n",LOCK_EX)===false){
             @unlink($tmp);
             return null;
         }
@@ -340,7 +340,7 @@ function release_chain_cache_write(string $root,string $branch,string $headSha,a
         $path=release_chain_cache_path($root);
         $tmp=$path.'.tmp';
         @unlink($tmp);
-        if(file_put_contents($tmp,$json."\\n",LOCK_EX)===false){
+        if(file_put_contents($tmp,$json."\n",LOCK_EX)===false){
             @unlink($tmp);
             return false;
         }
