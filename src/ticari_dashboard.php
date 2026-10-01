@@ -30,6 +30,7 @@ function td_currency_kpis(PDO $pdo): array {
             ELSE 0
           END
         ),0) gecikmis_bakiye,
+        COALESCE(SUM(s.toplam_tutar-COALESCE(pay.tahsil_edilen,0)),0) kalan_bakiye,
         SUM(
           CASE
             WHEN s.durum='aktif'
@@ -192,7 +193,7 @@ function td_institution_rows(PDO $pdo,array $filters=[],int $limit=300): array {
         GROUP BY s.kurum_id,k.ad,k.kod,s.para_birimi
         ORDER BY
           gecikmis_bakiye DESC,
-          (sozlesme_toplami-COALESCE(SUM(COALESCE(pay.tahsil_edilen,0)),0)) DESC,
+          kalan_bakiye DESC,
           k.ad,s.para_birimi
         LIMIT {$limit}");
     $stmt->execute($params);
