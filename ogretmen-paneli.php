@@ -37,5 +37,5 @@ try{
 <section class="role-section" id="ogrenciler"><div class="role-section-head"><div><span class="eyeline">ÖĞRENCİLERİM</span><h2>Bağlı Öğrenciler</h2></div></div><div class="role-list">
 <?php if(!$students):?><div class="role-empty"><span>🎒</span>Henüz öğrenci eşleştirilmedi.</div><?php else:foreach($students as $s):$x=$s['summary'];?><a class="role-row" href="ogrenci-raporu.php?id=<?=(int)$s['id']?>"><span>🎒</span><div><strong><?=tp_h((string)($s['ad']?:$s['email']))?></strong><small><?=$x['completed_steps']?> ders adımı · <?=$x['games']?> oyun · <?=$x['stars']?> yıldız</small></div><b>→</b></a><?php endforeach;endif;?>
 </div></section>
-<div class="role-note"><span>ℹ️</span><p>Öğretmene özel içerik üretimi ve kurum içeriği daha sonra bağlanacak. Şimdilik mevcut sistem verileri ve öğrenci raporları korunuyor.</p></div>
+<div class="role-note"><span>ℹ️</span><p>Yayınladığın içerikler kuruma göre ayrılır; aktif içerikler öğrencilerin Öğretmenim alanında görünür ve kurum yöneticisi Kurum İçerikleri bölümünden yayın özetlerini izleyebilir.</p></div>
 </main><nav class="role-bottom"><a class="active" href="ogretmen-paneli.php"><span>⌂</span>Panel</a><a href="ogretmen-ogrencilerim.php"><span>🎒</span>Öğrenciler</a><a href="ogretmen-icerikleri.php"><span>⭐</span>İçeriklerim</a><a href="logout.php"><span>🚪</span>Çıkış</a></nav></div></body></html>
