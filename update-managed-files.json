@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.96",
+  "version": "1.1.119",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -59,6 +59,7 @@
     "RELEASE-1.1.1.md",
     "RELEASE-1.1.10.md",
     "RELEASE-1.1.11.md",
+    "RELEASE-1.1.119.md",
     "RELEASE-1.1.12.md",
     "RELEASE-1.1.13.md",
     "RELEASE-1.1.14.md",
@@ -152,6 +153,7 @@
     "RELEASE-1.1.94.md",
     "RELEASE-1.1.95.md",
     "RELEASE-1.1.96.md",
+    "RELEASE-1.1.97.md",
     "YETKILENDIRME-1.0.35.md",
     "activities-extra.js",
     "adimbot-ai-bridge.js",
@@ -366,6 +368,7 @@
     "settings-account.js",
     "sistem-durum.php",
     "src/adimbot_groq.php",
+    "src/adimbot_transcript.php",
     "src/auth.php",
     "src/kurum_rol_sayfasi.php",
     "src/kurum_yonetimi.php",
@@ -385,19 +388,23 @@
     "tests/adimbot-dialog-84.cjs",
     "tests/adimbot-groq-connection.php",
     "tests/adimbot-lifecycle-82.cjs",
+    "tests/adimbot-microphone-flow.cjs",
     "tests/adimbot-notation-90.cjs",
     "tests/adimbot-position-86.cjs",
     "tests/adimbot-provider-speech-85.cjs",
     "tests/adimbot-safety-87.cjs",
     "tests/adimbot-speech-81.cjs",
+    "tests/adimbot-transcript-behavior.php",
     "tests/adimbot-voice-83.cjs",
     "tests/hardening-91.cjs",
     "tests/hardening-94.cjs",
     "tests/migration-safety-93.cjs",
     "tests/pwa-95.cjs",
     "tests/security-92.cjs",
+    "tests/update-recovery-119.cjs",
     "tests/updater-manifest-96.cjs",
     "update-managed-files.json",
+    "update-release.json",
     "v4-features.css",
     "v4-features.js",
     "v4-offline.css",
@@ -409,5 +416,6 @@
     "yonetici-paneli.php",
     "yonetici-yetkileri.php",
     "yonetici.css"
-  ]
+  ],
+  "release_revision": 1
 }

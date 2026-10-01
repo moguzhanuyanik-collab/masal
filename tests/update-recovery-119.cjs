@@ -1,0 +1,27 @@
+const fs=require('fs');
+const assert=require('assert');
+
+const version=JSON.parse(fs.readFileSync('version.json','utf8'));
+const release=JSON.parse(fs.readFileSync('update-release.json','utf8'));
+const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
+const updater=fs.readFileSync('src/updater.php','utf8');
+
+assert.strictEqual(version.version,'1.1.119');
+assert.strictEqual(version.release_revision,1);
+assert.strictEqual(release.version,'1.1.119');
+assert.strictEqual(release.release_revision,1);
+assert.strictEqual(manifest.version,'1.1.119');
+assert.strictEqual(manifest.release_revision,1);
+
+assert(updater.includes('ILKADIM_UPDATER_CORE_GENERATION = 119'));
+assert(updater.includes('function github_branch_head_sha'));
+assert(updater.includes('return remote_release_info($gh);'));
+assert(!updater.includes('/commits?sha='));
+assert(!updater.includes('recovery_bridge_target_info'));
+assert(updater.includes('1.1.119 temiz recovery yalnız uygulama kodu/updater çekirdeğini yeniler'));
+
+assert(manifest.files.includes('RELEASE-1.1.119.md'));
+assert(manifest.files.includes('update-release.json'));
+assert(manifest.files.includes('tests/update-recovery-119.cjs'));
+
+console.log('PASS: 1.1.119 clean recovery contract');

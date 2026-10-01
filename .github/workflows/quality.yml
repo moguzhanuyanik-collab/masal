@@ -44,3 +44,4 @@ jobs:
           node tests/hardening-94.cjs
           node tests/pwa-95.cjs
           node tests/updater-manifest-96.cjs
+          node tests/update-recovery-119.cjs
