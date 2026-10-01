@@ -27,18 +27,29 @@ assert(block.includes('Sıradaki güncelleme güvenli biçimde belirlenemedi.'))
 assert(!block.includes('return remote_release_info($gh);'),
   'Updater doğrudan main HEAD release döndürerek ara sürümleri atlamamalı.');
 
+function compareVersion(a,b){
+  const pa=String(a).split('.').map(Number), pb=String(b).split('.').map(Number);
+  for(let i=0;i<3;i++){
+    if((pa[i]||0)!==(pb[i]||0)) return (pa[i]||0)>(pb[i]||0)?1:-1;
+  }
+  return 0;
+}
 function pick(candidates,localVersion,localRevision=0){
   let next=null;
   for(const info of candidates){
     const v=String(info.version||'');
     const rv=Number(info.release_revision||0);
-    const pv=v.split('.').map(Number), pl=String(localVersion).split('.').map(Number);
-    let cmp=0;
-    for(let i=0;i<3;i++){
-      if((pv[i]||0)!==(pl[i]||0)){cmp=(pv[i]||0)>(pl[i]||0)?1:-1;break;}
+    const localCmp=compareVersion(v,localVersion);
+    if(localCmp<0 || (localCmp===0 && rv<=localRevision)) continue;
+
+    if(next===null){
+      next=info;
+      continue;
     }
-    if(cmp>0 || (cmp===0 && rv>localRevision)){
-      if(!next || cmp<0 || (cmp===0 && rv<Number(next.release_revision||0))) next=info;
+
+    const nextCmp=compareVersion(v,next.version);
+    if(nextCmp<0 || (nextCmp===0 && rv<Number(next.release_revision||0))){
+      next=info;
     }
   }
   return next;
