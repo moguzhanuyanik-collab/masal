@@ -420,9 +420,11 @@ function oi_create_content(PDO $pdo,array $user,array $input,array $targetStuden
         throw new RuntimeException('İçerik metnini yaz.');
     }
 
-    $targetStudentIds=oi_resolve_content_target_ids(
+    $targetPlan=oi_resolve_content_target_plan(
         $pdo,(int)$teacher['id'],$institutionId,$input,$targetStudentIds
     );
+    $targetStudentIds=$targetPlan['student_ids'];
+    $targetGroupRows=$targetPlan['group_targets'];
     $targetType=$targetStudentIds?'secili_ogrenciler':'tum_ogrenciler';
 
     $pdo->beginTransaction();
@@ -443,6 +445,7 @@ function oi_create_content(PDO $pdo,array $user,array $input,array $targetStuden
             foreach($targetStudentIds as $studentId) $target->execute([$contentId,$studentId]);
             $target->closeCursor();
         }
+        oi_store_content_group_targets($pdo,$contentId,$targetGroupRows);
         $pdo->commit();
     }catch(Throwable $e){
         if($pdo->inTransaction()) $pdo->rollBack();
@@ -687,6 +690,15 @@ function oi_teacher_content_for_edit(PDO $pdo,array $user,int $contentId): ?arra
     $targets->execute([$contentId]);
     $row['hedef_ogrenciler']=array_map('intval',$targets->fetchAll(PDO::FETCH_COLUMN)?:[]);
     $targets->closeCursor();
+
+    $row['hedef_gruplar']=[];
+    if(oi_table_exists($pdo,'ogretmen_icerik_hedef_gruplari')){
+        $groups=$pdo->prepare('SELECT DISTINCT kurum_sinif_id FROM ogretmen_icerik_hedef_gruplari WHERE icerik_id=? ORDER BY kurum_sinif_id');
+        $groups->execute([$contentId]);
+        $row['hedef_gruplar']=array_map('intval',$groups->fetchAll(PDO::FETCH_COLUMN)?:[]);
+        $groups->closeCursor();
+    }
+
     $row['aktivite_sayisi']=(int)($row['soru_cevap_sayisi']??0)+(int)($row['odev_durum_sayisi']??0);
     return $row;
 }
@@ -758,9 +770,10 @@ function oi_normalize_content_input(PDO $pdo,int $teacherId,int $institutionId,a
         if($type!=='odev') $dueAt=null;
     }
 
-    $targetStudentIds=oi_resolve_content_target_ids(
+    $targetPlan=oi_resolve_content_target_plan(
         $pdo,$teacherId,$institutionId,$input,$targetStudentIds
     );
+    $targetStudentIds=$targetPlan['student_ids'];
 
     return [
         'ders_id'=>$lessonId,
@@ -777,6 +790,8 @@ function oi_normalize_content_input(PDO $pdo,int $teacherId,int $institutionId,a
         'hedef_turu'=>$targetStudentIds?'secili_ogrenciler':'tum_ogrenciler',
         'teslim_tarihi'=>$dueAt,
         'hedef_ogrenciler'=>$targetStudentIds,
+        'hedef_gruplar'=>$targetPlan['group_ids'],
+        'hedef_grup_satirlari'=>$targetPlan['group_targets'],
     ];
 }
 
@@ -816,11 +831,18 @@ function oi_update_content(PDO $pdo,array $user,int $contentId,array $input,arra
         $delete->execute([$contentId]);
         $delete->closeCursor();
 
+        if(oi_table_exists($pdo,'ogretmen_icerik_hedef_gruplari')){
+            $deleteGroups=$pdo->prepare('DELETE FROM ogretmen_icerik_hedef_gruplari WHERE icerik_id=?');
+            $deleteGroups->execute([$contentId]);
+            $deleteGroups->closeCursor();
+        }
+
         if($normalized['hedef_ogrenciler']){
             $insert=$pdo->prepare('INSERT INTO ogretmen_icerik_hedefleri (icerik_id,ogrenci_id) VALUES (?,?)');
             foreach($normalized['hedef_ogrenciler'] as $studentId) $insert->execute([$contentId,$studentId]);
             $insert->closeCursor();
         }
+        oi_store_content_group_targets($pdo,$contentId,$normalized['hedef_grup_satirlari']);
         $pdo->commit();
     }catch(Throwable $e){
         if($pdo->inTransaction()) $pdo->rollBack();
@@ -866,6 +888,16 @@ function oi_duplicate_content(PDO $pdo,array $user,int $contentId): int {
             $insert=$pdo->prepare('INSERT INTO ogretmen_icerik_hedefleri (icerik_id,ogrenci_id) VALUES (?,?)');
             foreach($targets as $studentId) $insert->execute([$newId,$studentId]);
             $insert->closeCursor();
+        }
+
+        if(oi_table_exists($pdo,'ogretmen_icerik_hedef_gruplari')){
+            $copyGroups=$pdo->prepare("INSERT INTO ogretmen_icerik_hedef_gruplari
+              (icerik_id,kurum_sinif_id,kurum_id,ogrenci_id,grup_adi,grup_turu,sinif_seviyesi)
+              SELECT ?,kurum_sinif_id,kurum_id,ogrenci_id,grup_adi,grup_turu,sinif_seviyesi
+              FROM ogretmen_icerik_hedef_gruplari
+              WHERE icerik_id=?");
+            $copyGroups->execute([$newId,$contentId]);
+            $copyGroups->closeCursor();
         }
         $pdo->commit();
     }catch(Throwable $e){
