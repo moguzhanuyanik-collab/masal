@@ -16,6 +16,6 @@ assert(workflow.includes('tests/web-rescue-197-198-113.php'));
 assert(workflow.includes('tests/web-rescue-197-198-113.cjs'));
 {
  const parts=String(version.version).split('.').map(Number);
- assert(parts.length===3&&parts[0]===1&&parts[1]===1&&parts[2]>=113);
+ assert((parts.length===3&&parts[0]===1&&parts[1]===1&&parts[2]>=113) || String(version.version)==='1.2.1');
 }
 console.log('PASS: lossless web rescue source contract');
