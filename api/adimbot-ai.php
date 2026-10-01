@@ -5,6 +5,7 @@ require dirname(__DIR__) . '/src/bootstrap.php';
 require dirname(__DIR__) . '/src/auth.php';
 require_once dirname(__DIR__) . '/src/adimbot_groq.php';
 require_once dirname(__DIR__) . '/src/adimbot_rate_limit.php';
+require_once dirname(__DIR__) . '/src/kurum_lisanslari.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, max-age=0');
@@ -350,6 +351,17 @@ if(($rateResult['persistent']??false)===true){
     session_write_close();
 }
 
+$quotaResult=kl_ai_quota_reserve($pdo,$userId,$studentId,$provider,$model);
+$quotaPublic=kl_ai_quota_public($quotaResult);
+if(($quotaResult['blocked']??false)===true){
+    adimbot_ai_json([
+        'ok'=>false,
+        'message'=>'Bu ayki AdımBot kullanım hakkın tamamlandı. Yeni ayda tekrar kullanabilirsin.',
+        'reason'=>'institution_ai_quota',
+        'quota'=>$quotaPublic
+    ],429);
+}
+
 $context=is_array($payload['context'] ?? null)?$payload['context']:[];
 $allowed=[];
 foreach (['screen'=>80,'lesson'=>80,'topic'=>80,'activity'=>80,'question'=>240,'practiceLesson'=>80,'reviewLesson'=>80,'reviewReason'=>24,'learningMode'=>20] as $key=>$max) {
@@ -522,4 +534,5 @@ adimbot_ai_json([
     'blocked'=>!$safe['ok'],
     'reason'=>$safe['reason'],
     'text'=>$safe['text'],
+    'quota'=>$quotaPublic,
 ]);
