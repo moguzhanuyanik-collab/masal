@@ -70,12 +70,12 @@ const history=[
   {version:'1.1.97',release_revision:1}
 ];
 
-assert.strictEqual(pick(history,'1.1.97').version,'1.1.98');
-assert.strictEqual(pick(history,'1.1.99').version,'1.1.100');
-assert.strictEqual(pick(history,'1.1.116').version,'1.1.117');
-assert.strictEqual(pick(history,'1.1.119').version,'1.2.1');
+assert.strictEqual(pick(history,'1.1.97',1).version,'1.1.98');
+assert.strictEqual(pick(history,'1.1.99',1).version,'1.1.100');
+assert.strictEqual(pick(history,'1.1.116',1).version,'1.1.117');
+assert.strictEqual(pick(history,'1.1.119',1).version,'1.2.1');
 assert.strictEqual(pick(history,'1.2.1',15).version,'1.2.2');
-assert.strictEqual(pick(history,'1.2.4').version,'1.2.5');
+assert.strictEqual(pick(history,'1.2.4',1).version,'1.2.5');
 
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
