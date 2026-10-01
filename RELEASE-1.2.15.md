@@ -22,7 +22,7 @@ AdımBot kalıcı rate-limit, Activities/State CSRF, curriculum/report/V4 scope,
 
 Bu sürüm production veritabanına doğrudan müdahale etmez.
 
-## 1.2.16 — Recovery chain ancestry lock
+## 1.2.15 rev2 — Recovery chain ancestry lock
 
 - 1.1.97 → 1.2.1 arasındaki 30 commitlik yeniden kurulmuş tarihçe immutable ancestry manifesti ile doğrulanıyor.
 - 1.1.118 ve 1.1.120 aktif zincir dışında tutuluyor; 1.1.119 recovery-only kalıyor.
