@@ -4,6 +4,7 @@ declare(strict_types=1);
 require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
 require __DIR__.'/src/veli_icerikleri.php';
+require __DIR__.'/src/veli_icerik_dashboard.php';
 
 $user=require_role('veli');
 $pdo=db();
@@ -82,10 +83,13 @@ $type=(string)($_GET['tur']??'tum');
 $allowedTypes=['tum','soru','tekrar','odev','not','diger'];
 if(!in_array($type,$allowedTypes,true)) $type='tum';
 
-$contents=[];
+$statusFilter=(string)($_GET['durum']??'tum');
+if(!in_array($statusFilter,['tum','attention','waiting','completed','info'],true)) $statusFilter='tum';
+
+$allContents=[];
 if($childId>0){
     try{
-        $contents=vi_parent_contents($pdo,(int)$user['id'],$childId,$institutionId,$type);
+        $allContents=vi_parent_contents($pdo,(int)$user['id'],$childId,$institutionId,$type);
     }catch(Throwable $e){
         error_log('[IlkAdim][parent-content-list] '.$e->getMessage());
         http_response_code(503);
@@ -94,9 +98,10 @@ if($childId>0){
     }
 }
 
-$summary=vi_parent_summary($contents);
-$questionRate=$summary['answered']>0?(int)round($summary['correct']*100/$summary['answered']):null;
-$homeworkRate=$summary['homeworks']>0?(int)round($summary['completed']*100/$summary['homeworks']):null;
+$summary=vpd_summary($allContents);
+$contents=vpd_filter($allContents,$statusFilter);
+$questionRate=$summary['question_accuracy'];
+$homeworkRate=$summary['homework_completion'];
 $reportInstitutionId=$institutionId>0?$institutionId:(count($institutions)===1?(int)$institutions[0]['id']:0);
 ?><!doctype html>
 <html lang="tr">
@@ -107,6 +112,7 @@ $reportInstitutionId=$institutionId>0?$institutionId:(count($institutions)===1?(
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="veli.css?v=1.0.42">
 <link rel="stylesheet" href="veli-icerikleri.css?v=1.2.17">
+<link rel="stylesheet" href="veli-icerikleri-dashboard.css?v=1.2.29">
 </head>
 <body class="role-page">
 <div class="role-shell">
@@ -126,7 +132,7 @@ $reportInstitutionId=$institutionId>0?$institutionId:(count($institutions)===1?(
 
 <?php if($children):?>
 <section class="role-section">
-<div class="role-section-head"><div><span class="eyeline">FİLTRELER</span><h2>Çocuk, Kurum ve Tür</h2></div></div>
+<div class="role-section-head"><div><span class="eyeline">FİLTRELER</span><h2>Çocuk, Kurum, Tür ve Durum</h2></div></div>
 <form class="role-form parent-content-filter" method="get">
 <label for="cocuk">Çocuğum</label>
 <select class="role-input" name="cocuk_id" id="cocuk">
@@ -150,6 +156,15 @@ $reportInstitutionId=$institutionId>0?$institutionId:(count($institutions)===1?(
 <option value="<?=$key?>" <?=$type===$key?'selected':''?>><?=vi_h(vi_type_label($key))?></option>
 <?php endforeach;?>
 </select>
+
+<label for="durum">Durum</label>
+<select class="role-input" name="durum" id="durum">
+<option value="tum" <?=$statusFilter==='tum'?'selected':''?>>Tüm durumlar</option>
+<option value="attention" <?=$statusFilter==='attention'?'selected':''?>>Dikkat gereken</option>
+<option value="waiting" <?=$statusFilter==='waiting'?'selected':''?>>Bekleyen</option>
+<option value="completed" <?=$statusFilter==='completed'?'selected':''?>>Tamamlanan</option>
+<option value="info" <?=$statusFilter==='info'?'selected':''?>>Bilgi içerikleri</option>
+</select>
 <button class="role-button" type="submit">İçerikleri Göster</button>
 </form>
 </section>
@@ -157,10 +172,13 @@ $reportInstitutionId=$institutionId>0?$institutionId:(count($institutions)===1?(
 
 <section class="role-section">
 <div class="role-section-head"><div><span class="eyeline">ÖZET</span><h2><?=vi_h((string)($selectedChild['ad']??'İçerik Durumu'))?></h2></div></div>
-<div class="parent-content-stats">
+<div class="parent-content-stats parent-content-performance-stats">
 <div class="role-stat"><span>📚</span><strong><?=$summary['all']?></strong><small>Aktif içerik</small></div>
+<div class="role-stat"><span>⚠️</span><strong><?=$summary['attention']?></strong><small>Dikkat gereken</small></div>
+<div class="role-stat"><span>⏳</span><strong><?=$summary['waiting']?></strong><small>Bekleyen</small></div>
 <div class="role-stat"><span>❓</span><strong><?=$summary['answered']?> / <?=$summary['questions']?></strong><small>Yanıtlanan soru</small></div>
 <div class="role-stat"><span>📈</span><strong><?=$questionRate!==null?$questionRate.'%':'—'?></strong><small>Soru doğruluğu</small></div>
+<div class="role-stat"><span>❌</span><strong><?=$summary['wrong']?></strong><small>Yanlış soru</small></div>
 <div class="role-stat"><span>📝</span><strong><?=$summary['completed']?> / <?=$summary['homeworks']?></strong><small>Tamamlanan ödev</small></div>
 <div class="role-stat"><span>✅</span><strong><?=$homeworkRate!==null?$homeworkRate.'%':'—'?></strong><small>Ödev tamamlama</small></div>
 <div class="role-stat"><span>⏰</span><strong><?=$summary['overdue']?></strong><small>Geciken ödev</small></div>
@@ -168,7 +186,7 @@ $reportInstitutionId=$institutionId>0?$institutionId:(count($institutions)===1?(
 </section>
 
 <section class="role-section">
-<div class="role-section-head"><div><span class="eyeline">YAYINLAR</span><h2>Öğretmen İçerikleri</h2></div><span class="role-pill"><?=count($contents)?></span></div>
+<div class="role-section-head"><div><span class="eyeline">YAYINLAR</span><h2>Öğretmen İçerikleri</h2></div><span class="role-pill"><?=count($contents)?> / <?=$summary['all']?></span></div>
 <div class="parent-content-list">
 <?php if(!$children):?>
 <div class="role-empty"><span>🎒</span>Henüz kurum kapsamında bağlı öğrenci bulunmuyor.</div>
@@ -178,8 +196,9 @@ $reportInstitutionId=$institutionId>0?$institutionId:(count($institutions)===1?(
 
 <?php foreach($contents as $item):
     $itemType=(string)$item['icerik_turu'];
-    $status='Yayınlandı';
-    $statusClass='';
+    $normalizedStatus=vpd_item_status($item);
+    $status=vpd_status_label($normalizedStatus);
+    $statusClass=vpd_status_class($normalizedStatus);
     $detail='';
 
     if($itemType==='soru'){
@@ -188,32 +207,24 @@ $reportInstitutionId=$institutionId>0?$institutionId:(count($institutions)===1?(
             $detail='Henüz cevap vermedi.';
         }elseif((int)$item['cevap_dogru']===1){
             $status='Doğru';
-            $statusClass='ok';
             $detail=(int)($item['deneme_sayisi']??1).' deneme · '.vi_date((string)($item['cevap_tarihi']??''));
         }else{
             $status='Yanlış';
-            $statusClass='warn';
             $detail=(int)($item['deneme_sayisi']??1).' deneme · '.vi_date((string)($item['cevap_tarihi']??''));
         }
     }elseif($itemType==='odev'){
-        $done=(int)($item['odev_tamamlandi']??0)===1;
-        $late=false;
-        if(!$done && !empty($item['teslim_tarihi'])){
-            try{$late=(new DateTimeImmutable((string)$item['teslim_tarihi']))<new DateTimeImmutable('now');}catch(Throwable){}
-        }
-        if($done){
+        if((int)($item['odev_tamamlandi']??0)===1){
             $status='Tamamlandı';
-            $statusClass='ok';
             $detail='Tamamlanma: '.vi_date((string)($item['tamamlanma_tarihi']??''));
-        }elseif($late){
+        }elseif($normalizedStatus==='attention'){
             $status='Gecikti';
-            $statusClass='warn';
-            $detail='Teslim: '.vi_date((string)$item['teslim_tarihi']);
+            $detail='Teslim: '.vi_date((string)($item['teslim_tarihi']??''));
         }else{
             $status='Bekliyor';
             $detail='Teslim: '.vi_date((string)($item['teslim_tarihi']??''));
         }
     }else{
+        $status='Yayınlandı';
         $detail='Yayın: '.vi_date((string)$item['olusturulma_tarihi']);
     }
 ?>

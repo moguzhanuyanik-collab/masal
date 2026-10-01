@@ -134,6 +134,7 @@ jobs:
           node tests/teacher-question-dashboard-151.cjs
           node tests/student-teacher-content-dashboard-152.cjs
           node tests/institution-content-performance-153.cjs
+          node tests/parent-content-performance-154.cjs
 
   tenant-db-integration:
     name: Tenant DB integration
@@ -203,4 +204,5 @@ jobs:
           php tests/teacher-question-dashboard-db-151.php
           php tests/student-teacher-content-dashboard-db-152.php
           php tests/institution-content-performance-db-153.php
+          php tests/parent-content-performance-db-154.php
 
