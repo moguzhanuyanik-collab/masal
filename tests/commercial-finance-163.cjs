@@ -29,7 +29,7 @@ assert(page.includes("require_role('super_admin')"),'commercial finance page mus
 assert(page.includes("verify_csrf($_POST['csrf']??null)"),'commercial writes must require CSRF');
 assert(page.includes('30 Günlük Yenileme Radar'),'renewal radar UI missing');
 assert(page.includes('Ticari Portföy'),'contract portfolio UI missing');
-assert(page.includes('Tahsilat Geçmişi'),'payment history UI missing');
+assert(page.includes('TAHSİLAT GEÇMİŞİ'),'payment history UI missing');
 assert(page.includes('resmi e-Fatura/e-Arşiv belgesi üretmez'),'page must not claim regulated invoice generation');
 assert(admin.includes('href="ticari-finans.php"'),'Super Admin commercial finance navigation missing');
 
