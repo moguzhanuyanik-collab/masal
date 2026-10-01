@@ -16,8 +16,11 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             $contentId=(int)($_POST['icerik_id']??0);
             $selected=(int)($_POST['secenek']??-1);
             $awardedStars=0;
-            $correct=oi_answer_question($pdo,$studentId,$contentId,$selected,$awardedStars);
-            if($correct && $awardedStars>0){
+            $alreadyCompleted=false;
+            $correct=oi_answer_question($pdo,$studentId,$contentId,$selected,$awardedStars,$alreadyCompleted);
+            if($alreadyCompleted){
+                $flash='Bu soruyu zaten doğru tamamladın. Sonucun korunuyor. ⭐';
+            }elseif($correct && $awardedStars>0){
                 $flash='Harika! Doğru cevap. ⭐ +'.$awardedStars.' yıldız kazandın!';
             }else{
                 $flash=$correct?'Harika! Doğru cevap. ⭐':'Tekrar deneyebilirsin. Öğretmenin açıklamasına göz at.';
@@ -75,7 +78,7 @@ function ois_icon(string $type): string {
 <link rel="icon" href="ilkadim-logo.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="ilkadim-logo-192.png">
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="ogretmenim.css?v=1.0.48">
+<link rel="stylesheet" href="ogretmenim.css?v=1.2.25">
 <link rel="stylesheet" href="adimbot-student.css?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-student.css'),0,16)?>">
 <script src="api/bootstrap.js.php?v=1.1.56" defer></script>
 <script src="adimbot-student.js?v=<?=substr(hash_file('sha256',__DIR__.'/adimbot-student.js'),0,16)?>" defer></script>
@@ -160,6 +163,7 @@ function ois_icon(string $type): string {
 <?php if($type==='soru' && !empty($item['soru'])):?>
 <div class="teacher-question">
 <strong><?=oi_h((string)$item['soru'])?></strong>
+<?php if(!$answerCorrect):?>
 <form method="post">
 <input type="hidden" name="csrf" value="<?=oi_h(csrf_token())?>">
 <input type="hidden" name="action" value="answer">
@@ -172,6 +176,18 @@ function ois_icon(string $type): string {
 <?php endforeach;?>
 <button class="teacher-answer-button" type="submit">Cevabımı Kontrol Et</button>
 </form>
+<?php else:?>
+<div class="teacher-question-locked">
+<span>🔒</span>
+<div><strong>Bu soruyu doğru tamamladın.</strong><small>Doğru sonucun ve kazandığın yıldız korunuyor.</small></div>
+</div>
+<?php foreach($options as $optionIndex=>$option):?>
+<label class="teacher-option locked">
+<input type="radio" disabled <?=$hasAnswer && (int)$item['secilen_cevap_indeksi']===(int)$optionIndex?'checked':''?>>
+<span><?=oi_h((string)$option)?></span>
+</label>
+<?php endforeach;?>
+<?php endif;?>
 
 <?php if($hasAnswer):?>
 <div class="teacher-answer-status <?=$answerCorrect?'ok':'bad'?>"><?=$answerCorrect?'✓ Doğru cevap verdin.':'↻ Son cevabın doğru değildi, yeniden deneyebilirsin.'?></div>
