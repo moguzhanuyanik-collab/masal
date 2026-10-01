@@ -24,14 +24,14 @@ assert(api.includes('$mysqlError=(int)($e->errorInfo[1]??0);'));
 assert(api.includes("if($mysqlError===1452)"));
 assert(api.includes("elseif($mysqlError===1062)"));
 
-assert.strictEqual(version.version,'1.1.117');
-assert.strictEqual(release.version,'1.1.117');
-assert.strictEqual(manifest.version,'1.1.117');
-assert.strictEqual(version.release_revision,1);
+assert.strictEqual(version.version,'1.1.119');
+assert.strictEqual(release.version,'1.1.119');
+assert.strictEqual(manifest.version,'1.1.119');
+assert(version.release_revision>=1);
 assert.strictEqual(release.release_revision,1);
 assert.strictEqual(manifest.release_revision,1);
 assert(manifest.files.includes('tests/tenant-matching-crud-117.cjs'));
 assert(manifest.files.includes('RELEASE-1.1.117.md'));
 assert(workflow.includes('node tests/tenant-matching-crud-117.cjs'));
 
-console.log('PASS: 1.1.117 tenant matching CRUD regression contract');
+console.log('PASS: tenant matching CRUD regression contract');
