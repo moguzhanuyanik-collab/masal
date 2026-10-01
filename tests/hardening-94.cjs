@@ -39,6 +39,12 @@ assert(!kurumApi.includes("['ok'=>false,'message'=>$e->getMessage()]"));
 assert(login.includes("catch (PDOException $e)"));
 assert(login.includes("catch (RuntimeException $e)"));
 
-assert(/^1\.1\.(?:9[4-9]|[1-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.1','version must be 1.1.94 or newer');
+const versionParts=String(version.version).split('.').map(Number);
+ assert(versionParts.length===3 && versionParts.every(Number.isFinite),'version must be semver-like');
+ const isAtLeast194=
+   versionParts[0]>1
+   || (versionParts[0]===1 && versionParts[1]>1)
+   || (versionParts[0]===1 && versionParts[1]===1 && versionParts[2]>=94);
+ assert(isAtLeast194,'version must be 1.1.94 or newer');
 
 console.log('1.1.94 hardening checks passed');
