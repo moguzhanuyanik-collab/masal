@@ -127,3 +127,9 @@ Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına 
 - 1.1.119 recovery regression testi, doğrudan main HEAD'e atlama beklentisi yerine yeni sıralı release seçim sözleşmesine güncellendi.
 - Uygulama updater davranışı korunarak testin eski 1.2.1 recovery varsayımı kaldırıldı.
 - Release metadata, version ve managed manifest rev18 olarak tekrar hizalandı.
+
+
+## Rev 19 — full rebuild regression alignment
+
+- 1.2.1 full recovery regression testi, eski doğrudan main HEAD beklentisinden sıralı updater sözleşmesine geçirildi.
+- Tüm ana regression kapıları aynı 1.2.1 rev19 release identity altında hizalandı.
