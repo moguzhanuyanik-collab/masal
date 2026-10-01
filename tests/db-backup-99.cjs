@@ -34,7 +34,9 @@ assert(updater.includes('Migration öncesi veritabanı yedeği doğrulanamadı')
 assert(updater.includes("return pending_migration_names($pdo,$root,$localVersion)!==[];"));
 assert(updater.includes('function create_database_backup('));
 assert(updater.includes('$isClean121Recovery'));
-assert(updater.includes("$updateStage=$isLegacy097Recovery?'database_recovery_preflight':'database_recovery_skip'"));
+assert(updater.includes("$updateStage=($isLegacy097Recovery || $pendingMigrations!==[] || $legacyRepairNeeded || $studentSchemaMissing)"));
+assert(updater.includes("elseif($pendingMigrations!==[] || $legacyRepairNeeded || $studentSchemaMissing){"));
+assert(updater.includes("$migrations=run_pending_migrations($pdo,$sourceRoot,$localVersion);"));
 assert(updater.includes("'database_backup'=>$dbBackupName"));
 
 assert(!updater.includes("masal@gmail.com"));
