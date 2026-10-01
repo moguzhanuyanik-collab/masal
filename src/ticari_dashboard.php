@@ -171,6 +171,7 @@ function td_institution_rows(PDO $pdo,array $filters=[],int $limit=300): array {
             ELSE 0
           END
         ),0) gecikmis_bakiye,
+        COALESCE(SUM(s.toplam_tutar-COALESCE(pay.tahsil_edilen,0)),0) kalan_bakiye,
         SUM(
           CASE
             WHEN s.durum='aktif'
