@@ -2310,6 +2310,7 @@ function install_github_update(
         $recoveryState['activation_preflight']=$activationPreflight;
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
 
+        // 1.2.1 temiz recovery yalnız uygulama kodu/updater çekirdeğini yeniler.
         // 1.2.1 temiz recovery davranışı korunur; ancak 1.1.97'den gelen
         // kurulumlar için kod ağacını güncellemek tek başına yeterli değildir.
         // Bu özel legacy hattı yalnız doğrulanmış 001-063 geçmişi + 064 checkpoint
