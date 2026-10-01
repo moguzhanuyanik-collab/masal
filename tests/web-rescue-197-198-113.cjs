@@ -20,6 +20,6 @@ assert(!/\\b(?:DROP|TRUNCATE)\\s+TABLE\\b/i.test(bridge));
 assert(!/\\bDELETE\\s+FROM\\b/i.test(bridge));
 assert(workflow.includes('tests/web-rescue-197-198-113.php'));
 assert(workflow.includes('tests/web-rescue-197-198-113.cjs'));
-assert(/^1\\.2\\.\\d+$/.test(String(version.version)) || /^1\\.1\\.(?:1(?:1[3-9])|[2-9]\\d)$/.test(String(version.version)));
+assert(/^1\.2\.\d+$/.test(String(version.version)) || /^1\.1\.(?:1(?:1[3-9])|[2-9]\d)$/.test(String(version.version)));
 
 console.log('PASS: direct 1.1.97 web rescue source contract');
