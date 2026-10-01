@@ -67,6 +67,7 @@ $packages=kl_tables_ready($pdo)?kl_package_rows($pdo,true):[];
 $contracts=$ready?tf_contract_rows($pdo):[];
 $payments=$ready?tf_payment_rows($pdo,80):[];
 $summary=$ready?tf_financial_summary($pdo):[];
+$integrityIssues=$ready?tf_integrity_issues($pdo):[];
 $renewals=kl_tables_ready($pdo)?tf_license_renewal_rows($pdo,30):[];
 
 $editId=max(0,(int)($_GET['sozlesme_id']??0));
@@ -106,6 +107,21 @@ foreach($contracts as $row) if((int)$row['id']===$editId){$edit=$row;break;}
 <?php if($success!==''):?><div class="role-note"><span>✅</span><p><?=tfh($success)?></p></div><?php endif;?>
 
 <?php if($ready):?>
+<?php if($integrityIssues):?>
+<section class="role-section">
+<div class="role-section-head"><div><span class="eyeline">VERİ BÜTÜNLÜĞÜ</span><h2>Geçmiş Kayıt Uyarıları</h2></div><span class="role-pill"><?=count($integrityIssues)?></span></div>
+<div class="role-list">
+<?php foreach($integrityIssues as $issue):?>
+<div class="role-row">
+<span>⚠️</span>
+<div><strong><?=tfh((string)$issue['mesaj'])?></strong><small><?=(int)$issue['adet']?> kayıt · Yeni işlemlerde bu tutarsızlık artık engelleniyor.</small></div>
+<span class="role-pill"><?=(int)$issue['adet']?></span>
+</div>
+<?php endforeach;?>
+</div>
+</section>
+<?php endif;?>
+
 <section class="role-section">
 <div class="role-section-head"><div><span class="eyeline">FİNANS ÖZETİ</span><h2>Sözleşme ve Tahsilat</h2></div></div>
 <div class="role-stats">
@@ -164,7 +180,13 @@ foreach($contracts as $row) if((int)$row['id']===$editId){$edit=$row;break;}
 <label>Para birimi</label>
 <select class="role-input" name="para_birimi"><?php foreach(['TRY','USD','EUR'] as $currency):?><option value="<?=$currency?>" <?=((string)($edit['para_birimi']??'TRY')===$currency?'selected':'')?>><?=$currency?></option><?php endforeach;?></select>
 <label>Durum</label>
-<select class="role-input" name="durum"><?php foreach(['taslak'=>'Taslak','aktif'=>'Aktif','tamamlandi'=>'Tamamlandı','iptal'=>'İptal'] as $value=>$label):?><option value="<?=$value?>" <?=((string)($edit['durum']??'aktif')===$value?'selected':'')?>><?=$label?></option><?php endforeach;?></select>
+<select class="role-input" name="durum">
+<option value="taslak" <?=((string)($edit['durum']??'aktif')==='taslak'?'selected':'')?>>Taslak</option>
+<option value="aktif" <?=((string)($edit['durum']??'aktif')==='aktif'?'selected':'')?>>Aktif</option>
+<?php if((string)($edit['durum']??'')==='tamamlandi'):?><option value="tamamlandi" selected disabled>Tamamlandı · tahsilata göre otomatik</option><?php endif;?>
+<option value="iptal" <?=((string)($edit['durum']??'aktif')==='iptal'?'selected':'')?>>İptal</option>
+</select>
+<small>Tamamlandı durumu aktif tahsilat toplamına göre otomatik belirlenir. Tahsilat geçmişi başladıktan sonra kurum ve para birimi değiştirilemez; aktif tahsilatlar iptal edilmeden sözleşme iptal edilemez.</small>
 <label>Not</label>
 <textarea class="role-input" name="notlar" rows="3" maxlength="2000"><?=tfh((string)($edit['notlar']??''))?></textarea>
 <button class="role-button" type="submit"><?=$edit?'Sözleşmeyi Güncelle':'Sözleşmeyi Kaydet'?></button>
@@ -228,6 +250,7 @@ foreach($contracts as $row) if((int)$row['id']===$editId){$edit=$row;break;}
 <div><strong><?=tfh((string)$payment['kurum_adi'])?> · <?=tff($payment['tutar'])?> <?=tfh((string)$payment['para_birimi'])?></strong>
 <small><?=tfh((string)$payment['tahsilat_tarihi'])?> · <?=tfh(tf_method((string)$payment['odeme_yontemi']))?> · <?=tfh((string)$payment['sozlesme_no'])?><?php if((string)$payment['referans_no']!==''):?> · Ref <?=tfh((string)$payment['referans_no'])?><?php endif;?></small>
 <?php if((string)$payment['durum']==='iptal'):?><small>İptal: <?=tfh((string)$payment['iptal_nedeni'])?></small><?php endif;?>
+<?php if(!empty($payment['kurum_tutarsiz'])):?><small>⚠️ Tahsilatın kayıtlı kurumu ile sözleşmenin güncel kurumu farklı. Geçmiş kayıt incelemesi gerekli.</small><?php endif;?>
 </div>
 <span class="role-pill <?=((string)$payment['durum']==='aktif'?'ok':'')?>"><?=((string)$payment['durum']==='aktif'?'Aktif':'İptal')?></span>
 <?php if((string)$payment['durum']==='aktif'):?>
