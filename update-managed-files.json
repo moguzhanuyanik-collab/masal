@@ -437,6 +437,7 @@
     "tests/db-backup-99.php",
     "tests/hardening-91.cjs",
     "tests/hardening-94.cjs",
+    "tests/legacy-064-integrity-124.php",
     "tests/migration-safety-93.cjs",
     "tests/pwa-95.cjs",
     "tests/rebuild-release-121.cjs",
@@ -503,5 +504,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 8
+  "release_revision": 9
 }
