@@ -1945,6 +1945,91 @@ function assert_historical_migration_history(PDO $pdo,string $root,string $local
     }
 }
 
+function assert_recovered_release_postconditions(PDO $pdo,string $root,string $sourceRoot,array $remote): void {
+    $targetVersion=trim((string)($remote['version']??''));
+    if($targetVersion==='' || version_compare($targetVersion,'1.2.1','<')) return;
+
+    // 1.2.1 ve sonrası artık "dosyalar kopyalandı" ile başarılı sayılmaz.
+    // 1.1.97 -> 1.2.1 kayıp zincirinde asıl risk, version.json ileri alınırken
+    // DB migrationlarının/şemalarının eksik kalmasıydı. Bu postcondition bütün
+    // recovery zincirinin gerçek hedef durumunu doğrular.
+    foreach([
+        ['version.json',$sourceRoot.'/version.json'],
+        ['update-release.json',$sourceRoot.'/update-release.json'],
+    ] as [$label,$path]){
+        if(!is_file($path) || is_link($path)){
+            throw new RuntimeException('Recovery postcondition metadata dosyası bulunamadı: '.$label);
+        }
+        $raw=file_get_contents($path);
+        $data=json_decode(is_string($raw)?$raw:'',true);
+        if(!is_array($data) || trim((string)($data['version']??''))!==$targetVersion){
+            throw new RuntimeException('Recovery postcondition sürüm metadata uyuşmazlığı: '.$label);
+        }
+    }
+
+    $sourceUpdater=rtrim($sourceRoot,'/\\').'/src/updater.php';
+    $liveUpdater=rtrim($root,'/\\').'/src/updater.php';
+    $sourceGeneration=updater_core_generation_from_file($sourceUpdater);
+    $liveGeneration=updater_core_generation_from_file($liveUpdater);
+    if($sourceGeneration<121){
+        throw new RuntimeException('Recovery postcondition paket updater çekirdeği 121 nesilinden eski.');
+    }
+    if($liveGeneration<121){
+        throw new RuntimeException('Recovery postcondition canlı updater çekirdeği 121 nesilinden eski.');
+    }
+
+    if(!auth_table_exists($pdo,'sistem_migrations')){
+        throw new RuntimeException('Recovery postcondition sistem_migrations tablosu bulunamadı.');
+    }
+
+    $check=$pdo->prepare('SELECT 1 FROM sistem_migrations WHERE migration=? LIMIT 1');
+    foreach([
+        '064_adimbot_rate_limit_ve_migration_checkpoint',
+        '065_kurum_bazli_eslestirme_izolasyonu',
+        '066_kurum_eslestirme_schema_guard',
+    ] as $migration){
+        $check->execute([$migration]);
+        $exists=(bool)$check->fetchColumn();
+        $check->closeCursor();
+        if(!$exists){
+            throw new RuntimeException('Recovery postcondition migration kaydı eksik: '.$migration);
+        }
+    }
+
+    if(!auth_table_exists($pdo,'adimbot_rate_limitleri')){
+        throw new RuntimeException('Recovery postcondition 064 şeması eksik: adimbot_rate_limitleri.');
+    }
+
+    if(!auth_table_exists($pdo,'kurum_kullanicilari')){
+        throw new RuntimeException('Recovery postcondition kurum_kullanicilari tablosu bulunamadı.');
+    }
+    $membershipColumns=auth_column_map($pdo,'kurum_kullanicilari');
+    foreach(['kurum_id','kullanici_id','kurum_rolu','aktif'] as $column){
+        if(!isset($membershipColumns[$column])){
+            throw new RuntimeException('Recovery postcondition kurum üyeliği kolonu eksik: '.$column);
+        }
+    }
+    foreach(['veli_id','ogretmen_id','ogrenci_id','yonetici_id'] as $legacyColumn){
+        if(isset($membershipColumns[$legacyColumn])){
+            throw new RuntimeException('Recovery postcondition legacy kurum üyeliği kolonu hâlâ mevcut: '.$legacyColumn);
+        }
+    }
+
+    foreach(['veli_ogrenci','ogretmen_ogrenci'] as $relation){
+        if(!auth_table_exists($pdo,$relation)){
+            throw new RuntimeException('Recovery postcondition ilişki tablosu bulunamadı: '.$relation);
+        }
+        $columns=auth_column_map($pdo,$relation);
+        if(!isset($columns['kurum_id'])){
+            throw new RuntimeException('Recovery postcondition tenant kolonu eksik: '.$relation.'.kurum_id');
+        }
+    }
+
+    // 066 kayıtlı olsa bile gerçek şema bozulmuş olabilir; checkpoint'e değil
+    // postcondition'a güven. Guard veri değiştirmez.
+    validate_tenant_relation_schema_guard($pdo,$sourceRoot);
+}
+
 function validate_tenant_relation_schema_guard(PDO $pdo,string $migrationRoot): void {
     $name='066_kurum_eslestirme_schema_guard';
     $file=rtrim($migrationRoot,'/\\').'/database/migrations/'.$name.'.sql';
@@ -2438,6 +2523,8 @@ function install_github_update(
             $sourceRoot,$root,$newManagedFiles,$preserve
         );
         $recoveryState['activation_verification']=$activationVerification;
+        assert_recovered_release_postconditions($pdo,$root,$sourceRoot,$remote);
+        $recoveryState['release_postconditions']='passed';
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
         $removedManagedFiles=remove_stale_managed_files(
             $root,$oldManagedFiles,$newManagedFiles,$preserve,$oldManagedHashes
