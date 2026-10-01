@@ -386,14 +386,29 @@ function oi_record_question_reward(PDO $pdo,int $studentId,int $contentId,int $s
     return $inserted?$stars:0;
 }
 
-function oi_answer_question(PDO $pdo,int $studentId,int $contentId,int $selectedIndex,?int &$awardedStars=null): bool {
+function oi_answer_question(
+    PDO $pdo,
+    int $studentId,
+    int $contentId,
+    int $selectedIndex,
+    ?int &$awardedStars=null,
+    ?bool &$alreadyCompleted=null
+): bool {
     $awardedStars=0;
+    $alreadyCompleted=false;
+
     $rows=oi_student_contents($pdo,$studentId,$contentId);
     $content=$rows[0]??null;
     if(!is_array($content) || (string)$content['icerik_turu']!=='soru') throw new RuntimeException('Soru bulunamadı.');
 
     $options=json_decode((string)($content['secenekler_json']??''),true);
     if(!is_array($options) || $selectedIndex<0 || $selectedIndex>=count($options)) throw new RuntimeException('Bir cevap seç.');
+
+    if($content['secilen_cevap_indeksi']!==null && (int)($content['cevap_dogru']??0)===1){
+        $alreadyCompleted=true;
+        return true;
+    }
+
     $correctIndex=(int)$content['dogru_cevap_indeksi'];
     $correct=$selectedIndex===$correctIndex;
     $reward=max(0,min(20,(int)($content['yildiz_degeri']??0)));
@@ -405,10 +420,10 @@ function oi_answer_question(PDO $pdo,int $studentId,int $contentId,int $selected
           (icerik_id,ogrenci_id,secilen_cevap_indeksi,dogru,deneme_sayisi,cevap_tarihi)
           VALUES (?,?,?,?,1,NOW())
           ON DUPLICATE KEY UPDATE
-            secilen_cevap_indeksi=VALUES(secilen_cevap_indeksi),
-            dogru=VALUES(dogru),
-            deneme_sayisi=deneme_sayisi+1,
-            cevap_tarihi=NOW()");
+            secilen_cevap_indeksi=IF(dogru=1,secilen_cevap_indeksi,VALUES(secilen_cevap_indeksi)),
+            deneme_sayisi=IF(dogru=1,deneme_sayisi,deneme_sayisi+1),
+            cevap_tarihi=IF(dogru=1,cevap_tarihi,NOW()),
+            dogru=IF(dogru=1,1,VALUES(dogru))");
         $s->execute([$contentId,$studentId,$selectedIndex,$correct?1:0]);
         $s->closeCursor();
 

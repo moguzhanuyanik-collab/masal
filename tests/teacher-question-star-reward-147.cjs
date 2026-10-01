@@ -38,7 +38,7 @@ assert(teacher.includes('Doğru cevap yıldız ödülü'),'teacher reward field 
 assert(teacher.includes("⭐ '.(int)$item['yildiz_degeri'].' ödül"),'teacher content list must show configured reward');
 
 assert(student.includes("$awardedStars=0;"),'student answer flow must capture newly awarded stars');
-assert(student.includes("oi_answer_question($pdo,$studentId,$contentId,$selected,$awardedStars)"),'student answer flow must request awarded amount');
+assert(/oi_answer_question\(\$pdo,\$studentId,\$contentId,\$selected,\$awardedStars(?:,\$alreadyCompleted)?\)/.test(student),'student answer flow must request awarded amount');
 assert(student.includes("yıldız kazandın!"),'student first-award message missing');
 assert(student.includes("<?=min(20,(int)$item['yildiz_degeri'])?> yıldız"),'student question reward badge missing');
 

@@ -42,3 +42,9 @@
 .teacher-flash{margin:0 14px 12px;padding:11px 13px;border-radius:14px;background:#eef9f2;border:1px solid #d4efdd;color:#2f7652;font-size:10px;font-weight:800}
 @media(max-width:430px){.app-nav-five>a{font-size:9px}.teacher-hero h1{font-size:22px}.teacher-hero p{max-width:86%}}
 .teacher-homework-link{display:inline-flex;margin-top:12px;padding:9px 12px;border-radius:12px;background:#fff;color:#6d52a5;border:1px solid #e2d8f3;font-size:9px;font-weight:950;box-shadow:0 5px 14px #5b3a7a0a}
+.teacher-question-locked{display:flex;align-items:center;gap:9px;margin:10px 0;padding:10px 11px;border:1px solid #d7eadf;border-radius:13px;background:#f1fbf5;color:#397657}
+.teacher-question-locked>span{font-size:18px}
+.teacher-question-locked strong{display:block;font-size:9px}
+.teacher-question-locked small{display:block;margin-top:2px;font-size:8px;line-height:1.35;color:#668271}
+.teacher-option.locked{opacity:.82;cursor:default}
+.teacher-option.locked input{pointer-events:none}
