@@ -299,6 +299,106 @@ function atomic_replace_update_file(string $source,string $target,string $relati
     }
 }
 
+function updater_core_handoff_marker_path(string $root): string {
+    return rtrim($root,'/\\').'/storage/updates/updater-core-handoff.json';
+}
+
+function read_updater_core_handoff_marker(string $root,string $targetCommit): ?array {
+    $path=updater_core_handoff_marker_path($root);
+    if(!is_file($path) || !is_readable($path)) return null;
+    $data=json_decode((string)file_get_contents($path),true);
+    if(!is_array($data)) return null;
+    if(trim((string)($data['target_commit']??''))!==$targetCommit) return null;
+    $backup=basename(trim((string)($data['application_backup']??'')));
+    if($backup==='' || !is_file(rtrim($root,'/\\').'/storage/backups/'.$backup)) return null;
+    return $data;
+}
+
+function write_updater_core_handoff_marker(string $root,array $state): void {
+    $path=updater_core_handoff_marker_path($root);
+    $dir=dirname($path);
+    if(!is_dir($dir)&&!mkdir($dir,0750,true)&&!is_dir($dir)){
+        throw new RuntimeException('Updater çekirdeği handoff klasörü oluşturulamadı.');
+    }
+    $tmp=$path.'.tmp';
+    $json=json_encode(
+        ['format'=>1,'updated_at'=>date(DATE_ATOM)]+$state,
+        JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT
+    );
+    if(!is_string($json)) throw new RuntimeException('Updater çekirdeği handoff kaydı oluşturulamadı.');
+    @unlink($tmp);
+    if(file_put_contents($tmp,$json."\n",LOCK_EX)===false){
+        throw new RuntimeException('Updater çekirdeği handoff kaydı yazılamadı.');
+    }
+    @chmod($tmp,0600);
+    if(!@rename($tmp,$path)){
+        @unlink($tmp);
+        throw new RuntimeException('Updater çekirdeği handoff kaydı etkinleştirilemedi.');
+    }
+    @chmod($path,0600);
+}
+
+function clear_updater_core_handoff_marker(string $root): void {
+    $path=updater_core_handoff_marker_path($root);
+    if(is_file($path)||is_link($path)) @unlink($path);
+}
+
+function prepare_updater_core_handoff(
+    string $root,
+    string $sourceRoot,
+    string $targetVersion,
+    string $targetCommit,
+    string $applicationBackup
+): ?array {
+    $relative='src/updater.php';
+    $source=rtrim($sourceRoot,'/\\').'/'.$relative;
+    $target=rtrim($root,'/\\').'/'.$relative;
+    if(!is_file($source)||is_link($source)){
+        throw new RuntimeException('Paket updater çekirdeği geçersiz.');
+    }
+    if(!is_file($target)||is_link($target)){
+        throw new RuntimeException('Canlı updater çekirdeği geçersiz.');
+    }
+
+    $sourceHash=update_file_sha256($source,'Paket updater çekirdeği');
+    $targetHash=update_file_sha256($target,'Canlı updater çekirdeği');
+    if(hash_equals($sourceHash,$targetHash)) return null;
+
+    $backupDir=rtrim($root,'/\\').'/storage/backups';
+    if(!is_dir($backupDir)&&!mkdir($backupDir,0750,true)&&!is_dir($backupDir)){
+        throw new RuntimeException('Updater çekirdeği yedek klasörü oluşturulamadı.');
+    }
+    $safeVersion=preg_replace('/[^0-9A-Za-z._-]+/','-',trim($targetVersion))?:'unknown';
+    $backupName='updater-core-before-'.$safeVersion.'-'.date('Ymd_His').'-'.substr($targetHash,0,12).'.php';
+    $backupPath=$backupDir.'/'.$backupName;
+    if(!copy($target,$backupPath)){
+        throw new RuntimeException('Canlı updater çekirdeği yedeklenemedi.');
+    }
+    @chmod($backupPath,0600);
+    if(!hash_equals($targetHash,update_file_sha256($backupPath,'Updater çekirdeği yedeği'))){
+        @unlink($backupPath);
+        throw new RuntimeException('Updater çekirdeği yedeği bütünlük doğrulamasından geçemedi.');
+    }
+
+    atomic_replace_update_file($source,$target,$relative);
+    $activatedHash=update_file_sha256($target,'Etkin updater çekirdeği');
+    if(!hash_equals($sourceHash,$activatedHash)){
+        @copy($backupPath,$target);
+        throw new RuntimeException('Updater çekirdeği etkinleştirme sonrası bütünlük doğrulamasından geçemedi.');
+    }
+
+    $state=[
+        'target_version'=>$targetVersion,
+        'target_commit'=>$targetCommit,
+        'application_backup'=>basename($applicationBackup),
+        'updater_backup'=>$backupName,
+        'old_sha256'=>$targetHash,
+        'new_sha256'=>$sourceHash,
+    ];
+    write_updater_core_handoff_marker($root,$state);
+    return $state;
+}
+
 function copy_update_tree(string $source,string $destination,array $preserve,string $relative=''): void {
     foreach(scandir($source)?:[] as $item){
         if($item==='.'||$item==='..'||$item==='.git') continue;
@@ -1574,7 +1674,10 @@ function install_github_update(
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
 
         $updateStage='application_backup';
-        $backupName=create_single_previous_backup($root);
+        $existingHandoff=read_updater_core_handoff_marker($root,$targetCommit);
+        $backupName=$existingHandoff!==null
+            ? basename((string)$existingHandoff['application_backup'])
+            : create_single_previous_backup($root);
         $recoveryState['status']='application_backup_ready';
         $recoveryState['stage']=$updateStage;
         $recoveryState['application_backup']=backup_artifact_metadata($root,$backupName);
@@ -1660,6 +1763,41 @@ function install_github_update(
         $oldManagedFiles=read_managed_update_manifest($root);
         $newManagedFiles=collect_managed_update_files($sourceRoot,$preserve);
         assert_packaged_manifest_matches_tree($manifestData,$newManagedFiles);
+
+        // DB/migration aşamasından önce updater çekirdeğini güvenli biçimde el değiştir.
+        // Bu PHP isteği bellekte eski kodla devam ettiği için burada temiz biçimde biter;
+        // sonraki HTTP isteği yeni src/updater.php çekirdeğiyle aynı paketi sürdürür.
+        $coreHandoff=prepare_updater_core_handoff(
+            $root,$sourceRoot,$packageVersion,$targetCommit,$backupName
+        );
+        if($coreHandoff!==null){
+            $updateStage='updater_core_handoff';
+            $recoveryState['status']='retry_required';
+            $recoveryState['stage']=$updateStage;
+            $recoveryState['updater_core_handoff']=$coreHandoff;
+            $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+            $handoffMessage='Updater çekirdeği güvenli biçimde yenilendi; kurulum yeni çekirdekle yeniden başlatılacak.';
+            $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='yeniden_dene',mesaj=?,bitis_tarihi=NOW() WHERE id=?")
+                ->execute([$handoffMessage,$logId]);
+            @unlink($zipPath);
+            delete_tree($extractDir);
+            flock($updateLock,LOCK_UN);
+            fclose($updateLock);
+            return [
+                'updated'=>false,
+                'retry_required'=>true,
+                'core_handoff'=>true,
+                'message'=>$handoffMessage,
+                'remote'=>$remote,
+                'local'=>$localVersion,
+                'local_revision'=>$localRevision,
+                'backup'=>$backupName,
+                'updater_backup'=>(string)($coreHandoff['updater_backup']??''),
+                'recovery_manifest'=>$recoveryManifestName,
+                'migrations'=>[],
+            ];
+        }
+
         assert_managed_copy_type_safe($root,$sourceRoot,$newManagedFiles,$oldManagedFiles,$preserve);
         $activationPreflight=assert_update_activation_preflight(
             $root,$sourceRoot,$newManagedFiles,$oldManagedFiles,$preserve
@@ -1718,6 +1856,7 @@ function install_github_update(
         if($dbBackupName!=='') $historyMessage.='; DB yedek: '.$dbBackupName;
         if($removedManagedFiles!==[]) $historyMessage.='; temizlenen eski dosya: '.count($removedManagedFiles);
         $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='basarili',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute([$historyMessage,$logId]);
+        clear_updater_core_handoff_marker($root);
 
         if(is_array($recoveryState)){
             $recoveryState['status']='update_completed';

@@ -57,6 +57,7 @@ jobs:
           php tests/update-release-revision-105.php
           php tests/update-197-rescue-106.php
           php tests/update-197-rescue-installer-107.php
+          php tests/update-core-handoff-108.php
 
       - name: Node regression checks
         shell: bash
@@ -76,3 +77,4 @@ jobs:
           node tests/update-release-revision-105.cjs
           node tests/update-197-rescue-106.cjs
           node tests/update-197-rescue-installer-107.cjs
+          node tests/update-core-handoff-108.cjs
