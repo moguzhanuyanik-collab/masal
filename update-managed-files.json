@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.1",
+  "version": "1.2.2",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -179,6 +179,7 @@
     "RELEASE-1.1.98.md",
     "RELEASE-1.1.99.md",
     "RELEASE-1.2.1.md",
+    "RELEASE-1.2.2.md",
     "YETKILENDIRME-1.0.35.md",
     "activities-extra.js",
     "adimbot-ai-bridge.js",
@@ -472,6 +473,7 @@
     "tests/update-manifest-contract-103.cjs",
     "tests/update-manifest-contract-103.php",
     "tests/update-migration-safety-116.php",
+    "tests/update-pending-migrations-127.cjs",
     "tests/update-quality-catalog-111.cjs",
     "tests/update-quality-catalog-112.cjs",
     "tests/update-quality-catalog-113.cjs",
@@ -506,5 +508,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 15
+  "release_revision": 1
 }

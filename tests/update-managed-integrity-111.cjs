@@ -18,7 +18,7 @@ assert(updater.includes("'hashes'=>$hashes"));
 assert(updater.includes('function assert_stale_managed_files_safe('));
 assert(updater.includes('güvenilir hash baseline yok'));
 assert(updater.includes('kurulumdan sonra değiştirilmiş'));
-const recoveryStageGate=updater.indexOf("$updateStage=$isLegacy097Recovery?'database_recovery_preflight':'database_recovery_skip';");
+const recoveryStageGate=updater.indexOf("$updateStage=($isLegacy097Recovery || $pendingMigrations!==[] || $legacyRepairNeeded || $studentSchemaMissing)");
 assert(recoveryStageGate>=0);
 assert(
   updater.indexOf('$stalePreflight=assert_stale_managed_files_safe(')
@@ -29,7 +29,7 @@ assert(workflow.includes('tests/update-managed-integrity-111.cjs'));
 
 {
   const parts=String(version.version).split('.').map(Number);
-  assert((parts.length===3 && parts[0]===1 && parts[1]===1 && Number.isInteger(parts[2]) && parts[2]>=111) || String(version.version)==='1.2.1','version must be 1.1.111 or newer');
+  assert((parts.length===3 && parts[0]===1 && parts[1]===1 && Number.isInteger(parts[2]) && parts[2]>=111) || /^1\.2\.\d+$/.test(String(version.version)),'version must be 1.1.111 or newer');
 }
 assert(Number.isInteger(version.release_revision) && version.release_revision>=1,'release revision must be positive');
 assert.strictEqual(anchor.version,version.version);

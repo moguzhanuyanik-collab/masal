@@ -9,6 +9,7 @@ on:
       - 'pwa-hardening-*'
       - 'updater-manifest-*'
       - 'update-*'
+      - 'fix/**'
       - 'db-ai-safety-*'
       - 'db-backup-*'
       - 'recovery-safety-*'
@@ -104,6 +105,7 @@ jobs:
           node tests/rebuild-release-121.cjs
           node tests/update-legacy-db-recovery-123.cjs
           node tests/update-chain-rebuild-126.cjs
+          node tests/update-pending-migrations-127.cjs
 
   tenant-db-integration:
     name: Tenant DB integration

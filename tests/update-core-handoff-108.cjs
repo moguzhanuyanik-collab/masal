@@ -14,7 +14,7 @@ assert(updater.includes('function prepare_updater_core_handoff('));
 assert(updater.includes('function read_updater_core_handoff_marker('));
 assert(updater.includes("durum='yeniden_dene'"));
 assert(updater.includes("'retry_required'=>true"));
-const recoveryStageGate=updater.indexOf("$updateStage=$isLegacy097Recovery?'database_recovery_preflight':'database_recovery_skip';");
+const recoveryStageGate=updater.indexOf("$updateStage=($isLegacy097Recovery || $pendingMigrations!==[] || $legacyRepairNeeded || $studentSchemaMissing)");
 assert(recoveryStageGate>=0);
 assert(
   updater.indexOf('$coreHandoff=prepare_updater_core_handoff(')
@@ -28,7 +28,7 @@ assert(page.includes('setTimeout(resolve, 350)'));
 assert(workflow.includes('tests/update-core-handoff-108.php'));
 assert(workflow.includes('tests/update-core-handoff-108.cjs'));
 
-assert(/^1\.1\.(?:10[8-9]|1[1-9][0-9]|[2-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.1','version must be 1.1.108 or newer');
+assert(/^1\.1\.(?:10[8-9]|1[1-9][0-9]|[2-9][0-9]{2,})$/.test(String(version.version)) || /^1\.2\.\d+$/.test(String(version.version)),'version must be 1.1.108 or newer');
 assert(Number.isInteger(version.release_revision) && version.release_revision>=1,'release revision must be positive');
 assert.strictEqual(anchor.version,version.version);
 assert.strictEqual(anchor.release_revision,version.release_revision);
