@@ -99,7 +99,7 @@ $pdo->exec('CREATE TABLE ogrenciler (
     PRIMARY KEY(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
 
-$pdo->exec('CREATE TABLE kurum_kullanicilari (
+$pdo->exec("CREATE TABLE kurum_kullanicilari (
     kurum_id BIGINT UNSIGNED NOT NULL,
     kullanici_id BIGINT UNSIGNED NULL,
     kurum_rolu VARCHAR(30) NOT NULL DEFAULT '',
@@ -109,7 +109,7 @@ $pdo->exec('CREATE TABLE kurum_kullanicilari (
     ogrenci_id BIGINT UNSIGNED NULL,
     yonetici_id BIGINT UNSIGNED NULL,
     olusturulma_tarihi DATETIME NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
 $pdo->exec('CREATE TABLE veli_ogrenci (
     veli_id BIGINT UNSIGNED NOT NULL,
