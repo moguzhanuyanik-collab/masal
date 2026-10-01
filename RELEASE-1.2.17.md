@@ -34,3 +34,8 @@ Bu düzeltme mevcut kullanıcı, öğrenci, kurum veya içerik verisini değişt
 
 - 1.1.98 tarihsel migration güvenliği testindeki eski 1.1.98-only guard beklentisi, 1.1.97 direct recovery için eklenen yeni fail-closed sözleşmeyle hizalandı.
 - Uygulama davranışı değiştirilmedi; yalnız regression testi güncel sözleşmeyi doğruluyor.
+
+## Rev 3 — recovery package lock regression uyumluluğu
+
+- Immutable 1.2.16 recovery bootstrap testi, yeni 1.2.x sürümlerinde exact-current-version beklentisine takılmayacak şekilde güncellendi.
+- Test artık mevcut sürümün en az 1.2.16 olmasını ve release/manifest metadata'sının kendi içinde eşleşmesini doğruluyor.
