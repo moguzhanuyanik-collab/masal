@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.47",
+  "version": "1.2.48",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -220,6 +220,7 @@
     "RELEASE-1.2.45.md",
     "RELEASE-1.2.46.md",
     "RELEASE-1.2.47.md",
+    "RELEASE-1.2.48.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
@@ -398,6 +399,7 @@
     "database/migrations/077_yasal_belge_onay_merkezi.sql",
     "database/migrations/078_demo_satis_donusum_merkezi.sql",
     "database/migrations/079_paket_lisans_butunlugu.sql",
+    "database/migrations/080_lisans_yenileme_operasyon_merkezi.sql",
     "demo-satis.css",
     "demo-satis.php",
     "destek.css",
@@ -450,6 +452,8 @@
     "lesson-ui-fix.js",
     "lisans-erisim.css",
     "lisans-erisim.php",
+    "lisans-yenilemeleri.css",
+    "lisans-yenilemeleri.php",
     "login.php",
     "logout.php",
     "manifest.webmanifest",
@@ -513,6 +517,7 @@
     "src/kurum_siniflari.php",
     "src/kurum_yonetimi.php",
     "src/kurumlar_modulu.php",
+    "src/lisans_yenileme.php",
     "src/mail_settings.php",
     "src/normalized.php",
     "src/odev_durumu.php",
@@ -596,6 +601,8 @@
     "tests/legacy-064-integrity-124.php",
     "tests/legal-consent-168.cjs",
     "tests/legal-consent-db-168.php",
+    "tests/license-renewal-173.cjs",
+    "tests/license-renewal-db-173.php",
     "tests/mail-settings-166.cjs",
     "tests/mail-settings-166.php",
     "tests/manager-report-tenant-scope-145.cjs",
@@ -720,5 +727,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Kurum lisans erişim politikası"
+  "name": "Lisans yenileme ve süre sonu operasyon merkezi"
 }

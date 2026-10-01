@@ -30,7 +30,8 @@ assert(domain.includes("$newStatus=$remainingPaid+0.009>=(float)$contract['topla
 
 assert(page.includes("require_role('super_admin')"),'commercial finance page must be Super Admin only');
 assert(page.includes("verify_csrf($_POST['csrf']??null)"),'commercial writes must require CSRF');
-assert(page.includes('30 Günlük Yenileme Radar'),'renewal radar UI missing');
+assert(page.includes('Yenileme Operasyon Merkezi'),'dedicated renewal center handoff missing');
+assert(page.includes('href="lisans-yenilemeleri.php"'),'commercial finance must route renewal operations to dedicated center');
 assert(page.includes('Ticari Portföy'),'contract portfolio UI missing');
 assert(page.includes('TAHSİLAT GEÇMİŞİ'),'payment history UI missing');
 assert(page.includes('resmi e-Fatura/e-Arşiv belgesi üretmez'),'page must not claim regulated invoice generation');
@@ -58,4 +59,4 @@ for(const path of [
   'tests/commercial-finance-db-163.php'
 ]) assert(manifest.files.includes(path),'manifest missing '+path);
 
-console.log('PASS: commercial finance, payment integrity and renewal radar source contract');
+console.log('PASS: commercial finance, payment integrity and dedicated renewal-center handoff source contract');
