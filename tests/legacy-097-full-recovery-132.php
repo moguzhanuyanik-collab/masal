@@ -195,9 +195,10 @@ foreach(['veli_id','ogretmen_id','ogrenci_id','yonetici_id'] as $legacy){
     ok_132(!isset($membershipColumns[$legacy]),'Legacy kurum üyeliği kolonu kaldı: '.$legacy);
 }
 
+$versionData=json_decode((string)file_get_contents($root.'/version.json'),true);
 $remote=[
-    'version'=>'1.2.6',
-    'release_revision'=>1,
+    'version'=>is_array($versionData)?(string)($versionData['version']??''):'',
+    'release_revision'=>is_array($versionData)?(int)($versionData['release_revision']??1):1,
     'name'=>'legacy 1.1.97 full recovery fixture',
 ];
 assert_recovered_release_postconditions($pdo,$root,$root,$remote);
