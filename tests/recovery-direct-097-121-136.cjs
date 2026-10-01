@@ -12,6 +12,9 @@ const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
 const anchor='6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c';
 
 assert(updater.includes("const ILKADIM_LEGACY_097_RECOVERY_121_COMMIT='"+anchor+"';"));
+assert(updater.includes("const ILKADIM_LEGACY_097_RECOVERY_121_SOURCE_TREE='9665e2754d02db81f8ca07a97b95506397103e1e';"));
+assert(updater.includes("const ILKADIM_LEGACY_097_RECOVERY_121_RELEASE_REVISION=15;"));
+assert(updater.includes('function github_commit_tree_sha'));
 assert(updater.includes('function legacy_097_direct_121_recovery_release'));
 assert(updater.includes("if($localVersion==='1.1.97'){"));
 assert(updater.includes('return legacy_097_direct_121_recovery_release($gh);'));

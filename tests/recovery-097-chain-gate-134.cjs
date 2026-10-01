@@ -12,7 +12,7 @@ const release=JSON.parse(fs.readFileSync('update-release.json','utf8'));
 const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
 const workflow=fs.readFileSync('.github/workflows/quality.yml','utf8');
 
-const bootstrap='2c86df240cde635812e12d35cafbb10fe99471d1';
+const bootstrap='ea5ddda3a90cdc0ace01729cee827a532d673fe9';
 const target='6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c';
 
 assert(rescue.includes("const ILKADIM_LEGACY_097_BOOTSTRAP_COMMIT='"+bootstrap+"';"));
@@ -29,13 +29,13 @@ assert(updater.includes('/commits?sha='));
 assert(updater.includes("if($localVersion==='1.1.97'){"));
 assert(updater.includes('return legacy_097_direct_121_recovery_release($gh);'));
 
-assert(version_compare_118(String(version.version),'1.2.10')>=0);
+assert(version_compare_118(String(version.version),'1.2.16')>=0);
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
 assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
 assert.strictEqual(release.release_revision,version.release_revision);
 assert.strictEqual(manifest.release_revision,version.release_revision);
-assert(manifest.files.includes('RELEASE-1.2.10.md'));
+assert(manifest.files.includes('RELEASE-1.2.16.md'));
 assert(manifest.files.includes('tests/recovery-097-chain-gate-134.cjs'));
 assert(workflow.includes('node tests/recovery-097-chain-gate-134.cjs'));
 

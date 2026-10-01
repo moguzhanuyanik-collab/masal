@@ -14,7 +14,7 @@ const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
 const workflow=fs.readFileSync('.github/workflows/quality.yml','utf8');
 
 const expected=['1.1.98','1.1.99','1.1.100','1.1.101','1.1.102','1.1.103','1.1.104','1.1.105','1.1.106','1.1.107','1.1.108','1.1.109','1.1.110','1.1.111','1.1.112','1.1.113','1.1.114','1.1.115','1.1.116','1.1.117','1.2.1'];
-const bootstrap='2c86df240cde635812e12d35cafbb10fe99471d1';
+const bootstrap='ea5ddda3a90cdc0ace01729cee827a532d673fe9';
 const target='6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c';
 
 assert(rescue.includes("const ILKADIM_LEGACY_097_BOOTSTRAP_COMMIT='"+bootstrap+"';"));
@@ -28,7 +28,7 @@ for(const v of expected){
   assert(rebuild.includes("'"+v+"'"),'Rebuild contract zincirinde eksik sürüm: '+v);
 }
 
-assert(version_compare_118(String(version.version),'1.2.10')>=0);
+assert(version_compare_118(String(version.version),'1.2.16')>=0);
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
 assert(Number.isInteger(version.release_revision) && version.release_revision>=1);

@@ -203,6 +203,23 @@ function remote_release_info_at_ref(array $gh,string $ref): array {
     return remote_update_metadata_at_ref($gh,$ref,'update-release.json');
 }
 
+function github_commit_tree_sha(array $gh,string $commit): string {
+    [$owner,$repo]=github_repo_info($gh);
+    $commit=trim($commit);
+    if(!preg_match('/^[a-f0-9]{40}$/i',$commit)){
+        throw new RuntimeException('GitHub commit SHA geçersiz.');
+    }
+    $cacheBuster=(string)round(microtime(true)*1000);
+    $url='https://api.github.com/repos/'.rawurlencode($owner).'/'.rawurlencode($repo)
+        .'/commits/'.rawurlencode($commit).'?cb='.$cacheBuster;
+    $data=json_decode((string)updater_http($url,$gh),true);
+    $tree=trim((string)($data['commit']['tree']['sha']??''));
+    if(!preg_match('/^[a-f0-9]{40}$/i',$tree)){
+        throw new RuntimeException('GitHub recovery source tree bilgisi çözümlenemedi.');
+    }
+    return strtolower($tree);
+}
+
 function github_branch_head_sha(array $gh): string {
     [$owner,$repo,$branch]=github_repo_info($gh);
     $cacheBuster=(string)round(microtime(true)*1000);
@@ -225,6 +242,8 @@ function remote_release_info(array $gh): array {
 }
 
 const ILKADIM_LEGACY_097_RECOVERY_121_COMMIT='6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c';
+const ILKADIM_LEGACY_097_RECOVERY_121_SOURCE_TREE='9665e2754d02db81f8ca07a97b95506397103e1e';
+const ILKADIM_LEGACY_097_RECOVERY_121_RELEASE_REVISION=15;
 
 function legacy_097_direct_121_recovery_release(array $gh): array {
     $commit=ILKADIM_LEGACY_097_RECOVERY_121_COMMIT;
@@ -235,12 +254,19 @@ function legacy_097_direct_121_recovery_release(array $gh): array {
     $releaseVersion=trim((string)($releaseInfo['version']??''));
     $versionRevision=normalize_release_revision($versionInfo['release_revision']??0);
     $releaseRevision=normalize_release_revision($releaseInfo['release_revision']??0);
+    $sourceTree=github_commit_tree_sha($gh,$commit);
 
     if($version!=='1.2.1' || $releaseVersion!=='1.2.1'){
         throw new RuntimeException('1.1.97 direct recovery ankrajı beklenen 1.2.1 release metadata ile eşleşmiyor.');
     }
-    if($versionRevision<1 || $releaseRevision!==$versionRevision){
+    if($versionRevision!==ILKADIM_LEGACY_097_RECOVERY_121_RELEASE_REVISION
+        || $releaseRevision!==ILKADIM_LEGACY_097_RECOVERY_121_RELEASE_REVISION){
         throw new RuntimeException('1.1.97 direct recovery ankrajı release revision metadata uyuşmazlığı içeriyor.');
+    }
+    if($sourceTree!==strtolower(ILKADIM_LEGACY_097_RECOVERY_121_SOURCE_TREE)){
+        throw new RuntimeException(
+            '1.1.97 direct recovery source tree beklenen 1.2.1 recovery authority ile eşleşmiyor.'
+        );
     }
 
     $releaseInfo['commit']=$commit;

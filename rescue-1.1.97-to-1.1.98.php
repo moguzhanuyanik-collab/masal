@@ -85,7 +85,7 @@ function rescue_http(string $url,array $gh): string {
     return (string)$body;
 }
 
-const ILKADIM_LEGACY_097_BOOTSTRAP_COMMIT='2c86df240cde635812e12d35cafbb10fe99471d1';
+const ILKADIM_LEGACY_097_BOOTSTRAP_COMMIT='ea5ddda3a90cdc0ace01729cee827a532d673fe9';
 const ILKADIM_LEGACY_097_TARGET_COMMIT='6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c';
 
 function rescue_bootstrap_commit(): string {
@@ -162,7 +162,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         $targetRevision=(int)($versionData['release_revision']??0);
         $releaseRevision=(int)($releaseData['release_revision']??0);
         $manifestRevision=(int)($manifestData['release_revision']??0);
-        if($targetVersion!=='1.2.9'
+        if($targetVersion!=='1.2.16'
             || $releaseVersion!==$targetVersion
             || $manifestVersion!==$targetVersion
             || $targetRevision<1

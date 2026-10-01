@@ -134,6 +134,7 @@ jobs:
           node tests/recovery-097-chain-gate-134.cjs
           node tests/recovery-chain-order-135.cjs
           node tests/recovery-direct-097-121-136.cjs
+          node tests/recovery-package-lock-142.cjs
           node tests/direct-097-bootstrap-anchor-137.cjs
           node tests/recovery-release-postcondition-131.cjs
           node tests/functional-rebuild-118.cjs

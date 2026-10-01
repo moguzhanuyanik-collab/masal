@@ -1,0 +1,20 @@
+{
+  "format": 1,
+  "baseline": {
+    "version": "1.1.97",
+    "commit": "be2651c5e375e3b54c0735d7283820a6ec9eb581"
+  },
+  "source": {
+    "version": "1.2.1",
+    "release_revision": 15,
+    "commit": "6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c",
+    "source_tree": "9665e2754d02db81f8ca07a97b95506397103e1e"
+  },
+  "recovery_mode": "legacy_097_to_121_direct",
+  "purpose": "Immutable recovery package lock. A 1.1.97 installation must recover to this exact 1.2.1 source authority; mutable main HEAD is never the recovery target.",
+  "bootstrap": {
+    "version": "1.2.16",
+    "release_revision": 1,
+    "commit": "ea5ddda3a90cdc0ace01729cee827a532d673fe9"
+  }
+}
