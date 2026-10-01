@@ -62,6 +62,7 @@ jobs:
           php tests/update-core-handoff-108.php
           php tests/update-core-handoff-rollback-109.php
           php tests/update-198-rescue-110.php
+          php tests/update-managed-integrity-111.php
 
       - name: Node regression checks
         shell: bash
@@ -85,3 +86,5 @@ jobs:
           node tests/update-core-handoff-rollback-109.cjs
           node tests/update-release-head-anchor-109.cjs
           node tests/update-198-rescue-110.cjs
+          node tests/update-managed-integrity-111.cjs
+          node tests/update-quality-catalog-111.cjs

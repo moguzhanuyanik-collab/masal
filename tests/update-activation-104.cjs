@@ -21,7 +21,7 @@ assert(
 );
 assert(
   updater.indexOf('verify_activated_update_files(')
-  < updater.indexOf('remove_stale_managed_files($root,$oldManagedFiles,$newManagedFiles,$preserve)')
+  < updater.indexOf('$removedManagedFiles=remove_stale_managed_files(')
 );
 assert(updatePage.includes("'Güncelleme hedef'"));
 assert(updatePage.includes("'Güncelleme sonrası'"));
