@@ -39,5 +39,6 @@ assert.strictEqual(release.release_revision,9);
 assert.strictEqual(manifest.release_revision,9);
 assert(manifest.files.includes('tests/update-legacy-db-recovery-123.cjs'));
 assert(workflow.includes('node tests/update-legacy-db-recovery-123.cjs'));
+assert(workflow.includes('php tests/legacy-064-integrity-124.php'));
 
 console.log('PASS: 1.1.97 -> 1.2.1 legacy DB recovery contract');
