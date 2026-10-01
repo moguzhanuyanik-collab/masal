@@ -28,6 +28,8 @@ assert(updater.includes("const ILKADIM_LEGACY_097_RECOVERY_121_SOURCE_TREE='"+pk
 assert(updater.includes("const ILKADIM_LEGACY_097_RECOVERY_121_RELEASE_REVISION=15;"));
 assert(updater.includes('function github_commit_tree_sha'));
 assert(rescue.includes("const ILKADIM_LEGACY_097_TARGET_COMMIT='"+pkg.source.commit+"';"));
+assert(rescue.includes("const ILKADIM_LEGACY_097_BOOTSTRAP_COMMIT='"+pkg.bootstrap.commit+"';"));
+assert(rescue.includes("$targetVersion!=='1.2.16'"));
 
 assert.strictEqual(version.version,'1.2.16');
 assert.strictEqual(release.version,'1.2.16');
