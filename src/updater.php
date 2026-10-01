@@ -303,12 +303,29 @@ function updater_core_handoff_marker_path(string $root): string {
     return rtrim($root,'/\\').'/storage/updates/updater-core-handoff.json';
 }
 
-function read_updater_core_handoff_marker(string $root,string $targetCommit): ?array {
+function updater_core_handoff_max_age_seconds(): int {
+    return 6*60*60;
+}
+
+function read_updater_core_handoff_marker(
+    string $root,
+    string $targetCommit,
+    string $targetVersion=''
+): ?array {
     $path=updater_core_handoff_marker_path($root);
     if(!is_file($path) || !is_readable($path) || is_link($path)) return null;
     $data=json_decode((string)file_get_contents($path),true);
     if(!is_array($data)) return null;
+
     if(trim((string)($data['target_commit']??''))!==$targetCommit) return null;
+    if($targetVersion!=='' && trim((string)($data['target_version']??''))!==$targetVersion) return null;
+
+    $updatedAt=trim((string)($data['updated_at']??''));
+    $updatedTs=$updatedAt!==''?strtotime($updatedAt):false;
+    $now=time();
+    if($updatedTs===false || $updatedTs>$now+300 || ($now-$updatedTs)>updater_core_handoff_max_age_seconds()){
+        return null;
+    }
 
     $rawBackup=trim((string)($data['application_backup']??''));
     $backup=basename($rawBackup);
@@ -328,12 +345,26 @@ function read_updater_core_handoff_marker(string $root,string $targetCommit): ?a
         if($expectedBytes<1 || $expectedBytes!==$actualBytes) return null;
         if(!hash_equals($expectedHash,$actualHash)) return null;
     }else{
-        // Eski marker'larda kayıtlı hash yoktur. Dosyayı yalnız mevcut haliyle
-        // yeniden fingerprint edip bu istek için geçici olarak doğrulanmış kabul et.
         $data['application_backup_sha256']=$actualHash;
         $data['application_backup_bytes']=$actualBytes;
         $data['legacy_marker']=true;
     }
+
+    $rawUpdaterBackup=trim((string)($data['updater_backup']??''));
+    $updaterBackup=basename($rawUpdaterBackup);
+    $oldHash=strtolower(trim((string)($data['old_sha256']??'')));
+    $newHash=strtolower(trim((string)($data['new_sha256']??'')));
+    if($updaterBackup==='' || $rawUpdaterBackup!==$updaterBackup) return null;
+    if(preg_match('/^[a-f0-9]{64}$/',$oldHash)!==1 || preg_match('/^[a-f0-9]{64}$/',$newHash)!==1) return null;
+
+    $updaterBackupPath=rtrim($root,'/\\').'/storage/backups/'.$updaterBackup;
+    if(!is_file($updaterBackupPath) || is_link($updaterBackupPath)) return null;
+    if(!hash_equals($oldHash,update_file_sha256($updaterBackupPath,'Handoff updater yedeği'))) return null;
+
+    $liveUpdater=rtrim($root,'/\\').'/src/updater.php';
+    if(!is_file($liveUpdater) || is_link($liveUpdater)) return null;
+    if(!hash_equals($newHash,update_file_sha256($liveUpdater,'Canlı updater çekirdeği'))) return null;
+
     return $data;
 }
 
@@ -568,12 +599,42 @@ function read_managed_file_list(string $path): array {
     return array_values(array_unique($files));
 }
 
-function read_managed_update_manifest(string $root): array {
-    $runtime=read_managed_file_list(managed_manifest_path($root));
-    if($runtime!==[]) return $runtime;
+function managed_runtime_manifest_state(string $root): ?array {
+    $path=managed_manifest_path($root);
+    if(!is_file($path) || !is_readable($path) || is_link($path)) return null;
+    $decoded=json_decode((string)file_get_contents($path),true);
+    if(!is_array($decoded) || !is_array($decoded['files']??null)) return null;
 
-    // İlk 1.1.96 kurulumu eski updater ile yapılır. Paketle gelen baseline manifest,
-    // sonraki güncellemede ilk güvenli karşılaştırma kaynağı olur.
+    $format=max(1,(int)($decoded['format']??1));
+    $version=trim((string)($decoded['version']??''));
+    $revision=normalize_release_revision($decoded['release_revision']??0);
+    if($version==='') return null;
+
+    $localPath=rtrim($root,'/\\').'/version.json';
+    $localData=is_file($localPath)?json_decode((string)file_get_contents($localPath),true):null;
+    if(!is_array($localData)) return null;
+    $localVersion=trim((string)($localData['version']??''));
+    $localRevision=normalize_release_revision($localData['release_revision']??0);
+    if($localVersion==='' || $version!==$localVersion) return null;
+    if(version_compare($localVersion,'1.1.105','>=') && $revision!==$localRevision) return null;
+
+    $files=read_managed_file_list($path);
+    if($files===[]) return null;
+    return [
+        'format'=>$format,
+        'version'=>$version,
+        'release_revision'=>$revision,
+        'files'=>$files,
+        'path'=>$path,
+    ];
+}
+
+function read_managed_update_manifest(string $root): array {
+    $runtime=managed_runtime_manifest_state($root);
+    if($runtime!==null) return $runtime['files'];
+
+    // Runtime manifest kimliği yerel release ile eşleşmiyorsa güvenilmez.
+    // Paketle gelen manifest yalnız dosya-listesi baseline'ı olarak kullanılabilir.
     return read_managed_file_list(rtrim($root,'/\\').'/update-managed-files.json');
 }
 
@@ -595,9 +656,16 @@ function read_managed_file_hashes(string $path): array {
 }
 
 function read_managed_update_hashes(string $root): array {
-    // Hash baseline yalnız runtime manifestinden okunur. Paket manifestinde hash
-    // olmaması eski kurulumlarda yanlış güven varsayımı üretmemelidir.
-    return read_managed_file_hashes(managed_manifest_path($root));
+    $runtime=managed_runtime_manifest_state($root);
+    if($runtime===null || (int)$runtime['format']<2) return [];
+
+    $hashes=read_managed_file_hashes((string)$runtime['path']);
+    $files=$runtime['files'];
+    if(count($hashes)!==count($files)) return [];
+    foreach($files as $relative){
+        if(!isset($hashes[$relative])) return [];
+    }
+    return $hashes;
 }
 
 function write_managed_update_manifest(string $root,array $files,string $version,int $releaseRevision=0): void {
@@ -1816,7 +1884,7 @@ function install_github_update(
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
 
         $updateStage='application_backup';
-        $existingHandoff=read_updater_core_handoff_marker($root,$targetCommit);
+        $existingHandoff=read_updater_core_handoff_marker($root,$targetCommit,(string)$remote['version']);
         $backupName=$existingHandoff!==null
             ? basename((string)$existingHandoff['application_backup'])
             : create_single_previous_backup($root);
