@@ -29,6 +29,14 @@ function osd_state_icon(string $state): string {
     };
 }
 
+function osd_group_label(array $group,bool $showInstitution=false): string {
+    $type=(string)($group['tur']??'sinif')==='grup'?'Grup':'Sınıf';
+    $grade=$group['sinif_seviyesi']!==null?(int)$group['sinif_seviyesi']:0;
+    $label=$type.' · '.(string)($group['ad']??'').($grade>0?' · '.$grade.'. sınıf':'');
+    if($showInstitution && !empty($group['kurum_adi'])) $label=(string)$group['kurum_adi'].' · '.$label;
+    return $label;
+}
+
 try{
     $teacher=oi_teacher_profile($pdo,(int)$user['id']);
     if(!$teacher){
@@ -51,6 +59,15 @@ if($institutionId>0 && !in_array($institutionId,$institutionIds,true)){
     exit;
 }
 
+$groups=oi_teacher_dashboard_target_groups($pdo,(int)$user['id'],$institutionId,'soru');
+$groupIds=array_map('intval',array_column($groups,'id'));
+$groupId=max(0,(int)($_GET['grup_id']??0));
+if($groupId>0 && !in_array($groupId,$groupIds,true)){
+    http_response_code(403);
+    echo 'Bu sınıf / grup soru performansı kapsamında değil.';
+    exit;
+}
+
 $publication=(string)($_GET['yayin']??'tum');
 if(!in_array($publication,['tum','aktif','pasif'],true)) $publication='tum';
 
@@ -58,7 +75,7 @@ $performance=(string)($_GET['performans']??'tum');
 if(!in_array($performance,['tum','waiting','wrong','all_correct','no_target'],true)) $performance='tum';
 
 try{
-    $allQuestions=tsd_teacher_questions($pdo,(int)$user['id'],$institutionId,$publication);
+    $allQuestions=tsd_teacher_questions($pdo,(int)$user['id'],$institutionId,$publication,$groupId);
 }catch(Throwable $e){
     error_log('[IlkAdim][teacher-question-dashboard] '.$e->getMessage());
     http_response_code(503);
@@ -76,7 +93,7 @@ $questions=tsd_filter_questions($allQuestions,$performance);
 <title>Soru Performansı — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="ogretmen.css?v=1.0.42">
-<link rel="stylesheet" href="ogretmen-sorulari.css?v=1.2.26">
+<link rel="stylesheet" href="ogretmen-sorulari.css?v=1.2.31">
 </head>
 <body class="role-page">
 <div class="role-shell">
@@ -111,13 +128,21 @@ $questions=tsd_filter_questions($allQuestions,$performance);
 </section>
 
 <section class="role-section">
-<div class="role-section-head"><div><span class="eyeline">FİLTRELER</span><h2>Kurum, Yayın ve Performans</h2></div></div>
+<div class="role-section-head"><div><span class="eyeline">FİLTRELER</span><h2>Kurum, Sınıf/Grup, Yayın ve Performans</h2></div></div>
 <form method="get" class="role-form teacher-question-dashboard-filter">
 <label for="kurum">Kurum</label>
 <select class="role-input" name="kurum_id" id="kurum">
 <option value="0">Tüm kurumlarım</option>
 <?php foreach($institutions as $institution):?>
 <option value="<?=(int)$institution['id']?>" <?=((int)$institution['id']===$institutionId?'selected':'')?>><?=osd_h((string)$institution['ad'])?></option>
+<?php endforeach;?>
+</select>
+
+<label for="grup">Sınıf / grup</label>
+<select class="role-input" name="grup_id" id="grup">
+<option value="0">Tüm sınıf / grup hedefleri</option>
+<?php foreach($groups as $group):?>
+<option value="<?=(int)$group['id']?>" <?=((int)$group['id']===$groupId?'selected':'')?>><?=osd_h(osd_group_label($group,$institutionId===0))?></option>
 <?php endforeach;?>
 </select>
 
@@ -148,7 +173,7 @@ $questions=tsd_filter_questions($allQuestions,$performance);
 <?php foreach($questions as $question):
     $state=(string)$question['performans_durumu'];
 ?>
-<a class="teacher-question-dashboard-card <?=$state?>" href="ogretmen-icerik-detay.php?id=<?=(int)$question['id']?>">
+<a class="teacher-question-dashboard-card <?=$state?>" href="ogretmen-icerik-detay.php?id=<?=(int)$question['id']?><?=$groupId>0?'&amp;grup_id='.$groupId:''?>">
 <div class="teacher-question-dashboard-head">
 <span class="teacher-question-dashboard-icon"><?=osd_state_icon($state)?></span>
 <div>
