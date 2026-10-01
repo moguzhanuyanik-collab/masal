@@ -19,3 +19,4 @@
 .institution-content-detail-status.ok{background:#eaf8ef;color:#357753}
 .institution-content-detail-status.warn{background:#fff0e8;color:#9b5536}
 @media(min-width:600px){.institution-content-detail-stats{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.institution-content-detail-group{display:inline-flex;align-items:center;margin-top:8px;padding:6px 9px;border-radius:999px;background:#eef5fc;color:#385f91;font-size:8px;font-weight:950}
