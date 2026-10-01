@@ -4,6 +4,7 @@ const fs=require('fs');
 const assert=require('assert');
 const cp=require('child_process');
 
+// Recovery chain ancestry regression.
 const chain=JSON.parse(fs.readFileSync('RECOVERY-1.1.97-1.2.1-CHAIN.json','utf8'));
 const evidence=JSON.parse(fs.readFileSync('RECOVERY-1.1.97-1.2.1-EVIDENCE.json','utf8'));
 
