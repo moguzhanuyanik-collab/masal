@@ -59,6 +59,67 @@ function kr_group_label(array $group): string {
     $grade=$group['sinif_seviyesi']!==null?(int)$group['sinif_seviyesi']:0;
     return $type.' · '.(string)($group['ad']??'').($grade>0?' · '.$grade.'. sınıf':'');
 }
+function kr_csv_value(string $value): string {
+    $trimmed=ltrim($value);
+    if($trimmed!=='' && in_array($trimmed[0],['=','+','-','@'],true)) return "'".$value;
+    return $value;
+}
+
+$exportParams=['kurum_id'=>$institutionId,'format'=>'csv'];
+if($grade>0) $exportParams['sinif']=$grade;
+if($groupId>0) $exportParams['grup_id']=$groupId;
+if($start!=='') $exportParams['baslangic']=$start;
+if($end!=='') $exportParams['bitis']=$end;
+$exportUrl='kurum-raporlari.php?'.http_build_query($exportParams,'','&',PHP_QUERY_RFC3986);
+
+if(strtolower(trim((string)($_GET['format']??'')))==='csv'){
+    $filename='ilkadim-kurum-raporu-'.$institutionId.'-'.date('Ymd-His').'.csv';
+    header('Content-Type: text/csv; charset=UTF-8');
+    header('Content-Disposition: attachment; filename="'.$filename.'"');
+    header('X-Content-Type-Options: nosniff');
+
+    $out=fopen('php://output','wb');
+    if($out===false) throw new RuntimeException('Rapor çıktısı açılamadı.');
+    fwrite($out,"\xEF\xBB\xBF");
+
+    $scope=$selectedGroup?kr_group_label($selectedGroup):'Tüm sınıf ve gruplar';
+    fputcsv($out,['İlkAdım Kurum Raporu'], ';');
+    fputcsv($out,['Kurum',kr_csv_value((string)$institution['ad'])], ';');
+    fputcsv($out,['Sınıf seviyesi',$grade>0?$grade.'. sınıf':'Tümü'], ';');
+    fputcsv($out,['Sınıf / grup',kr_csv_value($scope)], ';');
+    fputcsv($out,['Başlangıç',$start!==''?$start:'—'], ';');
+    fputcsv($out,['Bitiş',$end!==''?$end:'—'], ';');
+    fputcsv($out,[], ';');
+    fputcsv($out,[
+        'Öğrenci','Sınıf','Sistem yanıt','Sistem doğru','Öğretmen yanıt','Öğretmen doğru',
+        'Toplam doğruluk %','Atanan ödev','Tamamlanan ödev','Geciken ödev','Ödev tamamlama %'
+    ], ';');
+
+    foreach($rows as $row){
+        $systemAnswers=(int)$row['sistem_yanit'];
+        $systemCorrect=(int)$row['sistem_dogru'];
+        $teacherAnswers=(int)$row['ogretmen_yanit'];
+        $teacherCorrect=(int)$row['ogretmen_dogru'];
+        $answers=$systemAnswers+$teacherAnswers;
+        $correct=$systemCorrect+$teacherCorrect;
+        $accuracy=$answers>0?(int)round($correct*100/$answers):null;
+        $assigned=(int)$row['odev_atanan'];
+        $completed=(int)$row['odev_tamamlanan'];
+        $overdue=(int)$row['odev_geciken'];
+        $homeworkPercent=$assigned>0?(int)round($completed*100/$assigned):null;
+
+        fputcsv($out,[
+            kr_csv_value((string)($row['ad']?:$row['email'])),
+            (int)$row['sinif_seviyesi'],
+            $systemAnswers,$systemCorrect,$teacherAnswers,$teacherCorrect,
+            $accuracy!==null?$accuracy:'',
+            $assigned,$completed,$overdue,
+            $homeworkPercent!==null?$homeworkPercent:'',
+        ], ';');
+    }
+    fclose($out);
+    exit;
+}
 ?><!doctype html>
 <html lang="tr">
 <head>
@@ -111,6 +172,7 @@ function kr_group_label(array $group): string {
 
 <div class="institution-report-filter-actions">
 <button class="role-button" type="submit">Raporu Göster</button>
+<a class="role-button" href="<?=krh($exportUrl)?>">CSV İndir</a>
 <a class="institution-report-reset" href="kurum-raporlari.php?kurum_id=<?=$institutionId?>">Filtreleri temizle</a>
 </div>
 </form>
