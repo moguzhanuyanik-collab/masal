@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.41",
+  "version": "1.2.42",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -214,6 +214,7 @@
     "RELEASE-1.2.4.md",
     "RELEASE-1.2.40.md",
     "RELEASE-1.2.41.md",
+    "RELEASE-1.2.42.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
@@ -388,6 +389,9 @@
     "database/migrations/073_ticari_finans_ve_tahsilat.sql",
     "database/migrations/074_merkezi_bildirim_ve_duyurular.sql",
     "database/migrations/075_guvenli_sifre_kurtarma.sql",
+    "database/migrations/076_destek_talep_merkezi.sql",
+    "destek.css",
+    "destek.php",
     "eposta-ayarlari.php",
     "global-arsiv.php",
     "global-audio-feedback.js",
@@ -486,6 +490,7 @@
     "src/adimbot_transcript.php",
     "src/auth.php",
     "src/bildirimler.php",
+    "src/destek.php",
     "src/kurum_hazirlik.php",
     "src/kurum_icerik_dashboard.php",
     "src/kurum_icerik_detay.php",
@@ -596,6 +601,8 @@
     "tests/student-report-detail-138.php",
     "tests/student-teacher-content-dashboard-152.cjs",
     "tests/student-teacher-content-dashboard-db-152.php",
+    "tests/support-center-167.cjs",
+    "tests/support-center-db-167.php",
     "tests/teacher-content-detail-140.cjs",
     "tests/teacher-content-detail-db-140.php",
     "tests/teacher-content-edit-copy-139.cjs",
@@ -686,5 +693,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Süper Admin e-posta ve SMTP ayar merkezi"
+  "name": "Destek ve talep merkezi"
 }
