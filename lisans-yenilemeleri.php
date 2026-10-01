@@ -29,6 +29,16 @@ function ly_urgency_class(int $days): string {
     return 'normal';
 }
 
+function ly_contract_status(string $value): string {
+    return match($value){
+        'taslak'=>'Taslak',
+        'aktif'=>'Aktif',
+        'tamamlandi'=>'Tamamlandı',
+        'iptal'=>'İptal',
+        default=>$value,
+    };
+}
+
 $error='';
 $success=trim((string)($_GET['ok']??''));
 $ready=ly_tables_ready($pdo);
@@ -372,7 +382,7 @@ $days=(int)$selected['kalan_gun'];
 <?php elseif($selectedContract):?>
 <div class="ly-detail-grid">
 <div><span>Sözleşme</span><strong><?=lyh((string)$selectedContract['sozlesme_no'])?></strong></div>
-<div><span>Durum</span><strong><?=lyh(tf_status((string)$selectedContract['durum']))?></strong></div>
+<div><span>Durum</span><strong><?=lyh(ly_contract_status((string)$selectedContract['durum']))?></strong></div>
 <div><span>Toplam</span><strong><?=number_format((float)$selectedContract['toplam_tutar'],2,',','.')?> <?=lyh((string)$selectedContract['para_birimi'])?></strong></div>
 <div><span>Tahsil Edilen</span><strong><?=number_format((float)$selectedContract['tahsil_edilen'],2,',','.')?> <?=lyh((string)$selectedContract['para_birimi'])?></strong></div>
 <div><span>Kalan</span><strong><?=number_format((float)$selectedContract['kalan_tutar'],2,',','.')?> <?=lyh((string)$selectedContract['para_birimi'])?></strong></div>
