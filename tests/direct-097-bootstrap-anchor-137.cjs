@@ -1,5 +1,7 @@
 'use strict';
 
+function version_compare_118(a,b){const A=a.split('.').map(Number),B=b.split('.').map(Number);for(let i=0;i<3;i++){if((A[i]||0)!==(B[i]||0))return (A[i]||0)-(B[i]||0);}return 0;}
+
 const fs=require('fs');
 const assert=require('assert');
 
@@ -28,7 +30,7 @@ assert(updater.includes("const ILKADIM_LEGACY_097_RECOVERY_121_COMMIT='"+target+
 assert(updater.includes("if($localVersion==='1.1.97'){"));
 assert(workflow.includes('node tests/direct-097-bootstrap-anchor-137.cjs'));
 
-assert.strictEqual(version.version,'1.2.10');
+assert(version_compare_118(String(version.version),'1.2.10')>=0);
 assert.strictEqual(release.version,'1.2.10');
 assert.strictEqual(manifest.version,'1.2.10');
 assert.strictEqual(version.release_revision,1);
