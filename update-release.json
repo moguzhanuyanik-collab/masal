@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.116",
-  "name": "Updater tenant şema güvenlik uyumluluğu ve migration 065 düzeltmesi",
+  "version": "1.1.117",
+  "name": "Kurum eşleştirme görünürlüğü, stale ilişki temizliği ve 1452 hata ayrıştırması",
   "release_revision": 1
 }
