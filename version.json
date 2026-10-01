@@ -1,5 +1,5 @@
 {
-  "version": "1.1.109",
-  "name": "Updater handoff rollback ve release anchor güvenliği",
-  "release_revision": 2
+  "version": "1.1.110",
+  "name": "1.1.98 geçiş kurtarma ve tarihsel recovery onarımı",
+  "release_revision": 4
 }
