@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.5",
+  "version": "1.2.6",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -183,6 +183,7 @@
     "RELEASE-1.2.3.md",
     "RELEASE-1.2.4.md",
     "RELEASE-1.2.5.md",
+    "RELEASE-1.2.6.md",
     "YETKILENDIRME-1.0.35.md",
     "activities-extra.js",
     "adimbot-ai-bridge.js",
@@ -345,6 +346,7 @@
     "global-ogrenciler.php",
     "global-veliler.php",
     "global.php",
+    "guncelleme-manuel.css",
     "guncelleme.php",
     "hesabim.php",
     "hesap-guvenligi.php",
@@ -441,6 +443,7 @@
     "tests/db-backup-99.cjs",
     "tests/db-backup-99.php",
     "tests/global-scope-integrity-129.cjs",
+    "tests/manual-update-upload-131.cjs",
     "tests/hardening-91.cjs",
     "tests/hardening-94.cjs",
     "tests/legacy-064-integrity-124.php",
@@ -516,5 +519,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 2
+  "release_revision": 1
 }
