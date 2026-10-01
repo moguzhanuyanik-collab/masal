@@ -1,0 +1,41 @@
+{
+  "format": 1,
+  "baseline": {
+    "version": "1.1.97",
+    "commit": "be2651c5e375e3b54c0735d7283820a6ec9eb581"
+  },
+  "source": {
+    "version": "1.2.1",
+    "release_revision": 15,
+    "commit": "6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c"
+  },
+  "expected_commit_count": 30,
+  "active_sequence": [
+    ["1.1.97", "be2651c5e375e3b54c0735d7283820a6ec9eb581"],
+    ["1.1.98", "8412893134c5ca7c7ae6d90b3920183fafaea069"],
+    ["1.1.99", "a592ba5c2023cab8ac5c0ea512f4f91d102a57dd"],
+    ["1.1.100", "c6fe620306103ca8467cec0e42a43328712a32dd"],
+    ["1.1.101", "d8870ffe76dae592cce291eba8f189a016e5cd65"],
+    ["1.1.102", "adcecccd8f1460db338482ed0bc20f018b8cf015f"],
+    ["1.1.103", "d867af83d2e8ae91f90920202e898af2c67a731f"],
+    ["1.1.104", "15bd4ed1466186e2a19822af9cd9d8933b98499d"],
+    ["1.1.105", "5c27ddc56b8c39c40b365545dadd47daef9f0d94"],
+    ["1.1.106", "2eaf35274283058d129bbf3b9041adc25a70c058"],
+    ["1.1.107", "93bf2ee628f59d9d0cf38cc2970cecf21af13140"],
+    ["1.1.108", "49be2429735e7fdd7abb757f804d26cdf7c43c39"],
+    ["1.1.109", "15d19b033f96c378e3949c416ebd14aa359dd52e"],
+    ["1.1.110", "4539ffcea85fa229551887552c3c313a3a1acd04"],
+    ["1.1.111", "cda8e736113f1a66199876ee3e2bad42a7554ab0"],
+    ["1.1.112", "9183f5a6ab1de381e615a0f55f703ae0ff42e288"],
+    ["1.1.113", "2f4744bf1ef62d3530b419d5aa5759b4521b07ae"],
+    ["1.1.114", "764c4a9f9b2e156e6e85a954dca3dd12ce03ed8f"],
+    ["1.1.115", "c0cb4133326f4c1367cbc3560113ff3bd0fe7c8e"],
+    ["1.1.116", "d8917b8383c47215c7607aa8e77371112b49039d"],
+    ["1.1.117", "32227d815dadffa2be26a862f5792233e01a7911"],
+    ["1.1.119", "d7d7c1a02b449e5b433ee74ccf78c26c736b16f6"],
+    ["1.2.1", "6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c"]
+  ],
+  "excluded": ["1.1.118", "1.1.120"],
+  "recovery_only": ["1.1.119"],
+  "purpose": "Preserve the reconstructed 1.1.97 to 1.2.1 history as immutable ancestry evidence."
+}
