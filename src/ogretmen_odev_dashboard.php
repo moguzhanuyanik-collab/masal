@@ -175,3 +175,12 @@ function thd_dashboard_summary(array $rows): array {
     }
     return $summary;
 }
+
+function thd_filter_homeworks(array $rows,string $delivery): array {
+    if(!in_array($delivery,['pending','overdue','completed','no_target'],true)) return array_values($rows);
+    return array_values(array_filter(
+        $rows,
+        static fn(array $row): bool => (string)($row['teslim_durumu']??thd_homework_progress_state($row))===$delivery
+    ));
+}
+
