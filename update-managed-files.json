@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.37",
+  "version": "1.2.38",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -209,6 +209,7 @@
     "RELEASE-1.2.35.md",
     "RELEASE-1.2.36.md",
     "RELEASE-1.2.37.md",
+    "RELEASE-1.2.38.md",
     "RELEASE-1.2.4.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.6.md",
@@ -378,6 +379,7 @@
     "database/migrations/070_ogretmen_icerik_grup_hedef_snapshot.sql",
     "database/migrations/071_paket_ve_kurum_lisanslari.sql",
     "database/migrations/072_adimbot_kurum_ai_kotasi.sql",
+    "database/migrations/073_ticari_finans_ve_tahsilat.sql",
     "global-arsiv.php",
     "global-audio-feedback.js",
     "global-eslestirme.php",
@@ -491,6 +493,7 @@
     "src/ogretmen_ogrenci_listesi.php",
     "src/ogretmen_soru_dashboard.php",
     "src/super_admin_icons.php",
+    "src/ticari_finans.php",
     "src/updater.php",
     "src/veli_icerik_dashboard.php",
     "src/veli_icerikleri.php",
@@ -517,6 +520,8 @@
     "tests/adimbot-speech-81.cjs",
     "tests/adimbot-transcript-behavior.php",
     "tests/adimbot-voice-83.cjs",
+    "tests/commercial-finance-163.cjs",
+    "tests/commercial-finance-db-163.php",
     "tests/db-ai-safety-98.cjs",
     "tests/db-backup-99.cjs",
     "tests/db-backup-99.php",
@@ -635,6 +640,7 @@
     "tests/updater-manifest-96.cjs",
     "tests/web-rescue-197-198-113.cjs",
     "tests/web-rescue-197-198-113.php",
+    "ticari-finans.php",
     "tools/1.1.97-history-checkpoint.sql",
     "tools/apply-updater-1.1.97-rescue.php",
     "tools/apply-updater-1.1.98-rescue.php",
@@ -660,5 +666,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "AdımBot AI kullanım ve kota merkezi"
+  "name": "Ticari finans sözleşme ve tahsilat merkezi"
 }
