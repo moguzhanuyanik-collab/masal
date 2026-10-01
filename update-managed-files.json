@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.4",
+  "version": "1.2.5",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -182,6 +182,7 @@
     "RELEASE-1.2.2.md",
     "RELEASE-1.2.3.md",
     "RELEASE-1.2.4.md",
+    "RELEASE-1.2.5.md",
     "YETKILENDIRME-1.0.35.md",
     "activities-extra.js",
     "adimbot-ai-bridge.js",
@@ -442,6 +443,7 @@
     "tests/hardening-91.cjs",
     "tests/hardening-94.cjs",
     "tests/legacy-064-integrity-124.php",
+    "tests/legacy-097-full-recovery-132.php",
     "tests/migration-safety-93.cjs",
     "tests/pwa-95.cjs",
     "tests/rebuild-release-121.cjs",
