@@ -116,6 +116,7 @@ jobs:
           node tests/institution-content-center-133.cjs
           node tests/institution-classes-groups-134.cjs
           node tests/institution-member-crud-135.cjs
+          node tests/institution-readiness-160.cjs
           node tests/institution-class-edit-136.cjs
           node tests/institution-reporting-137.cjs
           node tests/institution-report-export-159.cjs
@@ -193,6 +194,7 @@ jobs:
           php tests/homework-completion-db-132.php
           php tests/institution-classes-groups-db-134.php
           php tests/institution-member-crud-db-135.php
+          php tests/institution-readiness-db-160.php
           php tests/institution-class-edit-db-136.php
           php tests/institution-reporting-db-137.php
           php tests/teacher-content-edit-copy-db-139.php
