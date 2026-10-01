@@ -59,6 +59,7 @@ $packages=$ready?kl_package_rows($pdo,true):[];
 $activePackages=$ready?kl_package_rows($pdo,false):[];
 $institutions=kl_active_institutions($pdo);
 $licenses=$ready?kl_license_rows($pdo):[];
+$aiUsageReady=$ready?kl_ai_usage_ready($pdo):false;
 
 $editPackageId=max(0,(int)($_GET['paket_id']??0));
 $editPackage=null;
@@ -194,6 +195,32 @@ foreach($licenses as $row) if((int)$row['kurum_id']===$editInstitutionId){$editL
 </section>
 
 <section class="role-section">
+<div class="role-section-head"><div><span class="eyeline">AI KULLANIM MERKEZİ</span><h2>Bu Ay AdımBot Kullanımı</h2></div><span class="role-pill"><?=date('Y-m')?></span></div>
+<div class="role-list">
+<?php if(!$aiUsageReady):?><div class="role-empty"><span>🤖</span>AI kullanım sayacı 1.2.37 migrationı kurulduğunda otomatik çalışır.</div><?php endif;?>
+<?php if($aiUsageReady && !$licenses):?><div class="role-empty"><span>🤖</span>Lisans atanmış kurum bulunmuyor. Lisansı olmayan kurumlarda AdımBot kullanımı kısıtlanmaz.</div><?php endif;?>
+<?php if($aiUsageReady) foreach($licenses as $license):
+$aiUsage=kl_ai_usage_summary($pdo,(int)$license['kurum_id']);
+$aiLimit=max(0,(int)$license['ai_aylik_kota']);
+$aiUsed=max(0,(int)$aiUsage['used']);
+$aiRemaining=$aiLimit>0?max(0,$aiLimit-$aiUsed):null;
+?>
+<div class="role-row">
+<span>🤖</span>
+<div>
+<strong><?=pl_h((string)$license['kurum_adi'])?> · <?=pl_h((string)$license['paket_adi'])?></strong>
+<small>
+Bu ay <?=$aiUsed?> kullanım · Kota <?=$aiLimit>0?$aiLimit:'Sınırsız'?><?php if($aiRemaining!==null):?> · Kalan <?=$aiRemaining?><?php endif;?>
+<?php if((string)$aiUsage['last_provider']!==''):?> · Son sağlayıcı <?=pl_h((string)$aiUsage['last_provider'])?><?php endif;?>
+</small>
+</div>
+<span class="role-pill <?=($aiLimit===0 || $aiUsed<$aiLimit)?'ok':''?>"><?=$aiLimit===0?'Sınırsız':($aiUsed>=$aiLimit?'Kota doldu':'Aktif')?></span>
+</div>
+<?php endforeach;?>
+</div>
+</section>
+
+<section class="role-section">
 <div class="role-section-head"><div><span class="eyeline">LİSANSLAR</span><h2>Kurum Lisans Durumu</h2></div><span class="role-pill"><?=count($licenses)?></span></div>
 <div class="role-list">
 <?php if(!$licenses):?><div class="role-empty"><span>🏫</span>Henüz bir kuruma lisans atanmadı. Lisansı olmayan kurumlar geriye uyumluluk için sınırsız çalışmaya devam eder.</div><?php endif;?>
@@ -217,7 +244,7 @@ Veli <?=(int)$license['veli_sayisi']?> / <?=pl_limit((int)$license['veli_limiti'
 </div>
 </section>
 
-<div class="role-note"><span>ℹ️</span><p>Lisansı olmayan kurumlar etkilenmez. Aktif/deneme lisansı bulunan kurumlarda kullanıcı limitleri yeni ekleme, başka kuruma taşıma ve yeniden aktifleştirme sırasında uygulanır. AI kotası bu sürümde ticari paket tanımı olarak saklanır; AdımBot kullanım sayacı ayrı entegrasyon adımında bağlanacaktır.</p></div>
+<div class="role-note"><span>ℹ️</span><p>Lisansı olmayan kurumlar etkilenmez. Aktif/deneme lisansı bulunan kurumlarda kullanıcı limitleri yeni ekleme, başka kuruma taşıma ve yeniden aktifleştirme sırasında uygulanır. AI aylık kotası AdımBot isteklerine bağlıdır. Kota, sağlayıcıya gönderilecek istek atomik olarak rezerve edildiğinde tüketilir; lisansı olmayan kurumlarda kullanım kısıtlanmaz.</p></div>
 <?php endif;?>
 </main>
 

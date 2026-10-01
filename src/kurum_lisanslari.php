@@ -265,3 +265,195 @@ function kl_save_license(PDO $pdo,array $actor,array $input): int {
     auth_audit($pdo,(int)$actor['id'],null,'kurum_lisans_guncelle','Kurum #'.$institutionId.' paket #'.$packageId.' durum '.$status);
     return $id;
 }
+
+
+function kl_ai_usage_ready(PDO $pdo): bool {
+    return auth_runtime_table_exists($pdo,'adimbot_ai_kullanimlari');
+}
+
+function kl_student_institution_ids(PDO $pdo,int $userId): array {
+    if($userId<=0 || !auth_runtime_table_exists($pdo,'kurum_kullanicilari')) return [];
+    try{
+        $stmt=$pdo->prepare("SELECT DISTINCT kk.kurum_id
+            FROM kurum_kullanicilari kk
+            INNER JOIN kurumlar k ON k.id=kk.kurum_id AND k.aktif=1
+            WHERE kk.kullanici_id=?
+              AND kk.kurum_rolu='ogrenci'
+              AND kk.aktif=1
+            ORDER BY kk.kurum_id");
+        $stmt->execute([$userId]);
+        $ids=array_map('intval',$stmt->fetchAll(PDO::FETCH_COLUMN)?:[]);
+        $stmt->closeCursor();
+        return array_values(array_filter(array_unique($ids),static fn(int $id):bool=>$id>0));
+    }catch(Throwable){
+        return [];
+    }
+}
+
+function kl_ai_quota_institution(PDO $pdo,int $userId): ?int {
+    $ids=kl_student_institution_ids($pdo,$userId);
+    if(count($ids)===1) return $ids[0];
+    if(count($ids)<2) return null;
+
+    $licensed=[];
+    foreach($ids as $institutionId){
+        if(kl_active_license($pdo,$institutionId)!==null) $licensed[]=$institutionId;
+    }
+    return count($licensed)===1?$licensed[0]:null;
+}
+
+function kl_ai_period_start(?string $date=null): string {
+    $date=$date?:date('Y-m-d');
+    $parsed=DateTimeImmutable::createFromFormat('!Y-m-d',$date);
+    if(!$parsed) $parsed=new DateTimeImmutable('first day of this month');
+    return $parsed->format('Y-m-01');
+}
+
+function kl_ai_usage_summary(PDO $pdo,int $institutionId,?string $periodStart=null): array {
+    $periodStart=kl_ai_period_start($periodStart);
+    $used=0;
+    $lastProvider='';
+    $lastModel='';
+    $lastUsage=null;
+    if($institutionId>0 && kl_ai_usage_ready($pdo)){
+        try{
+            $stmt=$pdo->prepare("SELECT kullanim_sayisi,son_saglayici,son_model,son_kullanim
+                FROM adimbot_ai_kullanimlari
+                WHERE kurum_id=? AND donem_baslangici=?
+                LIMIT 1");
+            $stmt->execute([$institutionId,$periodStart]);
+            $row=$stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
+            if(is_array($row)){
+                $used=max(0,(int)($row['kullanim_sayisi']??0));
+                $lastProvider=(string)($row['son_saglayici']??'');
+                $lastModel=(string)($row['son_model']??'');
+                $lastUsage=$row['son_kullanim']??null;
+            }
+        }catch(Throwable){}
+    }
+    return [
+        'period_start'=>$periodStart,
+        'used'=>$used,
+        'last_provider'=>$lastProvider,
+        'last_model'=>$lastModel,
+        'last_usage'=>$lastUsage,
+    ];
+}
+
+function kl_ai_quota_public(array $result): array {
+    return [
+        'tracked'=>(bool)($result['tracked']??false),
+        'enforced'=>(bool)($result['enforced']??false),
+        'period'=>(string)($result['period_start']??date('Y-m-01')),
+        'used'=>max(0,(int)($result['used']??0)),
+        'limit'=>max(0,(int)($result['limit']??0)),
+        'remaining'=>isset($result['remaining']) && $result['remaining']!==null
+            ?max(0,(int)$result['remaining'])
+            :null,
+    ];
+}
+
+function kl_ai_quota_reserve(
+    PDO $pdo,
+    int $userId,
+    int $studentId,
+    string $provider,
+    string $model
+): array {
+    $institutionId=kl_ai_quota_institution($pdo,$userId);
+    $periodStart=kl_ai_period_start();
+    if($institutionId===null){
+        return [
+            'tracked'=>false,'enforced'=>false,'blocked'=>false,
+            'institution_id'=>null,'period_start'=>$periodStart,
+            'used'=>0,'limit'=>0,'remaining'=>null,'reason'=>'institution_unresolved'
+        ];
+    }
+
+    if(!kl_ai_usage_ready($pdo)){
+        return [
+            'tracked'=>false,'enforced'=>false,'blocked'=>false,
+            'institution_id'=>$institutionId,'period_start'=>$periodStart,
+            'used'=>0,'limit'=>0,'remaining'=>null,'reason'=>'usage_table_missing'
+        ];
+    }
+
+    $provider=mb_substr(strtolower(trim($provider)),0,20);
+    $model=mb_substr(trim($model),0,120);
+    $studentId=max(0,$studentId);
+    $started=false;
+
+    try{
+        if(!$pdo->inTransaction()){
+            $pdo->beginTransaction();
+            $started=true;
+        }
+
+        $license=kl_active_license($pdo,$institutionId);
+        $limit=$license?max(0,(int)($license['ai_aylik_kota']??0)):0;
+        $enforced=$license!==null && $limit>0;
+
+        $ensure=$pdo->prepare("INSERT IGNORE INTO adimbot_ai_kullanimlari
+            (kurum_id,donem_baslangici,kullanim_sayisi,son_ogrenci_id,son_saglayici,son_model,son_kullanim)
+            VALUES (?,?,0,NULL,NULL,NULL,NULL)");
+        $ensure->execute([$institutionId,$periodStart]);
+        $ensure->closeCursor();
+
+        $select=$pdo->prepare("SELECT kullanim_sayisi
+            FROM adimbot_ai_kullanimlari
+            WHERE kurum_id=? AND donem_baslangici=?
+            LIMIT 1 FOR UPDATE");
+        $select->execute([$institutionId,$periodStart]);
+        $used=(int)($select->fetchColumn()?:0);
+        $select->closeCursor();
+        $used=max(0,$used);
+
+        if($enforced && $used>=$limit){
+            if($started) $pdo->commit();
+            return [
+                'tracked'=>true,'enforced'=>true,'blocked'=>true,
+                'institution_id'=>$institutionId,'period_start'=>$periodStart,
+                'used'=>$used,'limit'=>$limit,'remaining'=>0,
+                'package_name'=>(string)($license['paket_adi']??''),
+                'reason'=>'quota_exhausted'
+            ];
+        }
+
+        $next=$used+1;
+        $update=$pdo->prepare("UPDATE adimbot_ai_kullanimlari
+            SET kullanim_sayisi=?,
+                son_ogrenci_id=?,
+                son_saglayici=?,
+                son_model=?,
+                son_kullanim=NOW()
+            WHERE kurum_id=? AND donem_baslangici=?");
+        $update->execute([
+            $next,
+            $studentId>0?$studentId:null,
+            $provider!==''?$provider:null,
+            $model!==''?$model:null,
+            $institutionId,
+            $periodStart,
+        ]);
+        $update->closeCursor();
+
+        if($started) $pdo->commit();
+        return [
+            'tracked'=>true,'enforced'=>$enforced,'blocked'=>false,
+            'institution_id'=>$institutionId,'period_start'=>$periodStart,
+            'used'=>$next,'limit'=>$limit,
+            'remaining'=>$enforced?max(0,$limit-$next):null,
+            'package_name'=>$license?(string)($license['paket_adi']??''):'',
+            'reason'=>'reserved'
+        ];
+    }catch(Throwable $e){
+        if($started && $pdo->inTransaction()) $pdo->rollBack();
+        error_log('[IlkAdim][ai-quota] '.$e->getMessage());
+        return [
+            'tracked'=>false,'enforced'=>false,'blocked'=>false,
+            'institution_id'=>$institutionId,'period_start'=>$periodStart,
+            'used'=>0,'limit'=>0,'remaining'=>null,'reason'=>'quota_error'
+        ];
+    }
+}
