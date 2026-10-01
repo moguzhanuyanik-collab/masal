@@ -160,6 +160,12 @@ function oi_type_icon(string $type): string {
 <label>Açıklama / tekrar / ödev metni</label>
 <textarea class="role-input" name="icerik_metni" placeholder="Öğrencine anlatmak istediğin içerik..."></textarea>
 
+<div class="teacher-content-homework" data-homework-fields hidden>
+<label>Teslim tarihi <small>(isteğe bağlı)</small></label>
+<input class="role-input" type="datetime-local" name="teslim_tarihi">
+<small class="teacher-content-help">Ödev için son teslim tarihini belirleyebilirsin. Tarih vermezsen süre sınırı olmaz.</small>
+</div>
+
 <div class="teacher-content-question" data-question-fields>
 <label>Soru</label>
 <textarea class="role-input" name="soru" placeholder="Sorunu buraya yaz"></textarea>
@@ -201,7 +207,7 @@ function oi_type_icon(string $type): string {
 <span class="teacher-content-icon"><?=oi_type_icon((string)$item['icerik_turu'])?></span>
 <div>
 <strong><?=oi_h((string)$item['baslik'])?></strong>
-<small><?=oi_h((string)$item['kurum_adi'])?> · <?=oi_h((string)$item['ders_adi'])?> / <?=oi_h((string)$item['konu_adi'])?> · <?=oi_h($types[(string)$item['icerik_turu']]??'Diğer')?> · <?=$item['hedef_turu']==='tum_ogrenciler'?'Tüm bağlı öğrenciler':(int)$item['hedef_sayisi'].' öğrenci'?><?=(string)$item['icerik_turu']==='soru'?' · '.(int)$item['cevap_sayisi'].' cevap':''?></small>
+<small><?=oi_h((string)$item['kurum_adi'])?> · <?=oi_h((string)$item['ders_adi'])?> / <?=oi_h((string)$item['konu_adi'])?> · <?=oi_h($types[(string)$item['icerik_turu']]??'Diğer')?> · <?=$item['hedef_turu']==='tum_ogrenciler'?'Tüm bağlı öğrenciler':(int)$item['hedef_sayisi'].' öğrenci'?><?=(string)$item['icerik_turu']==='soru'?' · '.(int)$item['cevap_sayisi'].' cevap':''?><?=(string)$item['icerik_turu']==='odev' && !empty($item['teslim_tarihi'])?' · Teslim: '.oi_h(date('d.m.Y H:i',strtotime((string)$item['teslim_tarihi']))):''?></small>
 </div>
 <div class="teacher-content-actions">
 <span class="role-pill <?=((int)$item['aktif']===1?'ok':'off')?>"><?=((int)$item['aktif']===1?'Aktif':'Pasif')?></span>
