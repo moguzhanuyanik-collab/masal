@@ -45,3 +45,12 @@ Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına 
 
 - Tarihsel recovery testleri 1.2.1 release revision artışlarında kırılmayacak şekilde release identity üzerinden doğrulanıyor.
 - 1.1.110 rescue regression'ındaki tanımsız version referansı düzeltildi.
+
+## Rev 4 — 1.1.97 legacy DB recovery
+
+- 1.1.97 kurulumlarında 1.2.1'e geçiş artık yalnız dosya ağacını değiştirmiyor.
+- Doğrulanmış 001-063 migration geçmişi korunarak yalnız eksik 064 checkpointi recovery ile tamamlanıyor.
+- Legacy `kurum_kullanicilari` dönüşümü, 064 sonrasında 065 tenant izolasyonu ve 066 schema guard sırasıyla uygulanıyor.
+- DB migration başlamadan önce doğrulanmış mysqldump yedeği zorunlu.
+- 1.1.99+ / 1.2.1 temiz recovery davranışı değiştirilmiyor; veritabanı geriye alınmıyor.
+- Sürüm ankrajı 1.2.1 rev8 olarak güncellendi.
