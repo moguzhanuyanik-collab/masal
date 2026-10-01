@@ -18,7 +18,7 @@ assert(list.includes('kurum-icerikleri.css?v=1.2.16'),'institution content CSS m
 assert(page.includes("require_role(['yonetici','super_admin'])"),'detail page must require manager or super admin');
 assert(page.includes('ky_assert_manageable($pdo,$user,$institutionId)'),'detail page must enforce manageable institution');
 assert(page.includes("yy_can($pdo,$user,'kurum_goruntule')"),'detail page must enforce institution view permission');
-assert(page.includes('kid_content_detail($pdo,$institutionId,$contentId)'),'detail page must use tenant-scoped domain');
+assert(/kid_content_detail\(\$pdo,\$institutionId,\$contentId(?:,\$groupId)?\)/.test(page),'detail page must use tenant-scoped domain');
 assert(page.includes('ogrenci-raporu.php?id=<?=(int)$student[\'id\']?>&amp;kurum_id=<?=$institutionId?>'),'student drill-down must preserve verified institution context');
 assert(page.includes('Cevapladı'),'question status summary missing');
 assert(page.includes('Gecikti'),'homework overdue state missing');
