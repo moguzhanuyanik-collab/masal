@@ -113,6 +113,7 @@ jobs:
           node tests/homework-completion-132.cjs
           node tests/institution-content-center-133.cjs
           node tests/institution-classes-groups-134.cjs
+          node tests/institution-member-crud-135.cjs
 
   tenant-db-integration:
     name: Tenant DB integration
@@ -165,4 +166,5 @@ jobs:
           php tests/tenant-recovery-postcondition-125.php
           php tests/homework-completion-db-132.php
           php tests/institution-classes-groups-db-134.php
+          php tests/institution-member-crud-db-135.php
 
