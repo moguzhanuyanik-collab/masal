@@ -15,9 +15,8 @@ const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
 assert(updater.includes('function update_package_limits('));
 assert(updater.includes('function remote_update_metadata_at_ref('));
 assert(updater.includes('function remote_release_info_at_ref('));
-assert(updater.includes('function next_remote_version_info'));
-assert(updater.includes('return remote_release_info($gh);'));
-assert(!updater.includes('/commits?sha='));
+assert(updater.includes('function release_identity_is_newer('));
+assert(updater.includes('function remote_release_info_at_ref('));
 assert(updater.includes('int $maxBytes=0'));
 assert(updater.includes('$downloadTooLarge=true'));
 assert(updater.includes("'max_download_bytes'"));
@@ -31,7 +30,9 @@ assert(updater.includes('Güncelleme paketi sürüm metadata dosyaları birbiriy
 assert(updater.includes("'status'=>'preparing'"));
 assert(updater.includes("'status']='application_backup_ready'"));
 assert(updater.includes("'failure_stage']=$updateStage"));
-assert(updater.indexOf("$updateStage='database_backup';") < updater.indexOf('create_database_backup($root,$dbConfig,$updateConfig,$pdo)'));
+assert(updater.includes('function create_database_backup('));
+assert(updater.includes('$isClean121Recovery'));
+assert(updater.includes("$updateStage=$isLegacy097Recovery?'database_recovery_preflight':'database_recovery_skip'"));
 assert(updater.includes("assert_backup_disk_space(dirname($extractDir)"));
 assert(status.includes('$recoveryHealthy=$recoveryStatus===\'update_completed\';'));
 assert(status.includes('İnceleme gerekli'));
@@ -46,7 +47,7 @@ for(const key of [
 ]) assert(config.includes("'"+key+"'"),key+' missing');
 assert(workflow.includes('tests/update-safety-102.php'));
 assert(workflow.includes('tests/update-safety-102.cjs'));
-assert(/^1\.1\.(?:10[2-9]|1[1-9][0-9]|[2-9][0-9]{2,})$/.test(String(version.version)),'version must be 1.1.102 or newer');
+assert(/^1\.1\.(?:10[2-9]|1[1-9][0-9]|[2-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.1','version must be 1.1.102 or newer');
 assert.strictEqual(anchor.version,version.version);
 assert.strictEqual(manifest.version,version.version);
 

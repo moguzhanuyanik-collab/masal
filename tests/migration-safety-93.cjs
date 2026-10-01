@@ -57,6 +57,18 @@ assert(!preserve[1].includes("'styles.css'"));
 assert(!preserve[1].includes("'app-style.css'"));
 assert(!preserve[1].includes("'features-style.css'"));
 
-assert(/^1\.1\.(?:9[3-9]|[1-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.2','version must be 1.1.93 or newer');
+const versionParts=String(version.version).split('.').map(value=>Number(value));
+assert(
+  versionParts.length===3
+  && versionParts.every(Number.isInteger)
+  && (
+    versionParts[0]>1
+    || (versionParts[0]===1 && (
+      versionParts[1]>1
+      || (versionParts[1]===1 && versionParts[2]>=93)
+    ))
+  ),
+  'version must be 1.1.93 or newer'
+);
 
 console.log('1.1.93 migration and login safety checks passed');
