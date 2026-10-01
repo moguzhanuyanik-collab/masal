@@ -354,12 +354,26 @@ if(($rateResult['persistent']??false)===true){
 $quotaResult=kl_ai_quota_reserve($pdo,$userId,$studentId,$provider,$model);
 $quotaPublic=kl_ai_quota_public($quotaResult);
 if(($quotaResult['blocked']??false)===true){
+    $quotaReason=(string)($quotaResult['reason']??'');
+    if($quotaReason==='quota_exhausted'){
+        adimbot_ai_json([
+            'ok'=>false,
+            'message'=>'Bu ayki AdımBot kullanım hakkın tamamlandı. Yeni ayda tekrar kullanabilirsin.',
+            'reason'=>'institution_ai_quota',
+            'quota'=>$quotaPublic
+        ],429);
+    }
+
+    $message=in_array($quotaReason,['ambiguous_active_licenses','ambiguous_institutions'],true)
+        ?'AdımBot için hangi kurum lisansının kullanılacağı belirlenemedi. Kurum yöneticinle iletişime geç.'
+        :'Kurumunun AdımBot lisansı şu anda kullanıma açık değil. Kurum yöneticinle iletişime geç.';
     adimbot_ai_json([
         'ok'=>false,
-        'message'=>'Bu ayki AdımBot kullanım hakkın tamamlandı. Yeni ayda tekrar kullanabilirsin.',
-        'reason'=>'institution_ai_quota',
+        'message'=>$message,
+        'reason'=>'institution_ai_license',
+        'license_reason'=>$quotaReason,
         'quota'=>$quotaPublic
-    ],429);
+    ],403);
 }
 
 $context=is_array($payload['context'] ?? null)?$payload['context']:[];
