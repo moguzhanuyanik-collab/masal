@@ -78,6 +78,7 @@ function oid_type_icon(string $type): string {
 <div class="role-stat"><span>✅</span><strong><?=(int)$summary['correct']?></strong><small>Doğru</small></div>
 <div class="role-stat"><span>❌</span><strong><?=(int)$summary['wrong']?></strong><small>Yanlış</small></div>
 <div class="role-stat"><span>⏳</span><strong><?=(int)$summary['waiting']?></strong><small>Bekliyor</small></div>
+<?php if((int)($content['yildiz_degeri']??0)>0):?><div class="role-stat"><span>⭐</span><strong><?=(int)$summary['reward_stars']?></strong><small>Dağıtılan yıldız</small></div><?php endif;?>
 <?php elseif($type==='odev'):?>
 <div class="role-stat"><span>✅</span><strong><?=(int)$summary['completed']?></strong><small>Tamamladı</small></div>
 <div class="role-stat"><span>⏰</span><strong><?=(int)$summary['overdue']?></strong><small>Gecikti</small></div>
@@ -111,6 +112,7 @@ if(is_array($options) && $options):
 <span>🏫 <?=oid_h((string)$content['kurum_adi'])?></span>
 <span>📘 <?=oid_h((string)$content['ders_adi'])?></span>
 <span>📌 <?=oid_h((string)$content['konu_adi'])?></span>
+<?php if($type==='soru' && (int)($content['yildiz_degeri']??0)>0):?><span>⭐ İlk doğru cevap ödülü: <?=(int)$content['yildiz_degeri']?></span><?php endif;?>
 <?php if($type==='odev'):?><span>⏰ Teslim: <?=oid_h(oid_date((string)($content['teslim_tarihi']??'')))?></span><?php endif;?>
 </div>
 </div>
@@ -133,6 +135,7 @@ if(is_array($options) && $options):
             $status='Doğru';
             $statusClass='ok';
             $detailText=(int)($student['deneme_sayisi']??1).' deneme · '.oid_date((string)($student['cevap_tarihi']??$student['cevap_guncellenme_tarihi']??''));
+            if((int)($student['kazanilan_yildiz']??0)>0)$detailText.=' · ⭐ +'.(int)$student['kazanilan_yildiz'];
         }else{
             $status='Yanlış';
             $statusClass='warn';
