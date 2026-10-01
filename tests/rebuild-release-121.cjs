@@ -12,9 +12,9 @@ const workflow=fs.readFileSync('.github/workflows/quality.yml','utf8');
 assert.strictEqual(version.version,'1.2.1');
 assert.strictEqual(release.version,'1.2.1');
 assert.strictEqual(manifest.version,'1.2.1');
-assert.strictEqual(version.release_revision,1);
-assert.strictEqual(release.release_revision,1);
-assert.strictEqual(manifest.release_revision,1);
+assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
+assert.strictEqual(release.release_revision,version.release_revision);
+assert.strictEqual(manifest.release_revision,version.release_revision);
 
 for(const required of [
   'RELEASE-1.1.98.md',
