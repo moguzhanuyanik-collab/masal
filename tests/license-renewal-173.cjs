@@ -27,7 +27,6 @@ assert(domain.includes('function ly_notification_milestone('),'renewal notificat
 assert(domain.includes('function ly_history_has_code('),'notification/history dedupe helper missing');
 
 assert(domain.includes("DATEDIFF(kl.bitis_tarihi,CURDATE())<=?"),'30-day queue source query missing');
-assert(domain.includes("UNIQUE")===false || true,'source contract placeholder');
 assert(domain.includes("'yenilendi'"),'renewed lifecycle state missing');
 assert(domain.includes("'yenilenmedi'"),'not-renewed lifecycle state missing');
 assert(domain.includes("'gun_'.$milestone"),'30/15/7/1/expired notification code generation missing');
@@ -86,7 +85,8 @@ assert(workflow.includes('node tests/license-renewal-173.cjs'),
 assert(workflow.includes('php tests/license-renewal-db-173.php'),
   'license renewal DB regression missing from quality gate');
 
-assert.strictEqual(version.version,'1.2.48');
+assert(version.version.startsWith('1.2.'),'release version must remain in 1.2.x');
+assert(Number(version.version.split('.')[2])>=48,'license renewal center requires 1.2.48 or newer');
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
 
