@@ -119,6 +119,61 @@ function lyt_create_contract_draft(PDO $pdo,array $actor,int $renewalId,array $i
     return $contractId;
 }
 
+function lyt_contract_links(PDO $pdo,array $contractIds): array {
+    if(!lyt_tables_ready($pdo)) return [];
+    $ids=array_values(array_unique(array_filter(array_map('intval',$contractIds),static fn(int $id):bool=>$id>0)));
+    if(!$ids) return [];
+    $ph=implode(',',array_fill(0,count($ids),'?'));
+    $stmt=$pdo->prepare("SELECT
+        m.sozlesme_id,m.yenileme_id,m.kurum_id,
+        y.hedef_bitis_tarihi,y.sonuc_bitis_tarihi,y.durum yenileme_durum
+        FROM lisans_yenileme_sozlesmeleri m
+        INNER JOIN kurum_lisans_yenilemeleri y ON y.id=m.yenileme_id AND y.kurum_id=m.kurum_id
+        WHERE m.sozlesme_id IN ($ph)");
+    $stmt->execute($ids);
+    $rows=$stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    $out=[];
+    foreach($rows as $row)$out[(int)$row['sozlesme_id']]=$row;
+    return $out;
+}
+
+function lyt_revenue_summary(PDO $pdo): array {
+    if(!lyt_tables_ready($pdo)) return [];
+    $stmt=$pdo->query("SELECT
+        s.para_birimi,
+        COUNT(DISTINCT y.id) yenileme_sayisi,
+        COUNT(DISTINCT s.id) sozlesme_sayisi,
+        COALESCE(SUM(s.toplam_tutar),0) sozlesme_toplami,
+        COALESCE(SUM(COALESCE(pay.tahsil_edilen,0)),0) tahsil_edilen
+        FROM lisans_yenileme_sozlesmeleri m
+        INNER JOIN kurum_lisans_yenilemeleri y
+          ON y.id=m.yenileme_id AND y.kurum_id=m.kurum_id AND y.durum='yenilendi'
+        INNER JOIN kurum_sozlesmeleri s
+          ON s.id=m.sozlesme_id AND s.kurum_id=m.kurum_id
+        LEFT JOIN (
+            SELECT sozlesme_id,COALESCE(SUM(tutar),0) tahsil_edilen
+            FROM kurum_tahsilatlari
+            WHERE durum='aktif'
+            GROUP BY sozlesme_id
+        ) pay ON pay.sozlesme_id=s.id
+        WHERE s.durum<>'iptal'
+        GROUP BY s.para_birimi
+        ORDER BY FIELD(s.para_birimi,'TRY','USD','EUR'),s.para_birimi");
+    $rows=$stmt?$stmt->fetchAll(PDO::FETCH_ASSOC):[];
+    if($stmt)$stmt->closeCursor();
+    if(!is_array($rows)) return [];
+    foreach($rows as &$row){
+        $total=(float)$row['sozlesme_toplami'];
+        $paid=(float)$row['tahsil_edilen'];
+        $row['sozlesme_toplami']=number_format($total,2,'.','');
+        $row['tahsil_edilen']=number_format($paid,2,'.','');
+        $row['kalan_tutar']=number_format(max(0,$total-$paid),2,'.','');
+    }
+    unset($row);
+    return $rows;
+}
+
 function lyt_gap_rows(PDO $pdo,int $limit=300): array {
     if(!lyt_tables_ready($pdo)) return [];
     $limit=max(1,min(1000,$limit));
