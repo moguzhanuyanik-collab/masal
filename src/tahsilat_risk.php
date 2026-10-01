@@ -141,13 +141,12 @@ function tr_sync_cases(PDO $pdo,?array $actor=null): array {
 
         $stmt=$pdo->query("SELECT s.id
             FROM kurum_sozlesmeleri s
-            LEFT JOIN (
-              SELECT sozlesme_id,SUM(CASE WHEN durum='aktif' THEN tutar ELSE 0 END) tahsil_edilen
-              FROM kurum_tahsilatlari
-              GROUP BY sozlesme_id
-            ) pay ON pay.sozlesme_id=s.id
             WHERE s.durum='aktif'
-              AND s.toplam_tutar-COALESCE(pay.tahsil_edilen,0)>0.009
+              AND s.toplam_tutar-COALESCE((
+                SELECT SUM(t.tutar)
+                FROM kurum_tahsilatlari t
+                WHERE t.sozlesme_id=s.id AND t.durum='aktif'
+              ),0)>0.009
               AND (
                 s.vade_tarihi IS NULL
                 OR s.vade_tarihi<=DATE_ADD(CURDATE(),INTERVAL 7 DAY)
@@ -426,8 +425,9 @@ function tr_set_stage(PDO $pdo,array $actor,int $contractId,string $stage): void
 
         if((string)$case['durum']!==$stage){
             $stmt=$pdo->prepare("UPDATE ticari_tahsilat_takipleri
-                SET durum=?,guncelleyen_kullanici_id=? WHERE sozlesme_id=?");
-            $stmt->execute([$stage,(int)$actor['id'],$contractId]);
+                SET durum=?,sorumlu_kullanici_id=COALESCE(sorumlu_kullanici_id,?),
+                    guncelleyen_kullanici_id=? WHERE sozlesme_id=?");
+            $stmt->execute([$stage,(int)$actor['id'],(int)$actor['id'],$contractId]);
             $stmt->closeCursor();
             tr_history_add(
                 $pdo,$contractId,(int)$case['kurum_id'],(int)$actor['id'],
@@ -461,9 +461,10 @@ function tr_add_note(PDO $pdo,array $actor,int $contractId,string $note,?string 
 
         $newStage=$stage!==null && $stage!==''?$stage:((string)$case['durum']==='acik'?'temas':(string)$case['durum']);
         $stmt=$pdo->prepare("UPDATE ticari_tahsilat_takipleri
-            SET durum=?,son_temas_tarihi=CURDATE(),sonraki_aksiyon_tarihi=?,guncelleyen_kullanici_id=?
+            SET durum=?,sorumlu_kullanici_id=COALESCE(sorumlu_kullanici_id,?),
+                son_temas_tarihi=CURDATE(),sonraki_aksiyon_tarihi=?,guncelleyen_kullanici_id=?
             WHERE sozlesme_id=?");
-        $stmt->execute([$newStage,$next,(int)$actor['id'],$contractId]);
+        $stmt->execute([$newStage,(int)$actor['id'],$next,(int)$actor['id'],$contractId]);
         $stmt->closeCursor();
 
         tr_history_add(
