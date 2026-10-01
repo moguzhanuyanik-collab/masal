@@ -18,7 +18,7 @@ try {
         }elseif($action==='unlink'){
             $parentId=(int)($_POST['veli_id']??0);$studentId=(int)($_POST['ogrenci_id']??0);
             if(!isset($parentNames[$parentId],$studentNames[$studentId]))throw new RuntimeException('Global eşleştirme bulunamadı.');
-            $stmt=$pdo->prepare('DELETE FROM veli_ogrenci WHERE veli_id=? AND ogrenci_id=?');
+            $stmt=$pdo->prepare('DELETE FROM veli_ogrenci WHERE veli_id=? AND ogrenci_id=? AND kurum_id=0');
             $stmt->execute([$parentId,$studentId]);
             auth_audit($pdo,(int)$actor['id'],$parentProfiles[$parentId],'global_eslestirme_kaldir','Öğrenci: '.$studentId);
             $message='Eşleştirme kaldırıldı.';
@@ -27,7 +27,7 @@ try {
 }catch(PDOException $e){error_log('[IlkAdim][global-matching-db] '.$e->getMessage());$error='Eşleştirme işlemi veritabanında tamamlanamadı.';}catch(RuntimeException $e){$error=$e->getMessage();}catch(Throwable $e){error_log('[IlkAdim][global-matching] '.$e->getMessage());$error='Eşleştirme işlemi tamamlanamadı. Lütfen tekrar deneyin.';}
 $links=[];
 try{
-    $stmt=$pdo->query('SELECT veli_id,ogrenci_id FROM veli_ogrenci ORDER BY veli_id,ogrenci_id');
+    $stmt=$pdo->query('SELECT veli_id,ogrenci_id FROM veli_ogrenci WHERE kurum_id=0 ORDER BY veli_id,ogrenci_id');
     foreach($stmt as $row){$pid=(int)$row['veli_id'];$sid=(int)$row['ogrenci_id'];if(isset($parentNames[$pid],$studentNames[$sid]))$links[]=[$pid,$sid];}
 }catch(Throwable){$error='Eşleştirmeler okunamadı.';}
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Global Eşleştirme — İlkAdım</title><link rel="stylesheet" href="super-admin-pages.css?v=1.0.72"></head>

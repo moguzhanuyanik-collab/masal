@@ -161,9 +161,25 @@ function remote_release_info_at_ref(array $gh,string $ref): array {
     return remote_update_metadata_at_ref($gh,$ref,'update-release.json');
 }
 
+function github_branch_head_sha(array $gh): string {
+    [$owner,$repo,$branch]=github_repo_info($gh);
+    $cacheBuster=(string)round(microtime(true)*1000);
+    $url='https://api.github.com/repos/'.rawurlencode($owner).'/'.rawurlencode($repo)
+        .'/commits/'.rawurlencode($branch).'?cb='.$cacheBuster;
+    $data=json_decode((string)updater_http($url,$gh),true);
+    $sha=trim((string)($data['sha']??''));
+    if(!preg_match('/^[a-f0-9]{40}$/i',$sha)){
+        throw new RuntimeException('GitHub dal HEAD commit bilgisi çözümlenemedi.');
+    }
+    return $sha;
+}
+
 function remote_version_info(array $gh): array {
-    [,,$branch]=github_repo_info($gh);
-    return remote_version_info_at_ref($gh,$branch);
+    return remote_version_info_at_ref($gh,github_branch_head_sha($gh));
+}
+
+function remote_release_info(array $gh): array {
+    return remote_release_info_at_ref($gh,github_branch_head_sha($gh));
 }
 
 function next_remote_version_info(array $gh,string $localVersion,int $localRevision=0): array {
@@ -209,8 +225,7 @@ function next_remote_version_info(array $gh,string $localVersion,int $localRevis
                     if(release_identity_should_replace_next($info,$next)) $next=$info;
                     continue;
                 }
-                $reachedInstalledOrOlder=true;
-                break;
+                continue;
             }
 
             if(release_identity_is_newer($info,$localVersion,$localRevision)){
@@ -218,22 +233,17 @@ function next_remote_version_info(array $gh,string $localVersion,int $localRevis
                 continue;
             }
 
-            $versionCmp=version_compare($candidateVersion,$localVersion);
-            $candidateRevision=normalize_release_revision($info['release_revision']??0);
-            if($versionCmp<0 || ($versionCmp===0 && $candidateRevision<=$localRevision)){
-                $reachedInstalledOrOlder=true;
-                break;
-            }
+            continue;
         }
 
-        if($reachedInstalledOrOlder||count($rows)<100) break;
+        if(count($rows)<100) break;
         $page++;
     }
 
     if($next!==null) return $next;
 
     $latest=$historyFile==='update-release.json'
-        ?remote_release_info_at_ref($gh,$branch)
+        ?remote_release_info($gh)
         :remote_version_info($gh);
 
     if($historyFile==='version.json'){
@@ -1811,6 +1821,67 @@ function retired_automatic_migrations(): array {
     ];
 }
 
+function recover_missing_064_checkpoint_after_1_1_98_bridge(PDO $pdo,string $root,string $localVersion): array {
+    if($localVersion!=='1.1.98') return [];
+
+    $name='064_adimbot_rate_limit_ve_migration_checkpoint';
+    $check=$pdo->prepare('SELECT 1 FROM sistem_migrations WHERE migration=? LIMIT 1');
+    $check->execute([$name]);
+    $already=(bool)$check->fetchColumn();
+    $check->closeCursor();
+    if($already) return [];
+
+    // Yalnız 064 eksikse onar. 064 öncesindeki bütün non-retired geçmiş
+    // eksiksiz değilse hiçbir değişiklik yapmadan dur.
+    $retired=retired_automatic_migrations();
+    $expected=[];
+    foreach(glob(rtrim($root,'/\\').'/database/migrations/*.sql')?:[] as $file){
+        $migration=basename($file,'.sql');
+        $number=migration_sequence_number($migration);
+        if($number<1 || $number>63 || isset($retired[$migration])) continue;
+        $expected[$migration]=true;
+    }
+
+    $history=[];
+    foreach($pdo->query('SELECT migration FROM sistem_migrations')?:[] as $row){
+        if(isset($row['migration'])) $history[(string)$row['migration']]=true;
+    }
+
+    $missing=[];
+    foreach(array_keys($expected) as $migration){
+        if(!isset($history[$migration])) $missing[]=$migration;
+    }
+    if($missing!==[]){
+        sort($missing,SORT_NATURAL);
+        throw new RuntimeException(
+            '064 checkpoint recovery durduruldu. Önceki migration geçmişinde eksik kayıt var: '
+            .implode(', ',array_slice($missing,0,8))
+            .(count($missing)>8?' ...':'')
+        );
+    }
+
+    // 064'ün gerçek şema etkisi idempotent biçimde uygulanır. Eski migration
+    // SQL'i tekrar oynatılmaz ve mevcut kullanıcı/kurum verisine dokunulmaz.
+    $pdo->exec("CREATE TABLE IF NOT EXISTS adimbot_rate_limitleri (
+        kanal VARCHAR(16) NOT NULL,
+        kapsam VARCHAR(16) NOT NULL,
+        kapsam_hash CHAR(64) NOT NULL,
+        deneme_sayisi SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+        pencere_baslangici DATETIME NOT NULL,
+        engel_bitis DATETIME NULL,
+        son_deneme DATETIME NOT NULL,
+        PRIMARY KEY (kanal,kapsam,kapsam_hash),
+        KEY ix_adimbot_rate_engel (engel_bitis),
+        KEY ix_adimbot_rate_son (son_deneme)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+    $insert=$pdo->prepare('INSERT IGNORE INTO sistem_migrations (migration) VALUES (?)');
+    $insert->execute([$name]);
+    $insert->closeCursor();
+
+    return [$name];
+}
+
 function assert_historical_migration_history(PDO $pdo,string $root,string $localVersion): void {
     if(version_compare($localVersion,'1.1.98','<')) return;
 
@@ -1835,6 +1906,19 @@ function assert_historical_migration_history(PDO $pdo,string $root,string $local
     }
     if($missing!==[]){
         sort($missing,SORT_NATURAL);
+
+        // 1.1.98 bridge, eski 1.1.97 kilidini aşarken migration SQL'lerini
+        // bilinçli olarak paket dışı bırakmıştı. Bu nedenle yalnız 064
+        // checkpointinin eksik olması recovery için geçerli tek istisnadır.
+        // pending_migration_names bu kaydı "pending" görsün; böylece önce
+        // doğrulanmış DB yedeği alınır, ardından run_pending_migrations içindeki
+        // dar kapsamlı recovery 064'ü uygular. Başka tek bir eksik kayıt bile
+        // varsa yine fail-closed davranılır.
+        if($localVersion==='1.1.98'
+            && $missing===['064_adimbot_rate_limit_ve_migration_checkpoint']){
+            return;
+        }
+
         throw new RuntimeException(
             'Migration geçmişi eksik veya tutarsız. Eski migrationlar tekrar çalıştırılmadı. Eksik: '
             .implode(', ',array_slice($missing,0,8))
@@ -1844,10 +1928,11 @@ function assert_historical_migration_history(PDO $pdo,string $root,string $local
 }
 
 function run_pending_migrations(PDO $pdo,string $root,string $localVersion='0.0.0'): array {
+    $applied=recover_missing_064_checkpoint_after_1_1_98_bridge($pdo,$root,$localVersion);
     assert_historical_migration_history($pdo,$root,$localVersion);
     repair_legacy_institution_membership_schema($pdo);
     $retired=retired_automatic_migrations();
-    $applied=[]; $files=glob($root.'/database/migrations/*.sql')?:[]; sort($files,SORT_NATURAL);
+    $files=glob($root.'/database/migrations/*.sql')?:[]; sort($files,SORT_NATURAL);
     $check=$pdo->prepare('SELECT 1 FROM sistem_migrations WHERE migration=? LIMIT 1');
     $insert=$pdo->prepare('INSERT INTO sistem_migrations (migration) VALUES (?)');
     foreach($files as $file){
@@ -1981,7 +2066,10 @@ function install_github_update(
 
     $targetCommit=trim((string)($remote['commit']??''));
     if(!preg_match('/^[a-f0-9]{40}$/i',$targetCommit)){
-        throw new RuntimeException('Siradaki surumun GitHub commit bilgisi gecersiz.');
+        // Eski updater sürümlerinde branch adı (ör. "main") commit alanına
+        // sızabiliyordu. Kurulumdan önce gerçek HEAD SHA'ya çözümle.
+        $targetCommit=github_branch_head_sha($gh);
+        $remote['commit']=$targetCommit;
     }
 
     $storage=$root.'/storage';
@@ -2172,6 +2260,13 @@ function install_github_update(
         $recoveryState['activation_preflight']=$activationPreflight;
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
 
+        // 1.1.98 bridge'in bıraktığı tek 064 checkpoint eksikliği, veri dönüştürmeyen
+        // idempotent şema onarımıyla önce tamamlanır. Böylece bu özel durumda
+        // mysqldump zorunluluğu yüzünden güncelleme zinciri kilitlenmez.
+        $preflightRecoveredMigrations=recover_missing_064_checkpoint_after_1_1_98_bridge(
+            $pdo,$sourceRoot,$localVersion
+        );
+
         // Migration/legacy şema onarımı gerekiyorsa önce gerçek DB snapshot alınır.
         // mysqldump yoksa veri dönüştüren güncelleme fail-closed durur.
         $pendingMigrations=pending_migration_names($pdo,$sourceRoot,$localVersion);
@@ -2202,7 +2297,10 @@ function install_github_update(
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
         $databaseMutationStarted=$requiresDbBackup;
         if($studentSchemaMissing) ensure_student_auth_schema($pdo);
-        $migrations=run_pending_migrations($pdo,$sourceRoot,$localVersion);
+        $migrations=array_values(array_unique(array_merge(
+            $preflightRecoveredMigrations,
+            run_pending_migrations($pdo,$sourceRoot,$localVersion)
+        )));
 
         // Şema başarıyla hazırlandıktan sonra yeni uygulama dosyalarını etkinleştir.
         $updateStage='file_activation';

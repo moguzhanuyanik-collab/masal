@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.113",
+  "version": "1.1.114",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -77,6 +77,7 @@
     "RELEASE-1.1.111.md",
     "RELEASE-1.1.112.md",
     "RELEASE-1.1.113.md",
+    "RELEASE-1.1.114.md",
     "RELEASE-1.1.12.md",
     "RELEASE-1.1.13.md",
     "RELEASE-1.1.14.md",
@@ -328,6 +329,7 @@
     "database/migrations/062_grade8_diger.sql",
     "database/migrations/063_login_rate_limit.sql",
     "database/migrations/064_adimbot_rate_limit_ve_migration_checkpoint.sql",
+    "database/migrations/065_kurum_bazli_eslestirme_izolasyonu.sql",
     "global-audio-feedback.js",
     "global-eslestirme.php",
     "global-ogrenciler.php",
@@ -388,6 +390,7 @@
     "quality/update-quality-500-v2.json",
     "quality/update-quality-500-v3.json",
     "quality/update-quality-500.json",
+    "rescue-1.1.97-to-1.1.98.php",
     "rol-paneli.php",
     "service-worker.js",
     "settings-account.js",
@@ -433,6 +436,9 @@
     "tests/recovery-safety-100.cjs",
     "tests/recovery-safety-100.php",
     "tests/security-92.cjs",
+    "tests/tenant-isolation-114.cjs",
+    "tests/tenant-isolation-db-115.php",
+    "tests/tenant-relation-schema-115.cjs",
     "tests/update-197-rescue-106.cjs",
     "tests/update-197-rescue-106.php",
     "tests/update-197-rescue-installer-107.cjs",
@@ -462,6 +468,8 @@
     "tests/update-safety-102.cjs",
     "tests/update-safety-102.php",
     "tests/updater-manifest-96.cjs",
+    "tests/web-rescue-197-198-113.cjs",
+    "tests/web-rescue-197-198-113.php",
     "tools/1.1.97-history-checkpoint.sql",
     "tools/apply-updater-1.1.97-rescue.php",
     "tools/apply-updater-1.1.98-rescue.php",
@@ -482,5 +490,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 3
+  "release_revision": 14
 }
