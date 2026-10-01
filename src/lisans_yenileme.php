@@ -320,6 +320,10 @@ function ly_renew(PDO $pdo,array $actor,int $renewalId,int $packageId,string $ne
         if(!in_array((string)$case['durum'],ly_open_statuses(),true)) throw new RuntimeException('Bu yenileme vakası zaten kapanmış.');
         if($newEnd<date('Y-m-d')) throw new RuntimeException('Yeni lisans bitiş tarihi geçmişte olamaz.');
         if($newEnd<=(string)$case['hedef_bitis_tarihi']) throw new RuntimeException('Yeni bitiş tarihi mevcut yenileme döneminden ileri olmalı.');
+        $currentEnd=(string)($case['guncel_bitis_tarihi']??'');
+        if($currentEnd!=='' && $currentEnd>(string)$case['hedef_bitis_tarihi'] && $newEnd<$currentEnd){
+            throw new RuntimeException('Yenileme mevcut lisans bitiş tarihini geriye çekemez.');
+        }
 
         $stmt=$pdo->prepare('SELECT id,ad FROM paketler WHERE id=? AND aktif=1 LIMIT 1');
         $stmt->execute([$packageId]);
