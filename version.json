@@ -1,5 +1,5 @@
 {
-  "version": "1.2.12",
-  "name": "1.1.97 → 1.2.1 recovery lineage audit and update-loss protection",
-  "release_revision": 4
+  "version": "1.2.13",
+  "name": "1.1.97 → 1.2.1 recovery hattı için append-only history ve updater CI hardening",
+  "release_revision": 1
 }

@@ -16,6 +16,12 @@ on:
       - 'recovery-safety-*'
   pull_request:
 
+# Aynı ref üzerinde yeni bir commit geldiğinde eski CI çalışmasını iptal et.
+# Böylece stale workflow sonucu yeni HEAD'e ait olmayan hata raporu oluşmaz.
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -68,6 +74,22 @@ jobs:
           php tests/update-managed-integrity-111.php
           php tests/update-continuity-112.php
           php tests/web-rescue-197-198-113.php
+
+      - name: Reject main history rewrite
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.before != '0000000000000000000000000000000000000000'
+        shell: bash
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          if ! git cat-file -e "${BEFORE_SHA}^{commit}" 2>/dev/null; then
+            echo "Main history rewrite detected: previous push commit is not present in current history: ${BEFORE_SHA}"
+            exit 1
+          fi
+          if ! git merge-base --is-ancestor "${BEFORE_SHA}" HEAD; then
+            echo "Main history rewrite/force-push detected: ${BEFORE_SHA} is not an ancestor of HEAD."
+            exit 1
+          fi
+          echo "PASS: main history is append-only from previous push commit."
 
       - name: Node regression checks
         shell: bash
