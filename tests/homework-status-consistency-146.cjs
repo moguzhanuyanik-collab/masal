@@ -23,7 +23,7 @@ assert(parent.includes('value="overdue"'),'parent homework overdue filter missin
 assert(parent.includes("$summary=hw_summary($allHomeworks);"),'parent homework summary must use shared status domain');
 assert(parent.includes("hw_filter($allHomeworks,$status)"),'parent homework status filter must use shared status domain');
 assert(parent.includes("hw_status($homework)"),'parent homework cards must use shared status calculation');
-assert(parent.includes('Geciken'), 'parent homework summary must expose overdue count');
+assert(parent.includes('Gecikti'),'parent homework summary must expose overdue count');
 assert(parent.includes('veli-odevleri.css?v=1.2.21'),'parent homework stylesheet must be versioned');
 
 assert(teacherDetail.includes("require __DIR__.'/src/odev_durumu.php';"),'teacher homework detail must use shared status domain');
