@@ -1,0 +1,49 @@
+{
+  "baseline": {
+    "version": "1.1.97",
+    "commit": "be2651c5e375e3b54c0735d7283820a6ec9eb581"
+  },
+  "source": {
+    "version": "1.2.1",
+    "release_revision": 15,
+    "commit": "6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c"
+  },
+  "source_compare": {
+    "baseline_to_source_commit_count": 30,
+    "source_tree_is_the_recovery_authority": true
+  },
+  "reconstructed_release_sequence": [
+    "1.1.97",
+    "1.1.98",
+    "1.1.99",
+    "1.1.100",
+    "1.1.101",
+    "1.1.102",
+    "1.1.103",
+    "1.1.104",
+    "1.1.105",
+    "1.1.106",
+    "1.1.107",
+    "1.1.108",
+    "1.1.109",
+    "1.1.110",
+    "1.1.111",
+    "1.1.112",
+    "1.1.113",
+    "1.1.114",
+    "1.1.115",
+    "1.1.116",
+    "1.1.117",
+    "1.1.119",
+    "1.2.1"
+  ],
+  "excluded_from_active_sequence": [
+    "1.1.118",
+    "1.1.120"
+  ],
+  "recovery_only": [
+    "1.1.119"
+  ],
+  "functional_rebuild_artifact": "REBUILD-1.1.97-1.2.1-FUNCTIONAL.json",
+  "purpose": "Prevent a future reset or updater failure from silently removing the recovered 1.1.97 -> 1.2.1 source lineage."
+}
