@@ -21,7 +21,7 @@ assert(rescue.includes('function rescue_bootstrap_commit'));
 assert(rescue.includes('$targetCommit=rescue_bootstrap_commit();'));
 assert(!rescue.includes('$targetCommit=rescue_branch_head_sha($gh);'));
 assert(!rescue.includes('rescue_validate_historical_chain($gh);'));
-assert(rescue.includes("$targetVersion!=='1.2.9'"));
+assert(rescue.includes("$targetVersion!=='1.2.16'"));
 assert(rescue.includes("'bootstrap_commit'=>ILKADIM_LEGACY_097_BOOTSTRAP_COMMIT"));
 assert(rescue.includes("'target_121_commit'=>ILKADIM_LEGACY_097_TARGET_COMMIT"));
 assert(rescue.includes("const ILKADIM_LEGACY_097_RECOVERY_121_COMMIT='6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c';"));
