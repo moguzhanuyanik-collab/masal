@@ -657,7 +657,7 @@ if (!function_exists('auth_legal_pending_count')) {
                   AND FIND_IN_SET(?,b.hedef_roller)>0
                   AND NOT EXISTS (
                     SELECT 1 FROM yasal_belge_onaylari o
-                    WHERE o.belge_id=b.id AND o.kullanici_id=?
+                    WHERE o.belge_id=b.id AND o.kullanici_id=? AND o.belge_hash=b.icerik_hash
                   )");
             $stmt->execute([$role,$userId]);
             $count=max(0,(int)($stmt->fetchColumn()?:0));
