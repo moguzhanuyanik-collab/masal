@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.10",
+  "version": "1.2.11",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -9,6 +9,7 @@
     "QUALITY-500-V3.md",
     "QUALITY-500.md",
     "README.md",
+    "REBUILD-1.1.97-1.2.1-FUNCTIONAL.json",
     "RELEASE-1.0.11.md",
     "RELEASE-1.0.12.md",
     "RELEASE-1.0.16.md",
@@ -180,6 +181,7 @@
     "RELEASE-1.1.99.md",
     "RELEASE-1.2.1.md",
     "RELEASE-1.2.10.md",
+    "RELEASE-1.2.11.md",
     "RELEASE-1.2.2.md",
     "RELEASE-1.2.3.md",
     "RELEASE-1.2.4.md",
@@ -446,6 +448,7 @@
     "tests/db-backup-99.php",
     "tests/direct-097-bootstrap-anchor-137.cjs",
     "tests/direct-097-recovery-128.cjs",
+    "tests/functional-rebuild-118.cjs",
     "tests/hardening-91.cjs",
     "tests/hardening-94.cjs",
     "tests/legacy-064-integrity-124.php",

@@ -1,5 +1,7 @@
 'use strict';
 
+function version_compare_118(a,b){const A=a.split('.').map(Number),B=b.split('.').map(Number);for(let i=0;i<3;i++){if((A[i]||0)!==(B[i]||0))return (A[i]||0)-(B[i]||0);}return 0;}
+
 const fs=require('fs');
 const assert=require('assert');
 
@@ -26,7 +28,7 @@ for(const v of expected){
   assert(rebuild.includes("'"+v+"'"),'Rebuild contract zincirinde eksik sürüm: '+v);
 }
 
-assert.strictEqual(version.version,'1.2.10');
+assert(version_compare_118(String(version.version),'1.2.10')>=0);
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
 assert.strictEqual(version.release_revision,1);
