@@ -233,6 +233,8 @@ ok_173((int)$summary['gun_1']===1,'one renewal case should be in 0-1 day bucket.
 ok_173((int)$summary['gun_7']===1,'one renewal case should be in 2-7 day bucket.');
 ok_173((int)$summary['gun_15']===1,'one renewal case should be in 8-15 day bucket.');
 ok_173((int)$summary['gun_30']===1,'one renewal case should be in 16-30 day bucket.');
+ok_173(count(ly_queue_rows($pdo,['durum'=>'open']))===5,
+    'aggregate open filter must include acik/temas/teklif action states.');
 
 ok_173(ly_notification_milestone(31)===null,'31 days should have no manager milestone.');
 ok_173(ly_notification_milestone(30)===30,'30-day milestone mismatch.');
@@ -287,6 +289,8 @@ ok_173((string)$pdo->query("SELECT bitis_tarihi FROM kurum_lisanslari WHERE kuru
     'not-renewed close must not shorten current license.');
 ok_173((string)$pdo->query("SELECT durum FROM kurum_lisanslari WHERE kurum_id=30")->fetchColumn()==='aktif',
     'not-renewed close must not prematurely cancel current license.');
+ok_173(count(ly_queue_rows($pdo,['aciliyet'=>'7']))===0,
+    'closed not-renewed case must not remain in 2-7 day action queue.');
 
 $case40=(int)$pdo->query("SELECT id FROM kurum_lisans_yenilemeleri WHERE kurum_id=40")->fetchColumn();
 $externalEnd=$today->modify('+200 days')->format('Y-m-d');
@@ -306,6 +310,13 @@ try{ly_renew($pdo,$actor,$case10,1,$shorter,'Geri çekmemeli');}catch(RuntimeExc
 ok_173($shortenBlocked,'stale renewal case must not shorten an already-extended current license.');
 ok_173((string)$pdo->query("SELECT bitis_tarihi FROM kurum_lisanslari WHERE kurum_id=10")->fetchColumn()===$currentFar,
     'blocked stale renewal must leave current license end unchanged.');
+
+$pdo->exec("UPDATE kurum_lisanslari SET durum='iptal',bitis_tarihi=NULL WHERE kurum_id=10");
+$sync4=ly_sync_cases($pdo,$actor,30);
+$row10=ly_case_row($pdo,$case10);
+ok_173((int)$sync4['reconciled']>=1,'external cancellation should reconcile stale open renewal case.');
+ok_173((string)$row10['durum']==='yenilenmedi',
+    'external cancelled license with null end must close as not-renewed, never renewed.');
 
 $history20=ly_history_rows($pdo,$case20);
 ok_173(count($history20)>=4,'renewal history should retain case open, note, stage and renewal events.');
