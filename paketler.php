@@ -84,6 +84,7 @@ foreach($licenses as $row) if((int)$row['kurum_id']===$editInstitutionId){$editL
 <header class="role-topbar">
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Paket & Lisanslar</small></span></a>
 <div class="sa-page-actions">
+<a class="sa-page-action" href="demo-satis.php" aria-label="Demo & Satış"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="kurumlar.php" aria-label="Kurumlar"><svg><use href="#sa-building"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
@@ -252,6 +253,7 @@ Veli <?=(int)$license['veli_sayisi']?> / <?=pl_limit((int)$license['veli_limiti'
 <a href="super-admin.php"><span>⌂</span>Panel</a>
 <a href="kurumlar.php"><span>🏫</span>Kurumlar</a>
 <a class="active" href="paketler.php"><span>💼</span>Paketler</a>
+<a href="demo-satis.php"><span>🚀</span>Demo</a>
 <a href="guncelleme.php"><span>↻</span>Güncelle</a>
 </nav>
 </div>
