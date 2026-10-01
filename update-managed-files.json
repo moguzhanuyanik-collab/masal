@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.31",
+  "version": "1.2.32",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -203,6 +203,7 @@
     "RELEASE-1.2.3.md",
     "RELEASE-1.2.30.md",
     "RELEASE-1.2.31.md",
+    "RELEASE-1.2.32.md",
     "RELEASE-1.2.4.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.6.md",
@@ -522,6 +523,8 @@
     "tests/institution-content-detail-db-141.php",
     "tests/institution-content-performance-153.cjs",
     "tests/institution-content-performance-db-153.php",
+    "tests/institution-group-performance-157.cjs",
+    "tests/institution-group-performance-db-157.php",
     "tests/institution-member-crud-135.cjs",
     "tests/institution-member-crud-db-135.php",
     "tests/institution-reporting-137.cjs",
