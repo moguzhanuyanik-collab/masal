@@ -142,6 +142,7 @@ jobs:
           node tests/recovery-source-integrity-139.cjs
           node tests/recovery-functional-source-parity-140.cjs
           node tests/recovery-chain-ancestry-141.cjs
+          node tests/recovery-097-historical-gate-143.cjs
 
   tenant-db-integration:
     name: Tenant DB integration
