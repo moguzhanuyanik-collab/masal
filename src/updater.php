@@ -1,48 +1,6 @@
 <?php
 declare(strict_types=1);
 
-const ILKADIM_UPDATER_CORE_GENERATION = 121;
-
-function updater_core_generation_from_file(string $path): int {
-    if(!is_file($path) || is_link($path) || !is_readable($path)) return 0;
-    $raw=file_get_contents($path);
-    if(!is_string($raw) || $raw==='') return 0;
-    if(preg_match('/\\bILKADIM_UPDATER_CORE_GENERATION\\s*=\\s*(\\d+)\\s*;/', $raw, $m)!==1) return 0;
-    return max(0,(int)$m[1]);
-}
-
-function preserve_newer_live_updater_in_staging(string $root,string $sourceRoot): bool {
-    $live=rtrim($root,'/\\').'/src/updater.php';
-    $staged=rtrim($sourceRoot,'/\\').'/src/updater.php';
-    if(!is_file($live) || is_link($live) || !is_readable($live)) return false;
-    if(!is_file($staged) || is_link($staged)) return false;
-
-    $liveGeneration=updater_core_generation_from_file($live);
-    $stagedGeneration=updater_core_generation_from_file($staged);
-    if($liveGeneration<1 || $liveGeneration<=$stagedGeneration) return false;
-
-    $tmp=$staged.'.keep-newer-'.bin2hex(random_bytes(6)).'.tmp';
-    @unlink($tmp);
-    try{
-        if(!copy($live,$tmp)){
-            throw new RuntimeException('Yeni updater çekirdeği staging alanına korunamadı.');
-        }
-        $liveHash=hash_file('sha256',$live);
-        $tmpHash=hash_file('sha256',$tmp);
-        if(!is_string($liveHash) || !is_string($tmpHash) || !hash_equals($liveHash,$tmpHash)){
-            throw new RuntimeException('Korunan updater çekirdeği bütünlük doğrulamasından geçemedi.');
-        }
-        $mode=@fileperms($live);
-        if(is_int($mode)) @chmod($tmp,$mode&0777);
-        if(!@rename($tmp,$staged)){
-            throw new RuntimeException('Korunan updater çekirdeği staging alanında etkinleştirilemedi.');
-        }
-    }finally{
-        if(is_file($tmp)||is_link($tmp)) @unlink($tmp);
-    }
-    return true;
-}
-
 function github_repo_info(array $gh): array {
     $owner=trim((string)($gh['owner']??''));
     $repo=trim((string)($gh['repo']??''));
@@ -141,6 +99,30 @@ function normalize_release_revision(mixed $value): int {
     return 0;
 }
 
+function normalize_application_generation(mixed $value): int {
+    if(is_int($value)) return max(0,$value);
+    if(is_string($value) && preg_match('/^\d+$/D',$value)===1) return max(0,(int)$value);
+    if(is_float($value) && floor($value)===$value) return max(0,(int)$value);
+    return 0;
+}
+
+function read_local_application_generation(string $root,string $expectedVersion=''): int {
+    $path=rtrim($root,'/\\').'/version.json';
+    if(!is_file($path) || !is_readable($path)) return 0;
+    $data=json_decode((string)file_get_contents($path),true);
+    if(!is_array($data)) return 0;
+    $version=trim((string)($data['version']??''));
+    if($expectedVersion!=='' && $version!==$expectedVersion) return 0;
+    return normalize_application_generation($data['application_generation']??0);
+}
+
+function release_application_generation_is_safe(array $candidate,int $localGeneration): bool {
+    $candidateGeneration=normalize_application_generation($candidate['application_generation']??0);
+    if($localGeneration<=0) return $candidateGeneration>0;
+    if($candidateGeneration<=0) return false;
+    return $candidateGeneration >= $localGeneration;
+}
+
 function read_local_release_revision(string $root,string $expectedVersion=''): int {
     $path=rtrim($root,'/\\').'/version.json';
     if(!is_file($path) || !is_readable($path)) return 0;
@@ -190,6 +172,7 @@ function remote_update_metadata_at_ref(array $gh,string $ref,string $metadataFil
     return [
         'version'=>(string)$data['version'],
         'release_revision'=>normalize_release_revision($data['release_revision']??0),
+        'application_generation'=>normalize_application_generation($data['application_generation']??0),
         'name'=>(string)($data['name']??''),
         'commit'=>$ref,
     ];
@@ -225,11 +208,9 @@ function remote_release_info(array $gh): array {
 }
 
 function next_remote_version_info(array $gh,string $localVersion,int $localRevision=0): array {
-    $localVersion=trim($localVersion);
-    if($localVersion==='') $localVersion='0.0.0';
-
-    // 1.2.1: eski ara-sürüm/recovery zinciri tamamen kaldırıldı.
-    // Her kontrol yalnız main dalının gerçek 40 karakterlik HEAD SHA'sına gider.
+    // Release zinciri artık sürüm geçmişini tarayarak ara paket seçmez.
+    // Yalnızca main HEAD'in update-release.json metadata'sı adaydır.
+    // Kurulum ayrıca application_generation ve release revision sözleşmelerini doğrular.
     return remote_release_info($gh);
 }
 
@@ -2043,7 +2024,11 @@ function install_github_update(
     [$owner,$repo,$branch]=github_repo_info($gh);
     $localVersion=read_app_version();
     $localRevision=read_local_release_revision($root,$localVersion);
+    $localApplicationGeneration=read_local_application_generation($root,$localVersion);
     $remote=next_remote_version_info($gh,$localVersion,$localRevision);
+    if(!release_application_generation_is_safe($remote,$localApplicationGeneration)){
+        throw new RuntimeException('Güncelleme paketi uygulama neslini geriye götürüyor veya application_generation bilgisi eksik. Kurulum güvenlik nedeniyle durduruldu.');
+    }
     if(!release_identity_is_newer($remote,$localVersion,$localRevision)){
         return [
             'updated'=>false,
@@ -2082,7 +2067,6 @@ function install_github_update(
     $recoveryManifestName='';
     $databaseMutationStarted=false;
     $fileActivationStarted=false;
-    $preservedNewerUpdaterCore=false;
     $updateStage='preparing';
     $log=$pdo->prepare("INSERT INTO guncelleme_gecmisi (onceki_surumu,yeni_surumu,github_commit,durum) VALUES (?,?,?,'basladi')");
     $log->execute([$localVersion,$remote['version'],$remote['commit']]); $logId=(int)$pdo->lastInsertId();
@@ -2101,7 +2085,6 @@ function install_github_update(
             'pending_migrations'=>[],
             'legacy_membership_repair'=>false,
             'student_schema_missing'=>false,
-            'preserved_newer_updater_core'=>false,
             'manual_restore_only'=>true,
         ];
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
@@ -2171,7 +2154,17 @@ function install_github_update(
         $packageRevision=is_array($packageVersionData)?normalize_release_revision($packageVersionData['release_revision']??0):0;
         $releaseRevision=is_array($releaseData)?normalize_release_revision($releaseData['release_revision']??0):0;
         $manifestRevision=is_array($manifestData)?normalize_release_revision($manifestData['release_revision']??0):0;
+        $packageApplicationGeneration=is_array($packageVersionData)?normalize_application_generation($packageVersionData['application_generation']??0):0;
+        $releaseApplicationGeneration=is_array($releaseData)?normalize_application_generation($releaseData['application_generation']??0):0;
+        $manifestApplicationGeneration=is_array($manifestData)?normalize_application_generation($manifestData['application_generation']??0):0;
         $expectedRevision=normalize_release_revision($remote['release_revision']??0);
+        $expectedApplicationGeneration=normalize_application_generation($remote['application_generation']??0);
+        if(!release_application_generation_is_safe(['application_generation'=>$packageApplicationGeneration],$localApplicationGeneration)
+            || $releaseApplicationGeneration!==$packageApplicationGeneration
+            || $manifestApplicationGeneration!==$packageApplicationGeneration
+            || $expectedApplicationGeneration!==$packageApplicationGeneration){
+            throw new RuntimeException('Güncelleme paketi application_generation metadata değerleri birbiriyle eşleşmiyor veya uygulama nesli geriye gidiyor.');
+        }
         if($releaseVersion!==$packageVersion || $manifestVersion!==$packageVersion){
             throw new RuntimeException(
                 'Güncelleme paketi sürüm metadata dosyaları birbiriyle eşleşmiyor.'
@@ -2190,11 +2183,6 @@ function install_github_update(
         if(!is_array($manifestData['files']??null)){
             throw new RuntimeException('Güncelleme paketi yönetilen dosya manifesti geçersiz.');
         }
-
-        // Daha yeni bir updater çekirdeği daha eski tarihsel paket kurulurken geriye düşürülmez.
-        // Bu, recovery/bridge kurulumlarının güvenli çekirdeği kaybetmeden sıralı devam etmesini sağlar.
-        $preservedNewerUpdaterCore=preserve_newer_live_updater_in_staging($root,$sourceRoot);
-        $recoveryState['preserved_newer_updater_core']=$preservedNewerUpdaterCore;
 
         // Yalnız updater'ın daha önce yönettiği dosyalar stale cleanup adayıdır.
         // İlk manifest yoksa hiçbir canlı dosya silinmez; sadece yeni baseline kaydedilir.
@@ -2258,25 +2246,47 @@ function install_github_update(
         $recoveryState['activation_preflight']=$activationPreflight;
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
 
-        // 1.2.1 temiz recovery yalnız uygulama kodu/updater çekirdeğini yeniler.
-        // Veritabanı geriye alınmaz, yeni migration çalıştırılmaz, tablo/kolon/veri silinmez.
-        $isClean121Recovery=((string)($remote['version']??''))==='1.2.1';
-        $preflightRecoveredMigrations=[];
-        $pendingMigrations=[];
-        $legacyRepairNeeded=false;
-        $studentSchemaMissing=false;
-        $requiresDbBackup=false;
-        $dbBackupName='';
-        $migrations=[];
+        // 1.1.98 bridge'in bıraktığı tek 064 checkpoint eksikliği, veri dönüştürmeyen
+        // idempotent şema onarımıyla önce tamamlanır. Böylece bu özel durumda
+        // mysqldump zorunluluğu yüzünden güncelleme zinciri kilitlenmez.
+        $preflightRecoveredMigrations=recover_missing_064_checkpoint_after_1_1_98_bridge(
+            $pdo,$sourceRoot,$localVersion
+        );
 
-        $updateStage='database_recovery_skip';
+        // Migration/legacy şema onarımı gerekiyorsa önce gerçek DB snapshot alınır.
+        // mysqldump yoksa veri dönüştüren güncelleme fail-closed durur.
+        $pendingMigrations=pending_migration_names($pdo,$sourceRoot,$localVersion);
+        $legacyRepairNeeded=legacy_membership_repair_needed($pdo);
+        $studentSchemaMissing=!auth_table_exists($pdo,'ogrenciler');
+        $requiresDbBackup=$studentSchemaMissing || $legacyRepairNeeded || $pendingMigrations!==[];
+
+        $dbBackupName='';
+        $updateStage='database_backup';
         $recoveryState['stage']=$updateStage;
-        $recoveryState['pending_migrations']=[];
-        $recoveryState['legacy_membership_repair']=false;
-        $recoveryState['student_schema_missing']=false;
-        $recoveryState['database_backup']=null;
+        $recoveryState['pending_migrations']=$pendingMigrations;
+        $recoveryState['legacy_membership_repair']=$legacyRepairNeeded;
+        $recoveryState['student_schema_missing']=$studentSchemaMissing;
+        if($requiresDbBackup){
+            $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+            $dbBackupName=create_database_backup($root,$dbConfig,$updateConfig,$pdo);
+        }
+
         $recoveryState['status']='ready_before_mutation';
+        $recoveryState['stage']='ready_before_mutation';
+        $recoveryState['database_backup']=backup_artifact_metadata($root,$dbBackupName);
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+
+        // Migration'lar önce staging paketinden uygulanır.
+        // DB dönüşümü başarısızsa yeni uygulama dosyaları canlıya kopyalanmaz.
+        $updateStage='database_mutation';
+        $recoveryState['stage']=$updateStage;
+        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+        $databaseMutationStarted=$requiresDbBackup;
+        if($studentSchemaMissing) ensure_student_auth_schema($pdo);
+        $migrations=array_values(array_unique(array_merge(
+            $preflightRecoveredMigrations,
+            run_pending_migrations($pdo,$sourceRoot,$localVersion)
+        )));
 
         // Şema başarıyla hazırlandıktan sonra yeni uygulama dosyalarını etkinleştir.
         $updateStage='file_activation';
@@ -2298,7 +2308,6 @@ function install_github_update(
         $historyMessage='Guncelleme tamamlandi. Surum: '.(string)$remote['version'].' rev '.normalize_release_revision($remote['release_revision']??0).'; Yedek: '.$backupName;
         if($dbBackupName!=='') $historyMessage.='; DB yedek: '.$dbBackupName;
         if($removedManagedFiles!==[]) $historyMessage.='; temizlenen eski dosya: '.count($removedManagedFiles);
-        if($preservedNewerUpdaterCore) $historyMessage.='; daha yeni updater çekirdeği korundu';
         $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='basarili',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute([$historyMessage,$logId]);
         clear_updater_core_handoff_marker($root);
 
@@ -2326,7 +2335,6 @@ function install_github_update(
             'migrations'=>$migrations,
             'removed_files'=>$removedManagedFiles,
             'managed_files'=>count($newManagedFiles),
-            'preserved_newer_updater_core'=>$preservedNewerUpdaterCore,
         ];
     }catch(Throwable $e){
         error_log('[IlkAdim][updater] '.$e->getMessage());

@@ -1,0 +1,4053 @@
+{
+  "format": 1,
+  "version": "1.1.113",
+  "release_revision": 1,
+  "range": "Q1001-Q1500",
+  "total": 500,
+  "implemented": 20,
+  "planned": 480,
+  "categories": [
+    {
+      "name": "Legacy Upgrade Bridges",
+      "count": 50
+    },
+    {
+      "name": "Schema Evolution Safety",
+      "count": 50
+    },
+    {
+      "name": "Tenant Data Preservation",
+      "count": 50
+    },
+    {
+      "name": "Updater Failure Recovery",
+      "count": 50
+    },
+    {
+      "name": "Release Chain Integrity",
+      "count": 50
+    },
+    {
+      "name": "Backup Verification",
+      "count": 50
+    },
+    {
+      "name": "Security Boundary Tests",
+      "count": 50
+    },
+    {
+      "name": "Runtime Compatibility",
+      "count": 50
+    },
+    {
+      "name": "Operational Diagnostics",
+      "count": 50
+    },
+    {
+      "name": "Long-term Maintainability",
+      "count": 50
+    }
+  ],
+  "items": [
+    {
+      "id": "Q1001",
+      "category": "Legacy Upgrade Bridges",
+      "title": "legacy membership preflight — kontrol 1",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "legacy membership preflight için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1002",
+      "category": "Legacy Upgrade Bridges",
+      "title": "profile-to-user mapping — kontrol 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "profile-to-user mapping için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1003",
+      "category": "Legacy Upgrade Bridges",
+      "title": "manager identity resolution — kontrol 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "manager identity resolution için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1004",
+      "category": "Legacy Upgrade Bridges",
+      "title": "staging table verification — kontrol 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "staging table verification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1005",
+      "category": "Legacy Upgrade Bridges",
+      "title": "atomic table swap — kontrol 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "atomic table swap için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1006",
+      "category": "Legacy Upgrade Bridges",
+      "title": "legacy backup retention — kontrol 1",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "legacy backup retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1007",
+      "category": "Legacy Upgrade Bridges",
+      "title": "unresolved row fail-closed — kontrol 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "unresolved row fail-closed için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1008",
+      "category": "Legacy Upgrade Bridges",
+      "title": "hybrid schema preservation — kontrol 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "hybrid schema preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1009",
+      "category": "Legacy Upgrade Bridges",
+      "title": "duplicate membership merge — kontrol 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "duplicate membership merge için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1010",
+      "category": "Legacy Upgrade Bridges",
+      "title": "bridge rerun guard — kontrol 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "bridge rerun guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1011",
+      "category": "Legacy Upgrade Bridges",
+      "title": "legacy membership preflight — kontrol 2",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "legacy membership preflight için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1012",
+      "category": "Legacy Upgrade Bridges",
+      "title": "profile-to-user mapping — kontrol 2",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "profile-to-user mapping için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1013",
+      "category": "Legacy Upgrade Bridges",
+      "title": "manager identity resolution — kontrol 2",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "manager identity resolution için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1014",
+      "category": "Legacy Upgrade Bridges",
+      "title": "staging table verification — kontrol 2",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "staging table verification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1015",
+      "category": "Legacy Upgrade Bridges",
+      "title": "atomic table swap — kontrol 2",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "atomic table swap için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1016",
+      "category": "Legacy Upgrade Bridges",
+      "title": "legacy backup retention — kontrol 2",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "legacy backup retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1017",
+      "category": "Legacy Upgrade Bridges",
+      "title": "unresolved row fail-closed — kontrol 2",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "unresolved row fail-closed için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1018",
+      "category": "Legacy Upgrade Bridges",
+      "title": "hybrid schema preservation — kontrol 2",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "hybrid schema preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1019",
+      "category": "Legacy Upgrade Bridges",
+      "title": "duplicate membership merge — kontrol 2",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "duplicate membership merge için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1020",
+      "category": "Legacy Upgrade Bridges",
+      "title": "bridge rerun guard — kontrol 2",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "bridge rerun guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1021",
+      "category": "Legacy Upgrade Bridges",
+      "title": "legacy membership preflight — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy membership preflight için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1022",
+      "category": "Legacy Upgrade Bridges",
+      "title": "profile-to-user mapping — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "profile-to-user mapping için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1023",
+      "category": "Legacy Upgrade Bridges",
+      "title": "manager identity resolution — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "manager identity resolution için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1024",
+      "category": "Legacy Upgrade Bridges",
+      "title": "staging table verification — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "staging table verification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1025",
+      "category": "Legacy Upgrade Bridges",
+      "title": "atomic table swap — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "atomic table swap için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1026",
+      "category": "Legacy Upgrade Bridges",
+      "title": "legacy backup retention — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy backup retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1027",
+      "category": "Legacy Upgrade Bridges",
+      "title": "unresolved row fail-closed — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "unresolved row fail-closed için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1028",
+      "category": "Legacy Upgrade Bridges",
+      "title": "hybrid schema preservation — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "hybrid schema preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1029",
+      "category": "Legacy Upgrade Bridges",
+      "title": "duplicate membership merge — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "duplicate membership merge için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1030",
+      "category": "Legacy Upgrade Bridges",
+      "title": "bridge rerun guard — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "bridge rerun guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1031",
+      "category": "Legacy Upgrade Bridges",
+      "title": "legacy membership preflight — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy membership preflight için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1032",
+      "category": "Legacy Upgrade Bridges",
+      "title": "profile-to-user mapping — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "profile-to-user mapping için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1033",
+      "category": "Legacy Upgrade Bridges",
+      "title": "manager identity resolution — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "manager identity resolution için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1034",
+      "category": "Legacy Upgrade Bridges",
+      "title": "staging table verification — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "staging table verification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1035",
+      "category": "Legacy Upgrade Bridges",
+      "title": "atomic table swap — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "atomic table swap için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1036",
+      "category": "Legacy Upgrade Bridges",
+      "title": "legacy backup retention — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy backup retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1037",
+      "category": "Legacy Upgrade Bridges",
+      "title": "unresolved row fail-closed — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "unresolved row fail-closed için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1038",
+      "category": "Legacy Upgrade Bridges",
+      "title": "hybrid schema preservation — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "hybrid schema preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1039",
+      "category": "Legacy Upgrade Bridges",
+      "title": "duplicate membership merge — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "duplicate membership merge için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1040",
+      "category": "Legacy Upgrade Bridges",
+      "title": "bridge rerun guard — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "bridge rerun guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1041",
+      "category": "Legacy Upgrade Bridges",
+      "title": "legacy membership preflight — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy membership preflight için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1042",
+      "category": "Legacy Upgrade Bridges",
+      "title": "profile-to-user mapping — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "profile-to-user mapping için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1043",
+      "category": "Legacy Upgrade Bridges",
+      "title": "manager identity resolution — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "manager identity resolution için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1044",
+      "category": "Legacy Upgrade Bridges",
+      "title": "staging table verification — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "staging table verification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1045",
+      "category": "Legacy Upgrade Bridges",
+      "title": "atomic table swap — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "atomic table swap için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1046",
+      "category": "Legacy Upgrade Bridges",
+      "title": "legacy backup retention — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy backup retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1047",
+      "category": "Legacy Upgrade Bridges",
+      "title": "unresolved row fail-closed — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "unresolved row fail-closed için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1048",
+      "category": "Legacy Upgrade Bridges",
+      "title": "hybrid schema preservation — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "hybrid schema preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1049",
+      "category": "Legacy Upgrade Bridges",
+      "title": "duplicate membership merge — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "duplicate membership merge için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1050",
+      "category": "Legacy Upgrade Bridges",
+      "title": "bridge rerun guard — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "bridge rerun guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1051",
+      "category": "Schema Evolution Safety",
+      "title": "column type derivation — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "column type derivation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1052",
+      "category": "Schema Evolution Safety",
+      "title": "foreign-key inbound guard — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "foreign-key inbound guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1053",
+      "category": "Schema Evolution Safety",
+      "title": "DDL staging isolation — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "DDL staging isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1054",
+      "category": "Schema Evolution Safety",
+      "title": "schema postcondition check — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema postcondition check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1055",
+      "category": "Schema Evolution Safety",
+      "title": "index preservation — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "index preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1056",
+      "category": "Schema Evolution Safety",
+      "title": "collation consistency — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "collation consistency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1057",
+      "category": "Schema Evolution Safety",
+      "title": "nullable legacy handling — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "nullable legacy handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1058",
+      "category": "Schema Evolution Safety",
+      "title": "default timestamp preservation — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "default timestamp preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1059",
+      "category": "Schema Evolution Safety",
+      "title": "primary-key uniqueness — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "primary-key uniqueness için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1060",
+      "category": "Schema Evolution Safety",
+      "title": "schema rollback evidence — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema rollback evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1061",
+      "category": "Schema Evolution Safety",
+      "title": "column type derivation — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "column type derivation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1062",
+      "category": "Schema Evolution Safety",
+      "title": "foreign-key inbound guard — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "foreign-key inbound guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1063",
+      "category": "Schema Evolution Safety",
+      "title": "DDL staging isolation — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "DDL staging isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1064",
+      "category": "Schema Evolution Safety",
+      "title": "schema postcondition check — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema postcondition check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1065",
+      "category": "Schema Evolution Safety",
+      "title": "index preservation — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "index preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1066",
+      "category": "Schema Evolution Safety",
+      "title": "collation consistency — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "collation consistency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1067",
+      "category": "Schema Evolution Safety",
+      "title": "nullable legacy handling — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "nullable legacy handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1068",
+      "category": "Schema Evolution Safety",
+      "title": "default timestamp preservation — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "default timestamp preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1069",
+      "category": "Schema Evolution Safety",
+      "title": "primary-key uniqueness — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "primary-key uniqueness için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1070",
+      "category": "Schema Evolution Safety",
+      "title": "schema rollback evidence — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema rollback evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1071",
+      "category": "Schema Evolution Safety",
+      "title": "column type derivation — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "column type derivation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1072",
+      "category": "Schema Evolution Safety",
+      "title": "foreign-key inbound guard — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "foreign-key inbound guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1073",
+      "category": "Schema Evolution Safety",
+      "title": "DDL staging isolation — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "DDL staging isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1074",
+      "category": "Schema Evolution Safety",
+      "title": "schema postcondition check — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema postcondition check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1075",
+      "category": "Schema Evolution Safety",
+      "title": "index preservation — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "index preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1076",
+      "category": "Schema Evolution Safety",
+      "title": "collation consistency — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "collation consistency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1077",
+      "category": "Schema Evolution Safety",
+      "title": "nullable legacy handling — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "nullable legacy handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1078",
+      "category": "Schema Evolution Safety",
+      "title": "default timestamp preservation — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "default timestamp preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1079",
+      "category": "Schema Evolution Safety",
+      "title": "primary-key uniqueness — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "primary-key uniqueness için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1080",
+      "category": "Schema Evolution Safety",
+      "title": "schema rollback evidence — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema rollback evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1081",
+      "category": "Schema Evolution Safety",
+      "title": "column type derivation — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "column type derivation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1082",
+      "category": "Schema Evolution Safety",
+      "title": "foreign-key inbound guard — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "foreign-key inbound guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1083",
+      "category": "Schema Evolution Safety",
+      "title": "DDL staging isolation — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "DDL staging isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1084",
+      "category": "Schema Evolution Safety",
+      "title": "schema postcondition check — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema postcondition check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1085",
+      "category": "Schema Evolution Safety",
+      "title": "index preservation — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "index preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1086",
+      "category": "Schema Evolution Safety",
+      "title": "collation consistency — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "collation consistency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1087",
+      "category": "Schema Evolution Safety",
+      "title": "nullable legacy handling — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "nullable legacy handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1088",
+      "category": "Schema Evolution Safety",
+      "title": "default timestamp preservation — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "default timestamp preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1089",
+      "category": "Schema Evolution Safety",
+      "title": "primary-key uniqueness — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "primary-key uniqueness için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1090",
+      "category": "Schema Evolution Safety",
+      "title": "schema rollback evidence — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema rollback evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1091",
+      "category": "Schema Evolution Safety",
+      "title": "column type derivation — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "column type derivation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1092",
+      "category": "Schema Evolution Safety",
+      "title": "foreign-key inbound guard — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "foreign-key inbound guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1093",
+      "category": "Schema Evolution Safety",
+      "title": "DDL staging isolation — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "DDL staging isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1094",
+      "category": "Schema Evolution Safety",
+      "title": "schema postcondition check — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema postcondition check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1095",
+      "category": "Schema Evolution Safety",
+      "title": "index preservation — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "index preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1096",
+      "category": "Schema Evolution Safety",
+      "title": "collation consistency — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "collation consistency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1097",
+      "category": "Schema Evolution Safety",
+      "title": "nullable legacy handling — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "nullable legacy handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1098",
+      "category": "Schema Evolution Safety",
+      "title": "default timestamp preservation — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "default timestamp preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1099",
+      "category": "Schema Evolution Safety",
+      "title": "primary-key uniqueness — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "primary-key uniqueness için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1100",
+      "category": "Schema Evolution Safety",
+      "title": "schema rollback evidence — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema rollback evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1101",
+      "category": "Tenant Data Preservation",
+      "title": "institution existence validation — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "institution existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1102",
+      "category": "Tenant Data Preservation",
+      "title": "cross-tenant mapping guard — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cross-tenant mapping guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1103",
+      "category": "Tenant Data Preservation",
+      "title": "membership role preservation — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "membership role preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1104",
+      "category": "Tenant Data Preservation",
+      "title": "inactive membership preservation — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "inactive membership preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1105",
+      "category": "Tenant Data Preservation",
+      "title": "institution id stability — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "institution id stability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1106",
+      "category": "Tenant Data Preservation",
+      "title": "user existence validation — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "user existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1107",
+      "category": "Tenant Data Preservation",
+      "title": "profile ownership validation — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "profile ownership validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1108",
+      "category": "Tenant Data Preservation",
+      "title": "duplicate tenant membership handling — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "duplicate tenant membership handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1109",
+      "category": "Tenant Data Preservation",
+      "title": "orphan tenant detection — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "orphan tenant detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1110",
+      "category": "Tenant Data Preservation",
+      "title": "tenant backup evidence — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "tenant backup evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1111",
+      "category": "Tenant Data Preservation",
+      "title": "institution existence validation — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "institution existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1112",
+      "category": "Tenant Data Preservation",
+      "title": "cross-tenant mapping guard — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cross-tenant mapping guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1113",
+      "category": "Tenant Data Preservation",
+      "title": "membership role preservation — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "membership role preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1114",
+      "category": "Tenant Data Preservation",
+      "title": "inactive membership preservation — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "inactive membership preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1115",
+      "category": "Tenant Data Preservation",
+      "title": "institution id stability — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "institution id stability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1116",
+      "category": "Tenant Data Preservation",
+      "title": "user existence validation — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "user existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1117",
+      "category": "Tenant Data Preservation",
+      "title": "profile ownership validation — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "profile ownership validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1118",
+      "category": "Tenant Data Preservation",
+      "title": "duplicate tenant membership handling — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "duplicate tenant membership handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1119",
+      "category": "Tenant Data Preservation",
+      "title": "orphan tenant detection — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "orphan tenant detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1120",
+      "category": "Tenant Data Preservation",
+      "title": "tenant backup evidence — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "tenant backup evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1121",
+      "category": "Tenant Data Preservation",
+      "title": "institution existence validation — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "institution existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1122",
+      "category": "Tenant Data Preservation",
+      "title": "cross-tenant mapping guard — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cross-tenant mapping guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1123",
+      "category": "Tenant Data Preservation",
+      "title": "membership role preservation — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "membership role preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1124",
+      "category": "Tenant Data Preservation",
+      "title": "inactive membership preservation — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "inactive membership preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1125",
+      "category": "Tenant Data Preservation",
+      "title": "institution id stability — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "institution id stability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1126",
+      "category": "Tenant Data Preservation",
+      "title": "user existence validation — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "user existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1127",
+      "category": "Tenant Data Preservation",
+      "title": "profile ownership validation — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "profile ownership validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1128",
+      "category": "Tenant Data Preservation",
+      "title": "duplicate tenant membership handling — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "duplicate tenant membership handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1129",
+      "category": "Tenant Data Preservation",
+      "title": "orphan tenant detection — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "orphan tenant detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1130",
+      "category": "Tenant Data Preservation",
+      "title": "tenant backup evidence — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "tenant backup evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1131",
+      "category": "Tenant Data Preservation",
+      "title": "institution existence validation — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "institution existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1132",
+      "category": "Tenant Data Preservation",
+      "title": "cross-tenant mapping guard — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cross-tenant mapping guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1133",
+      "category": "Tenant Data Preservation",
+      "title": "membership role preservation — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "membership role preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1134",
+      "category": "Tenant Data Preservation",
+      "title": "inactive membership preservation — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "inactive membership preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1135",
+      "category": "Tenant Data Preservation",
+      "title": "institution id stability — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "institution id stability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1136",
+      "category": "Tenant Data Preservation",
+      "title": "user existence validation — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "user existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1137",
+      "category": "Tenant Data Preservation",
+      "title": "profile ownership validation — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "profile ownership validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1138",
+      "category": "Tenant Data Preservation",
+      "title": "duplicate tenant membership handling — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "duplicate tenant membership handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1139",
+      "category": "Tenant Data Preservation",
+      "title": "orphan tenant detection — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "orphan tenant detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1140",
+      "category": "Tenant Data Preservation",
+      "title": "tenant backup evidence — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "tenant backup evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1141",
+      "category": "Tenant Data Preservation",
+      "title": "institution existence validation — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "institution existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1142",
+      "category": "Tenant Data Preservation",
+      "title": "cross-tenant mapping guard — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cross-tenant mapping guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1143",
+      "category": "Tenant Data Preservation",
+      "title": "membership role preservation — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "membership role preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1144",
+      "category": "Tenant Data Preservation",
+      "title": "inactive membership preservation — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "inactive membership preservation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1145",
+      "category": "Tenant Data Preservation",
+      "title": "institution id stability — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "institution id stability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1146",
+      "category": "Tenant Data Preservation",
+      "title": "user existence validation — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "user existence validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1147",
+      "category": "Tenant Data Preservation",
+      "title": "profile ownership validation — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "profile ownership validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1148",
+      "category": "Tenant Data Preservation",
+      "title": "duplicate tenant membership handling — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "duplicate tenant membership handling için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1149",
+      "category": "Tenant Data Preservation",
+      "title": "orphan tenant detection — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "orphan tenant detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1150",
+      "category": "Tenant Data Preservation",
+      "title": "tenant backup evidence — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "tenant backup evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1151",
+      "category": "Updater Failure Recovery",
+      "title": "pre-mutation validation — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "pre-mutation validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1152",
+      "category": "Updater Failure Recovery",
+      "title": "download cleanup — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "download cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1153",
+      "category": "Updater Failure Recovery",
+      "title": "extraction cleanup — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "extraction cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1154",
+      "category": "Updater Failure Recovery",
+      "title": "failed bridge cleanup — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "failed bridge cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1155",
+      "category": "Updater Failure Recovery",
+      "title": "backup table retention — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup table retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1156",
+      "category": "Updater Failure Recovery",
+      "title": "recovery log clarity — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "recovery log clarity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1157",
+      "category": "Updater Failure Recovery",
+      "title": "retry idempotency — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "retry idempotency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1158",
+      "category": "Updater Failure Recovery",
+      "title": "partial DDL detection — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "partial DDL detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1159",
+      "category": "Updater Failure Recovery",
+      "title": "manual recovery path — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manual recovery path için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1160",
+      "category": "Updater Failure Recovery",
+      "title": "failure stage classification — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "failure stage classification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1161",
+      "category": "Updater Failure Recovery",
+      "title": "pre-mutation validation — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "pre-mutation validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1162",
+      "category": "Updater Failure Recovery",
+      "title": "download cleanup — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "download cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1163",
+      "category": "Updater Failure Recovery",
+      "title": "extraction cleanup — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "extraction cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1164",
+      "category": "Updater Failure Recovery",
+      "title": "failed bridge cleanup — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "failed bridge cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1165",
+      "category": "Updater Failure Recovery",
+      "title": "backup table retention — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup table retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1166",
+      "category": "Updater Failure Recovery",
+      "title": "recovery log clarity — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "recovery log clarity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1167",
+      "category": "Updater Failure Recovery",
+      "title": "retry idempotency — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "retry idempotency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1168",
+      "category": "Updater Failure Recovery",
+      "title": "partial DDL detection — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "partial DDL detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1169",
+      "category": "Updater Failure Recovery",
+      "title": "manual recovery path — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manual recovery path için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1170",
+      "category": "Updater Failure Recovery",
+      "title": "failure stage classification — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "failure stage classification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1171",
+      "category": "Updater Failure Recovery",
+      "title": "pre-mutation validation — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "pre-mutation validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1172",
+      "category": "Updater Failure Recovery",
+      "title": "download cleanup — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "download cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1173",
+      "category": "Updater Failure Recovery",
+      "title": "extraction cleanup — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "extraction cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1174",
+      "category": "Updater Failure Recovery",
+      "title": "failed bridge cleanup — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "failed bridge cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1175",
+      "category": "Updater Failure Recovery",
+      "title": "backup table retention — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup table retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1176",
+      "category": "Updater Failure Recovery",
+      "title": "recovery log clarity — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "recovery log clarity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1177",
+      "category": "Updater Failure Recovery",
+      "title": "retry idempotency — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "retry idempotency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1178",
+      "category": "Updater Failure Recovery",
+      "title": "partial DDL detection — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "partial DDL detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1179",
+      "category": "Updater Failure Recovery",
+      "title": "manual recovery path — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manual recovery path için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1180",
+      "category": "Updater Failure Recovery",
+      "title": "failure stage classification — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "failure stage classification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1181",
+      "category": "Updater Failure Recovery",
+      "title": "pre-mutation validation — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "pre-mutation validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1182",
+      "category": "Updater Failure Recovery",
+      "title": "download cleanup — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "download cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1183",
+      "category": "Updater Failure Recovery",
+      "title": "extraction cleanup — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "extraction cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1184",
+      "category": "Updater Failure Recovery",
+      "title": "failed bridge cleanup — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "failed bridge cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1185",
+      "category": "Updater Failure Recovery",
+      "title": "backup table retention — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup table retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1186",
+      "category": "Updater Failure Recovery",
+      "title": "recovery log clarity — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "recovery log clarity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1187",
+      "category": "Updater Failure Recovery",
+      "title": "retry idempotency — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "retry idempotency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1188",
+      "category": "Updater Failure Recovery",
+      "title": "partial DDL detection — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "partial DDL detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1189",
+      "category": "Updater Failure Recovery",
+      "title": "manual recovery path — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manual recovery path için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1190",
+      "category": "Updater Failure Recovery",
+      "title": "failure stage classification — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "failure stage classification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1191",
+      "category": "Updater Failure Recovery",
+      "title": "pre-mutation validation — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "pre-mutation validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1192",
+      "category": "Updater Failure Recovery",
+      "title": "download cleanup — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "download cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1193",
+      "category": "Updater Failure Recovery",
+      "title": "extraction cleanup — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "extraction cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1194",
+      "category": "Updater Failure Recovery",
+      "title": "failed bridge cleanup — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "failed bridge cleanup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1195",
+      "category": "Updater Failure Recovery",
+      "title": "backup table retention — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup table retention için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1196",
+      "category": "Updater Failure Recovery",
+      "title": "recovery log clarity — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "recovery log clarity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1197",
+      "category": "Updater Failure Recovery",
+      "title": "retry idempotency — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "retry idempotency için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1198",
+      "category": "Updater Failure Recovery",
+      "title": "partial DDL detection — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "partial DDL detection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1199",
+      "category": "Updater Failure Recovery",
+      "title": "manual recovery path — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manual recovery path için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1200",
+      "category": "Updater Failure Recovery",
+      "title": "failure stage classification — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "failure stage classification için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1201",
+      "category": "Release Chain Integrity",
+      "title": "1.1.97 bridge coverage — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "1.1.97 bridge coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1202",
+      "category": "Release Chain Integrity",
+      "title": "1.1.98 recovery ordering — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "1.1.98 recovery ordering için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1203",
+      "category": "Release Chain Integrity",
+      "title": "historical anchor continuity — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical anchor continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1204",
+      "category": "Release Chain Integrity",
+      "title": "revision monotonicity — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "revision monotonicity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1205",
+      "category": "Release Chain Integrity",
+      "title": "release metadata agreement — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release metadata agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1206",
+      "category": "Release Chain Integrity",
+      "title": "managed-tree agreement — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "managed-tree agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1207",
+      "category": "Release Chain Integrity",
+      "title": "next-version determinism — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "next-version determinism için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1208",
+      "category": "Release Chain Integrity",
+      "title": "post-release mutation guard — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "post-release mutation guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1209",
+      "category": "Release Chain Integrity",
+      "title": "candidate-main parity — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "candidate-main parity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1210",
+      "category": "Release Chain Integrity",
+      "title": "chain regression coverage — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "chain regression coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1211",
+      "category": "Release Chain Integrity",
+      "title": "1.1.97 bridge coverage — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "1.1.97 bridge coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1212",
+      "category": "Release Chain Integrity",
+      "title": "1.1.98 recovery ordering — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "1.1.98 recovery ordering için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1213",
+      "category": "Release Chain Integrity",
+      "title": "historical anchor continuity — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical anchor continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1214",
+      "category": "Release Chain Integrity",
+      "title": "revision monotonicity — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "revision monotonicity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1215",
+      "category": "Release Chain Integrity",
+      "title": "release metadata agreement — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release metadata agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1216",
+      "category": "Release Chain Integrity",
+      "title": "managed-tree agreement — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "managed-tree agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1217",
+      "category": "Release Chain Integrity",
+      "title": "next-version determinism — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "next-version determinism için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1218",
+      "category": "Release Chain Integrity",
+      "title": "post-release mutation guard — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "post-release mutation guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1219",
+      "category": "Release Chain Integrity",
+      "title": "candidate-main parity — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "candidate-main parity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1220",
+      "category": "Release Chain Integrity",
+      "title": "chain regression coverage — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "chain regression coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1221",
+      "category": "Release Chain Integrity",
+      "title": "1.1.97 bridge coverage — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "1.1.97 bridge coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1222",
+      "category": "Release Chain Integrity",
+      "title": "1.1.98 recovery ordering — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "1.1.98 recovery ordering için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1223",
+      "category": "Release Chain Integrity",
+      "title": "historical anchor continuity — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical anchor continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1224",
+      "category": "Release Chain Integrity",
+      "title": "revision monotonicity — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "revision monotonicity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1225",
+      "category": "Release Chain Integrity",
+      "title": "release metadata agreement — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release metadata agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1226",
+      "category": "Release Chain Integrity",
+      "title": "managed-tree agreement — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "managed-tree agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1227",
+      "category": "Release Chain Integrity",
+      "title": "next-version determinism — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "next-version determinism için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1228",
+      "category": "Release Chain Integrity",
+      "title": "post-release mutation guard — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "post-release mutation guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1229",
+      "category": "Release Chain Integrity",
+      "title": "candidate-main parity — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "candidate-main parity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1230",
+      "category": "Release Chain Integrity",
+      "title": "chain regression coverage — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "chain regression coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1231",
+      "category": "Release Chain Integrity",
+      "title": "1.1.97 bridge coverage — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "1.1.97 bridge coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1232",
+      "category": "Release Chain Integrity",
+      "title": "1.1.98 recovery ordering — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "1.1.98 recovery ordering için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1233",
+      "category": "Release Chain Integrity",
+      "title": "historical anchor continuity — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical anchor continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1234",
+      "category": "Release Chain Integrity",
+      "title": "revision monotonicity — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "revision monotonicity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1235",
+      "category": "Release Chain Integrity",
+      "title": "release metadata agreement — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release metadata agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1236",
+      "category": "Release Chain Integrity",
+      "title": "managed-tree agreement — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "managed-tree agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1237",
+      "category": "Release Chain Integrity",
+      "title": "next-version determinism — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "next-version determinism için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1238",
+      "category": "Release Chain Integrity",
+      "title": "post-release mutation guard — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "post-release mutation guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1239",
+      "category": "Release Chain Integrity",
+      "title": "candidate-main parity — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "candidate-main parity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1240",
+      "category": "Release Chain Integrity",
+      "title": "chain regression coverage — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "chain regression coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1241",
+      "category": "Release Chain Integrity",
+      "title": "1.1.97 bridge coverage — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "1.1.97 bridge coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1242",
+      "category": "Release Chain Integrity",
+      "title": "1.1.98 recovery ordering — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "1.1.98 recovery ordering için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1243",
+      "category": "Release Chain Integrity",
+      "title": "historical anchor continuity — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical anchor continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1244",
+      "category": "Release Chain Integrity",
+      "title": "revision monotonicity — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "revision monotonicity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1245",
+      "category": "Release Chain Integrity",
+      "title": "release metadata agreement — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release metadata agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1246",
+      "category": "Release Chain Integrity",
+      "title": "managed-tree agreement — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "managed-tree agreement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1247",
+      "category": "Release Chain Integrity",
+      "title": "next-version determinism — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "next-version determinism için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1248",
+      "category": "Release Chain Integrity",
+      "title": "post-release mutation guard — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "post-release mutation guard için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1249",
+      "category": "Release Chain Integrity",
+      "title": "candidate-main parity — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "candidate-main parity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1250",
+      "category": "Release Chain Integrity",
+      "title": "chain regression coverage — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "chain regression coverage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1251",
+      "category": "Backup Verification",
+      "title": "legacy table backup — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy table backup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1252",
+      "category": "Backup Verification",
+      "title": "application backup hash — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "application backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1253",
+      "category": "Backup Verification",
+      "title": "database backup hash — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "database backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1254",
+      "category": "Backup Verification",
+      "title": "backup byte validation — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup byte validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1255",
+      "category": "Backup Verification",
+      "title": "backup path confinement — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup path confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1256",
+      "category": "Backup Verification",
+      "title": "backup symlink rejection — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "backup symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1257",
+      "category": "Backup Verification",
+      "title": "backup restore evidence — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup restore evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1258",
+      "category": "Backup Verification",
+      "title": "backup overwrite protection — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup overwrite protection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1259",
+      "category": "Backup Verification",
+      "title": "backup retention rule — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup retention rule için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1260",
+      "category": "Backup Verification",
+      "title": "backup audit metadata — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup audit metadata için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1261",
+      "category": "Backup Verification",
+      "title": "legacy table backup — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy table backup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1262",
+      "category": "Backup Verification",
+      "title": "application backup hash — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "application backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1263",
+      "category": "Backup Verification",
+      "title": "database backup hash — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "database backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1264",
+      "category": "Backup Verification",
+      "title": "backup byte validation — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup byte validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1265",
+      "category": "Backup Verification",
+      "title": "backup path confinement — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup path confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1266",
+      "category": "Backup Verification",
+      "title": "backup symlink rejection — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "backup symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1267",
+      "category": "Backup Verification",
+      "title": "backup restore evidence — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup restore evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1268",
+      "category": "Backup Verification",
+      "title": "backup overwrite protection — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup overwrite protection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1269",
+      "category": "Backup Verification",
+      "title": "backup retention rule — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup retention rule için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1270",
+      "category": "Backup Verification",
+      "title": "backup audit metadata — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup audit metadata için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1271",
+      "category": "Backup Verification",
+      "title": "legacy table backup — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy table backup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1272",
+      "category": "Backup Verification",
+      "title": "application backup hash — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "application backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1273",
+      "category": "Backup Verification",
+      "title": "database backup hash — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "database backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1274",
+      "category": "Backup Verification",
+      "title": "backup byte validation — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup byte validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1275",
+      "category": "Backup Verification",
+      "title": "backup path confinement — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup path confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1276",
+      "category": "Backup Verification",
+      "title": "backup symlink rejection — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "backup symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1277",
+      "category": "Backup Verification",
+      "title": "backup restore evidence — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup restore evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1278",
+      "category": "Backup Verification",
+      "title": "backup overwrite protection — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup overwrite protection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1279",
+      "category": "Backup Verification",
+      "title": "backup retention rule — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup retention rule için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1280",
+      "category": "Backup Verification",
+      "title": "backup audit metadata — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup audit metadata için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1281",
+      "category": "Backup Verification",
+      "title": "legacy table backup — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy table backup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1282",
+      "category": "Backup Verification",
+      "title": "application backup hash — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "application backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1283",
+      "category": "Backup Verification",
+      "title": "database backup hash — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "database backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1284",
+      "category": "Backup Verification",
+      "title": "backup byte validation — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup byte validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1285",
+      "category": "Backup Verification",
+      "title": "backup path confinement — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup path confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1286",
+      "category": "Backup Verification",
+      "title": "backup symlink rejection — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "backup symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1287",
+      "category": "Backup Verification",
+      "title": "backup restore evidence — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup restore evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1288",
+      "category": "Backup Verification",
+      "title": "backup overwrite protection — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup overwrite protection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1289",
+      "category": "Backup Verification",
+      "title": "backup retention rule — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup retention rule için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1290",
+      "category": "Backup Verification",
+      "title": "backup audit metadata — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup audit metadata için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1291",
+      "category": "Backup Verification",
+      "title": "legacy table backup — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy table backup için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1292",
+      "category": "Backup Verification",
+      "title": "application backup hash — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "application backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1293",
+      "category": "Backup Verification",
+      "title": "database backup hash — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "database backup hash için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1294",
+      "category": "Backup Verification",
+      "title": "backup byte validation — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup byte validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1295",
+      "category": "Backup Verification",
+      "title": "backup path confinement — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup path confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1296",
+      "category": "Backup Verification",
+      "title": "backup symlink rejection — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "backup symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1297",
+      "category": "Backup Verification",
+      "title": "backup restore evidence — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup restore evidence için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1298",
+      "category": "Backup Verification",
+      "title": "backup overwrite protection — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup overwrite protection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1299",
+      "category": "Backup Verification",
+      "title": "backup retention rule — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup retention rule için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1300",
+      "category": "Backup Verification",
+      "title": "backup audit metadata — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup audit metadata için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1301",
+      "category": "Security Boundary Tests",
+      "title": "SQL identifier confinement — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "SQL identifier confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1302",
+      "category": "Security Boundary Tests",
+      "title": "role mapping whitelist — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "role mapping whitelist için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1303",
+      "category": "Security Boundary Tests",
+      "title": "IDOR-safe institution validation — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "IDOR-safe institution validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1304",
+      "category": "Security Boundary Tests",
+      "title": "symlink rejection — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1305",
+      "category": "Security Boundary Tests",
+      "title": "path traversal rejection — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "path traversal rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1306",
+      "category": "Security Boundary Tests",
+      "title": "CSRF update entrypoint — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "CSRF update entrypoint için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1307",
+      "category": "Security Boundary Tests",
+      "title": "super-admin authorization — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "super-admin authorization için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1308",
+      "category": "Security Boundary Tests",
+      "title": "error detail redaction — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "error detail redaction için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1309",
+      "category": "Security Boundary Tests",
+      "title": "secret exclusion — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "secret exclusion için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1310",
+      "category": "Security Boundary Tests",
+      "title": "fail-closed ambiguity — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "fail-closed ambiguity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1311",
+      "category": "Security Boundary Tests",
+      "title": "SQL identifier confinement — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "SQL identifier confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1312",
+      "category": "Security Boundary Tests",
+      "title": "role mapping whitelist — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "role mapping whitelist için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1313",
+      "category": "Security Boundary Tests",
+      "title": "IDOR-safe institution validation — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "IDOR-safe institution validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1314",
+      "category": "Security Boundary Tests",
+      "title": "symlink rejection — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1315",
+      "category": "Security Boundary Tests",
+      "title": "path traversal rejection — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "path traversal rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1316",
+      "category": "Security Boundary Tests",
+      "title": "CSRF update entrypoint — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "CSRF update entrypoint için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1317",
+      "category": "Security Boundary Tests",
+      "title": "super-admin authorization — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "super-admin authorization için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1318",
+      "category": "Security Boundary Tests",
+      "title": "error detail redaction — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "error detail redaction için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1319",
+      "category": "Security Boundary Tests",
+      "title": "secret exclusion — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "secret exclusion için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1320",
+      "category": "Security Boundary Tests",
+      "title": "fail-closed ambiguity — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "fail-closed ambiguity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1321",
+      "category": "Security Boundary Tests",
+      "title": "SQL identifier confinement — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "SQL identifier confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1322",
+      "category": "Security Boundary Tests",
+      "title": "role mapping whitelist — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "role mapping whitelist için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1323",
+      "category": "Security Boundary Tests",
+      "title": "IDOR-safe institution validation — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "IDOR-safe institution validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1324",
+      "category": "Security Boundary Tests",
+      "title": "symlink rejection — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1325",
+      "category": "Security Boundary Tests",
+      "title": "path traversal rejection — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "path traversal rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1326",
+      "category": "Security Boundary Tests",
+      "title": "CSRF update entrypoint — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "CSRF update entrypoint için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1327",
+      "category": "Security Boundary Tests",
+      "title": "super-admin authorization — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "super-admin authorization için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1328",
+      "category": "Security Boundary Tests",
+      "title": "error detail redaction — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "error detail redaction için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1329",
+      "category": "Security Boundary Tests",
+      "title": "secret exclusion — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "secret exclusion için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1330",
+      "category": "Security Boundary Tests",
+      "title": "fail-closed ambiguity — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "fail-closed ambiguity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1331",
+      "category": "Security Boundary Tests",
+      "title": "SQL identifier confinement — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "SQL identifier confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1332",
+      "category": "Security Boundary Tests",
+      "title": "role mapping whitelist — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "role mapping whitelist için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1333",
+      "category": "Security Boundary Tests",
+      "title": "IDOR-safe institution validation — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "IDOR-safe institution validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1334",
+      "category": "Security Boundary Tests",
+      "title": "symlink rejection — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1335",
+      "category": "Security Boundary Tests",
+      "title": "path traversal rejection — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "path traversal rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1336",
+      "category": "Security Boundary Tests",
+      "title": "CSRF update entrypoint — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "CSRF update entrypoint için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1337",
+      "category": "Security Boundary Tests",
+      "title": "super-admin authorization — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "super-admin authorization için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1338",
+      "category": "Security Boundary Tests",
+      "title": "error detail redaction — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "error detail redaction için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1339",
+      "category": "Security Boundary Tests",
+      "title": "secret exclusion — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "secret exclusion için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1340",
+      "category": "Security Boundary Tests",
+      "title": "fail-closed ambiguity — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "fail-closed ambiguity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1341",
+      "category": "Security Boundary Tests",
+      "title": "SQL identifier confinement — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "SQL identifier confinement için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1342",
+      "category": "Security Boundary Tests",
+      "title": "role mapping whitelist — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "role mapping whitelist için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1343",
+      "category": "Security Boundary Tests",
+      "title": "IDOR-safe institution validation — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "IDOR-safe institution validation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1344",
+      "category": "Security Boundary Tests",
+      "title": "symlink rejection — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "symlink rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1345",
+      "category": "Security Boundary Tests",
+      "title": "path traversal rejection — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "path traversal rejection için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1346",
+      "category": "Security Boundary Tests",
+      "title": "CSRF update entrypoint — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "CSRF update entrypoint için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1347",
+      "category": "Security Boundary Tests",
+      "title": "super-admin authorization — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "super-admin authorization için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1348",
+      "category": "Security Boundary Tests",
+      "title": "error detail redaction — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "error detail redaction için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1349",
+      "category": "Security Boundary Tests",
+      "title": "secret exclusion — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "secret exclusion için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1350",
+      "category": "Security Boundary Tests",
+      "title": "fail-closed ambiguity — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "fail-closed ambiguity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1351",
+      "category": "Runtime Compatibility",
+      "title": "PHP version syntax — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "PHP version syntax için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1352",
+      "category": "Runtime Compatibility",
+      "title": "MySQL rename semantics — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "MySQL rename semantics için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1353",
+      "category": "Runtime Compatibility",
+      "title": "MariaDB compatibility — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "MariaDB compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1354",
+      "category": "Runtime Compatibility",
+      "title": "UTF8MB4 collation — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "UTF8MB4 collation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1355",
+      "category": "Runtime Compatibility",
+      "title": "PDO buffered query safety — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "PDO buffered query safety için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1356",
+      "category": "Runtime Compatibility",
+      "title": "ZipArchive availability — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "ZipArchive availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1357",
+      "category": "Runtime Compatibility",
+      "title": "cURL availability — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cURL availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1358",
+      "category": "Runtime Compatibility",
+      "title": "filesystem permission check — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "filesystem permission check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1359",
+      "category": "Runtime Compatibility",
+      "title": "OPcache refresh behavior — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "OPcache refresh behavior için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1360",
+      "category": "Runtime Compatibility",
+      "title": "shared-host compatibility — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "shared-host compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1361",
+      "category": "Runtime Compatibility",
+      "title": "PHP version syntax — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "PHP version syntax için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1362",
+      "category": "Runtime Compatibility",
+      "title": "MySQL rename semantics — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "MySQL rename semantics için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1363",
+      "category": "Runtime Compatibility",
+      "title": "MariaDB compatibility — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "MariaDB compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1364",
+      "category": "Runtime Compatibility",
+      "title": "UTF8MB4 collation — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "UTF8MB4 collation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1365",
+      "category": "Runtime Compatibility",
+      "title": "PDO buffered query safety — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "PDO buffered query safety için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1366",
+      "category": "Runtime Compatibility",
+      "title": "ZipArchive availability — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "ZipArchive availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1367",
+      "category": "Runtime Compatibility",
+      "title": "cURL availability — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cURL availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1368",
+      "category": "Runtime Compatibility",
+      "title": "filesystem permission check — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "filesystem permission check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1369",
+      "category": "Runtime Compatibility",
+      "title": "OPcache refresh behavior — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "OPcache refresh behavior için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1370",
+      "category": "Runtime Compatibility",
+      "title": "shared-host compatibility — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "shared-host compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1371",
+      "category": "Runtime Compatibility",
+      "title": "PHP version syntax — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "PHP version syntax için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1372",
+      "category": "Runtime Compatibility",
+      "title": "MySQL rename semantics — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "MySQL rename semantics için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1373",
+      "category": "Runtime Compatibility",
+      "title": "MariaDB compatibility — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "MariaDB compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1374",
+      "category": "Runtime Compatibility",
+      "title": "UTF8MB4 collation — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "UTF8MB4 collation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1375",
+      "category": "Runtime Compatibility",
+      "title": "PDO buffered query safety — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "PDO buffered query safety için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1376",
+      "category": "Runtime Compatibility",
+      "title": "ZipArchive availability — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "ZipArchive availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1377",
+      "category": "Runtime Compatibility",
+      "title": "cURL availability — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cURL availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1378",
+      "category": "Runtime Compatibility",
+      "title": "filesystem permission check — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "filesystem permission check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1379",
+      "category": "Runtime Compatibility",
+      "title": "OPcache refresh behavior — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "OPcache refresh behavior için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1380",
+      "category": "Runtime Compatibility",
+      "title": "shared-host compatibility — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "shared-host compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1381",
+      "category": "Runtime Compatibility",
+      "title": "PHP version syntax — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "PHP version syntax için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1382",
+      "category": "Runtime Compatibility",
+      "title": "MySQL rename semantics — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "MySQL rename semantics için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1383",
+      "category": "Runtime Compatibility",
+      "title": "MariaDB compatibility — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "MariaDB compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1384",
+      "category": "Runtime Compatibility",
+      "title": "UTF8MB4 collation — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "UTF8MB4 collation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1385",
+      "category": "Runtime Compatibility",
+      "title": "PDO buffered query safety — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "PDO buffered query safety için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1386",
+      "category": "Runtime Compatibility",
+      "title": "ZipArchive availability — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "ZipArchive availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1387",
+      "category": "Runtime Compatibility",
+      "title": "cURL availability — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cURL availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1388",
+      "category": "Runtime Compatibility",
+      "title": "filesystem permission check — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "filesystem permission check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1389",
+      "category": "Runtime Compatibility",
+      "title": "OPcache refresh behavior — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "OPcache refresh behavior için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1390",
+      "category": "Runtime Compatibility",
+      "title": "shared-host compatibility — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "shared-host compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1391",
+      "category": "Runtime Compatibility",
+      "title": "PHP version syntax — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "PHP version syntax için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1392",
+      "category": "Runtime Compatibility",
+      "title": "MySQL rename semantics — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "MySQL rename semantics için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1393",
+      "category": "Runtime Compatibility",
+      "title": "MariaDB compatibility — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "MariaDB compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1394",
+      "category": "Runtime Compatibility",
+      "title": "UTF8MB4 collation — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "UTF8MB4 collation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1395",
+      "category": "Runtime Compatibility",
+      "title": "PDO buffered query safety — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "PDO buffered query safety için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1396",
+      "category": "Runtime Compatibility",
+      "title": "ZipArchive availability — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "ZipArchive availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1397",
+      "category": "Runtime Compatibility",
+      "title": "cURL availability — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cURL availability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1398",
+      "category": "Runtime Compatibility",
+      "title": "filesystem permission check — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "filesystem permission check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1399",
+      "category": "Runtime Compatibility",
+      "title": "OPcache refresh behavior — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "OPcache refresh behavior için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1400",
+      "category": "Runtime Compatibility",
+      "title": "shared-host compatibility — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "shared-host compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1401",
+      "category": "Operational Diagnostics",
+      "title": "legacy row count report — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy row count report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1402",
+      "category": "Operational Diagnostics",
+      "title": "unresolved mapping report — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "unresolved mapping report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1403",
+      "category": "Operational Diagnostics",
+      "title": "bridge readiness check — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "bridge readiness check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1404",
+      "category": "Operational Diagnostics",
+      "title": "backup location report — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup location report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1405",
+      "category": "Operational Diagnostics",
+      "title": "target version report — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "target version report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1406",
+      "category": "Operational Diagnostics",
+      "title": "migration history report — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "migration history report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1407",
+      "category": "Operational Diagnostics",
+      "title": "storage capacity report — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "storage capacity report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1408",
+      "category": "Operational Diagnostics",
+      "title": "lock status report — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "lock status report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1409",
+      "category": "Operational Diagnostics",
+      "title": "last failure stage report — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "last failure stage report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1410",
+      "category": "Operational Diagnostics",
+      "title": "recovery artifact report — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery artifact report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1411",
+      "category": "Operational Diagnostics",
+      "title": "legacy row count report — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy row count report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1412",
+      "category": "Operational Diagnostics",
+      "title": "unresolved mapping report — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "unresolved mapping report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1413",
+      "category": "Operational Diagnostics",
+      "title": "bridge readiness check — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "bridge readiness check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1414",
+      "category": "Operational Diagnostics",
+      "title": "backup location report — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup location report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1415",
+      "category": "Operational Diagnostics",
+      "title": "target version report — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "target version report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1416",
+      "category": "Operational Diagnostics",
+      "title": "migration history report — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "migration history report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1417",
+      "category": "Operational Diagnostics",
+      "title": "storage capacity report — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "storage capacity report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1418",
+      "category": "Operational Diagnostics",
+      "title": "lock status report — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "lock status report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1419",
+      "category": "Operational Diagnostics",
+      "title": "last failure stage report — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "last failure stage report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1420",
+      "category": "Operational Diagnostics",
+      "title": "recovery artifact report — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery artifact report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1421",
+      "category": "Operational Diagnostics",
+      "title": "legacy row count report — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy row count report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1422",
+      "category": "Operational Diagnostics",
+      "title": "unresolved mapping report — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "unresolved mapping report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1423",
+      "category": "Operational Diagnostics",
+      "title": "bridge readiness check — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "bridge readiness check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1424",
+      "category": "Operational Diagnostics",
+      "title": "backup location report — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup location report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1425",
+      "category": "Operational Diagnostics",
+      "title": "target version report — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "target version report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1426",
+      "category": "Operational Diagnostics",
+      "title": "migration history report — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "migration history report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1427",
+      "category": "Operational Diagnostics",
+      "title": "storage capacity report — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "storage capacity report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1428",
+      "category": "Operational Diagnostics",
+      "title": "lock status report — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "lock status report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1429",
+      "category": "Operational Diagnostics",
+      "title": "last failure stage report — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "last failure stage report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1430",
+      "category": "Operational Diagnostics",
+      "title": "recovery artifact report — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery artifact report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1431",
+      "category": "Operational Diagnostics",
+      "title": "legacy row count report — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy row count report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1432",
+      "category": "Operational Diagnostics",
+      "title": "unresolved mapping report — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "unresolved mapping report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1433",
+      "category": "Operational Diagnostics",
+      "title": "bridge readiness check — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "bridge readiness check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1434",
+      "category": "Operational Diagnostics",
+      "title": "backup location report — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup location report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1435",
+      "category": "Operational Diagnostics",
+      "title": "target version report — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "target version report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1436",
+      "category": "Operational Diagnostics",
+      "title": "migration history report — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "migration history report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1437",
+      "category": "Operational Diagnostics",
+      "title": "storage capacity report — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "storage capacity report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1438",
+      "category": "Operational Diagnostics",
+      "title": "lock status report — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "lock status report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1439",
+      "category": "Operational Diagnostics",
+      "title": "last failure stage report — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "last failure stage report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1440",
+      "category": "Operational Diagnostics",
+      "title": "recovery artifact report — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery artifact report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1441",
+      "category": "Operational Diagnostics",
+      "title": "legacy row count report — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy row count report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1442",
+      "category": "Operational Diagnostics",
+      "title": "unresolved mapping report — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "unresolved mapping report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1443",
+      "category": "Operational Diagnostics",
+      "title": "bridge readiness check — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "bridge readiness check için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1444",
+      "category": "Operational Diagnostics",
+      "title": "backup location report — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup location report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1445",
+      "category": "Operational Diagnostics",
+      "title": "target version report — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "target version report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1446",
+      "category": "Operational Diagnostics",
+      "title": "migration history report — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "migration history report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1447",
+      "category": "Operational Diagnostics",
+      "title": "storage capacity report — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "storage capacity report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1448",
+      "category": "Operational Diagnostics",
+      "title": "lock status report — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "lock status report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1449",
+      "category": "Operational Diagnostics",
+      "title": "last failure stage report — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "last failure stage report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1450",
+      "category": "Operational Diagnostics",
+      "title": "recovery artifact report — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery artifact report için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1451",
+      "category": "Long-term Maintainability",
+      "title": "bridge code isolation — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "bridge code isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1452",
+      "category": "Long-term Maintainability",
+      "title": "historical test immutability — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical test immutability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1453",
+      "category": "Long-term Maintainability",
+      "title": "future-version test compatibility — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "future-version test compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1454",
+      "category": "Long-term Maintainability",
+      "title": "single-source mapping rules — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "single-source mapping rules için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1455",
+      "category": "Long-term Maintainability",
+      "title": "release note traceability — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release note traceability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1456",
+      "category": "Long-term Maintainability",
+      "title": "quality catalog continuity — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "quality catalog continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1457",
+      "category": "Long-term Maintainability",
+      "title": "dead rescue retirement plan — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "dead rescue retirement plan için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1458",
+      "category": "Long-term Maintainability",
+      "title": "migration documentation — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "migration documentation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1459",
+      "category": "Long-term Maintainability",
+      "title": "support runbook linkage — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "support runbook linkage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1460",
+      "category": "Long-term Maintainability",
+      "title": "technical debt ownership — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "technical debt ownership için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1461",
+      "category": "Long-term Maintainability",
+      "title": "bridge code isolation — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "bridge code isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1462",
+      "category": "Long-term Maintainability",
+      "title": "historical test immutability — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical test immutability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1463",
+      "category": "Long-term Maintainability",
+      "title": "future-version test compatibility — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "future-version test compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1464",
+      "category": "Long-term Maintainability",
+      "title": "single-source mapping rules — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "single-source mapping rules için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1465",
+      "category": "Long-term Maintainability",
+      "title": "release note traceability — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release note traceability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1466",
+      "category": "Long-term Maintainability",
+      "title": "quality catalog continuity — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "quality catalog continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1467",
+      "category": "Long-term Maintainability",
+      "title": "dead rescue retirement plan — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "dead rescue retirement plan için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1468",
+      "category": "Long-term Maintainability",
+      "title": "migration documentation — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "migration documentation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1469",
+      "category": "Long-term Maintainability",
+      "title": "support runbook linkage — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "support runbook linkage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1470",
+      "category": "Long-term Maintainability",
+      "title": "technical debt ownership — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "technical debt ownership için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1471",
+      "category": "Long-term Maintainability",
+      "title": "bridge code isolation — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "bridge code isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1472",
+      "category": "Long-term Maintainability",
+      "title": "historical test immutability — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical test immutability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1473",
+      "category": "Long-term Maintainability",
+      "title": "future-version test compatibility — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "future-version test compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1474",
+      "category": "Long-term Maintainability",
+      "title": "single-source mapping rules — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "single-source mapping rules için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1475",
+      "category": "Long-term Maintainability",
+      "title": "release note traceability — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release note traceability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1476",
+      "category": "Long-term Maintainability",
+      "title": "quality catalog continuity — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "quality catalog continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1477",
+      "category": "Long-term Maintainability",
+      "title": "dead rescue retirement plan — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "dead rescue retirement plan için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1478",
+      "category": "Long-term Maintainability",
+      "title": "migration documentation — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "migration documentation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1479",
+      "category": "Long-term Maintainability",
+      "title": "support runbook linkage — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "support runbook linkage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1480",
+      "category": "Long-term Maintainability",
+      "title": "technical debt ownership — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "technical debt ownership için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1481",
+      "category": "Long-term Maintainability",
+      "title": "bridge code isolation — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "bridge code isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1482",
+      "category": "Long-term Maintainability",
+      "title": "historical test immutability — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical test immutability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1483",
+      "category": "Long-term Maintainability",
+      "title": "future-version test compatibility — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "future-version test compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1484",
+      "category": "Long-term Maintainability",
+      "title": "single-source mapping rules — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "single-source mapping rules için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1485",
+      "category": "Long-term Maintainability",
+      "title": "release note traceability — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release note traceability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1486",
+      "category": "Long-term Maintainability",
+      "title": "quality catalog continuity — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "quality catalog continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1487",
+      "category": "Long-term Maintainability",
+      "title": "dead rescue retirement plan — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "dead rescue retirement plan için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1488",
+      "category": "Long-term Maintainability",
+      "title": "migration documentation — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "migration documentation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1489",
+      "category": "Long-term Maintainability",
+      "title": "support runbook linkage — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "support runbook linkage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1490",
+      "category": "Long-term Maintainability",
+      "title": "technical debt ownership — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "technical debt ownership için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1491",
+      "category": "Long-term Maintainability",
+      "title": "bridge code isolation — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "bridge code isolation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1492",
+      "category": "Long-term Maintainability",
+      "title": "historical test immutability — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical test immutability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1493",
+      "category": "Long-term Maintainability",
+      "title": "future-version test compatibility — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "future-version test compatibility için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1494",
+      "category": "Long-term Maintainability",
+      "title": "single-source mapping rules — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "single-source mapping rules için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1495",
+      "category": "Long-term Maintainability",
+      "title": "release note traceability — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release note traceability için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1496",
+      "category": "Long-term Maintainability",
+      "title": "quality catalog continuity — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "quality catalog continuity için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1497",
+      "category": "Long-term Maintainability",
+      "title": "dead rescue retirement plan — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "dead rescue retirement plan için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1498",
+      "category": "Long-term Maintainability",
+      "title": "migration documentation — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "migration documentation için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1499",
+      "category": "Long-term Maintainability",
+      "title": "support runbook linkage — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "support runbook linkage için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    },
+    {
+      "id": "Q1500",
+      "category": "Long-term Maintainability",
+      "title": "technical debt ownership — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "technical debt ownership için doğrulanabilir ve tekrarlanabilir kontrol bulunmalı; belirsizlikte veri değiştirilmeden fail-closed davranılmalıdır."
+    }
+  ]
+}

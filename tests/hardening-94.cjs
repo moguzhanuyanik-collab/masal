@@ -23,22 +23,15 @@ assert(install.includes("$e instanceof PDOException"));
 
 assert(updater.includes("function ensure_runtime_storage_guard"));
 assert(updater.includes("Require all denied"));
-assert(
-  updater.includes("$rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')") ||
-  (updater.includes("$rel==='storage'||str_starts_with($rel,'storage/')") &&
-   updater.includes("$rel==='config/local.php'||$rel==='.env'")),
-  'backup secret/runtime exclusion missing'
-);
+assert(updater.includes("$rel==='config/local.php'"));
+assert(updater.includes("$rel==='.env'"));
+assert(updater.includes("str_starts_with($rel,'storage/')"));
 assert(updater.includes("Guncelleme hatayla sonlandi. Ayrintilar sunucu gunlugune kaydedildi."));
 assert(!updater.includes("execute([$e->getMessage(),$logId])"));
 
 assert(updatePage.includes("update_public_error_message"));
 assert(updatePage.includes("ensure_runtime_storage_guard(__DIR__)"));
-assert(
-  updatePage.includes("Canlı ayarlar ve storage verileri yedeğe eklenmez.") ||
-  updatePage.includes("Önce otomatik yedek alınacak"),
-  'update page backup safety notice missing'
-);
+assert(updatePage.includes("Sunucuda yalnızca bir önceki uygulama sürümünün tek yedeği tutulur."));
 
 assert(!activities.includes("'detail'=>$e->getMessage()"));
 assert(!state.includes("'detail'=>$e->getMessage()"));
@@ -46,6 +39,6 @@ assert(!kurumApi.includes("['ok'=>false,'message'=>$e->getMessage()]"));
 assert(login.includes("catch (PDOException $e)"));
 assert(login.includes("catch (RuntimeException $e)"));
 
-assert(/^1\.1\.(?:9[4-9]|[1-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.1','version must be 1.1.94 or newer');
+assert(/^1\.1\.(?:9[4-9]|[1-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.2','version must be 1.1.94 or newer');
 
 console.log('1.1.94 hardening checks passed');

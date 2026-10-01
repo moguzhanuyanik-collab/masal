@@ -2,10 +2,15 @@
 declare(strict_types=1);
 require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
+require __DIR__.'/src/updater.php';
 
 $user=require_role('super_admin');
 $pdo=db();
 $config=require __DIR__.'/config/app.php';
+$updateConfig=is_array($config['update']??null)?$config['update']:[];
+$mysqldumpPath=find_mysqldump_binary($updateConfig);
+$dbBackupReady=function_exists('proc_open') && is_string($mysqldumpPath) && $mysqldumpPath!=='';
+$packageLimits=update_package_limits($updateConfig);
 
 function sd_h(string $value): string {
     return htmlspecialchars($value,ENT_QUOTES,'UTF-8');
@@ -40,6 +45,18 @@ $aiKey=match ($aiProvider) {
 };
 $aiOk=$aiEnabled && in_array($aiProvider,['openai','groq','gemini'],true) && $aiModel!=='' && $aiKey!=='';
 $managedManifestReady=is_file(__DIR__.'/storage/updates/managed-files.json') || is_file(__DIR__.'/update-managed-files.json');
+$recoveryPath=__DIR__.'/storage/backups/recovery.json';
+$recoveryData=is_file($recoveryPath)?json_decode((string)file_get_contents($recoveryPath),true):null;
+$recoveryStatus=is_array($recoveryData)?trim((string)($recoveryData['status']??'')):'';
+$recoveryStage=is_array($recoveryData)?trim((string)($recoveryData['failure_stage']??($recoveryData['stage']??''))):'';
+$recoveryReady=$recoveryStatus!=='';
+$recoveryHealthy=$recoveryStatus==='update_completed';
+$recoveryLabel=match($recoveryStatus){
+    'update_completed'=>'Tamamlandı',
+    'preparing','application_backup_ready','ready_before_mutation'=>'Yarım kalmış olabilir',
+    'update_failed_before_mutation','update_failed_after_database_mutation','update_failed_during_file_activation'=>'İnceleme gerekli',
+    default=>$recoveryReady?'Durum bilinmiyor':'Henüz yok',
+};
 
 $checks=[
     ['name'=>'Veritabanı','detail'=>'MySQL bağlantısı ve basit sorgu','status'=>sd_status($databaseOk,'Hazır','Bağlantı kurulamadı')],
@@ -49,13 +66,16 @@ $checks=[
     ['name'=>'GD','detail'=>'Profil fotoğrafı işleme','status'=>sd_status(extension_loaded('gd'),'Yüklü','Eksik')],
     ['name'=>'Storage','detail'=>'Uygulama çalışma verileri','status'=>sd_writable_status(__DIR__.'/storage')],
     ['name'=>'Güncelleme alanı','detail'=>'İndirilen paket ve geçici dosyalar','status'=>sd_writable_status(__DIR__.'/storage/updates')],
-    ['name'=>'Yedek alanı','detail'=>'Güncelleme öncesi dosya yedekleri','status'=>sd_writable_status(__DIR__.'/storage/backups')],
+    ['name'=>'Yedek alanı','detail'=>'Güncelleme öncesi dosya ve DB yedekleri','status'=>sd_writable_status(__DIR__.'/storage/backups')],
+    ['name'=>'Migration DB yedeği','detail'=>'Migration öncesi native mysqldump snapshot','status'=>sd_status($dbBackupReady,'Hazır',$mysqldumpPath===null?'mysqldump bulunamadı':'proc_open kapalı')],
     ['name'=>'Çalışma bootstrap','detail'=>'Canlı uygulamanın src/bootstrap.php dosyası','status'=>sd_file_status(__DIR__.'/src/bootstrap.php')],
     ['name'=>'Ana stil dosyası','detail'=>'Canlı uygulamanın styles.css dosyası','status'=>sd_file_status(__DIR__.'/styles.css')],
     ['name'=>'Uygulama runtime','detail'=>'Canlı uygulamanın app-runtime.js dosyası','status'=>sd_file_status(__DIR__.'/app-runtime.js')],
     ['name'=>'Temiz kurulum şeması','detail'=>'database/schema.sql','status'=>sd_file_status(__DIR__.'/database/schema.sql','Hazır','GitHub/kurulum kaynağı eksik')],
     ['name'=>'Temiz kurulum başlangıç verisi','detail'=>'database/seed.sql','status'=>sd_file_status(__DIR__.'/database/seed.sql','Hazır','GitHub/kurulum kaynağı eksik')],
     ['name'=>'Yönetilen dosya manifesti','detail'=>'Updater yalnız kendi yönettiği eski dosyaları güvenle temizler','status'=>sd_status($managedManifestReady,'Baseline hazır','Manifest bulunamadı')],
+    ['name'=>'Paket güvenlik sınırları','detail'=>number_format($packageLimits['max_download_bytes']/1048576,0).' MB indirme · '.number_format($packageLimits['max_uncompressed_bytes']/1048576,0).' MB açılım · '.$packageLimits['max_entries'].' kayıt','status'=>sd_status(true,'Etkin','Kapalı')],
+    ['name'=>'Recovery manifest','detail'=>$recoveryReady?'Son durum: '.$recoveryStatus.($recoveryStage!==''?' · aşama: '.$recoveryStage:''):'Henüz recovery manifest oluşmadı','status'=>['ok'=>$recoveryHealthy,'label'=>$recoveryLabel]],
     ['name'=>'AdımBot','detail'=>$aiProvider!=='' && $aiModel!==''?$aiProvider.' · '.$aiModel:'Sağlayıcı veya model seçilmedi','status'=>sd_status($aiOk,'Yapılandırıldı',$aiEnabled?'Eksik yapılandırma':'Kapalı')],
 ];
 $readyCount=count(array_filter($checks,static fn(array $check):bool=>(bool)$check['status']['ok']));
@@ -79,7 +99,7 @@ if(is_file($versionFile)){
 <div><span class="sa-status-icon"><svg><use href="<?=$status['ok']?'#sa-shield':'#sa-settings'?>"/></svg></span><p><strong><?=sd_h((string)$check['name'])?></strong><small><?=sd_h((string)$check['detail'])?></small></p><?php if($status['ok']):?><b><i></i><?=sd_h((string)$status['label'])?></b><?php else:?><em><?=sd_h((string)$status['label'])?></em><?php endif;?></div>
 <?php endforeach; ?>
 </div></section>
-<p class="little-note">Bu ekran yalnız durum okur; ayarları, veritabanını veya dosyaları değiştirmez. Temiz kurulum şeması/seed eksikse mevcut çalışan sunucu etkilenmez ancak yeni sunucuya sıfırdan kurulum tamamlanamaz. <a href="adimbot-ayarlari.php">AdımBot ayarlarını aç</a>.</p>
+<p class="little-note">Bu ekran yalnız durum okur; ayarları, veritabanını veya dosyaları değiştirmez. Migration varsa native DB yedeği alınmadan güncelleme kurulmaz. Temiz kurulum şeması/seed eksikse mevcut çalışan sunucu etkilenmez ancak yeni sunucuya sıfırdan kurulum tamamlanamaz. <a href="adimbot-ayarlari.php">AdımBot ayarlarını aç</a>.</p>
 </div></main>
 <nav class="app-nav" aria-label="Süper Admin menüsü"><a href="super-admin.php"><span><svg><use href="#sa-home"/></svg></span>Panel</a><a href="kurumlar.php"><span><svg><use href="#sa-building"/></svg></span>Kurumlar</a><a href="global.php"><span><svg><use href="#sa-users"/></svg></span>Global</a><a href="guncelleme.php"><span><svg><use href="#sa-refresh"/></svg></span>Güncelle</a><a class="active" href="sistem-durum.php"><span><svg><use href="#sa-database"/></svg></span>Durum</a></nav>
 </div></body></html>

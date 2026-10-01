@@ -65,10 +65,11 @@ try {
                 try{normalized_sync($pdo,$studentId,$state);$pdo->commit();}catch(Throwable $e){if($pdo->inTransaction())$pdo->rollBack();throw $e;}
             }
         }
-        json_response(['ok'=>true,'student_id'=>$studentId,'state'=>$state,'summary'=>normalized_summary($pdo,$studentId),'storage'=>'mysql']);
+        json_response(['ok'=>true,'student_id'=>$studentId,'state'=>$state,'summary'=>normalized_summary($pdo,$studentId),'storage'=>'mysql','csrf'=>csrf_token()]);
     }
 
     if($_SERVER['REQUEST_METHOD']!=='POST')json_response(['ok'=>false,'message'=>'Yalnızca GET ve POST desteklenir.'],405);
+    if(!verify_csrf((string)($_SERVER['HTTP_X_CSRF_TOKEN']??'')))json_response(['ok'=>false,'message'=>'Güvenlik doğrulaması başarısız.'],403);
     $raw=file_get_contents('php://input');
     if(!is_string($raw)||strlen($raw)>2000000)json_response(['ok'=>false,'message'=>'Geçersiz veya çok büyük istek.'],413);
     $payload=json_decode($raw,true);

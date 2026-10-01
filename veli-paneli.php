@@ -14,17 +14,25 @@ if($institutionIds){
 }
 $children=[];
 try{
- $s=$pdo->prepare("SELECT o.id,o.ad,o.email FROM veli_ogrenci vo INNER JOIN veliler v ON v.id=vo.veli_id INNER JOIN ogrenciler o ON o.id=vo.ogrenci_id WHERE v.kullanici_id=? AND v.aktif=1 AND o.aktif=1 ORDER BY o.ad,o.id");
- $s->execute([(int)$user['id']]);$rows=$s->fetchAll();$s->closeCursor();
+ $accessibleStudentIds=auth_accessible_student_ids($pdo,(int)$user['id']);
+ if($accessibleStudentIds){
+  $ph=implode(',',array_fill(0,count($accessibleStudentIds),'?'));
+  $s=$pdo->prepare("SELECT o.id,o.ad,o.email
+      FROM ogrenciler o
+      INNER JOIN kullanicilar su ON su.id=o.kullanici_id AND su.aktif=1
+      WHERE o.id IN ($ph) AND o.aktif=1
+      ORDER BY o.ad,o.id");
+  $s->execute($accessibleStudentIds);$rows=$s->fetchAll();$s->closeCursor();
+  foreach($rows as $r){
+   $sid=(int)$r['id'];
+   try{$r['summary']=normalized_summary($pdo,$sid);}catch(Throwable){$r['summary']=null;}
+   $children[]=$r;
+  }
+ }
 }catch(Throwable){
  http_response_code(503);
  echo 'Öğrenci bilgileri şu anda okunamıyor. Lütfen daha sonra yeniden deneyin.';
  exit;
-}
-foreach($rows as $r){
- $sid=(int)$r['id'];
- try{$r['summary']=normalized_summary($pdo,$sid);}catch(Throwable){$r['summary']=null;}
- $children[]=$r;
 }
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Veli Paneli — İlkAdım</title>
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="veli.css?v=1.0.42"></head><body class="role-page"><div class="role-shell">

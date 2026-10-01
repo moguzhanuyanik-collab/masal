@@ -1,0 +1,4053 @@
+{
+  "format": 1,
+  "version": "1.1.112",
+  "release_revision": 1,
+  "range": "Q501-Q1000",
+  "total": 500,
+  "implemented": 12,
+  "planned": 488,
+  "categories": [
+    {
+      "name": "Authentication & Session Security",
+      "count": 50
+    },
+    {
+      "name": "Authorization & Tenant Isolation",
+      "count": 50
+    },
+    {
+      "name": "Data Integrity & Concurrency",
+      "count": 50
+    },
+    {
+      "name": "Storage & File Lifecycle",
+      "count": 50
+    },
+    {
+      "name": "Release Supply Chain",
+      "count": 50
+    },
+    {
+      "name": "Incident Recovery & Audit",
+      "count": 50
+    },
+    {
+      "name": "Accessibility & UX Resilience",
+      "count": 50
+    },
+    {
+      "name": "Browser & Device Compatibility",
+      "count": 50
+    },
+    {
+      "name": "AI & External Integrations",
+      "count": 50
+    },
+    {
+      "name": "Operations & Maintainability",
+      "count": 50
+    }
+  ],
+  "items": [
+    {
+      "id": "Q501",
+      "category": "Authentication & Session Security",
+      "title": "session fixation rotation — doğrulama 1",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "session fixation rotation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q502",
+      "category": "Authentication & Session Security",
+      "title": "cookie security attributes — doğrulama 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "cookie security attributes kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q503",
+      "category": "Authentication & Session Security",
+      "title": "idle session expiry — doğrulama 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "idle session expiry kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q504",
+      "category": "Authentication & Session Security",
+      "title": "absolute session lifetime — doğrulama 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "absolute session lifetime kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q505",
+      "category": "Authentication & Session Security",
+      "title": "login replay resistance — doğrulama 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "login replay resistance kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q506",
+      "category": "Authentication & Session Security",
+      "title": "password verification policy — doğrulama 1",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "password verification policy kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q507",
+      "category": "Authentication & Session Security",
+      "title": "credential stuffing throttle — doğrulama 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "credential stuffing throttle kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q508",
+      "category": "Authentication & Session Security",
+      "title": "logout invalidation — doğrulama 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "logout invalidation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q509",
+      "category": "Authentication & Session Security",
+      "title": "remember-me token rotation — doğrulama 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "remember-me token rotation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q510",
+      "category": "Authentication & Session Security",
+      "title": "concurrent session visibility — doğrulama 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "concurrent session visibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q511",
+      "category": "Authentication & Session Security",
+      "title": "session fixation rotation — doğrulama 2",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "session fixation rotation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q512",
+      "category": "Authentication & Session Security",
+      "title": "cookie security attributes — doğrulama 2",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "cookie security attributes kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q513",
+      "category": "Authentication & Session Security",
+      "title": "idle session expiry — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "idle session expiry kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q514",
+      "category": "Authentication & Session Security",
+      "title": "absolute session lifetime — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "absolute session lifetime kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q515",
+      "category": "Authentication & Session Security",
+      "title": "login replay resistance — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "login replay resistance kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q516",
+      "category": "Authentication & Session Security",
+      "title": "password verification policy — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "password verification policy kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q517",
+      "category": "Authentication & Session Security",
+      "title": "credential stuffing throttle — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "credential stuffing throttle kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q518",
+      "category": "Authentication & Session Security",
+      "title": "logout invalidation — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "logout invalidation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q519",
+      "category": "Authentication & Session Security",
+      "title": "remember-me token rotation — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "remember-me token rotation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q520",
+      "category": "Authentication & Session Security",
+      "title": "concurrent session visibility — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "concurrent session visibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q521",
+      "category": "Authentication & Session Security",
+      "title": "session fixation rotation — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "session fixation rotation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q522",
+      "category": "Authentication & Session Security",
+      "title": "cookie security attributes — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cookie security attributes kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q523",
+      "category": "Authentication & Session Security",
+      "title": "idle session expiry — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "idle session expiry kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q524",
+      "category": "Authentication & Session Security",
+      "title": "absolute session lifetime — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "absolute session lifetime kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q525",
+      "category": "Authentication & Session Security",
+      "title": "login replay resistance — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "login replay resistance kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q526",
+      "category": "Authentication & Session Security",
+      "title": "password verification policy — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "password verification policy kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q527",
+      "category": "Authentication & Session Security",
+      "title": "credential stuffing throttle — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "credential stuffing throttle kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q528",
+      "category": "Authentication & Session Security",
+      "title": "logout invalidation — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "logout invalidation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q529",
+      "category": "Authentication & Session Security",
+      "title": "remember-me token rotation — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "remember-me token rotation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q530",
+      "category": "Authentication & Session Security",
+      "title": "concurrent session visibility — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "concurrent session visibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q531",
+      "category": "Authentication & Session Security",
+      "title": "session fixation rotation — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "session fixation rotation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q532",
+      "category": "Authentication & Session Security",
+      "title": "cookie security attributes — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cookie security attributes kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q533",
+      "category": "Authentication & Session Security",
+      "title": "idle session expiry — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "idle session expiry kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q534",
+      "category": "Authentication & Session Security",
+      "title": "absolute session lifetime — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "absolute session lifetime kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q535",
+      "category": "Authentication & Session Security",
+      "title": "login replay resistance — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "login replay resistance kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q536",
+      "category": "Authentication & Session Security",
+      "title": "password verification policy — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "password verification policy kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q537",
+      "category": "Authentication & Session Security",
+      "title": "credential stuffing throttle — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "credential stuffing throttle kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q538",
+      "category": "Authentication & Session Security",
+      "title": "logout invalidation — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "logout invalidation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q539",
+      "category": "Authentication & Session Security",
+      "title": "remember-me token rotation — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "remember-me token rotation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q540",
+      "category": "Authentication & Session Security",
+      "title": "concurrent session visibility — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "concurrent session visibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q541",
+      "category": "Authentication & Session Security",
+      "title": "session fixation rotation — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "session fixation rotation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q542",
+      "category": "Authentication & Session Security",
+      "title": "cookie security attributes — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cookie security attributes kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q543",
+      "category": "Authentication & Session Security",
+      "title": "idle session expiry — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "idle session expiry kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q544",
+      "category": "Authentication & Session Security",
+      "title": "absolute session lifetime — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "absolute session lifetime kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q545",
+      "category": "Authentication & Session Security",
+      "title": "login replay resistance — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "login replay resistance kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q546",
+      "category": "Authentication & Session Security",
+      "title": "password verification policy — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "password verification policy kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q547",
+      "category": "Authentication & Session Security",
+      "title": "credential stuffing throttle — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "credential stuffing throttle kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q548",
+      "category": "Authentication & Session Security",
+      "title": "logout invalidation — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "logout invalidation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q549",
+      "category": "Authentication & Session Security",
+      "title": "remember-me token rotation — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "remember-me token rotation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q550",
+      "category": "Authentication & Session Security",
+      "title": "concurrent session visibility — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "concurrent session visibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q551",
+      "category": "Authorization & Tenant Isolation",
+      "title": "institution row scoping — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "institution row scoping kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q552",
+      "category": "Authorization & Tenant Isolation",
+      "title": "cross-tenant IDOR guard — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cross-tenant IDOR guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q553",
+      "category": "Authorization & Tenant Isolation",
+      "title": "role escalation prevention — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "role escalation prevention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q554",
+      "category": "Authorization & Tenant Isolation",
+      "title": "admin ownership validation — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "admin ownership validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q555",
+      "category": "Authorization & Tenant Isolation",
+      "title": "resource parent verification — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "resource parent verification kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q556",
+      "category": "Authorization & Tenant Isolation",
+      "title": "bulk action authorization — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "bulk action authorization kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q557",
+      "category": "Authorization & Tenant Isolation",
+      "title": "export permission enforcement — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "export permission enforcement kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q558",
+      "category": "Authorization & Tenant Isolation",
+      "title": "impersonation audit — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "impersonation audit kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q559",
+      "category": "Authorization & Tenant Isolation",
+      "title": "privileged route guard — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "privileged route guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q560",
+      "category": "Authorization & Tenant Isolation",
+      "title": "object-level access denial — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "object-level access denial kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q561",
+      "category": "Authorization & Tenant Isolation",
+      "title": "institution row scoping — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "institution row scoping kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q562",
+      "category": "Authorization & Tenant Isolation",
+      "title": "cross-tenant IDOR guard — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cross-tenant IDOR guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q563",
+      "category": "Authorization & Tenant Isolation",
+      "title": "role escalation prevention — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "role escalation prevention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q564",
+      "category": "Authorization & Tenant Isolation",
+      "title": "admin ownership validation — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "admin ownership validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q565",
+      "category": "Authorization & Tenant Isolation",
+      "title": "resource parent verification — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "resource parent verification kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q566",
+      "category": "Authorization & Tenant Isolation",
+      "title": "bulk action authorization — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "bulk action authorization kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q567",
+      "category": "Authorization & Tenant Isolation",
+      "title": "export permission enforcement — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "export permission enforcement kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q568",
+      "category": "Authorization & Tenant Isolation",
+      "title": "impersonation audit — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "impersonation audit kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q569",
+      "category": "Authorization & Tenant Isolation",
+      "title": "privileged route guard — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "privileged route guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q570",
+      "category": "Authorization & Tenant Isolation",
+      "title": "object-level access denial — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "object-level access denial kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q571",
+      "category": "Authorization & Tenant Isolation",
+      "title": "institution row scoping — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "institution row scoping kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q572",
+      "category": "Authorization & Tenant Isolation",
+      "title": "cross-tenant IDOR guard — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cross-tenant IDOR guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q573",
+      "category": "Authorization & Tenant Isolation",
+      "title": "role escalation prevention — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "role escalation prevention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q574",
+      "category": "Authorization & Tenant Isolation",
+      "title": "admin ownership validation — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "admin ownership validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q575",
+      "category": "Authorization & Tenant Isolation",
+      "title": "resource parent verification — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "resource parent verification kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q576",
+      "category": "Authorization & Tenant Isolation",
+      "title": "bulk action authorization — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "bulk action authorization kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q577",
+      "category": "Authorization & Tenant Isolation",
+      "title": "export permission enforcement — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "export permission enforcement kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q578",
+      "category": "Authorization & Tenant Isolation",
+      "title": "impersonation audit — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "impersonation audit kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q579",
+      "category": "Authorization & Tenant Isolation",
+      "title": "privileged route guard — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "privileged route guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q580",
+      "category": "Authorization & Tenant Isolation",
+      "title": "object-level access denial — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "object-level access denial kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q581",
+      "category": "Authorization & Tenant Isolation",
+      "title": "institution row scoping — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "institution row scoping kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q582",
+      "category": "Authorization & Tenant Isolation",
+      "title": "cross-tenant IDOR guard — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cross-tenant IDOR guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q583",
+      "category": "Authorization & Tenant Isolation",
+      "title": "role escalation prevention — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "role escalation prevention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q584",
+      "category": "Authorization & Tenant Isolation",
+      "title": "admin ownership validation — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "admin ownership validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q585",
+      "category": "Authorization & Tenant Isolation",
+      "title": "resource parent verification — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "resource parent verification kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q586",
+      "category": "Authorization & Tenant Isolation",
+      "title": "bulk action authorization — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "bulk action authorization kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q587",
+      "category": "Authorization & Tenant Isolation",
+      "title": "export permission enforcement — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "export permission enforcement kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q588",
+      "category": "Authorization & Tenant Isolation",
+      "title": "impersonation audit — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "impersonation audit kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q589",
+      "category": "Authorization & Tenant Isolation",
+      "title": "privileged route guard — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "privileged route guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q590",
+      "category": "Authorization & Tenant Isolation",
+      "title": "object-level access denial — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "object-level access denial kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q591",
+      "category": "Authorization & Tenant Isolation",
+      "title": "institution row scoping — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "institution row scoping kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q592",
+      "category": "Authorization & Tenant Isolation",
+      "title": "cross-tenant IDOR guard — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cross-tenant IDOR guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q593",
+      "category": "Authorization & Tenant Isolation",
+      "title": "role escalation prevention — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "role escalation prevention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q594",
+      "category": "Authorization & Tenant Isolation",
+      "title": "admin ownership validation — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "admin ownership validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q595",
+      "category": "Authorization & Tenant Isolation",
+      "title": "resource parent verification — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "resource parent verification kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q596",
+      "category": "Authorization & Tenant Isolation",
+      "title": "bulk action authorization — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "bulk action authorization kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q597",
+      "category": "Authorization & Tenant Isolation",
+      "title": "export permission enforcement — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "export permission enforcement kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q598",
+      "category": "Authorization & Tenant Isolation",
+      "title": "impersonation audit — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "impersonation audit kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q599",
+      "category": "Authorization & Tenant Isolation",
+      "title": "privileged route guard — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "privileged route guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q600",
+      "category": "Authorization & Tenant Isolation",
+      "title": "object-level access denial — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "object-level access denial kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q601",
+      "category": "Data Integrity & Concurrency",
+      "title": "optimistic concurrency token — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "optimistic concurrency token kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q602",
+      "category": "Data Integrity & Concurrency",
+      "title": "duplicate request idempotency — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "duplicate request idempotency kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q603",
+      "category": "Data Integrity & Concurrency",
+      "title": "unique constraint alignment — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "unique constraint alignment kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q604",
+      "category": "Data Integrity & Concurrency",
+      "title": "foreign-key lifecycle — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "foreign-key lifecycle kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q605",
+      "category": "Data Integrity & Concurrency",
+      "title": "transaction retry boundary — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "transaction retry boundary kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q606",
+      "category": "Data Integrity & Concurrency",
+      "title": "lost update prevention — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "lost update prevention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q607",
+      "category": "Data Integrity & Concurrency",
+      "title": "counter atomicity — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "counter atomicity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q608",
+      "category": "Data Integrity & Concurrency",
+      "title": "timestamp consistency — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "timestamp consistency kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q609",
+      "category": "Data Integrity & Concurrency",
+      "title": "soft-delete uniqueness — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "soft-delete uniqueness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q610",
+      "category": "Data Integrity & Concurrency",
+      "title": "concurrent migration lock — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "concurrent migration lock kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q611",
+      "category": "Data Integrity & Concurrency",
+      "title": "optimistic concurrency token — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "optimistic concurrency token kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q612",
+      "category": "Data Integrity & Concurrency",
+      "title": "duplicate request idempotency — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "duplicate request idempotency kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q613",
+      "category": "Data Integrity & Concurrency",
+      "title": "unique constraint alignment — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "unique constraint alignment kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q614",
+      "category": "Data Integrity & Concurrency",
+      "title": "foreign-key lifecycle — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "foreign-key lifecycle kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q615",
+      "category": "Data Integrity & Concurrency",
+      "title": "transaction retry boundary — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "transaction retry boundary kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q616",
+      "category": "Data Integrity & Concurrency",
+      "title": "lost update prevention — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "lost update prevention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q617",
+      "category": "Data Integrity & Concurrency",
+      "title": "counter atomicity — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "counter atomicity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q618",
+      "category": "Data Integrity & Concurrency",
+      "title": "timestamp consistency — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "timestamp consistency kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q619",
+      "category": "Data Integrity & Concurrency",
+      "title": "soft-delete uniqueness — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "soft-delete uniqueness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q620",
+      "category": "Data Integrity & Concurrency",
+      "title": "concurrent migration lock — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "concurrent migration lock kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q621",
+      "category": "Data Integrity & Concurrency",
+      "title": "optimistic concurrency token — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "optimistic concurrency token kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q622",
+      "category": "Data Integrity & Concurrency",
+      "title": "duplicate request idempotency — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "duplicate request idempotency kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q623",
+      "category": "Data Integrity & Concurrency",
+      "title": "unique constraint alignment — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "unique constraint alignment kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q624",
+      "category": "Data Integrity & Concurrency",
+      "title": "foreign-key lifecycle — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "foreign-key lifecycle kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q625",
+      "category": "Data Integrity & Concurrency",
+      "title": "transaction retry boundary — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "transaction retry boundary kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q626",
+      "category": "Data Integrity & Concurrency",
+      "title": "lost update prevention — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "lost update prevention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q627",
+      "category": "Data Integrity & Concurrency",
+      "title": "counter atomicity — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "counter atomicity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q628",
+      "category": "Data Integrity & Concurrency",
+      "title": "timestamp consistency — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "timestamp consistency kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q629",
+      "category": "Data Integrity & Concurrency",
+      "title": "soft-delete uniqueness — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "soft-delete uniqueness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q630",
+      "category": "Data Integrity & Concurrency",
+      "title": "concurrent migration lock — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "concurrent migration lock kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q631",
+      "category": "Data Integrity & Concurrency",
+      "title": "optimistic concurrency token — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "optimistic concurrency token kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q632",
+      "category": "Data Integrity & Concurrency",
+      "title": "duplicate request idempotency — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "duplicate request idempotency kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q633",
+      "category": "Data Integrity & Concurrency",
+      "title": "unique constraint alignment — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "unique constraint alignment kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q634",
+      "category": "Data Integrity & Concurrency",
+      "title": "foreign-key lifecycle — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "foreign-key lifecycle kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q635",
+      "category": "Data Integrity & Concurrency",
+      "title": "transaction retry boundary — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "transaction retry boundary kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q636",
+      "category": "Data Integrity & Concurrency",
+      "title": "lost update prevention — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "lost update prevention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q637",
+      "category": "Data Integrity & Concurrency",
+      "title": "counter atomicity — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "counter atomicity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q638",
+      "category": "Data Integrity & Concurrency",
+      "title": "timestamp consistency — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "timestamp consistency kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q639",
+      "category": "Data Integrity & Concurrency",
+      "title": "soft-delete uniqueness — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "soft-delete uniqueness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q640",
+      "category": "Data Integrity & Concurrency",
+      "title": "concurrent migration lock — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "concurrent migration lock kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q641",
+      "category": "Data Integrity & Concurrency",
+      "title": "optimistic concurrency token — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "optimistic concurrency token kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q642",
+      "category": "Data Integrity & Concurrency",
+      "title": "duplicate request idempotency — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "duplicate request idempotency kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q643",
+      "category": "Data Integrity & Concurrency",
+      "title": "unique constraint alignment — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "unique constraint alignment kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q644",
+      "category": "Data Integrity & Concurrency",
+      "title": "foreign-key lifecycle — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "foreign-key lifecycle kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q645",
+      "category": "Data Integrity & Concurrency",
+      "title": "transaction retry boundary — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "transaction retry boundary kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q646",
+      "category": "Data Integrity & Concurrency",
+      "title": "lost update prevention — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "lost update prevention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q647",
+      "category": "Data Integrity & Concurrency",
+      "title": "counter atomicity — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "counter atomicity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q648",
+      "category": "Data Integrity & Concurrency",
+      "title": "timestamp consistency — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "timestamp consistency kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q649",
+      "category": "Data Integrity & Concurrency",
+      "title": "soft-delete uniqueness — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "soft-delete uniqueness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q650",
+      "category": "Data Integrity & Concurrency",
+      "title": "concurrent migration lock — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "concurrent migration lock kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q651",
+      "category": "Storage & File Lifecycle",
+      "title": "runtime manifest identity — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "runtime manifest identity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q652",
+      "category": "Storage & File Lifecycle",
+      "title": "manifest hash coverage — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "manifest hash coverage kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q653",
+      "category": "Storage & File Lifecycle",
+      "title": "stale file tamper guard — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "stale file tamper guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q654",
+      "category": "Storage & File Lifecycle",
+      "title": "handoff marker expiry — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "handoff marker expiry kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q655",
+      "category": "Storage & File Lifecycle",
+      "title": "updater backup binding — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "updater backup binding kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q656",
+      "category": "Storage & File Lifecycle",
+      "title": "live core hash binding — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "live core hash binding kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q657",
+      "category": "Storage & File Lifecycle",
+      "title": "temporary artifact ownership — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "temporary artifact ownership kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q658",
+      "category": "Storage & File Lifecycle",
+      "title": "backup filename confinement — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup filename confinement kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q659",
+      "category": "Storage & File Lifecycle",
+      "title": "orphan artifact cleanup — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "orphan artifact cleanup kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q660",
+      "category": "Storage & File Lifecycle",
+      "title": "storage permission validation — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "storage permission validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q661",
+      "category": "Storage & File Lifecycle",
+      "title": "runtime manifest identity — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "runtime manifest identity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q662",
+      "category": "Storage & File Lifecycle",
+      "title": "manifest hash coverage — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "manifest hash coverage kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q663",
+      "category": "Storage & File Lifecycle",
+      "title": "stale file tamper guard — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "stale file tamper guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q664",
+      "category": "Storage & File Lifecycle",
+      "title": "handoff marker expiry — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "handoff marker expiry kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q665",
+      "category": "Storage & File Lifecycle",
+      "title": "updater backup binding — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "updater backup binding kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q666",
+      "category": "Storage & File Lifecycle",
+      "title": "live core hash binding — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "live core hash binding kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q667",
+      "category": "Storage & File Lifecycle",
+      "title": "temporary artifact ownership — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "temporary artifact ownership kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q668",
+      "category": "Storage & File Lifecycle",
+      "title": "backup filename confinement — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup filename confinement kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q669",
+      "category": "Storage & File Lifecycle",
+      "title": "orphan artifact cleanup — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "orphan artifact cleanup kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q670",
+      "category": "Storage & File Lifecycle",
+      "title": "storage permission validation — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "storage permission validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q671",
+      "category": "Storage & File Lifecycle",
+      "title": "runtime manifest identity — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "runtime manifest identity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q672",
+      "category": "Storage & File Lifecycle",
+      "title": "manifest hash coverage — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "manifest hash coverage kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q673",
+      "category": "Storage & File Lifecycle",
+      "title": "stale file tamper guard — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "stale file tamper guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q674",
+      "category": "Storage & File Lifecycle",
+      "title": "handoff marker expiry — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "handoff marker expiry kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q675",
+      "category": "Storage & File Lifecycle",
+      "title": "updater backup binding — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "updater backup binding kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q676",
+      "category": "Storage & File Lifecycle",
+      "title": "live core hash binding — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "live core hash binding kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q677",
+      "category": "Storage & File Lifecycle",
+      "title": "temporary artifact ownership — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "temporary artifact ownership kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q678",
+      "category": "Storage & File Lifecycle",
+      "title": "backup filename confinement — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup filename confinement kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q679",
+      "category": "Storage & File Lifecycle",
+      "title": "orphan artifact cleanup — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "orphan artifact cleanup kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q680",
+      "category": "Storage & File Lifecycle",
+      "title": "storage permission validation — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "storage permission validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q681",
+      "category": "Storage & File Lifecycle",
+      "title": "runtime manifest identity — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "runtime manifest identity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q682",
+      "category": "Storage & File Lifecycle",
+      "title": "manifest hash coverage — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "manifest hash coverage kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q683",
+      "category": "Storage & File Lifecycle",
+      "title": "stale file tamper guard — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "stale file tamper guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q684",
+      "category": "Storage & File Lifecycle",
+      "title": "handoff marker expiry — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "handoff marker expiry kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q685",
+      "category": "Storage & File Lifecycle",
+      "title": "updater backup binding — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "updater backup binding kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q686",
+      "category": "Storage & File Lifecycle",
+      "title": "live core hash binding — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "live core hash binding kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q687",
+      "category": "Storage & File Lifecycle",
+      "title": "temporary artifact ownership — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "temporary artifact ownership kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q688",
+      "category": "Storage & File Lifecycle",
+      "title": "backup filename confinement — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup filename confinement kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q689",
+      "category": "Storage & File Lifecycle",
+      "title": "orphan artifact cleanup — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "orphan artifact cleanup kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q690",
+      "category": "Storage & File Lifecycle",
+      "title": "storage permission validation — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "storage permission validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q691",
+      "category": "Storage & File Lifecycle",
+      "title": "runtime manifest identity — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "runtime manifest identity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q692",
+      "category": "Storage & File Lifecycle",
+      "title": "manifest hash coverage — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "manifest hash coverage kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q693",
+      "category": "Storage & File Lifecycle",
+      "title": "stale file tamper guard — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "stale file tamper guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q694",
+      "category": "Storage & File Lifecycle",
+      "title": "handoff marker expiry — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "handoff marker expiry kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q695",
+      "category": "Storage & File Lifecycle",
+      "title": "updater backup binding — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "updater backup binding kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q696",
+      "category": "Storage & File Lifecycle",
+      "title": "live core hash binding — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "live core hash binding kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q697",
+      "category": "Storage & File Lifecycle",
+      "title": "temporary artifact ownership — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "temporary artifact ownership kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q698",
+      "category": "Storage & File Lifecycle",
+      "title": "backup filename confinement — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup filename confinement kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q699",
+      "category": "Storage & File Lifecycle",
+      "title": "orphan artifact cleanup — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "orphan artifact cleanup kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q700",
+      "category": "Storage & File Lifecycle",
+      "title": "storage permission validation — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "storage permission validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q701",
+      "category": "Release Supply Chain",
+      "title": "commit-pinned package source — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "commit-pinned package source kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q702",
+      "category": "Release Supply Chain",
+      "title": "release ancestry validation — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "release ancestry validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q703",
+      "category": "Release Supply Chain",
+      "title": "historical anchor continuity — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical anchor continuity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q704",
+      "category": "Release Supply Chain",
+      "title": "package metadata binding — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "package metadata binding kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q705",
+      "category": "Release Supply Chain",
+      "title": "managed-tree exactness — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "managed-tree exactness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q706",
+      "category": "Release Supply Chain",
+      "title": "release branch immutability — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "release branch immutability kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q707",
+      "category": "Release Supply Chain",
+      "title": "CI dependency pinning — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "CI dependency pinning kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q708",
+      "category": "Release Supply Chain",
+      "title": "artifact provenance record — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "artifact provenance record kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q709",
+      "category": "Release Supply Chain",
+      "title": "release rollback mapping — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release rollback mapping kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q710",
+      "category": "Release Supply Chain",
+      "title": "revision downgrade prevention — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "revision downgrade prevention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q711",
+      "category": "Release Supply Chain",
+      "title": "commit-pinned package source — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "commit-pinned package source kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q712",
+      "category": "Release Supply Chain",
+      "title": "release ancestry validation — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "release ancestry validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q713",
+      "category": "Release Supply Chain",
+      "title": "historical anchor continuity — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical anchor continuity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q714",
+      "category": "Release Supply Chain",
+      "title": "package metadata binding — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "package metadata binding kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q715",
+      "category": "Release Supply Chain",
+      "title": "managed-tree exactness — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "managed-tree exactness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q716",
+      "category": "Release Supply Chain",
+      "title": "release branch immutability — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "release branch immutability kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q717",
+      "category": "Release Supply Chain",
+      "title": "CI dependency pinning — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "CI dependency pinning kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q718",
+      "category": "Release Supply Chain",
+      "title": "artifact provenance record — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "artifact provenance record kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q719",
+      "category": "Release Supply Chain",
+      "title": "release rollback mapping — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release rollback mapping kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q720",
+      "category": "Release Supply Chain",
+      "title": "revision downgrade prevention — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "revision downgrade prevention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q721",
+      "category": "Release Supply Chain",
+      "title": "commit-pinned package source — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "commit-pinned package source kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q722",
+      "category": "Release Supply Chain",
+      "title": "release ancestry validation — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "release ancestry validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q723",
+      "category": "Release Supply Chain",
+      "title": "historical anchor continuity — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical anchor continuity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q724",
+      "category": "Release Supply Chain",
+      "title": "package metadata binding — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "package metadata binding kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q725",
+      "category": "Release Supply Chain",
+      "title": "managed-tree exactness — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "managed-tree exactness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q726",
+      "category": "Release Supply Chain",
+      "title": "release branch immutability — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "release branch immutability kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q727",
+      "category": "Release Supply Chain",
+      "title": "CI dependency pinning — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "CI dependency pinning kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q728",
+      "category": "Release Supply Chain",
+      "title": "artifact provenance record — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "artifact provenance record kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q729",
+      "category": "Release Supply Chain",
+      "title": "release rollback mapping — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release rollback mapping kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q730",
+      "category": "Release Supply Chain",
+      "title": "revision downgrade prevention — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "revision downgrade prevention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q731",
+      "category": "Release Supply Chain",
+      "title": "commit-pinned package source — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "commit-pinned package source kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q732",
+      "category": "Release Supply Chain",
+      "title": "release ancestry validation — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "release ancestry validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q733",
+      "category": "Release Supply Chain",
+      "title": "historical anchor continuity — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical anchor continuity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q734",
+      "category": "Release Supply Chain",
+      "title": "package metadata binding — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "package metadata binding kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q735",
+      "category": "Release Supply Chain",
+      "title": "managed-tree exactness — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "managed-tree exactness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q736",
+      "category": "Release Supply Chain",
+      "title": "release branch immutability — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "release branch immutability kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q737",
+      "category": "Release Supply Chain",
+      "title": "CI dependency pinning — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "CI dependency pinning kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q738",
+      "category": "Release Supply Chain",
+      "title": "artifact provenance record — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "artifact provenance record kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q739",
+      "category": "Release Supply Chain",
+      "title": "release rollback mapping — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release rollback mapping kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q740",
+      "category": "Release Supply Chain",
+      "title": "revision downgrade prevention — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "revision downgrade prevention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q741",
+      "category": "Release Supply Chain",
+      "title": "commit-pinned package source — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "commit-pinned package source kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q742",
+      "category": "Release Supply Chain",
+      "title": "release ancestry validation — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "release ancestry validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q743",
+      "category": "Release Supply Chain",
+      "title": "historical anchor continuity — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical anchor continuity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q744",
+      "category": "Release Supply Chain",
+      "title": "package metadata binding — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "package metadata binding kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q745",
+      "category": "Release Supply Chain",
+      "title": "managed-tree exactness — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "managed-tree exactness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q746",
+      "category": "Release Supply Chain",
+      "title": "release branch immutability — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "release branch immutability kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q747",
+      "category": "Release Supply Chain",
+      "title": "CI dependency pinning — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "CI dependency pinning kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q748",
+      "category": "Release Supply Chain",
+      "title": "artifact provenance record — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "artifact provenance record kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q749",
+      "category": "Release Supply Chain",
+      "title": "release rollback mapping — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release rollback mapping kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q750",
+      "category": "Release Supply Chain",
+      "title": "revision downgrade prevention — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "revision downgrade prevention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q751",
+      "category": "Incident Recovery & Audit",
+      "title": "failure stage persistence — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "failure stage persistence kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q752",
+      "category": "Incident Recovery & Audit",
+      "title": "recovery state completeness — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "recovery state completeness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q753",
+      "category": "Incident Recovery & Audit",
+      "title": "backup verification evidence — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup verification evidence kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q754",
+      "category": "Incident Recovery & Audit",
+      "title": "manual restore instructions — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manual restore instructions kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q755",
+      "category": "Incident Recovery & Audit",
+      "title": "rollback audit record — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rollback audit record kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q756",
+      "category": "Incident Recovery & Audit",
+      "title": "correlation id logging — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "correlation id logging kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q757",
+      "category": "Incident Recovery & Audit",
+      "title": "update duration logging — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "update duration logging kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q758",
+      "category": "Incident Recovery & Audit",
+      "title": "failure reason classification — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "failure reason classification kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q759",
+      "category": "Incident Recovery & Audit",
+      "title": "recovery artifact retention — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery artifact retention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q760",
+      "category": "Incident Recovery & Audit",
+      "title": "post-recovery verification — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-recovery verification kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q761",
+      "category": "Incident Recovery & Audit",
+      "title": "failure stage persistence — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "failure stage persistence kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q762",
+      "category": "Incident Recovery & Audit",
+      "title": "recovery state completeness — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "recovery state completeness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q763",
+      "category": "Incident Recovery & Audit",
+      "title": "backup verification evidence — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup verification evidence kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q764",
+      "category": "Incident Recovery & Audit",
+      "title": "manual restore instructions — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manual restore instructions kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q765",
+      "category": "Incident Recovery & Audit",
+      "title": "rollback audit record — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rollback audit record kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q766",
+      "category": "Incident Recovery & Audit",
+      "title": "correlation id logging — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "correlation id logging kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q767",
+      "category": "Incident Recovery & Audit",
+      "title": "update duration logging — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "update duration logging kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q768",
+      "category": "Incident Recovery & Audit",
+      "title": "failure reason classification — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "failure reason classification kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q769",
+      "category": "Incident Recovery & Audit",
+      "title": "recovery artifact retention — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery artifact retention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q770",
+      "category": "Incident Recovery & Audit",
+      "title": "post-recovery verification — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-recovery verification kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q771",
+      "category": "Incident Recovery & Audit",
+      "title": "failure stage persistence — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "failure stage persistence kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q772",
+      "category": "Incident Recovery & Audit",
+      "title": "recovery state completeness — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "recovery state completeness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q773",
+      "category": "Incident Recovery & Audit",
+      "title": "backup verification evidence — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup verification evidence kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q774",
+      "category": "Incident Recovery & Audit",
+      "title": "manual restore instructions — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manual restore instructions kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q775",
+      "category": "Incident Recovery & Audit",
+      "title": "rollback audit record — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rollback audit record kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q776",
+      "category": "Incident Recovery & Audit",
+      "title": "correlation id logging — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "correlation id logging kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q777",
+      "category": "Incident Recovery & Audit",
+      "title": "update duration logging — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "update duration logging kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q778",
+      "category": "Incident Recovery & Audit",
+      "title": "failure reason classification — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "failure reason classification kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q779",
+      "category": "Incident Recovery & Audit",
+      "title": "recovery artifact retention — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery artifact retention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q780",
+      "category": "Incident Recovery & Audit",
+      "title": "post-recovery verification — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-recovery verification kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q781",
+      "category": "Incident Recovery & Audit",
+      "title": "failure stage persistence — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "failure stage persistence kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q782",
+      "category": "Incident Recovery & Audit",
+      "title": "recovery state completeness — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "recovery state completeness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q783",
+      "category": "Incident Recovery & Audit",
+      "title": "backup verification evidence — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup verification evidence kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q784",
+      "category": "Incident Recovery & Audit",
+      "title": "manual restore instructions — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manual restore instructions kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q785",
+      "category": "Incident Recovery & Audit",
+      "title": "rollback audit record — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rollback audit record kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q786",
+      "category": "Incident Recovery & Audit",
+      "title": "correlation id logging — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "correlation id logging kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q787",
+      "category": "Incident Recovery & Audit",
+      "title": "update duration logging — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "update duration logging kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q788",
+      "category": "Incident Recovery & Audit",
+      "title": "failure reason classification — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "failure reason classification kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q789",
+      "category": "Incident Recovery & Audit",
+      "title": "recovery artifact retention — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery artifact retention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q790",
+      "category": "Incident Recovery & Audit",
+      "title": "post-recovery verification — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-recovery verification kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q791",
+      "category": "Incident Recovery & Audit",
+      "title": "failure stage persistence — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "failure stage persistence kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q792",
+      "category": "Incident Recovery & Audit",
+      "title": "recovery state completeness — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "recovery state completeness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q793",
+      "category": "Incident Recovery & Audit",
+      "title": "backup verification evidence — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup verification evidence kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q794",
+      "category": "Incident Recovery & Audit",
+      "title": "manual restore instructions — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "manual restore instructions kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q795",
+      "category": "Incident Recovery & Audit",
+      "title": "rollback audit record — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rollback audit record kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q796",
+      "category": "Incident Recovery & Audit",
+      "title": "correlation id logging — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "correlation id logging kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q797",
+      "category": "Incident Recovery & Audit",
+      "title": "update duration logging — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "update duration logging kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q798",
+      "category": "Incident Recovery & Audit",
+      "title": "failure reason classification — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "failure reason classification kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q799",
+      "category": "Incident Recovery & Audit",
+      "title": "recovery artifact retention — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery artifact retention kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q800",
+      "category": "Incident Recovery & Audit",
+      "title": "post-recovery verification — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-recovery verification kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q801",
+      "category": "Accessibility & UX Resilience",
+      "title": "keyboard-only update flow — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "keyboard-only update flow kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q802",
+      "category": "Accessibility & UX Resilience",
+      "title": "focus restoration after modal — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "focus restoration after modal kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q803",
+      "category": "Accessibility & UX Resilience",
+      "title": "screen-reader status announcement — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "screen-reader status announcement kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q804",
+      "category": "Accessibility & UX Resilience",
+      "title": "reduced motion compatibility — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "reduced motion compatibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q805",
+      "category": "Accessibility & UX Resilience",
+      "title": "loading state timeout — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "loading state timeout kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q806",
+      "category": "Accessibility & UX Resilience",
+      "title": "retry action visibility — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "retry action visibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q807",
+      "category": "Accessibility & UX Resilience",
+      "title": "error recovery affordance — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "error recovery affordance kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q808",
+      "category": "Accessibility & UX Resilience",
+      "title": "touch target minimum — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "touch target minimum kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q809",
+      "category": "Accessibility & UX Resilience",
+      "title": "contrast regression — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "contrast regression kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q810",
+      "category": "Accessibility & UX Resilience",
+      "title": "responsive overflow guard — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "responsive overflow guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q811",
+      "category": "Accessibility & UX Resilience",
+      "title": "keyboard-only update flow — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "keyboard-only update flow kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q812",
+      "category": "Accessibility & UX Resilience",
+      "title": "focus restoration after modal — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "focus restoration after modal kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q813",
+      "category": "Accessibility & UX Resilience",
+      "title": "screen-reader status announcement — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "screen-reader status announcement kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q814",
+      "category": "Accessibility & UX Resilience",
+      "title": "reduced motion compatibility — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "reduced motion compatibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q815",
+      "category": "Accessibility & UX Resilience",
+      "title": "loading state timeout — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "loading state timeout kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q816",
+      "category": "Accessibility & UX Resilience",
+      "title": "retry action visibility — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "retry action visibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q817",
+      "category": "Accessibility & UX Resilience",
+      "title": "error recovery affordance — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "error recovery affordance kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q818",
+      "category": "Accessibility & UX Resilience",
+      "title": "touch target minimum — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "touch target minimum kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q819",
+      "category": "Accessibility & UX Resilience",
+      "title": "contrast regression — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "contrast regression kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q820",
+      "category": "Accessibility & UX Resilience",
+      "title": "responsive overflow guard — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "responsive overflow guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q821",
+      "category": "Accessibility & UX Resilience",
+      "title": "keyboard-only update flow — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "keyboard-only update flow kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q822",
+      "category": "Accessibility & UX Resilience",
+      "title": "focus restoration after modal — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "focus restoration after modal kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q823",
+      "category": "Accessibility & UX Resilience",
+      "title": "screen-reader status announcement — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "screen-reader status announcement kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q824",
+      "category": "Accessibility & UX Resilience",
+      "title": "reduced motion compatibility — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "reduced motion compatibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q825",
+      "category": "Accessibility & UX Resilience",
+      "title": "loading state timeout — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "loading state timeout kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q826",
+      "category": "Accessibility & UX Resilience",
+      "title": "retry action visibility — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "retry action visibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q827",
+      "category": "Accessibility & UX Resilience",
+      "title": "error recovery affordance — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "error recovery affordance kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q828",
+      "category": "Accessibility & UX Resilience",
+      "title": "touch target minimum — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "touch target minimum kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q829",
+      "category": "Accessibility & UX Resilience",
+      "title": "contrast regression — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "contrast regression kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q830",
+      "category": "Accessibility & UX Resilience",
+      "title": "responsive overflow guard — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "responsive overflow guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q831",
+      "category": "Accessibility & UX Resilience",
+      "title": "keyboard-only update flow — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "keyboard-only update flow kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q832",
+      "category": "Accessibility & UX Resilience",
+      "title": "focus restoration after modal — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "focus restoration after modal kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q833",
+      "category": "Accessibility & UX Resilience",
+      "title": "screen-reader status announcement — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "screen-reader status announcement kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q834",
+      "category": "Accessibility & UX Resilience",
+      "title": "reduced motion compatibility — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "reduced motion compatibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q835",
+      "category": "Accessibility & UX Resilience",
+      "title": "loading state timeout — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "loading state timeout kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q836",
+      "category": "Accessibility & UX Resilience",
+      "title": "retry action visibility — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "retry action visibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q837",
+      "category": "Accessibility & UX Resilience",
+      "title": "error recovery affordance — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "error recovery affordance kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q838",
+      "category": "Accessibility & UX Resilience",
+      "title": "touch target minimum — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "touch target minimum kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q839",
+      "category": "Accessibility & UX Resilience",
+      "title": "contrast regression — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "contrast regression kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q840",
+      "category": "Accessibility & UX Resilience",
+      "title": "responsive overflow guard — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "responsive overflow guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q841",
+      "category": "Accessibility & UX Resilience",
+      "title": "keyboard-only update flow — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "keyboard-only update flow kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q842",
+      "category": "Accessibility & UX Resilience",
+      "title": "focus restoration after modal — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "focus restoration after modal kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q843",
+      "category": "Accessibility & UX Resilience",
+      "title": "screen-reader status announcement — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "screen-reader status announcement kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q844",
+      "category": "Accessibility & UX Resilience",
+      "title": "reduced motion compatibility — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "reduced motion compatibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q845",
+      "category": "Accessibility & UX Resilience",
+      "title": "loading state timeout — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "loading state timeout kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q846",
+      "category": "Accessibility & UX Resilience",
+      "title": "retry action visibility — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "retry action visibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q847",
+      "category": "Accessibility & UX Resilience",
+      "title": "error recovery affordance — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "error recovery affordance kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q848",
+      "category": "Accessibility & UX Resilience",
+      "title": "touch target minimum — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "touch target minimum kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q849",
+      "category": "Accessibility & UX Resilience",
+      "title": "contrast regression — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "contrast regression kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q850",
+      "category": "Accessibility & UX Resilience",
+      "title": "responsive overflow guard — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "responsive overflow guard kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q851",
+      "category": "Browser & Device Compatibility",
+      "title": "Safari cache behavior — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "Safari cache behavior kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q852",
+      "category": "Browser & Device Compatibility",
+      "title": "iOS standalone navigation — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "iOS standalone navigation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q853",
+      "category": "Browser & Device Compatibility",
+      "title": "Android WebView compatibility — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "Android WebView compatibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q854",
+      "category": "Browser & Device Compatibility",
+      "title": "desktop Chrome regression — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "desktop Chrome regression kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q855",
+      "category": "Browser & Device Compatibility",
+      "title": "Firefox fetch behavior — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "Firefox fetch behavior kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q856",
+      "category": "Browser & Device Compatibility",
+      "title": "Edge download handling — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "Edge download handling kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q857",
+      "category": "Browser & Device Compatibility",
+      "title": "mobile viewport resize — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "mobile viewport resize kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q858",
+      "category": "Browser & Device Compatibility",
+      "title": "back-forward cache safety — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "back-forward cache safety kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q859",
+      "category": "Browser & Device Compatibility",
+      "title": "service-worker activation — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "service-worker activation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q860",
+      "category": "Browser & Device Compatibility",
+      "title": "network transition recovery — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "network transition recovery kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q861",
+      "category": "Browser & Device Compatibility",
+      "title": "Safari cache behavior — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "Safari cache behavior kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q862",
+      "category": "Browser & Device Compatibility",
+      "title": "iOS standalone navigation — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "iOS standalone navigation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q863",
+      "category": "Browser & Device Compatibility",
+      "title": "Android WebView compatibility — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "Android WebView compatibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q864",
+      "category": "Browser & Device Compatibility",
+      "title": "desktop Chrome regression — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "desktop Chrome regression kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q865",
+      "category": "Browser & Device Compatibility",
+      "title": "Firefox fetch behavior — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "Firefox fetch behavior kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q866",
+      "category": "Browser & Device Compatibility",
+      "title": "Edge download handling — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "Edge download handling kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q867",
+      "category": "Browser & Device Compatibility",
+      "title": "mobile viewport resize — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "mobile viewport resize kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q868",
+      "category": "Browser & Device Compatibility",
+      "title": "back-forward cache safety — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "back-forward cache safety kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q869",
+      "category": "Browser & Device Compatibility",
+      "title": "service-worker activation — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "service-worker activation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q870",
+      "category": "Browser & Device Compatibility",
+      "title": "network transition recovery — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "network transition recovery kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q871",
+      "category": "Browser & Device Compatibility",
+      "title": "Safari cache behavior — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "Safari cache behavior kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q872",
+      "category": "Browser & Device Compatibility",
+      "title": "iOS standalone navigation — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "iOS standalone navigation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q873",
+      "category": "Browser & Device Compatibility",
+      "title": "Android WebView compatibility — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "Android WebView compatibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q874",
+      "category": "Browser & Device Compatibility",
+      "title": "desktop Chrome regression — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "desktop Chrome regression kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q875",
+      "category": "Browser & Device Compatibility",
+      "title": "Firefox fetch behavior — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "Firefox fetch behavior kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q876",
+      "category": "Browser & Device Compatibility",
+      "title": "Edge download handling — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "Edge download handling kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q877",
+      "category": "Browser & Device Compatibility",
+      "title": "mobile viewport resize — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "mobile viewport resize kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q878",
+      "category": "Browser & Device Compatibility",
+      "title": "back-forward cache safety — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "back-forward cache safety kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q879",
+      "category": "Browser & Device Compatibility",
+      "title": "service-worker activation — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "service-worker activation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q880",
+      "category": "Browser & Device Compatibility",
+      "title": "network transition recovery — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "network transition recovery kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q881",
+      "category": "Browser & Device Compatibility",
+      "title": "Safari cache behavior — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "Safari cache behavior kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q882",
+      "category": "Browser & Device Compatibility",
+      "title": "iOS standalone navigation — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "iOS standalone navigation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q883",
+      "category": "Browser & Device Compatibility",
+      "title": "Android WebView compatibility — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "Android WebView compatibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q884",
+      "category": "Browser & Device Compatibility",
+      "title": "desktop Chrome regression — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "desktop Chrome regression kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q885",
+      "category": "Browser & Device Compatibility",
+      "title": "Firefox fetch behavior — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "Firefox fetch behavior kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q886",
+      "category": "Browser & Device Compatibility",
+      "title": "Edge download handling — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "Edge download handling kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q887",
+      "category": "Browser & Device Compatibility",
+      "title": "mobile viewport resize — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "mobile viewport resize kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q888",
+      "category": "Browser & Device Compatibility",
+      "title": "back-forward cache safety — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "back-forward cache safety kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q889",
+      "category": "Browser & Device Compatibility",
+      "title": "service-worker activation — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "service-worker activation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q890",
+      "category": "Browser & Device Compatibility",
+      "title": "network transition recovery — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "network transition recovery kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q891",
+      "category": "Browser & Device Compatibility",
+      "title": "Safari cache behavior — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "Safari cache behavior kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q892",
+      "category": "Browser & Device Compatibility",
+      "title": "iOS standalone navigation — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "iOS standalone navigation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q893",
+      "category": "Browser & Device Compatibility",
+      "title": "Android WebView compatibility — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "Android WebView compatibility kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q894",
+      "category": "Browser & Device Compatibility",
+      "title": "desktop Chrome regression — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "desktop Chrome regression kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q895",
+      "category": "Browser & Device Compatibility",
+      "title": "Firefox fetch behavior — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "Firefox fetch behavior kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q896",
+      "category": "Browser & Device Compatibility",
+      "title": "Edge download handling — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "Edge download handling kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q897",
+      "category": "Browser & Device Compatibility",
+      "title": "mobile viewport resize — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "mobile viewport resize kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q898",
+      "category": "Browser & Device Compatibility",
+      "title": "back-forward cache safety — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "back-forward cache safety kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q899",
+      "category": "Browser & Device Compatibility",
+      "title": "service-worker activation — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "service-worker activation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q900",
+      "category": "Browser & Device Compatibility",
+      "title": "network transition recovery — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "network transition recovery kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q901",
+      "category": "AI & External Integrations",
+      "title": "provider timeout isolation — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "provider timeout isolation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q902",
+      "category": "AI & External Integrations",
+      "title": "API key redaction — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "API key redaction kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q903",
+      "category": "AI & External Integrations",
+      "title": "provider retry budget — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "provider retry budget kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q904",
+      "category": "AI & External Integrations",
+      "title": "model response schema validation — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "model response schema validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q905",
+      "category": "AI & External Integrations",
+      "title": "prompt input length cap — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "prompt input length cap kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q906",
+      "category": "AI & External Integrations",
+      "title": "external JSON sanitization — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "external JSON sanitization kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q907",
+      "category": "AI & External Integrations",
+      "title": "provider circuit breaker — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "provider circuit breaker kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q908",
+      "category": "AI & External Integrations",
+      "title": "quota exhaustion handling — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "quota exhaustion handling kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q909",
+      "category": "AI & External Integrations",
+      "title": "webhook authenticity — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "webhook authenticity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q910",
+      "category": "AI & External Integrations",
+      "title": "integration failure fallback — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "integration failure fallback kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q911",
+      "category": "AI & External Integrations",
+      "title": "provider timeout isolation — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "provider timeout isolation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q912",
+      "category": "AI & External Integrations",
+      "title": "API key redaction — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "API key redaction kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q913",
+      "category": "AI & External Integrations",
+      "title": "provider retry budget — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "provider retry budget kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q914",
+      "category": "AI & External Integrations",
+      "title": "model response schema validation — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "model response schema validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q915",
+      "category": "AI & External Integrations",
+      "title": "prompt input length cap — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "prompt input length cap kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q916",
+      "category": "AI & External Integrations",
+      "title": "external JSON sanitization — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "external JSON sanitization kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q917",
+      "category": "AI & External Integrations",
+      "title": "provider circuit breaker — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "provider circuit breaker kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q918",
+      "category": "AI & External Integrations",
+      "title": "quota exhaustion handling — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "quota exhaustion handling kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q919",
+      "category": "AI & External Integrations",
+      "title": "webhook authenticity — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "webhook authenticity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q920",
+      "category": "AI & External Integrations",
+      "title": "integration failure fallback — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "integration failure fallback kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q921",
+      "category": "AI & External Integrations",
+      "title": "provider timeout isolation — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "provider timeout isolation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q922",
+      "category": "AI & External Integrations",
+      "title": "API key redaction — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "API key redaction kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q923",
+      "category": "AI & External Integrations",
+      "title": "provider retry budget — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "provider retry budget kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q924",
+      "category": "AI & External Integrations",
+      "title": "model response schema validation — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "model response schema validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q925",
+      "category": "AI & External Integrations",
+      "title": "prompt input length cap — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "prompt input length cap kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q926",
+      "category": "AI & External Integrations",
+      "title": "external JSON sanitization — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "external JSON sanitization kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q927",
+      "category": "AI & External Integrations",
+      "title": "provider circuit breaker — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "provider circuit breaker kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q928",
+      "category": "AI & External Integrations",
+      "title": "quota exhaustion handling — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "quota exhaustion handling kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q929",
+      "category": "AI & External Integrations",
+      "title": "webhook authenticity — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "webhook authenticity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q930",
+      "category": "AI & External Integrations",
+      "title": "integration failure fallback — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "integration failure fallback kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q931",
+      "category": "AI & External Integrations",
+      "title": "provider timeout isolation — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "provider timeout isolation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q932",
+      "category": "AI & External Integrations",
+      "title": "API key redaction — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "API key redaction kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q933",
+      "category": "AI & External Integrations",
+      "title": "provider retry budget — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "provider retry budget kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q934",
+      "category": "AI & External Integrations",
+      "title": "model response schema validation — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "model response schema validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q935",
+      "category": "AI & External Integrations",
+      "title": "prompt input length cap — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "prompt input length cap kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q936",
+      "category": "AI & External Integrations",
+      "title": "external JSON sanitization — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "external JSON sanitization kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q937",
+      "category": "AI & External Integrations",
+      "title": "provider circuit breaker — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "provider circuit breaker kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q938",
+      "category": "AI & External Integrations",
+      "title": "quota exhaustion handling — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "quota exhaustion handling kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q939",
+      "category": "AI & External Integrations",
+      "title": "webhook authenticity — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "webhook authenticity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q940",
+      "category": "AI & External Integrations",
+      "title": "integration failure fallback — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "integration failure fallback kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q941",
+      "category": "AI & External Integrations",
+      "title": "provider timeout isolation — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "provider timeout isolation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q942",
+      "category": "AI & External Integrations",
+      "title": "API key redaction — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "API key redaction kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q943",
+      "category": "AI & External Integrations",
+      "title": "provider retry budget — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "provider retry budget kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q944",
+      "category": "AI & External Integrations",
+      "title": "model response schema validation — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "model response schema validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q945",
+      "category": "AI & External Integrations",
+      "title": "prompt input length cap — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "prompt input length cap kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q946",
+      "category": "AI & External Integrations",
+      "title": "external JSON sanitization — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "external JSON sanitization kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q947",
+      "category": "AI & External Integrations",
+      "title": "provider circuit breaker — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "provider circuit breaker kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q948",
+      "category": "AI & External Integrations",
+      "title": "quota exhaustion handling — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "quota exhaustion handling kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q949",
+      "category": "AI & External Integrations",
+      "title": "webhook authenticity — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "webhook authenticity kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q950",
+      "category": "AI & External Integrations",
+      "title": "integration failure fallback — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "integration failure fallback kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q951",
+      "category": "Operations & Maintainability",
+      "title": "config drift detection — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "config drift detection kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q952",
+      "category": "Operations & Maintainability",
+      "title": "environment prerequisite check — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "environment prerequisite check kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q953",
+      "category": "Operations & Maintainability",
+      "title": "log rotation readiness — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "log rotation readiness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q954",
+      "category": "Operations & Maintainability",
+      "title": "health check coverage — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "health check coverage kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q955",
+      "category": "Operations & Maintainability",
+      "title": "dead code detection — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "dead code detection kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q956",
+      "category": "Operations & Maintainability",
+      "title": "dependency inventory — doğrulama 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "dependency inventory kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q957",
+      "category": "Operations & Maintainability",
+      "title": "schema documentation sync — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "schema documentation sync kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q958",
+      "category": "Operations & Maintainability",
+      "title": "release runbook validation — doğrulama 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "release runbook validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q959",
+      "category": "Operations & Maintainability",
+      "title": "operational metric naming — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "operational metric naming kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q960",
+      "category": "Operations & Maintainability",
+      "title": "maintenance mode safety — doğrulama 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "maintenance mode safety kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q961",
+      "category": "Operations & Maintainability",
+      "title": "config drift detection — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "config drift detection kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q962",
+      "category": "Operations & Maintainability",
+      "title": "environment prerequisite check — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "environment prerequisite check kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q963",
+      "category": "Operations & Maintainability",
+      "title": "log rotation readiness — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "log rotation readiness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q964",
+      "category": "Operations & Maintainability",
+      "title": "health check coverage — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "health check coverage kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q965",
+      "category": "Operations & Maintainability",
+      "title": "dead code detection — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "dead code detection kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q966",
+      "category": "Operations & Maintainability",
+      "title": "dependency inventory — doğrulama 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "dependency inventory kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q967",
+      "category": "Operations & Maintainability",
+      "title": "schema documentation sync — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "schema documentation sync kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q968",
+      "category": "Operations & Maintainability",
+      "title": "release runbook validation — doğrulama 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "release runbook validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q969",
+      "category": "Operations & Maintainability",
+      "title": "operational metric naming — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "operational metric naming kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q970",
+      "category": "Operations & Maintainability",
+      "title": "maintenance mode safety — doğrulama 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "maintenance mode safety kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q971",
+      "category": "Operations & Maintainability",
+      "title": "config drift detection — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "config drift detection kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q972",
+      "category": "Operations & Maintainability",
+      "title": "environment prerequisite check — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "environment prerequisite check kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q973",
+      "category": "Operations & Maintainability",
+      "title": "log rotation readiness — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "log rotation readiness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q974",
+      "category": "Operations & Maintainability",
+      "title": "health check coverage — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "health check coverage kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q975",
+      "category": "Operations & Maintainability",
+      "title": "dead code detection — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "dead code detection kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q976",
+      "category": "Operations & Maintainability",
+      "title": "dependency inventory — doğrulama 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "dependency inventory kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q977",
+      "category": "Operations & Maintainability",
+      "title": "schema documentation sync — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "schema documentation sync kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q978",
+      "category": "Operations & Maintainability",
+      "title": "release runbook validation — doğrulama 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "release runbook validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q979",
+      "category": "Operations & Maintainability",
+      "title": "operational metric naming — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "operational metric naming kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q980",
+      "category": "Operations & Maintainability",
+      "title": "maintenance mode safety — doğrulama 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "maintenance mode safety kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q981",
+      "category": "Operations & Maintainability",
+      "title": "config drift detection — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "config drift detection kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q982",
+      "category": "Operations & Maintainability",
+      "title": "environment prerequisite check — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "environment prerequisite check kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q983",
+      "category": "Operations & Maintainability",
+      "title": "log rotation readiness — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "log rotation readiness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q984",
+      "category": "Operations & Maintainability",
+      "title": "health check coverage — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "health check coverage kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q985",
+      "category": "Operations & Maintainability",
+      "title": "dead code detection — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "dead code detection kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q986",
+      "category": "Operations & Maintainability",
+      "title": "dependency inventory — doğrulama 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "dependency inventory kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q987",
+      "category": "Operations & Maintainability",
+      "title": "schema documentation sync — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "schema documentation sync kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q988",
+      "category": "Operations & Maintainability",
+      "title": "release runbook validation — doğrulama 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "release runbook validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q989",
+      "category": "Operations & Maintainability",
+      "title": "operational metric naming — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "operational metric naming kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q990",
+      "category": "Operations & Maintainability",
+      "title": "maintenance mode safety — doğrulama 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "maintenance mode safety kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q991",
+      "category": "Operations & Maintainability",
+      "title": "config drift detection — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "config drift detection kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q992",
+      "category": "Operations & Maintainability",
+      "title": "environment prerequisite check — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "environment prerequisite check kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q993",
+      "category": "Operations & Maintainability",
+      "title": "log rotation readiness — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "log rotation readiness kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q994",
+      "category": "Operations & Maintainability",
+      "title": "health check coverage — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "health check coverage kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q995",
+      "category": "Operations & Maintainability",
+      "title": "dead code detection — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "dead code detection kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q996",
+      "category": "Operations & Maintainability",
+      "title": "dependency inventory — doğrulama 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "dependency inventory kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q997",
+      "category": "Operations & Maintainability",
+      "title": "schema documentation sync — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "schema documentation sync kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q998",
+      "category": "Operations & Maintainability",
+      "title": "release runbook validation — doğrulama 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "release runbook validation kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q999",
+      "category": "Operations & Maintainability",
+      "title": "operational metric naming — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "operational metric naming kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    },
+    {
+      "id": "Q1000",
+      "category": "Operations & Maintainability",
+      "title": "maintenance mode safety — doğrulama 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "maintenance mode safety kontrolü otomatik ve deterministik olmalı; uyumsuzlukta güvenli duruş veya açık izlenebilir fallback üretmelidir."
+    }
+  ]
+}

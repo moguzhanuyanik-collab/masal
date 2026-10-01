@@ -1,6 +1,7 @@
 {
   "format": 1,
-  "version": "1.2.1",
-  "name": "1.2.1 temiz Recovery ve updater stabilizasyonu",
-  "release_revision": 1
+  "version": "1.1.119",
+  "name": "1.1.119 lossless rebuild: 1.1.97 sonrası uygulama zinciri + güvenli updater",
+  "release_revision": 13,
+  "application_generation": 117
 }

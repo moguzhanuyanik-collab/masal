@@ -1,0 +1,81 @@
+# İlkAdım 1.1.113
+
+## 1.1.97 güncelleme kilidi
+- Dolu legacy kurum_kullanicilari tablosu artık körlemesine DROP edilmez.
+- Eski veli/öğretmen/öğrenci kimlikleri profil tablolarındaki kullanici_id ile doğrulanır.
+- Yönetici kimliği önce yoneticiler.kullanici_id, yoksa yalnız doğrulanmış yonetici/super_admin kullanıcı rolü üzerinden çözülür.
+- Çözülemeyen tek satırda hiçbir canlı tablo değiştirilmeden işlem durur.
+- Yeni üyelikler ayrı staging tabloda oluşturulur ve sayısal olarak doğrulanır.
+- Canlı tablo değişimi tek atomik RENAME TABLE ile yapılır.
+- Eski tablo kurum_kullanicilari_legacy_197_backup adıyla korunur.
+- Başka tablodan inbound FK varsa otomatik dönüşüm durur.
+- 1.1.97 -> 1.1.98 rescue updater dönüşümü recovery migrationından önce çalıştırır.
+- Aynı lossless onarım güncel updater çekirdeğine de eklendi.
+
+## Yeni kalite matrisi
+- Q1001–Q1500 arasında 500 yeni madde eklendi.
+- 20 kritik madde uygulanmış, 480 madde plan statüsündedir.
+- Toplam izlenebilir kalite/güncelleme kataloğu 1500 maddeye çıktı.
+
+## Rev 2
+
+- 1.1.93 tarihsel migration güvenlik testi, eski "dolu tabloysa her zaman dur" sözleşmesi yerine lossless staging + atomik swap + çözülemeyen satırda fail-closed sözleşmesini doğrulayacak şekilde güncellendi.
+
+## Rev 3
+
+- Q1001–Q1500 katalog ve 1500-madde index dosyaları tarihsel rev1 artefaktı olarak sabitlendi; aynı sürüm içindeki düzeltme revisionları katalog süreklilik testini bozmaz.
+
+## Rev 4 — canlı 1.1.97 web rescue
+
+- Canlı 1.1.97 kurulumunun lossless 1.1.98 updater çekirdeğine ulaşabilmesi için tek dosyalık tarayıcı kurtarma köprüsü eklendi.
+- Köprü yalnız Süper Admin + CSRF + tam 1.1.97 sürümünde çalışır.
+- Yalnız src/updater.php değiştirilir; önce SHA-256 doğrulamalı yedek alınır.
+- Gömülü payload mevcut rev3 lossless rescue updater ile birebir aynıdır.
+- Etkinleştirme başarısızlığında eski updater atomik restore edilir.
+- 1.1.98 kurulumu sonrasında kurum_kullanicilari dönüşümü mevcut lossless staging + doğrulama + atomik RENAME TABLE akışıyla devam eder.
+
+## Rev 5 — 1.1.97 → 1.1.98 geçiş ankrajı
+
+- Eski 1.1.97 updater'ın version.json geçmiş taramasında önce güvenli bir 1.1.98 köprü commitini seçebilmesi için tarihsel bridge ankrajı eklendi.
+- Köprü paketinde database/migrations altındaki SQL dosyaları bilinçli olarak yoktur; amaç eski migration geçmişini yeniden oynatmadan modern updater çekirdeğini canlıya taşımaktır.
+- Köprü commitinden hemen sonra 1.1.113 paket ağacı eksiksiz geri yüklenmiştir; main dalındaki güncel paket içeriği korunur.
+- Güncel release HEAD tekrar version.json + update-release.json + update-managed-files.json üçlü ankrajıyla rev 5 olarak sabitlenmiştir.
+
+## Rev 9 — 1.1.98 eksik 064 checkpoint recovery
+
+- 1.1.98 bridge sonrasında eksik kalan `064_adimbot_rate_limit_ve_migration_checkpoint` güvenli biçimde tamamlanır.
+- Yalnız 064 eksikse çalışır; 064 öncesinde başka eksik migration varsa SQL çalıştırmadan durur.
+- 1.1.99 rev999 recovery checkpointi güncel updater çekirdeğini taşır.
+- Recovery checkpointinden sonra eski 1.1.100–1.1.112 updater paketleri atlanır ve güncel main sürümüne geçilir.
+
+## Rev 10 — 064 preflight recovery düzeltmesi
+
+- 1.1.98 bridge sonrasında yalnız `064_adimbot_rate_limit_ve_migration_checkpoint` eksik olduğunda tarihsel doğrulama artık preflight aşamasını geçirebilir.
+- Bu istisna migrationı doğrudan çalıştırmaz; önce pending listesine alınır ve mevcut updater akışı DB yedeğini oluşturur.
+- DB yedeği hazırlandıktan sonra dar kapsamlı 064 recovery çalışır ve `sistem_migrations` kaydını tamamlar.
+- 064 dışında başka herhangi bir geçmiş migration eksikse sistem yine fail-closed durur.
+- Yeni ara ankraj `1.1.99 rev1000` olarak yayınlandı.
+
+## Rev 11 — 064 idempotent recovery
+
+- 1.1.98 bridge sonrasında yalnız 064 checkpointi eksikse eski migration SQL'i tekrar oynatılmaz.
+- Tüm 064 öncesi non-retired migration kayıtları önce doğrulanır; başka eksik varsa hiçbir değişiklik yapılmaz.
+- `adimbot_rate_limitleri` yalnız `CREATE TABLE IF NOT EXISTS` ile hazırlanır ve 064 kaydı `INSERT IGNORE` ile tamamlanır.
+- Kullanıcı, kurum, öğrenci, veli ve öğretmen verileri bu recovery tarafından değiştirilmez.
+- Bu dar recovery veri dönüştürmediği için normal pending-migration DB snapshot kapısına takılmadan önce tamamlanır.
+- Yeni tarihsel geçiş ankrajı `1.1.99 rev1001` olarak yayınlandı.
+
+## Rev 12 — GitHub branch → gerçek commit SHA düzeltmesi
+
+- Güncelleme kontrolünde `main` gibi branch adlarının `commit` alanına sızması engellendi.
+- Branch HEAD önce GitHub API üzerinden 40 karakterlik gerçek commit SHA değerine çözümlenir.
+- 1.1.99 recovery checkpointinden güncel main sürümüne geçiş artık branch adıyla değil sabit commit SHA ile kurulur.
+- Kurulum aşamasında eski bir updater yine branch adı üretirse hedef commit son kez gerçek HEAD SHA'ya normalize edilir.
+
+## Rev 13 — sıralı güncelleme zinciri
+
+- 1.1.99'dan doğrudan en güncel sürüme atlayan kısayol kaldırıldı.
+- Bridge/recovery commitleri güncelleme geçmişi taramasını artık erken kesmez.
+- Güncelleyici kurulu sürümden sonraki en küçük sürümü seçer: 1.1.99 → 1.1.100 → 1.1.101 → ...
+- Hedef paket gerçek GitHub commit SHA ile sabitlenir.
+
