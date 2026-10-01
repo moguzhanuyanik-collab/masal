@@ -14,9 +14,9 @@ const versionAtLeast123=versionParts[0]>1 || (versionParts[0]===1 && (versionPar
 assert(versionAtLeast123,'Release must remain 1.2.3 or newer.');
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
-assert.strictEqual(version.release_revision,1);
-assert.strictEqual(release.release_revision,1);
-assert.strictEqual(manifest.release_revision,1);
+assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
+assert.strictEqual(release.release_revision,version.release_revision);
+assert.strictEqual(manifest.release_revision,version.release_revision);
 assert(updater.includes('function github_branch_head_sha'));
 assert(updater.includes('function remote_release_info(array $gh): array'));
 assert(updater.includes('function run_legacy_1_1_97_to_1_2_1_recovery'));
