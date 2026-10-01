@@ -39,10 +39,10 @@ function versionAtLeast(a,b){
 assert(versionAtLeast(version.version,'1.2.16'),'current release must remain at or above immutable recovery bootstrap 1.2.16');
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
-assert.strictEqual(version.release_revision,2);
+assert(Number.isInteger(version.release_revision) && version.release_revision>=pkg.bootstrap.release_revision);
 assert.strictEqual(pkg.bootstrap.release_revision,1);
-assert.strictEqual(release.release_revision,2);
-assert.strictEqual(manifest.release_revision,2);
+assert.strictEqual(release.release_revision,version.release_revision);
+assert.strictEqual(manifest.release_revision,version.release_revision);
 assert(manifest.files.includes('RECOVERY-1.1.97-1.2.1-PACKAGE.json'));
 assert(manifest.files.includes('tests/recovery-package-lock-142.cjs'));
 

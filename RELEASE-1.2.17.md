@@ -39,3 +39,8 @@ Bu düzeltme mevcut kullanıcı, öğrenci, kurum veya içerik verisini değişt
 
 - Immutable 1.2.16 recovery bootstrap testi, yeni 1.2.x sürümlerinde exact-current-version beklentisine takılmayacak şekilde güncellendi.
 - Test artık mevcut sürümün en az 1.2.16 olmasını ve release/manifest metadata'sının kendi içinde eşleşmesini doğruluyor.
+
+## Rev 4 — bootstrap revision uyumluluğu
+
+- Recovery package lock testi, 1.2.16 bootstrap rev1 ile mevcut daha yeni 1.2.x revizyonlarını karşılaştırmalı olarak doğrulayacak şekilde gevşetildi.
+- Mevcut release/manifest revision değerlerinin bootstrap revizyonuyla eşit veya daha yeni olması zorunlu tutuldu.
