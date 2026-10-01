@@ -133,7 +133,18 @@ $ambiguous=kl_ai_quota_institution($pdo,4001);
 ok_162($ambiguous===null,'birden fazla aktif lisanslı kurum varsa kullanım rastgele kuruma yazılmamalı.');
 $ambiguousReserve=kl_ai_quota_reserve($pdo,4001,701,'gemini','gemini-test');
 ok_162(($ambiguousReserve['tracked']??true)===false,'belirsiz çoklu kurum kullanımında yanlış kuruma sayaç yazılmamalı.');
-ok_162(($ambiguousReserve['blocked']??true)===false,'belirsiz kurum çözümü uygulamayı yanlışlıkla kilitlememeli.');
+ok_162(($ambiguousReserve['blocked']??false)===true,'belirsiz çoklu aktif lisans AI kullanımını fail-closed engellemeli.');
+ok_162((string)($ambiguousReserve['reason']??'')==='ambiguous_active_licenses','belirsiz aktif lisans nedeni açık olmalı.');
+
+$pdo->exec("UPDATE kurum_lisanslari SET durum='askida' WHERE kurum_id=10");
+$suspended=kl_ai_quota_reserve($pdo,1001,501,'groq','llama-test');
+ok_162(($suspended['blocked']??false)===true,'askıdaki lisans AI kullanımını engellemeli.');
+ok_162((string)($suspended['reason']??'')==='license_suspended','askıdaki lisans nedeni doğru olmalı.');
+
+$pdo->exec("UPDATE kurum_lisanslari SET durum='aktif',bitis_tarihi=DATE_SUB(CURDATE(),INTERVAL 1 DAY) WHERE kurum_id=10");
+$expired=kl_ai_quota_reserve($pdo,1001,501,'groq','llama-test');
+ok_162(($expired['blocked']??false)===true,'süresi dolmuş lisans AI kullanımını engellemeli.');
+ok_162((string)($expired['reason']??'')==='license_expired','süresi dolmuş lisans nedeni doğru olmalı.');
 
 foreach($tables as $table)$pdo->exec("DROP TABLE IF EXISTS {$table}");
 
