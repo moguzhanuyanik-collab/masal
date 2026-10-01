@@ -126,6 +126,7 @@ jobs:
           node tests/support-center-167.cjs
           node tests/legal-consent-168.cjs
           node tests/commercial-finance-integrity-169.cjs
+          node tests/trial-sales-170.cjs
           node tests/institution-class-edit-136.cjs
           node tests/institution-reporting-137.cjs
           node tests/institution-report-export-159.cjs
@@ -213,6 +214,7 @@ jobs:
           php tests/support-center-db-167.php
           php tests/legal-consent-db-168.php
           php tests/commercial-finance-integrity-db-169.php
+          php tests/trial-sales-db-170.php
           php tests/institution-class-edit-db-136.php
           php tests/institution-reporting-db-137.php
           php tests/teacher-content-edit-copy-db-139.php
