@@ -118,6 +118,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 <input class="text-input" type="password" name="new_password_repeat" minlength="8" autocomplete="new-password">
 <button class="button primary full" type="submit">Giriş Bilgilerini Kaydet</button>
 </form>
+<a class="button soft full" href="yasal-onay.php">Yasal Belgeler ve Onay Geçmişim</a>
 <a class="button soft full" href="<?=h_sec($roleHome)?>">Panelime Dön</a>
 </div>
 </main>
