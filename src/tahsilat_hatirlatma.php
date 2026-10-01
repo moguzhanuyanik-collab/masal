@@ -189,13 +189,19 @@ function th_sync_manager_reminders(PDO $pdo,array $actor): array {
                 continue;
             }
 
-            $insert=$pdo->prepare("INSERT INTO ticari_tahsilat_hatirlatmalari
+            $insert=$pdo->prepare("INSERT IGNORE INTO ticari_tahsilat_hatirlatmalari
                 (sozlesme_id,kurum_id,vade_tarihi,esik_kodu,acik_tutar,para_birimi,gonderen_kullanici_id)
                 VALUES (?,?,?,?,?,?,?)");
             $insert->execute([
                 $contractId,$institutionId,$freshDue,$freshCode,
                 (string)$financial['kalan_tutar'],(string)$financial['para_birimi'],(int)$actor['id']
             ]);
+            if($insert->rowCount()!==1){
+                $insert->closeCursor();
+                if($started)$pdo->commit();
+                $skipped++;
+                continue;
+            }
             $reminderId=(int)$pdo->lastInsertId();
             $insert->closeCursor();
 
