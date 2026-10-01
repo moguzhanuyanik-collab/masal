@@ -11,7 +11,13 @@ assert(page.includes("auth_runtime_column_exists($pdo,'veli_ogrenci','kurum_id')
 assert(page.includes("auth_runtime_column_exists($pdo,'ogretmen_ogrenci','kurum_id')"));
 assert(page.includes("Yönetici hesabını Kurumlar bölümünden bir kuruma bağlayarak oluştur."));
 assert(page.includes("Yönetici rolü Kurumlar bölümünden kurum üyeliğiyle birlikte verilmelidir."));
+assert(page.includes("require __DIR__ . '/src/kurum_yonetimi.php';"));
+assert(page.includes('$targetId=ky_create_user('));
+assert(page.includes("Süper Admin rolü bu ekrandan verilemez."));
+assert(page.includes("Kurum kullanıcısının rolünü Kurumlar bölümünden yönetin."));
+assert(page.includes('foreach ($globalUsers as $u)'));
 assert(!page.includes('<option value="yonetici">Yönetici</option>'));
+assert(!page.includes('<option value="super_admin">Süper Admin</option>'));
 
 assert(page.includes('INSERT IGNORE INTO veli_ogrenci (veli_id,ogrenci_id,kurum_id) VALUES (?,?,0)'));
 assert(page.includes('INSERT IGNORE INTO ogretmen_ogrenci (ogretmen_id,ogrenci_id,kurum_id) VALUES (?,?,0)'));
