@@ -12,12 +12,14 @@ const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
 const testPath='tests/direct-097-recovery-128.cjs';
 
 assert(rescue.includes("installed!=='1.1.97'"),'Direct rescue yalnız 1.1.97 için çalışmalı.');
-assert(rescue.includes('rescue_branch_head_sha'), 'Rescue gerçek branch HEAD SHA çözümlemeli.');
-assert(rescue.includes('function rescue_validate_historical_chain'), 'Rescue tarihsel recovery zincirini doğrulamalı.');
-assert(rescue.includes('1.1.98') && rescue.includes('1.2.1'), 'Rescue 1.1.98 → 1.2.1 zincir sınırlarını bilmeli.');
+assert(rescue.includes("const ILKADIM_LEGACY_097_BOOTSTRAP_COMMIT='2c86df240cde635812e12d35cafbb10fe99471d1';"), 'Rescue immutable bootstrap commit kullanmalı.');
+assert(rescue.includes("const ILKADIM_LEGACY_097_TARGET_COMMIT='6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c';"), 'Rescue 1.2.1 immutable target anchorını bilmeli.');
+assert(rescue.includes('function rescue_bootstrap_commit'), 'Rescue sabit bootstrap commit fonksiyonunu kullanmalı.');
+assert(!rescue.includes('rescue_branch_head_sha($gh)'), 'Rescue mutable branch HEAD kullanmamalı.');
+assert(!rescue.includes('rescue_validate_historical_chain($gh)'), 'Rescue güncel branch tarihçesine bağımlı olmamalı.');
 assert(rescue.includes('rescue_ref_file'), 'Rescue dosyaları aynı sabit commit üzerinden çekmeli.');
 assert(rescue.includes("^[a-f0-9]{40}$"), 'Rescue gerçek 40 karakter SHA doğrulaması yapmalı.');
-assert(rescue.includes('version_compare($targetVersion,\'1.2.2\',\'<\')'), 'Rescue eski/broken updater hedeflerini reddetmeli.');
+assert(rescue.includes("$targetVersion!=='1.2.9'"), 'Rescue yalnız doğrulanmış 1.2.9 bootstrap çekirdeğini kabul etmeli.');
 assert(rescue.includes('function run_legacy_1_1_97_to_1_2_1_recovery'), 'Rescue yalnız doğrulanmış modern updater çekirdeğini kabul etmeli.');
 assert(rescue.includes('hash_file(\'sha256\',$target)'), 'Canlı updater SHA-256 ile doğrulanmalı.');
 assert(rescue.includes('hash_file(\'sha256\',$backup)'), 'Updater yedeği SHA-256 ile doğrulanmalı.');
