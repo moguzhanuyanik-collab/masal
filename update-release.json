@@ -1,6 +1,6 @@
 {
   "format": 1,
   "version": "1.2.1",
-  "name": "1.1.97 → 1.2.1 legacy veritabanı recovery hattının tamamlanması ve updater stabilizasyonu",
-  "release_revision": 8
+  "name": "1.1.97 → 1.2.1 legacy recovery hattı ve 064 checkpoint bütünlük onarımı",
+  "release_revision": 9
 }
