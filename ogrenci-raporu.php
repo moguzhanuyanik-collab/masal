@@ -6,6 +6,7 @@ require __DIR__ . '/src/auth.php';
 require __DIR__ . '/src/normalized.php';
 require __DIR__ . '/src/ogretmen_icerik.php';
 require __DIR__ . '/src/ogrenci_rapor_detay.php';
+require __DIR__ . '/src/ogretmen_ogrenci_listesi.php';
 
 $user=require_login();
 $pdo=db();
@@ -33,7 +34,8 @@ $reportInstitutionScoped=false;
 $reportInstitutionName='';
 $reportBack=$roleHome;
 
-if($reportInstitutionId>0 && in_array(auth_effective_role($user),['yonetici','super_admin'],true)){
+$effectiveRole=auth_effective_role($user);
+if($reportInstitutionId>0 && in_array($effectiveRole,['yonetici','super_admin'],true)){
     try{
         $scope=$pdo->prepare("SELECT k.ad
             FROM kurum_kullanicilari kk
@@ -50,6 +52,15 @@ if($reportInstitutionId>0 && in_array(auth_effective_role($user),['yonetici','su
             $reportInstitutionScoped=true;
             $reportInstitutionName=$institutionName;
             $reportBack='kurum-raporlari.php?kurum_id='.$reportInstitutionId;
+        }
+    }catch(Throwable){}
+}elseif($reportInstitutionId>0 && $effectiveRole==='ogretmen'){
+    try{
+        $teacherContext=tol_teacher_report_context($pdo,(int)$user['id'],$studentId,$reportInstitutionId);
+        if(is_array($teacherContext)){
+            $reportInstitutionScoped=true;
+            $reportInstitutionName=(string)$teacherContext['institution_name'];
+            $reportBack=(string)$teacherContext['back'];
         }
     }catch(Throwable){}
 }
