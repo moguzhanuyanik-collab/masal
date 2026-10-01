@@ -79,23 +79,22 @@ function vi_parent_contents(
     if(!in_array($type,$allowedTypes,true)) $type='tum';
 
     $where=[
-        "os.id=?",
         "oi.aktif=1",
         "(oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)"
     ];
-    $params=[$parentUserId,$studentId];
+    $filterParams=[];
 
     if($institutionId>0){
         $where[]='oi.kurum_id=?';
-        $params[]=$institutionId;
+        $filterParams[]=$institutionId;
     }
     if($type!=='tum'){
         $where[]='oi.icerik_turu=?';
-        $params[]=$type;
+        $filterParams[]=$type;
     }
 
     $sql="SELECT DISTINCT oi.id,oi.kurum_id,oi.ogretmen_id,oi.icerik_turu,oi.baslik,
-        oi.icerik_metni,oi.soru,oi.secnekler_json AS secenekler_json,
+        oi.icerik_metni,oi.soru,oi.secenekler_json,
         oi.dogru_cevap_indeksi,oi.aciklama,oi.teslim_tarihi,oi.olusturulma_tarihi,
         k.ad kurum_adi,d.ad ders_adi,d.emoji ders_emoji,
         COALESCE(dm.baslik,oi.konu_basligi,'Genel') konu_adi,
@@ -162,8 +161,7 @@ function vi_parent_contents(
         ORDER BY oi.olusturulma_tarihi DESC,oi.id DESC";
 
     // SQL begins with student id then parent id in join order.
-    $queryParams=[$studentId,$parentUserId];
-    foreach(array_slice($params,2) as $value) $queryParams[]=$value;
+    $queryParams=[$studentId,$parentUserId,...$filterParams];
 
     $stmt=$pdo->prepare($sql);
     $stmt->execute($queryParams);
