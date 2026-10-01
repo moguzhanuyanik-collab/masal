@@ -31,7 +31,7 @@ assert(teacherDetail.includes("hw_summary($students,null,(string)($homework['tes
 assert(teacherDetail.includes("hw_status($student,null,(string)($homework['teslim_tarihi']??''))"),'teacher student rows must use shared status calculation');
 assert(teacherDetail.includes("ogrenci-raporu.php?id=<?=(int)$student['id']?>&amp;kurum_id=<?=(int)$homework['kurum_id']?>"),'teacher homework student drill-down must preserve institution context');
 assert(teacherDetail.includes('Gecikti'),'teacher homework detail must expose overdue status');
-assert(teacherDetail.includes('ogretmen-odev-detay.css?v=1.2.21'),'teacher homework detail stylesheet must be versioned');
+assert(/ogretmen-odev-detay\.css\?v=1\.2\.(?:2[1-9]|[3-9]\d)/.test(teacherDetail),'teacher homework detail stylesheet must be versioned at 1.2.21 or newer');
 assert(teacherList.includes('Gecikme var'),'teacher homework list must expose overdue delivery state');
 assert(teacherList.includes('Tümü tamamlandı'),'teacher homework list must expose fully-completed delivery state');
 assert(teacherList.includes('Devam ediyor'),'teacher homework list must expose pending delivery state');
