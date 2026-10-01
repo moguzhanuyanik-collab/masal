@@ -25,7 +25,7 @@ assert(updater.includes('function release_application_generation_is_safe'));
 assert(updater.includes('application_generation'));
 assert(updater.includes('uygulama neslini geriye götürüyor'));
 assert(updater.includes('function github_branch_head_sha'));
-assert(updater.includes('return remote_release_info($gh);'));
+assert(updater.includes('function remote_release_info(array $gh): array'));assert(updater.includes('return remote_release_info($gh);'));
 assert(!updater.includes('/commits?sha='));
 
 assert(updatePage.includes('read_local_application_generation'));
