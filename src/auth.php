@@ -722,14 +722,30 @@ if (!function_exists('require_student_login')) {
 
 if (!function_exists('require_api_student')) {
     function require_api_student(): int {
-        $id=authenticated_student_id();
-        if ($id!==null) return $id;
+        $user=authenticated_user();
+        if ($user && auth_effective_role($user)==='ogrenci') {
+            $pending=auth_legal_pending_count(db(),(int)$user['id'],'ogrenci');
+            if ($pending>0) {
+                if (function_exists('json_response')) {
+                    json_response([
+                        'ok'=>false,
+                        'message'=>'Devam etmek için güncel yasal belgeleri onaylaman gerekiyor.',
+                        'legal_consent_required'=>true,
+                        'pending_legal_documents'=>$pending
+                    ],428);
+                }
+                http_response_code(428);
+                exit;
+            }
+            $id=auth_student_id_for_user(db(),(int)$user['id']);
+            if ($id!==null) return $id;
+        }
         if (function_exists('json_response')) {
             json_response([
                 'ok'=>false,
                 'message'=>'Bu işlem yalnızca öğrenci hesabıyla yapılabilir.',
-                'auth_required'=>authenticated_user()===null
-            ], authenticated_user()===null ? 401 : 403);
+                'auth_required'=>$user===null
+            ], $user===null ? 401 : 403);
         }
         http_response_code(403);
         exit;
