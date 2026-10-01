@@ -44,7 +44,7 @@ assert(parent.includes('Tamamlandı'),'parent completion status missing');
 assert(student.includes('require_student_login()'),'student homework page must require student role');
 assert(student.includes("verify_csrf($_POST['csrf']??null)"),'student homework status must require CSRF');
 assert(student.includes('oi_set_homework_completed'),'student homework status action missing');
-assert(student.includes('Süresi geçti'),'student overdue state missing');
+assert(student.includes('hw_status_label($itemStatus)'),'student overdue state must use shared homework status semantics');
 assert(student.includes('Tekrar bekliyor yap'),'student completion reversal missing');
 assert(profileFeatures.includes("'ogrenci-odevleri.php'"),'student homework page must be discoverable from profile');
 
