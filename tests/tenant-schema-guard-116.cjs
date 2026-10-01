@@ -23,7 +23,7 @@ assert.strictEqual(version.version,'1.1.119');
 assert.strictEqual(release.version,'1.1.119');
 assert.strictEqual(manifest.version,'1.1.119');
 assert(version.release_revision>=1);
-assert.strictEqual(release.release_revision,1);
-assert.strictEqual(manifest.release_revision,1);
+assert.strictEqual(release.release_revision,version.release_revision);
+assert.strictEqual(manifest.release_revision,version.release_revision);
 
 console.log('PASS: tenant schema guard contract');
