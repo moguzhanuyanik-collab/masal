@@ -1609,10 +1609,24 @@ function pending_migration_names(PDO $pdo,string $root,string $localVersion='0.0
     return $pending;
 }
 
+function database_update_plan(PDO $pdo,string $root,string $localVersion='0.0.0'): array {
+    // Tek bir snapshot üzerinden plan çıkar. Böylece preflight ile mutation
+    // aşaması aynı staged migration ağacını referans alır.
+    $pending=pending_migration_names($pdo,$root,$localVersion);
+    $legacyRepair=legacy_membership_repair_needed($pdo);
+    $studentSchemaMissing=!auth_table_exists($pdo,'ogrenciler');
+
+    return [
+        'pending_migrations'=>$pending,
+        'legacy_membership_repair'=>$legacyRepair,
+        'student_schema_missing'=>$studentSchemaMissing,
+        'requires_backup'=>$studentSchemaMissing || $legacyRepair || $pending!==[],
+    ];
+}
+
 function database_update_requires_backup(PDO $pdo,string $root,string $localVersion='0.0.0'): bool {
-    if(!auth_table_exists($pdo,'ogrenciler')) return true;
-    if(legacy_membership_repair_needed($pdo)) return true;
-    return pending_migration_names($pdo,$root,$localVersion)!==[];
+    $plan=database_update_plan($pdo,$root,$localVersion);
+    return (bool)$plan['requires_backup'];
 }
 
 function run_migration_sql(PDO $pdo,string $path): void {
