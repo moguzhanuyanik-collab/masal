@@ -20,7 +20,7 @@ assert(updater.includes('/commits?sha='));
 assert(updater.includes('release_identity_should_replace_next'));
 assert(updater.includes('path=update-release.json'));
 assert(!updater.includes('recovery_bridge_target_info'));
-assert(updater.includes('1.2.1 temiz recovery yalnız uygulama kodu/updater çekirdeğini yeniler'));
+assert(updater.includes('run_legacy_1_1_97_to_1_2_1_recovery'));
 
 assert(manifest.files.includes('RELEASE-1.1.119.md'));
 assert(manifest.files.includes('update-release.json'));
