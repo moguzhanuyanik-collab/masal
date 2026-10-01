@@ -24,6 +24,12 @@ assert(updater.includes('release-chain-cache.json'));
 assert(updater.includes('github_branch_head_sha($gh)'));
 assert(updater.includes('path=update-release.json'));
 assert(updater.includes('release_identity_should_replace_next'));
+assert(updater.includes("'update-managed-files.json'"),'managed manifest identity must be remotely readable');
+assert(updater.includes('function remote_managed_manifest_info_at_ref'),'managed manifest metadata helper missing');
+assert(updater.includes('function release_candidate_metadata_consistent'),'release metadata consistency guard missing');
+assert(updater.includes('release_candidate_metadata_consistent($gh,$next)'),'next release must validate all metadata files');
+assert(updater.includes('$validatedChain=array_values($chain)'),'invalid historical anchors must be removable without mutating cache');
+
 assert(updater.includes('$root!==null'));
 assert(page.includes('next_remote_version_info($gh,$local,$localRevision,__DIR__)'));
 assert(page.includes('next_remote_version_info($gh,$newLocal,$newLocalRevision,__DIR__)'));

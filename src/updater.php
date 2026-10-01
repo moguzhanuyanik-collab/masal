@@ -176,7 +176,7 @@ function remote_update_metadata_at_ref(array $gh,string $ref,string $metadataFil
     $ref=trim($ref);
     if($ref==='') throw new RuntimeException('GitHub surum referansi bos olamaz.');
     if(!preg_match('/^[A-Za-z0-9_.\/-]+$/',$ref)) throw new RuntimeException('GitHub surum referansi gecersiz.');
-    if(!in_array($metadataFile,['version.json','update-release.json'],true)){
+    if(!in_array($metadataFile,['version.json','update-release.json','update-managed-files.json'],true)){
         throw new RuntimeException('GitHub surum metadata dosyasi gecersiz.');
     }
 
@@ -201,6 +201,40 @@ function remote_version_info_at_ref(array $gh,string $ref): array {
 
 function remote_release_info_at_ref(array $gh,string $ref): array {
     return remote_update_metadata_at_ref($gh,$ref,'update-release.json');
+}
+
+function remote_managed_manifest_info_at_ref(array $gh,string $ref): array {
+    return remote_update_metadata_at_ref($gh,$ref,'update-managed-files.json');
+}
+
+function release_candidate_metadata_consistent(array $gh,array $candidate): bool {
+    $commit=strtolower(trim((string)($candidate['commit']??'')));
+    if(preg_match('/^[a-f0-9]{40}$/',$commit)!==1) return false;
+
+    try{
+        $versionInfo=remote_version_info_at_ref($gh,$commit);
+        $releaseInfo=remote_release_info_at_ref($gh,$commit);
+        $manifestInfo=remote_managed_manifest_info_at_ref($gh,$commit);
+    }catch(Throwable){
+        return false;
+    }
+
+    $candidateVersion=trim((string)($candidate['version']??''));
+    $candidateRevision=normalize_release_revision($candidate['release_revision']??0);
+    $version=trim((string)($versionInfo['version']??''));
+    $release=trim((string)($releaseInfo['version']??''));
+    $manifest=trim((string)($manifestInfo['version']??''));
+    $versionRevision=normalize_release_revision($versionInfo['release_revision']??0);
+    $releaseRevision=normalize_release_revision($releaseInfo['release_revision']??0);
+    $manifestRevision=normalize_release_revision($manifestInfo['release_revision']??0);
+
+    return $candidateVersion!==''
+        && $candidateVersion===$version
+        && $candidateVersion===$release
+        && $candidateVersion===$manifest
+        && $candidateRevision===$versionRevision
+        && $candidateRevision===$releaseRevision
+        && $candidateRevision===$manifestRevision;
 }
 
 function github_branch_head_sha(array $gh): string {
@@ -453,20 +487,40 @@ function next_remote_version_info(
         if($root!==null) release_chain_cache_write($root,$branch,$headSha,$chain);
     }
 
-    $next=select_next_release_from_chain($chain,$localVersion,$localRevision);
-    if($next!==null){
-        $targetCommit=trim((string)($next['commit']??''));
-        if(preg_match('/^[a-f0-9]{40}$/i',$targetCommit)!==1){
+    // Aynı sürüm için birden fazla tarihsel anchor bulunabilir. Önce en küçük
+    // uygun sürüm / en yüksek revision seçilir; üç metadata dosyası aynı committe
+    // doğrulanmıyorsa o commit zincirden elenir ve sıradaki aday denenir.
+    $validatedChain=array_values($chain);
+    while(($next=select_next_release_from_chain($validatedChain,$localVersion,$localRevision))!==null){
+        $targetCommit=strtolower(trim((string)($next['commit']??'')));
+        if(preg_match('/^[a-f0-9]{40}$/',$targetCommit)!==1){
             throw new RuntimeException('Sıradaki güncellemenin commit SHA değeri geçersiz.');
         }
-        return $next;
+        if(release_candidate_metadata_consistent($gh,$next)){
+            return $next;
+        }
+        $validatedChain=array_values(array_filter(
+            $validatedChain,
+            static fn(array $candidate): bool =>
+                strtolower(trim((string)($candidate['commit']??'')))!==$targetCommit
+        ));
     }
 
-    // Cache zincirinin son doğrulanmış release kimliği, HEAD üzerinde metadata
-    // değişikliği olmayan commitler için de güncel release durumunu temsil eder.
-    $latest=latest_release_from_chain($chain);
-    if($latest!==null && !release_identity_is_newer($latest,$localVersion,$localRevision)){
-        return $latest;
+    // Güncel olduğumuz durumda da döndürülen son release kimliği bozuk bir
+    // tarihsel anchor olmamalıdır.
+    while(($latest=latest_release_from_chain($validatedChain))!==null){
+        if(release_candidate_metadata_consistent($gh,$latest)){
+            if(!release_identity_is_newer($latest,$localVersion,$localRevision)){
+                return $latest;
+            }
+            break;
+        }
+        $badCommit=strtolower(trim((string)($latest['commit']??'')));
+        $validatedChain=array_values(array_filter(
+            $validatedChain,
+            static fn(array $candidate): bool =>
+                strtolower(trim((string)($candidate['commit']??'')))!==$badCommit
+        ));
     }
 
     throw new RuntimeException(
