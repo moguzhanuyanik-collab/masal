@@ -68,7 +68,6 @@ jobs:
           php tests/update-managed-integrity-111.php
           php tests/update-continuity-112.php
           php tests/web-rescue-197-198-113.php
-          php tests/recovery-release-postcondition-131.php
 
       - name: Node regression checks
         shell: bash
@@ -160,4 +159,5 @@ jobs:
           php tests/tenant-isolation-db-115.php
           php tests/legacy-064-integrity-124.php
           php tests/tenant-recovery-postcondition-125.php
+          php tests/recovery-release-postcondition-131.php
 
