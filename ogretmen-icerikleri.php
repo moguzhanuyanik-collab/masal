@@ -357,6 +357,7 @@ function oi_type_icon(string $type): string {
 <div class="teacher-content-actions">
 <span class="role-pill <?=((int)$item['aktif']===1?'ok':'off')?>"><?=((int)$item['aktif']===1?'Aktif':'Pasif')?></span>
 <?php if($activity>0):?><span class="role-pill off">🔒 Geçmiş var</span><?php endif;?>
+<a class="teacher-content-action detail" href="ogretmen-icerik-detay.php?id=<?=(int)$item['id']?>">Detay</a>
 <a class="teacher-content-action edit" href="ogretmen-icerikleri.php?kurum_id=<?=(int)$item['kurum_id']?>&amp;duzenle=<?=(int)$item['id']?>#icerik-duzenle"><?=$activity>0?'İncele':'Düzenle'?></a>
 <form method="post" data-content-copy>
 <input type="hidden" name="csrf" value="<?=oi_h(csrf_token())?>">

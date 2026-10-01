@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.14",
+  "version": "1.2.15",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -184,6 +184,7 @@
     "RELEASE-1.2.12.md",
     "RELEASE-1.2.13.md",
     "RELEASE-1.2.14.md",
+    "RELEASE-1.2.15.md",
     "RELEASE-1.2.2.md",
     "RELEASE-1.2.3.md",
     "RELEASE-1.2.4.md",
@@ -401,6 +402,8 @@
     "ogrenci-odevleri.php",
     "ogrenci-raporu.css",
     "ogrenci-raporu.php",
+    "ogretmen-icerik-detay.css",
+    "ogretmen-icerik-detay.php",
     "ogretmen-icerikleri.css",
     "ogretmen-icerikleri.js",
     "ogretmen-icerikleri.php",
@@ -490,6 +493,8 @@
     "tests/security-92.cjs",
     "tests/student-report-detail-138.cjs",
     "tests/student-report-detail-138.php",
+    "tests/teacher-content-detail-140.cjs",
+    "tests/teacher-content-detail-db-140.php",
     "tests/teacher-content-edit-copy-139.cjs",
     "tests/teacher-content-edit-copy-db-139.php",
     "tests/tenant-isolation-114.cjs",
