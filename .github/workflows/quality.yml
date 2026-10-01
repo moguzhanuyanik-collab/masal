@@ -108,6 +108,7 @@ jobs:
           node tests/update-chain-rebuild-126.cjs
           node tests/update-release-chain-cache-127.cjs
           node tests/update-migration-execution-128.cjs
+          node tests/global-scope-integrity-129.cjs
 
   tenant-db-integration:
     name: Tenant DB integration

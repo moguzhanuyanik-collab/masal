@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.2",
+  "version": "1.2.5",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -180,6 +180,9 @@
     "RELEASE-1.1.99.md",
     "RELEASE-1.2.1.md",
     "RELEASE-1.2.2.md",
+    "RELEASE-1.2.3.md",
+    "RELEASE-1.2.4.md",
+    "RELEASE-1.2.5.md",
     "YETKILENDIRME-1.0.35.md",
     "activities-extra.js",
     "adimbot-ai-bridge.js",
@@ -419,6 +422,7 @@
     "super-admin.css",
     "super-admin.php",
     "test-progress-reset.js",
+    "tests/adimbot-api-auth-130.cjs",
     "tests/adimbot-audio-88.cjs",
     "tests/adimbot-chat-89.cjs",
     "tests/adimbot-dialog-84.cjs",
@@ -436,6 +440,7 @@
     "tests/db-ai-safety-98.cjs",
     "tests/db-backup-99.cjs",
     "tests/db-backup-99.php",
+    "tests/global-scope-integrity-129.cjs",
     "tests/hardening-91.cjs",
     "tests/hardening-94.cjs",
     "tests/legacy-064-integrity-124.php",
@@ -511,5 +516,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 2
+  "release_revision": 1
 }
