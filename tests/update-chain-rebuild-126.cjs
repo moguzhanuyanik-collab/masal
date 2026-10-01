@@ -12,9 +12,9 @@ const updater=fs.readFileSync('src/updater.php','utf8');
 assert.strictEqual(version.version,'1.2.1');
 assert.strictEqual(release.version,'1.2.1');
 assert.strictEqual(manifest.version,'1.2.1');
-assert.strictEqual(version.release_revision,14);
-assert.strictEqual(release.release_revision,14);
-assert.strictEqual(manifest.release_revision,14);
+assert.strictEqual(version.release_revision,15);
+assert.strictEqual(release.release_revision,15);
+assert.strictEqual(manifest.release_revision,15);
 assert(updater.includes('function github_branch_head_sha'));
 assert(updater.includes('function remote_release_info(array $gh): array'));
 assert(updater.includes('function run_legacy_1_1_97_to_1_2_1_recovery'));
@@ -36,6 +36,7 @@ for(const sha of commits){
   if(typeof data.version==='string' && data.version.trim()!=='') versions.push(data.version.trim());
  }catch(_){}
 }
+versions.reverse();
 let cursor=0;
 for(const v of versions){
  if(v===expected[cursor]) cursor++;

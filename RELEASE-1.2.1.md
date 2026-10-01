@@ -98,3 +98,9 @@ Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına 
 
 - Release revision, version.json, update-release.json ve managed manifest tek final ankrajda hizalandı.
 - Legacy recovery regression testi artık release revision numarasını sabit değere bağlamıyor.
+
+
+## Rev 15 — final chain-test correction
+
+- Sıralı sürüm regression testi Git geçmişini newest→oldest döndüren `git log` çıktısını doğru biçimde oldest→newest değerlendiriyor.
+- Final release head bu test düzeltmesiyle yeniden ankrajlandı.
