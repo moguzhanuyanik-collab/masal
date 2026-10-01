@@ -235,6 +235,10 @@ function release_chain_cache_secret_path(string $root): string {
 function release_chain_cache_secret(string $root): ?string {
     ensure_runtime_storage_guard($root);
     $path=release_chain_cache_secret_path($root);
+    $dir=dirname($path);
+    if(!is_dir($dir)&&!mkdir($dir,0750,true)&&!is_dir($dir)){
+        return null;
+    }
 
     if(is_file($path) && !is_link($path) && is_readable($path)){
         $existing=trim((string)file_get_contents($path));
