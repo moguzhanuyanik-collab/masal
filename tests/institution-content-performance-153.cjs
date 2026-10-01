@@ -13,7 +13,7 @@ const release=JSON.parse(fs.readFileSync('update-release.json','utf8'));
 
 assert(page.includes("require __DIR__.'/src/kurum_icerik_dashboard.php';"),'institution content dashboard domain missing');
 assert(page.includes('name="performans"'),'performance filter missing');
-assert(page.includes('kic_contents($pdo,$institutionId,$teacherId,$type,$publication)'),'institution content list must use dashboard domain');
+assert(/kic_contents\(\$pdo,\$institutionId,\$teacherId,\$type,\$publication(?:,\$groupId)?\)/.test(page),'institution content list must use dashboard domain with optional group scope');
 assert(page.includes('kic_filter_performance($allContents,$performance)'),'performance filter pipeline missing');
 assert(page.includes('kic_summary($contents)'),'dashboard summary missing');
 assert(page.includes('Dikkat gereken yayın'),'attention summary stat missing');
@@ -24,7 +24,7 @@ assert(page.includes('Ödev tamamlama'),'homework completion summary missing');
 assert(page.includes('kic_performance_label((string)$item[\'performans_durumu\'])'),'performance status badge missing');
 assert(page.includes("<?=(int)$item['yanlis_sayisi']?> yanlış"),'question wrong count missing');
 assert(page.includes("<?=(int)$item['geciken_sayisi']?> gecikti"),'homework overdue count missing');
-assert(page.includes('kurum-icerikleri-dashboard.css?v=1.2.28'),'dashboard stylesheet must be versioned');
+assert(/kurum-icerikleri-dashboard\.css\?v=1\.2\.(?:2[8-9]|[3-9]\d)/.test(page),'dashboard stylesheet must be versioned at 1.2.28 or newer');
 
 assert(domain.includes('function kic_contents('),'dashboard content provider missing');
 assert(domain.includes("tk.kurum_id=oi.kurum_id"),'teacher membership must match content institution');
