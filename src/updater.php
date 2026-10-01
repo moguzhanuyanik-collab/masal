@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-const ILKADIM_UPDATER_CORE_GENERATION = 119;
+const ILKADIM_UPDATER_CORE_GENERATION = 121;
 
 function updater_core_generation_from_file(string $path): int {
     if(!is_file($path) || is_link($path) || !is_readable($path)) return 0;
@@ -228,7 +228,7 @@ function next_remote_version_info(array $gh,string $localVersion,int $localRevis
     $localVersion=trim($localVersion);
     if($localVersion==='') $localVersion='0.0.0';
 
-    // 1.1.119: eski ara-sürüm/recovery zinciri tamamen kaldırıldı.
+    // 1.2.1: eski ara-sürüm/recovery zinciri tamamen kaldırıldı.
     // Her kontrol yalnız main dalının gerçek 40 karakterlik HEAD SHA'sına gider.
     return remote_release_info($gh);
 }
@@ -2258,9 +2258,9 @@ function install_github_update(
         $recoveryState['activation_preflight']=$activationPreflight;
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
 
-        // 1.1.119 temiz recovery yalnız uygulama kodu/updater çekirdeğini yeniler.
+        // 1.2.1 temiz recovery yalnız uygulama kodu/updater çekirdeğini yeniler.
         // Veritabanı geriye alınmaz, yeni migration çalıştırılmaz, tablo/kolon/veri silinmez.
-        $isClean119Recovery=((string)($remote['version']??''))==='1.1.119';
+        $isClean121Recovery=((string)($remote['version']??''))==='1.2.1';
         $preflightRecoveredMigrations=[];
         $pendingMigrations=[];
         $legacyRepairNeeded=false;

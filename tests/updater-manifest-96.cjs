@@ -54,10 +54,10 @@ const tracked=execFileSync('git',['ls-files'],{encoding:'utf8'})
 const listed=[...manifest.files].sort();
 assert.deepStrictEqual(listed,tracked,'update-managed-files.json must match deploy-managed tracked files');
 assert.strictEqual(manifest.format,1);
-assert(['1.1.96','1.1.119'].includes(manifest.version));
+assert(['1.1.96','1.1.119','1.2.1'].includes(manifest.version));
 assert(listed.includes('update-managed-files.json'));
 assert(listed.includes('src/updater.php'));
 assert(listed.includes('version.json'));
-assert(['1.1.96','1.1.119'].includes(version.version));
+assert(['1.1.96','1.1.119','1.2.1'].includes(version.version));
 
 console.log('1.1.96 updater manifest safety checks passed');
