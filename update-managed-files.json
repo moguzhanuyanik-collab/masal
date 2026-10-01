@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.50",
+  "version": "1.2.51",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -224,6 +224,7 @@
     "RELEASE-1.2.49.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.50.md",
+    "RELEASE-1.2.51.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
@@ -404,6 +405,7 @@
     "database/migrations/080_lisans_yenileme_operasyon_merkezi.sql",
     "database/migrations/081_yenileme_sozlesme_tahsilat_baglantisi.sql",
     "database/migrations/082_ticari_tahsilat_risk_merkezi.sql",
+    "database/migrations/083_ticari_tahsilat_hatirlatmalari.sql",
     "demo-satis.css",
     "demo-satis.php",
     "destek.css",
@@ -535,6 +537,7 @@
     "src/ogretmen_soru_dashboard.php",
     "src/password_reset.php",
     "src/super_admin_icons.php",
+    "src/tahsilat_hatirlatma.php",
     "src/tahsilat_risk.php",
     "src/ticari_finans.php",
     "src/updater.php",
@@ -566,6 +569,8 @@
     "tests/adimbot-speech-81.cjs",
     "tests/adimbot-transcript-behavior.php",
     "tests/adimbot-voice-83.cjs",
+    "tests/collection-reminders-176.cjs",
+    "tests/collection-reminders-db-176.php",
     "tests/commercial-finance-163.cjs",
     "tests/commercial-finance-db-163.php",
     "tests/commercial-finance-integrity-169.cjs",
@@ -739,5 +744,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Ticari operasyon ve tahsilat risk merkezi"
+  "name": "Ticari yönetici bildirimleri ve tahsilat hatırlatma merkezi"
 }
