@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.42",
+  "version": "1.2.43",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -215,6 +215,7 @@
     "RELEASE-1.2.40.md",
     "RELEASE-1.2.41.md",
     "RELEASE-1.2.42.md",
+    "RELEASE-1.2.43.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
@@ -390,6 +391,7 @@
     "database/migrations/074_merkezi_bildirim_ve_duyurular.sql",
     "database/migrations/075_guvenli_sifre_kurtarma.sql",
     "database/migrations/076_destek_talep_merkezi.sql",
+    "database/migrations/077_yasal_belge_onay_merkezi.sql",
     "destek.css",
     "destek.php",
     "eposta-ayarlari.php",
@@ -516,6 +518,7 @@
     "src/updater.php",
     "src/veli_icerik_dashboard.php",
     "src/veli_icerikleri.php",
+    "src/yasal_onay.php",
     "src/yonetici_yetkileri.php",
     "super-admin-pages.css",
     "super-admin-profil.php",
@@ -576,6 +579,8 @@
     "tests/institution-reporting-137.cjs",
     "tests/institution-reporting-db-137.php",
     "tests/legacy-064-integrity-124.php",
+    "tests/legal-consent-168.cjs",
+    "tests/legal-consent-db-168.php",
     "tests/mail-settings-166.cjs",
     "tests/mail-settings-166.php",
     "tests/manager-report-tenant-scope-145.cjs",
@@ -687,11 +692,14 @@
     "veli-paneli.php",
     "veli.css",
     "version.json",
+    "yasal-belgeler.php",
+    "yasal-onay.php",
+    "yasal.css",
     "yetkilendirme.php",
     "yonetici-paneli.php",
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Destek ve talep merkezi"
+  "name": "Versiyonlu yasal belge ve açık onay merkezi"
 }
