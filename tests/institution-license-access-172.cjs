@@ -41,18 +41,26 @@ assert(auth.includes("AND kt.kurum_id IN ({$ph})"),
 assert(auth.includes("AND vk.kurum_id IN ({$ph})"),
   'parent student scope must filter to operational institutions');
 
-assert(supportDomain.includes("auth_user_institution_ids_raw($pdo,(int)$user['id'],$role)"),
-  'support must retain raw institution membership while license is restricted');
-assert(supportDomain.includes("auth_user_in_institution_raw($pdo,(int)$user['id'],$institutionId,$role)"),
-  'support ticket creation must use raw membership authorization');
+assert(supportDomain.includes("function ds_raw_institution_ids("),
+  'support raw institution compatibility helper missing');
+assert(supportDomain.includes("return auth_user_institution_ids_raw($pdo,$userId,$role);"),
+  'support must prefer raw institution membership while license is restricted');
+assert(supportDomain.includes("function ds_raw_user_in_institution("),
+  'support raw membership authorization helper missing');
+assert(supportDomain.includes("return auth_user_in_institution_raw($pdo,$userId,$institutionId,$role);"),
+  'support ticket creation must prefer raw membership authorization');
 
-assert(institutionDomain.includes('auth_operational_manageable_institution_ids($pdo,$user)'),
-  'manager institution operations must require operationally licensed institution');
+assert(institutionDomain.includes('function ky_operational_manageable_ids('),
+  'manager operational scope compatibility helper missing');
+assert(institutionDomain.includes('return auth_operational_manageable_institution_ids($pdo,$user);'),
+  'manager institution operations must prefer operationally licensed institution scope');
 assert(institutionDomain.includes('Kurum lisansı operasyonel kullanıma açık değil.'),
   'manager direct-operation license denial missing');
 
-assert(notifications.includes('auth_operational_manageable_institution_ids($pdo,$actor)'),
-  'manager announcement writes must use operational institutions only');
+assert(notifications.includes('function bd_operational_manageable_ids('),
+  'notification operational scope compatibility helper missing');
+assert(notifications.includes('return auth_operational_manageable_institution_ids($pdo,$actor);'),
+  'manager announcement writes must prefer operational institutions only');
 
 assert(manager.includes('$operationalOpen=(bool)($licenseAccess[\'allowed\']??true);'),
   'manager panel license state missing');
