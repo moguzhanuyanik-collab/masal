@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.30",
+  "version": "1.2.31",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -202,6 +202,7 @@
     "RELEASE-1.2.29.md",
     "RELEASE-1.2.3.md",
     "RELEASE-1.2.30.md",
+    "RELEASE-1.2.31.md",
     "RELEASE-1.2.4.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.6.md",
@@ -368,6 +369,7 @@
     "database/migrations/067_odev_teslim_tarihi_ve_tamamlama.sql",
     "database/migrations/068_kurum_siniflari_ve_gruplar.sql",
     "database/migrations/069_ogretmen_soru_yildiz_odulleri.sql",
+    "database/migrations/070_ogretmen_icerik_grup_hedef_snapshot.sql",
     "global-audio-feedback.js",
     "global-eslestirme.php",
     "global-ogrenciler.php",
@@ -550,6 +552,8 @@
     "tests/teacher-content-detail-db-140.php",
     "tests/teacher-content-edit-copy-139.cjs",
     "tests/teacher-content-edit-copy-db-139.php",
+    "tests/teacher-dashboard-group-filter-156.cjs",
+    "tests/teacher-dashboard-group-filter-db-156.php",
     "tests/teacher-group-filter-143.cjs",
     "tests/teacher-group-filter-db-143.php",
     "tests/teacher-group-targeting-155.cjs",

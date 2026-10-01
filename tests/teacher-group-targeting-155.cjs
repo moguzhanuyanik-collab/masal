@@ -15,8 +15,8 @@ assert(page.includes('oi_teacher_target_groups($pdo,(int)$teacher[\'id\'],$selec
 assert(page.includes('name="hedef_gruplar[]"'),'class/group targeting controls missing');
 assert(page.includes('Sınıf / grup hızlı hedefleme'),'group targeting heading missing');
 assert(page.includes('Grup üyeliği sonradan değişse bile eski yayının hedefi otomatik değişmez.'),'snapshot targeting explanation missing');
-assert(page.includes('ogretmen-icerikleri.css?v=1.2.30'),'teacher content CSS cache version must be 1.2.30');
-assert(page.includes('ogretmen-icerikleri.js?v=1.2.30'),'teacher content JS cache version must be 1.2.30');
+assert(/ogretmen-icerikleri\.css\?v=1\.2\.(?:30|3[1-9]|[4-9]\d)/.test(page),'teacher content CSS cache version must be 1.2.30 or newer');
+assert(/ogretmen-icerikleri\.js\?v=1\.2\.(?:30|3[1-9]|[4-9]\d)/.test(page),'teacher content JS cache version must be 1.2.30 or newer');
 
 assert(domain.includes('function oi_teacher_target_groups('),'teacher target group provider missing');
 assert(domain.includes('function oi_teacher_group_student_ids('),'group student resolver missing');
@@ -31,7 +31,8 @@ assert(domain.includes('oi_teacher_group_student_ids($pdo,$teacherId,$institutio
 assert(domain.includes("throw new RuntimeException('Seçilen sınıf / gruplardan biri bu kurumda sana bağlı aktif öğrenci içermiyor.')"),'foreign/empty group target must fail closed');
 assert(domain.includes('array_merge($targetStudentIds,$groupStudentIds)'),'group and manual targets must combine');
 assert(domain.includes('sort($targetStudentIds,SORT_NUMERIC)'),'combined targets must be deterministic');
-assert((domain.match(/oi_resolve_content_target_ids\(/g)||[]).length>=3,'create and update flows must both resolve class/group targets');
+assert(domain.includes('function oi_resolve_content_target_plan('),'snapshot-capable target planner missing');
+assert((domain.match(/oi_resolve_content_target_plan\(/g)||[]).length>=3,'create and update flows must both use snapshot-capable target planning');
 
 assert(css.includes('.teacher-content-group-target-box'),'group target box styling missing');
 assert(css.includes('.teacher-content-group-targets'),'group target list styling missing');

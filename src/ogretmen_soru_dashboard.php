@@ -5,14 +5,18 @@ function tsd_teacher_questions(
     PDO $pdo,
     int $teacherUserId,
     int $institutionId=0,
-    string $publication='tum'
+    string $publication='tum',
+    int $groupId=0
 ): array {
     if($teacherUserId<=0) return [];
     if(!in_array($publication,['tum','aktif','pasif'],true)) $publication='tum';
+    $groupId=max(0,$groupId);
 
     $teacher=oi_teacher_profile($pdo,$teacherUserId);
     if(!$teacher) return [];
     $teacherId=(int)$teacher['id'];
+
+    if($groupId>0 && !oi_table_exists($pdo,'ogretmen_icerik_hedef_gruplari')) return [];
 
     $where=["oi.ogretmen_id=?","oi.icerik_turu='soru'"];
     $params=[$teacherId];
@@ -25,12 +29,34 @@ function tsd_teacher_questions(
     if($publication==='aktif') $where[]='oi.aktif=1';
     elseif($publication==='pasif') $where[]='oi.aktif=0';
 
+    $groupStudentCondition='';
+    if($groupId>0){
+        $groupStudentCondition=" AND EXISTS (
+            SELECT 1 FROM ogretmen_icerik_hedef_gruplari ghs
+            WHERE ghs.icerik_id=oi.id
+              AND ghs.kurum_sinif_id={$groupId}
+              AND ghs.ogrenci_id=o.id
+        )";
+        $where[]="EXISTS (
+            SELECT 1 FROM ogretmen_icerik_hedef_gruplari ghc
+            WHERE ghc.icerik_id=oi.id
+              AND ghc.kurum_sinif_id={$groupId}
+        )";
+    }
+
     $rewardSelect=oi_table_exists($pdo,'ogretmen_icerik_yildiz_odulleri')
         ?",COUNT(DISTINCT CASE
-             WHEN o.id IS NOT NULL AND su.id IS NOT NULL AND sk.kullanici_id IS NOT NULL AND yr.ogrenci_id IS NOT NULL
+             WHEN o.id IS NOT NULL
+              AND su.id IS NOT NULL
+              AND sk.kullanici_id IS NOT NULL
+              {$groupStudentCondition}
+              AND yr.ogrenci_id IS NOT NULL
              THEN o.id END) odullendirilen_sayisi,
            COALESCE(SUM(CASE
-             WHEN o.id IS NOT NULL AND su.id IS NOT NULL AND sk.kullanici_id IS NOT NULL
+             WHEN o.id IS NOT NULL
+              AND su.id IS NOT NULL
+              AND sk.kullanici_id IS NOT NULL
+              {$groupStudentCondition}
              THEN COALESCE(yr.yildiz_degeri,0) ELSE 0 END),0) dagitilan_yildiz"
         :",0 odullendirilen_sayisi,0 dagitilan_yildiz";
     $rewardJoin=oi_table_exists($pdo,'ogretmen_icerik_yildiz_odulleri')
@@ -47,12 +73,14 @@ function tsd_teacher_questions(
            AND su.id IS NOT NULL
            AND sk.kullanici_id IS NOT NULL
            AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
+           {$groupStudentCondition}
           THEN o.id END) hedef_sayisi,
         COUNT(DISTINCT CASE
           WHEN o.id IS NOT NULL
            AND su.id IS NOT NULL
            AND sk.kullanici_id IS NOT NULL
            AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
+           {$groupStudentCondition}
            AND c.secilen_cevap_indeksi IS NOT NULL
           THEN o.id END) cevaplayan_sayisi,
         COUNT(DISTINCT CASE
@@ -60,6 +88,7 @@ function tsd_teacher_questions(
            AND su.id IS NOT NULL
            AND sk.kullanici_id IS NOT NULL
            AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
+           {$groupStudentCondition}
            AND c.dogru=1
           THEN o.id END) dogru_sayisi,
         COUNT(DISTINCT CASE
@@ -67,6 +96,7 @@ function tsd_teacher_questions(
            AND su.id IS NOT NULL
            AND sk.kullanici_id IS NOT NULL
            AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
+           {$groupStudentCondition}
            AND c.secilen_cevap_indeksi IS NOT NULL
            AND c.dogru=0
           THEN o.id END) yanlis_sayisi

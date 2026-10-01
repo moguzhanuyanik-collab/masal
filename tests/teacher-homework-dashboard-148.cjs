@@ -13,7 +13,7 @@ const release=JSON.parse(fs.readFileSync('update-release.json','utf8'));
 
 assert(page.includes("require __DIR__.'/src/ogretmen_odev_dashboard.php';"),'teacher homework page must use dashboard domain');
 assert(page.includes('thd_teacher_institutions($pdo,(int)$user[\'id\'])'),'teacher institution filter must use dashboard domain');
-assert(page.includes('thd_teacher_homeworks($pdo,(int)$user[\'id\'],$institutionId,$publication,\'tum\')'),'dashboard rows must use shared progress query');
+assert(/thd_teacher_homeworks\(\$pdo,\(int\)\$user\['id'\],\$institutionId,\$publication,'tum'(?:,\$groupId)?\)/.test(page),'dashboard rows must use shared progress query');
 assert(page.includes('thd_dashboard_summary($allHomeworks)'),'dashboard summary missing');
 assert(page.includes('thd_filter_homeworks($allHomeworks,$delivery)'),'delivery filter missing');
 assert(page.includes('name="yayin"'),'publication status filter missing');
@@ -26,7 +26,7 @@ assert(page.includes('Tümü tamamlandı'),'completed dashboard state missing');
 assert(page.includes('hedef</span>'),'target-count metric missing');
 assert(page.includes('gecikti</span>'),'overdue-count metric missing');
 assert(page.includes('bekliyor</span>'),'pending-count metric missing');
-assert(page.includes('ogretmen-odevleri.css?v=1.2.23'),'dashboard stylesheet must be versioned');
+assert(/ogretmen-odevleri\.css\?v=1\.2\.(?:2[3-9]|[3-9]\d)/.test(page),'dashboard stylesheet must be versioned at 1.2.23 or newer');
 
 assert(domain.includes('function thd_teacher_profile_id('),'teacher profile helper missing');
 assert(domain.includes('function thd_teacher_institutions('),'teacher institutions helper missing');
