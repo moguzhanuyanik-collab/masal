@@ -92,3 +92,9 @@ Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına 
 
 - 1.2.1 release head, version metadata ve legacy recovery regression testi tek son ankraj commitinde hizalandı.
 - Bu committen sonra release-head sözleşmesini bozan ek dosya commitleri bırakılmayacak.
+
+
+## Rev 14 — final rebuild anchor
+
+- Release revision, version.json, update-release.json ve managed manifest tek final ankrajda hizalandı.
+- Legacy recovery regression testi artık release revision numarasını sabit değere bağlamıyor.
