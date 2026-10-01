@@ -24,8 +24,8 @@ assert(/^[a-f0-9]{40}$/.test(source));
 assert(commitExists(baseline),'1.1.97 baseline commit Git history içinde bulunamadı.');
 assert(commitExists(source),'1.2.1 recovery source commit Git history içinde bulunamadı.');
 
-assert.strictEqual(git(['show',baseline+':version.json']).match(/"version"\\s*:\\s*"([^"]+)"/)?.[1],'1.1.97');
-assert.strictEqual(git(['show',source+':version.json']).match(/"version"\\s*:\\s*"([^"]+)"/)?.[1],'1.2.1');
+assert.strictEqual(git(['show',baseline+':version.json']).match(/"version"\s*:\s*"([^"]+)"/)?.[1],'1.1.97');
+assert.strictEqual(git(['show',source+':version.json']).match(/"version"\s*:\s*"([^"]+)"/)?.[1],'1.2.1');
 
 assert.strictEqual(git(['rev-list','--count',baseline+'..'+source]),String(evidence.source_compare.baseline_to_source_commit_count));
 assert.strictEqual(evidence.source_compare.baseline_to_source_commit_count,30);
