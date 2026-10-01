@@ -223,13 +223,15 @@ function oi_teacher_contents(PDO $pdo,int $teacherId): array {
           k.ad kurum_adi,d.ad ders_adi,d.emoji ders_emoji,
           COALESCE(dm.baslik,oi.konu_basligi,'Genel') konu_adi,
           COUNT(DISTINCT h.ogrenci_id) hedef_sayisi,
-          COUNT(DISTINCT c.ogrenci_id) cevap_sayisi
+          COUNT(DISTINCT c.ogrenci_id) cevap_sayisi,
+          COUNT(DISTINCT od.ogrenci_id) odev_durum_sayisi
           FROM ogretmen_icerikleri oi
           INNER JOIN kurumlar k ON k.id=oi.kurum_id
           INNER JOIN dersler d ON d.id=oi.ders_id
           LEFT JOIN ders_modulleri dm ON dm.id=oi.ders_modulu_id
           LEFT JOIN ogretmen_icerik_hedefleri h ON h.icerik_id=oi.id
           LEFT JOIN ogretmen_icerik_cevaplari c ON c.icerik_id=oi.id
+          LEFT JOIN ogrenci_odev_durumlari od ON od.icerik_id=oi.id
           WHERE oi.ogretmen_id=?
           GROUP BY oi.id,k.ad,d.ad,d.emoji,dm.baslik
           ORDER BY oi.aktif DESC,oi.olusturulma_tarihi DESC,oi.id DESC");
