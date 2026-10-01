@@ -144,7 +144,7 @@ $back=$isSuper?'kurum-detay.php?kurum_id='.$institutionId:'yonetici-paneli.php?k
 <title>Kurum İçerikleri — <?=ki_h((string)$institution['ad'])?></title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="kurum.css?v=1.2.8">
-<link rel="stylesheet" href="kurum-icerikleri.css?v=1.2.8">
+<link rel="stylesheet" href="kurum-icerikleri.css?v=1.2.16">
 </head>
 <body class="role-page"><div class="role-shell">
 <header class="role-topbar">
@@ -224,6 +224,7 @@ $back=$isSuper?'kurum-detay.php?kurum_id='.$institutionId:'yonetici-paneli.php?k
 <?php if($contentText!==''):?><p class="institution-content-preview"><?=nl2br(ki_h($contentText))?></p><?php endif;?>
 
 <div class="institution-content-meta">
+<a class="institution-content-detail-link" href="kurum-icerik-detay.php?kurum_id=<?=$institutionId?>&amp;id=<?=(int)$item['id']?>">Detay</a>
 <span>🎯 <?=$targetCount?> hedef öğrenci</span>
 <?php if((string)$item['icerik_turu']==='soru'):?>
 <span>💬 <?=(int)$item['cevap_ogrenci_sayisi']?> cevap</span>

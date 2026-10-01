@@ -13,3 +13,4 @@
 .institution-content-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .institution-content-meta span{display:inline-flex;padding:6px 8px;border-radius:999px;background:#f6f3f9;color:#766c80;font-size:8px;font-weight:850}
 @media(min-width:520px){.content-filter{grid-template-columns:1fr 1fr}.content-filter button{grid-column:1/-1}}
+.institution-content-detail-link{display:inline-flex;align-items:center;padding:6px 9px;border-radius:999px;background:#eef5fc;color:#385f91;font-size:8px;font-weight:950;text-decoration:none}
