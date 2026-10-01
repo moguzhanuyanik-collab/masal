@@ -1,4 +1,4 @@
 {
-  "version": "1.1.98",
-  "name": "Migration geçmişi checkpoint ve kalıcı AdımBot hız limiti"
+  "version": "1.1.99",
+  "name": "Migration öncesi native DB yedeği ve legacy hesap güvenliği"
 }

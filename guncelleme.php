@@ -87,6 +87,7 @@ try{
 }
 
 $gh = app_config('github');
+$dbCfg = app_config('db');
 $updateCfg = app_config('update');
 $updateCsrf = csrf_token();
 
@@ -150,7 +151,9 @@ if ($isAjax) {
             $result = install_github_update(
                 __DIR__,
                 $gh,
-                (array)($updateCfg['preserve'] ?? [])
+                (array)($updateCfg['preserve'] ?? []),
+                is_array($dbCfg)?$dbCfg:[],
+                is_array($updateCfg)?$updateCfg:[]
             );
 
             $newLocal = read_app_version();
@@ -173,6 +176,7 @@ if ($isAjax) {
                 'action' => 'install',
                 'message' => $message,
                 'backup' => (string)($result['backup'] ?? ''),
+                'database_backup' => (string)($result['database_backup'] ?? ''),
                 'local_version' => $newLocal,
                 'remote_version' => (string)($remote['version'] ?? ''),
                 'remote_name' => (string)($remote['name'] ?? ''),
