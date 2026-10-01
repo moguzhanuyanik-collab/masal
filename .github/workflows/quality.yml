@@ -62,3 +62,4 @@ jobs:
           node tests/db-ai-safety-98.cjs
           node tests/db-backup-99.cjs
           node tests/recovery-safety-100.cjs
+          node tests/update-release-anchor-101.cjs
