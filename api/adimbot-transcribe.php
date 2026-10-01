@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+require dirname(__DIR__).'/src/bootstrap.php';
 require dirname(__DIR__).'/src/auth.php';
 require_once dirname(__DIR__).'/src/adimbot_groq.php';
 require_once dirname(__DIR__).'/src/adimbot_transcript.php';
@@ -36,7 +37,11 @@ function voice_provider_error(int $status, mixed $body, int $retryAfter=0): neve
 }
 app_session_start();
 if ($_SERVER['REQUEST_METHOD']!=='POST') voice_result(['ok'=>false,'reason'=>'method'],405);
-if (($_SESSION['aktif_rol'] ?? '')!=='ogrenci' || (int)($_SESSION['ogrenci_id'] ?? 0)<1 || (int)($_SESSION['kullanici_id'] ?? 0)<1) voice_result(['ok'=>false,'reason'=>'auth'],403);
+$pdo=db();
+$user=authenticated_user();
+if (!$user || auth_effective_role($user)!=='ogrenci') voice_result(['ok'=>false,'reason'=>'auth'],403);
+$studentId=auth_student_id_for_user($pdo,(int)$user['id']);
+if ($studentId===null) voice_result(['ok'=>false,'reason'=>'auth'],403);
 if (!verify_csrf((string)($_SERVER['HTTP_X_CSRF_TOKEN'] ?? ''))) voice_result(['ok'=>false,'reason'=>'csrf'],403);
 $origin=(string)($_SERVER['HTTP_ORIGIN'] ?? '');
 if ($origin!=='') {
@@ -81,9 +86,9 @@ $voiceRate=['persistent'=>false,'blocked'=>false,'retry_after'=>0];
 if(function_exists('db')){
     try{
         $voiceRate=adimbot_rate_limit_check_and_record(
-            db(),
+            $pdo,
             'voice',
-            (int)($_SESSION['ogrenci_id'] ?? 0),
+            $studentId,
             mb_substr((string)($_SERVER['REMOTE_ADDR'] ?? ''),0,45),
             $voiceLimit,
             $voiceWindow
