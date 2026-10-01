@@ -69,17 +69,20 @@ function thd_teacher_homeworks(
         k.ad kurum_adi,d.ad ders_adi,
         COUNT(DISTINCT CASE
             WHEN os.id IS NOT NULL
+             AND su.id IS NOT NULL
              AND sk.kullanici_id IS NOT NULL
              AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
             THEN os.id END) hedef_sayisi,
         COUNT(DISTINCT CASE
             WHEN os.id IS NOT NULL
+             AND su.id IS NOT NULL
              AND sk.kullanici_id IS NOT NULL
              AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
              AND COALESCE(od.tamamlandi,0)=1
             THEN os.id END) tamamlanan_sayisi,
         COUNT(DISTINCT CASE
             WHEN os.id IS NOT NULL
+             AND su.id IS NOT NULL
              AND sk.kullanici_id IS NOT NULL
              AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
              AND COALESCE(od.tamamlandi,0)=0
