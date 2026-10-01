@@ -32,7 +32,9 @@ assert(teacherDetail.includes("hw_status($student,null,(string)($homework['tesli
 assert(teacherDetail.includes("ogrenci-raporu.php?id=<?=(int)$student['id']?>&amp;kurum_id=<?=(int)$homework['kurum_id']?>"),'teacher homework student drill-down must preserve institution context');
 assert(teacherDetail.includes('Gecikti'),'teacher homework detail must expose overdue status');
 assert(teacherDetail.includes('ogretmen-odev-detay.css?v=1.2.21'),'teacher homework detail stylesheet must be versioned');
-assert(teacherList.includes('tamamlandı, gecikti ve bekliyor'),'teacher homework list help must describe all delivery states');
+assert(teacherList.includes('Gecikme var'),'teacher homework list must expose overdue delivery state');
+assert(teacherList.includes('Tümü tamamlandı'),'teacher homework list must expose fully-completed delivery state');
+assert(teacherList.includes('Devam ediyor'),'teacher homework list must expose pending delivery state');
 
 assert(domain.includes('function hw_status('),'shared homework status helper missing');
 assert(domain.includes("if($completed) return 'completed';"),'completed homework must take precedence over due date');
