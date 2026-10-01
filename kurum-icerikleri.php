@@ -41,11 +41,17 @@ function ki_type_icon(string $type): string {
         'diger'=>'📌',
     ][$type]??'📌';
 }
+function ki_group_label(array $group): string {
+    $type=(string)($group['tur']??'sinif')==='grup'?'Grup':'Sınıf';
+    $grade=$group['sinif_seviyesi']!==null?(int)$group['sinif_seviyesi']:0;
+    return $type.' · '.(string)($group['ad']??'').($grade>0?' · '.$grade.'. sınıf':'');
+}
 
 $type=(string)($_GET['tur']??'tum');
 $publication=(string)($_GET['durum']??'tum');
 $performance=(string)($_GET['performans']??'tum');
 $teacherId=(int)($_GET['ogretmen_id']??0);
+$groupId=max(0,(int)($_GET['grup_id']??0));
 $allowedTypes=['tum','soru','tekrar','odev','not','diger'];
 if(!in_array($type,$allowedTypes,true)) $type='tum';
 if(!in_array($publication,['tum','aktif','pasif'],true)) $publication='tum';
@@ -72,7 +78,14 @@ $teacherIds=array_map('intval',array_column($teachers,'id'));
 if($teacherId>0 && !in_array($teacherId,$teacherIds,true)) $teacherId=0;
 
 try{
-    $allContents=kic_contents($pdo,$institutionId,$teacherId,$type,$publication);
+    $groupOptions=kic_group_options($pdo,$institutionId,$teacherId);
+    $groupIds=array_map('intval',array_column($groupOptions,'id'));
+    if($groupId>0 && !in_array($groupId,$groupIds,true)){
+        http_response_code(403);
+        echo 'Bu sınıf / grup için kurum içerik performansını görüntüleme yetkin yok.';
+        exit;
+    }
+    $allContents=kic_contents($pdo,$institutionId,$teacherId,$type,$publication,$groupId);
     $contents=kic_filter_performance($allContents,$performance);
     $stats=kic_summary($contents);
 }catch(Throwable $e){
@@ -93,7 +106,7 @@ $back=$isSuper?'kurum-detay.php?kurum_id='.$institutionId:'yonetici-paneli.php?k
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="kurum.css?v=1.2.8">
 <link rel="stylesheet" href="kurum-icerikleri.css?v=1.2.16">
-<link rel="stylesheet" href="kurum-icerikleri-dashboard.css?v=1.2.28">
+<link rel="stylesheet" href="kurum-icerikleri-dashboard.css?v=1.2.32">
 </head>
 <body class="role-page"><div class="role-shell">
 <header class="role-topbar">
@@ -135,6 +148,15 @@ $back=$isSuper?'kurum-detay.php?kurum_id='.$institutionId:'yonetici-paneli.php?k
 <option value="<?=(int)$teacher['id']?>" <?=((int)$teacher['id']===$teacherId?'selected':'')?>><?=ki_h((string)$teacher['ad_soyad'])?></option>
 <?php endforeach;?>
 </select>
+<label for="grup">Sınıf / grup</label>
+<select class="role-input" id="grup" name="grup_id">
+<option value="0">Tüm sınıf / grup hedefleri</option>
+<?php foreach($groupOptions as $group):?>
+<option value="<?=(int)$group['id']?>" <?=((int)$group['id']===$groupId?'selected':'')?>>
+<?=ki_h(ki_group_label($group))?> · <?=(int)$group['icerik_sayisi']?> yayın · <?=(int)$group['ogrenci_sayisi']?> snapshot öğrenci
+</option>
+<?php endforeach;?>
+</select>
 <label for="tur">İçerik türü</label>
 <select class="role-input" id="tur" name="tur">
 <option value="tum" <?=$type==='tum'?'selected':''?>>Tüm türler</option>
@@ -165,7 +187,7 @@ $back=$isSuper?'kurum-detay.php?kurum_id='.$institutionId:'yonetici-paneli.php?k
 <div class="role-section-head"><div><span class="eyeline">YAYINLAR</span><h2>Kurum Öğretmen İçerikleri</h2></div><span class="role-pill"><?=$stats['total']?></span></div>
 <div class="institution-content-list">
 <?php if(!$contents):?>
-<div class="role-empty"><span>📚</span>Bu filtrede öğretmen içeriği bulunamadı.</div>
+<div class="role-empty"><span>📚</span><?=$groupId>0?'Bu yayın-anı sınıf / grup snapshotında öğretmen içeriği bulunamadı.':'Bu filtrede öğretmen içeriği bulunamadı.'?></div>
 <?php else:foreach($contents as $item):
     $contentText=trim((string)($item['icerik_turu']==='soru'?$item['soru']:$item['icerik_metni']));
 ?>
@@ -186,7 +208,7 @@ $back=$isSuper?'kurum-detay.php?kurum_id='.$institutionId:'yonetici-paneli.php?k
 <?php if($contentText!==''):?><p class="institution-content-preview"><?=nl2br(ki_h($contentText))?></p><?php endif;?>
 
 <div class="institution-content-meta">
-<a class="institution-content-detail-link" href="kurum-icerik-detay.php?kurum_id=<?=$institutionId?>&amp;id=<?=(int)$item['id']?>">Detay</a>
+<a class="institution-content-detail-link" href="kurum-icerik-detay.php?kurum_id=<?=$institutionId?>&amp;id=<?=(int)$item['id']?><?=$groupId>0?'&amp;grup_id='.$groupId:''?>">Detay</a>
 <span>🎯 <?=(int)$item['hedef_sayisi']?> hedef</span>
 <?php if((string)$item['icerik_turu']==='soru'):?>
 <span>💬 <?=(int)$item['cevaplayan_sayisi']?> cevap</span>
@@ -208,7 +230,7 @@ $back=$isSuper?'kurum-detay.php?kurum_id='.$institutionId:'yonetici-paneli.php?k
 </div>
 </section>
 
-<div class="role-note"><span>ℹ️</span><p>Bu ekran kurum içeriğini denetlemek için salt okunurdur. Yayın oluşturma ve aktif/pasif değiştirme işlemleri ilgili öğretmenin İçeriklerim ekranından yapılır.</p></div>
+<div class="role-note"><span>ℹ️</span><p>Sınıf / grup filtresi yayın anındaki hedef snapshotını kullanır; grup üyeliği sonradan değişse bile geçmiş performans rakamları değişmez. Bu ekran kurum içeriğini denetlemek için salt okunurdur.</p></div>
 </main>
 
 <nav class="role-bottom">

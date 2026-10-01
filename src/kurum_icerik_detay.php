@@ -1,8 +1,45 @@
 <?php
 declare(strict_types=1);
 
-function kid_content_detail(PDO $pdo,int $institutionId,int $contentId): ?array {
+function kid_table_exists(PDO $pdo,string $table): bool {
+    static $cache=[];
+    $key=spl_object_id($pdo).':'.$table;
+    if(array_key_exists($key,$cache)) return $cache[$key];
+    try{
+        $s=$pdo->prepare("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name=?");
+        $s->execute([$table]);
+        $cache[$key]=(int)$s->fetchColumn()>0;
+        $s->closeCursor();
+    }catch(Throwable){
+        $cache[$key]=false;
+    }
+    return $cache[$key];
+}
+
+function kid_group_context(PDO $pdo,int $institutionId,int $contentId,int $groupId): ?array {
+    if($institutionId<=0 || $contentId<=0 || $groupId<=0) return null;
+    if(!kid_table_exists($pdo,'ogretmen_icerik_hedef_gruplari')) return null;
+
+    $s=$pdo->prepare("SELECT kurum_sinif_id id,
+        MAX(grup_adi) ad,
+        MAX(grup_turu) tur,
+        MAX(sinif_seviyesi) sinif_seviyesi,
+        COUNT(DISTINCT ogrenci_id) hedef_sayisi
+      FROM ogretmen_icerik_hedef_gruplari
+      WHERE kurum_id=?
+        AND icerik_id=?
+        AND kurum_sinif_id=?
+      GROUP BY kurum_sinif_id
+      LIMIT 1");
+    $s->execute([$institutionId,$contentId,$groupId]);
+    $row=$s->fetch();
+    $s->closeCursor();
+    return is_array($row)?$row:null;
+}
+
+function kid_content_detail(PDO $pdo,int $institutionId,int $contentId,int $groupId=0): ?array {
     if($institutionId<=0 || $contentId<=0) return null;
+    $groupId=max(0,$groupId);
 
     $s=$pdo->prepare("SELECT oi.*,
       COALESCE(NULLIF(TRIM(og.ad_soyad),''),u.ad_soyad) ogretmen_adi,
@@ -25,6 +62,20 @@ function kid_content_detail(PDO $pdo,int $institutionId,int $contentId): ?array 
     $content=$s->fetch();
     $s->closeCursor();
     if(!is_array($content)) return null;
+
+    $groupContext=null;
+    $groupJoin='';
+    $params=[$contentId,$institutionId];
+    if($groupId>0){
+        $groupContext=kid_group_context($pdo,$institutionId,$contentId,$groupId);
+        if(!is_array($groupContext)) return null;
+        $groupJoin="INNER JOIN ogretmen_icerik_hedef_gruplari gh
+          ON gh.icerik_id=oi.id
+         AND gh.kurum_id=oi.kurum_id
+         AND gh.kurum_sinif_id=?
+         AND gh.ogrenci_id=o.id";
+        $params=[$groupId,$contentId,$institutionId];
+    }
 
     $s=$pdo->prepare("SELECT DISTINCT o.id,o.ad,o.email,o.sinif_seviyesi,
       c.secilen_cevap_indeksi,c.dogru cevap_dogru,c.deneme_sayisi,
@@ -49,6 +100,7 @@ function kid_content_detail(PDO $pdo,int $institutionId,int $contentId): ?array 
       LEFT JOIN ogretmen_icerik_hedefleri h
         ON h.icerik_id=oi.id
        AND h.ogrenci_id=o.id
+      {$groupJoin}
       LEFT JOIN ogretmen_icerik_cevaplari c
         ON c.icerik_id=oi.id
        AND c.ogrenci_id=o.id
@@ -59,7 +111,7 @@ function kid_content_detail(PDO $pdo,int $institutionId,int $contentId): ?array 
         AND oi.kurum_id=?
         AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
       ORDER BY o.sinif_seviyesi,o.ad,o.id");
-    $s->execute([$contentId,$institutionId]);
+    $s->execute($params);
     $students=$s->fetchAll();
     $s->closeCursor();
     if(!is_array($students)) $students=[];
@@ -104,5 +156,10 @@ function kid_content_detail(PDO $pdo,int $institutionId,int $contentId): ?array 
         $summary['waiting']=$summary['targeted'];
     }
 
-    return ['content'=>$content,'students'=>$students,'summary'=>$summary];
+    return [
+        'content'=>$content,
+        'students'=>$students,
+        'summary'=>$summary,
+        'group'=>$groupContext,
+    ];
 }

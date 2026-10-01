@@ -1,16 +1,76 @@
 <?php
 declare(strict_types=1);
 
+function kic_table_exists(PDO $pdo,string $table): bool {
+    static $cache=[];
+    $key=spl_object_id($pdo).':'.$table;
+    if(array_key_exists($key,$cache)) return $cache[$key];
+    try{
+        $s=$pdo->prepare("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name=?");
+        $s->execute([$table]);
+        $cache[$key]=(int)$s->fetchColumn()>0;
+        $s->closeCursor();
+    }catch(Throwable){
+        $cache[$key]=false;
+    }
+    return $cache[$key];
+}
+
+function kic_group_options(PDO $pdo,int $institutionId,int $teacherId=0): array {
+    if($institutionId<=0 || !kic_table_exists($pdo,'ogretmen_icerik_hedef_gruplari')) return [];
+
+    $where=['gh.kurum_id=?'];
+    $params=[$institutionId];
+    if($teacherId>0){
+        $where[]='oi.ogretmen_id=?';
+        $params[]=$teacherId;
+    }
+
+    $sql="SELECT gh.kurum_sinif_id id,
+        MAX(gh.grup_adi) ad,
+        MAX(gh.grup_turu) tur,
+        MAX(gh.sinif_seviyesi) sinif_seviyesi,
+        COUNT(DISTINCT gh.icerik_id) icerik_sayisi,
+        COUNT(DISTINCT gh.ogrenci_id) ogrenci_sayisi
+      FROM ogretmen_icerik_hedef_gruplari gh
+      INNER JOIN ogretmen_icerikleri oi
+        ON oi.id=gh.icerik_id
+       AND oi.kurum_id=gh.kurum_id
+      INNER JOIN ogretmenler og
+        ON og.id=oi.ogretmen_id
+       AND og.aktif=1
+      INNER JOIN kullanicilar u
+        ON u.id=og.kullanici_id
+       AND u.aktif=1
+      INNER JOIN kurum_kullanicilari tk
+        ON tk.kullanici_id=u.id
+       AND tk.kurum_id=oi.kurum_id
+       AND tk.kurum_rolu='ogretmen'
+       AND tk.aktif=1
+      WHERE ".implode(' AND ',$where)."
+      GROUP BY gh.kurum_sinif_id
+      ORDER BY COALESCE(MAX(gh.sinif_seviyesi),99),MAX(gh.grup_turu),MAX(gh.grup_adi),gh.kurum_sinif_id";
+
+    $stmt=$pdo->prepare($sql);
+    $stmt->execute($params);
+    $rows=$stmt->fetchAll();
+    $stmt->closeCursor();
+    return is_array($rows)?$rows:[];
+}
+
 function kic_contents(
     PDO $pdo,
     int $institutionId,
     int $teacherId=0,
     string $type='tum',
-    string $publication='tum'
+    string $publication='tum',
+    int $groupId=0
 ): array {
     if($institutionId<=0) return [];
     if(!in_array($type,['tum','soru','tekrar','odev','not','diger'],true)) $type='tum';
     if(!in_array($publication,['tum','aktif','pasif'],true)) $publication='tum';
+    $groupId=max(0,$groupId);
+    if($groupId>0 && !kic_table_exists($pdo,'ogretmen_icerik_hedef_gruplari')) return [];
 
     $where=['oi.kurum_id=?'];
     $params=[$institutionId];
@@ -25,6 +85,17 @@ function kic_contents(
     }
     if($publication==='aktif') $where[]='oi.aktif=1';
     elseif($publication==='pasif') $where[]='oi.aktif=0';
+
+    $groupJoin='';
+    $joinParams=[];
+    if($groupId>0){
+        $groupJoin="INNER JOIN ogretmen_icerik_hedef_gruplari gh
+          ON gh.icerik_id=oi.id
+         AND gh.kurum_id=oi.kurum_id
+         AND gh.ogrenci_id=o.id
+         AND gh.kurum_sinif_id=?";
+        $joinParams[]=$groupId;
+    }
 
     $validTarget="o.id IS NOT NULL
       AND su.id IS NOT NULL
@@ -90,6 +161,7 @@ function kic_contents(
       LEFT JOIN ogretmen_icerik_hedefleri h
         ON h.icerik_id=oi.id
        AND h.ogrenci_id=o.id
+      {$groupJoin}
       LEFT JOIN ogretmen_icerik_cevaplari c
         ON c.icerik_id=oi.id
        AND c.ogrenci_id=o.id
@@ -103,7 +175,7 @@ function kic_contents(
       ORDER BY oi.aktif DESC,oi.olusturulma_tarihi DESC,oi.id DESC";
 
     $stmt=$pdo->prepare($sql);
-    $stmt->execute($params);
+    $stmt->execute(array_merge($joinParams,$params));
     $rows=$stmt->fetchAll();
     $stmt->closeCursor();
     if(!is_array($rows)) return [];
