@@ -20,7 +20,7 @@ assert(page.includes('Ödev durumu'),'homework detail section missing');
 assert(page.includes('Öğretmen soruları'),'teacher question detail section missing');
 assert(page.includes("Süresi geçti"),'overdue homework state missing');
 assert(page.includes("Kurum Raporuna Dön"),'verified report return action missing');
-assert(page.includes("ogrenci-raporu.css?v=1.2.13"),'student report stylesheet must be versioned');
+assert(/ogrenci-raporu\.css\?v=1\.2\.(?:1[3-9]|[2-9]\d)/.test(page),'student report stylesheet must be versioned at 1.2.13 or newer');
 
 assert(domain.includes('function ord_scope_teacher_contents('),'teacher content scope helper missing');
 assert(domain.includes("(int)($row['kurum_id']??0)===$institutionId"),'teacher content scope must match exact institution');
