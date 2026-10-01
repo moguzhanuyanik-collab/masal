@@ -244,13 +244,14 @@ function km_validate_member_input(array $input,bool $creating): array {
 
 function km_create_member(PDO $pdo,array $actor,string $role,array $input): int {
     [$institutionId,$name,$email,$password,$telefon]=km_validate_member_input($input,true);
+    $studentGrade=$role==='ogrenci'?ky_student_grade($input['sinif_seviyesi']??1):null;
     $stmt=$pdo->prepare('SELECT 1 FROM kurumlar WHERE id=? AND aktif=1 LIMIT 1');
     $stmt->execute([$institutionId]);
     $ok=(bool)$stmt->fetchColumn();
     $stmt->closeCursor();
     if(!$ok) throw new RuntimeException('Seçilen kurum aktif değil.');
 
-    $userId=ky_create_user($pdo,$actor,$role,$name,$email,$password,$institutionId);
+    $userId=ky_create_user($pdo,$actor,$role,$name,$email,$password,$institutionId,$studentGrade);
     if($telefon!=='' && in_array($role,['ogretmen','veli'],true)){
         $table=$role==='ogretmen'?'ogretmenler':'veliler';
         if(auth_runtime_column_exists($pdo,$table,'telefon')){
@@ -265,6 +266,7 @@ function km_create_member(PDO $pdo,array $actor,string $role,array $input): int 
 function km_update_member(PDO $pdo,array $actor,string $role,int $userId,int $oldInstitutionId,array $input): void {
     if($userId<=0 || $oldInstitutionId<=0) throw new RuntimeException('Kullanıcı bulunamadı.');
     [$institutionId,$name,$email,$password,$telefon]=km_validate_member_input($input,false);
+    $studentGrade=$role==='ogrenci'?ky_student_grade($input['sinif_seviyesi']??1):null;
 
     $stmt=$pdo->prepare('SELECT 1 FROM kurum_kullanicilari WHERE kurum_id=? AND kullanici_id=? AND kurum_rolu=? AND aktif=1 LIMIT 1');
     $stmt->execute([$oldInstitutionId,$userId,$role]);
@@ -297,6 +299,8 @@ function km_update_member(PDO $pdo,array $actor,string $role,int $userId,int $ol
             $sets=['ad=?'];
             $values=[$name];
             if(auth_runtime_column_exists($pdo,'ogrenciler','email')){$sets[]='email=?';$values[]=$email;}
+            if(auth_runtime_column_exists($pdo,'ogrenciler','sinif_seviyesi')){$sets[]='sinif_seviyesi=?';$values[]=$studentGrade;}
+            if(auth_runtime_column_exists($pdo,'ogrenciler','egitim_kademesi')){$sets[]="egitim_kademesi='temel_egitim'";}
             if($password!=='' && auth_runtime_column_exists($pdo,'ogrenciler','sifre_hash')){$sets[]='sifre_hash=?';$values[]=$hash;}
             $values[]=$userId;
             $stmt=$pdo->prepare('UPDATE ogrenciler SET '.implode(',',$sets).' WHERE kullanici_id=?');
@@ -384,6 +388,57 @@ function km_delete_member(PDO $pdo,array $actor,string $role,int $userId,int $in
     return ['account_deactivated'=>$deactivated];
 }
 
+
+
+function km_restore_member(PDO $pdo,array $actor,string $role,int $userId,int $institutionId): void {
+    if($userId<=0 || $institutionId<=0 || !in_array($role,['yonetici','ogretmen','veli','ogrenci'],true)){
+        throw new RuntimeException('Kullanıcı bulunamadı.');
+    }
+
+    $stmt=$pdo->prepare('SELECT 1 FROM kurumlar WHERE id=? AND aktif=1 LIMIT 1');
+    $stmt->execute([$institutionId]);
+    $institutionActive=(bool)$stmt->fetchColumn();
+    $stmt->closeCursor();
+    if(!$institutionActive) throw new RuntimeException('Kurum aktif değil.');
+
+    $stmt=$pdo->prepare('SELECT aktif FROM kurum_kullanicilari WHERE kurum_id=? AND kullanici_id=? AND kurum_rolu=? LIMIT 1');
+    $stmt->execute([$institutionId,$userId,$role]);
+    $membership=$stmt->fetchColumn();
+    $stmt->closeCursor();
+    if($membership===false) throw new RuntimeException('Kurum üyeliği bulunamadı.');
+
+    $pdo->beginTransaction();
+    try{
+        $stmt=$pdo->prepare('UPDATE kurum_kullanicilari SET aktif=1 WHERE kurum_id=? AND kullanici_id=? AND kurum_rolu=?');
+        $stmt->execute([$institutionId,$userId,$role]);
+        $stmt->closeCursor();
+
+        $stmt=$pdo->prepare('UPDATE kullanicilar SET aktif=1 WHERE id=?');
+        $stmt->execute([$userId]);
+        $stmt->closeCursor();
+
+        $table=match($role){
+            'ogrenci'=>'ogrenciler',
+            'veli'=>'veliler',
+            'ogretmen'=>'ogretmenler',
+            default=>null
+        };
+        if($table!==null && auth_runtime_table_exists($pdo,$table)
+            && auth_runtime_column_exists($pdo,$table,'kullanici_id')
+            && auth_runtime_column_exists($pdo,$table,'aktif')){
+            $stmt=$pdo->prepare("UPDATE {$table} SET aktif=1 WHERE kullanici_id=?");
+            $stmt->execute([$userId]);
+            $stmt->closeCursor();
+        }
+
+        $pdo->commit();
+    }catch(Throwable $e){
+        if($pdo->inTransaction()) $pdo->rollBack();
+        throw $e;
+    }
+
+    auth_audit($pdo,(int)$actor['id'],$userId,'kurum_kullanici_aktif','Rol '.$role.' / kurum '.$institutionId);
+}
 
 function km_matching_rows(PDO $pdo,int $institutionId=0): array {
     $params=[];

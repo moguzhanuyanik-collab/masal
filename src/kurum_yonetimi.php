@@ -100,23 +100,63 @@ function ky_create_user(PDO $pdo,array $actor,string $role,string $name,string $
     return $userId;
 }
 
-function ky_role_members(PDO $pdo,int $institutionId,string $role): array {
+function ky_role_members(PDO $pdo,int $institutionId,string $role,bool $includeInactive=false): array {
     if($institutionId<=0 || !in_array($role,['yonetici','ogretmen','veli','ogrenci'],true)) return [];
     try{
         if($role==='ogrenci'){
-            $s=$pdo->prepare("SELECT k.id kullanici_id,k.ad_soyad,k.email,k.aktif,o.id ogrenci_id,o.ad,o.egitim_kademesi,o.sinif_seviyesi
+            $where=$includeInactive
+                ?"kk.kurum_id=? AND kk.kurum_rolu='ogrenci'"
+                :"kk.kurum_id=? AND kk.kurum_rolu='ogrenci' AND kk.aktif=1 AND k.aktif=1 AND o.aktif=1";
+            $s=$pdo->prepare("SELECT k.id kullanici_id,k.ad_soyad,k.email,k.aktif kullanici_aktif,
+                kk.aktif uyelik_aktif,o.id ogrenci_id,o.ad,o.egitim_kademesi,o.sinif_seviyesi,o.aktif profil_aktif,
+                NULL telefon
                 FROM kurum_kullanicilari kk
                 INNER JOIN kullanicilar k ON k.id=kk.kullanici_id
                 INNER JOIN ogrenciler o ON o.kullanici_id=k.id
-                WHERE kk.kurum_id=? AND kk.kurum_rolu='ogrenci' AND kk.aktif=1 AND k.aktif=1 AND o.aktif=1
-                ORDER BY o.ad,o.id");
+                WHERE {$where}
+                ORDER BY kk.aktif DESC,o.ad,o.id");
             $s->execute([$institutionId]);
-        }else{
-            $s=$pdo->prepare("SELECT k.id kullanici_id,k.ad_soyad,k.email,k.aktif,NULL ogrenci_id,k.ad_soyad ad
+        }elseif($role==='ogretmen'){
+            $where=$includeInactive
+                ?"kk.kurum_id=? AND kk.kurum_rolu='ogretmen'"
+                :"kk.kurum_id=? AND kk.kurum_rolu='ogretmen' AND kk.aktif=1 AND k.aktif=1 AND (p.aktif=1 OR p.aktif IS NULL)";
+            $phone=auth_runtime_column_exists($pdo,'ogretmenler','telefon')?'p.telefon':'NULL';
+            $s=$pdo->prepare("SELECT k.id kullanici_id,k.ad_soyad,k.email,k.aktif kullanici_aktif,
+                kk.aktif uyelik_aktif,NULL ogrenci_id,COALESCE(NULLIF(TRIM(p.ad_soyad),''),k.ad_soyad) ad,
+                NULL egitim_kademesi,NULL sinif_seviyesi,COALESCE(p.aktif,k.aktif) profil_aktif,
+                {$phone} telefon
                 FROM kurum_kullanicilari kk
                 INNER JOIN kullanicilar k ON k.id=kk.kullanici_id
-                WHERE kk.kurum_id=? AND kk.kurum_rolu=? AND kk.aktif=1 AND k.aktif=1
-                ORDER BY k.ad_soyad,k.id");
+                LEFT JOIN ogretmenler p ON p.kullanici_id=k.id
+                WHERE {$where}
+                ORDER BY kk.aktif DESC,k.ad_soyad,k.id");
+            $s->execute([$institutionId]);
+        }elseif($role==='veli'){
+            $where=$includeInactive
+                ?"kk.kurum_id=? AND kk.kurum_rolu='veli'"
+                :"kk.kurum_id=? AND kk.kurum_rolu='veli' AND kk.aktif=1 AND k.aktif=1 AND (p.aktif=1 OR p.aktif IS NULL)";
+            $phone=auth_runtime_column_exists($pdo,'veliler','telefon')?'p.telefon':'NULL';
+            $s=$pdo->prepare("SELECT k.id kullanici_id,k.ad_soyad,k.email,k.aktif kullanici_aktif,
+                kk.aktif uyelik_aktif,NULL ogrenci_id,COALESCE(NULLIF(TRIM(p.ad_soyad),''),k.ad_soyad) ad,
+                NULL egitim_kademesi,NULL sinif_seviyesi,COALESCE(p.aktif,k.aktif) profil_aktif,
+                {$phone} telefon
+                FROM kurum_kullanicilari kk
+                INNER JOIN kullanicilar k ON k.id=kk.kullanici_id
+                LEFT JOIN veliler p ON p.kullanici_id=k.id
+                WHERE {$where}
+                ORDER BY kk.aktif DESC,k.ad_soyad,k.id");
+            $s->execute([$institutionId]);
+        }else{
+            $where=$includeInactive
+                ?"kk.kurum_id=? AND kk.kurum_rolu=?"
+                :"kk.kurum_id=? AND kk.kurum_rolu=? AND kk.aktif=1 AND k.aktif=1";
+            $s=$pdo->prepare("SELECT k.id kullanici_id,k.ad_soyad,k.email,k.aktif kullanici_aktif,
+                kk.aktif uyelik_aktif,NULL ogrenci_id,k.ad_soyad ad,
+                NULL egitim_kademesi,NULL sinif_seviyesi,k.aktif profil_aktif,NULL telefon
+                FROM kurum_kullanicilari kk
+                INNER JOIN kullanicilar k ON k.id=kk.kullanici_id
+                WHERE {$where}
+                ORDER BY kk.aktif DESC,k.ad_soyad,k.id");
             $s->execute([$institutionId,$role]);
         }
         $rows=$s->fetchAll();
@@ -126,7 +166,6 @@ function ky_role_members(PDO $pdo,int $institutionId,string $role): array {
         return [];
     }
 }
-
 function ky_global_students(PDO $pdo): array {
     try{
         $s=$pdo->query("SELECT k.id kullanici_id,k.ad_soyad,k.email,k.aktif,o.id ogrenci_id,o.ad,o.egitim_kademesi,o.sinif_seviyesi,
