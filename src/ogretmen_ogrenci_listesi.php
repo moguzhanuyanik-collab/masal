@@ -170,3 +170,49 @@ function tol_student_group_map(PDO $pdo,int $institutionId,array $studentIds): a
     }
     return $map;
 }
+
+function tol_teacher_report_context(PDO $pdo,int $teacherUserId,int $studentId,int $institutionId): ?array {
+    if($teacherUserId<=0 || $studentId<=0 || $institutionId<=0) return null;
+
+    $stmt=$pdo->prepare("SELECT k.ad
+        FROM ogretmen_ogrenci oo
+        INNER JOIN ogretmenler og
+          ON og.id=oo.ogretmen_id
+         AND og.aktif=1
+         AND og.kullanici_id=?
+        INNER JOIN kullanicilar tu
+          ON tu.id=og.kullanici_id
+         AND tu.aktif=1
+        INNER JOIN kurum_kullanicilari tk
+          ON tk.kullanici_id=tu.id
+         AND tk.kurum_id=oo.kurum_id
+         AND tk.kurum_rolu='ogretmen'
+         AND tk.aktif=1
+        INNER JOIN ogrenciler o
+          ON o.id=oo.ogrenci_id
+         AND o.aktif=1
+        INNER JOIN kullanicilar su
+          ON su.id=o.kullanici_id
+         AND su.aktif=1
+        INNER JOIN kurum_kullanicilari sk
+          ON sk.kullanici_id=su.id
+         AND sk.kurum_id=oo.kurum_id
+         AND sk.kurum_rolu='ogrenci'
+         AND sk.aktif=1
+        INNER JOIN kurumlar k
+          ON k.id=oo.kurum_id
+         AND k.aktif=1
+        WHERE oo.kurum_id=?
+          AND oo.ogrenci_id=?
+        LIMIT 1");
+    $stmt->execute([$teacherUserId,$institutionId,$studentId]);
+    $institutionName=$stmt->fetchColumn();
+    $stmt->closeCursor();
+
+    if(!is_string($institutionName) || $institutionName==='') return null;
+    return [
+        'institution_name'=>$institutionName,
+        'back'=>'ogretmen-ogrencilerim.php?kurum_id='.$institutionId,
+    ];
+}
+
