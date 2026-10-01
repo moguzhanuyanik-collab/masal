@@ -18,7 +18,7 @@ assert(updater.includes('function github_branch_head_sha'));
 assert(updater.includes('return remote_release_info($gh);'));
 assert(!updater.includes('/commits?sha='));
 assert(!updater.includes('recovery_bridge_target_info'));
-assert(updater.includes('1.1.119 temiz recovery yalnız uygulama kodu/updater çekirdeğini yeniler'));
+assert(updater.includes('1.2.1 temiz recovery yalnız uygulama kodu/updater çekirdeğini yeniler'));
 
 assert(manifest.files.includes('RELEASE-1.1.119.md'));
 assert(manifest.files.includes('update-release.json'));
