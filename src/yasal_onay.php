@@ -306,3 +306,45 @@ function yl_admin_report(PDO $pdo): array {
     unset($doc);
     return $rows;
 }
+
+
+function yl_admin_user_report(PDO $pdo,int $documentId,int $limit=500): array {
+    $doc=yl_document($pdo,$documentId);
+    if(!$doc || !yl_tables_ready($pdo)) return [];
+    $roles=array_values(array_filter(array_map('trim',explode(',',(string)$doc['hedef_roller']))));
+    if(!$roles) return [];
+    $limit=max(1,min(1000,$limit));
+    $ph=implode(',',array_fill(0,count($roles),'?'));
+
+    if(auth_runtime_table_exists($pdo,'kullanici_rolleri')){
+        $sql="SELECT DISTINCT
+            k.id,k.ad_soyad,k.email,k.ana_rol,
+            CASE WHEN o.kullanici_id IS NULL THEN 0 ELSE 1 END onayli,
+            o.onay_rolu,o.onay_tarihi
+            FROM kullanicilar k
+            LEFT JOIN kullanici_rolleri kr ON kr.kullanici_id=k.id
+            LEFT JOIN yasal_belge_onaylari o ON o.kullanici_id=k.id AND o.belge_id=?
+            WHERE k.aktif=1
+              AND (k.ana_rol IN ($ph) OR kr.rol IN ($ph))
+            ORDER BY onayli ASC,k.ad_soyad,k.id
+            LIMIT {$limit}";
+        $params=array_merge([$documentId],$roles,$roles);
+    }else{
+        $sql="SELECT
+            k.id,k.ad_soyad,k.email,k.ana_rol,
+            CASE WHEN o.kullanici_id IS NULL THEN 0 ELSE 1 END onayli,
+            o.onay_rolu,o.onay_tarihi
+            FROM kullanicilar k
+            LEFT JOIN yasal_belge_onaylari o ON o.kullanici_id=k.id AND o.belge_id=?
+            WHERE k.aktif=1 AND k.ana_rol IN ($ph)
+            ORDER BY onayli ASC,k.ad_soyad,k.id
+            LIMIT {$limit}";
+        $params=array_merge([$documentId],$roles);
+    }
+
+    $stmt=$pdo->prepare($sql);
+    $stmt->execute($params);
+    $rows=$stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return is_array($rows)?$rows:[];
+}
