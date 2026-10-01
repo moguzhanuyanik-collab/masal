@@ -19,8 +19,8 @@ assert(page.includes('oi_duplicate_content($pdo,$user,$sourceId)'),'copy action 
 assert(page.includes('data-content-copy'),'copy confirmation hook missing');
 assert(page.includes('🔒 Geçmiş var'),'activity lock indicator missing');
 assert(page.includes("Öğrenci yanıtı veya ödev durumu oluşan içerikler"),'history protection explanation missing');
-assert(page.includes('ogretmen-icerikleri.css?v=1.2.14'),'teacher content CSS must be cache-busted');
-assert(page.includes('ogretmen-icerikleri.js?v=1.2.14'),'teacher content JS must be cache-busted');
+assert(/ogretmen-icerikleri\.css\?v=1\.2\.(?:1[4-9]|[2-9]\d)/.test(page),'teacher content CSS must be cache-busted at 1.2.14 or newer');
+assert(/ogretmen-icerikleri\.js\?v=1\.2\.(?:1[4-9]|[2-9]\d)/.test(page),'teacher content JS must be cache-busted at 1.2.14 or newer');
 
 assert(domain.includes('function oi_teacher_content_for_edit('),'editable content fetch helper missing');
 assert(domain.includes('COUNT(DISTINCT c.ogrenci_id) soru_cevap_sayisi'),'question activity count missing');
