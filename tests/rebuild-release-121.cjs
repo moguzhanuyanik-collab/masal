@@ -52,7 +52,8 @@ for(const required of [
   assert(fs.existsSync(required), 'Recovered file missing from tree: '+required);
 }
 
-assert(updater.includes('ILKADIM_UPDATER_CORE_GENERATION = 121'));
+const generationMatch=updater.match(/ILKADIM_UPDATER_CORE_GENERATION\s*=\s*(\d+)/);
+assert(generationMatch && Number(generationMatch[1])>=121,'updater core generation must remain 121 or newer');
 assert(updater.includes('function github_branch_head_sha'));
 assert(updater.includes('function next_remote_version_info'));
 assert(updater.includes('/commits?sha='));
