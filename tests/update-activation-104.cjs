@@ -17,7 +17,7 @@ assert(updater.includes("hash_file('sha256'"));
 assert(updater.includes("'.ilkadim-update-'"));
 assert(
   updater.indexOf('assert_update_activation_preflight(')
-  < updater.indexOf("$updateStage='database_mutation';")
+  < updater.indexOf("$updateStage='file_activation';")
 );
 assert(
   updater.indexOf('verify_activated_update_files(')
