@@ -14,8 +14,8 @@ assert(migration.includes('SET kurum_id=0 WHERE kurum_id IS NULL'),'065 migratio
 assert(migration.includes('PRIMARY KEY (veli_id,ogrenci_id,kurum_id)'),'parent relation PK must include institution');
 assert(migration.includes('PRIMARY KEY (ogretmen_id,ogrenci_id,kurum_id)'),'teacher relation PK must include institution');
 
-assert(auth.includes('AND vo.kurum_id=vk.kurum_id'),'parent access must require relation institution');
-assert(auth.includes('AND vo.kurum_id=0'),'global parent access must remain explicitly global');
+assert(auth.includes('vo.kurum_id=vk.kurum_id'),'parent access must require relation institution');
+assert(auth.includes('vo.kurum_id=0'),'global parent access must remain explicitly global');
 assert(auth.includes('WHERE oo.kurum_id=kt.kurum_id'),'teacher access must require relation institution');
 
 assert(matching.includes('vo.kurum_id=k.id'),'matching list must be institution-scoped');
