@@ -1,5 +1,5 @@
 {
-  "version": "1.2.2",
-  "name": "Sequential migration execution ve güvenli DB recovery",
+  "version": "1.2.3",
+  "name": "Global ve kurum kapsamı bütünlük hardening",
   "release_revision": 1
 }
