@@ -224,11 +224,43 @@ function remote_release_info(array $gh): array {
     return remote_release_info_at_ref($gh,github_branch_head_sha($gh));
 }
 
+const ILKADIM_LEGACY_097_RECOVERY_121_COMMIT='6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c';
+
+function legacy_097_direct_121_recovery_release(array $gh): array {
+    $commit=ILKADIM_LEGACY_097_RECOVERY_121_COMMIT;
+    $versionInfo=remote_version_info_at_ref($gh,$commit);
+    $releaseInfo=remote_release_info_at_ref($gh,$commit);
+
+    $version=trim((string)($versionInfo['version']??''));
+    $releaseVersion=trim((string)($releaseInfo['version']??''));
+    $versionRevision=normalize_release_revision($versionInfo['release_revision']??0);
+    $releaseRevision=normalize_release_revision($releaseInfo['release_revision']??0);
+
+    if($version!=='1.2.1' || $releaseVersion!=='1.2.1'){
+        throw new RuntimeException('1.1.97 direct recovery ankrajı beklenen 1.2.1 release metadata ile eşleşmiyor.');
+    }
+    if($versionRevision<1 || $releaseRevision!==$versionRevision){
+        throw new RuntimeException('1.1.97 direct recovery ankrajı release revision metadata uyuşmazlığı içeriyor.');
+    }
+
+    $releaseInfo['commit']=$commit;
+    $releaseInfo['recovery_mode']='legacy_097_to_121_direct';
+    $releaseInfo['recovery_source_version']='1.1.97';
+    return $releaseInfo;
+}
+
 function next_remote_version_info(array $gh,string $localVersion,int $localRevision=0): array {
     [$owner,$repo,$branch]=github_repo_info($gh);
     $localVersion=trim($localVersion);
     if($localVersion==='') $localVersion='0.0.0';
     $localRevision=max(0,$localRevision);
+
+    // 1.1.97 kurulumları bozuk tarihsel updater zincirini tek tek yürütmez.
+    // Doğrudan doğrulanmış 1.2.1 rev15 final rebuild anchor'ına geçilir;
+    // DB tarafında özel legacy recovery hattı ve release postcondition çalışır.
+    if($localVersion==='1.1.97'){
+        return legacy_097_direct_121_recovery_release($gh);
+    }
 
     // Güncelleme zinciri hiçbir zaman main HEAD'e atlamaz.
     // Kurulu sürümden sonraki EN KÜÇÜK sürüm/revision seçilir.
