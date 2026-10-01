@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.23",
+  "version": "1.2.24",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -194,6 +194,7 @@
     "RELEASE-1.2.21.md",
     "RELEASE-1.2.22.md",
     "RELEASE-1.2.23.md",
+    "RELEASE-1.2.24.md",
     "RELEASE-1.2.3.md",
     "RELEASE-1.2.4.md",
     "RELEASE-1.2.5.md",
@@ -457,6 +458,7 @@
     "src/kurumlar_modulu.php",
     "src/normalized.php",
     "src/odev_durumu.php",
+    "src/ogrenci_odev_dashboard.php",
     "src/ogrenci_rapor_detay.php",
     "src/ogretmen_icerik.php",
     "src/ogretmen_odev_dashboard.php",
@@ -520,6 +522,8 @@
     "tests/recovery-safety-100.cjs",
     "tests/recovery-safety-100.php",
     "tests/security-92.cjs",
+    "tests/student-homework-dashboard-149.cjs",
+    "tests/student-homework-dashboard-db-149.php",
     "tests/student-report-detail-138.cjs",
     "tests/student-report-detail-138.php",
     "tests/teacher-content-detail-140.cjs",
