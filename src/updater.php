@@ -1813,7 +1813,9 @@ function retired_automatic_migrations(): array {
 }
 
 function recover_missing_064_checkpoint_after_1_1_98_bridge(PDO $pdo,string $root,string $localVersion): array {
-    if($localVersion!=='1.1.98') return [];
+    // 1.1.97 -> 1.2.1 legacy recovery'de de yalnız 064 checkpointi,
+    // 001-063 geçmişi eksiksizse idempotent biçimde onarılabilir.
+    if(!in_array($localVersion,['1.1.97','1.1.98'],true)) return [];
 
     $name='064_adimbot_rate_limit_ve_migration_checkpoint';
     $check=$pdo->prepare('SELECT 1 FROM sistem_migrations WHERE migration=? LIMIT 1');
@@ -1916,6 +1918,56 @@ function assert_historical_migration_history(PDO $pdo,string $root,string $local
             .(count($missing)>8?' ...':'')
         );
     }
+}
+
+function run_legacy_1_1_97_to_1_2_1_recovery(PDO $pdo,string $migrationRoot,string $localVersion): array {
+    if($localVersion!=='1.1.97') return [];
+
+    // Önce mevcut 1.1.97 tarihsel geçmişini doğrula ve yalnız eksik 064 checkpointini
+    // idempotent biçimde tamamla. 001-063 hiçbir koşulda tekrar oynatılmaz.
+    $applied=recover_missing_064_checkpoint_after_1_1_98_bridge($pdo,$migrationRoot,$localVersion);
+
+    // 065'in beklediği yeni kurum üyeliği şemasını önce güvenli staging/rename
+    // mekanizmasıyla hazırla. Bu adım başarısızsa tenant migrationlarına geçilmez.
+    repair_legacy_institution_membership_schema($pdo);
+
+    $targetMigrations=[
+        '065_kurum_bazli_eslestirme_izolasyonu',
+        '066_kurum_eslestirme_schema_guard',
+    ];
+    $check=$pdo->prepare('SELECT 1 FROM sistem_migrations WHERE migration=? LIMIT 1');
+    $insert=$pdo->prepare('INSERT INTO sistem_migrations (migration) VALUES (?)');
+
+    foreach($targetMigrations as $name){
+        $check->execute([$name]);
+        $already=(bool)$check->fetchColumn();
+        $check->closeCursor();
+        if($already) continue;
+
+        $file=rtrim($migrationRoot,'/\\').'/database/migrations/'.$name.'.sql';
+        if(!is_file($file) || is_link($file)){
+            throw new RuntimeException('Legacy recovery migration dosyası bulunamadı: '.$name);
+        }
+
+        assert_automatic_migration_safe($name,$file);
+        run_migration_sql($pdo,$file);
+        $insert->execute([$name]);
+        $insert->closeCursor();
+        $applied[]=$name;
+    }
+
+    // 066 kaydı varsa 065'in de kaydı bulunmalıdır; ters tarihçe kabul edilmez.
+    $check->execute(['065_kurum_bazli_eslestirme_izolasyonu']);
+    $has065=(bool)$check->fetchColumn();
+    $check->closeCursor();
+    $check->execute(['066_kurum_eslestirme_schema_guard']);
+    $has066=(bool)$check->fetchColumn();
+    $check->closeCursor();
+    if($has066 && !$has065){
+        throw new RuntimeException('Legacy recovery migration geçmişi tutarsız: 066 var, 065 yok.');
+    }
+
+    return $applied;
 }
 
 function run_pending_migrations(PDO $pdo,string $root,string $localVersion='0.0.0'): array {
@@ -2259,24 +2311,48 @@ function install_github_update(
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
 
         // 1.2.1 temiz recovery yalnız uygulama kodu/updater çekirdeğini yeniler.
-        // Veritabanı geriye alınmaz, yeni migration çalıştırılmaz, tablo/kolon/veri silinmez.
-        $isClean121Recovery=((string)($remote['version']??''))==='1.2.1';
+        // 1.2.1 temiz recovery davranışı korunur; ancak 1.1.97'den gelen
+        // kurulumlar için kod ağacını güncellemek tek başına yeterli değildir.
+        // Bu özel legacy hattı yalnız doğrulanmış 001-063 geçmişi + 064 checkpoint
+        // + legacy kurum üyeliği dönüşümü + 065 + 066 sırasını uygular.
+        $isLegacy097Recovery=((string)($localVersion)==='1.1.97'
+            && version_compare((string)($remote['version']??''),'1.2.1','>='));
+        $isClean121Recovery=!$isLegacy097Recovery && ((string)($remote['version']??''))==='1.2.1';
         $preflightRecoveredMigrations=[];
         $pendingMigrations=[];
         $legacyRepairNeeded=false;
         $studentSchemaMissing=false;
-        $requiresDbBackup=false;
+        $requiresDbBackup=$isLegacy097Recovery;
         $dbBackupName='';
         $migrations=[];
 
-        $updateStage='database_recovery_skip';
+        $updateStage=$isLegacy097Recovery?'database_recovery_preflight':'database_recovery_skip';
         $recoveryState['stage']=$updateStage;
         $recoveryState['pending_migrations']=[];
-        $recoveryState['legacy_membership_repair']=false;
+        $recoveryState['legacy_membership_repair']=$isLegacy097Recovery;
         $recoveryState['student_schema_missing']=false;
         $recoveryState['database_backup']=null;
+        $recoveryState['legacy_097_recovery']=$isLegacy097Recovery;
         $recoveryState['status']='ready_before_mutation';
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+
+        if($isLegacy097Recovery){
+            $updateStage='database_backup';
+            $recoveryState['stage']=$updateStage;
+            $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+            $dbBackupName=create_database_backup($root,$dbConfig,$updateConfig,$pdo);
+            $recoveryState['database_backup']=backup_artifact_metadata($root,$dbBackupName);
+            $recoveryState['status']='database_backup_ready';
+            $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+
+            $updateStage='legacy_database_recovery';
+            $recoveryState['stage']=$updateStage;
+            $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+            $migrations=run_legacy_1_1_97_to_1_2_1_recovery($pdo,$sourceRoot,$localVersion);
+            $recoveryState['pending_migrations']=$migrations;
+            $recoveryState['status']='database_recovery_complete';
+            $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+        }
 
         // Şema başarıyla hazırlandıktan sonra yeni uygulama dosyalarını etkinleştir.
         $updateStage='file_activation';

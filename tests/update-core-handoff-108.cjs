@@ -14,9 +14,11 @@ assert(updater.includes('function prepare_updater_core_handoff('));
 assert(updater.includes('function read_updater_core_handoff_marker('));
 assert(updater.includes("durum='yeniden_dene'"));
 assert(updater.includes("'retry_required'=>true"));
+const recoveryStageGate=updater.indexOf("$updateStage=$isLegacy097Recovery?'database_recovery_preflight':'database_recovery_skip';");
+assert(recoveryStageGate>=0);
 assert(
   updater.indexOf('$coreHandoff=prepare_updater_core_handoff(')
-  < updater.indexOf("$updateStage='database_recovery_skip';")
+  < recoveryStageGate
 );
 assert(updater.includes('clear_updater_core_handoff_marker($root);'));
 assert(page.includes("'retry_required' => true"));

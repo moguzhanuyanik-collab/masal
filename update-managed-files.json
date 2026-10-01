@@ -463,6 +463,7 @@
     "tests/update-core-handoff-rollback-109.cjs",
     "tests/update-core-handoff-rollback-109.php",
     "tests/update-legacy-bridge-113.cjs",
+    "tests/update-legacy-db-recovery-123.cjs",
     "tests/update-managed-integrity-111.cjs",
     "tests/update-managed-integrity-111.php",
     "tests/update-manifest-contract-103.cjs",
@@ -502,5 +503,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 7
+  "release_revision": 8
 }

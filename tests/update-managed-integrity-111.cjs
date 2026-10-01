@@ -18,9 +18,11 @@ assert(updater.includes("'hashes'=>$hashes"));
 assert(updater.includes('function assert_stale_managed_files_safe('));
 assert(updater.includes('güvenilir hash baseline yok'));
 assert(updater.includes('kurulumdan sonra değiştirilmiş'));
+const recoveryStageGate=updater.indexOf("$updateStage=$isLegacy097Recovery?'database_recovery_preflight':'database_recovery_skip';");
+assert(recoveryStageGate>=0);
 assert(
   updater.indexOf('$stalePreflight=assert_stale_managed_files_safe(')
-  < updater.indexOf("$updateStage='database_recovery_skip';")
+  < recoveryStageGate
 );
 assert(workflow.includes('tests/update-managed-integrity-111.php'));
 assert(workflow.includes('tests/update-managed-integrity-111.cjs'));

@@ -102,6 +102,7 @@ jobs:
           node tests/tenant-matching-crud-117.cjs
           node tests/update-recovery-119.cjs
           node tests/rebuild-release-121.cjs
+          node tests/update-legacy-db-recovery-123.cjs
 
   tenant-db-integration:
     name: Tenant DB integration

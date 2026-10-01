@@ -32,7 +32,7 @@ assert(updater.includes("'status']='application_backup_ready'"));
 assert(updater.includes("'failure_stage']=$updateStage"));
 assert(updater.includes('function create_database_backup('));
 assert(updater.includes('$isClean121Recovery'));
-assert(updater.includes("$updateStage='database_recovery_skip'"));
+assert(updater.includes("$updateStage=$isLegacy097Recovery?'database_recovery_preflight':'database_recovery_skip'"));
 assert(updater.includes("assert_backup_disk_space(dirname($extractDir)"));
 assert(status.includes('$recoveryHealthy=$recoveryStatus===\'update_completed\';'));
 assert(status.includes('İnceleme gerekli'));
