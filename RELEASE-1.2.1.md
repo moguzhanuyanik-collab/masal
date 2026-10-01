@@ -120,3 +120,10 @@ Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına 
 
 - Yeniden kurulum branch'lerinin kendi push'larında Quality Gate çalışacak şekilde CI branch filtresine `rebuild-*` deseni eklendi.
 - Release revision 17 olarak yeniden ankrajlandı; version.json, update-release.json ve managed manifest aynı revision değerini taşıyor.
+
+
+## Rev 18 — 1.1.119 regression sözleşmesi
+
+- 1.1.119 recovery regression testi, doğrudan main HEAD'e atlama beklentisi yerine yeni sıralı release seçim sözleşmesine güncellendi.
+- Uygulama updater davranışı korunarak testin eski 1.2.1 recovery varsayımı kaldırıldı.
+- Release metadata, version ve managed manifest rev18 olarak tekrar hizalandı.
