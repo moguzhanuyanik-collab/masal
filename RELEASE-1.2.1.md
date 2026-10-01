@@ -140,3 +140,13 @@ Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına 
 - `rebuild-release-121.cjs` içindeki eski doğrudan main HEAD beklentisi kaldırıldı.
 - Regression artık gerçek sıralı updater seçim fonksiyonunu doğruluyor.
 - Release metadata rev20 olarak yeniden hizalandı.
+
+
+## Rev 21 — release-chain cache hardening
+
+- 1.1.97 → 1.2.1 sıralı rebuild zinciri korunarak updater'ın tarihsel `update-release.json` taraması HMAC imzalı runtime cache ile güvenli biçimde tekrar kullanılabilir hale getirildi.
+- Cache anahtarı güncel `main` HEAD SHA'sına bağlıdır; HEAD değişirse cache otomatik olarak geçersiz olur ve zincir GitHub'dan yeniden oluşturulur.
+- Cache secret runtime'da `storage/updates` altında üretilir, atomik yazılır ve 0600 izinleriyle korunur. Secret eksik/bozuksa mevcut cache güvenilmez sayılır.
+- Cache hit durumunda tarihsel commit/raw metadata taraması tekrar yapılmaz; yalnız güncel main HEAD çözülür ve kurulu sürümün üzerindeki en küçük sürüm/revision seçilir.
+- 1.1.99 → 1.1.100 gibi ardışık geçiş sözleşmesi korunur; uzak sürüme atlama yapılmaz.
+- Node + gerçek PHP regression testleri CI kalite kapısına eklendi.
