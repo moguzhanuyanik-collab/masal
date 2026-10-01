@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.19",
+  "version": "1.2.20",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -190,6 +190,7 @@
     "RELEASE-1.2.18.md",
     "RELEASE-1.2.19.md",
     "RELEASE-1.2.2.md",
+    "RELEASE-1.2.20.md",
     "RELEASE-1.2.3.md",
     "RELEASE-1.2.4.md",
     "RELEASE-1.2.5.md",
@@ -496,6 +497,8 @@
     "tests/institution-reporting-137.cjs",
     "tests/institution-reporting-db-137.php",
     "tests/legacy-064-integrity-124.php",
+    "tests/manager-report-tenant-scope-145.cjs",
+    "tests/manager-report-tenant-scope-db-145.php",
     "tests/manual-update-upload-131.cjs",
     "tests/migration-safety-93.cjs",
     "tests/parent-report-tenant-scope-144.cjs",

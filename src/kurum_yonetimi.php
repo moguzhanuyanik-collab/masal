@@ -306,3 +306,69 @@ function ky_deactivate_global_user(PDO $pdo,array $actor,string $role,int $userI
     }catch(Throwable $e){if($pdo->inTransaction())$pdo->rollBack();throw $e;}
     auth_audit($pdo,(int)$actor['id'],$userId,'global_kullanici_pasif','Rol: '.$role);
 }
+
+function ky_manager_student_report_contexts(PDO $pdo,array $user,int $studentId): array {
+    if($studentId<=0 || !yy_can($pdo,$user,'kurum_goruntule')) return [];
+
+    $institutionIds=auth_manageable_institution_ids($pdo,$user);
+    if(!$institutionIds) return [];
+
+    $placeholders=implode(',',array_fill(0,count($institutionIds),'?'));
+    $params=array_merge([$studentId],$institutionIds);
+    $stmt=$pdo->prepare("SELECT DISTINCT k.id,k.ad
+        FROM ogrenciler o
+        INNER JOIN kullanicilar su
+          ON su.id=o.kullanici_id
+         AND su.aktif=1
+        INNER JOIN kurum_kullanicilari sk
+          ON sk.kullanici_id=o.kullanici_id
+         AND sk.kurum_rolu='ogrenci'
+         AND sk.aktif=1
+        INNER JOIN kurumlar k
+          ON k.id=sk.kurum_id
+         AND k.aktif=1
+        WHERE o.id=?
+          AND o.aktif=1
+          AND sk.kurum_id IN ({$placeholders})
+        ORDER BY k.ad,k.id");
+    $stmt->execute($params);
+    $rows=$stmt->fetchAll();
+    $stmt->closeCursor();
+    return is_array($rows)?$rows:[];
+}
+
+function ky_manager_student_report_context(PDO $pdo,array $user,int $studentId,int $institutionId): ?array {
+    if($studentId<=0 || $institutionId<=0 || !yy_can($pdo,$user,'kurum_goruntule')) return null;
+
+    try{
+        $institution=ky_assert_manageable($pdo,$user,$institutionId);
+    }catch(Throwable){
+        return null;
+    }
+
+    $stmt=$pdo->prepare("SELECT 1
+        FROM ogrenciler o
+        INNER JOIN kullanicilar su
+          ON su.id=o.kullanici_id
+         AND su.aktif=1
+        INNER JOIN kurum_kullanicilari sk
+          ON sk.kullanici_id=o.kullanici_id
+         AND sk.kurum_id=?
+         AND sk.kurum_rolu='ogrenci'
+         AND sk.aktif=1
+        WHERE o.id=?
+          AND o.aktif=1
+        LIMIT 1");
+    $stmt->execute([$institutionId,$studentId]);
+    $allowed=(bool)$stmt->fetchColumn();
+    $stmt->closeCursor();
+    if(!$allowed) return null;
+
+    return [
+        'institution_id'=>$institutionId,
+        'institution_name'=>(string)$institution['ad'],
+        'back'=>'kurum-raporlari.php?kurum_id='.$institutionId,
+        'back_label'=>'Kurum Raporuna Dön',
+    ];
+}
+

@@ -19,7 +19,9 @@ assert(page.includes('Öğretmen içerikleri'),'teacher content summary section 
 assert(page.includes('Ödev durumu'),'homework detail section missing');
 assert(page.includes('Öğretmen soruları'),'teacher question detail section missing');
 assert(page.includes("Süresi geçti"),'overdue homework state missing');
-assert(page.includes("Kurum Raporuna Dön"),'verified report return action missing');
+assert(page.includes("$reportBackLabel='Panelime Dön'"),'default report return label missing');
+assert(page.includes("$reportBackLabel='Kurum Raporuna Dön'") || page.includes("$reportBackLabel=(string)$managerContext['back_label'];"),'verified manager report return label missing');
+assert(page.includes('<?=h_report($reportBackLabel)?>'),'student report return action must render verified context label');
 assert(/ogrenci-raporu\.css\?v=1\.2\.(?:1[3-9]|[2-9]\d)/.test(page),'student report stylesheet must be versioned at 1.2.13 or newer');
 
 assert(domain.includes('function ord_scope_teacher_contents('),'teacher content scope helper missing');

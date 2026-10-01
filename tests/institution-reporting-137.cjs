@@ -6,6 +6,7 @@ const assert=require('assert');
 const page=fs.readFileSync('kurum-raporlari.php','utf8');
 const domain=fs.readFileSync('src/kurum_raporlari.php','utf8');
 const studentReport=fs.readFileSync('ogrenci-raporu.php','utf8');
+const management=fs.readFileSync('src/kurum_yonetimi.php','utf8');
 const workflow=fs.readFileSync('.github/workflows/quality.yml','utf8');
 const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
 const version=JSON.parse(fs.readFileSync('version.json','utf8'));
@@ -34,9 +35,10 @@ assert(domain.includes("COUNT(DISTINCT CASE"),'homework status aggregation must 
 assert(domain.includes("oi.teslim_tarihi<NOW()"),'overdue homework calculation missing');
 
 assert(studentReport.includes("SELECT id,ad,email,egitim_kademesi,sinif_seviyesi,kullanici_id FROM ogrenciler"),'student report must load display name and user id');
-assert(studentReport.includes("kk.kurum_id=?"),'student report return context must verify institution');
-assert(studentReport.includes("kk.kullanici_id=?"),'student report return context must verify student membership');
-assert(studentReport.includes("$reportBack='kurum-raporlari.php?kurum_id='.$reportInstitutionId"),'student report must return to verified institution report');
+assert(studentReport.includes('ky_manager_student_report_context($pdo,$user,$studentId,$reportInstitutionId)'),'student report return context must use strict manager scope');
+assert(management.includes('ky_assert_manageable($pdo,$user,$institutionId)'),'student report return context must verify manageable institution');
+assert(management.includes("sk.kurum_id=?"),'student report return context must verify student membership in selected institution');
+assert(management.includes("'back'=>'kurum-raporlari.php?kurum_id='.$institutionId"),'student report must return to verified institution report');
 
 assert(workflow.includes('node tests/institution-reporting-137.cjs'),'institution reporting source regression must run in quality gate');
 assert(workflow.includes('php tests/institution-reporting-db-137.php'),'institution reporting DB regression must run in quality gate');

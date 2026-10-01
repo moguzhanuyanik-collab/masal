@@ -22,7 +22,7 @@ assert(report.includes('Öğretmen soru ve ödevlerinin karışmaması için rap
 assert(report.includes("exit;\n        }\n    }catch(Throwable $e)"),'multi-institution selection must stop report execution before data queries');
 assert(report.includes("if($reportInstitutionScoped){\n    $teacherContents=ord_scope_teacher_contents($teacherContents,$reportInstitutionId);"),'teacher contents must be institution scoped after parent context validation');
 assert(report.includes("$reportBackLabel=(string)$parentContext['back_label'];"),'parent report back label must be context-specific');
-assert(report.includes('ogrenci-raporu.css?v=1.2.19'),'student report CSS cache version must be 1.2.19');
+assert(/ogrenci-raporu\.css\?v=1\.2\.(?:19|[2-9]\d)/.test(report),'student report CSS cache version must be 1.2.19 or newer');
 
 assert(parentDomain.includes('function vi_parent_report_context('),'strict parent report context helper missing');
 assert(parentDomain.includes('vo.kurum_id=?'),'parent report context must target exact veli_ogrenci institution');
