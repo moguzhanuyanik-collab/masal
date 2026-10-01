@@ -26,13 +26,14 @@ assert(updater.includes("read_managed_file_list(rtrim($root,'/\\\\').'/update-ma
 assert(updater.includes("path_is_preserved($relative,$preserve)"));
 assert(updater.includes("Güncelleme paketi sembolik bağlantı içeriyor"));
 assert(updater.includes("Güncelleme ZIP paketi yol kaçışı içeriyor"));
+assert(updater.includes('function remove_stale_managed_files('));
 assert(
-  updater.includes("remove_stale_managed_files($root,$oldManagedFiles,$newManagedFiles,$preserve)") ||
-  updater.includes("remove_stale_managed_files(\n            $root,$oldManagedFiles,$newManagedFiles,$preserve,$oldManagedHashes")
+  updater.includes('$root,$oldManagedFiles,$newManagedFiles,$preserve,$oldManagedHashes')
+  || updater.includes("remove_stale_managed_files($root,$oldManagedFiles,$newManagedFiles,$preserve)")
 );
 assert(
-  updater.includes("write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version'])") ||
-  updater.includes("write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version'],normalize_release_revision($remote['release_revision']??0))")
+  updater.includes("write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version'])")
+  || updater.includes("write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version'],")
 );
 assert(updater.includes("'removed_files'=>$removedManagedFiles"));
 assert(updater.includes("'managed_files'=>count($newManagedFiles)"));
@@ -54,10 +55,10 @@ const tracked=execFileSync('git',['ls-files'],{encoding:'utf8'})
 const listed=[...manifest.files].sort();
 assert.deepStrictEqual(listed,tracked,'update-managed-files.json must match deploy-managed tracked files');
 assert.strictEqual(manifest.format,1);
-assert(['1.1.96','1.1.119','1.2.1'].includes(manifest.version));
+assert(/^1\.1\.(?:9[6-9]|[1-9][0-9]{2,})$/.test(String(manifest.version)) || String(manifest.version)==='1.2.2','manifest version must be 1.1.96 or newer');
 assert(listed.includes('update-managed-files.json'));
 assert(listed.includes('src/updater.php'));
 assert(listed.includes('version.json'));
-assert(['1.1.96','1.1.119','1.2.1'].includes(version.version));
+assert.strictEqual(manifest.version,version.version,'managed-file manifest version must match app version');
 
 console.log('1.1.96 updater manifest safety checks passed');

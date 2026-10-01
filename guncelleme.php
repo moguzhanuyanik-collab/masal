@@ -60,10 +60,6 @@ function update_public_error_message(Throwable $e): string {
         'Başka bir güncelleme',
         'Siradaki guncelleme',
         'Sıradaki güncelleme',
-        'Siradaki surumun',
-        'Sıradaki sürümün',
-        'Güncelleme kurtarma köprüsü',
-        'GitHub dal HEAD',
         'Migration ',
         'Eski kurum_kullanicilari',
         'Eski kurum kullanıcı',
@@ -105,6 +101,7 @@ if ($isAjax) {
         $action = (string)($_GET['action'] ?? 'check');
         $local = read_app_version();
         $localRevision = read_local_release_revision(__DIR__,$local);
+        $localApplicationGeneration = read_local_application_generation(__DIR__,$local);
 
         if ($action === 'check') {
             $remote = next_remote_version_info($gh,$local,$localRevision);
@@ -118,7 +115,10 @@ if ($isAjax) {
                 'remote_revision' => normalize_release_revision($remote['release_revision'] ?? 0),
                 'remote_name' => (string)($remote['name'] ?? ''),
                 'commit' => (string)($remote['commit'] ?? ''),
-                'update_available' => release_identity_is_newer($remote,$local,$localRevision),
+                'application_generation' => normalize_application_generation($remote['application_generation'] ?? 0),
+                'local_application_generation' => $localApplicationGeneration,
+                'update_available' => release_application_generation_is_safe($remote,$localApplicationGeneration)
+                    && release_identity_is_newer($remote,$local,$localRevision),
             ]);
         }
 
@@ -139,7 +139,8 @@ if ($isAjax) {
 
             $remoteBefore = next_remote_version_info($gh,$local,$localRevision);
 
-            if (!release_identity_is_newer($remoteBefore,$local,$localRevision)) {
+            if (!release_application_generation_is_safe($remoteBefore,$localApplicationGeneration)
+                || !release_identity_is_newer($remoteBefore,$local,$localRevision)) {
                 ajax_response([
                     'ok' => true,
                     'action' => 'install',
@@ -184,6 +185,7 @@ if ($isAjax) {
 
             $newLocal = read_app_version();
             $newLocalRevision = read_local_release_revision(__DIR__,$newLocal);
+            $newLocalApplicationGeneration = read_local_application_generation(__DIR__,$newLocal);
 
             // Kurulum başarıyla tamamlandıktan sonraki GitHub kontrolü ikincil bir adımdır.
             // Bu ağ isteği başarısız olsa bile tamamlanmış kurulumu kullanıcıya hatalı gösterme.
@@ -197,7 +199,8 @@ if ($isAjax) {
             $hasNext = false;
             try {
                 $remote = next_remote_version_info($gh,$newLocal,$newLocalRevision);
-                $hasNext = release_identity_is_newer($remote,$newLocal,$newLocalRevision);
+                $hasNext = release_application_generation_is_safe($remote,$newLocalApplicationGeneration)
+                    && release_identity_is_newer($remote,$newLocal,$newLocalRevision);
                 if ($hasNext) {
                     $message .= ' Sıradaki güncelleme '.(string)$remote['version'].' rev '.normalize_release_revision($remote['release_revision']??0).' kuruluma hazır.';
                 }
@@ -219,6 +222,8 @@ if ($isAjax) {
                 'remote_revision' => normalize_release_revision($remote['release_revision'] ?? 0),
                 'remote_name' => (string)($remote['name'] ?? ''),
                 'commit' => (string)($remote['commit'] ?? ''),
+                'application_generation' => normalize_application_generation($remote['application_generation'] ?? 0),
+                'local_application_generation' => $newLocalApplicationGeneration,
                 'update_available' => $hasNext,
             ]);
         }
@@ -294,7 +299,7 @@ $localRevision = read_local_release_revision(__DIR__,$local);
                 <div class="history-item">
                     <span><svg><use href="#sa-cloud"/></svg></span>
                     <div>
-                        <strong>Sıradaki sürüm</strong>
+                        <strong>GitHub sürümü</strong>
                         <small><span id="remoteVersion">Kontrol ediliyor...</span><span id="remoteName"></span></small>
                     </div>
                     <svg aria-hidden="true"><use href="#i-refresh"/></svg>
@@ -303,7 +308,7 @@ $localRevision = read_local_release_revision(__DIR__,$local);
                 <div class="history-item">
                     <span><svg><use href="#sa-code"/></svg></span>
                     <div>
-                        <strong>Hedef commit</strong>
+                        <strong>Commit</strong>
                         <small id="commit">-</small>
                     </div>
                     <svg aria-hidden="true"><use href="#i-check"/></svg>
@@ -312,7 +317,7 @@ $localRevision = read_local_release_revision(__DIR__,$local);
 
             <section class="weekly-summary" id="statusBox">
                 <strong id="statusTitle">Güncelleme kontrol ediliyor</strong>
-                <p id="statusText">Sıradaki güvenli sürüm kontrol ediliyor...</p>
+                <p id="statusText">GitHub sürümü kontrol ediliyor...</p>
                 <small id="backupText" hidden></small>
             </section>
 

@@ -9,10 +9,27 @@ function normalized_column_exists(PDO $pdo,string $table,string $column):bool{
     $s=$pdo->prepare("SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name=? AND column_name=?");
     $s->execute([$table,$column]);return (int)$s->fetchColumn()>0;
 }
+function normalized_student_curriculum(PDO $pdo,int $studentId):array{
+    $scope=['kademe_kodu'=>'temel_egitim','sinif_seviyesi'=>1];
+    if($studentId<=0||!normalized_table_exists($pdo,'ogrenciler'))return $scope;
+    $hasGrade=normalized_column_exists($pdo,'ogrenciler','sinif_seviyesi');
+    $hasStage=normalized_column_exists($pdo,'ogrenciler','egitim_kademesi');
+    if(!$hasGrade&&!$hasStage)return $scope;
+    $columns=[];
+    if($hasStage)$columns[]='egitim_kademesi';
+    if($hasGrade)$columns[]='sinif_seviyesi';
+    $s=$pdo->prepare('SELECT '.implode(',',$columns).' FROM ogrenciler WHERE id=? AND aktif=1 LIMIT 1');
+    $s->execute([$studentId]);
+    $row=$s->fetch(PDO::FETCH_ASSOC)?:[];
+    if($hasStage){
+        $stage=trim((string)($row['egitim_kademesi']??''));
+        if($stage!=='')$scope['kademe_kodu']=mb_substr($stage,0,30);
+    }
+    if($hasGrade)$scope['sinif_seviyesi']=max(1,min(8,(int)($row['sinif_seviyesi']??1)));
+    return $scope;
+}
 function normalized_student_grade(PDO $pdo,int $studentId):int{
-    if($studentId<=0||!normalized_column_exists($pdo,'ogrenciler','sinif_seviyesi'))return 1;
-    $s=$pdo->prepare('SELECT sinif_seviyesi FROM ogrenciler WHERE id=? LIMIT 1');$s->execute([$studentId]);
-    return max(1,min(8,(int)($s->fetchColumn()?:1)));
+    return normalized_student_curriculum($pdo,$studentId)['sinif_seviyesi'];
 }
 function normalized_datetime(mixed $v):string{
     $ms=is_numeric($v)?(int)$v:(int)(microtime(true)*1000);
@@ -27,15 +44,17 @@ function normalized_longest_streak(array $days):int{
 }
 function normalized_badges(PDO $pdo,array $state,int $studentId=0):array{
     $steps=[];foreach(($state['steps']??[]) as $k)if(preg_match('/^([a-z0-9_-]+)-(\\d+)$/i',(string)$k,$m))$steps[$m[1]][(int)$m[2]]=true;
-    $grade=normalized_student_grade($pdo,$studentId);$counts=[];
+    $scope=normalized_student_curriculum($pdo,$studentId);
+    $stage=$scope['kademe_kodu'];
+    $grade=$scope['sinif_seviyesi'];$counts=[];
     $hasCurriculum=normalized_table_exists($pdo,'ders_konulari')&&normalized_table_exists($pdo,'ders_sorulari');
     if(normalized_table_exists($pdo,'sinif_dersleri')&&normalized_column_exists($pdo,'ders_modulleri','sinif_seviyesi')){
         if($hasCurriculum){
-            $q=$pdo->prepare("SELECT d.kod,COUNT(DISTINCT ds.id) soru_sayisi,COUNT(DISTINCT m.id) modul_sayisi FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id AND sd.kademe_kodu='temel_egitim' AND sd.sinif_seviyesi=? AND sd.aktif=1 LEFT JOIN ders_konulari k ON k.ders_id=d.id AND k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=? AND k.aktif=1 LEFT JOIN ders_sorulari ds ON ds.konu_id=k.id AND ds.aktif=1 LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.kademe_kodu='temel_egitim' AND m.sinif_seviyesi=? AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod");
-            $q->execute([$grade,$grade,$grade]);$rows=$q->fetchAll();
+            $q=$pdo->prepare("SELECT d.kod,COUNT(DISTINCT ds.id) soru_sayisi,COUNT(DISTINCT m.id) modul_sayisi FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id AND sd.kademe_kodu=? AND sd.sinif_seviyesi=? AND sd.aktif=1 LEFT JOIN ders_konulari k ON k.ders_id=d.id AND k.kademe_kodu=? AND k.sinif_seviyesi=? AND k.aktif=1 LEFT JOIN ders_sorulari ds ON ds.konu_id=k.id AND ds.aktif=1 LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.kademe_kodu=? AND m.sinif_seviyesi=? AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod");
+            $q->execute([$stage,$grade,$stage,$grade,$stage,$grade]);$rows=$q->fetchAll();
         }else{
-            $q=$pdo->prepare("SELECT d.kod,0 soru_sayisi,COUNT(m.id) modul_sayisi FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id AND sd.kademe_kodu='temel_egitim' AND sd.sinif_seviyesi=? AND sd.aktif=1 LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.kademe_kodu='temel_egitim' AND m.sinif_seviyesi=? AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod");
-            $q->execute([$grade,$grade]);$rows=$q->fetchAll();
+            $q=$pdo->prepare("SELECT d.kod,0 soru_sayisi,COUNT(m.id) modul_sayisi FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id AND sd.kademe_kodu=? AND sd.sinif_seviyesi=? AND sd.aktif=1 LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.kademe_kodu=? AND m.sinif_seviyesi=? AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod");
+            $q->execute([$stage,$grade,$stage,$grade]);$rows=$q->fetchAll();
         }
     }else{
         $rows=$pdo->query("SELECT d.kod,0 soru_sayisi,COUNT(m.id) modul_sayisi FROM dersler d LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod")?:[];

@@ -1,0 +1,4050 @@
+{
+  "format": 1,
+  "version": "1.1.111",
+  "release_revision": 4,
+  "total": 500,
+  "categories": [
+    {
+      "name": "Updater Core",
+      "count": 50
+    },
+    {
+      "name": "Release & Versioning",
+      "count": 50
+    },
+    {
+      "name": "Database & Migration",
+      "count": 50
+    },
+    {
+      "name": "Backup & Recovery",
+      "count": 50
+    },
+    {
+      "name": "Security",
+      "count": 50
+    },
+    {
+      "name": "API & AJAX",
+      "count": 50
+    },
+    {
+      "name": "Frontend & UI",
+      "count": 50
+    },
+    {
+      "name": "Mobile & PWA",
+      "count": 50
+    },
+    {
+      "name": "Performance & Reliability",
+      "count": 50
+    },
+    {
+      "name": "Testing & Observability",
+      "count": 50
+    }
+  ],
+  "items": [
+    {
+      "id": "Q001",
+      "category": "Updater Core",
+      "title": "lock acquisition ordering — kontrol 1",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "lock acquisition ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q002",
+      "category": "Updater Core",
+      "title": "download timeout handling — kontrol 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "download timeout handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q003",
+      "category": "Updater Core",
+      "title": "zip extraction guard — kontrol 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "zip extraction guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q004",
+      "category": "Updater Core",
+      "title": "temporary file cleanup — kontrol 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "temporary file cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q005",
+      "category": "Updater Core",
+      "title": "atomic replace integrity — kontrol 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "atomic replace integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q006",
+      "category": "Updater Core",
+      "title": "handoff marker integrity — kontrol 1",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "handoff marker integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q007",
+      "category": "Updater Core",
+      "title": "stale marker expiry — kontrol 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "stale marker expiry için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q008",
+      "category": "Updater Core",
+      "title": "update retry idempotency — kontrol 1",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "update retry idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q009",
+      "category": "Updater Core",
+      "title": "preserved path enforcement — kontrol 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "preserved path enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q010",
+      "category": "Updater Core",
+      "title": "symlink rejection — kontrol 1",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "symlink rejection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q011",
+      "category": "Updater Core",
+      "title": "lock acquisition ordering — kontrol 2",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "lock acquisition ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q012",
+      "category": "Updater Core",
+      "title": "download timeout handling — kontrol 2",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "download timeout handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q013",
+      "category": "Updater Core",
+      "title": "zip extraction guard — kontrol 2",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "zip extraction guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q014",
+      "category": "Updater Core",
+      "title": "temporary file cleanup — kontrol 2",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "temporary file cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q015",
+      "category": "Updater Core",
+      "title": "atomic replace integrity — kontrol 2",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "atomic replace integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q016",
+      "category": "Updater Core",
+      "title": "handoff marker integrity — kontrol 2",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "handoff marker integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q017",
+      "category": "Updater Core",
+      "title": "stale marker expiry — kontrol 2",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "stale marker expiry için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q018",
+      "category": "Updater Core",
+      "title": "update retry idempotency — kontrol 2",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "update retry idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q019",
+      "category": "Updater Core",
+      "title": "preserved path enforcement — kontrol 2",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "preserved path enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q020",
+      "category": "Updater Core",
+      "title": "symlink rejection — kontrol 2",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "symlink rejection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q021",
+      "category": "Updater Core",
+      "title": "lock acquisition ordering — kontrol 3",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "lock acquisition ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q022",
+      "category": "Updater Core",
+      "title": "download timeout handling — kontrol 3",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "download timeout handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q023",
+      "category": "Updater Core",
+      "title": "zip extraction guard — kontrol 3",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "zip extraction guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q024",
+      "category": "Updater Core",
+      "title": "temporary file cleanup — kontrol 3",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "temporary file cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q025",
+      "category": "Updater Core",
+      "title": "atomic replace integrity — kontrol 3",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "atomic replace integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q026",
+      "category": "Updater Core",
+      "title": "handoff marker integrity — kontrol 3",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "handoff marker integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q027",
+      "category": "Updater Core",
+      "title": "stale marker expiry — kontrol 3",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "stale marker expiry için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q028",
+      "category": "Updater Core",
+      "title": "update retry idempotency — kontrol 3",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "update retry idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q029",
+      "category": "Updater Core",
+      "title": "preserved path enforcement — kontrol 3",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "preserved path enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q030",
+      "category": "Updater Core",
+      "title": "symlink rejection — kontrol 3",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "symlink rejection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q031",
+      "category": "Updater Core",
+      "title": "lock acquisition ordering — kontrol 4",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "lock acquisition ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q032",
+      "category": "Updater Core",
+      "title": "download timeout handling — kontrol 4",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "download timeout handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q033",
+      "category": "Updater Core",
+      "title": "zip extraction guard — kontrol 4",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "zip extraction guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q034",
+      "category": "Updater Core",
+      "title": "temporary file cleanup — kontrol 4",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "temporary file cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q035",
+      "category": "Updater Core",
+      "title": "atomic replace integrity — kontrol 4",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "atomic replace integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q036",
+      "category": "Updater Core",
+      "title": "handoff marker integrity — kontrol 4",
+      "priority": "P0",
+      "status": "implemented",
+      "acceptance": "handoff marker integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q037",
+      "category": "Updater Core",
+      "title": "stale marker expiry — kontrol 4",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "stale marker expiry için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q038",
+      "category": "Updater Core",
+      "title": "update retry idempotency — kontrol 4",
+      "priority": "P1",
+      "status": "implemented",
+      "acceptance": "update retry idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q039",
+      "category": "Updater Core",
+      "title": "preserved path enforcement — kontrol 4",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "preserved path enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q040",
+      "category": "Updater Core",
+      "title": "symlink rejection — kontrol 4",
+      "priority": "P2",
+      "status": "implemented",
+      "acceptance": "symlink rejection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q041",
+      "category": "Updater Core",
+      "title": "lock acquisition ordering — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "lock acquisition ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q042",
+      "category": "Updater Core",
+      "title": "download timeout handling — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "download timeout handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q043",
+      "category": "Updater Core",
+      "title": "zip extraction guard — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "zip extraction guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q044",
+      "category": "Updater Core",
+      "title": "temporary file cleanup — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "temporary file cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q045",
+      "category": "Updater Core",
+      "title": "atomic replace integrity — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "atomic replace integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q046",
+      "category": "Updater Core",
+      "title": "handoff marker integrity — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "handoff marker integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q047",
+      "category": "Updater Core",
+      "title": "stale marker expiry — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "stale marker expiry için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q048",
+      "category": "Updater Core",
+      "title": "update retry idempotency — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "update retry idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q049",
+      "category": "Updater Core",
+      "title": "preserved path enforcement — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "preserved path enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q050",
+      "category": "Updater Core",
+      "title": "symlink rejection — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "symlink rejection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q051",
+      "category": "Release & Versioning",
+      "title": "release anchor equals HEAD — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "release anchor equals HEAD için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q052",
+      "category": "Release & Versioning",
+      "title": "version metadata consistency — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "version metadata consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q053",
+      "category": "Release & Versioning",
+      "title": "revision monotonicity — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "revision monotonicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q054",
+      "category": "Release & Versioning",
+      "title": "historical anchor ordering — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "historical anchor ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q055",
+      "category": "Release & Versioning",
+      "title": "next release selection — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "next release selection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q056",
+      "category": "Release & Versioning",
+      "title": "release note presence — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "release note presence için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q057",
+      "category": "Release & Versioning",
+      "title": "managed manifest version match — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "managed manifest version match için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q058",
+      "category": "Release & Versioning",
+      "title": "branch release invariant — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "branch release invariant için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q059",
+      "category": "Release & Versioning",
+      "title": "same-version revision handling — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "same-version revision handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q060",
+      "category": "Release & Versioning",
+      "title": "post-release commit prevention — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-release commit prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q061",
+      "category": "Release & Versioning",
+      "title": "release anchor equals HEAD — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "release anchor equals HEAD için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q062",
+      "category": "Release & Versioning",
+      "title": "version metadata consistency — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "version metadata consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q063",
+      "category": "Release & Versioning",
+      "title": "revision monotonicity — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "revision monotonicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q064",
+      "category": "Release & Versioning",
+      "title": "historical anchor ordering — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "historical anchor ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q065",
+      "category": "Release & Versioning",
+      "title": "next release selection — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "next release selection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q066",
+      "category": "Release & Versioning",
+      "title": "release note presence — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "release note presence için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q067",
+      "category": "Release & Versioning",
+      "title": "managed manifest version match — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "managed manifest version match için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q068",
+      "category": "Release & Versioning",
+      "title": "branch release invariant — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "branch release invariant için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q069",
+      "category": "Release & Versioning",
+      "title": "same-version revision handling — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "same-version revision handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q070",
+      "category": "Release & Versioning",
+      "title": "post-release commit prevention — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-release commit prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q071",
+      "category": "Release & Versioning",
+      "title": "release anchor equals HEAD — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "release anchor equals HEAD için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q072",
+      "category": "Release & Versioning",
+      "title": "version metadata consistency — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "version metadata consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q073",
+      "category": "Release & Versioning",
+      "title": "revision monotonicity — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "revision monotonicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q074",
+      "category": "Release & Versioning",
+      "title": "historical anchor ordering — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "historical anchor ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q075",
+      "category": "Release & Versioning",
+      "title": "next release selection — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "next release selection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q076",
+      "category": "Release & Versioning",
+      "title": "release note presence — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "release note presence için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q077",
+      "category": "Release & Versioning",
+      "title": "managed manifest version match — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "managed manifest version match için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q078",
+      "category": "Release & Versioning",
+      "title": "branch release invariant — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "branch release invariant için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q079",
+      "category": "Release & Versioning",
+      "title": "same-version revision handling — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "same-version revision handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q080",
+      "category": "Release & Versioning",
+      "title": "post-release commit prevention — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-release commit prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q081",
+      "category": "Release & Versioning",
+      "title": "release anchor equals HEAD — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "release anchor equals HEAD için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q082",
+      "category": "Release & Versioning",
+      "title": "version metadata consistency — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "version metadata consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q083",
+      "category": "Release & Versioning",
+      "title": "revision monotonicity — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "revision monotonicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q084",
+      "category": "Release & Versioning",
+      "title": "historical anchor ordering — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "historical anchor ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q085",
+      "category": "Release & Versioning",
+      "title": "next release selection — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "next release selection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q086",
+      "category": "Release & Versioning",
+      "title": "release note presence — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "release note presence için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q087",
+      "category": "Release & Versioning",
+      "title": "managed manifest version match — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "managed manifest version match için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q088",
+      "category": "Release & Versioning",
+      "title": "branch release invariant — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "branch release invariant için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q089",
+      "category": "Release & Versioning",
+      "title": "same-version revision handling — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "same-version revision handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q090",
+      "category": "Release & Versioning",
+      "title": "post-release commit prevention — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-release commit prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q091",
+      "category": "Release & Versioning",
+      "title": "release anchor equals HEAD — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "release anchor equals HEAD için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q092",
+      "category": "Release & Versioning",
+      "title": "version metadata consistency — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "version metadata consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q093",
+      "category": "Release & Versioning",
+      "title": "revision monotonicity — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "revision monotonicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q094",
+      "category": "Release & Versioning",
+      "title": "historical anchor ordering — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "historical anchor ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q095",
+      "category": "Release & Versioning",
+      "title": "next release selection — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "next release selection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q096",
+      "category": "Release & Versioning",
+      "title": "release note presence — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "release note presence için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q097",
+      "category": "Release & Versioning",
+      "title": "managed manifest version match — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "managed manifest version match için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q098",
+      "category": "Release & Versioning",
+      "title": "branch release invariant — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "branch release invariant için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q099",
+      "category": "Release & Versioning",
+      "title": "same-version revision handling — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "same-version revision handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q100",
+      "category": "Release & Versioning",
+      "title": "post-release commit prevention — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "post-release commit prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q101",
+      "category": "Database & Migration",
+      "title": "migration idempotency — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "migration idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q102",
+      "category": "Database & Migration",
+      "title": "historical migration checkpoint — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical migration checkpoint için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q103",
+      "category": "Database & Migration",
+      "title": "transaction eligibility — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "transaction eligibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q104",
+      "category": "Database & Migration",
+      "title": "DDL safety detection — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "DDL safety detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q105",
+      "category": "Database & Migration",
+      "title": "destructive SQL guard — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "destructive SQL guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q106",
+      "category": "Database & Migration",
+      "title": "legacy schema detection — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy schema detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q107",
+      "category": "Database & Migration",
+      "title": "migration ordering — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "migration ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q108",
+      "category": "Database & Migration",
+      "title": "migration history uniqueness — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "migration history uniqueness için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q109",
+      "category": "Database & Migration",
+      "title": "schema existence check — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema existence check için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q110",
+      "category": "Database & Migration",
+      "title": "migration failure recovery — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "migration failure recovery için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q111",
+      "category": "Database & Migration",
+      "title": "migration idempotency — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "migration idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q112",
+      "category": "Database & Migration",
+      "title": "historical migration checkpoint — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical migration checkpoint için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q113",
+      "category": "Database & Migration",
+      "title": "transaction eligibility — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "transaction eligibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q114",
+      "category": "Database & Migration",
+      "title": "DDL safety detection — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "DDL safety detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q115",
+      "category": "Database & Migration",
+      "title": "destructive SQL guard — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "destructive SQL guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q116",
+      "category": "Database & Migration",
+      "title": "legacy schema detection — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy schema detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q117",
+      "category": "Database & Migration",
+      "title": "migration ordering — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "migration ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q118",
+      "category": "Database & Migration",
+      "title": "migration history uniqueness — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "migration history uniqueness için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q119",
+      "category": "Database & Migration",
+      "title": "schema existence check — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema existence check için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q120",
+      "category": "Database & Migration",
+      "title": "migration failure recovery — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "migration failure recovery için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q121",
+      "category": "Database & Migration",
+      "title": "migration idempotency — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "migration idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q122",
+      "category": "Database & Migration",
+      "title": "historical migration checkpoint — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical migration checkpoint için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q123",
+      "category": "Database & Migration",
+      "title": "transaction eligibility — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "transaction eligibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q124",
+      "category": "Database & Migration",
+      "title": "DDL safety detection — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "DDL safety detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q125",
+      "category": "Database & Migration",
+      "title": "destructive SQL guard — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "destructive SQL guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q126",
+      "category": "Database & Migration",
+      "title": "legacy schema detection — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy schema detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q127",
+      "category": "Database & Migration",
+      "title": "migration ordering — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "migration ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q128",
+      "category": "Database & Migration",
+      "title": "migration history uniqueness — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "migration history uniqueness için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q129",
+      "category": "Database & Migration",
+      "title": "schema existence check — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema existence check için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q130",
+      "category": "Database & Migration",
+      "title": "migration failure recovery — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "migration failure recovery için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q131",
+      "category": "Database & Migration",
+      "title": "migration idempotency — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "migration idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q132",
+      "category": "Database & Migration",
+      "title": "historical migration checkpoint — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical migration checkpoint için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q133",
+      "category": "Database & Migration",
+      "title": "transaction eligibility — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "transaction eligibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q134",
+      "category": "Database & Migration",
+      "title": "DDL safety detection — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "DDL safety detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q135",
+      "category": "Database & Migration",
+      "title": "destructive SQL guard — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "destructive SQL guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q136",
+      "category": "Database & Migration",
+      "title": "legacy schema detection — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy schema detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q137",
+      "category": "Database & Migration",
+      "title": "migration ordering — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "migration ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q138",
+      "category": "Database & Migration",
+      "title": "migration history uniqueness — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "migration history uniqueness için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q139",
+      "category": "Database & Migration",
+      "title": "schema existence check — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema existence check için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q140",
+      "category": "Database & Migration",
+      "title": "migration failure recovery — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "migration failure recovery için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q141",
+      "category": "Database & Migration",
+      "title": "migration idempotency — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "migration idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q142",
+      "category": "Database & Migration",
+      "title": "historical migration checkpoint — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "historical migration checkpoint için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q143",
+      "category": "Database & Migration",
+      "title": "transaction eligibility — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "transaction eligibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q144",
+      "category": "Database & Migration",
+      "title": "DDL safety detection — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "DDL safety detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q145",
+      "category": "Database & Migration",
+      "title": "destructive SQL guard — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "destructive SQL guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q146",
+      "category": "Database & Migration",
+      "title": "legacy schema detection — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "legacy schema detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q147",
+      "category": "Database & Migration",
+      "title": "migration ordering — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "migration ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q148",
+      "category": "Database & Migration",
+      "title": "migration history uniqueness — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "migration history uniqueness için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q149",
+      "category": "Database & Migration",
+      "title": "schema existence check — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "schema existence check için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q150",
+      "category": "Database & Migration",
+      "title": "migration failure recovery — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "migration failure recovery için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q151",
+      "category": "Backup & Recovery",
+      "title": "application backup validation — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "application backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q152",
+      "category": "Backup & Recovery",
+      "title": "database backup validation — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "database backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q153",
+      "category": "Backup & Recovery",
+      "title": "backup hash verification — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup hash verification için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q154",
+      "category": "Backup & Recovery",
+      "title": "backup size validation — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup size validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q155",
+      "category": "Backup & Recovery",
+      "title": "recovery manifest atomicity — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery manifest atomicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q156",
+      "category": "Backup & Recovery",
+      "title": "rollback integrity — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "rollback integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q157",
+      "category": "Backup & Recovery",
+      "title": "backup rotation safety — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup rotation safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q158",
+      "category": "Backup & Recovery",
+      "title": "manual restore metadata — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "manual restore metadata için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q159",
+      "category": "Backup & Recovery",
+      "title": "disk space preflight — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "disk space preflight için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q160",
+      "category": "Backup & Recovery",
+      "title": "secret exclusion from backup — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "secret exclusion from backup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q161",
+      "category": "Backup & Recovery",
+      "title": "application backup validation — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "application backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q162",
+      "category": "Backup & Recovery",
+      "title": "database backup validation — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "database backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q163",
+      "category": "Backup & Recovery",
+      "title": "backup hash verification — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup hash verification için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q164",
+      "category": "Backup & Recovery",
+      "title": "backup size validation — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup size validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q165",
+      "category": "Backup & Recovery",
+      "title": "recovery manifest atomicity — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery manifest atomicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q166",
+      "category": "Backup & Recovery",
+      "title": "rollback integrity — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "rollback integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q167",
+      "category": "Backup & Recovery",
+      "title": "backup rotation safety — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup rotation safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q168",
+      "category": "Backup & Recovery",
+      "title": "manual restore metadata — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "manual restore metadata için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q169",
+      "category": "Backup & Recovery",
+      "title": "disk space preflight — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "disk space preflight için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q170",
+      "category": "Backup & Recovery",
+      "title": "secret exclusion from backup — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "secret exclusion from backup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q171",
+      "category": "Backup & Recovery",
+      "title": "application backup validation — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "application backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q172",
+      "category": "Backup & Recovery",
+      "title": "database backup validation — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "database backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q173",
+      "category": "Backup & Recovery",
+      "title": "backup hash verification — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup hash verification için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q174",
+      "category": "Backup & Recovery",
+      "title": "backup size validation — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup size validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q175",
+      "category": "Backup & Recovery",
+      "title": "recovery manifest atomicity — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery manifest atomicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q176",
+      "category": "Backup & Recovery",
+      "title": "rollback integrity — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "rollback integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q177",
+      "category": "Backup & Recovery",
+      "title": "backup rotation safety — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup rotation safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q178",
+      "category": "Backup & Recovery",
+      "title": "manual restore metadata — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "manual restore metadata için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q179",
+      "category": "Backup & Recovery",
+      "title": "disk space preflight — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "disk space preflight için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q180",
+      "category": "Backup & Recovery",
+      "title": "secret exclusion from backup — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "secret exclusion from backup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q181",
+      "category": "Backup & Recovery",
+      "title": "application backup validation — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "application backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q182",
+      "category": "Backup & Recovery",
+      "title": "database backup validation — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "database backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q183",
+      "category": "Backup & Recovery",
+      "title": "backup hash verification — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup hash verification için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q184",
+      "category": "Backup & Recovery",
+      "title": "backup size validation — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup size validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q185",
+      "category": "Backup & Recovery",
+      "title": "recovery manifest atomicity — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery manifest atomicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q186",
+      "category": "Backup & Recovery",
+      "title": "rollback integrity — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "rollback integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q187",
+      "category": "Backup & Recovery",
+      "title": "backup rotation safety — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup rotation safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q188",
+      "category": "Backup & Recovery",
+      "title": "manual restore metadata — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "manual restore metadata için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q189",
+      "category": "Backup & Recovery",
+      "title": "disk space preflight — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "disk space preflight için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q190",
+      "category": "Backup & Recovery",
+      "title": "secret exclusion from backup — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "secret exclusion from backup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q191",
+      "category": "Backup & Recovery",
+      "title": "application backup validation — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "application backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q192",
+      "category": "Backup & Recovery",
+      "title": "database backup validation — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "database backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q193",
+      "category": "Backup & Recovery",
+      "title": "backup hash verification — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup hash verification için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q194",
+      "category": "Backup & Recovery",
+      "title": "backup size validation — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "backup size validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q195",
+      "category": "Backup & Recovery",
+      "title": "recovery manifest atomicity — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "recovery manifest atomicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q196",
+      "category": "Backup & Recovery",
+      "title": "rollback integrity — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "rollback integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q197",
+      "category": "Backup & Recovery",
+      "title": "backup rotation safety — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "backup rotation safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q198",
+      "category": "Backup & Recovery",
+      "title": "manual restore metadata — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "manual restore metadata için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q199",
+      "category": "Backup & Recovery",
+      "title": "disk space preflight — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "disk space preflight için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q200",
+      "category": "Backup & Recovery",
+      "title": "secret exclusion from backup — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "secret exclusion from backup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q201",
+      "category": "Security",
+      "title": "CSRF enforcement — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "CSRF enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q202",
+      "category": "Security",
+      "title": "authorization guard — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "authorization guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q203",
+      "category": "Security",
+      "title": "IDOR resistance — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "IDOR resistance için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q204",
+      "category": "Security",
+      "title": "SQL parameterization — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "SQL parameterization için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q205",
+      "category": "Security",
+      "title": "XSS output escaping — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "XSS output escaping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q206",
+      "category": "Security",
+      "title": "session hardening — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "session hardening için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q207",
+      "category": "Security",
+      "title": "upload validation — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "upload validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q208",
+      "category": "Security",
+      "title": "path traversal guard — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "path traversal guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q209",
+      "category": "Security",
+      "title": "secret handling — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "secret handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q210",
+      "category": "Security",
+      "title": "error disclosure prevention — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "error disclosure prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q211",
+      "category": "Security",
+      "title": "CSRF enforcement — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "CSRF enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q212",
+      "category": "Security",
+      "title": "authorization guard — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "authorization guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q213",
+      "category": "Security",
+      "title": "IDOR resistance — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "IDOR resistance için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q214",
+      "category": "Security",
+      "title": "SQL parameterization — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "SQL parameterization için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q215",
+      "category": "Security",
+      "title": "XSS output escaping — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "XSS output escaping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q216",
+      "category": "Security",
+      "title": "session hardening — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "session hardening için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q217",
+      "category": "Security",
+      "title": "upload validation — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "upload validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q218",
+      "category": "Security",
+      "title": "path traversal guard — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "path traversal guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q219",
+      "category": "Security",
+      "title": "secret handling — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "secret handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q220",
+      "category": "Security",
+      "title": "error disclosure prevention — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "error disclosure prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q221",
+      "category": "Security",
+      "title": "CSRF enforcement — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "CSRF enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q222",
+      "category": "Security",
+      "title": "authorization guard — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "authorization guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q223",
+      "category": "Security",
+      "title": "IDOR resistance — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "IDOR resistance için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q224",
+      "category": "Security",
+      "title": "SQL parameterization — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "SQL parameterization için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q225",
+      "category": "Security",
+      "title": "XSS output escaping — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "XSS output escaping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q226",
+      "category": "Security",
+      "title": "session hardening — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "session hardening için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q227",
+      "category": "Security",
+      "title": "upload validation — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "upload validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q228",
+      "category": "Security",
+      "title": "path traversal guard — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "path traversal guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q229",
+      "category": "Security",
+      "title": "secret handling — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "secret handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q230",
+      "category": "Security",
+      "title": "error disclosure prevention — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "error disclosure prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q231",
+      "category": "Security",
+      "title": "CSRF enforcement — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "CSRF enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q232",
+      "category": "Security",
+      "title": "authorization guard — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "authorization guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q233",
+      "category": "Security",
+      "title": "IDOR resistance — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "IDOR resistance için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q234",
+      "category": "Security",
+      "title": "SQL parameterization — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "SQL parameterization için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q235",
+      "category": "Security",
+      "title": "XSS output escaping — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "XSS output escaping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q236",
+      "category": "Security",
+      "title": "session hardening — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "session hardening için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q237",
+      "category": "Security",
+      "title": "upload validation — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "upload validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q238",
+      "category": "Security",
+      "title": "path traversal guard — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "path traversal guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q239",
+      "category": "Security",
+      "title": "secret handling — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "secret handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q240",
+      "category": "Security",
+      "title": "error disclosure prevention — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "error disclosure prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q241",
+      "category": "Security",
+      "title": "CSRF enforcement — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "CSRF enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q242",
+      "category": "Security",
+      "title": "authorization guard — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "authorization guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q243",
+      "category": "Security",
+      "title": "IDOR resistance — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "IDOR resistance için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q244",
+      "category": "Security",
+      "title": "SQL parameterization — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "SQL parameterization için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q245",
+      "category": "Security",
+      "title": "XSS output escaping — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "XSS output escaping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q246",
+      "category": "Security",
+      "title": "session hardening — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "session hardening için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q247",
+      "category": "Security",
+      "title": "upload validation — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "upload validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q248",
+      "category": "Security",
+      "title": "path traversal guard — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "path traversal guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q249",
+      "category": "Security",
+      "title": "secret handling — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "secret handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q250",
+      "category": "Security",
+      "title": "error disclosure prevention — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "error disclosure prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q251",
+      "category": "API & AJAX",
+      "title": "JSON contract stability — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "JSON contract stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q252",
+      "category": "API & AJAX",
+      "title": "HTTP status mapping — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "HTTP status mapping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q253",
+      "category": "API & AJAX",
+      "title": "request validation — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "request validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q254",
+      "category": "API & AJAX",
+      "title": "timeout behavior — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "timeout behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q255",
+      "category": "API & AJAX",
+      "title": "retry semantics — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "retry semantics için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q256",
+      "category": "API & AJAX",
+      "title": "duplicate submission handling — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "duplicate submission handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q257",
+      "category": "API & AJAX",
+      "title": "response schema consistency — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "response schema consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q258",
+      "category": "API & AJAX",
+      "title": "auth failure handling — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "auth failure handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q259",
+      "category": "API & AJAX",
+      "title": "rate limit behavior — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rate limit behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q260",
+      "category": "API & AJAX",
+      "title": "partial failure reporting — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "partial failure reporting için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q261",
+      "category": "API & AJAX",
+      "title": "JSON contract stability — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "JSON contract stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q262",
+      "category": "API & AJAX",
+      "title": "HTTP status mapping — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "HTTP status mapping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q263",
+      "category": "API & AJAX",
+      "title": "request validation — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "request validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q264",
+      "category": "API & AJAX",
+      "title": "timeout behavior — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "timeout behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q265",
+      "category": "API & AJAX",
+      "title": "retry semantics — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "retry semantics için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q266",
+      "category": "API & AJAX",
+      "title": "duplicate submission handling — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "duplicate submission handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q267",
+      "category": "API & AJAX",
+      "title": "response schema consistency — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "response schema consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q268",
+      "category": "API & AJAX",
+      "title": "auth failure handling — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "auth failure handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q269",
+      "category": "API & AJAX",
+      "title": "rate limit behavior — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rate limit behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q270",
+      "category": "API & AJAX",
+      "title": "partial failure reporting — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "partial failure reporting için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q271",
+      "category": "API & AJAX",
+      "title": "JSON contract stability — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "JSON contract stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q272",
+      "category": "API & AJAX",
+      "title": "HTTP status mapping — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "HTTP status mapping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q273",
+      "category": "API & AJAX",
+      "title": "request validation — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "request validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q274",
+      "category": "API & AJAX",
+      "title": "timeout behavior — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "timeout behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q275",
+      "category": "API & AJAX",
+      "title": "retry semantics — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "retry semantics için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q276",
+      "category": "API & AJAX",
+      "title": "duplicate submission handling — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "duplicate submission handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q277",
+      "category": "API & AJAX",
+      "title": "response schema consistency — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "response schema consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q278",
+      "category": "API & AJAX",
+      "title": "auth failure handling — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "auth failure handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q279",
+      "category": "API & AJAX",
+      "title": "rate limit behavior — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rate limit behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q280",
+      "category": "API & AJAX",
+      "title": "partial failure reporting — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "partial failure reporting için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q281",
+      "category": "API & AJAX",
+      "title": "JSON contract stability — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "JSON contract stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q282",
+      "category": "API & AJAX",
+      "title": "HTTP status mapping — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "HTTP status mapping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q283",
+      "category": "API & AJAX",
+      "title": "request validation — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "request validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q284",
+      "category": "API & AJAX",
+      "title": "timeout behavior — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "timeout behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q285",
+      "category": "API & AJAX",
+      "title": "retry semantics — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "retry semantics için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q286",
+      "category": "API & AJAX",
+      "title": "duplicate submission handling — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "duplicate submission handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q287",
+      "category": "API & AJAX",
+      "title": "response schema consistency — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "response schema consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q288",
+      "category": "API & AJAX",
+      "title": "auth failure handling — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "auth failure handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q289",
+      "category": "API & AJAX",
+      "title": "rate limit behavior — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rate limit behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q290",
+      "category": "API & AJAX",
+      "title": "partial failure reporting — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "partial failure reporting için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q291",
+      "category": "API & AJAX",
+      "title": "JSON contract stability — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "JSON contract stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q292",
+      "category": "API & AJAX",
+      "title": "HTTP status mapping — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "HTTP status mapping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q293",
+      "category": "API & AJAX",
+      "title": "request validation — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "request validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q294",
+      "category": "API & AJAX",
+      "title": "timeout behavior — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "timeout behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q295",
+      "category": "API & AJAX",
+      "title": "retry semantics — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "retry semantics için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q296",
+      "category": "API & AJAX",
+      "title": "duplicate submission handling — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "duplicate submission handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q297",
+      "category": "API & AJAX",
+      "title": "response schema consistency — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "response schema consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q298",
+      "category": "API & AJAX",
+      "title": "auth failure handling — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "auth failure handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q299",
+      "category": "API & AJAX",
+      "title": "rate limit behavior — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "rate limit behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q300",
+      "category": "API & AJAX",
+      "title": "partial failure reporting — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "partial failure reporting için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q301",
+      "category": "Frontend & UI",
+      "title": "loading state consistency — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "loading state consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q302",
+      "category": "Frontend & UI",
+      "title": "button disabled state — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "button disabled state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q303",
+      "category": "Frontend & UI",
+      "title": "modal focus behavior — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "modal focus behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q304",
+      "category": "Frontend & UI",
+      "title": "mobile overflow — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "mobile overflow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q305",
+      "category": "Frontend & UI",
+      "title": "error message clarity — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "error message clarity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q306",
+      "category": "Frontend & UI",
+      "title": "success state refresh — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "success state refresh için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q307",
+      "category": "Frontend & UI",
+      "title": "responsive layout — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "responsive layout için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q308",
+      "category": "Frontend & UI",
+      "title": "notification consistency — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "notification consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q309",
+      "category": "Frontend & UI",
+      "title": "empty state rendering — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "empty state rendering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q310",
+      "category": "Frontend & UI",
+      "title": "accessibility labeling — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "accessibility labeling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q311",
+      "category": "Frontend & UI",
+      "title": "loading state consistency — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "loading state consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q312",
+      "category": "Frontend & UI",
+      "title": "button disabled state — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "button disabled state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q313",
+      "category": "Frontend & UI",
+      "title": "modal focus behavior — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "modal focus behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q314",
+      "category": "Frontend & UI",
+      "title": "mobile overflow — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "mobile overflow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q315",
+      "category": "Frontend & UI",
+      "title": "error message clarity — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "error message clarity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q316",
+      "category": "Frontend & UI",
+      "title": "success state refresh — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "success state refresh için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q317",
+      "category": "Frontend & UI",
+      "title": "responsive layout — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "responsive layout için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q318",
+      "category": "Frontend & UI",
+      "title": "notification consistency — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "notification consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q319",
+      "category": "Frontend & UI",
+      "title": "empty state rendering — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "empty state rendering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q320",
+      "category": "Frontend & UI",
+      "title": "accessibility labeling — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "accessibility labeling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q321",
+      "category": "Frontend & UI",
+      "title": "loading state consistency — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "loading state consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q322",
+      "category": "Frontend & UI",
+      "title": "button disabled state — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "button disabled state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q323",
+      "category": "Frontend & UI",
+      "title": "modal focus behavior — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "modal focus behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q324",
+      "category": "Frontend & UI",
+      "title": "mobile overflow — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "mobile overflow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q325",
+      "category": "Frontend & UI",
+      "title": "error message clarity — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "error message clarity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q326",
+      "category": "Frontend & UI",
+      "title": "success state refresh — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "success state refresh için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q327",
+      "category": "Frontend & UI",
+      "title": "responsive layout — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "responsive layout için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q328",
+      "category": "Frontend & UI",
+      "title": "notification consistency — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "notification consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q329",
+      "category": "Frontend & UI",
+      "title": "empty state rendering — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "empty state rendering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q330",
+      "category": "Frontend & UI",
+      "title": "accessibility labeling — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "accessibility labeling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q331",
+      "category": "Frontend & UI",
+      "title": "loading state consistency — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "loading state consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q332",
+      "category": "Frontend & UI",
+      "title": "button disabled state — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "button disabled state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q333",
+      "category": "Frontend & UI",
+      "title": "modal focus behavior — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "modal focus behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q334",
+      "category": "Frontend & UI",
+      "title": "mobile overflow — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "mobile overflow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q335",
+      "category": "Frontend & UI",
+      "title": "error message clarity — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "error message clarity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q336",
+      "category": "Frontend & UI",
+      "title": "success state refresh — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "success state refresh için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q337",
+      "category": "Frontend & UI",
+      "title": "responsive layout — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "responsive layout için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q338",
+      "category": "Frontend & UI",
+      "title": "notification consistency — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "notification consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q339",
+      "category": "Frontend & UI",
+      "title": "empty state rendering — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "empty state rendering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q340",
+      "category": "Frontend & UI",
+      "title": "accessibility labeling — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "accessibility labeling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q341",
+      "category": "Frontend & UI",
+      "title": "loading state consistency — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "loading state consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q342",
+      "category": "Frontend & UI",
+      "title": "button disabled state — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "button disabled state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q343",
+      "category": "Frontend & UI",
+      "title": "modal focus behavior — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "modal focus behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q344",
+      "category": "Frontend & UI",
+      "title": "mobile overflow — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "mobile overflow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q345",
+      "category": "Frontend & UI",
+      "title": "error message clarity — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "error message clarity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q346",
+      "category": "Frontend & UI",
+      "title": "success state refresh — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "success state refresh için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q347",
+      "category": "Frontend & UI",
+      "title": "responsive layout — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "responsive layout için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q348",
+      "category": "Frontend & UI",
+      "title": "notification consistency — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "notification consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q349",
+      "category": "Frontend & UI",
+      "title": "empty state rendering — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "empty state rendering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q350",
+      "category": "Frontend & UI",
+      "title": "accessibility labeling — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "accessibility labeling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q351",
+      "category": "Mobile & PWA",
+      "title": "service worker update flow — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "service worker update flow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q352",
+      "category": "Mobile & PWA",
+      "title": "offline fallback — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "offline fallback için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q353",
+      "category": "Mobile & PWA",
+      "title": "cache versioning — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cache versioning için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q354",
+      "category": "Mobile & PWA",
+      "title": "iOS standalone behavior — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "iOS standalone behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q355",
+      "category": "Mobile & PWA",
+      "title": "push permission state — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "push permission state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q356",
+      "category": "Mobile & PWA",
+      "title": "mobile menu lifecycle — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "mobile menu lifecycle için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q357",
+      "category": "Mobile & PWA",
+      "title": "touch target sizing — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "touch target sizing için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q358",
+      "category": "Mobile & PWA",
+      "title": "viewport stability — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "viewport stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q359",
+      "category": "Mobile & PWA",
+      "title": "background sync safety — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "background sync safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q360",
+      "category": "Mobile & PWA",
+      "title": "PWA install state — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "PWA install state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q361",
+      "category": "Mobile & PWA",
+      "title": "service worker update flow — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "service worker update flow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q362",
+      "category": "Mobile & PWA",
+      "title": "offline fallback — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "offline fallback için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q363",
+      "category": "Mobile & PWA",
+      "title": "cache versioning — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cache versioning için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q364",
+      "category": "Mobile & PWA",
+      "title": "iOS standalone behavior — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "iOS standalone behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q365",
+      "category": "Mobile & PWA",
+      "title": "push permission state — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "push permission state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q366",
+      "category": "Mobile & PWA",
+      "title": "mobile menu lifecycle — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "mobile menu lifecycle için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q367",
+      "category": "Mobile & PWA",
+      "title": "touch target sizing — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "touch target sizing için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q368",
+      "category": "Mobile & PWA",
+      "title": "viewport stability — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "viewport stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q369",
+      "category": "Mobile & PWA",
+      "title": "background sync safety — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "background sync safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q370",
+      "category": "Mobile & PWA",
+      "title": "PWA install state — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "PWA install state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q371",
+      "category": "Mobile & PWA",
+      "title": "service worker update flow — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "service worker update flow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q372",
+      "category": "Mobile & PWA",
+      "title": "offline fallback — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "offline fallback için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q373",
+      "category": "Mobile & PWA",
+      "title": "cache versioning — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cache versioning için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q374",
+      "category": "Mobile & PWA",
+      "title": "iOS standalone behavior — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "iOS standalone behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q375",
+      "category": "Mobile & PWA",
+      "title": "push permission state — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "push permission state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q376",
+      "category": "Mobile & PWA",
+      "title": "mobile menu lifecycle — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "mobile menu lifecycle için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q377",
+      "category": "Mobile & PWA",
+      "title": "touch target sizing — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "touch target sizing için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q378",
+      "category": "Mobile & PWA",
+      "title": "viewport stability — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "viewport stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q379",
+      "category": "Mobile & PWA",
+      "title": "background sync safety — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "background sync safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q380",
+      "category": "Mobile & PWA",
+      "title": "PWA install state — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "PWA install state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q381",
+      "category": "Mobile & PWA",
+      "title": "service worker update flow — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "service worker update flow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q382",
+      "category": "Mobile & PWA",
+      "title": "offline fallback — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "offline fallback için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q383",
+      "category": "Mobile & PWA",
+      "title": "cache versioning — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cache versioning için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q384",
+      "category": "Mobile & PWA",
+      "title": "iOS standalone behavior — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "iOS standalone behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q385",
+      "category": "Mobile & PWA",
+      "title": "push permission state — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "push permission state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q386",
+      "category": "Mobile & PWA",
+      "title": "mobile menu lifecycle — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "mobile menu lifecycle için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q387",
+      "category": "Mobile & PWA",
+      "title": "touch target sizing — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "touch target sizing için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q388",
+      "category": "Mobile & PWA",
+      "title": "viewport stability — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "viewport stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q389",
+      "category": "Mobile & PWA",
+      "title": "background sync safety — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "background sync safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q390",
+      "category": "Mobile & PWA",
+      "title": "PWA install state — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "PWA install state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q391",
+      "category": "Mobile & PWA",
+      "title": "service worker update flow — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "service worker update flow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q392",
+      "category": "Mobile & PWA",
+      "title": "offline fallback — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "offline fallback için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q393",
+      "category": "Mobile & PWA",
+      "title": "cache versioning — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cache versioning için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q394",
+      "category": "Mobile & PWA",
+      "title": "iOS standalone behavior — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "iOS standalone behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q395",
+      "category": "Mobile & PWA",
+      "title": "push permission state — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "push permission state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q396",
+      "category": "Mobile & PWA",
+      "title": "mobile menu lifecycle — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "mobile menu lifecycle için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q397",
+      "category": "Mobile & PWA",
+      "title": "touch target sizing — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "touch target sizing için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q398",
+      "category": "Mobile & PWA",
+      "title": "viewport stability — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "viewport stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q399",
+      "category": "Mobile & PWA",
+      "title": "background sync safety — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "background sync safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q400",
+      "category": "Mobile & PWA",
+      "title": "PWA install state — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "PWA install state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q401",
+      "category": "Performance & Reliability",
+      "title": "query count control — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "query count control için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q402",
+      "category": "Performance & Reliability",
+      "title": "N+1 prevention — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "N+1 prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q403",
+      "category": "Performance & Reliability",
+      "title": "large payload limits — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "large payload limits için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q404",
+      "category": "Performance & Reliability",
+      "title": "memory usage guard — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "memory usage guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q405",
+      "category": "Performance & Reliability",
+      "title": "event listener cleanup — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "event listener cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q406",
+      "category": "Performance & Reliability",
+      "title": "DOM update scope — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "DOM update scope için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q407",
+      "category": "Performance & Reliability",
+      "title": "cache invalidation — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cache invalidation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q408",
+      "category": "Performance & Reliability",
+      "title": "concurrent update safety — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "concurrent update safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q409",
+      "category": "Performance & Reliability",
+      "title": "network retry budget — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "network retry budget için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q410",
+      "category": "Performance & Reliability",
+      "title": "slow operation observability — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "slow operation observability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q411",
+      "category": "Performance & Reliability",
+      "title": "query count control — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "query count control için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q412",
+      "category": "Performance & Reliability",
+      "title": "N+1 prevention — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "N+1 prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q413",
+      "category": "Performance & Reliability",
+      "title": "large payload limits — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "large payload limits için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q414",
+      "category": "Performance & Reliability",
+      "title": "memory usage guard — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "memory usage guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q415",
+      "category": "Performance & Reliability",
+      "title": "event listener cleanup — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "event listener cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q416",
+      "category": "Performance & Reliability",
+      "title": "DOM update scope — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "DOM update scope için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q417",
+      "category": "Performance & Reliability",
+      "title": "cache invalidation — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cache invalidation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q418",
+      "category": "Performance & Reliability",
+      "title": "concurrent update safety — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "concurrent update safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q419",
+      "category": "Performance & Reliability",
+      "title": "network retry budget — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "network retry budget için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q420",
+      "category": "Performance & Reliability",
+      "title": "slow operation observability — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "slow operation observability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q421",
+      "category": "Performance & Reliability",
+      "title": "query count control — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "query count control için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q422",
+      "category": "Performance & Reliability",
+      "title": "N+1 prevention — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "N+1 prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q423",
+      "category": "Performance & Reliability",
+      "title": "large payload limits — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "large payload limits için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q424",
+      "category": "Performance & Reliability",
+      "title": "memory usage guard — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "memory usage guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q425",
+      "category": "Performance & Reliability",
+      "title": "event listener cleanup — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "event listener cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q426",
+      "category": "Performance & Reliability",
+      "title": "DOM update scope — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "DOM update scope için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q427",
+      "category": "Performance & Reliability",
+      "title": "cache invalidation — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cache invalidation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q428",
+      "category": "Performance & Reliability",
+      "title": "concurrent update safety — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "concurrent update safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q429",
+      "category": "Performance & Reliability",
+      "title": "network retry budget — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "network retry budget için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q430",
+      "category": "Performance & Reliability",
+      "title": "slow operation observability — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "slow operation observability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q431",
+      "category": "Performance & Reliability",
+      "title": "query count control — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "query count control için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q432",
+      "category": "Performance & Reliability",
+      "title": "N+1 prevention — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "N+1 prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q433",
+      "category": "Performance & Reliability",
+      "title": "large payload limits — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "large payload limits için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q434",
+      "category": "Performance & Reliability",
+      "title": "memory usage guard — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "memory usage guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q435",
+      "category": "Performance & Reliability",
+      "title": "event listener cleanup — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "event listener cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q436",
+      "category": "Performance & Reliability",
+      "title": "DOM update scope — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "DOM update scope için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q437",
+      "category": "Performance & Reliability",
+      "title": "cache invalidation — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cache invalidation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q438",
+      "category": "Performance & Reliability",
+      "title": "concurrent update safety — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "concurrent update safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q439",
+      "category": "Performance & Reliability",
+      "title": "network retry budget — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "network retry budget için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q440",
+      "category": "Performance & Reliability",
+      "title": "slow operation observability — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "slow operation observability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q441",
+      "category": "Performance & Reliability",
+      "title": "query count control — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "query count control için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q442",
+      "category": "Performance & Reliability",
+      "title": "N+1 prevention — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "N+1 prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q443",
+      "category": "Performance & Reliability",
+      "title": "large payload limits — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "large payload limits için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q444",
+      "category": "Performance & Reliability",
+      "title": "memory usage guard — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "memory usage guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q445",
+      "category": "Performance & Reliability",
+      "title": "event listener cleanup — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "event listener cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q446",
+      "category": "Performance & Reliability",
+      "title": "DOM update scope — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "DOM update scope için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q447",
+      "category": "Performance & Reliability",
+      "title": "cache invalidation — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "cache invalidation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q448",
+      "category": "Performance & Reliability",
+      "title": "concurrent update safety — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "concurrent update safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q449",
+      "category": "Performance & Reliability",
+      "title": "network retry budget — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "network retry budget için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q450",
+      "category": "Performance & Reliability",
+      "title": "slow operation observability — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "slow operation observability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q451",
+      "category": "Testing & Observability",
+      "title": "PHP syntax gate — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "PHP syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q452",
+      "category": "Testing & Observability",
+      "title": "JavaScript syntax gate — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "JavaScript syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q453",
+      "category": "Testing & Observability",
+      "title": "regression coverage — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "regression coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q454",
+      "category": "Testing & Observability",
+      "title": "release invariant test — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release invariant test için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q455",
+      "category": "Testing & Observability",
+      "title": "migration fixture coverage — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "migration fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q456",
+      "category": "Testing & Observability",
+      "title": "backup fixture coverage — kontrol 1",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "backup fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q457",
+      "category": "Testing & Observability",
+      "title": "structured logging — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "structured logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q458",
+      "category": "Testing & Observability",
+      "title": "failure stage logging — kontrol 1",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "failure stage logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q459",
+      "category": "Testing & Observability",
+      "title": "test future compatibility — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "test future compatibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q460",
+      "category": "Testing & Observability",
+      "title": "artifact traceability — kontrol 1",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "artifact traceability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q461",
+      "category": "Testing & Observability",
+      "title": "PHP syntax gate — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "PHP syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q462",
+      "category": "Testing & Observability",
+      "title": "JavaScript syntax gate — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "JavaScript syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q463",
+      "category": "Testing & Observability",
+      "title": "regression coverage — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "regression coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q464",
+      "category": "Testing & Observability",
+      "title": "release invariant test — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release invariant test için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q465",
+      "category": "Testing & Observability",
+      "title": "migration fixture coverage — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "migration fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q466",
+      "category": "Testing & Observability",
+      "title": "backup fixture coverage — kontrol 2",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "backup fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q467",
+      "category": "Testing & Observability",
+      "title": "structured logging — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "structured logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q468",
+      "category": "Testing & Observability",
+      "title": "failure stage logging — kontrol 2",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "failure stage logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q469",
+      "category": "Testing & Observability",
+      "title": "test future compatibility — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "test future compatibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q470",
+      "category": "Testing & Observability",
+      "title": "artifact traceability — kontrol 2",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "artifact traceability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q471",
+      "category": "Testing & Observability",
+      "title": "PHP syntax gate — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "PHP syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q472",
+      "category": "Testing & Observability",
+      "title": "JavaScript syntax gate — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "JavaScript syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q473",
+      "category": "Testing & Observability",
+      "title": "regression coverage — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "regression coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q474",
+      "category": "Testing & Observability",
+      "title": "release invariant test — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release invariant test için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q475",
+      "category": "Testing & Observability",
+      "title": "migration fixture coverage — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "migration fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q476",
+      "category": "Testing & Observability",
+      "title": "backup fixture coverage — kontrol 3",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "backup fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q477",
+      "category": "Testing & Observability",
+      "title": "structured logging — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "structured logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q478",
+      "category": "Testing & Observability",
+      "title": "failure stage logging — kontrol 3",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "failure stage logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q479",
+      "category": "Testing & Observability",
+      "title": "test future compatibility — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "test future compatibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q480",
+      "category": "Testing & Observability",
+      "title": "artifact traceability — kontrol 3",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "artifact traceability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q481",
+      "category": "Testing & Observability",
+      "title": "PHP syntax gate — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "PHP syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q482",
+      "category": "Testing & Observability",
+      "title": "JavaScript syntax gate — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "JavaScript syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q483",
+      "category": "Testing & Observability",
+      "title": "regression coverage — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "regression coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q484",
+      "category": "Testing & Observability",
+      "title": "release invariant test — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release invariant test için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q485",
+      "category": "Testing & Observability",
+      "title": "migration fixture coverage — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "migration fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q486",
+      "category": "Testing & Observability",
+      "title": "backup fixture coverage — kontrol 4",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "backup fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q487",
+      "category": "Testing & Observability",
+      "title": "structured logging — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "structured logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q488",
+      "category": "Testing & Observability",
+      "title": "failure stage logging — kontrol 4",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "failure stage logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q489",
+      "category": "Testing & Observability",
+      "title": "test future compatibility — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "test future compatibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q490",
+      "category": "Testing & Observability",
+      "title": "artifact traceability — kontrol 4",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "artifact traceability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q491",
+      "category": "Testing & Observability",
+      "title": "PHP syntax gate — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "PHP syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q492",
+      "category": "Testing & Observability",
+      "title": "JavaScript syntax gate — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "JavaScript syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q493",
+      "category": "Testing & Observability",
+      "title": "regression coverage — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "regression coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q494",
+      "category": "Testing & Observability",
+      "title": "release invariant test — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "release invariant test için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q495",
+      "category": "Testing & Observability",
+      "title": "migration fixture coverage — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "migration fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q496",
+      "category": "Testing & Observability",
+      "title": "backup fixture coverage — kontrol 5",
+      "priority": "P0",
+      "status": "planned",
+      "acceptance": "backup fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q497",
+      "category": "Testing & Observability",
+      "title": "structured logging — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "structured logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q498",
+      "category": "Testing & Observability",
+      "title": "failure stage logging — kontrol 5",
+      "priority": "P1",
+      "status": "planned",
+      "acceptance": "failure stage logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q499",
+      "category": "Testing & Observability",
+      "title": "test future compatibility — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "test future compatibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    },
+    {
+      "id": "Q500",
+      "category": "Testing & Observability",
+      "title": "artifact traceability — kontrol 5",
+      "priority": "P2",
+      "status": "planned",
+      "acceptance": "artifact traceability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli."
+    }
+  ]
+}

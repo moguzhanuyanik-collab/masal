@@ -35,13 +35,10 @@ try{
             $rows=km_institution_rows($pdo);
             $matchingOptions=null;
         }elseif($section==='eslestirme'){
-            if($institutionId>0){
-                $rows=km_matching_rows($pdo,$institutionId);
-                $matchingOptions=km_matching_options($pdo,$institutionId);
-            }else{
-                $rows=[];
-                $matchingOptions=['ogrenciler'=>[],'veliler'=>[],'ogretmenler'=>[]];
-            }
+            // 0 = tüm aktif kurumlar. Listeyi boş bırakmak yerine kurum filtresi
+            // seçilmemişken de tüm tenant kapsamlarını göstermek gerekir.
+            $rows=km_matching_rows($pdo,$institutionId);
+            $matchingOptions=km_matching_options($pdo,$institutionId);
         }else{
             $rows=km_member_rows($pdo,(string)$sections[$section]['role'],$institutionId);
             $matchingOptions=null;
@@ -135,9 +132,18 @@ try{
 
     km_api_response(['ok'=>false,'message'=>'Geçersiz kullanıcı işlemi.'],400);
 }catch(PDOException $e){
-    $message=$e->getCode()==='23000'
-        ?'Bu e-posta, kurum kodu veya üyelik zaten kullanılıyor.'
-        :'Veritabanı işlemi tamamlanamadı.';
+    $mysqlError=(int)($e->errorInfo[1]??0);
+    if($mysqlError===1452){
+        // MariaDB 1452, child kaydın referans verdiği parent kaydın bulunmadığını
+        // gösterir. Kullanıcıya duplicate üyelik mesajı vermek yanıltıcıdır.
+        $message='Eşleştirme veritabanı bütünlük kontrolünden geçmedi. Seçilen öğrenci, veli veya öğretmenin kurum kaydı güncel değil. Listeyi yenileyip tekrar deneyin.';
+    }elseif($mysqlError===1062){
+        $message='Bu e-posta, kurum kodu veya üyelik zaten kullanılıyor.';
+    }elseif($e->getCode()==='23000'){
+        $message='Veritabanı bütünlük kuralı işlemi engelledi. Bilgileri kontrol edip tekrar deneyin.';
+    }else{
+        $message='Veritabanı işlemi tamamlanamadı.';
+    }
     km_api_response(['ok'=>false,'message'=>$message],400);
 }catch(Throwable $e){
     error_log('[IlkAdim][kurumlar-api] '.$e->getMessage());

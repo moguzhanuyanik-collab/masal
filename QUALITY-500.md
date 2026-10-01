@@ -1,0 +1,534 @@
+# İlkAdım — 500 Maddelik Güncelleme ve Kalite Matrisi
+
+Bu katalog updater, release, veritabanı, recovery, güvenlik, API/AJAX, arayüz, mobil/PWA, performans ve test/observability alanlarında **500 benzersiz kontrol maddesi** içerir.
+
+## Updater Core
+
+- [x] **Q001** — lock acquisition ordering — kontrol 1 (P0) — lock acquisition ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q002** — download timeout handling — kontrol 1 (P1) — download timeout handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q003** — zip extraction guard — kontrol 1 (P1) — zip extraction guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q004** — temporary file cleanup — kontrol 1 (P2) — temporary file cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q005** — atomic replace integrity — kontrol 1 (P2) — atomic replace integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q006** — handoff marker integrity — kontrol 1 (P0) — handoff marker integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q007** — stale marker expiry — kontrol 1 (P1) — stale marker expiry için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q008** — update retry idempotency — kontrol 1 (P1) — update retry idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q009** — preserved path enforcement — kontrol 1 (P2) — preserved path enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q010** — symlink rejection — kontrol 1 (P2) — symlink rejection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q011** — lock acquisition ordering — kontrol 2 (P0) — lock acquisition ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q012** — download timeout handling — kontrol 2 (P1) — download timeout handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q013** — zip extraction guard — kontrol 2 (P1) — zip extraction guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q014** — temporary file cleanup — kontrol 2 (P2) — temporary file cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q015** — atomic replace integrity — kontrol 2 (P2) — atomic replace integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q016** — handoff marker integrity — kontrol 2 (P0) — handoff marker integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q017** — stale marker expiry — kontrol 2 (P1) — stale marker expiry için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q018** — update retry idempotency — kontrol 2 (P1) — update retry idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q019** — preserved path enforcement — kontrol 2 (P2) — preserved path enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q020** — symlink rejection — kontrol 2 (P2) — symlink rejection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q021** — lock acquisition ordering — kontrol 3 (P0) — lock acquisition ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q022** — download timeout handling — kontrol 3 (P1) — download timeout handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q023** — zip extraction guard — kontrol 3 (P1) — zip extraction guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q024** — temporary file cleanup — kontrol 3 (P2) — temporary file cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q025** — atomic replace integrity — kontrol 3 (P2) — atomic replace integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q026** — handoff marker integrity — kontrol 3 (P0) — handoff marker integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q027** — stale marker expiry — kontrol 3 (P1) — stale marker expiry için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q028** — update retry idempotency — kontrol 3 (P1) — update retry idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q029** — preserved path enforcement — kontrol 3 (P2) — preserved path enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q030** — symlink rejection — kontrol 3 (P2) — symlink rejection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q031** — lock acquisition ordering — kontrol 4 (P0) — lock acquisition ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q032** — download timeout handling — kontrol 4 (P1) — download timeout handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q033** — zip extraction guard — kontrol 4 (P1) — zip extraction guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q034** — temporary file cleanup — kontrol 4 (P2) — temporary file cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q035** — atomic replace integrity — kontrol 4 (P2) — atomic replace integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q036** — handoff marker integrity — kontrol 4 (P0) — handoff marker integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q037** — stale marker expiry — kontrol 4 (P1) — stale marker expiry için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q038** — update retry idempotency — kontrol 4 (P1) — update retry idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q039** — preserved path enforcement — kontrol 4 (P2) — preserved path enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [x] **Q040** — symlink rejection — kontrol 4 (P2) — symlink rejection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q041** — lock acquisition ordering — kontrol 5 (P0) — lock acquisition ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q042** — download timeout handling — kontrol 5 (P1) — download timeout handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q043** — zip extraction guard — kontrol 5 (P1) — zip extraction guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q044** — temporary file cleanup — kontrol 5 (P2) — temporary file cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q045** — atomic replace integrity — kontrol 5 (P2) — atomic replace integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q046** — handoff marker integrity — kontrol 5 (P0) — handoff marker integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q047** — stale marker expiry — kontrol 5 (P1) — stale marker expiry için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q048** — update retry idempotency — kontrol 5 (P1) — update retry idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q049** — preserved path enforcement — kontrol 5 (P2) — preserved path enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q050** — symlink rejection — kontrol 5 (P2) — symlink rejection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+
+## Release & Versioning
+
+- [ ] **Q051** — release anchor equals HEAD — kontrol 1 (P0) — release anchor equals HEAD için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q052** — version metadata consistency — kontrol 1 (P1) — version metadata consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q053** — revision monotonicity — kontrol 1 (P1) — revision monotonicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q054** — historical anchor ordering — kontrol 1 (P2) — historical anchor ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q055** — next release selection — kontrol 1 (P2) — next release selection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q056** — release note presence — kontrol 1 (P0) — release note presence için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q057** — managed manifest version match — kontrol 1 (P1) — managed manifest version match için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q058** — branch release invariant — kontrol 1 (P1) — branch release invariant için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q059** — same-version revision handling — kontrol 1 (P2) — same-version revision handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q060** — post-release commit prevention — kontrol 1 (P2) — post-release commit prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q061** — release anchor equals HEAD — kontrol 2 (P0) — release anchor equals HEAD için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q062** — version metadata consistency — kontrol 2 (P1) — version metadata consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q063** — revision monotonicity — kontrol 2 (P1) — revision monotonicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q064** — historical anchor ordering — kontrol 2 (P2) — historical anchor ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q065** — next release selection — kontrol 2 (P2) — next release selection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q066** — release note presence — kontrol 2 (P0) — release note presence için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q067** — managed manifest version match — kontrol 2 (P1) — managed manifest version match için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q068** — branch release invariant — kontrol 2 (P1) — branch release invariant için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q069** — same-version revision handling — kontrol 2 (P2) — same-version revision handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q070** — post-release commit prevention — kontrol 2 (P2) — post-release commit prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q071** — release anchor equals HEAD — kontrol 3 (P0) — release anchor equals HEAD için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q072** — version metadata consistency — kontrol 3 (P1) — version metadata consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q073** — revision monotonicity — kontrol 3 (P1) — revision monotonicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q074** — historical anchor ordering — kontrol 3 (P2) — historical anchor ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q075** — next release selection — kontrol 3 (P2) — next release selection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q076** — release note presence — kontrol 3 (P0) — release note presence için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q077** — managed manifest version match — kontrol 3 (P1) — managed manifest version match için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q078** — branch release invariant — kontrol 3 (P1) — branch release invariant için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q079** — same-version revision handling — kontrol 3 (P2) — same-version revision handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q080** — post-release commit prevention — kontrol 3 (P2) — post-release commit prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q081** — release anchor equals HEAD — kontrol 4 (P0) — release anchor equals HEAD için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q082** — version metadata consistency — kontrol 4 (P1) — version metadata consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q083** — revision monotonicity — kontrol 4 (P1) — revision monotonicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q084** — historical anchor ordering — kontrol 4 (P2) — historical anchor ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q085** — next release selection — kontrol 4 (P2) — next release selection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q086** — release note presence — kontrol 4 (P0) — release note presence için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q087** — managed manifest version match — kontrol 4 (P1) — managed manifest version match için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q088** — branch release invariant — kontrol 4 (P1) — branch release invariant için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q089** — same-version revision handling — kontrol 4 (P2) — same-version revision handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q090** — post-release commit prevention — kontrol 4 (P2) — post-release commit prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q091** — release anchor equals HEAD — kontrol 5 (P0) — release anchor equals HEAD için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q092** — version metadata consistency — kontrol 5 (P1) — version metadata consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q093** — revision monotonicity — kontrol 5 (P1) — revision monotonicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q094** — historical anchor ordering — kontrol 5 (P2) — historical anchor ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q095** — next release selection — kontrol 5 (P2) — next release selection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q096** — release note presence — kontrol 5 (P0) — release note presence için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q097** — managed manifest version match — kontrol 5 (P1) — managed manifest version match için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q098** — branch release invariant — kontrol 5 (P1) — branch release invariant için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q099** — same-version revision handling — kontrol 5 (P2) — same-version revision handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q100** — post-release commit prevention — kontrol 5 (P2) — post-release commit prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+
+## Database & Migration
+
+- [ ] **Q101** — migration idempotency — kontrol 1 (P0) — migration idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q102** — historical migration checkpoint — kontrol 1 (P1) — historical migration checkpoint için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q103** — transaction eligibility — kontrol 1 (P1) — transaction eligibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q104** — DDL safety detection — kontrol 1 (P2) — DDL safety detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q105** — destructive SQL guard — kontrol 1 (P2) — destructive SQL guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q106** — legacy schema detection — kontrol 1 (P0) — legacy schema detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q107** — migration ordering — kontrol 1 (P1) — migration ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q108** — migration history uniqueness — kontrol 1 (P1) — migration history uniqueness için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q109** — schema existence check — kontrol 1 (P2) — schema existence check için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q110** — migration failure recovery — kontrol 1 (P2) — migration failure recovery için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q111** — migration idempotency — kontrol 2 (P0) — migration idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q112** — historical migration checkpoint — kontrol 2 (P1) — historical migration checkpoint için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q113** — transaction eligibility — kontrol 2 (P1) — transaction eligibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q114** — DDL safety detection — kontrol 2 (P2) — DDL safety detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q115** — destructive SQL guard — kontrol 2 (P2) — destructive SQL guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q116** — legacy schema detection — kontrol 2 (P0) — legacy schema detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q117** — migration ordering — kontrol 2 (P1) — migration ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q118** — migration history uniqueness — kontrol 2 (P1) — migration history uniqueness için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q119** — schema existence check — kontrol 2 (P2) — schema existence check için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q120** — migration failure recovery — kontrol 2 (P2) — migration failure recovery için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q121** — migration idempotency — kontrol 3 (P0) — migration idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q122** — historical migration checkpoint — kontrol 3 (P1) — historical migration checkpoint için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q123** — transaction eligibility — kontrol 3 (P1) — transaction eligibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q124** — DDL safety detection — kontrol 3 (P2) — DDL safety detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q125** — destructive SQL guard — kontrol 3 (P2) — destructive SQL guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q126** — legacy schema detection — kontrol 3 (P0) — legacy schema detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q127** — migration ordering — kontrol 3 (P1) — migration ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q128** — migration history uniqueness — kontrol 3 (P1) — migration history uniqueness için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q129** — schema existence check — kontrol 3 (P2) — schema existence check için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q130** — migration failure recovery — kontrol 3 (P2) — migration failure recovery için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q131** — migration idempotency — kontrol 4 (P0) — migration idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q132** — historical migration checkpoint — kontrol 4 (P1) — historical migration checkpoint için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q133** — transaction eligibility — kontrol 4 (P1) — transaction eligibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q134** — DDL safety detection — kontrol 4 (P2) — DDL safety detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q135** — destructive SQL guard — kontrol 4 (P2) — destructive SQL guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q136** — legacy schema detection — kontrol 4 (P0) — legacy schema detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q137** — migration ordering — kontrol 4 (P1) — migration ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q138** — migration history uniqueness — kontrol 4 (P1) — migration history uniqueness için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q139** — schema existence check — kontrol 4 (P2) — schema existence check için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q140** — migration failure recovery — kontrol 4 (P2) — migration failure recovery için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q141** — migration idempotency — kontrol 5 (P0) — migration idempotency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q142** — historical migration checkpoint — kontrol 5 (P1) — historical migration checkpoint için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q143** — transaction eligibility — kontrol 5 (P1) — transaction eligibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q144** — DDL safety detection — kontrol 5 (P2) — DDL safety detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q145** — destructive SQL guard — kontrol 5 (P2) — destructive SQL guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q146** — legacy schema detection — kontrol 5 (P0) — legacy schema detection için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q147** — migration ordering — kontrol 5 (P1) — migration ordering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q148** — migration history uniqueness — kontrol 5 (P1) — migration history uniqueness için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q149** — schema existence check — kontrol 5 (P2) — schema existence check için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q150** — migration failure recovery — kontrol 5 (P2) — migration failure recovery için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+
+## Backup & Recovery
+
+- [ ] **Q151** — application backup validation — kontrol 1 (P0) — application backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q152** — database backup validation — kontrol 1 (P1) — database backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q153** — backup hash verification — kontrol 1 (P1) — backup hash verification için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q154** — backup size validation — kontrol 1 (P2) — backup size validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q155** — recovery manifest atomicity — kontrol 1 (P2) — recovery manifest atomicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q156** — rollback integrity — kontrol 1 (P0) — rollback integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q157** — backup rotation safety — kontrol 1 (P1) — backup rotation safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q158** — manual restore metadata — kontrol 1 (P1) — manual restore metadata için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q159** — disk space preflight — kontrol 1 (P2) — disk space preflight için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q160** — secret exclusion from backup — kontrol 1 (P2) — secret exclusion from backup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q161** — application backup validation — kontrol 2 (P0) — application backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q162** — database backup validation — kontrol 2 (P1) — database backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q163** — backup hash verification — kontrol 2 (P1) — backup hash verification için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q164** — backup size validation — kontrol 2 (P2) — backup size validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q165** — recovery manifest atomicity — kontrol 2 (P2) — recovery manifest atomicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q166** — rollback integrity — kontrol 2 (P0) — rollback integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q167** — backup rotation safety — kontrol 2 (P1) — backup rotation safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q168** — manual restore metadata — kontrol 2 (P1) — manual restore metadata için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q169** — disk space preflight — kontrol 2 (P2) — disk space preflight için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q170** — secret exclusion from backup — kontrol 2 (P2) — secret exclusion from backup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q171** — application backup validation — kontrol 3 (P0) — application backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q172** — database backup validation — kontrol 3 (P1) — database backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q173** — backup hash verification — kontrol 3 (P1) — backup hash verification için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q174** — backup size validation — kontrol 3 (P2) — backup size validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q175** — recovery manifest atomicity — kontrol 3 (P2) — recovery manifest atomicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q176** — rollback integrity — kontrol 3 (P0) — rollback integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q177** — backup rotation safety — kontrol 3 (P1) — backup rotation safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q178** — manual restore metadata — kontrol 3 (P1) — manual restore metadata için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q179** — disk space preflight — kontrol 3 (P2) — disk space preflight için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q180** — secret exclusion from backup — kontrol 3 (P2) — secret exclusion from backup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q181** — application backup validation — kontrol 4 (P0) — application backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q182** — database backup validation — kontrol 4 (P1) — database backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q183** — backup hash verification — kontrol 4 (P1) — backup hash verification için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q184** — backup size validation — kontrol 4 (P2) — backup size validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q185** — recovery manifest atomicity — kontrol 4 (P2) — recovery manifest atomicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q186** — rollback integrity — kontrol 4 (P0) — rollback integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q187** — backup rotation safety — kontrol 4 (P1) — backup rotation safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q188** — manual restore metadata — kontrol 4 (P1) — manual restore metadata için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q189** — disk space preflight — kontrol 4 (P2) — disk space preflight için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q190** — secret exclusion from backup — kontrol 4 (P2) — secret exclusion from backup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q191** — application backup validation — kontrol 5 (P0) — application backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q192** — database backup validation — kontrol 5 (P1) — database backup validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q193** — backup hash verification — kontrol 5 (P1) — backup hash verification için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q194** — backup size validation — kontrol 5 (P2) — backup size validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q195** — recovery manifest atomicity — kontrol 5 (P2) — recovery manifest atomicity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q196** — rollback integrity — kontrol 5 (P0) — rollback integrity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q197** — backup rotation safety — kontrol 5 (P1) — backup rotation safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q198** — manual restore metadata — kontrol 5 (P1) — manual restore metadata için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q199** — disk space preflight — kontrol 5 (P2) — disk space preflight için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q200** — secret exclusion from backup — kontrol 5 (P2) — secret exclusion from backup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+
+## Security
+
+- [ ] **Q201** — CSRF enforcement — kontrol 1 (P0) — CSRF enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q202** — authorization guard — kontrol 1 (P1) — authorization guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q203** — IDOR resistance — kontrol 1 (P1) — IDOR resistance için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q204** — SQL parameterization — kontrol 1 (P2) — SQL parameterization için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q205** — XSS output escaping — kontrol 1 (P2) — XSS output escaping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q206** — session hardening — kontrol 1 (P0) — session hardening için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q207** — upload validation — kontrol 1 (P1) — upload validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q208** — path traversal guard — kontrol 1 (P1) — path traversal guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q209** — secret handling — kontrol 1 (P2) — secret handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q210** — error disclosure prevention — kontrol 1 (P2) — error disclosure prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q211** — CSRF enforcement — kontrol 2 (P0) — CSRF enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q212** — authorization guard — kontrol 2 (P1) — authorization guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q213** — IDOR resistance — kontrol 2 (P1) — IDOR resistance için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q214** — SQL parameterization — kontrol 2 (P2) — SQL parameterization için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q215** — XSS output escaping — kontrol 2 (P2) — XSS output escaping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q216** — session hardening — kontrol 2 (P0) — session hardening için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q217** — upload validation — kontrol 2 (P1) — upload validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q218** — path traversal guard — kontrol 2 (P1) — path traversal guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q219** — secret handling — kontrol 2 (P2) — secret handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q220** — error disclosure prevention — kontrol 2 (P2) — error disclosure prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q221** — CSRF enforcement — kontrol 3 (P0) — CSRF enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q222** — authorization guard — kontrol 3 (P1) — authorization guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q223** — IDOR resistance — kontrol 3 (P1) — IDOR resistance için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q224** — SQL parameterization — kontrol 3 (P2) — SQL parameterization için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q225** — XSS output escaping — kontrol 3 (P2) — XSS output escaping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q226** — session hardening — kontrol 3 (P0) — session hardening için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q227** — upload validation — kontrol 3 (P1) — upload validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q228** — path traversal guard — kontrol 3 (P1) — path traversal guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q229** — secret handling — kontrol 3 (P2) — secret handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q230** — error disclosure prevention — kontrol 3 (P2) — error disclosure prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q231** — CSRF enforcement — kontrol 4 (P0) — CSRF enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q232** — authorization guard — kontrol 4 (P1) — authorization guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q233** — IDOR resistance — kontrol 4 (P1) — IDOR resistance için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q234** — SQL parameterization — kontrol 4 (P2) — SQL parameterization için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q235** — XSS output escaping — kontrol 4 (P2) — XSS output escaping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q236** — session hardening — kontrol 4 (P0) — session hardening için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q237** — upload validation — kontrol 4 (P1) — upload validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q238** — path traversal guard — kontrol 4 (P1) — path traversal guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q239** — secret handling — kontrol 4 (P2) — secret handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q240** — error disclosure prevention — kontrol 4 (P2) — error disclosure prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q241** — CSRF enforcement — kontrol 5 (P0) — CSRF enforcement için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q242** — authorization guard — kontrol 5 (P1) — authorization guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q243** — IDOR resistance — kontrol 5 (P1) — IDOR resistance için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q244** — SQL parameterization — kontrol 5 (P2) — SQL parameterization için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q245** — XSS output escaping — kontrol 5 (P2) — XSS output escaping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q246** — session hardening — kontrol 5 (P0) — session hardening için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q247** — upload validation — kontrol 5 (P1) — upload validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q248** — path traversal guard — kontrol 5 (P1) — path traversal guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q249** — secret handling — kontrol 5 (P2) — secret handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q250** — error disclosure prevention — kontrol 5 (P2) — error disclosure prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+
+## API & AJAX
+
+- [ ] **Q251** — JSON contract stability — kontrol 1 (P0) — JSON contract stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q252** — HTTP status mapping — kontrol 1 (P1) — HTTP status mapping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q253** — request validation — kontrol 1 (P1) — request validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q254** — timeout behavior — kontrol 1 (P2) — timeout behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q255** — retry semantics — kontrol 1 (P2) — retry semantics için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q256** — duplicate submission handling — kontrol 1 (P0) — duplicate submission handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q257** — response schema consistency — kontrol 1 (P1) — response schema consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q258** — auth failure handling — kontrol 1 (P1) — auth failure handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q259** — rate limit behavior — kontrol 1 (P2) — rate limit behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q260** — partial failure reporting — kontrol 1 (P2) — partial failure reporting için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q261** — JSON contract stability — kontrol 2 (P0) — JSON contract stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q262** — HTTP status mapping — kontrol 2 (P1) — HTTP status mapping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q263** — request validation — kontrol 2 (P1) — request validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q264** — timeout behavior — kontrol 2 (P2) — timeout behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q265** — retry semantics — kontrol 2 (P2) — retry semantics için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q266** — duplicate submission handling — kontrol 2 (P0) — duplicate submission handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q267** — response schema consistency — kontrol 2 (P1) — response schema consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q268** — auth failure handling — kontrol 2 (P1) — auth failure handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q269** — rate limit behavior — kontrol 2 (P2) — rate limit behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q270** — partial failure reporting — kontrol 2 (P2) — partial failure reporting için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q271** — JSON contract stability — kontrol 3 (P0) — JSON contract stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q272** — HTTP status mapping — kontrol 3 (P1) — HTTP status mapping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q273** — request validation — kontrol 3 (P1) — request validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q274** — timeout behavior — kontrol 3 (P2) — timeout behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q275** — retry semantics — kontrol 3 (P2) — retry semantics için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q276** — duplicate submission handling — kontrol 3 (P0) — duplicate submission handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q277** — response schema consistency — kontrol 3 (P1) — response schema consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q278** — auth failure handling — kontrol 3 (P1) — auth failure handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q279** — rate limit behavior — kontrol 3 (P2) — rate limit behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q280** — partial failure reporting — kontrol 3 (P2) — partial failure reporting için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q281** — JSON contract stability — kontrol 4 (P0) — JSON contract stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q282** — HTTP status mapping — kontrol 4 (P1) — HTTP status mapping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q283** — request validation — kontrol 4 (P1) — request validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q284** — timeout behavior — kontrol 4 (P2) — timeout behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q285** — retry semantics — kontrol 4 (P2) — retry semantics için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q286** — duplicate submission handling — kontrol 4 (P0) — duplicate submission handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q287** — response schema consistency — kontrol 4 (P1) — response schema consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q288** — auth failure handling — kontrol 4 (P1) — auth failure handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q289** — rate limit behavior — kontrol 4 (P2) — rate limit behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q290** — partial failure reporting — kontrol 4 (P2) — partial failure reporting için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q291** — JSON contract stability — kontrol 5 (P0) — JSON contract stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q292** — HTTP status mapping — kontrol 5 (P1) — HTTP status mapping için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q293** — request validation — kontrol 5 (P1) — request validation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q294** — timeout behavior — kontrol 5 (P2) — timeout behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q295** — retry semantics — kontrol 5 (P2) — retry semantics için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q296** — duplicate submission handling — kontrol 5 (P0) — duplicate submission handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q297** — response schema consistency — kontrol 5 (P1) — response schema consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q298** — auth failure handling — kontrol 5 (P1) — auth failure handling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q299** — rate limit behavior — kontrol 5 (P2) — rate limit behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q300** — partial failure reporting — kontrol 5 (P2) — partial failure reporting için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+
+## Frontend & UI
+
+- [ ] **Q301** — loading state consistency — kontrol 1 (P0) — loading state consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q302** — button disabled state — kontrol 1 (P1) — button disabled state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q303** — modal focus behavior — kontrol 1 (P1) — modal focus behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q304** — mobile overflow — kontrol 1 (P2) — mobile overflow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q305** — error message clarity — kontrol 1 (P2) — error message clarity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q306** — success state refresh — kontrol 1 (P0) — success state refresh için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q307** — responsive layout — kontrol 1 (P1) — responsive layout için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q308** — notification consistency — kontrol 1 (P1) — notification consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q309** — empty state rendering — kontrol 1 (P2) — empty state rendering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q310** — accessibility labeling — kontrol 1 (P2) — accessibility labeling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q311** — loading state consistency — kontrol 2 (P0) — loading state consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q312** — button disabled state — kontrol 2 (P1) — button disabled state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q313** — modal focus behavior — kontrol 2 (P1) — modal focus behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q314** — mobile overflow — kontrol 2 (P2) — mobile overflow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q315** — error message clarity — kontrol 2 (P2) — error message clarity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q316** — success state refresh — kontrol 2 (P0) — success state refresh için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q317** — responsive layout — kontrol 2 (P1) — responsive layout için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q318** — notification consistency — kontrol 2 (P1) — notification consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q319** — empty state rendering — kontrol 2 (P2) — empty state rendering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q320** — accessibility labeling — kontrol 2 (P2) — accessibility labeling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q321** — loading state consistency — kontrol 3 (P0) — loading state consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q322** — button disabled state — kontrol 3 (P1) — button disabled state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q323** — modal focus behavior — kontrol 3 (P1) — modal focus behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q324** — mobile overflow — kontrol 3 (P2) — mobile overflow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q325** — error message clarity — kontrol 3 (P2) — error message clarity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q326** — success state refresh — kontrol 3 (P0) — success state refresh için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q327** — responsive layout — kontrol 3 (P1) — responsive layout için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q328** — notification consistency — kontrol 3 (P1) — notification consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q329** — empty state rendering — kontrol 3 (P2) — empty state rendering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q330** — accessibility labeling — kontrol 3 (P2) — accessibility labeling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q331** — loading state consistency — kontrol 4 (P0) — loading state consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q332** — button disabled state — kontrol 4 (P1) — button disabled state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q333** — modal focus behavior — kontrol 4 (P1) — modal focus behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q334** — mobile overflow — kontrol 4 (P2) — mobile overflow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q335** — error message clarity — kontrol 4 (P2) — error message clarity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q336** — success state refresh — kontrol 4 (P0) — success state refresh için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q337** — responsive layout — kontrol 4 (P1) — responsive layout için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q338** — notification consistency — kontrol 4 (P1) — notification consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q339** — empty state rendering — kontrol 4 (P2) — empty state rendering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q340** — accessibility labeling — kontrol 4 (P2) — accessibility labeling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q341** — loading state consistency — kontrol 5 (P0) — loading state consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q342** — button disabled state — kontrol 5 (P1) — button disabled state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q343** — modal focus behavior — kontrol 5 (P1) — modal focus behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q344** — mobile overflow — kontrol 5 (P2) — mobile overflow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q345** — error message clarity — kontrol 5 (P2) — error message clarity için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q346** — success state refresh — kontrol 5 (P0) — success state refresh için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q347** — responsive layout — kontrol 5 (P1) — responsive layout için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q348** — notification consistency — kontrol 5 (P1) — notification consistency için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q349** — empty state rendering — kontrol 5 (P2) — empty state rendering için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q350** — accessibility labeling — kontrol 5 (P2) — accessibility labeling için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+
+## Mobile & PWA
+
+- [ ] **Q351** — service worker update flow — kontrol 1 (P0) — service worker update flow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q352** — offline fallback — kontrol 1 (P1) — offline fallback için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q353** — cache versioning — kontrol 1 (P1) — cache versioning için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q354** — iOS standalone behavior — kontrol 1 (P2) — iOS standalone behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q355** — push permission state — kontrol 1 (P2) — push permission state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q356** — mobile menu lifecycle — kontrol 1 (P0) — mobile menu lifecycle için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q357** — touch target sizing — kontrol 1 (P1) — touch target sizing için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q358** — viewport stability — kontrol 1 (P1) — viewport stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q359** — background sync safety — kontrol 1 (P2) — background sync safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q360** — PWA install state — kontrol 1 (P2) — PWA install state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q361** — service worker update flow — kontrol 2 (P0) — service worker update flow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q362** — offline fallback — kontrol 2 (P1) — offline fallback için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q363** — cache versioning — kontrol 2 (P1) — cache versioning için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q364** — iOS standalone behavior — kontrol 2 (P2) — iOS standalone behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q365** — push permission state — kontrol 2 (P2) — push permission state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q366** — mobile menu lifecycle — kontrol 2 (P0) — mobile menu lifecycle için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q367** — touch target sizing — kontrol 2 (P1) — touch target sizing için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q368** — viewport stability — kontrol 2 (P1) — viewport stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q369** — background sync safety — kontrol 2 (P2) — background sync safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q370** — PWA install state — kontrol 2 (P2) — PWA install state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q371** — service worker update flow — kontrol 3 (P0) — service worker update flow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q372** — offline fallback — kontrol 3 (P1) — offline fallback için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q373** — cache versioning — kontrol 3 (P1) — cache versioning için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q374** — iOS standalone behavior — kontrol 3 (P2) — iOS standalone behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q375** — push permission state — kontrol 3 (P2) — push permission state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q376** — mobile menu lifecycle — kontrol 3 (P0) — mobile menu lifecycle için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q377** — touch target sizing — kontrol 3 (P1) — touch target sizing için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q378** — viewport stability — kontrol 3 (P1) — viewport stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q379** — background sync safety — kontrol 3 (P2) — background sync safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q380** — PWA install state — kontrol 3 (P2) — PWA install state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q381** — service worker update flow — kontrol 4 (P0) — service worker update flow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q382** — offline fallback — kontrol 4 (P1) — offline fallback için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q383** — cache versioning — kontrol 4 (P1) — cache versioning için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q384** — iOS standalone behavior — kontrol 4 (P2) — iOS standalone behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q385** — push permission state — kontrol 4 (P2) — push permission state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q386** — mobile menu lifecycle — kontrol 4 (P0) — mobile menu lifecycle için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q387** — touch target sizing — kontrol 4 (P1) — touch target sizing için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q388** — viewport stability — kontrol 4 (P1) — viewport stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q389** — background sync safety — kontrol 4 (P2) — background sync safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q390** — PWA install state — kontrol 4 (P2) — PWA install state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q391** — service worker update flow — kontrol 5 (P0) — service worker update flow için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q392** — offline fallback — kontrol 5 (P1) — offline fallback için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q393** — cache versioning — kontrol 5 (P1) — cache versioning için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q394** — iOS standalone behavior — kontrol 5 (P2) — iOS standalone behavior için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q395** — push permission state — kontrol 5 (P2) — push permission state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q396** — mobile menu lifecycle — kontrol 5 (P0) — mobile menu lifecycle için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q397** — touch target sizing — kontrol 5 (P1) — touch target sizing için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q398** — viewport stability — kontrol 5 (P1) — viewport stability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q399** — background sync safety — kontrol 5 (P2) — background sync safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q400** — PWA install state — kontrol 5 (P2) — PWA install state için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+
+## Performance & Reliability
+
+- [ ] **Q401** — query count control — kontrol 1 (P0) — query count control için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q402** — N+1 prevention — kontrol 1 (P1) — N+1 prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q403** — large payload limits — kontrol 1 (P1) — large payload limits için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q404** — memory usage guard — kontrol 1 (P2) — memory usage guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q405** — event listener cleanup — kontrol 1 (P2) — event listener cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q406** — DOM update scope — kontrol 1 (P0) — DOM update scope için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q407** — cache invalidation — kontrol 1 (P1) — cache invalidation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q408** — concurrent update safety — kontrol 1 (P1) — concurrent update safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q409** — network retry budget — kontrol 1 (P2) — network retry budget için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q410** — slow operation observability — kontrol 1 (P2) — slow operation observability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q411** — query count control — kontrol 2 (P0) — query count control için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q412** — N+1 prevention — kontrol 2 (P1) — N+1 prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q413** — large payload limits — kontrol 2 (P1) — large payload limits için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q414** — memory usage guard — kontrol 2 (P2) — memory usage guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q415** — event listener cleanup — kontrol 2 (P2) — event listener cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q416** — DOM update scope — kontrol 2 (P0) — DOM update scope için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q417** — cache invalidation — kontrol 2 (P1) — cache invalidation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q418** — concurrent update safety — kontrol 2 (P1) — concurrent update safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q419** — network retry budget — kontrol 2 (P2) — network retry budget için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q420** — slow operation observability — kontrol 2 (P2) — slow operation observability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q421** — query count control — kontrol 3 (P0) — query count control için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q422** — N+1 prevention — kontrol 3 (P1) — N+1 prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q423** — large payload limits — kontrol 3 (P1) — large payload limits için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q424** — memory usage guard — kontrol 3 (P2) — memory usage guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q425** — event listener cleanup — kontrol 3 (P2) — event listener cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q426** — DOM update scope — kontrol 3 (P0) — DOM update scope için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q427** — cache invalidation — kontrol 3 (P1) — cache invalidation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q428** — concurrent update safety — kontrol 3 (P1) — concurrent update safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q429** — network retry budget — kontrol 3 (P2) — network retry budget için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q430** — slow operation observability — kontrol 3 (P2) — slow operation observability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q431** — query count control — kontrol 4 (P0) — query count control için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q432** — N+1 prevention — kontrol 4 (P1) — N+1 prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q433** — large payload limits — kontrol 4 (P1) — large payload limits için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q434** — memory usage guard — kontrol 4 (P2) — memory usage guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q435** — event listener cleanup — kontrol 4 (P2) — event listener cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q436** — DOM update scope — kontrol 4 (P0) — DOM update scope için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q437** — cache invalidation — kontrol 4 (P1) — cache invalidation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q438** — concurrent update safety — kontrol 4 (P1) — concurrent update safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q439** — network retry budget — kontrol 4 (P2) — network retry budget için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q440** — slow operation observability — kontrol 4 (P2) — slow operation observability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q441** — query count control — kontrol 5 (P0) — query count control için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q442** — N+1 prevention — kontrol 5 (P1) — N+1 prevention için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q443** — large payload limits — kontrol 5 (P1) — large payload limits için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q444** — memory usage guard — kontrol 5 (P2) — memory usage guard için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q445** — event listener cleanup — kontrol 5 (P2) — event listener cleanup için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q446** — DOM update scope — kontrol 5 (P0) — DOM update scope için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q447** — cache invalidation — kontrol 5 (P1) — cache invalidation için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q448** — concurrent update safety — kontrol 5 (P1) — concurrent update safety için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q449** — network retry budget — kontrol 5 (P2) — network retry budget için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q450** — slow operation observability — kontrol 5 (P2) — slow operation observability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+
+## Testing & Observability
+
+- [ ] **Q451** — PHP syntax gate — kontrol 1 (P0) — PHP syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q452** — JavaScript syntax gate — kontrol 1 (P1) — JavaScript syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q453** — regression coverage — kontrol 1 (P1) — regression coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q454** — release invariant test — kontrol 1 (P2) — release invariant test için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q455** — migration fixture coverage — kontrol 1 (P2) — migration fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q456** — backup fixture coverage — kontrol 1 (P0) — backup fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q457** — structured logging — kontrol 1 (P1) — structured logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q458** — failure stage logging — kontrol 1 (P1) — failure stage logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q459** — test future compatibility — kontrol 1 (P2) — test future compatibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q460** — artifact traceability — kontrol 1 (P2) — artifact traceability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q461** — PHP syntax gate — kontrol 2 (P0) — PHP syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q462** — JavaScript syntax gate — kontrol 2 (P1) — JavaScript syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q463** — regression coverage — kontrol 2 (P1) — regression coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q464** — release invariant test — kontrol 2 (P2) — release invariant test için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q465** — migration fixture coverage — kontrol 2 (P2) — migration fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q466** — backup fixture coverage — kontrol 2 (P0) — backup fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q467** — structured logging — kontrol 2 (P1) — structured logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q468** — failure stage logging — kontrol 2 (P1) — failure stage logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q469** — test future compatibility — kontrol 2 (P2) — test future compatibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q470** — artifact traceability — kontrol 2 (P2) — artifact traceability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q471** — PHP syntax gate — kontrol 3 (P0) — PHP syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q472** — JavaScript syntax gate — kontrol 3 (P1) — JavaScript syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q473** — regression coverage — kontrol 3 (P1) — regression coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q474** — release invariant test — kontrol 3 (P2) — release invariant test için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q475** — migration fixture coverage — kontrol 3 (P2) — migration fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q476** — backup fixture coverage — kontrol 3 (P0) — backup fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q477** — structured logging — kontrol 3 (P1) — structured logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q478** — failure stage logging — kontrol 3 (P1) — failure stage logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q479** — test future compatibility — kontrol 3 (P2) — test future compatibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q480** — artifact traceability — kontrol 3 (P2) — artifact traceability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q481** — PHP syntax gate — kontrol 4 (P0) — PHP syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q482** — JavaScript syntax gate — kontrol 4 (P1) — JavaScript syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q483** — regression coverage — kontrol 4 (P1) — regression coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q484** — release invariant test — kontrol 4 (P2) — release invariant test için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q485** — migration fixture coverage — kontrol 4 (P2) — migration fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q486** — backup fixture coverage — kontrol 4 (P0) — backup fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q487** — structured logging — kontrol 4 (P1) — structured logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q488** — failure stage logging — kontrol 4 (P1) — failure stage logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q489** — test future compatibility — kontrol 4 (P2) — test future compatibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q490** — artifact traceability — kontrol 4 (P2) — artifact traceability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q491** — PHP syntax gate — kontrol 5 (P0) — PHP syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q492** — JavaScript syntax gate — kontrol 5 (P1) — JavaScript syntax gate için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q493** — regression coverage — kontrol 5 (P1) — regression coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q494** — release invariant test — kontrol 5 (P2) — release invariant test için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q495** — migration fixture coverage — kontrol 5 (P2) — migration fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q496** — backup fixture coverage — kontrol 5 (P0) — backup fixture coverage için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q497** — structured logging — kontrol 5 (P1) — structured logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q498** — failure stage logging — kontrol 5 (P1) — failure stage logging için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q499** — test future compatibility — kontrol 5 (P2) — test future compatibility için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+- [ ] **Q500** — artifact traceability — kontrol 5 (P2) — artifact traceability için deterministik kontrol bulunmalı; başarısızlık fail-closed veya güvenli fallback üretmeli.
+

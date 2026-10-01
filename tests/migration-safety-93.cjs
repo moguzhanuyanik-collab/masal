@@ -34,17 +34,15 @@ for(const name of retired){
 
 assert(updater.includes("SELECT COUNT(*) FROM kurum_kullanicilari"));
 assert(
-  updater.includes("if($rowCount>0)") ||
-  updater.includes("if($liveCount!==count($members))"),
-  'legacy membership row-count integrity check missing'
+  updater.includes('kurum_kullanicilari_v4_bridge')
+  && updater.includes('kurum_kullanicilari_legacy_197_backup')
+  && updater.includes('RENAME TABLE kurum_kullanicilari TO')
+  && updater.includes('Legacy kurum üyeliği kullanıcı eşlemesi çözülemedi')
 );
 assert(updater.includes("assert_automatic_migration_safe($name,$file)"));
-assert(
-  updater.includes("$rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')") ||
-  (updater.includes("$rel==='storage'||str_starts_with($rel,'storage/')") &&
-   updater.includes("$rel==='config/local.php'||$rel==='.env'")),
-  'backup secret/runtime exclusion missing'
-);
+assert(updater.includes("$rel==='config/local.php'"));
+assert(updater.includes("$rel==='.env'"));
+assert(updater.includes("str_starts_with($rel,'storage/')"));
 
 assert(auth.includes("'email_ip'"));
 assert(auth.includes("INSERT IGNORE INTO giris_guvenlik"));
@@ -59,6 +57,6 @@ assert(!preserve[1].includes("'styles.css'"));
 assert(!preserve[1].includes("'app-style.css'"));
 assert(!preserve[1].includes("'features-style.css'"));
 
-assert(/^1\.1\.(?:9[3-9]|[1-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.1','version must be 1.1.93 or newer');
+assert(/^1\.1\.(?:9[3-9]|[1-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.2','version must be 1.1.93 or newer');
 
 console.log('1.1.93 migration and login safety checks passed');
