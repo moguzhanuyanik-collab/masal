@@ -16,7 +16,7 @@ function bd_importance(string $value): string {
     return match($value){'acil'=>'Acil','onemli'=>'Önemli',default=>'Normal'};
 }
 function bd_role_text(string $csv): string {
-    $map=bd_recipient_roles();
+    $map=bd_supported_recipient_roles();
     $labels=[];
     foreach(array_filter(explode(',',$csv)) as $role) if(isset($map[$role])) $labels[]=$map[$role];
     return $labels?implode(', ',$labels):'—';
