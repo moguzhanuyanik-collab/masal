@@ -10,6 +10,7 @@ const teacherJs=fs.readFileSync('ogretmen-icerikleri.js','utf8');
 const teacherList=fs.readFileSync('ogretmen-odevleri.php','utf8');
 const teacherDetail=fs.readFileSync('ogretmen-odev-detay.php','utf8');
 const parent=fs.readFileSync('veli-odevleri.php','utf8');
+const parentDomain=fs.readFileSync('src/veli_icerikleri.php','utf8');
 const student=fs.readFileSync('ogrenci-odevleri.php','utf8');
 const profileFeatures=fs.readFileSync('v4-features.js','utf8');
 const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
@@ -36,7 +37,8 @@ assert(teacherList.includes('Teslim:'),'teacher homework list deadline missing')
 assert(teacherDetail.includes('TESLİM ÖZETİ'),'teacher completion summary missing');
 assert(teacherDetail.includes("tamamlanma_tarihi"),'teacher completion timestamp missing');
 assert(parent.includes("auth_accessible_student_ids"),'parent homework child list must use centralized scoped access');
-assert(parent.includes("vo.kurum_id=oi.kurum_id"),'parent homework relation must be tenant scoped');
+assert(parent.includes("vi_parent_contents($pdo,(int)$user['id'],$childId,$institutionId,'odev')"),'parent homework list must use centralized tenant-safe content provider');
+assert(parentDomain.includes("vo.kurum_id=oi.kurum_id"),'parent homework relation must remain tenant scoped in shared provider');
 assert(parent.includes('Tamamlandı'),'parent completion status missing');
 
 assert(student.includes('require_student_login()'),'student homework page must require student role');
