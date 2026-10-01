@@ -50,6 +50,7 @@ jobs:
           php tests/adimbot-rate-limit-98.php
           php tests/db-backup-99.php
           php tests/recovery-safety-100.php
+          php tests/update-safety-102.php
 
       - name: Node regression checks
         shell: bash
@@ -63,3 +64,4 @@ jobs:
           node tests/db-backup-99.cjs
           node tests/recovery-safety-100.cjs
           node tests/update-release-anchor-101.cjs
+          node tests/update-safety-102.cjs
