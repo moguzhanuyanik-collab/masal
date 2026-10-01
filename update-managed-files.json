@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.24",
+  "version": "1.2.25",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -195,6 +195,7 @@
     "RELEASE-1.2.22.md",
     "RELEASE-1.2.23.md",
     "RELEASE-1.2.24.md",
+    "RELEASE-1.2.25.md",
     "RELEASE-1.2.3.md",
     "RELEASE-1.2.4.md",
     "RELEASE-1.2.5.md",
@@ -534,6 +535,8 @@
     "tests/teacher-group-filter-db-143.php",
     "tests/teacher-homework-dashboard-148.cjs",
     "tests/teacher-homework-dashboard-db-148.php",
+    "tests/teacher-question-correct-lock-150.cjs",
+    "tests/teacher-question-correct-lock-db-150.php",
     "tests/teacher-question-star-reward-147.cjs",
     "tests/teacher-question-star-reward-db-147.php",
     "tests/tenant-isolation-114.cjs",
