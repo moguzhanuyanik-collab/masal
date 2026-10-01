@@ -106,7 +106,7 @@ Mevcut genel öğretmen tasarımı değiştirilmedi.
 Yeni testler:
 
 - `tests/teacher-homework-dashboard-148.cjs`
-- `tests/teacher-homework-dashboard-db-147.php`
+- `tests/teacher-homework-dashboard-db-148.php`
 
 MariaDB entegrasyon testi:
 
