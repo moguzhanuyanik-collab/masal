@@ -1945,6 +1945,16 @@ function assert_historical_migration_history(PDO $pdo,string $root,string $local
     }
 }
 
+function validate_tenant_relation_schema_guard(PDO $pdo,string $migrationRoot): void {
+    $name='066_kurum_eslestirme_schema_guard';
+    $file=rtrim($migrationRoot,'/\\').'/database/migrations/'.$name.'.sql';
+    if(!is_file($file) || is_link($file)){
+        throw new RuntimeException('Tenant şema doğrulama migration dosyası bulunamadı: '.$name);
+    }
+    assert_automatic_migration_safe($name,$file);
+    run_migration_sql($pdo,$file);
+}
+
 function run_legacy_1_1_97_to_1_2_1_recovery(PDO $pdo,string $migrationRoot,string $localVersion): array {
     if($localVersion!=='1.1.97') return [];
 
@@ -1980,6 +1990,11 @@ function run_legacy_1_1_97_to_1_2_1_recovery(PDO $pdo,string $migrationRoot,stri
         $insert->closeCursor();
         $applied[]=$name;
     }
+
+    // Migration checkpoint'i mevcut olsa bile gerçek tenant şeması bozulmuş olabilir.
+    // 066 veri değiştirmeyen guard'ı recovery sonunda yeniden çalıştırarak gerçek
+    // postcondition'ı zorunlu kıl. Böylece bozuk checkpoint sessizce geçilemez.
+    validate_tenant_relation_schema_guard($pdo,$migrationRoot);
 
     // 066 kaydı varsa 065'in de kaydı bulunmalıdır; ters tarihçe kabul edilmez.
     $check->execute(['065_kurum_bazli_eslestirme_izolasyonu']);
@@ -2175,6 +2190,7 @@ function install_github_update(
             'stage'=>$updateStage,
             'application_backup'=>null,
             'database_backup'=>null,
+            'database_mutation_started'=>false,
             'pending_migrations'=>[],
             'legacy_membership_repair'=>false,
             'student_schema_missing'=>false,
@@ -2372,7 +2388,9 @@ function install_github_update(
 
             $updateStage='legacy_database_recovery';
             $recoveryState['stage']=$updateStage;
+            $recoveryState['database_mutation_started']=true;
             $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+            $databaseMutationStarted=true;
             $migrations=run_legacy_1_1_97_to_1_2_1_recovery($pdo,$sourceRoot,$localVersion);
             $recoveryState['pending_migrations']=$migrations;
             $recoveryState['status']='database_recovery_complete';
