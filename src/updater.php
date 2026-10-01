@@ -225,14 +225,107 @@ function remote_release_info(array $gh): array {
 }
 
 function next_remote_version_info(array $gh,string $localVersion,int $localRevision=0): array {
+    [$owner,$repo,$branch]=github_repo_info($gh);
     $localVersion=trim($localVersion);
     if($localVersion==='') $localVersion='0.0.0';
+    $localRevision=max(0,$localRevision);
 
-    // 1.2.1: eski ara-sürüm/recovery zinciri tamamen kaldırıldı.
-    // Her kontrol yalnız main dalının gerçek 40 karakterlik HEAD SHA'sına gider.
-    return remote_release_info($gh);
+    // Güncelleme zinciri hiçbir zaman main HEAD'e atlamaz.
+    // Kurulu sürümden sonraki EN KÜÇÜK sürüm/revision seçilir.
+    // 1.1.98 -> 1.1.99 -> ... -> 1.1.119 -> 1.2.1 -> 1.2.2 ...
+    // şeklindeki tarihsel zincir korunur. Böylece aradaki migration/uygulama
+    // adımları atlanarak canlı DB'nin hazırlıksız bırakılması engellenir.
+    $historyFile=version_compare($localVersion,'1.1.101','>=')
+        ?'update-release.json'
+        :'version.json';
+
+    $next=null;
+    $page=1;
+    $maxPages=20;
+
+    while($page<=$maxPages){
+        $url='https://api.github.com/repos/'.rawurlencode($owner).'/'.rawurlencode($repo)
+            .'/commits?sha='.rawurlencode($branch)
+            .'&path='.rawurlencode($historyFile)
+            .'&per_page=100&page='.$page
+            .'&cb='.(string)round(microtime(true)*1000);
+
+        $rows=json_decode((string)updater_http($url,$gh),true);
+        if(!is_array($rows)){
+            throw new RuntimeException('GitHub sürüm geçmişi okunamadı.');
+        }
+        if($rows===[]) break;
+
+        $reachedInstalledOrOlder=false;
+
+        foreach($rows as $row){
+            $sha=trim((string)($row['sha']??''));
+            if(!preg_match('/^[a-f0-9]{40}$/i',$sha)) continue;
+
+            try{
+                $info=$historyFile==='update-release.json'
+                    ?remote_release_info_at_ref($gh,$sha)
+                    :remote_version_info_at_ref($gh,$sha);
+            }catch(Throwable $ignored){
+                continue;
+            }
+
+            $candidateVersion=trim((string)($info['version']??''));
+            if($candidateVersion==='') continue;
+
+            if($historyFile==='version.json'){
+                if(version_compare($candidateVersion,$localVersion,'>')){
+                    if(release_identity_should_replace_next($info,$next)){
+                        $next=$info;
+                    }
+                    continue;
+                }
+
+                $reachedInstalledOrOlder=true;
+                break;
+            }
+
+            if(release_identity_is_newer($info,$localVersion,$localRevision)){
+                if(release_identity_should_replace_next($info,$next)){
+                    $next=$info;
+                }
+                continue;
+            }
+
+            $versionCmp=version_compare($candidateVersion,$localVersion);
+            $candidateRevision=normalize_release_revision($info['release_revision']??0);
+            if($versionCmp<0 || ($versionCmp===0 && $candidateRevision<=$localRevision)){
+                $reachedInstalledOrOlder=true;
+                break;
+            }
+        }
+
+        if($reachedInstalledOrOlder || count($rows)<100) break;
+        $page++;
+    }
+
+    if($next!==null) return $next;
+
+    // Tarihsel zincirden bir sonraki sürüm güvenli biçimde bulunamadıysa
+    // latest/main'e atlama yapılmaz.
+    $latest=$historyFile==='update-release.json'
+        ?remote_release_info_at_ref($gh,$branch)
+        :remote_version_info($gh);
+
+    if($historyFile==='version.json'){
+        $latestVersion=trim((string)($latest['version']??''));
+        if($latestVersion==='' || version_compare($latestVersion,$localVersion,'<=')){
+            return $latest;
+        }
+    }elseif(!release_identity_is_newer($latest,$localVersion,$localRevision)){
+        return $latest;
+    }
+
+    throw new RuntimeException(
+        'Sıradaki güncelleme güvenli biçimde belirlenemedi. '
+        .'En son sürüme atlanmadı; ara sürüm zinciri kontrol edilmeli.'
+    );
 }
-
 function path_is_preserved(string $relative,array $preserve): bool {
     $relative=ltrim(str_replace('\\','/',$relative),'/');
     foreach($preserve as $rule){

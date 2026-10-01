@@ -196,7 +196,7 @@ foreach(['veli_id','ogretmen_id','ogrenci_id','yonetici_id'] as $legacy){
 }
 
 $remote=[
-    'version'=>'1.2.5',
+    'version'=>'1.2.6',
     'release_revision'=>1,
     'name'=>'legacy 1.1.97 full recovery fixture',
 ];

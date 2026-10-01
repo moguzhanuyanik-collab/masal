@@ -6,7 +6,7 @@ const release=JSON.parse(fs.readFileSync('update-release.json','utf8'));
 const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
 const updater=fs.readFileSync('src/updater.php','utf8');
 
-assert(version.version==='1.2.1' || /^1\.2\.[2-9]\d*$/.test(version.version),'version must be 1.2.1 or newer');
+assert(/^1\.2\.(?:[6-9]|[1-9]\d+)$/.test(version.version),'version must be 1.2.1 or newer');
 assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(release.release_revision,version.release_revision);
@@ -15,8 +15,12 @@ assert.strictEqual(manifest.release_revision,version.release_revision);
 
 assert(updater.includes('ILKADIM_UPDATER_CORE_GENERATION = 121'));
 assert(updater.includes('function github_branch_head_sha'));
-assert(updater.includes('return remote_release_info($gh);'));
-assert(!updater.includes('/commits?sha='));
+const nextStart=updater.indexOf('function next_remote_version_info(');
+const nextEnd=updater.indexOf('\nfunction ',nextStart+10);
+const nextBlock=updater.slice(nextStart,nextEnd);
+assert(nextBlock.includes('/commits?sha='));
+assert(nextBlock.includes('release_identity_should_replace_next($info,$next)'));
+assert(!nextBlock.includes('return remote_release_info($gh);'));
 assert(!updater.includes('recovery_bridge_target_info'));
 assert(updater.includes('1.2.1 temiz recovery yalnız uygulama kodu/updater çekirdeğini yeniler'));
 
