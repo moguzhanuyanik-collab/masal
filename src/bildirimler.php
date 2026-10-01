@@ -23,6 +23,10 @@ function bd_recipient_roles(): array {
     return ['ogretmen'=>'Öğretmenler','veli'=>'Veliler','ogrenci'=>'Öğrenciler'];
 }
 
+function bd_supported_recipient_roles(): array {
+    return bd_recipient_roles()+['yonetici'=>'Yöneticiler'];
+}
+
 function bd_validate_date(string $value): ?string {
     $value=trim($value);
     if($value==='') return null;
@@ -134,7 +138,7 @@ function bd_insert_announcement(
         foreach($recipients as $recipient){
             $userId=max(0,(int)($recipient['kullanici_id']??0));
             $role=(string)($recipient['kurum_rolu']??'');
-            if($userId<=0 || !in_array($role,array_keys(bd_recipient_roles()),true)) continue;
+            if($userId<=0 || !in_array($role,array_keys(bd_supported_recipient_roles()),true)) continue;
             $insert->execute([$announcementId,$institutionId,$userId,$role]);
             if($insert->rowCount()>0) $inserted++;
         }
