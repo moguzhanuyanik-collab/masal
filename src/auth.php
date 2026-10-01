@@ -73,6 +73,22 @@ if (!function_exists('auth_runtime_column_exists')) {
     }
 }
 
+if (!function_exists('auth_session_version')) {
+    function auth_session_version(PDO $pdo, int $userId): int {
+        if ($userId<=0 || !auth_runtime_table_exists($pdo,'kullanicilar')
+            || !auth_runtime_column_exists($pdo,'kullanicilar','oturum_surumu')) return 1;
+        try {
+            $stmt=$pdo->prepare('SELECT oturum_surumu FROM kullanicilar WHERE id=? AND aktif=1 LIMIT 1');
+            $stmt->execute([$userId]);
+            $version=max(1,(int)($stmt->fetchColumn()?:1));
+            $stmt->closeCursor();
+            return $version;
+        } catch (Throwable) {
+            return 1;
+        }
+    }
+}
+
 if (!function_exists('auth_security_log_once')) {
     function auth_security_log_once(string $code): void {
         static $logged=[];
@@ -439,6 +455,7 @@ if (!function_exists('auth_set_user_session')) {
             unset($_SESSION['ogrenci_id']);
         }
         $_SESSION['aktif_rol']=auth_effective_role($user);
+        $_SESSION['auth_version']=auth_session_version($pdo,$userId);
         return $user;
     }
 }
@@ -523,8 +540,20 @@ if (!function_exists('authenticated_user')) {
             $userId=(int)($_SESSION['kullanici_id']??0);
             if ($userId>0) {
                 $user=auth_fetch_user($pdo,$userId);
-                if ($user) return $user;
-                unset($_SESSION['kullanici_id'],$_SESSION['ogrenci_id']);
+                if ($user) {
+                    $currentVersion=auth_session_version($pdo,$userId);
+                    $sessionVersion=array_key_exists('auth_version',$_SESSION)
+                        ? max(1,(int)$_SESSION['auth_version'])
+                        : 1;
+                    if ($sessionVersion===$currentVersion) {
+                        $_SESSION['auth_version']=$currentVersion;
+                        return $user;
+                    }
+                    unset($_SESSION['kullanici_id'],$_SESSION['ogrenci_id'],$_SESSION['aktif_rol'],$_SESSION['auth_version']);
+                    clear_remember_cookie($pdo);
+                } else {
+                    unset($_SESSION['kullanici_id'],$_SESSION['ogrenci_id'],$_SESSION['aktif_rol'],$_SESSION['auth_version']);
+                }
             }
 
             $legacyStudent=(int)($_SESSION['ogrenci_id']??0);
