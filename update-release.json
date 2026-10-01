@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.5",
-  "name": "Release-chain metadata recovery hardening",
-  "release_revision": 2
+  "version": "1.2.6",
+  "name": "Manuel güncelleme ve güvenli ZIP kurulum akışı",
+  "release_revision": 1
 }
