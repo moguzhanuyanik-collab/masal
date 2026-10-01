@@ -224,17 +224,139 @@ function remote_release_info(array $gh): array {
     return remote_release_info_at_ref($gh,github_branch_head_sha($gh));
 }
 
-function next_remote_version_info(array $gh,string $localVersion,int $localRevision=0): array {
-    [$owner,$repo,$branch]=github_repo_info($gh);
-    $localVersion=trim($localVersion);
-    if($localVersion==='') $localVersion='0.0.0';
-    $localRevision=max(0,$localRevision);
+function release_chain_cache_path(string $root): string {
+    return rtrim($root,'/\\').'/storage/updates/release-chain-cache.json';
+}
 
-    // Güncelleme zinciri mutlaka bir sonraki yayınlanmış sürümü seçer.
-    // GitHub commit listesi newest -> oldest gelir; bu yüzden tüm geçmiş taranır
-    // ve local sürümün üzerindeki en küçük semver seçilir. Aynı semver içindeki
-    // hotfix/release revisionlarından en yükseği seçilir.
-    $next=null;
+function release_chain_cache_secret_path(string $root): string {
+    return rtrim($root,'/\\').'/storage/updates/release-chain-secret';
+}
+
+function release_chain_cache_secret(string $root): ?string {
+    ensure_runtime_storage_guard($root);
+    $path=release_chain_cache_secret_path($root);
+
+    if(is_file($path) && !is_link($path) && is_readable($path)){
+        $existing=trim((string)file_get_contents($path));
+        if(preg_match('/^[a-f0-9]{64}$/i',$existing)===1){
+            return strtolower($existing);
+        }
+    }
+
+    // Cache sırrı yoksa/bozuksa yeni bir sır üret. Yazılamıyorsa cache güvenilmez
+    // kabul edilir; güncelleme yine GitHub geçmişini yeniden tarayarak devam eder.
+    try{
+        $secret=bin2hex(random_bytes(32));
+        $tmp=$path.'.tmp';
+        @unlink($tmp);
+        if(file_put_contents($tmp,$secret."\\n",LOCK_EX)===false){
+            @unlink($tmp);
+            return null;
+        }
+        @chmod($tmp,0600);
+        if(!@rename($tmp,$path)){
+            @unlink($tmp);
+            return null;
+        }
+        @chmod($path,0600);
+        return $secret;
+    }catch(Throwable $e){
+        error_log('[IlkAdim][release-chain-secret] '.$e->getMessage());
+        return null;
+    }
+}
+
+function release_chain_cache_payload(string $branch,string $headSha,array $chain): string {
+    $payload=[
+        'format'=>1,
+        'branch'=>$branch,
+        'head_sha'=>$headSha,
+        'chain'=>array_values($chain),
+    ];
+    $json=json_encode($payload,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+    if(!is_string($json)){
+        throw new RuntimeException('Release zinciri cache payload oluşturulamadı.');
+    }
+    return $json;
+}
+
+function release_chain_cache_read(string $root,string $branch,string $headSha): ?array {
+    $path=release_chain_cache_path($root);
+    if(!is_file($path) || is_link($path) || !is_readable($path)) return null;
+
+    $secret=release_chain_cache_secret($root);
+    if($secret===null) return null;
+
+    $data=json_decode((string)file_get_contents($path),true);
+    if(!is_array($data) || (int)($data['format']??0)!==1) return null;
+    if((string)($data['branch']??'')!==$branch) return null;
+    if(!hash_equals($headSha,trim((string)($data['head_sha']??'')))) return null;
+    if(!is_array($data['chain']??null) || $data['chain']===[]) return null;
+
+    $chain=[];
+    $seen=[];
+    foreach($data['chain'] as $candidate){
+        if(!is_array($candidate)) return null;
+        $version=trim((string)($candidate['version']??''));
+        $commit=strtolower(trim((string)($candidate['commit']??'')));
+        $revision=normalize_release_revision($candidate['release_revision']??0);
+        if($version==='' || preg_match('/^[a-f0-9]{40}$/',$commit)!==1) return null;
+        if(isset($seen[$commit])) return null;
+        $seen[$commit]=true;
+        $chain[]=[
+            'version'=>$version,
+            'release_revision'=>$revision,
+            'name'=>(string)($candidate['name']??''),
+            'commit'=>$commit,
+        ];
+    }
+
+    $payload=release_chain_cache_payload($branch,$headSha,$chain);
+    $expected=strtolower(trim((string)($data['hmac']??'')));
+    if(preg_match('/^[a-f0-9]{64}$/',$expected)!==1) return null;
+    $actual=hash_hmac('sha256',$payload,$secret);
+    if(!hash_equals($expected,$actual)) return null;
+
+    return $chain;
+}
+
+function release_chain_cache_write(string $root,string $branch,string $headSha,array $chain): bool {
+    if($chain===[]) return false;
+    $secret=release_chain_cache_secret($root);
+    if($secret===null) return false;
+
+    try{
+        $payload=release_chain_cache_payload($branch,$headSha,$chain);
+        $data=json_decode($payload,true);
+        if(!is_array($data)) return false;
+        $data['hmac']=hash_hmac('sha256',$payload,$secret);
+        $json=json_encode($data,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
+        if(!is_string($json)) return false;
+
+        $path=release_chain_cache_path($root);
+        $tmp=$path.'.tmp';
+        @unlink($tmp);
+        if(file_put_contents($tmp,$json."\\n",LOCK_EX)===false){
+            @unlink($tmp);
+            return false;
+        }
+        @chmod($tmp,0600);
+        if(!@rename($tmp,$path)){
+            @unlink($tmp);
+            return false;
+        }
+        @chmod($path,0600);
+        return true;
+    }catch(Throwable $e){
+        error_log('[IlkAdim][release-chain-cache] '.$e->getMessage());
+        return false;
+    }
+}
+
+function build_release_chain_cache(array $gh,string $branch,string $headSha): array {
+    [$owner,$repo]=array_slice(github_repo_info($gh),0,2);
+    $chain=[];
+    $seen=[];
     $page=1;
     $maxPages=20;
 
@@ -249,39 +371,100 @@ function next_remote_version_info(array $gh,string $localVersion,int $localRevis
         if($rows===[]) break;
 
         foreach($rows as $row){
-            $sha=trim((string)($row['sha']??''));
-            if(!preg_match('/^[a-f0-9]{40}$/i',$sha)) continue;
-
+            $sha=strtolower(trim((string)($row['sha']??'')));
+            if(preg_match('/^[a-f0-9]{40}$/',$sha)!==1 || isset($seen[$sha])) continue;
             try{
                 $candidate=remote_release_info_at_ref($gh,$sha);
             }catch(Throwable $ignored){
                 continue;
             }
 
-            if(!release_identity_is_newer($candidate,$localVersion,$localRevision)) continue;
-            if(release_identity_should_replace_next($candidate,$next)){
-                $next=$candidate;
-            }
+            $version=trim((string)($candidate['version']??''));
+            if($version==='') continue;
+            $seen[$sha]=true;
+            $chain[]=[
+                'version'=>$version,
+                'release_revision'=>normalize_release_revision($candidate['release_revision']??0),
+                'name'=>(string)($candidate['name']??''),
+                'commit'=>$sha,
+            ];
         }
 
         if(count($rows)<100) break;
         $page++;
     }
 
+    if($chain===[]){
+        throw new RuntimeException(
+            'GitHub release geçmişinden doğrulanmış update-release.json zinciri oluşturulamadı.'
+        );
+    }
+
+    return $chain;
+}
+
+function select_next_release_from_chain(array $chain,string $localVersion,int $localRevision=0): ?array {
+    $next=null;
+    foreach($chain as $candidate){
+        if(!is_array($candidate)) continue;
+        if(!release_identity_is_newer($candidate,$localVersion,$localRevision)) continue;
+        if(release_identity_should_replace_next($candidate,$next)){
+            $next=$candidate;
+        }
+    }
+    return $next;
+}
+
+function latest_release_from_chain(array $chain): ?array {
+    $latest=null;
+    foreach($chain as $candidate){
+        if(!is_array($candidate)) continue;
+        if($latest===null || release_identity_should_replace_next($candidate,$latest)){
+            $latest=$candidate;
+        }
+    }
+    return $latest;
+}
+
+function next_remote_version_info(
+    array $gh,
+    string $localVersion,
+    int $localRevision=0,
+    ?string $root=null
+): array {
+    [$owner,$repo,$branch]=github_repo_info($gh);
+    $localVersion=trim($localVersion);
+    if($localVersion==='') $localVersion='0.0.0';
+    $localRevision=max(0,$localRevision);
+
+    // Her kontrol güncel main HEAD'i bir kez çözer. Aynı HEAD için tarihsel
+    // update-release.json taraması yalnızca cache miss durumunda yapılır.
+    $headSha=github_branch_head_sha($gh);
+    $chain=$root!==null
+        ? release_chain_cache_read($root,$branch,$headSha)
+        : null;
+
+    if($chain===null){
+        $chain=build_release_chain_cache($gh,$branch,$headSha);
+        if($root!==null) release_chain_cache_write($root,$branch,$headSha,$chain);
+    }
+
+    $next=select_next_release_from_chain($chain,$localVersion,$localRevision);
     if($next!==null){
         $targetCommit=trim((string)($next['commit']??''));
-        if(!preg_match('/^[a-f0-9]{40}$/i',$targetCommit)){
+        if(preg_match('/^[a-f0-9]{40}$/i',$targetCommit)!==1){
             throw new RuntimeException('Sıradaki güncellemenin commit SHA değeri geçersiz.');
         }
         return $next;
     }
 
-    $latest=remote_release_info($gh);
-    if(!release_identity_is_newer($latest,$localVersion,$localRevision)){
+    // Cache zincirinin son doğrulanmış release kimliği, HEAD üzerinde metadata
+    // değişikliği olmayan commitler için de güncel release durumunu temsil eder.
+    $latest=latest_release_from_chain($chain);
+    if($latest!==null && !release_identity_is_newer($latest,$localVersion,$localRevision)){
         return $latest;
     }
 
-    // Yeni sürüm var ama aradaki yayınlı sürüm bulunamadıysa en son sürüme atlama.
     throw new RuntimeException(
         'Sıradaki güncelleme güvenli biçimde belirlenemedi. '
         .'Ara sürüm zinciri eksik veya bozuk; en son sürüme atlanmadı.'
@@ -2189,7 +2372,7 @@ function install_github_update(
     [$owner,$repo,$branch]=github_repo_info($gh);
     $localVersion=read_app_version();
     $localRevision=read_local_release_revision($root,$localVersion);
-    $remote=next_remote_version_info($gh,$localVersion,$localRevision);
+    $remote=next_remote_version_info($gh,$localVersion,$localRevision,$root);
     if(!release_identity_is_newer($remote,$localVersion,$localRevision)){
         return [
             'updated'=>false,
