@@ -23,19 +23,22 @@ assert.strictEqual(manifest.release_revision,version.release_revision);
 if(protectedReleaseBranch){
   const head=cp.execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
   const anchorHead=cp.execFileSync('git',['log','-1','--format=%H','--','update-release.json'],{encoding:'utf8'}).trim();
-  assert.strictEqual(
-    anchorHead,
-    head,
-    'Release branch HEAD must be the latest update-release.json anchor commit. Re-anchor instead of appending post-release commits.'
-  );
 
-  const changed=cp.execFileSync(
-    'git',['diff-tree','--no-commit-id','--name-only','-r','HEAD'],
-    {encoding:'utf8'}
-  ).trim().split(/\r?\n/).filter(Boolean);
-  for(const required of ['version.json','update-release.json','update-managed-files.json']){
-    assert(changed.includes(required),'Release HEAD must change '+required);
+  assert(/^[a-f0-9]{40}$/i.test(anchorHead),
+    'update-release.json için geçerli bir release anchor commit bulunamadı.');
+
+  // Release metadata'nın son değiştiği commit, güncel HEAD'in atası olmalıdır.
+  // Release sonrasında dokümantasyon/regression/CI commitleri eklenebilir; bu
+  // commitleri zorla metadata re-anchor etmeye mecbur bırakmak history rewrite
+  // baskısı oluşturuyordu.
+  try{
+    cp.execFileSync('git',['merge-base','--is-ancestor',anchorHead,head],{stdio:'ignore'});
+  }catch{
+    assert.fail(
+      'Release metadata anchor commit güncel HEAD tarihçesinin atası değil. '+
+      'Bu durum history rewrite/force-push belirtisi olabilir.'
+    );
   }
 }
 
-console.log('1.1.109 release HEAD anchor invariant passed');
+console.log('1.1.109 release metadata ancestor invariant passed');
