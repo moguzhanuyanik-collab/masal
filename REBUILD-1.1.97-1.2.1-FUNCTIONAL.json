@@ -1,0 +1,21 @@
+{
+  "source_tree": "6a0f372871e6dbd2b71d2efef121fbf2dfb2f82c",
+  "source_version": "1.2.1",
+  "baseline_version": "1.1.97",
+  "rebuild_version": "1.2.11",
+  "functional_targets": [
+    "adimbot_persistent_rate_limit",
+    "activities_csrf",
+    "state_csrf",
+    "report_curriculum_scope",
+    "v4_curriculum_scope",
+    "teacher_institution_scoped_access",
+    "parent_institution_scoped_access",
+    "normalized_curriculum_scope",
+    "tenant_matching_isolation",
+    "migration_064_065_066"
+  ],
+  "additional_hardening": [
+    "inactive_institution_membership_is_not_an_active_tenant_scope"
+  ]
+}
