@@ -6,6 +6,8 @@ $defaults = [
         'name' => 'İlkAdım',
         'demo_student_id' => 1,
         'timezone' => 'Europe/Istanbul',
+        // Şifre sıfırlama bağlantıları için dışarıdan erişilebilir HTTPS kök adresi.
+        'base_url' => '',
     ],
     'db' => [
         'host' => 'localhost',
@@ -14,6 +16,20 @@ $defaults = [
         'user' => 'root',
         'pass' => '',
         'charset' => 'utf8mb4',
+    ],
+    'mail' => [
+        // disabled | mail | smtp
+        'transport' => 'disabled',
+        'from_email' => '',
+        'from_name' => 'İlkAdım',
+        'smtp' => [
+            'host' => '',
+            'port' => 587,
+            'encryption' => 'tls', // none | tls | ssl
+            'username' => '',
+            'password' => '',
+            'timeout_seconds' => 10,
+        ],
     ],
     'github' => [
         'owner' => '',

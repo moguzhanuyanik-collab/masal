@@ -121,6 +121,7 @@ jobs:
           node tests/adimbot-license-quota-162.cjs
           node tests/commercial-finance-163.cjs
           node tests/institution-notifications-164.cjs
+          node tests/password-recovery-165.cjs
           node tests/institution-class-edit-136.cjs
           node tests/institution-reporting-137.cjs
           node tests/institution-report-export-159.cjs
@@ -203,6 +204,7 @@ jobs:
           php tests/adimbot-license-quota-db-162.php
           php tests/commercial-finance-db-163.php
           php tests/institution-notifications-db-164.php
+          php tests/password-recovery-db-165.php
           php tests/institution-class-edit-db-136.php
           php tests/institution-reporting-db-137.php
           php tests/teacher-content-edit-copy-db-139.php

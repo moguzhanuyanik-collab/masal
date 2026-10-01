@@ -12,6 +12,7 @@ if ($existing) {
 
 $error='';
 $email='';
+$resetSuccess=isset($_GET['reset']) && $_GET['reset']==='1';
 try {
     $pdo=db();
 
@@ -146,6 +147,10 @@ function h(string $v): string { return htmlspecialchars($v,ENT_QUOTES,'UTF-8'); 
 <section class="settings-block local-data"><p><?=h($error)?></p></section>
 <?php endif; ?>
 
+<?php if ($resetSuccess): ?>
+<section class="settings-block local-data"><p>Şifren başarıyla yenilendi. Yeni şifrenle giriş yapabilirsin.</p></section>
+<?php endif; ?>
+
 <form method="post" class="settings-block" autocomplete="on">
 <input type="hidden" name="csrf" value="<?=h(csrf_token())?>">
 <h2>İlkAdım Girişi</h2>
@@ -164,6 +169,7 @@ function h(string $v): string { return htmlspecialchars($v,ENT_QUOTES,'UTF-8'); 
 </label>
 
 <button class="button primary full" type="submit">Giriş Yap →</button>
+<a class="button soft full" href="sifremi-unuttum.php">Şifremi unuttum</a>
 </form>
 </div>
 </main>

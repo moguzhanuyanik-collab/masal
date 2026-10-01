@@ -1,11 +1,27 @@
 <?php
 return [
+    'app' => [
+        'base_url' => 'https://uygulamaniz.example.com',
+    ],
     'db' => [
         'host' => 'localhost',
         'port' => 3306,
         'name' => 'ilk_adim',
         'user' => 'VERITABANI_KULLANICI_ADI',
         'pass' => 'VERITABANI_SIFRESI',
+    ],
+    'mail' => [
+        'transport' => 'smtp',
+        'from_email' => 'noreply@uygulamaniz.example.com',
+        'from_name' => 'İlkAdım',
+        'smtp' => [
+            'host' => 'smtp.example.com',
+            'port' => 587,
+            'encryption' => 'tls',
+            'username' => 'SMTP_KULLANICI_ADI',
+            'password' => 'SMTP_SIFRESI',
+            'timeout_seconds' => 10,
+        ],
     ],
     'github' => [
         'owner' => 'moguzhanuyanik-collab',
