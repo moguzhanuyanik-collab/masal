@@ -597,3 +597,105 @@ function oi_duplicate_content(PDO $pdo,array $user,int $contentId): int {
     return $newId;
 }
 
+function oi_teacher_content_detail(PDO $pdo,array $user,int $contentId): ?array {
+    $teacher=oi_teacher_profile($pdo,(int)$user['id']);
+    if(!$teacher || $contentId<=0) return null;
+
+    $s=$pdo->prepare("SELECT oi.*,
+      k.ad kurum_adi,d.ad ders_adi,d.emoji ders_emoji,
+      COALESCE(dm.baslik,oi.konu_basligi,'Genel') konu_adi
+      FROM ogretmen_icerikleri oi
+      INNER JOIN kurumlar k ON k.id=oi.kurum_id AND k.aktif=1
+      INNER JOIN dersler d ON d.id=oi.ders_id
+      LEFT JOIN ders_modulleri dm ON dm.id=oi.ders_modulu_id
+      WHERE oi.id=? AND oi.ogretmen_id=?
+      LIMIT 1");
+    $s->execute([$contentId,(int)$teacher['id']]);
+    $content=$s->fetch();
+    $s->closeCursor();
+    if(!is_array($content)) return null;
+
+    $institutionId=(int)$content['kurum_id'];
+    if(!oi_teacher_can_use_institution($pdo,(int)$user['id'],$institutionId)) return null;
+
+    $s=$pdo->prepare("SELECT DISTINCT o.id,o.ad,o.email,o.sinif_seviyesi,
+      c.secilen_cevap_indeksi,c.dogru cevap_dogru,c.deneme_sayisi,
+      c.cevap_tarihi,c.guncellenme_tarihi cevap_guncellenme_tarihi,
+      COALESCE(od.tamamlandi,0) odev_tamamlandi,
+      od.tamamlanma_tarihi odev_tamamlanma_tarihi
+      FROM ogretmen_icerikleri oi
+      INNER JOIN ogretmen_ogrenci oo
+        ON oo.ogretmen_id=oi.ogretmen_id
+       AND oo.kurum_id=oi.kurum_id
+      INNER JOIN ogrenciler o
+        ON o.id=oo.ogrenci_id
+       AND o.aktif=1
+      INNER JOIN kullanicilar su
+        ON su.id=o.kullanici_id
+       AND su.aktif=1
+      INNER JOIN kurum_kullanicilari kk
+        ON kk.kurum_id=oi.kurum_id
+       AND kk.kullanici_id=o.kullanici_id
+       AND kk.kurum_rolu='ogrenci'
+       AND kk.aktif=1
+      LEFT JOIN ogretmen_icerik_hedefleri h
+        ON h.icerik_id=oi.id
+       AND h.ogrenci_id=o.id
+      LEFT JOIN ogretmen_icerik_cevaplari c
+        ON c.icerik_id=oi.id
+       AND c.ogrenci_id=o.id
+      LEFT JOIN ogrenci_odev_durumlari od
+        ON od.icerik_id=oi.id
+       AND od.ogrenci_id=o.id
+      WHERE oi.id=?
+        AND oi.ogretmen_id=?
+        AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
+      ORDER BY o.sinif_seviyesi,o.ad,o.id");
+    $s->execute([$contentId,(int)$teacher['id']]);
+    $students=$s->fetchAll();
+    $s->closeCursor();
+    if(!is_array($students)) $students=[];
+
+    $summary=[
+        'targeted'=>count($students),
+        'answered'=>0,
+        'correct'=>0,
+        'wrong'=>0,
+        'waiting'=>0,
+        'completed'=>0,
+        'overdue'=>0,
+    ];
+
+    $type=(string)$content['icerik_turu'];
+    if($type==='soru'){
+        foreach($students as $student){
+            if($student['secilen_cevap_indeksi']===null){
+                $summary['waiting']++;
+                continue;
+            }
+            $summary['answered']++;
+            if((int)$student['cevap_dogru']===1)$summary['correct']++;
+            else $summary['wrong']++;
+        }
+    }elseif($type==='odev'){
+        $now=new DateTimeImmutable('now');
+        $dueAt=null;
+        if(!empty($content['teslim_tarihi'])){
+            try{$dueAt=new DateTimeImmutable((string)$content['teslim_tarihi']);}catch(Throwable){}
+        }
+        foreach($students as $student){
+            if((int)$student['odev_tamamlandi']===1){
+                $summary['completed']++;
+            }elseif($dueAt && $dueAt<$now){
+                $summary['overdue']++;
+            }else{
+                $summary['waiting']++;
+            }
+        }
+    }else{
+        $summary['waiting']=$summary['targeted'];
+    }
+
+    return ['content'=>$content,'students'=>$students,'summary'=>$summary];
+}
+
