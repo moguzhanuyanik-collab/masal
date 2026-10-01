@@ -33,7 +33,7 @@ assert(page.includes('Kayıtlı şifre korunacak'),'stored SMTP secret preservat
 assert(page.includes('Bağlantıyı Test Et'),'SMTP handshake test action missing');
 assert(page.includes('Test E-postası Gönder'),'real delivery test action missing');
 assert(page.includes("Ayarları Kaydet"),'mail settings save action missing');
-assert(!page.includes("value="<?=eah((string)$smtp['password'])"),'SMTP secret must not be rendered into HTML');
+assert(!page.includes(`value="<?=eah((string)$smtp['password'])`),'SMTP secret must not be rendered into HTML');
 
 assert(reset.includes('function pr_smtp_probe('),'SMTP probe capability missing');
 assert(reset.includes('function pr_send_plain_email('),'generic plain email sender missing');
