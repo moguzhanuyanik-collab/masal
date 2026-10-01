@@ -223,13 +223,15 @@ function oi_teacher_contents(PDO $pdo,int $teacherId): array {
           k.ad kurum_adi,d.ad ders_adi,d.emoji ders_emoji,
           COALESCE(dm.baslik,oi.konu_basligi,'Genel') konu_adi,
           COUNT(DISTINCT h.ogrenci_id) hedef_sayisi,
-          COUNT(DISTINCT c.ogrenci_id) cevap_sayisi
+          COUNT(DISTINCT c.ogrenci_id) cevap_sayisi,
+          COUNT(DISTINCT od.ogrenci_id) odev_durum_sayisi
           FROM ogretmen_icerikleri oi
           INNER JOIN kurumlar k ON k.id=oi.kurum_id
           INNER JOIN dersler d ON d.id=oi.ders_id
           LEFT JOIN ders_modulleri dm ON dm.id=oi.ders_modulu_id
           LEFT JOIN ogretmen_icerik_hedefleri h ON h.icerik_id=oi.id
           LEFT JOIN ogretmen_icerik_cevaplari c ON c.icerik_id=oi.id
+          LEFT JOIN ogrenci_odev_durumlari od ON od.icerik_id=oi.id
           WHERE oi.ogretmen_id=?
           GROUP BY oi.id,k.ad,d.ad,d.emoji,dm.baslik
           ORDER BY oi.aktif DESC,oi.olusturulma_tarihi DESC,oi.id DESC");
@@ -380,3 +382,218 @@ function oi_answer_question(PDO $pdo,int $studentId,int $contentId,int $selected
     $s->closeCursor();
     return $correct;
 }
+
+function oi_teacher_content_for_edit(PDO $pdo,array $user,int $contentId): ?array {
+    $teacher=oi_teacher_profile($pdo,(int)$user['id']);
+    if(!$teacher || $contentId<=0) return null;
+
+    $s=$pdo->prepare("SELECT oi.*,
+      COUNT(DISTINCT c.ogrenci_id) soru_cevap_sayisi,
+      COUNT(DISTINCT od.ogrenci_id) odev_durum_sayisi
+      FROM ogretmen_icerikleri oi
+      LEFT JOIN ogretmen_icerik_cevaplari c ON c.icerik_id=oi.id
+      LEFT JOIN ogrenci_odev_durumlari od ON od.icerik_id=oi.id
+      WHERE oi.id=? AND oi.ogretmen_id=?
+      GROUP BY oi.id
+      LIMIT 1");
+    $s->execute([$contentId,(int)$teacher['id']]);
+    $row=$s->fetch();
+    $s->closeCursor();
+    if(!is_array($row)) return null;
+
+    $targets=$pdo->prepare('SELECT ogrenci_id FROM ogretmen_icerik_hedefleri WHERE icerik_id=? ORDER BY ogrenci_id');
+    $targets->execute([$contentId]);
+    $row['hedef_ogrenciler']=array_map('intval',$targets->fetchAll(PDO::FETCH_COLUMN)?:[]);
+    $targets->closeCursor();
+    $row['aktivite_sayisi']=(int)($row['soru_cevap_sayisi']??0)+(int)($row['odev_durum_sayisi']??0);
+    return $row;
+}
+
+function oi_normalize_content_input(PDO $pdo,int $teacherId,int $institutionId,array $input,array $targetStudentIds=[]): array {
+    $lessonId=(int)($input['ders_id']??0);
+    $moduleId=(int)($input['ders_modulu_id']??0);
+    $type=(string)($input['icerik_turu']??'soru');
+    $title=trim((string)($input['baslik']??''));
+    $topic=trim((string)($input['konu_basligi']??''));
+    $body=trim((string)($input['icerik_metni']??''));
+    $question=trim((string)($input['soru']??''));
+    $explanation=trim((string)($input['aciklama']??''));
+    $dueAt=null;
+    $dueRaw=trim((string)($input['teslim_tarihi']??''));
+
+    if(!array_key_exists($type,oi_content_types())) throw new RuntimeException('İçerik türü geçersiz.');
+    if(mb_strlen($title)<2 || mb_strlen($title)>190) throw new RuntimeException('Başlığı kontrol et.');
+
+    $s=$pdo->prepare('SELECT id FROM dersler WHERE id=? AND aktif=1 LIMIT 1');
+    $s->execute([$lessonId]);
+    $validLesson=(int)($s->fetchColumn()?:0);
+    $s->closeCursor();
+    if($validLesson<=0) throw new RuntimeException('Ders seç.');
+
+    if($moduleId>0){
+        $s=$pdo->prepare('SELECT baslik FROM ders_modulleri WHERE id=? AND ders_id=? AND aktif=1 LIMIT 1');
+        $s->execute([$moduleId,$lessonId]);
+        $moduleTitle=(string)($s->fetchColumn()?:'');
+        $s->closeCursor();
+        if($moduleTitle==='') throw new RuntimeException('Seçilen konu bu derse ait değil.');
+        if($topic==='') $topic=$moduleTitle;
+    }else{
+        $moduleId=0;
+    }
+    if($topic==='') $topic='Genel';
+
+    if($type==='odev' && $dueRaw!==''){
+        $due=DateTimeImmutable::createFromFormat('!Y-m-d\TH:i',$dueRaw);
+        $errors=DateTimeImmutable::getLastErrors();
+        if(!$due || (is_array($errors) && (($errors['warning_count']??0)>0 || ($errors['error_count']??0)>0))){
+            throw new RuntimeException('Teslim tarihini kontrol et.');
+        }
+        $dueAt=$due->format('Y-m-d H:i:s');
+    }
+
+    $options=[];
+    $correct=null;
+    if($type==='soru'){
+        if(mb_strlen($question)<2) throw new RuntimeException('Soruyu yaz.');
+        $rawOptions=$input['secenekler']??[];
+        if(!is_array($rawOptions)) $rawOptions=[];
+        foreach($rawOptions as $option){
+            $option=trim((string)$option);
+            if($option!=='') $options[]=$option;
+        }
+        if(count($options)<2 || count($options)>6) throw new RuntimeException('Soru için 2 ile 6 arasında seçenek yaz.');
+        $correct=(int)($input['dogru_cevap_indeksi']??-1);
+        if($correct<0 || $correct>=count($options)) throw new RuntimeException('Doğru cevabı seç.');
+        $body=null;
+    }else{
+        if($body==='') throw new RuntimeException('İçerik metnini yaz.');
+        $question=null;
+        $explanation=null;
+        $options=[];
+        $correct=null;
+        if($type!=='odev') $dueAt=null;
+    }
+
+    $availableStudents=oi_teacher_students($pdo,$teacherId,$institutionId);
+    $availableIds=array_map('intval',array_column($availableStudents,'id'));
+    $targetStudentIds=array_values(array_unique(array_filter(array_map('intval',$targetStudentIds),static fn(int $id):bool=>$id>0)));
+    foreach($targetStudentIds as $studentId){
+        if(!in_array($studentId,$availableIds,true)){
+            throw new RuntimeException('Seçilen öğrencilerden biri bu kurumda sana bağlı değil.');
+        }
+    }
+
+    return [
+        'ders_id'=>$lessonId,
+        'ders_modulu_id'=>$moduleId>0?$moduleId:null,
+        'konu_basligi'=>$topic,
+        'icerik_turu'=>$type,
+        'baslik'=>$title,
+        'icerik_metni'=>$body!==null && $body!==''?$body:null,
+        'soru'=>$question!==null && $question!==''?$question:null,
+        'secenekler_json'=>$options?json_encode($options,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES):null,
+        'dogru_cevap_indeksi'=>$correct,
+        'aciklama'=>$explanation!==null && $explanation!==''?$explanation:null,
+        'hedef_turu'=>$targetStudentIds?'secili_ogrenciler':'tum_ogrenciler',
+        'teslim_tarihi'=>$dueAt,
+        'hedef_ogrenciler'=>$targetStudentIds,
+    ];
+}
+
+function oi_update_content(PDO $pdo,array $user,int $contentId,array $input,array $targetStudentIds=[]): void {
+    $teacher=oi_teacher_profile($pdo,(int)$user['id']);
+    if(!$teacher) throw new RuntimeException('Öğretmen profili bulunamadı.');
+
+    $current=oi_teacher_content_for_edit($pdo,$user,$contentId);
+    if(!$current) throw new RuntimeException('İçerik bulunamadı.');
+    if((int)($current['aktivite_sayisi']??0)>0){
+        throw new RuntimeException('Bu içerikte öğrenci yanıtı veya ödev durumu oluşmuş. Geçmiş veriyi korumak için içeriği değiştirmek yerine kopyala ve yeni yayını düzenle.');
+    }
+
+    $institutionId=(int)$current['kurum_id'];
+    if(!oi_teacher_can_use_institution($pdo,(int)$user['id'],$institutionId)){
+        throw new RuntimeException('Bu kurum için içerik düzenleme yetkin yok.');
+    }
+
+    $normalized=oi_normalize_content_input($pdo,(int)$teacher['id'],$institutionId,$input,$targetStudentIds);
+
+    $pdo->beginTransaction();
+    try{
+        $s=$pdo->prepare("UPDATE ogretmen_icerikleri SET
+          ders_id=?,ders_modulu_id=?,konu_basligi=?,icerik_turu=?,baslik=?,
+          icerik_metni=?,soru=?,secenekler_json=?,dogru_cevap_indeksi=?,aciklama=?,
+          hedef_turu=?,teslim_tarihi=?
+          WHERE id=? AND ogretmen_id=? AND kurum_id=?");
+        $s->execute([
+            $normalized['ders_id'],$normalized['ders_modulu_id'],$normalized['konu_basligi'],$normalized['icerik_turu'],
+            $normalized['baslik'],$normalized['icerik_metni'],$normalized['soru'],$normalized['secenekler_json'],
+            $normalized['dogru_cevap_indeksi'],$normalized['aciklama'],$normalized['hedef_turu'],$normalized['teslim_tarihi'],
+            $contentId,(int)$teacher['id'],$institutionId
+        ]);
+        $s->closeCursor();
+
+        $delete=$pdo->prepare('DELETE FROM ogretmen_icerik_hedefleri WHERE icerik_id=?');
+        $delete->execute([$contentId]);
+        $delete->closeCursor();
+
+        if($normalized['hedef_ogrenciler']){
+            $insert=$pdo->prepare('INSERT INTO ogretmen_icerik_hedefleri (icerik_id,ogrenci_id) VALUES (?,?)');
+            foreach($normalized['hedef_ogrenciler'] as $studentId) $insert->execute([$contentId,$studentId]);
+            $insert->closeCursor();
+        }
+        $pdo->commit();
+    }catch(Throwable $e){
+        if($pdo->inTransaction()) $pdo->rollBack();
+        throw $e;
+    }
+
+    auth_audit($pdo,(int)$user['id'],null,'ogretmen_icerik_guncelle','İçerik #'.$contentId.' / kurum '.$institutionId);
+}
+
+function oi_duplicate_content(PDO $pdo,array $user,int $contentId): int {
+    $teacher=oi_teacher_profile($pdo,(int)$user['id']);
+    if(!$teacher) throw new RuntimeException('Öğretmen profili bulunamadı.');
+
+    $current=oi_teacher_content_for_edit($pdo,$user,$contentId);
+    if(!$current) throw new RuntimeException('İçerik bulunamadı.');
+
+    $institutionId=(int)$current['kurum_id'];
+    if(!oi_teacher_can_use_institution($pdo,(int)$user['id'],$institutionId)){
+        throw new RuntimeException('Bu kurum için içerik kopyalama yetkin yok.');
+    }
+
+    $title=trim((string)$current['baslik']);
+    $copyTitle=mb_substr($title.' (Kopya)',0,190);
+
+    $pdo->beginTransaction();
+    try{
+        $s=$pdo->prepare("INSERT INTO ogretmen_icerikleri
+          (kurum_id,ogretmen_id,ders_id,ders_modulu_id,konu_basligi,icerik_turu,baslik,
+           icerik_metni,soru,secenekler_json,dogru_cevap_indeksi,aciklama,yildiz_degeri,
+           hedef_turu,teslim_tarihi,aktif)
+          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)");
+        $s->execute([
+            $institutionId,(int)$teacher['id'],(int)$current['ders_id'],$current['ders_modulu_id']!==null?(int)$current['ders_modulu_id']:null,
+            (string)$current['konu_basligi'],(string)$current['icerik_turu'],$copyTitle,
+            $current['icerik_metni'],$current['soru'],$current['secenekler_json'],$current['dogru_cevap_indeksi'],
+            $current['aciklama'],(int)($current['yildiz_degeri']??0),(string)$current['hedef_turu'],$current['teslim_tarihi']
+        ]);
+        $newId=(int)$pdo->lastInsertId();
+        $s->closeCursor();
+
+        $targets=array_map('intval',$current['hedef_ogrenciler']??[]);
+        if($targets){
+            $insert=$pdo->prepare('INSERT INTO ogretmen_icerik_hedefleri (icerik_id,ogrenci_id) VALUES (?,?)');
+            foreach($targets as $studentId) $insert->execute([$newId,$studentId]);
+            $insert->closeCursor();
+        }
+        $pdo->commit();
+    }catch(Throwable $e){
+        if($pdo->inTransaction()) $pdo->rollBack();
+        throw $e;
+    }
+
+    auth_audit($pdo,(int)$user['id'],null,'ogretmen_icerik_kopyala','Kaynak #'.$contentId.' / Kopya #'.$newId.' / kurum '.$institutionId);
+    return $newId;
+}
+
