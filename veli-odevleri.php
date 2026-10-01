@@ -173,7 +173,7 @@ $homeworks=$status==='tum'?$allHomeworks:hw_filter($allHomeworks,$status);
 <?php if(trim((string)$homework['icerik_metni'])!==''):?><p><?=nl2br(vo_h((string)$homework['icerik_metni']))?></p><?php endif;?>
 <div class="parent-homework-meta">
 <span>⏰ Teslim: <?=vo_h(vo_date($homework['teslim_tarihi']??null))?></span>
-<?php if($itemStatus==='completed' && !empty($homework['odev_tamamlanma_tarihi'])):?><span>✅ Tamamlandı: <?=vo_h(vo_date((string)$homework['odev_tamamlanma_tarihi'],'—'))?></span><?php endif;?>
+<?php if($itemStatus==='completed' && !empty($homework['tamamlanma_tarihi'])):?><span>✅ Tamamlandı: <?=vo_h(vo_date((string)$homework['tamamlanma_tarihi'],'—'))?></span><?php endif;?>
 <?php if($itemStatus==='overdue'):?><span>⚠️ Teslim tarihi geçti</span><?php endif;?>
 </div>
 </article>
