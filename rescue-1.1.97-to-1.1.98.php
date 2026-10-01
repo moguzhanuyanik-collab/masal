@@ -107,11 +107,34 @@ function rescue_ref_file(array $gh,string $ref,string $path): string {
     return rescue_http($url,$gh);
 }
 
+function rescue_validate_historical_sequence(array $history,array $expected,array $ignored=[]): void {
+    $collapsed=[];
+    foreach($history as $value){
+        $value=trim((string)$value);
+        if($value==='' || in_array($value,$ignored,true)) continue;
+        if($collapsed===[] || $collapsed[count($collapsed)-1]!==$value) $collapsed[]=$value;
+    }
+    $expectedCount=count($expected);
+    if($expectedCount===0) return;
+    $limit=count($collapsed)-$expectedCount;
+    for($start=0;$start<=$limit;$start++){
+        $matches=true;
+        for($offset=0;$offset<$expectedCount;$offset++){
+            if(($collapsed[$start+$offset]??null)!==$expected[$offset]){$matches=false;break;}
+        }
+        if($matches) return;
+    }
+    throw new RuntimeException('1.1.97 recovery zinciri eksik, atlanmış veya sırası bozulmuş. Updater çekirdeği değiştirilmedi.');
+}
+
 function rescue_validate_historical_chain(array $gh): void {
     [$owner,$repo,$branch]=rescue_github_info($gh);
-    $expected=['1.1.98','1.1.99','1.1.100','1.1.101','1.1.102','1.1.103','1.1.104','1.1.105','1.1.106','1.1.107','1.1.108','1.1.109','1.1.110','1.1.111','1.1.112','1.1.113','1.1.114','1.1.115','1.1.116','1.1.117','1.1.119','1.2.1'];
-    $seen=[]; $page=1;
-    while($page<=20 && count($seen)<count($expected)){
+    // Aktif zincir: 1.1.98 -> 1.1.99 -> ... -> 1.1.117 -> 1.2.1.
+    // 1.1.118 yoktur. 1.1.119 recovery-only artifact olarak tutulur.
+    $expected=['1.1.98','1.1.99','1.1.100','1.1.101','1.1.102','1.1.103','1.1.104','1.1.105','1.1.106','1.1.107','1.1.108','1.1.109','1.1.110','1.1.111','1.1.112','1.1.113','1.1.114','1.1.115','1.1.116','1.1.117','1.2.1'];
+    $recoveryOnly=['1.1.119'];
+    $historyNewestFirst=[];$page=1;
+    while($page<=20){
         $url='https://api.github.com/repos/'.rawurlencode($owner).'/'.rawurlencode($repo).'/commits?sha='.rawurlencode($branch).'&path=version.json&per_page=100&page='.$page.'&cb='.(string)round(microtime(true)*1000);
         $rows=json_decode(rescue_http($url,$gh),true);
         if(!is_array($rows)) throw new RuntimeException('GitHub tarihsel sürüm geçmişi okunamadı.');
@@ -121,19 +144,12 @@ function rescue_validate_historical_chain(array $gh): void {
             if(!preg_match('/^[a-f0-9]{40}$/i',$sha)) continue;
             try{$data=json_decode(rescue_ref_file($gh,$sha,'version.json'),true);}catch(Throwable){continue;}
             $v=is_array($data)?trim((string)($data['version']??'')):'';
-            if($v!=='' && !in_array($v,$seen,true)) $seen[]=$v;
+            if($v!=='') $historyNewestFirst[]=$v;
         }
         if(count($rows)<100) break;
         $page++;
     }
-    $cursor=0;
-    foreach(array_reverse($seen) as $v){
-        if($cursor<count($expected) && $v===$expected[$cursor]) $cursor++;
-        if($cursor===count($expected)) break;
-    }
-    if($cursor!==count($expected)){
-        throw new RuntimeException('1.1.97 recovery zinciri eksik veya bozuk. Updater çekirdeği değiştirilmedi.');
-    }
+    rescue_validate_historical_sequence(array_reverse($historyNewestFirst),$expected,$recoveryOnly);
 }
 function rescue_atomic_replace(string $source,string $target): void {
     $tmp=$target.'.ilkadim-direct-rescue-'.bin2hex(random_bytes(6)).'.tmp';
