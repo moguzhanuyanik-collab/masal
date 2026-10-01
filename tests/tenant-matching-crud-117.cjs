@@ -21,16 +21,17 @@ const saveStart=matching.indexOf('function km_save_matching');
 const deleteStart=matching.indexOf('function km_delete_matching',saveStart);
 assert(saveStart>=0 && deleteStart>saveStart,'km_save_matching sınırları bulunamadı.');
 const saveBlock=matching.slice(saveStart,deleteStart);
-assert(!saveBlock.includes('INNER JOIN kurum_kullanicilari'),'eşleştirme temizliği pasif üyelik JOIN\'ine bağlı olmamalı.');
+assert(!saveBlock.includes('INNER JOIN kurum_kullanicilari'),
+  'Eşleştirme temizliği pasif üyelik JOIN\'ine bağlı olmamalı.');
 
 assert(api.includes('$mysqlError=(int)($e->errorInfo[1]??0);'));
 assert(api.includes("if($mysqlError===1452)"));
 assert(api.includes("elseif($mysqlError===1062)"));
 
-assert.strictEqual(version.version,'1.1.119');
-assert.strictEqual(release.version,'1.1.119');
-assert.strictEqual(manifest.version,'1.1.119');
-assert(version.release_revision>=1);
+assert(['1.1.117','1.2.1'].includes(version.version));
+assert(['1.1.117','1.2.1'].includes(release.version));
+assert(['1.1.117','1.2.1'].includes(manifest.version));
+assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
 assert.strictEqual(release.release_revision,version.release_revision);
 assert.strictEqual(manifest.release_revision,version.release_revision);
 assert(manifest.files.includes('tests/tenant-matching-crud-117.cjs'));

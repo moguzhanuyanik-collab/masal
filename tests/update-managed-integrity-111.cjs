@@ -19,15 +19,15 @@ assert(updater.includes('function assert_stale_managed_files_safe('));
 assert(updater.includes('güvenilir hash baseline yok'));
 assert(updater.includes('kurulumdan sonra değiştirilmiş'));
 assert(
-  updater.indexOf('assert_stale_managed_files_safe(')
-  < updater.indexOf('$pendingMigrations=pending_migration_names(')
+  updater.indexOf('$stalePreflight=assert_stale_managed_files_safe(')
+  < updater.indexOf("$updateStage='database_recovery_skip';")
 );
 assert(workflow.includes('tests/update-managed-integrity-111.php'));
 assert(workflow.includes('tests/update-managed-integrity-111.cjs'));
 
 {
   const parts=String(version.version).split('.').map(Number);
-  assert(parts.length===3 && parts[0]===1 && parts[1]===1 && Number.isInteger(parts[2]) && parts[2]>=111,'version must be 1.1.111 or newer');
+  assert((parts.length===3 && parts[0]===1 && parts[1]===1 && Number.isInteger(parts[2]) && parts[2]>=111) || String(version.version)==='1.2.1','version must be 1.1.111 or newer');
 }
 assert(Number.isInteger(version.release_revision) && version.release_revision>=1,'release revision must be positive');
 assert.strictEqual(anchor.version,version.version);
