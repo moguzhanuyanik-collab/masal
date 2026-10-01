@@ -4,9 +4,11 @@ require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
 require __DIR__.'/src/yonetici_yetkileri.php';
 require __DIR__.'/src/kurum_hazirlik.php';
+require __DIR__.'/src/bildirimler.php';
 
 $user=require_role('yonetici');
 $pdo=db();
+$notificationUnread=bd_unread_count($pdo,(int)$user['id']);
 $ids=auth_manageable_institution_ids($pdo,$user);
 $institutionId=(int)($_GET['kurum_id']??($ids[0]??0));
 if($institutionId<=0 || (!auth_user_has_role($user,'super_admin') && !in_array($institutionId,$ids,true))){
@@ -32,7 +34,7 @@ $readiness=$hasInstitution?kh_status($pdo,$institutionId):['percent'=>0,'done'=>
 ?><!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Yönetici Paneli — İlkAdım</title>
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="yonetici.css?v=1.0.42"></head>
 <body class="role-page"><div class="role-shell">
-<header class="role-topbar"><a class="role-brand" href="yonetici-paneli.php"><span>🧑‍💼</span><span><strong>Yönetici</strong><small>KURUM PANELİ</small></span></a><div class="role-actions"><a class="role-icon" href="yonetici-paneli.php">🏫</a><a class="role-icon" href="hesap-guvenligi.php">⚙️</a></div></header>
+<header class="role-topbar"><a class="role-brand" href="yonetici-paneli.php"><span>🧑‍💼</span><span><strong>Yönetici</strong><small>KURUM PANELİ</small></span></a><div class="role-actions"><a class="role-icon" href="yonetici-paneli.php">🏫</a><a class="role-icon" href="bildirimler.php" title="Bildirimler">🔔<?=$notificationUnread>0?' '.$notificationUnread:''?></a><a class="role-icon" href="hesap-guvenligi.php">⚙️</a></div></header>
 <main class="role-content">
 <section class="role-hero"><span class="eyeline">KURUM YÖNETİMİ</span><h1><?=yp_h((string)($institution['ad']??'Kurum bulunamadı'))?></h1>
 <p><?=yp_h((string)$user['ad_soyad'])?> · İçerik kaynağı: <?=yp_h((string)($institution['icerik_kaynagi']??'—'))?></p>
@@ -76,6 +78,7 @@ $readiness=$hasInstitution?kh_status($pdo,$institutionId):['percent'=>0,'done'=>
 <?php if($hasInstitution && $canView):?><a class="role-module" href="kurum-icerikleri.php?kurum_id=<?=$institutionId?>"><span>📚</span><div><strong>Kurum İçerikleri</strong><small>Öğretmenlerin yayınladığı içerik ve ödevleri kurum seviyesinde izle.</small></div><b>→</b></a><?php endif;?>
 <?php if($hasInstitution && $canView):?><a class="role-module" href="kurum-siniflari.php?kurum_id=<?=$institutionId?>"><span>🏷️</span><div><strong>Sınıflar / Gruplar</strong><small>Kurum sınıflarını ve çalışma gruplarını düzenle.</small></div><b>→</b></a><?php endif;?>
 <?php if($hasInstitution && $canView):?><a class="role-module" href="kurum-raporlari.php?kurum_id=<?=$institutionId?>"><span>📊</span><div><strong>Kurum Raporları</strong><small>Sınıf ve tarihe göre yanıtları incele.</small></div><b>→</b></a><?php endif;?>
+<a class="role-module" href="bildirimler.php"><span>🔔</span><div><strong>Bildirim & Duyurular</strong><small><?=$notificationUnread?> okunmamış · Kuruma duyuru gönder ve okunma durumunu izle.</small></div><b>→</b></a>
 <a class="role-module" href="hesap-guvenligi.php"><span>🔐</span><div><strong>Hesap Güvenliği</strong><small>E-posta ve şifre ayarlarını düzenle.</small></div><b>→</b></a>
 </div></section>
 
