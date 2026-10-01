@@ -31,3 +31,8 @@ Aktif olarak belgelenmiş zincir:
 Bu sürüm yeni uygulama özelliği eklemekten çok, **kaybolan güncellemelerin yeniden kurulmuş kaynak hattının bir daha sessizce kaybolmasını engelleyen koruma katmanıdır.**
 
 Production veritabanına doğrudan müdahale edilmez.
+
+## Rev 2 — final release-head re-anchor
+
+- Release metadata, version ve managed manifest aynı 1.2.12 rev2 final ankrajında yeniden hizalanacak şekilde release-head sözleşmesi tamamlandı.
+- Recovery lineage koruması bu final ankrajdan sonra değişmeden korunur.
