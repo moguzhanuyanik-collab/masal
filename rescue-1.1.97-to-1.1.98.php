@@ -127,6 +127,26 @@ function rescue_validate_historical_sequence(array $history,array $expected,arra
     throw new RuntimeException('1.1.97 recovery zinciri eksik, atlanmış veya sırası bozulmuş. Updater çekirdeği değiştirilmedi.');
 }
 
+function rescue_validate_historical_sequence(array $history,array $expected,array $ignored=[]): void {
+    $collapsed=[];
+    foreach($history as $value){
+        $value=trim((string)$value);
+        if($value==='' || in_array($value,$ignored,true)) continue;
+        if($collapsed===[] || $collapsed[count($collapsed)-1]!==$value) $collapsed[]=$value;
+    }
+    $expectedCount=count($expected);
+    if($expectedCount===0) return;
+    $limit=count($collapsed)-$expectedCount;
+    for($start=0;$start<=$limit;$start++){
+        $matches=true;
+        for($offset=0;$offset<$expectedCount;$offset++){
+            if(($collapsed[$start+$offset]??null)!==$expected[$offset]){$matches=false;break;}
+        }
+        if($matches) return;
+    }
+    throw new RuntimeException('1.1.97 recovery zinciri eksik, atlanmış veya sırası bozulmuş. Updater çekirdeği değiştirilmedi.');
+}
+
 function rescue_validate_historical_chain(array $gh): void {
     [$owner,$repo,$branch]=rescue_github_info($gh);
     // Aktif zincir: 1.1.98 -> 1.1.99 -> ... -> 1.1.117 -> 1.2.1.
