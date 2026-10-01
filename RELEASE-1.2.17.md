@@ -29,3 +29,8 @@ Bu düzeltme mevcut kullanıcı, öğrenci, kurum veya içerik verisini değişt
 ## Rev 1
 
 - 1.2.17 release metadata üçlü ankrajı `version.json`, `update-release.json` ve managed manifest üzerinde eşitlendi.
+
+## Rev 2 — kalite kapısı uyumluluğu
+
+- 1.1.98 tarihsel migration güvenliği testindeki eski 1.1.98-only guard beklentisi, 1.1.97 direct recovery için eklenen yeni fail-closed sözleşmeyle hizalandı.
+- Uygulama davranışı değiştirilmedi; yalnız regression testi güncel sözleşmeyi doğruluyor.

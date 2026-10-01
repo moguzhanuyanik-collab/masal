@@ -56,7 +56,8 @@ assert(chat.includes("$_SESSION['adimbot_ai_requests']"));
 assert(voice.includes("$_SESSION['adimbot_voice_requests']"));
 
 assert(updater.includes('function assert_historical_migration_history'));
-assert(updater.includes("version_compare($localVersion,'1.1.98','<')"));
+assert(updater.includes("version_compare($localVersion,'1.1.97','<')"));
+assert(updater.includes("in_array($localVersion,['1.1.97','1.1.98'],true)"));
 assert(updater.includes('function run_pending_migrations(PDO $pdo,string $root,string $localVersion'));
 assert(updater.includes("migration_sequence_number($name)>=65"));
 assert(updater.includes('ILKADIM_ALLOW_TRANSACTIONAL_DELETE'));
