@@ -49,5 +49,24 @@
   "functional_rebuild_artifact": "REBUILD-1.1.97-1.2.1-FUNCTIONAL.json",
   "purpose": "Prevent a future reset or updater failure from silently removing the recovered 1.1.97 -> 1.2.1 source lineage.",
   "verification_contract": "tests/recovery-source-integrity-139.cjs",
-  "last_recovery_hardening_version": "1.2.14"
+  "last_recovery_hardening_version": "1.2.15",
+  "functional_source_files": [
+    "src/adimbot_rate_limit.php",
+    "api/adimbot-ai.php",
+    "api/adimbot-transcribe.php",
+    "api/activities.php",
+    "activities-extra.js",
+    "api/state.php",
+    "api/report.php",
+    "api/v4-features.php",
+    "ogretmen-paneli.php",
+    "veli-paneli.php",
+    "src/normalized.php",
+    "src/kurumlar_modulu.php",
+    "api/kurumlar-modulu.php",
+    "database/migrations/064_adimbot_rate_limit_ve_migration_checkpoint.sql",
+    "database/migrations/065_kurum_bazli_eslestirme_izolasyonu.sql",
+    "database/migrations/066_kurum_eslestirme_schema_guard.sql"
+  ],
+  "functional_source_contract": "tests/recovery-functional-source-parity-140.cjs"
 }
