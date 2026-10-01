@@ -106,6 +106,7 @@ jobs:
           node tests/update-legacy-db-recovery-123.cjs
           node tests/update-chain-rebuild-126.cjs
           node tests/update-pending-migrations-127.cjs
+          node tests/direct-097-recovery-128.cjs
 
   tenant-db-integration:
     name: Tenant DB integration
