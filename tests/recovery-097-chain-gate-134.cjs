@@ -26,13 +26,13 @@ for(const v of expected) assert(rescue.includes("'"+v+"'"),'Aktif recovery zinci
 assert(updater.includes('/commits?sha='));
 assert(updater.includes('Sıradaki güncelleme güvenli biçimde belirlenemedi.'));
 
-assert.strictEqual(version.version,'1.2.7');
-assert.strictEqual(release.version,'1.2.7');
-assert.strictEqual(manifest.version,'1.2.7');
+assert.strictEqual(version.version,'1.2.8');
+assert.strictEqual(release.version,'1.2.8');
+assert.strictEqual(manifest.version,'1.2.8');
 assert.strictEqual(version.release_revision,1);
 assert.strictEqual(release.release_revision,1);
 assert.strictEqual(manifest.release_revision,1);
-assert(manifest.files.includes('RELEASE-1.2.7.md'));
+assert(manifest.files.includes('RELEASE-1.2.8.md'));
 assert(manifest.files.includes('tests/recovery-097-chain-gate-134.cjs'));
 assert(workflow.includes('node tests/recovery-097-chain-gate-134.cjs'));
 
