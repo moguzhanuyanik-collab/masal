@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.35",
+  "version": "1.2.36",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -207,6 +207,7 @@
     "RELEASE-1.2.33.md",
     "RELEASE-1.2.34.md",
     "RELEASE-1.2.35.md",
+    "RELEASE-1.2.36.md",
     "RELEASE-1.2.4.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.6.md",
@@ -374,6 +375,7 @@
     "database/migrations/068_kurum_siniflari_ve_gruplar.sql",
     "database/migrations/069_ogretmen_soru_yildiz_odulleri.sql",
     "database/migrations/070_ogretmen_icerik_grup_hedef_snapshot.sql",
+    "database/migrations/071_paket_ve_kurum_lisanslari.sql",
     "global-arsiv.php",
     "global-audio-feedback.js",
     "global-eslestirme.php",
@@ -446,6 +448,7 @@
     "ogretmenim-dashboard.css",
     "ogretmenim.css",
     "ogretmenim.php",
+    "paketler.php",
     "profil-foto.php",
     "profile-update-link.js",
     "pwa-cleanup.js",
@@ -470,6 +473,7 @@
     "src/kurum_hazirlik.php",
     "src/kurum_icerik_dashboard.php",
     "src/kurum_icerik_detay.php",
+    "src/kurum_lisanslari.php",
     "src/kurum_raporlari.php",
     "src/kurum_rol_sayfasi.php",
     "src/kurum_siniflari.php",
@@ -532,6 +536,8 @@
     "tests/institution-content-performance-db-153.php",
     "tests/institution-group-performance-157.cjs",
     "tests/institution-group-performance-db-157.php",
+    "tests/institution-license-161.cjs",
+    "tests/institution-license-db-161.php",
     "tests/institution-member-crud-135.cjs",
     "tests/institution-member-crud-db-135.php",
     "tests/institution-readiness-160.cjs",
@@ -649,5 +655,6 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 1
+  "release_revision": 1,
+  "name": "Paket ve kurum lisans yönetimi"
 }

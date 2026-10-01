@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__.'/kurum_lisanslari.php';
+
 function km_slug(string $value): string {
     $value=mb_strtolower(trim($value),'UTF-8');
     $value=strtr($value,['ç'=>'c','ğ'=>'g','ı'=>'i','ö'=>'o','ş'=>'s','ü'=>'u']);
@@ -251,6 +253,8 @@ function km_create_member(PDO $pdo,array $actor,string $role,array $input): int 
     $stmt->closeCursor();
     if(!$ok) throw new RuntimeException('Seçilen kurum aktif değil.');
 
+    kl_assert_member_capacity($pdo,$institutionId,$role);
+
     $userId=ky_create_user($pdo,$actor,$role,$name,$email,$password,$institutionId,$studentGrade);
     if($telefon!=='' && in_array($role,['ogretmen','veli'],true)){
         $table=$role==='ogretmen'?'ogretmenler':'veliler';
@@ -279,6 +283,10 @@ function km_update_member(PDO $pdo,array $actor,string $role,int $userId,int $ol
     $activeInstitution=(bool)$stmt->fetchColumn();
     $stmt->closeCursor();
     if(!$activeInstitution) throw new RuntimeException('Hedef kurum aktif değil.');
+
+    if($institutionId!==$oldInstitutionId){
+        kl_assert_member_capacity($pdo,$institutionId,$role,$userId);
+    }
 
     $pdo->beginTransaction();
     try{
@@ -406,6 +414,8 @@ function km_restore_member(PDO $pdo,array $actor,string $role,int $userId,int $i
     $membership=$stmt->fetchColumn();
     $stmt->closeCursor();
     if($membership===false) throw new RuntimeException('Kurum üyeliği bulunamadı.');
+
+    kl_assert_member_capacity($pdo,$institutionId,$role,$userId);
 
     $pdo->beginTransaction();
     try{
