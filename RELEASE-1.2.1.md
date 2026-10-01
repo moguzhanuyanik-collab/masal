@@ -79,3 +79,10 @@ Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına 
 - Güncelleme motorunun tarihsel commit taraması bu lineer zincirde her seferinde bir sonraki sürümü bulabilecek şekilde korunuyor.
 - Quality Gate artık tam Git geçmişiyle zincir sözleşmesini doğruluyor.
 - Production veritabanına rollback/değişiklik yapılmadı.
+
+
+## Rev 12 — release-head re-anchor
+
+- Son regression düzeltmesi release head kuralını bozmayacak şekilde aynı 1.2.1 sürümünün yeni revision ankrajına alındı.
+- `tests/update-legacy-db-recovery-123.cjs` rev12 ile hizalandı.
+- Release metadata, version ve managed manifest aynı revision değerinde tutuluyor.
