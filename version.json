@@ -1,5 +1,5 @@
 {
-  "version": "1.2.1",
-  "name": "1.2.1 sequential rebuild and update-chain integrity hardening",
-  "release_revision": 15
+  "version": "1.2.2",
+  "name": "Non-legacy pending migration recovery and DB update safety",
+  "release_revision": 1
 }
