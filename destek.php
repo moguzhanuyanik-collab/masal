@@ -138,7 +138,7 @@ $home=auth_role_home($user);
 <input type="hidden" name="csrf" value="<?=dsh(csrf_token())?>">
 <input type="hidden" name="action" value="create">
 <label>Kurum</label>
-<select name="kurum_id" required><option value="">Kurum seç</option><?php foreach($institutions as $institution):?><option value="<?=(int)$institution['id']?>"><?=dsh((string)$institution['ad'])?></option><?php endforeach;?></select>
+<select name="kurum_id" required><option value="">Kurum seç</option><?php foreach($institutions as $institution):?><option value="<?=(int)$institution['id']?>"><?=dsh((string)$institution['ad'])?><?=((int)($institution['aktif']??1)===1?'':' · Pasif kurum')?></option><?php endforeach;?></select>
 <label>Kategori</label>
 <select name="kategori" required><?php foreach(ds_categories() as $key=>$label):?><option value="<?=$key?>"><?=dsh($label)?></option><?php endforeach;?></select>
 <label>Öncelik</label>
