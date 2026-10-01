@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.39",
+  "version": "1.2.40",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -212,6 +212,7 @@
     "RELEASE-1.2.38.md",
     "RELEASE-1.2.39.md",
     "RELEASE-1.2.4.md",
+    "RELEASE-1.2.40.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
@@ -385,6 +386,7 @@
     "database/migrations/072_adimbot_kurum_ai_kotasi.sql",
     "database/migrations/073_ticari_finans_ve_tahsilat.sql",
     "database/migrations/074_merkezi_bildirim_ve_duyurular.sql",
+    "database/migrations/075_guvenli_sifre_kurtarma.sql",
     "global-arsiv.php",
     "global-audio-feedback.js",
     "global-eslestirme.php",
@@ -474,6 +476,8 @@
     "rol-paneli.php",
     "service-worker.js",
     "settings-account.js",
+    "sifre-sifirla.php",
+    "sifremi-unuttum.php",
     "sistem-durum.php",
     "src/adimbot_groq.php",
     "src/adimbot_rate_limit.php",
@@ -498,6 +502,7 @@
     "src/ogretmen_odev_dashboard.php",
     "src/ogretmen_ogrenci_listesi.php",
     "src/ogretmen_soru_dashboard.php",
+    "src/password_reset.php",
     "src/super_admin_icons.php",
     "src/ticari_finans.php",
     "src/updater.php",
@@ -573,6 +578,8 @@
     "tests/parent-report-tenant-scope-db-144.php",
     "tests/parent-teacher-content-142.cjs",
     "tests/parent-teacher-content-db-142.php",
+    "tests/password-recovery-165.cjs",
+    "tests/password-recovery-db-165.php",
     "tests/pwa-95.cjs",
     "tests/rebuild-release-121.cjs",
     "tests/recovery-safety-100.cjs",
@@ -674,5 +681,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Merkezi bildirim ve duyuru sistemi"
+  "name": "Güvenli şifre kurtarma merkezi"
 }
