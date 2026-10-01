@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.9",
+  "version": "1.2.10",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -179,6 +179,7 @@
     "RELEASE-1.1.98.md",
     "RELEASE-1.1.99.md",
     "RELEASE-1.2.1.md",
+    "RELEASE-1.2.10.md",
     "RELEASE-1.2.2.md",
     "RELEASE-1.2.3.md",
     "RELEASE-1.2.4.md",
@@ -368,6 +369,8 @@
     "kurum-ogrencileri.php",
     "kurum-ogretmenleri.php",
     "kurum-raporlari.php",
+    "kurum-rol-crud.css",
+    "kurum-rol-crud.js",
     "kurum-siniflari.css",
     "kurum-siniflari.php",
     "kurum-velileri.php",
@@ -461,6 +464,8 @@
     "tests/institution-classes-groups-134.cjs",
     "tests/institution-classes-groups-db-134.php",
     "tests/institution-content-center-133.cjs",
+    "tests/institution-member-crud-135.cjs",
+    "tests/institution-member-crud-db-135.php",
     "tests/legacy-064-integrity-124.php",
     "tests/manual-update-upload-131.cjs",
     "tests/migration-safety-93.cjs",
