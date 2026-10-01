@@ -152,4 +152,5 @@ jobs:
         run: |
           php tests/tenant-isolation-db-115.php
           php tests/legacy-064-integrity-124.php
+          php tests/tenant-recovery-postcondition-125.php
 
