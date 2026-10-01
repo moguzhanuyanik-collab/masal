@@ -8,15 +8,19 @@ $pdo=db();
 function vo_h(string $value): string { return htmlspecialchars($value,ENT_QUOTES,'UTF-8'); }
 
 try{
-    $stmt=$pdo->prepare("SELECT DISTINCT o.id,o.ad,o.email,o.sinif_seviyesi
-        FROM veli_ogrenci vo
-        INNER JOIN veliler v ON v.id=vo.veli_id AND v.aktif=1
-        INNER JOIN ogrenciler o ON o.id=vo.ogrenci_id AND o.aktif=1
-        INNER JOIN kullanicilar su ON su.id=o.kullanici_id AND su.aktif=1
-        WHERE v.kullanici_id=? ORDER BY o.ad,o.id");
-    $stmt->execute([(int)$user['id']]);
-    $children=$stmt->fetchAll();
-    $stmt->closeCursor();
+    $accessibleChildIds=auth_accessible_student_ids($pdo,(int)$user['id']);
+    $children=[];
+    if($accessibleChildIds!==[]){
+        $placeholders=implode(',',array_fill(0,count($accessibleChildIds),'?'));
+        $stmt=$pdo->prepare("SELECT o.id,o.ad,o.email,o.sinif_seviyesi
+            FROM ogrenciler o
+            INNER JOIN kullanicilar su ON su.id=o.kullanici_id AND su.aktif=1
+            WHERE o.aktif=1 AND o.id IN ({$placeholders})
+            ORDER BY o.ad,o.id");
+        $stmt->execute($accessibleChildIds);
+        $children=$stmt->fetchAll();
+        $stmt->closeCursor();
+    }
 }catch(Throwable){
     http_response_code(503);
     echo 'Çocuk bilgileri şu anda okunamıyor.';
