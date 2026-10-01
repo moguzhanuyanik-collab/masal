@@ -39,7 +39,7 @@ assert(css.includes('.manual-update-dialog'));
 assert(css.includes('.manual-update-dropzone'));
 assert(workflow.includes('node tests/manual-update-upload-131.cjs'));
 
-assert(/^1\\.2\\.\\d+$/.test(version.version),'release version must remain in the 1.2.x line');
+assert(/^1\.2\.\d+$/.test(version.version),'release version must remain in the 1.2.x line');
 assert(Number(version.version.split('.')[2])>=6,'manual update capability requires 1.2.6 or newer');
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
