@@ -55,6 +55,7 @@ jobs:
           php tests/recovery-safety-100.php
           php tests/update-safety-102.php
           php tests/update-migration-safety-116.php
+          php tests/update-release-chain-cache-127.php
           php tests/update-manifest-contract-103.php
           php tests/update-activation-104.php
           php tests/update-release-revision-105.php
@@ -105,6 +106,7 @@ jobs:
           node tests/rebuild-release-121.cjs
           node tests/update-legacy-db-recovery-123.cjs
           node tests/update-chain-rebuild-126.cjs
+          node tests/update-release-chain-cache-127.cjs
 
   tenant-db-integration:
     name: Tenant DB integration

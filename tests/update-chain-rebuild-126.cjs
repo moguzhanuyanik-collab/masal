@@ -12,15 +12,17 @@ const updater=fs.readFileSync('src/updater.php','utf8');
 assert.strictEqual(version.version,'1.2.1');
 assert.strictEqual(release.version,'1.2.1');
 assert.strictEqual(manifest.version,'1.2.1');
-assert.strictEqual(version.release_revision,20);
-assert.strictEqual(release.release_revision,20);
-assert.strictEqual(manifest.release_revision,20);
+assert.strictEqual(version.release_revision,21);
+assert.strictEqual(release.release_revision,21);
+assert.strictEqual(manifest.release_revision,21);
 assert(updater.includes('function github_branch_head_sha'));
 assert(updater.includes('function remote_release_info(array $gh): array'));
 assert(updater.includes('function run_legacy_1_1_97_to_1_2_1_recovery'));
 assert(updater.includes('/commits?sha='));
 assert(updater.includes('release_identity_should_replace_next'));
 assert(updater.includes('release_identity_is_newer'));
+assert(updater.includes('function release_chain_cache_read'));
+assert(updater.includes('function select_next_release_from_chain'));
 assert(updater.includes("path=update-release.json"));
 
 const expected=[
@@ -47,4 +49,4 @@ for(const v of versions){
 }
 assert.strictEqual(cursor,expected.length,'Sıralı 1.1.97 → 1.2.1 version.json commit zinciri eksik/bozuk: '+versions.slice(0,40).join(' → '));
 assert(manifest.files.includes('tests/update-chain-rebuild-126.cjs'));
-console.log('PASS: 1.2.1 sequential rebuild and updater-chain integrity contract');
+console.log('PASS: 1.2.1 sequential rebuild, updater-chain and cache integrity contract');
