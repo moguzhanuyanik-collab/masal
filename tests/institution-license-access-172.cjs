@@ -84,7 +84,8 @@ assert(workflow.includes('node tests/institution-license-access-172.cjs'),
 assert(workflow.includes('php tests/institution-license-access-db-172.php'),
   'institution license access DB test missing from quality gate');
 
-assert.strictEqual(version.version,'1.2.47');
+assert(version.version.startsWith('1.2.'),'release version must remain in 1.2.x');
+assert(Number(version.version.split('.')[2])>=47,'institution license access requires 1.2.47 or newer');
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
 for(const path of [
