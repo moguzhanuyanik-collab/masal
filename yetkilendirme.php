@@ -6,6 +6,8 @@ require __DIR__ . '/src/auth.php';
 $user=require_role('super_admin');
 $pdo=db();
 $isSuper=auth_user_has_role($user,'super_admin');
+$relationScopeReady=auth_runtime_column_exists($pdo,'veli_ogrenci','kurum_id')
+    && auth_runtime_column_exists($pdo,'ogretmen_ogrenci','kurum_id');
 $message='';
 $error='';
 
@@ -27,7 +29,8 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
             $password=(string)($_POST['yeni_kullanici_sifre']??'');
             $role=(string)($_POST['rol']??'');
 
-            $allowed=$isSuper?['ogrenci','veli','ogretmen','yonetici']:['ogrenci','veli','ogretmen'];
+            if ($role==='yonetici') throw new RuntimeException('Yönetici hesabını Kurumlar bölümünden bir kuruma bağlayarak oluştur.');
+            $allowed=['ogrenci','veli','ogretmen'];
             if (!in_array($role,$allowed,true)) throw new RuntimeException('Bu rolü oluşturma yetkin yok.');
             if (mb_strlen($name)<2 || mb_strlen($name)>190) throw new RuntimeException('Ad soyad bilgisini kontrol et.');
             if (!filter_var($email,FILTER_VALIDATE_EMAIL)) throw new RuntimeException('Geçerli bir e-posta yaz.');
@@ -64,7 +67,8 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
             if (!$isSuper) throw new RuntimeException('Ek rol verme işlemi yalnızca Süper Admin içindir.');
             $targetId=(int)($_POST['kullanici_id']??0);
             $role=(string)($_POST['rol']??'');
-            if (!in_array($role,['veli','ogretmen','yonetici','super_admin'],true)) throw new RuntimeException('Geçersiz rol.');
+            if ($role==='yonetici') throw new RuntimeException('Yönetici rolü Kurumlar bölümünden kurum üyeliğiyle birlikte verilmelidir.');
+            if (!in_array($role,['veli','ogretmen','super_admin'],true)) throw new RuntimeException('Geçersiz rol.');
             $target=auth_fetch_user($pdo,$targetId);
             if (!$target) throw new RuntimeException('Kullanıcı bulunamadı.');
             $pdo->prepare('INSERT IGNORE INTO kullanici_rolleri (kullanici_id,rol) VALUES (?,?)')->execute([$targetId,$role]);
@@ -79,19 +83,23 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
             $studentId=(int)($_POST['ogrenci_id']??0);
             $role=(string)($_POST['rol']??'');
             if (!in_array($role,['veli','ogretmen'],true)) throw new RuntimeException('Yalnızca veli veya öğretmen öğrenciyle eşleştirilebilir.');
+            if (!$relationScopeReady) throw new RuntimeException('Kurum kapsamlı eşleştirme şeması hazır değil. Sistem güncellemesini tamamlayın.');
             $target=require_target_role($pdo,$targetId,$role);
-            $check=$pdo->prepare('SELECT id FROM ogrenciler WHERE id=? AND aktif=1 LIMIT 1');
+            $globalTarget=$pdo->prepare("SELECT 1 FROM kullanicilar k WHERE k.id=? AND k.aktif=1 AND NOT EXISTS (SELECT 1 FROM kurum_kullanicilari kk WHERE kk.kullanici_id=k.id AND kk.aktif=1) LIMIT 1");
+            $globalTarget->execute([$targetId]);
+            if (!$globalTarget->fetchColumn()) throw new RuntimeException('Kurum kullanıcısı bu ekrandan global eşleştirmeye eklenemez.');
+            $check=$pdo->prepare("SELECT o.id FROM ogrenciler o INNER JOIN kullanicilar k ON k.id=o.kullanici_id WHERE o.id=? AND o.aktif=1 AND k.aktif=1 AND NOT EXISTS (SELECT 1 FROM kurum_kullanicilari kk WHERE kk.kullanici_id=k.id AND kk.aktif=1) LIMIT 1");
             $check->execute([$studentId]);
-            if (!$check->fetchColumn()) throw new RuntimeException('Öğrenci bulunamadı.');
+            if (!$check->fetchColumn()) throw new RuntimeException('Global öğrenci bulunamadı.');
 
             if ($role==='veli') {
                 $pdo->prepare('INSERT IGNORE INTO veliler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')->execute([$targetId,(string)$target['ad_soyad']]);
                 $p=$pdo->prepare('SELECT id FROM veliler WHERE kullanici_id=? LIMIT 1');$p->execute([$targetId]);$profileId=(int)$p->fetchColumn();
-                $pdo->prepare('INSERT IGNORE INTO veli_ogrenci (veli_id,ogrenci_id) VALUES (?,?)')->execute([$profileId,$studentId]);
+                $pdo->prepare('INSERT IGNORE INTO veli_ogrenci (veli_id,ogrenci_id,kurum_id) VALUES (?,?,0)')->execute([$profileId,$studentId]);
             } else {
                 $pdo->prepare('INSERT IGNORE INTO ogretmenler (kullanici_id,ad_soyad,aktif) VALUES (?,?,1)')->execute([$targetId,(string)$target['ad_soyad']]);
                 $p=$pdo->prepare('SELECT id FROM ogretmenler WHERE kullanici_id=? LIMIT 1');$p->execute([$targetId]);$profileId=(int)$p->fetchColumn();
-                $pdo->prepare('INSERT IGNORE INTO ogretmen_ogrenci (ogretmen_id,ogrenci_id) VALUES (?,?)')->execute([$profileId,$studentId]);
+                $pdo->prepare('INSERT IGNORE INTO ogretmen_ogrenci (ogretmen_id,ogrenci_id,kurum_id) VALUES (?,?,0)')->execute([$profileId,$studentId]);
             }
             auth_audit($pdo,(int)$user['id'],$targetId,'ogrenci_eslestir','Rol: '.$role.' Öğrenci: '.$studentId);
             $message='Öğrenci eşleştirmesi kaydedildi.';
@@ -102,13 +110,14 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
             $studentId=(int)($_POST['ogrenci_id']??0);
             $role=(string)($_POST['rol']??'');
             if (!in_array($role,['veli','ogretmen'],true)) throw new RuntimeException('Geçersiz eşleştirme türü.');
+            if (!$relationScopeReady) throw new RuntimeException('Kurum kapsamlı eşleştirme şeması hazır değil. Sistem güncellemesini tamamlayın.');
             require_target_role($pdo,$targetId,$role);
             if ($role==='veli') {
                 $p=$pdo->prepare('SELECT id FROM veliler WHERE kullanici_id=? LIMIT 1');$p->execute([$targetId]);$profileId=(int)$p->fetchColumn();
-                if ($profileId>0) $pdo->prepare('DELETE FROM veli_ogrenci WHERE veli_id=? AND ogrenci_id=?')->execute([$profileId,$studentId]);
+                if ($profileId>0) $pdo->prepare('DELETE FROM veli_ogrenci WHERE veli_id=? AND ogrenci_id=? AND kurum_id=0')->execute([$profileId,$studentId]);
             } else {
                 $p=$pdo->prepare('SELECT id FROM ogretmenler WHERE kullanici_id=? LIMIT 1');$p->execute([$targetId]);$profileId=(int)$p->fetchColumn();
-                if ($profileId>0) $pdo->prepare('DELETE FROM ogretmen_ogrenci WHERE ogretmen_id=? AND ogrenci_id=?')->execute([$profileId,$studentId]);
+                if ($profileId>0) $pdo->prepare('DELETE FROM ogretmen_ogrenci WHERE ogretmen_id=? AND ogrenci_id=? AND kurum_id=0')->execute([$profileId,$studentId]);
             }
             auth_audit($pdo,(int)$user['id'],$targetId,'ogrenci_eslestirme_kaldir','Rol: '.$role.' Öğrenci: '.$studentId);
             $message='Öğrenci eşleştirmesi kaldırıldı.';
@@ -126,10 +135,27 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
                 throw new RuntimeException('Bu hesabı değiştirme yetkin yok.');
             }
             $current=(int)$targetRow['aktif']===1;
-            $pdo->prepare('UPDATE kullanicilar SET aktif=? WHERE id=?')->execute([$current?0:1,$targetId]);
-            if ($current) $pdo->prepare('DELETE FROM kullanici_oturum_tokenlari WHERE kullanici_id=?')->execute([$targetId]);
+            $newActive=$current?0:1;
+            $pdo->beginTransaction();
+            try {
+                $pdo->prepare('UPDATE kullanicilar SET aktif=? WHERE id=?')->execute([$newActive,$targetId]);
+                foreach (['ogrenciler','veliler','ogretmenler'] as $profileTable) {
+                    if (auth_runtime_table_exists($pdo,$profileTable)
+                        && auth_runtime_column_exists($pdo,$profileTable,'kullanici_id')
+                        && auth_runtime_column_exists($pdo,$profileTable,'aktif')) {
+                        $pdo->prepare("UPDATE {$profileTable} SET aktif=? WHERE kullanici_id=?")->execute([$newActive,$targetId]);
+                    }
+                }
+                if ($current && auth_runtime_table_exists($pdo,'kullanici_oturum_tokenlari')) {
+                    $pdo->prepare('DELETE FROM kullanici_oturum_tokenlari WHERE kullanici_id=?')->execute([$targetId]);
+                }
+                $pdo->commit();
+            } catch (Throwable $e) {
+                if ($pdo->inTransaction()) $pdo->rollBack();
+                throw $e;
+            }
             auth_audit($pdo,(int)$user['id'],$targetId,'hesap_durum',($current?'pasif':'aktif'));
-            $message='Kullanıcı durumu güncellendi.';
+            $message='Kullanıcı ve profil durumu güncellendi.';
         }
     } catch (PDOException $e) {
         error_log('[IlkAdim][authorization-db] '.$e->getMessage());
@@ -148,25 +174,58 @@ $users=$pdo->query("SELECT k.id,k.email,k.ad_soyad,k.ana_rol,k.aktif,
     LEFT JOIN kullanici_rolleri r ON r.kullanici_id=k.id
     GROUP BY k.id,k.email,k.ad_soyad,k.ana_rol,k.aktif
     ORDER BY k.id")->fetchAll();
-$students=$pdo->query("SELECT id,email FROM ogrenciler WHERE aktif=1 ORDER BY id")->fetchAll();
+$globalUsers=$pdo->query("SELECT k.id,k.email,k.ad_soyad,k.ana_rol,k.aktif,
+    GROUP_CONCAT(r.rol ORDER BY r.rol SEPARATOR ',') roller
+    FROM kullanicilar k
+    LEFT JOIN kullanici_rolleri r ON r.kullanici_id=k.id
+    WHERE k.aktif=1
+      AND NOT EXISTS (
+        SELECT 1 FROM kurum_kullanicilari kk
+        WHERE kk.kullanici_id=k.id AND kk.aktif=1
+      )
+    GROUP BY k.id,k.email,k.ad_soyad,k.ana_rol,k.aktif
+    ORDER BY k.id")->fetchAll();
+$students=$pdo->query("SELECT o.id,o.email
+    FROM ogrenciler o
+    INNER JOIN kullanicilar k ON k.id=o.kullanici_id
+    WHERE o.aktif=1 AND k.aktif=1
+      AND NOT EXISTS (
+        SELECT 1 FROM kurum_kullanicilari kk
+        WHERE kk.kullanici_id=k.id AND kk.aktif=1
+      )
+    ORDER BY o.id")->fetchAll();
 
-$assignable=array_values(array_filter($users,static function(array $u):bool{
+$assignable=array_values(array_filter($globalUsers?:[],static function(array $u):bool{
     $roles=explode(',',(string)($u['roller']??''));
     return in_array('veli',$roles,true)||in_array('ogretmen',$roles,true);
 }));
 
 $links=[];
-$parentLinks=$pdo->query("SELECT k.id kullanici_id,k.email,vo.ogrenci_id,'veli' rol
-    FROM veli_ogrenci vo
-    INNER JOIN veliler v ON v.id=vo.veli_id
-    INNER JOIN kullanicilar k ON k.id=v.kullanici_id
-    ORDER BY k.email,vo.ogrenci_id")->fetchAll();
-$teacherLinks=$pdo->query("SELECT k.id kullanici_id,k.email,oo.ogrenci_id,'ogretmen' rol
-    FROM ogretmen_ogrenci oo
-    INNER JOIN ogretmenler o ON o.id=oo.ogretmen_id
-    INNER JOIN kullanicilar k ON k.id=o.kullanici_id
-    ORDER BY k.email,oo.ogrenci_id")->fetchAll();
-$links=array_merge($parentLinks?:[],$teacherLinks?:[]);
+if($relationScopeReady){
+    $parentLinks=$pdo->query("SELECT k.id kullanici_id,k.email,vo.ogrenci_id,'veli' rol
+        FROM veli_ogrenci vo
+        INNER JOIN veliler v ON v.id=vo.veli_id
+        INNER JOIN kullanicilar k ON k.id=v.kullanici_id
+        INNER JOIN ogrenciler s ON s.id=vo.ogrenci_id
+        INNER JOIN kullanicilar sk ON sk.id=s.kullanici_id
+        WHERE vo.kurum_id=0
+          AND NOT EXISTS (SELECT 1 FROM kurum_kullanicilari kk WHERE kk.kullanici_id=k.id AND kk.aktif=1)
+          AND NOT EXISTS (SELECT 1 FROM kurum_kullanicilari skk WHERE skk.kullanici_id=sk.id AND skk.aktif=1)
+        ORDER BY k.email,vo.ogrenci_id")->fetchAll();
+    $teacherLinks=$pdo->query("SELECT k.id kullanici_id,k.email,oo.ogrenci_id,'ogretmen' rol
+        FROM ogretmen_ogrenci oo
+        INNER JOIN ogretmenler o ON o.id=oo.ogretmen_id
+        INNER JOIN kullanicilar k ON k.id=o.kullanici_id
+        INNER JOIN ogrenciler s ON s.id=oo.ogrenci_id
+        INNER JOIN kullanicilar sk ON sk.id=s.kullanici_id
+        WHERE oo.kurum_id=0
+          AND NOT EXISTS (SELECT 1 FROM kurum_kullanicilari kk WHERE kk.kullanici_id=k.id AND kk.aktif=1)
+          AND NOT EXISTS (SELECT 1 FROM kurum_kullanicilari skk WHERE skk.kullanici_id=sk.id AND skk.aktif=1)
+        ORDER BY k.email,oo.ogrenci_id")->fetchAll();
+    $links=array_merge($parentLinks?:[],$teacherLinks?:[]);
+}elseif($error===''){
+    $error='Kurum kapsamlı eşleştirme şeması hazır değil. Sistem güncellemesini tamamlayın.';
+}
 ?><!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -211,7 +270,6 @@ $links=array_merge($parentLinks?:[],$teacherLinks?:[]);
 <option value="ogrenci">Öğrenci</option>
 <option value="veli">Veli</option>
 <option value="ogretmen">Öğretmen</option>
-<?php if ($isSuper): ?><option value="yonetici">Yönetici</option><?php endif; ?>
 </select>
 <button class="button primary full" type="submit">Kullanıcı Oluştur</button>
 </form>
@@ -267,7 +325,7 @@ $links=array_merge($parentLinks?:[],$teacherLinks?:[]);
 </select>
 <select class="text-input" name="rol" required>
 <option value="veli">Veli</option><option value="ogretmen">Öğretmen</option>
-<option value="yonetici">Yönetici</option><option value="super_admin">Süper Admin</option>
+<option value="super_admin">Süper Admin</option>
 </select>
 <button class="button soft full" type="submit">Rol Ekle</button>
 </form>
