@@ -92,6 +92,43 @@ function update_package_limits(array $updateConfig=[]): array {
     ];
 }
 
+function normalize_release_revision(mixed $value): int {
+    if(is_int($value)) return max(0,$value);
+    if(is_string($value) && preg_match('/^\d+$/D',$value)===1) return max(0,(int)$value);
+    if(is_float($value) && floor($value)===$value) return max(0,(int)$value);
+    return 0;
+}
+
+function read_local_release_revision(string $root,string $expectedVersion=''): int {
+    $path=rtrim($root,'/\\').'/version.json';
+    if(!is_file($path) || !is_readable($path)) return 0;
+    $data=json_decode((string)file_get_contents($path),true);
+    if(!is_array($data)) return 0;
+    $version=trim((string)($data['version']??''));
+    if($expectedVersion!=='' && $version!==$expectedVersion) return 0;
+    return normalize_release_revision($data['release_revision']??0);
+}
+
+function release_identity_is_newer(array $candidate,string $localVersion,int $localRevision=0): bool {
+    $candidateVersion=trim((string)($candidate['version']??''));
+    if($candidateVersion==='') return false;
+    $cmp=version_compare($candidateVersion,$localVersion);
+    if($cmp>0) return true;
+    if($cmp<0) return false;
+    return normalize_release_revision($candidate['release_revision']??0)>max(0,$localRevision);
+}
+
+function release_identity_should_replace_next(array $candidate,?array $next): bool {
+    if($next===null) return true;
+    $candidateVersion=trim((string)($candidate['version']??''));
+    $nextVersion=trim((string)($next['version']??''));
+    $cmp=version_compare($candidateVersion,$nextVersion);
+    if($cmp<0) return true;
+    if($cmp>0) return false;
+    return normalize_release_revision($candidate['release_revision']??0)
+        > normalize_release_revision($next['release_revision']??0);
+}
+
 function remote_update_metadata_at_ref(array $gh,string $ref,string $metadataFile='version.json'): array {
     [$owner,$repo,$branch]=github_repo_info($gh);
     $ref=trim($ref);
@@ -110,6 +147,7 @@ function remote_update_metadata_at_ref(array $gh,string $ref,string $metadataFil
 
     return [
         'version'=>(string)$data['version'],
+        'release_revision'=>normalize_release_revision($data['release_revision']??0),
         'name'=>(string)($data['name']??''),
         'commit'=>$ref,
     ];
@@ -128,10 +166,11 @@ function remote_version_info(array $gh): array {
     return remote_version_info_at_ref($gh,$branch);
 }
 
-function next_remote_version_info(array $gh,string $localVersion): array {
+function next_remote_version_info(array $gh,string $localVersion,int $localRevision=0): array {
     [$owner,$repo,$branch]=github_repo_info($gh);
     $localVersion=trim($localVersion);
     if($localVersion==='') $localVersion='0.0.0';
+    $localRevision=max(0,$localRevision);
 
     $historyFile=version_compare($localVersion,'1.1.101','>=')?'update-release.json':'version.json';
     $next=null;
@@ -165,36 +204,45 @@ function next_remote_version_info(array $gh,string $localVersion): array {
             $candidateVersion=trim((string)($info['version']??''));
             if($candidateVersion==='') continue;
 
-            if(version_compare($candidateVersion,$localVersion,'>')){
-                if($next===null||version_compare($candidateVersion,(string)$next['version'],'<')){
-                    $next=$info;
+            if($historyFile==='version.json'){
+                if(version_compare($candidateVersion,$localVersion,'>')){
+                    if(release_identity_should_replace_next($info,$next)) $next=$info;
+                    continue;
                 }
+                $reachedInstalledOrOlder=true;
+                break;
+            }
+
+            if(release_identity_is_newer($info,$localVersion,$localRevision)){
+                if(release_identity_should_replace_next($info,$next)) $next=$info;
                 continue;
             }
 
-            $reachedInstalledOrOlder=true;
-            break;
+            $versionCmp=version_compare($candidateVersion,$localVersion);
+            $candidateRevision=normalize_release_revision($info['release_revision']??0);
+            if($versionCmp<0 || ($versionCmp===0 && $candidateRevision<=$localRevision)){
+                $reachedInstalledOrOlder=true;
+                break;
+            }
         }
 
         if($reachedInstalledOrOlder||count($rows)<100) break;
         $page++;
     }
 
-    if($next!==null){
-        return $next;
-    }
+    if($next!==null) return $next;
 
     $latest=$historyFile==='update-release.json'
         ?remote_release_info_at_ref($gh,$branch)
         :remote_version_info($gh);
-    $latestVersion=trim((string)($latest['version']??''));
 
-    if($latestVersion===''||version_compare($latestVersion,$localVersion,'<=')){
+    if($historyFile==='version.json'){
+        $latestVersion=trim((string)($latest['version']??''));
+        if($latestVersion===''||version_compare($latestVersion,$localVersion,'<=')) return $latest;
+    }elseif(!release_identity_is_newer($latest,$localVersion,$localRevision)){
         return $latest;
     }
 
-    // Sürüm geçmişinden güvenli ara sürüm belirlenemiyorsa en son main sürümüne atlama.
-    // Böylece eksik bir ara paket yüzünden güncelleme zinciri bozulmaz.
     throw new RuntimeException(
         'Siradaki guncelleme guvenli bicimde belirlenemedi. '
         .'En son surume atlanmadi; ara surum zinciri kontrol edilmeli.'
@@ -378,7 +426,7 @@ function read_managed_update_manifest(string $root): array {
     return read_managed_file_list(rtrim($root,'/\\').'/update-managed-files.json');
 }
 
-function write_managed_update_manifest(string $root,array $files,string $version): void {
+function write_managed_update_manifest(string $root,array $files,string $version,int $releaseRevision=0): void {
     $path=managed_manifest_path($root);
     $dir=dirname($path);
     if(!is_dir($dir)&&!mkdir($dir,0750,true)&&!is_dir($dir)){
@@ -393,6 +441,7 @@ function write_managed_update_manifest(string $root,array $files,string $version
     $json=json_encode([
         'format'=>1,
         'version'=>$version,
+        'release_revision'=>max(0,$releaseRevision),
         'written_at'=>date(DATE_ATOM),
         'files'=>$normalized,
     ],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
@@ -1465,8 +1514,18 @@ function install_github_update(
 ): array {
     [$owner,$repo,$branch]=github_repo_info($gh);
     $localVersion=read_app_version();
-    $remote=next_remote_version_info($gh,$localVersion);
-    if(version_compare($remote['version'],$localVersion,'<=')) return ['updated'=>false,'message'=>'Zaten guncel surum kullaniliyor.','remote'=>$remote,'local'=>$localVersion,'migrations'=>[]];
+    $localRevision=read_local_release_revision($root,$localVersion);
+    $remote=next_remote_version_info($gh,$localVersion,$localRevision);
+    if(!release_identity_is_newer($remote,$localVersion,$localRevision)){
+        return [
+            'updated'=>false,
+            'message'=>'Zaten guncel surum kullaniliyor.',
+            'remote'=>$remote,
+            'local'=>$localVersion,
+            'local_revision'=>$localRevision,
+            'migrations'=>[],
+        ];
+    }
 
     $targetCommit=trim((string)($remote['commit']??''));
     if(!preg_match('/^[a-f0-9]{40}$/i',$targetCommit)){
@@ -1499,7 +1558,9 @@ function install_github_update(
     try{
         $recoveryState=[
             'from_version'=>$localVersion,
+            'from_revision'=>$localRevision,
             'to_version'=>(string)$remote['version'],
+            'to_revision'=>normalize_release_revision($remote['release_revision']??0),
             'target_commit'=>$targetCommit,
             'status'=>'preparing',
             'stage'=>$updateStage,
@@ -1571,9 +1632,23 @@ function install_github_update(
         $manifestData=json_decode((string)file_get_contents($sourceRoot.'/update-managed-files.json'),true);
         $releaseVersion=is_array($releaseData)?trim((string)($releaseData['version']??'')):'';
         $manifestVersion=is_array($manifestData)?trim((string)($manifestData['version']??'')):'';
+        $packageRevision=is_array($packageVersionData)?normalize_release_revision($packageVersionData['release_revision']??0):0;
+        $releaseRevision=is_array($releaseData)?normalize_release_revision($releaseData['release_revision']??0):0;
+        $manifestRevision=is_array($manifestData)?normalize_release_revision($manifestData['release_revision']??0):0;
+        $expectedRevision=normalize_release_revision($remote['release_revision']??0);
         if($releaseVersion!==$packageVersion || $manifestVersion!==$packageVersion){
             throw new RuntimeException(
                 'Güncelleme paketi sürüm metadata dosyaları birbiriyle eşleşmiyor.'
+            );
+        }
+        if(version_compare($packageVersion,'1.1.105','>=') && (
+            $packageRevision<1
+            || $releaseRevision!==$packageRevision
+            || $manifestRevision!==$packageRevision
+            || $expectedRevision!==$packageRevision
+        )){
+            throw new RuntimeException(
+                'Güncelleme paketi release revision metadata değerleri birbiriyle eşleşmiyor.'
             );
         }
         if(!is_array($manifestData['files']??null)){
@@ -1636,10 +1711,10 @@ function install_github_update(
         $recoveryState['activation_verification']=$activationVerification;
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
         $removedManagedFiles=remove_stale_managed_files($root,$oldManagedFiles,$newManagedFiles,$preserve);
-        write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version']);
+        write_managed_update_manifest($root,$newManagedFiles,(string)$remote['version'],normalize_release_revision($remote['release_revision']??0));
 
         $pdo->prepare("INSERT INTO sistem_ayarlar (ayar_anahtari,ayar_degeri) VALUES ('uygulama_surumu',?) ON DUPLICATE KEY UPDATE ayar_degeri=VALUES(ayar_degeri)")->execute([$remote['version']]);
-        $historyMessage='Guncelleme tamamlandi. Yedek: '.$backupName;
+        $historyMessage='Guncelleme tamamlandi. Surum: '.(string)$remote['version'].' rev '.normalize_release_revision($remote['release_revision']??0).'; Yedek: '.$backupName;
         if($dbBackupName!=='') $historyMessage.='; DB yedek: '.$dbBackupName;
         if($removedManagedFiles!==[]) $historyMessage.='; temizlenen eski dosya: '.count($removedManagedFiles);
         $pdo->prepare("UPDATE guncelleme_gecmisi SET durum='basarili',mesaj=?,bitis_tarihi=NOW() WHERE id=?")->execute([$historyMessage,$logId]);
@@ -1660,6 +1735,8 @@ function install_github_update(
             'message'=>'Guncelleme basariyla kuruldu.',
             'remote'=>$remote,
             'local'=>$localVersion,
+            'local_revision'=>$localRevision,
+            'installed_revision'=>normalize_release_revision($remote['release_revision']??0),
             'backup'=>$backupName,
             'database_backup'=>$dbBackupName,
             'recovery_manifest'=>$recoveryManifestName,
