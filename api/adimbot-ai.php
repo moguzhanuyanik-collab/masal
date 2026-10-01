@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-require dirname(__DIR__) . '/src/bootstrap.php';
 require dirname(__DIR__) . '/src/auth.php';
 require_once dirname(__DIR__) . '/src/adimbot_groq.php';
 require_once dirname(__DIR__) . '/src/adimbot_rate_limit.php';
@@ -220,15 +219,11 @@ if ($_SERVER['REQUEST_METHOD']!=='POST') {
     adimbot_ai_json(['ok'=>false,'message'=>'Yalnızca POST desteklenir.'],405);
 }
 
-$pdo=db();
-$user=authenticated_user();
-if (!$user || auth_effective_role($user)!=='ogrenci') {
-    adimbot_ai_json(['ok'=>false,'message'=>'Bu özellik yalnızca aktif öğrenci hesabında kullanılabilir.','reason'=>'auth'],403);
-}
-$userId=(int)$user['id'];
-$studentId=auth_student_id_for_user($pdo,$userId);
-if ($studentId===null) {
-    adimbot_ai_json(['ok'=>false,'message'=>'Aktif öğrenci profili bulunamadı.','reason'=>'auth'],403);
+$role=(string)($_SESSION['aktif_rol'] ?? '');
+$studentId=(int)($_SESSION['ogrenci_id'] ?? 0);
+$userId=(int)($_SESSION['kullanici_id'] ?? 0);
+if ($role!=='ogrenci' || $studentId<=0 || $userId<=0) {
+    adimbot_ai_json(['ok'=>false,'message'=>'Bu özellik yalnızca öğrenci hesabında kullanılabilir.','reason'=>'auth'],403);
 }
 
 $csrf=(string)($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
@@ -305,7 +300,7 @@ $rateResult=['persistent'=>false,'blocked'=>false,'retry_after'=>0];
 if(function_exists('db')){
     try{
         $rateResult=adimbot_rate_limit_check_and_record(
-            $pdo,
+            db(),
             'chat',
             $studentId,
             mb_substr((string)($_SERVER['REMOTE_ADDR'] ?? ''),0,45),
