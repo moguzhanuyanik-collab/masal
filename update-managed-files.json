@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.40",
+  "version": "1.2.41",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -213,6 +213,7 @@
     "RELEASE-1.2.39.md",
     "RELEASE-1.2.4.md",
     "RELEASE-1.2.40.md",
+    "RELEASE-1.2.41.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
@@ -387,6 +388,7 @@
     "database/migrations/073_ticari_finans_ve_tahsilat.sql",
     "database/migrations/074_merkezi_bildirim_ve_duyurular.sql",
     "database/migrations/075_guvenli_sifre_kurtarma.sql",
+    "eposta-ayarlari.php",
     "global-arsiv.php",
     "global-audio-feedback.js",
     "global-eslestirme.php",
@@ -493,6 +495,7 @@
     "src/kurum_siniflari.php",
     "src/kurum_yonetimi.php",
     "src/kurumlar_modulu.php",
+    "src/mail_settings.php",
     "src/normalized.php",
     "src/odev_durumu.php",
     "src/ogrenci_odev_dashboard.php",
@@ -568,6 +571,8 @@
     "tests/institution-reporting-137.cjs",
     "tests/institution-reporting-db-137.php",
     "tests/legacy-064-integrity-124.php",
+    "tests/mail-settings-166.cjs",
+    "tests/mail-settings-166.php",
     "tests/manager-report-tenant-scope-145.cjs",
     "tests/manager-report-tenant-scope-db-145.php",
     "tests/manual-update-upload-131.cjs",
@@ -681,5 +686,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Güvenli şifre kurtarma merkezi"
+  "name": "Süper Admin e-posta ve SMTP ayar merkezi"
 }
