@@ -16,7 +16,7 @@ assert(updater.includes("durum='yeniden_dene'"));
 assert(updater.includes("'retry_required'=>true"));
 assert(
   updater.indexOf('$coreHandoff=prepare_updater_core_handoff(')
-  < updater.indexOf('$pendingMigrations=pending_migration_names(')
+  < updater.indexOf("$updateStage='database_recovery_skip';")
 );
 assert(updater.includes('clear_updater_core_handoff_marker($root);'));
 assert(page.includes("'retry_required' => true"));
