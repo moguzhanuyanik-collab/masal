@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
+require __DIR__.'/src/ogretmen_icerik.php';
 require __DIR__.'/src/ogretmen_odev_dashboard.php';
 
 $user=require_role('ogretmen');
@@ -16,6 +17,14 @@ function oo_due(?string $value): string {
     if($value==='') return 'Süre yok';
     try{return (new DateTimeImmutable($value))->format('d.m.Y H:i');}
     catch(Throwable){return 'Süre yok';}
+}
+
+function oo_group_label(array $group,bool $showInstitution=false): string {
+    $type=(string)($group['tur']??'sinif')==='grup'?'Grup':'Sınıf';
+    $grade=$group['sinif_seviyesi']!==null?(int)$group['sinif_seviyesi']:0;
+    $label=$type.' · '.(string)($group['ad']??'').($grade>0?' · '.$grade.'. sınıf':'');
+    if($showInstitution && !empty($group['kurum_adi'])) $label=(string)$group['kurum_adi'].' · '.$label;
+    return $label;
 }
 
 try{
@@ -40,6 +49,15 @@ if($institutionId>0 && !in_array($institutionId,$institutionIds,true)){
     exit;
 }
 
+$groups=oi_teacher_dashboard_target_groups($pdo,(int)$user['id'],$institutionId,'odev');
+$groupIds=array_map('intval',array_column($groups,'id'));
+$groupId=max(0,(int)($_GET['grup_id']??0));
+if($groupId>0 && !in_array($groupId,$groupIds,true)){
+    http_response_code(403);
+    echo 'Bu sınıf / grup ödev performansı kapsamında değil.';
+    exit;
+}
+
 $publication=(string)($_GET['yayin']??$_GET['durum']??'tum');
 if(!in_array($publication,['tum','aktif','pasif'],true)) $publication='tum';
 
@@ -47,7 +65,7 @@ $delivery=(string)($_GET['teslim']??'tum');
 if(!in_array($delivery,['tum','pending','overdue','completed','no_target'],true)) $delivery='tum';
 
 try{
-    $allHomeworks=thd_teacher_homeworks($pdo,(int)$user['id'],$institutionId,$publication,'tum');
+    $allHomeworks=thd_teacher_homeworks($pdo,(int)$user['id'],$institutionId,$publication,'tum',$groupId);
 }catch(Throwable){
     http_response_code(503);
     echo 'Ödevler şu anda okunamıyor.';
@@ -80,7 +98,7 @@ function oo_state_icon(string $state): string {
 <title>Ödevlerim — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="ogretmen.css?v=1.0.42">
-<link rel="stylesheet" href="ogretmen-odevleri.css?v=1.2.23">
+<link rel="stylesheet" href="ogretmen-odevleri.css?v=1.2.31">
 </head>
 <body class="role-page">
 <div class="role-shell">
@@ -111,13 +129,21 @@ function oo_state_icon(string $state): string {
 </section>
 
 <section class="role-section">
-<div class="role-section-head"><div><span class="eyeline">FİLTRELER</span><h2>Kurum, Yayın ve Teslim</h2></div></div>
+<div class="role-section-head"><div><span class="eyeline">FİLTRELER</span><h2>Kurum, Sınıf/Grup, Yayın ve Teslim</h2></div></div>
 <form method="get" class="role-form teacher-homework-dashboard-filter">
 <label for="kurum">Kurum</label>
 <select class="role-input" name="kurum_id" id="kurum">
 <option value="0">Tüm kurumlarım</option>
 <?php foreach($institutions as $institution):?>
 <option value="<?=(int)$institution['id']?>" <?=((int)$institution['id']===$institutionId?'selected':'')?>><?=oo_h((string)$institution['ad'])?></option>
+<?php endforeach;?>
+</select>
+
+<label for="grup">Sınıf / grup</label>
+<select class="role-input" name="grup_id" id="grup">
+<option value="0">Tüm sınıf / grup hedefleri</option>
+<?php foreach($groups as $group):?>
+<option value="<?=(int)$group['id']?>" <?=((int)$group['id']===$groupId?'selected':'')?>><?=oo_h(oo_group_label($group,$institutionId===0))?></option>
 <?php endforeach;?>
 </select>
 
@@ -152,7 +178,7 @@ function oo_state_icon(string $state): string {
     $overdue=(int)$homework['geciken_sayisi'];
     $pending=(int)$homework['bekleyen_sayisi'];
 ?>
-<a class="teacher-homework-dashboard-card <?=$state?>" href="ogretmen-odev-detay.php?id=<?=(int)$homework['id']?>">
+<a class="teacher-homework-dashboard-card <?=$state?>" href="ogretmen-odev-detay.php?id=<?=(int)$homework['id']?><?=$groupId>0?'&amp;grup_id='.$groupId:''?>">
 <div class="teacher-homework-dashboard-head">
 <span class="teacher-homework-dashboard-icon"><?=oo_state_icon($state)?></span>
 <div>
