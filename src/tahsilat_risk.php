@@ -395,6 +395,47 @@ function tr_case_row(PDO $pdo,int $contractId,bool $forUpdate=false): ?array {
     return is_array($row)?$row:null;
 }
 
+function tr_case_detail(PDO $pdo,int $contractId): ?array {
+    if(!tr_tables_ready($pdo) || $contractId<=0) return null;
+    $case=tr_case_row($pdo,$contractId,false);
+    if(!$case) return null;
+    $financial=tr_contract_financial_state($pdo,$contractId,false);
+
+    $row=array_merge($case,$financial??[
+        'sozlesme_id'=>$contractId,'kurum_id'=>(int)$case['kurum_id'],'sozlesme_no'=>'—',
+        'paket_id'=>null,'vade_tarihi'=>null,'bitis_tarihi'=>null,'toplam_tutar'=>'0.00',
+        'para_birimi'=>'TRY','sozlesme_durum'=>'kayit_yok','kurum_adi'=>'—','paket_adi'=>'—',
+        'tahsil_edilen'=>'0.00','kalan_tutar'=>'0.00'
+    ]);
+
+    $risk=tr_risk_bucket(($row['vade_tarihi']??null)!==null?(string)$row['vade_tarihi']:null);
+    $row['risk_kodu']=$risk['kod'];
+    $row['risk_etiketi']=$risk['etiket'];
+    $row['risk_seviyesi']=$risk['seviye'];
+    $row['gecikme_gunu']=$risk['gecikme_gunu'];
+    $row['yenileme_id']=null;
+
+    if(auth_runtime_table_exists($pdo,'lisans_yenileme_sozlesmeleri')){
+        $stmt=$pdo->prepare("SELECT yenileme_id
+            FROM lisans_yenileme_sozlesmeleri
+            WHERE sozlesme_id=? AND kurum_id=? LIMIT 1");
+        $stmt->execute([$contractId,(int)$row['kurum_id']]);
+        $renewalId=(int)($stmt->fetchColumn()?:0);
+        $stmt->closeCursor();
+        if($renewalId>0)$row['yenileme_id']=$renewalId;
+    }
+
+    $row['sorumlu_adi']='—';
+    if((int)($case['sorumlu_kullanici_id']??0)>0){
+        $stmt=$pdo->prepare('SELECT ad_soyad FROM kullanicilar WHERE id=? LIMIT 1');
+        $stmt->execute([(int)$case['sorumlu_kullanici_id']]);
+        $row['sorumlu_adi']=(string)($stmt->fetchColumn()?:'—');
+        $stmt->closeCursor();
+    }
+
+    return $row;
+}
+
 function tr_history_rows(PDO $pdo,int $contractId,int $limit=200): array {
     if(!tr_tables_ready($pdo) || $contractId<=0) return [];
     $limit=max(1,min(500,$limit));
