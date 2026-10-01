@@ -34,3 +34,9 @@ Bu sürüm 1.2.2 migration yürütme düzeltmesinin üstünde, legacy Sistem Rol
 - Kuruma bağlı kullanıcıya legacy ek-rol verme yolu kapatıldı; kurum rolleri Kurumlar modülünden yönetilir.
 - `super_admin` rolünü legacy ek-rol ekranından verme yolu kapatıldı.
 - Regression kapsamı bu iş kurallarını da doğrulayacak şekilde genişletildi.
+
+## Rev 4 — regression ileri uyumluluğu
+
+- Tenant schema guard ve tenant matching testlerinin 1.2.2'ye sabit sürüm listeleri 1.2.x ileri uyumlu hale getirildi.
+- update-rebuild sürüm regex'indeki fazla escape düzeltildi.
+- Eski release revision=15 sabiti kaldırıldı; sürüm, release ve managed manifest revision eşitliği doğrulanıyor.
