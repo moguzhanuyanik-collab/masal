@@ -6,6 +6,8 @@ require __DIR__.'/src/auth.php';
 require __DIR__.'/src/kurum_lisanslari.php';
 require __DIR__.'/src/ticari_finans.php';
 require __DIR__.'/src/tahsilat_risk.php';
+require __DIR__.'/src/bildirimler.php';
+require __DIR__.'/src/tahsilat_hatirlatma.php';
 
 $user=require_role('super_admin');
 $pdo=db();
@@ -59,6 +61,19 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             exit;
         }
 
+        if($action==='notify'){
+            tr_sync_cases($pdo,$user);
+            if(!th_tables_ready($pdo)) throw new RuntimeException('Tahsilat hatırlatma migrationı henüz kurulmamış.');
+            $notify=th_sync_manager_reminders($pdo,$user);
+            header('Location: tahsilat-risk.php?ok='.rawurlencode(
+                'Yönetici tahsilat hatırlatmaları senkronize edildi. Gönderilen: '.(int)$notify['sent']
+                .' · Daha önce gönderilen/uygun olmayan: '.(int)$notify['skipped']
+                .' · Yöneticisi olmayan kurum: '.(int)$notify['no_recipient']
+                .' · Hata: '.(int)$notify['failed']
+            ));
+            exit;
+        }
+
         tr_sync_cases($pdo,$user);
         $contractId=max(0,(int)($_POST['sozlesme_id']??0));
 
@@ -96,10 +111,14 @@ $filters=[
 $summary=$ready?tr_summary($pdo):[];
 $exposure=$ready?tr_currency_exposure($pdo):[];
 $rows=$ready?tr_queue_rows($pdo,$filters,500):[];
+$reminderReady=$ready&&th_tables_ready($pdo);
+$reminderSummary=$reminderReady?th_summary($pdo):[];
+$reminderRows=$reminderReady?th_history_rows($pdo,120):[];
 
 $selectedId=max(0,(int)($_GET['sozlesme_id']??0));
 $selected=$selectedId>0&&$ready?tr_case_detail($pdo,$selectedId):null;
 $history=$selected?tr_history_rows($pdo,$selectedId):[];
+$selectedReminders=$selected&&$reminderReady?th_contract_history($pdo,$selectedId):[];
 ?>
 <!doctype html>
 <html lang="tr">
@@ -109,7 +128,7 @@ $history=$selected?tr_history_rows($pdo,$selectedId):[];
 <title>Tahsilat Risk Merkezi — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
-<link rel="stylesheet" href="tahsilat-risk.css?v=1.2.50">
+<link rel="stylesheet" href="tahsilat-risk.css?v=1.2.51">
 </head>
 <body class="role-page sa-subpage">
 <?php require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -158,10 +177,42 @@ $history=$selected?tr_history_rows($pdo,$selectedId):[];
 <input type="hidden" name="action" value="sync">
 <button class="role-button" type="submit">Risk Kuyruğunu Senkronize Et</button>
 </form>
+<?php if($reminderReady):?>
+<form method="post">
+<input type="hidden" name="csrf" value="<?=trh(csrf_token())?>">
+<input type="hidden" name="action" value="notify">
+<button class="role-button tr-notify-button" type="submit">Yönetici Hatırlatmalarını Senkronize Et</button>
+</form>
+<?php endif;?>
 <a class="role-pill" href="ticari-finans.php">Ticari Finans →</a>
 </div>
-<div class="role-note"><span>ℹ️</span><p>Finansal bakiye bu modülde kopyalanmaz. Açık bakiye ve sözleşme durumu her görüntülemede Ticari Finans tablolarından okunur. Senkronizasyon yalnız operasyonel takip vakasını açar, yeniden açar veya finansal risk çözülmüşse otomatik kapatır.</p></div>
+<div class="role-note"><span>ℹ️</span><p>Finansal bakiye bu modülde kopyalanmaz. Açık bakiye ve sözleşme durumu her görüntülemede Ticari Finans tablolarından okunur. Risk senkronizasyonu operasyonel vakaları yönetir; yönetici hatırlatmaları ise ayrı, CSRF korumalı işlemle yalnız eksik eşik bildirimlerini gönderir.</p></div>
 </section>
+
+<?php if($reminderReady):?>
+<section class="role-section">
+<div class="role-section-head"><div><span class="eyeline">YÖNETİCİ HATIRLATMALARI</span><h2>Gönderim Geçmişi & Eşikler</h2></div><span class="role-pill"><?=(int)($reminderSummary['toplam']??0)?> gönderim</span></div>
+<div class="tr-reminder-summary">
+<div><strong><?=(int)($reminderSummary['vade_7']??0)?></strong><span>≤7 gün vade</span></div>
+<div><strong><?=(int)($reminderSummary['vade_0']??0)?></strong><span>Vade / ilk gecikme</span></div>
+<div><strong><?=(int)($reminderSummary['gecikme_7']??0)?></strong><span>7+ gün</span></div>
+<div><strong><?=(int)($reminderSummary['gecikme_15']??0)?></strong><span>15+ gün</span></div>
+<div><strong><?=(int)($reminderSummary['gecikme_30']??0)?></strong><span>30+ gün</span></div>
+</div>
+<div class="role-note"><span>🔔</span><p>Aynı sözleşme, aynı vade dönemi ve aynı eşik ikinci kez gönderilmez. Vade tarihi değişirse yeni dönem ayrı takip edilir. Hatırlatmalar yalnız aktif kurum yöneticilerine gider; manuel duyuru hedef seçenekleri değişmez.</p></div>
+<div class="tr-reminder-history">
+<?php if(!$reminderRows):?><div class="role-empty">Henüz tahsilat hatırlatması gönderilmedi.</div><?php endif;?>
+<?php foreach(array_slice($reminderRows,0,20) as $reminder):?>
+<a href="tahsilat-risk.php?sozlesme_id=<?=(int)$reminder['sozlesme_id']?>">
+<div><strong><?=trh((string)($reminder['kurum_adi']?:'Kurum'))?> · <?=trh((string)($reminder['sozlesme_no']?:'#'.$reminder['sozlesme_id']))?></strong><span><?=trh(date('d.m.Y H:i',strtotime((string)$reminder['olusturulma_tarihi'])))?></span></div>
+<small><?=trh((string)$reminder['esik_kodu'])?> · Vade <?=trh((string)$reminder['vade_tarihi'])?> · <?=trm($reminder['acik_tutar'])?> <?=trh((string)$reminder['para_birimi'])?> · <?=(int)$reminder['alici_sayisi']?> yönetici</small>
+</a>
+<?php endforeach;?>
+</div>
+</section>
+<?php else:?>
+<div class="role-note"><span>ℹ️</span><p>Yönetici tahsilat hatırlatmaları 083 migration kurulduğunda açılır.</p></div>
+<?php endif;?>
 
 <?php if($exposure):?>
 <section class="role-section">
@@ -291,6 +342,19 @@ $isOpen=in_array($stage,tr_open_stages(),true);
 </form>
 <?php else:?>
 <div class="role-note"><span>✅</span><p>Bu takip vakası finansal risk çözüldüğü için kapalıdır. Geçmiş kayıtlar korunur. Sözleşme tekrar risk penceresine girerse senkronizasyonda aynı vaka yeniden açılır.</p></div>
+<?php endif;?>
+
+<?php if($reminderReady):?>
+<div class="tr-contract-reminders">
+<h3>Yönetici Hatırlatma Geçmişi</h3>
+<?php if(!$selectedReminders):?><div class="role-empty">Bu sözleşme için henüz yönetici hatırlatması gönderilmedi.</div><?php endif;?>
+<?php foreach($selectedReminders as $reminder):?>
+<article>
+<div><strong><?=trh((string)$reminder['esik_kodu'])?></strong><span><?=trh(date('d.m.Y H:i',strtotime((string)$reminder['olusturulma_tarihi'])))?></span></div>
+<small>Vade <?=trh((string)$reminder['vade_tarihi'])?> · Açık tutar snapshot <?=trm($reminder['acik_tutar'])?> <?=trh((string)$reminder['para_birimi'])?> · <?=(int)$reminder['alici_sayisi']?> alıcı · <?=trh((string)$reminder['gonderen_adi'])?></small>
+</article>
+<?php endforeach;?>
+</div>
 <?php endif;?>
 
 <div class="tr-history">
