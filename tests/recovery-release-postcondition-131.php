@@ -80,7 +80,7 @@ $pdo->exec("INSERT INTO sistem_migrations(migration) VALUES
 
 $root=dirname(__DIR__);
 $remote=[
-    'version'=>'1.2.4',
+    'version'=>'1.2.5',
     'release_revision'=>1,
     'name'=>'direct recovery test',
 ];
