@@ -54,3 +54,11 @@ Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına 
 - DB migration başlamadan önce doğrulanmış mysqldump yedeği zorunlu.
 - 1.1.99+ / 1.2.1 temiz recovery davranışı değiştirilmiyor; veritabanı geriye alınmıyor.
 - Sürüm ankrajı 1.2.1 rev8 olarak güncellendi.
+
+## Rev 9 — 064 checkpoint bütünlük onarımı
+
+- 1.1.97 legacy recovery sırasında `sistem_migrations` içinde 064 kaydı bulunup `adimbot_rate_limitleri` tablosu eksikse recovery'nin sessizce atlaması düzeltildi.
+- Eksik tablo yalnız `CREATE TABLE IF NOT EXISTS` ile idempotent biçimde yeniden oluşturuluyor; mevcut kullanıcı/kurum/öğrenci/veli/öğretmen verilerine dokunulmuyor.
+- Tablo yeniden oluşturulamazsa süreç fail-closed duruyor.
+- Gerçek MariaDB regression testi eklendi: 064 kaydı eksik → oluşturma, tablo sonradan kaybolmuş → yeniden oluşturma ve migration kaydının tekil kalması doğrulanıyor.
+- Sürüm 1.2.1 rev9 olarak yeniden ankrajlandı.
