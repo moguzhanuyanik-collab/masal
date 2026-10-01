@@ -54,11 +54,12 @@ $hasInstitution=$institutionId>0 && is_array($institution);
 <?php if($hasInstitution && $canManageParents):?><a class="role-module" href="kurum-velileri.php?kurum_id=<?=$institutionId?>"><span>👪</span><div><strong>Veliler</strong><small>Kurum velilerini görüntüle ve ekle.</small></div><b>→</b></a><?php endif;?>
 <?php if($hasInstitution && $canManageStudents):?><a class="role-module" href="kurum-ogrencileri.php?kurum_id=<?=$institutionId?>"><span>🎒</span><div><strong>Öğrenciler</strong><small>Kurum öğrencilerini görüntüle ve ekle.</small></div><b>→</b></a><?php endif;?>
 <?php if($hasInstitution && $canView && $canManageStudents && $canManageParents && $canManageTeachers):?><a class="role-module" href="kurum-eslestirmeleri.php?kurum_id=<?=$institutionId?>"><span>🔗</span><div><strong>Eşleştirmeler</strong><small>Öğrencilere veli ve öğretmen bağla.</small></div><b>→</b></a><?php endif;?>
+<?php if($hasInstitution && $canView):?><a class="role-module" href="kurum-icerikleri.php?kurum_id=<?=$institutionId?>"><span>📚</span><div><strong>Kurum İçerikleri</strong><small>Öğretmenlerin yayınladığı içerik ve ödevleri kurum seviyesinde izle.</small></div><b>→</b></a><?php endif;?>
 <?php if($hasInstitution && $canView):?><a class="role-module" href="kurum-raporlari.php?kurum_id=<?=$institutionId?>"><span>📊</span><div><strong>Kurum Raporları</strong><small>Sınıf ve tarihe göre yanıtları incele.</small></div><b>→</b></a><?php endif;?>
 <a class="role-module" href="hesap-guvenligi.php"><span>🔐</span><div><strong>Hesap Güvenliği</strong><small>E-posta ve şifre ayarlarını düzenle.</small></div><b>→</b></a>
 </div></section>
 
-<div class="role-note"><span>💡</span><p><?=($institution['icerik_kaynagi']??'sistem')==='sistem'?'Bu kurum İlkAdım sistem içeriklerini kullanır. Doğrudan/okulsuz öğrenciler için uygundur.':'Bu kurumun özel içerik kaynağı daha sonra öğretmen içerikleriyle etkinleştirilecek.'?></p></div>
+<div class="role-note"><span>💡</span><p><?=($institution['icerik_kaynagi']??'sistem')==='sistem'?'Bu kurum İlkAdım sistem içeriklerini kullanır. Öğretmenlerin özel yayınları Kurum İçerikleri bölümünden ayrıca izlenebilir.':'Bu kurumun öğretmen yayınları Kurum İçerikleri bölümünde kurum bazında izlenebilir; öğrenciler aktif yayınları Öğretmenim alanında görür.'?></p></div>
 </main>
 <nav class="role-bottom"><a class="active" href="yonetici-paneli.php?kurum_id=<?=$institutionId?>"><span>⌂</span>Panel</a><?php if($canView && $hasInstitution):?><a href="kurum-detay.php?kurum_id=<?=$institutionId?>"><span>👥</span>Kullanıcılar</a><?php endif;?><a href="hesap-guvenligi.php"><span>⚙️</span>Hesap</a><a href="logout.php"><span>🚪</span>Çıkış</a></nav>
 </div></body></html>

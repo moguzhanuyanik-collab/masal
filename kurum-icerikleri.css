@@ -1,0 +1,15 @@
+.institution-content-shell{display:grid;gap:2px}
+.content-stats .role-stat{min-height:104px}
+.content-filter{grid-template-columns:1fr;align-items:end}
+.institution-content-list{display:grid;gap:11px}
+.institution-content-card{padding:15px;border:1px solid var(--role-line);border-radius:18px;background:#fff;box-shadow:0 8px 22px #4b35620a}
+.institution-content-head{display:flex;align-items:flex-start;gap:11px}
+.institution-content-icon{display:grid;place-items:center;width:44px;height:44px;flex:0 0 auto;border-radius:13px;background:var(--role-soft);font-size:22px}
+.institution-content-head>div{min-width:0;flex:1}
+.institution-content-badges{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px}
+.institution-content-card h3{margin:0;font-size:12px;font-weight:1000;line-height:1.35}
+.institution-content-card small{display:block;margin-top:4px;color:var(--role-muted);font-size:9px;line-height:1.45}
+.institution-content-preview{margin:11px 0 0;padding:11px 12px;border-radius:13px;background:#fbf9fd;color:#675f70;font-size:10px;line-height:1.55}
+.institution-content-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.institution-content-meta span{display:inline-flex;padding:6px 8px;border-radius:999px;background:#f6f3f9;color:#766c80;font-size:8px;font-weight:850}
+@media(min-width:520px){.content-filter{grid-template-columns:1fr 1fr}.content-filter button{grid-column:1/-1}}

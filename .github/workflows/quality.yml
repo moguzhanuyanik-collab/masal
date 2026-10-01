@@ -111,6 +111,7 @@ jobs:
           node tests/global-scope-integrity-129.cjs
           node tests/manual-update-upload-131.cjs
           node tests/homework-completion-132.cjs
+          node tests/institution-content-center-133.cjs
 
   tenant-db-integration:
     name: Tenant DB integration
