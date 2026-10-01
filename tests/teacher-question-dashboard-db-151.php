@@ -159,7 +159,7 @@ ok_151(count($passive)===1 && (int)$passive[0]['id']===705,'pasif filtre yalnız
 $wrong=tsd_filter_questions($rows,'wrong');
 ok_151(count($wrong)===1 && (int)$wrong[0]['id']===701,'wrong filtresi yalnız Karışık Sonuç olmalı.');
 $allCorrect=tsd_filter_questions($rows,'all_correct');
-ok_151(count($allCorrect)===2,'all_correct filtresi Tümü Doğru ve cevaplanmış Pasif Soru yu içermeli.');
+ok_151(count($allCorrect)===1 && (int)$allCorrect[0]['id']===703,'all_correct filtresi yalnız tüm hedefleri doğru tamamlayan soruyu getirmeli.');
 $noTarget=tsd_filter_questions($rows,'no_target');
 ok_151(count($noTarget)===1 && (int)$noTarget[0]['id']===704,'no_target filtresi yalnız Hedefsiz olmalı.');
 
@@ -172,6 +172,8 @@ ok_151($summary['correct']===4,'toplam doğru 4 olmalı.');
 ok_151($summary['wrong']===1,'toplam yanlış 1 olmalı.');
 ok_151($summary['waiting']===2,'toplam bekleyen 2 olmalı.');
 ok_151($summary['reward_stars']===9,'Okul A dağıtılan toplam yıldız 9 olmalı.');
+ok_151($summary['answer_rate']===71,'toplam cevaplanma oranı yüzde 71 olmalı.');
+ok_151($summary['accuracy']===80,'toplam doğruluk oranı yüzde 80 olmalı.');
 
 $schoolB=tsd_teacher_questions($pdo,3001,20,'tum');
 ok_151(count($schoolB)===1 && (int)$schoolB[0]['id']===801,'Okul B ayrı tenant kapsamında tek soru getirmeli.');
