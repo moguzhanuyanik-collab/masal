@@ -36,7 +36,7 @@ function bd_validate_date(string $value): ?string {
 }
 
 function bd_manageable_institutions(PDO $pdo,array $actor): array {
-    $ids=auth_manageable_institution_ids($pdo,$actor);
+    $ids=auth_operational_manageable_institution_ids($pdo,$actor);
     if(!$ids) return [];
     $ph=implode(',',array_fill(0,count($ids),'?'));
     $stmt=$pdo->prepare("SELECT id,ad,kod FROM kurumlar WHERE aktif=1 AND id IN ($ph) ORDER BY ad,id");
@@ -48,7 +48,7 @@ function bd_manageable_institutions(PDO $pdo,array $actor): array {
 
 function bd_assert_manageable(PDO $pdo,array $actor,int $institutionId): void {
     if($institutionId<=0) throw new RuntimeException('Kurum seç.');
-    if(!in_array($institutionId,auth_manageable_institution_ids($pdo,$actor),true)){
+    if(!in_array($institutionId,auth_operational_manageable_institution_ids($pdo,$actor),true)){
         throw new RuntimeException('Bu kurum için duyuru gönderme yetkin yok.');
     }
 }
