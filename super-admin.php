@@ -64,6 +64,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
   <a class="active" href="super-admin.php"><svg><use href="#sa-home"/></svg>Genel Bakış</a>
   <a href="kurumlar.php"><svg><use href="#sa-building"/></svg>Kurum Yönetimi</a>
   <a href="paketler.php"><svg><use href="#sa-database"/></svg>Paket & Lisanslar</a>
+  <a href="demo-satis.php"><svg><use href="#sa-chart"/></svg>Demo & Satış</a>
   <a href="ticari-finans.php"><svg><use href="#sa-chart"/></svg>Ticari Finans</a>
   <a href="bildirimler.php"><svg><use href="#sa-users"/></svg>Bildirim & Duyurular</a>
   <a href="destek.php"><svg><use href="#sa-users"/></svg>Destek Merkezi</a>
@@ -153,6 +154,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
    <div class="sa-section-title"><div><small>SİSTEM</small><h2>Durum</h2></div><a class="sa-update-link" href="guncelleme.php"><svg><use href="#sa-refresh"/></svg>Sistemi Güncelle</a></div>
    <div class="sa-menu-grid">
     <a href="paketler.php"><span class="sa-menu-icon"><svg><use href="#sa-database"/></svg></span><span><strong>Paket & Lisanslar</strong><small>Kurum planları, kapasite limitleri ve lisans tarihleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="demo-satis.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Demo & Satış</strong><small>Deneme kurumları, bitiş radarı, satış notları ve ücretliye dönüşüm</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="ticari-finans.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Ticari Finans</strong><small>Sözleşmeler, tahsilatlar, vadeler ve lisans yenilemeleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="bildirimler.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Bildirim & Duyurular</strong><small>Kurum duyuruları, sistem bildirimleri ve okunma takibi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="destek.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Destek Merkezi</strong><small>Kurum talepleri, öncelikler, yanıt geçmişi ve durum yönetimi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
