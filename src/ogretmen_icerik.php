@@ -4,6 +4,18 @@ declare(strict_types=1);
 function oi_h(string $value): string {
     return htmlspecialchars($value,ENT_QUOTES,'UTF-8');
 }
+function oi_table_exists(PDO $pdo,string $table): bool {
+    if(!preg_match('/^[A-Za-z0-9_]+$/',$table)) return false;
+    try{
+        $s=$pdo->prepare('SHOW TABLES LIKE ?');
+        $s->execute([$table]);
+        $exists=(bool)$s->fetchColumn();
+        $s->closeCursor();
+        return $exists;
+    }catch(Throwable){
+        return false;
+    }
+}
 
 function oi_teacher_profile(PDO $pdo,int $userId): ?array {
     if($userId<=0) return null;
@@ -651,10 +663,17 @@ function oi_teacher_content_detail(PDO $pdo,array $user,int $contentId): ?array 
     $institutionId=(int)$content['kurum_id'];
     if(!oi_teacher_can_use_institution($pdo,(int)$user['id'],$institutionId)) return null;
 
+    $rewardSelect=oi_table_exists($pdo,'ogretmen_icerik_yildiz_odulleri')
+        ?'yr.yildiz_degeri kazanilan_yildiz'
+        :'NULL kazanilan_yildiz';
+    $rewardJoin=oi_table_exists($pdo,'ogretmen_icerik_yildiz_odulleri')
+        ?" LEFT JOIN ogretmen_icerik_yildiz_odulleri yr ON yr.icerik_id=oi.id AND yr.ogrenci_id=o.id "
+        :'';
+
     $s=$pdo->prepare("SELECT DISTINCT o.id,o.ad,o.email,o.sinif_seviyesi,
       c.secilen_cevap_indeksi,c.dogru cevap_dogru,c.deneme_sayisi,
       c.cevap_tarihi,c.guncellenme_tarihi cevap_guncellenme_tarihi,
-      yr.yildiz_degeri kazanilan_yildiz,
+      {$rewardSelect},
       COALESCE(od.tamamlandi,0) odev_tamamlandi,
       od.tamamlanma_tarihi odev_tamamlanma_tarihi
       FROM ogretmen_icerikleri oi
@@ -681,9 +700,7 @@ function oi_teacher_content_detail(PDO $pdo,array $user,int $contentId): ?array 
       LEFT JOIN ogrenci_odev_durumlari od
         ON od.icerik_id=oi.id
        AND od.ogrenci_id=o.id
-      LEFT JOIN ogretmen_icerik_yildiz_odulleri yr
-        ON yr.icerik_id=oi.id
-       AND yr.ogrenci_id=o.id
+      {$rewardJoin}
       WHERE oi.id=?
         AND oi.ogretmen_id=?
         AND (oi.hedef_turu='tum_ogrenciler' OR h.ogrenci_id IS NOT NULL)
