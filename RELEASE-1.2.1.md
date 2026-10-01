@@ -133,3 +133,10 @@ Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına 
 
 - 1.2.1 full recovery regression testi, eski doğrudan main HEAD beklentisinden sıralı updater sözleşmesine geçirildi.
 - Tüm ana regression kapıları aynı 1.2.1 rev19 release identity altında hizalandı.
+
+
+## Rev 20 — full recovery regression düzeltmesi
+
+- `rebuild-release-121.cjs` içindeki eski doğrudan main HEAD beklentisi kaldırıldı.
+- Regression artık gerçek sıralı updater seçim fonksiyonunu doğruluyor.
+- Release metadata rev20 olarak yeniden hizalandı.
