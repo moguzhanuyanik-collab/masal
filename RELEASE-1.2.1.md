@@ -70,3 +70,12 @@ Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına 
 - DB mutation sınırı recovery manifestine açıkça yazılıyor ve hata durumunda yanlışlıkla "database mutation olmadı" raporlanması engelleniyor.
 - Gerçek MariaDB regression testi bozuk primary key ve eksik tenant index senaryolarının fail-closed yakalandığını doğruluyor.
 - Sürüm ankrajı 1.2.1 rev10 olarak güncellendi.
+
+
+## Rev 11 — sequential rebuild integrity
+
+- 1.1.97 tabanından 1.2.1'e kadar olan kayıp sürüm zinciri GitHub commit geçmişinde yeniden lineer olarak oluşturuldu.
+- Sıra: 1.1.97 → 1.1.98 → 1.1.99 → 1.1.100 → 1.1.101 → 1.1.102 → 1.1.103 → 1.1.104 → 1.1.105 → 1.1.106 → 1.1.107 → 1.1.108 → 1.1.109 → 1.1.110 → 1.1.111 → 1.1.112 → 1.1.113 → 1.1.114 → 1.1.115 → 1.1.116 → 1.1.117 → 1.1.119 → 1.2.1.
+- Güncelleme motorunun tarihsel commit taraması bu lineer zincirde her seferinde bir sonraki sürümü bulabilecek şekilde korunuyor.
+- Quality Gate artık tam Git geçmişiyle zincir sözleşmesini doğruluyor.
+- Production veritabanına rollback/değişiklik yapılmadı.

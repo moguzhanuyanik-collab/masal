@@ -25,7 +25,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: PHP syntax
         shell: bash
@@ -103,6 +103,7 @@ jobs:
           node tests/update-recovery-119.cjs
           node tests/rebuild-release-121.cjs
           node tests/update-legacy-db-recovery-123.cjs
+          node tests/update-chain-rebuild-126.cjs
 
   tenant-db-integration:
     name: Tenant DB integration

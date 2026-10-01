@@ -458,6 +458,7 @@
     "tests/update-198-rescue-110.php",
     "tests/update-activation-104.cjs",
     "tests/update-activation-104.php",
+    "tests/update-chain-rebuild-126.cjs",
     "tests/update-continuity-112.cjs",
     "tests/update-continuity-112.php",
     "tests/update-core-handoff-108.cjs",
@@ -505,5 +506,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 10
+  "release_revision": 11
 }
