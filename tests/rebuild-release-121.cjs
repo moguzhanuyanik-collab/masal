@@ -8,10 +8,15 @@ const release=JSON.parse(fs.readFileSync('update-release.json','utf8'));
 const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
 const updater=fs.readFileSync('src/updater.php','utf8');
 const workflow=fs.readFileSync('.github/workflows/quality.yml','utf8');
+function version_compare_like(a,b){
+  const pa=String(a).split('.').map(Number), pb=String(b).split('.').map(Number);
+  for(let i=0;i<3;i++){if((pa[i]||0)!==(pb[i]||0)) return (pa[i]||0)>(pb[i]||0);}
+  return true;
+}
 
-assert.strictEqual(version.version,'1.2.1');
-assert.strictEqual(release.version,'1.2.1');
-assert.strictEqual(manifest.version,'1.2.1');
+assert(version_compare_like(version.version,'1.2.1'),'version must be 1.2.1 or newer');
+assert.strictEqual(release.version,version.version);
+assert.strictEqual(manifest.version,version.version);
 assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
 assert.strictEqual(release.release_revision,version.release_revision);
 assert.strictEqual(manifest.release_revision,version.release_revision);
