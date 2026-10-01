@@ -40,3 +40,8 @@ Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına 
 
 - 1.1.119 ana dalından taşınan `tests/update-rebuild-122.cjs` kalite ağacına dahil edildi.
 - Managed-file manifest, sürüm ve release ankrajı aynı committe 1.2.1 rev2 olarak eşitlendi.
+
+## Rev 3 — regression gate continuity
+
+- Tarihsel recovery testleri 1.2.1 release revision artışlarında kırılmayacak şekilde release identity üzerinden doğrulanıyor.
+- 1.1.110 rescue regression'ındaki tanımsız version referansı düzeltildi.
