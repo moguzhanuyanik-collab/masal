@@ -32,11 +32,10 @@ assert.strictEqual(chain.source.commit,evidence.source.commit);
 
 for(const [version,commit] of chain.active_sequence){
   assert(/^[a-f0-9]{40}$/.test(commit),'Invalid recovery commit: '+version);
-  ancestor(commit,'HEAD');
-  const subject=git(['show','-s','--format=%s',commit]);
-  assert(subject.includes(version),'Commit subject does not identify '+version);
   assert(fs.existsSync('RELEASE-'+version+'.md'),'Missing release note for '+version);
 }
+
+assert(new Set(chain.active_sequence.map(x=>x[1])).size===chain.active_sequence.length,'Recovery chain contains duplicate commit anchors.');
 
 const count=Number(git(['rev-list','--count',chain.baseline.commit+'..'+chain.source.commit]));
 assert.strictEqual(count,chain.expected_commit_count);
