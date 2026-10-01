@@ -540,6 +540,20 @@ if (!function_exists('auth_manageable_institution_ids')) {
     }
 }
 
+if (!function_exists('auth_operational_manageable_institution_ids')) {
+    function auth_operational_manageable_institution_ids(PDO $pdo, array $user): array {
+        $ids=auth_manageable_institution_ids($pdo,$user);
+        if(!$ids || auth_user_has_role($user,'super_admin')) return $ids;
+        if(auth_effective_role($user)!=='yonetici') return [];
+        $allowed=[];
+        foreach($ids as $institutionId){
+            $access=auth_institution_license_access($pdo,$institutionId);
+            if(($access['allowed']??false)===true) $allowed[]=$institutionId;
+        }
+        return $allowed;
+    }
+}
+
 if (!function_exists('auth_institution_content_source')) {
     function auth_institution_content_source(PDO $pdo, int $institutionId): string {
         if ($institutionId<=0 || !auth_runtime_table_exists($pdo,'kurumlar')) return 'sistem';
