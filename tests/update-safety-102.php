@@ -18,9 +18,9 @@ $zip->close();
 $zip=new ZipArchive();
 check102($zip->open($okZip)===true,'Cannot open safe ZIP.');
 $stats=assert_update_zip_safe($zip,[
-    'max_package_entries'=>10,
-    'max_package_uncompressed_bytes'=>1024*1024,
-    'max_package_file_bytes'=>64*1024,
+    'max_package_entries'=>200,
+    'max_package_uncompressed_bytes'=>16*1024*1024,
+    'max_package_file_bytes'=>1024*1024,
     'max_package_compression_ratio'=>1000,
 ]);
 check102($stats['entries']===101,'ZIP entry count mismatch.');
