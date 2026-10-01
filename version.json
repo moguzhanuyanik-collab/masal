@@ -1,5 +1,5 @@
 {
-  "version": "1.1.115",
-  "name": "Kurum eşleştirme şema guard ve fail-closed tenant doğrulaması",
+  "version": "1.1.116",
+  "name": "Updater tenant şema güvenlik uyumluluğu ve migration 065 düzeltmesi",
   "release_revision": 1
 }
