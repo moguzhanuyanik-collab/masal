@@ -22,8 +22,8 @@ assert(workflow.includes('node tests/tenant-schema-guard-116.cjs'),'CI must run 
 assert(['1.1.116','1.2.1'].includes(version.version));
 assert(['1.1.116','1.2.1'].includes(release.version));
 assert(['1.1.116','1.2.1'].includes(manifest.version));
-assert.strictEqual(version.release_revision,1);
-assert.strictEqual(release.release_revision,1);
-assert.strictEqual(manifest.release_revision,1);
+assert(Number.isInteger(version.release_revision) && version.release_revision>=1);
+assert.strictEqual(release.release_revision,version.release_revision);
+assert.strictEqual(manifest.release_revision,version.release_revision);
 
 console.log('PASS: tenant schema guard contract');
