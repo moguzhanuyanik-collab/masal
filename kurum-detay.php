@@ -73,7 +73,7 @@ $isSuper=auth_user_has_role($user,'super_admin');
 <div class="role-section-head"><div><span class="eyeline">KURUM MODÜLLERİ</span><h2>Dersler, İçerikler ve Raporlar</h2></div></div>
 <div class="role-list">
 <a class="role-row" href="kurum-icerikleri.php?kurum_id=<?=$institutionId?>"><span>📚</span><div><strong>Dersler / İçerikler</strong><small>Öğretmenlerin bu kurum için yayınladığı soru, tekrar, ödev ve notları izle.</small></div><span class="role-pill ok">Aç</span></a>
-<div class="role-row"><span>🏷️</span><div><strong>Sınıflar / Gruplar</strong><small>Kurum sınıf ve grup yapısını daha sonra ekleyeceğiz.</small></div><span class="role-pill off">Sonra</span></div>
+<a class="role-row" href="kurum-siniflari.php?kurum_id=<?=$institutionId?>"><span>🏷️</span><div><strong>Sınıflar / Gruplar</strong><small>Kurum içi sınıfları ve çalışma gruplarını oluştur, öğrencileri güvenli biçimde ata.</small></div><span class="role-pill ok">Aç</span></a>
 <a class="role-row" href="kurum-raporlari.php?kurum_id=<?=$institutionId?>"><span>📊</span><div><strong>Raporlar</strong><small>Sınıf ve tarihe göre öğrenci yanıt özeti.</small></div><span class="role-pill ok">Aç</span></a>
 </div>
 </section>

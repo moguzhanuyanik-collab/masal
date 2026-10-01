@@ -112,6 +112,7 @@ jobs:
           node tests/manual-update-upload-131.cjs
           node tests/homework-completion-132.cjs
           node tests/institution-content-center-133.cjs
+          node tests/institution-classes-groups-134.cjs
 
   tenant-db-integration:
     name: Tenant DB integration
@@ -163,4 +164,5 @@ jobs:
           php tests/legacy-064-integrity-124.php
           php tests/tenant-recovery-postcondition-125.php
           php tests/homework-completion-db-132.php
+          php tests/institution-classes-groups-db-134.php
 
