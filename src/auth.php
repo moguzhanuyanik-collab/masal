@@ -310,10 +310,18 @@ if (!function_exists('auth_user_institution_ids')) {
         if ($userId<=0 || !auth_runtime_table_exists($pdo,'kurum_kullanicilari')) return [];
         try {
             if ($institutionRole!==null) {
-                $stmt=$pdo->prepare('SELECT DISTINCT kurum_id FROM kurum_kullanicilari WHERE kullanici_id=? AND kurum_rolu=? AND aktif=1 ORDER BY kurum_id');
+                $stmt=$pdo->prepare('SELECT DISTINCT kk.kurum_id
+                    FROM kurum_kullanicilari kk
+                    INNER JOIN kurumlar k ON k.id=kk.kurum_id AND k.aktif=1
+                    WHERE kk.kullanici_id=? AND kk.kurum_rolu=? AND kk.aktif=1
+                    ORDER BY kk.kurum_id');
                 $stmt->execute([$userId,$institutionRole]);
             } else {
-                $stmt=$pdo->prepare('SELECT DISTINCT kurum_id FROM kurum_kullanicilari WHERE kullanici_id=? AND aktif=1 ORDER BY kurum_id');
+                $stmt=$pdo->prepare('SELECT DISTINCT kk.kurum_id
+                    FROM kurum_kullanicilari kk
+                    INNER JOIN kurumlar k ON k.id=kk.kurum_id AND k.aktif=1
+                    WHERE kk.kullanici_id=? AND kk.aktif=1
+                    ORDER BY kk.kurum_id');
                 $stmt->execute([$userId]);
             }
             $ids=array_map('intval',$stmt->fetchAll(PDO::FETCH_COLUMN)?:[]);
