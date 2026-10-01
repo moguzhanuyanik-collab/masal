@@ -8,6 +8,8 @@ require __DIR__ . '/src/ogretmen_icerik.php';
 require __DIR__ . '/src/ogrenci_rapor_detay.php';
 require __DIR__ . '/src/ogretmen_ogrenci_listesi.php';
 require __DIR__ . '/src/veli_icerikleri.php';
+require __DIR__ . '/src/yonetici_yetkileri.php';
+require __DIR__ . '/src/kurum_yonetimi.php';
 
 $user=require_login();
 $pdo=db();
@@ -36,28 +38,99 @@ $reportInstitutionName='';
 $reportBack=$roleHome;
 $reportBackLabel='Panelime Dön';
 $parentInstitutionChoices=[];
+$managerInstitutionChoices=[];
 
 $effectiveRole=auth_effective_role($user);
-if($reportInstitutionId>0 && in_array($effectiveRole,['yonetici','super_admin'],true)){
+if($effectiveRole==='yonetici'){
     try{
-        $scope=$pdo->prepare("SELECT k.ad
-            FROM kurum_kullanicilari kk
-            INNER JOIN kurumlar k ON k.id=kk.kurum_id AND k.aktif=1
-            WHERE kk.kurum_id=?
-              AND kk.kullanici_id=?
-              AND kk.kurum_rolu='ogrenci'
-              AND kk.aktif=1
-            LIMIT 1");
-        $scope->execute([$reportInstitutionId,(int)$student['kullanici_id']]);
-        $institutionName=$scope->fetchColumn();
-        $scope->closeCursor();
-        if(is_string($institutionName) && $institutionName!==''){
+        $managerInstitutionChoices=ky_manager_student_report_contexts($pdo,$user,$studentId);
+
+        if($reportInstitutionId>0){
+            $managerContext=ky_manager_student_report_context($pdo,$user,$studentId,$reportInstitutionId);
+            if(!is_array($managerContext)){
+                http_response_code(403);
+                echo 'Bu kurum için öğrenci raporunu görüntüleme yetkiniz yok.';
+                exit;
+            }
             $reportInstitutionScoped=true;
-            $reportInstitutionName=$institutionName;
-            $reportBack='kurum-raporlari.php?kurum_id='.$reportInstitutionId;
-            $reportBackLabel='Kurum Raporuna Dön';
+            $reportInstitutionName=(string)$managerContext['institution_name'];
+            $reportBack=(string)$managerContext['back'];
+            $reportBackLabel=(string)$managerContext['back_label'];
+        }elseif(count($managerInstitutionChoices)===1){
+            $reportInstitutionId=(int)$managerInstitutionChoices[0]['id'];
+            $managerContext=ky_manager_student_report_context($pdo,$user,$studentId,$reportInstitutionId);
+            if(!is_array($managerContext)){
+                http_response_code(403);
+                echo 'Öğrenci raporu kurum kapsamı doğrulanamadı.';
+                exit;
+            }
+            $reportInstitutionScoped=true;
+            $reportInstitutionName=(string)$managerContext['institution_name'];
+            $reportBack=(string)$managerContext['back'];
+            $reportBackLabel=(string)$managerContext['back_label'];
+        }elseif(count($managerInstitutionChoices)>1){
+            ?><!doctype html>
+            <html lang="tr">
+            <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+            <title>Rapor Kurumu Seç — İlkAdım</title>
+            <link rel="stylesheet" href="styles.css">
+            <link rel="stylesheet" href="kurum.css?v=1.2.20">
+            <link rel="stylesheet" href="ogrenci-raporu.css?v=1.2.20">
+            </head>
+            <body class="role-page">
+            <div class="role-shell">
+            <header class="role-topbar">
+            <a class="role-icon" href="yonetici-paneli.php">←</a>
+            <span class="role-brand"><span>📊</span><span><strong>Öğrenci Raporu</strong><small>KURUM SEÇİMİ</small></span></span>
+            </header>
+            <main class="role-content">
+            <section class="role-hero">
+            <span class="eyeline">YÖNETİCİ RAPORU</span>
+            <h1><?=htmlspecialchars((string)($student['ad']?:$student['email']),ENT_QUOTES,'UTF-8')?></h1>
+            <p>Bu öğrenci birden fazla yönetebildiğin kurumda aktif. Öğretmen içeriklerinin kurumlar arasında karışmaması için rapor kurumunu seç.</p>
+            <span class="role-hero-art">🏫</span>
+            </section>
+            <section class="role-section">
+            <div class="role-section-head"><div><span class="eyeline">YÖNETEBİLDİĞİN KURUMLAR</span><h2>Rapor Kurumu</h2></div></div>
+            <div class="role-list">
+            <?php foreach($managerInstitutionChoices as $choice):?>
+            <a class="role-row" href="ogrenci-raporu.php?id=<?=$studentId?>&amp;kurum_id=<?=(int)$choice['id']?>">
+            <span>🏫</span>
+            <div><strong><?=htmlspecialchars((string)$choice['ad'],ENT_QUOTES,'UTF-8')?></strong><small>Bu kurum kapsamında raporu aç →</small></div>
+            <b>→</b>
+            </a>
+            <?php endforeach;?>
+            </div>
+            </section>
+            </main>
+            </div>
+            </body>
+            </html><?php
+            exit;
+        }else{
+            http_response_code(403);
+            echo 'Bu öğrenci için yönetebildiğiniz aktif bir kurum bulunamadı.';
+            exit;
         }
-    }catch(Throwable){}
+    }catch(Throwable $e){
+        error_log('[IlkAdim][manager-report-context] '.$e->getMessage());
+        http_response_code(503);
+        echo 'Yönetici rapor kapsamı şu anda doğrulanamıyor.';
+        exit;
+    }
+}elseif($effectiveRole==='super_admin' && $reportInstitutionId>0){
+    $managerContext=ky_manager_student_report_context($pdo,$user,$studentId,$reportInstitutionId);
+    if(!is_array($managerContext)){
+        http_response_code(403);
+        echo 'Bu kurum için öğrenci raporunu görüntüleme yetkiniz yok.';
+        exit;
+    }
+    $reportInstitutionScoped=true;
+    $reportInstitutionName=(string)$managerContext['institution_name'];
+    $reportBack=(string)$managerContext['back'];
+    $reportBackLabel=(string)$managerContext['back_label'];
 }elseif($reportInstitutionId>0 && $effectiveRole==='ogretmen'){
     try{
         $teacherContext=tol_teacher_report_context($pdo,(int)$user['id'],$studentId,$reportInstitutionId);
@@ -101,7 +174,7 @@ if($reportInstitutionId>0 && in_array($effectiveRole,['yonetici','super_admin'],
             <title>Rapor Kurumu Seç — İlkAdım</title>
             <link rel="stylesheet" href="styles.css">
             <link rel="stylesheet" href="veli.css?v=1.0.42">
-            <link rel="stylesheet" href="ogrenci-raporu.css?v=1.2.19">
+            <link rel="stylesheet" href="ogrenci-raporu.css?v=1.2.20">
             </head>
             <body class="role-page">
             <div class="role-shell">
@@ -216,7 +289,7 @@ function or_group_label(array $group): string {
 <meta name="theme-color" content="#f8f7fc">
 <title>Öğrenci Raporu — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="ogrenci-raporu.css?v=1.2.19">
+<link rel="stylesheet" href="ogrenci-raporu.css?v=1.2.20">
 </head>
 <body>
 <div class="app-shell">
