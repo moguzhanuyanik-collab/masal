@@ -128,6 +128,7 @@ jobs:
           node tests/commercial-finance-integrity-169.cjs
           node tests/trial-sales-170.cjs
           node tests/package-license-integrity-171.cjs
+          node tests/institution-license-access-172.cjs
           node tests/institution-class-edit-136.cjs
           node tests/institution-reporting-137.cjs
           node tests/institution-report-export-159.cjs
@@ -217,6 +218,7 @@ jobs:
           php tests/commercial-finance-integrity-db-169.php
           php tests/trial-sales-db-170.php
           php tests/package-license-integrity-db-171.php
+          php tests/institution-license-access-db-172.php
           php tests/institution-class-edit-db-136.php
           php tests/institution-reporting-db-137.php
           php tests/teacher-content-edit-copy-db-139.php

@@ -65,7 +65,8 @@ assert(workflow.includes('node tests/package-license-integrity-171.cjs'),
 assert(workflow.includes('php tests/package-license-integrity-db-171.php'),
   'package/license integrity DB regression missing from quality gate');
 
-assert.strictEqual(version.version,'1.2.46');
+assert(version.version.startsWith('1.2.'),'release version must remain in 1.2.x');
+assert(Number(version.version.split('.')[2])>=46,'package/license integrity requires 1.2.46 or newer');
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(manifest.version,version.version);
 

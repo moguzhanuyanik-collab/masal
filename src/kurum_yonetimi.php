@@ -18,11 +18,25 @@ function ky_institution(PDO $pdo,int $institutionId): ?array {
     }
 }
 
+function ky_operational_manageable_ids(PDO $pdo,array $user): array {
+    if(function_exists('auth_operational_manageable_institution_ids')){
+        return auth_operational_manageable_institution_ids($pdo,$user);
+    }
+    return auth_manageable_institution_ids($pdo,$user);
+}
+
 function ky_assert_manageable(PDO $pdo,array $user,int $institutionId): array {
     $institution=ky_institution($pdo,$institutionId);
     if(!$institution) throw new RuntimeException('Kurum bulunamadı.');
     if(auth_user_has_role($user,'super_admin')) return $institution;
-    if(auth_user_has_role($user,'yonetici') && in_array($institutionId,auth_manageable_institution_ids($pdo,$user),true)) return $institution;
+    if(auth_user_has_role($user,'yonetici')
+        && in_array($institutionId,ky_operational_manageable_ids($pdo,$user),true)){
+        return $institution;
+    }
+    if(auth_user_has_role($user,'yonetici')
+        && in_array($institutionId,auth_manageable_institution_ids($pdo,$user),true)){
+        throw new RuntimeException('Kurum lisansı operasyonel kullanıma açık değil.');
+    }
     throw new RuntimeException('Bu kurumu yönetme yetkin yok.');
 }
 

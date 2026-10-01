@@ -20,9 +20,10 @@ assert(domain.includes('function ds_user_reply('),'requester reply flow missing'
 assert(domain.includes('function ds_admin_reply('),'Super Admin reply flow missing');
 assert(domain.includes('function ds_admin_set_status('),'support status management missing');
 assert(domain.includes('function ds_admin_summary('),'support operations summary missing');
-assert(domain.includes("if(!auth_user_in_institution($pdo,(int)$user['id'],$institutionId,$role))") ||
-       domain.includes("!auth_user_in_institution($pdo,(int)$user['id'],$institutionId,$role)"),
-       'ticket creation must enforce institution membership');
+assert(domain.includes('function ds_raw_user_in_institution('),
+       'support raw institution membership guard missing');
+assert(domain.includes("!ds_raw_user_in_institution($pdo,(int)$user['id'],$institutionId,$role)"),
+       'ticket creation must enforce raw institution membership while remaining available during license restriction');
 assert(domain.includes('AND t.acani_kullanici_id=?'),'non-admin ticket detail must be owner scoped');
 assert(domain.includes("if((string)$ticket['durum']==='kapali')"),'closed ticket reply guard missing');
 assert(domain.includes("SET durum='acik',cozum_tarihi=NULL,kapanis_tarihi=NULL"),'requester reply must reopen resolved ticket');

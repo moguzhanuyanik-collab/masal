@@ -22,13 +22,17 @@ assert(auth.includes("INNER JOIN kurum_kullanicilari ks"));
 assert(auth.includes("ks.kurum_id=kt.kurum_id"));
 assert(auth.includes("ks.kurum_rolu='ogrenci'"));
 
-// Veli erişimi de aynı tenant sınırına tabidir.
-assert(auth.includes("FROM kurum_kullanicilari vk"));
+// Veli erişimi de aynı tenant sınırına tabidir. Kuruma bağlı veli için
+// doğrudan ortak kurum join'i ve operasyonel lisans kapsamı zorunludur.
+// Yalnız gerçekten kurumsuz legacy hesapta kurum_id=0 fallback korunur.
+assert(auth.includes("INNER JOIN kurum_kullanicilari vk"));
 assert(auth.includes("vk.kurum_rolu='veli'"));
 assert(auth.includes("sk.kurum_id=vk.kurum_id"));
 assert(auth.includes("sk.kurum_rolu='ogrenci'"));
-assert(auth.includes("NOT EXISTS ("));
-assert(auth.includes("vk0.kurum_rolu='veli'"));
+assert(auth.includes("vo.kurum_id=vk.kurum_id"));
+assert(auth.includes("vk.kurum_id IN ({$ph})"));
+assert(auth.includes("if($rawInstitutionIds){"));
+assert(auth.includes("WHERE vo.kurum_id=0"));
 assert(auth.includes("sk0.kurum_rolu='ogrenci'"));
 
 // Rol panelleri, doğrudan eski eşleştirme tablolarından öğrenci sızdırmamalı.

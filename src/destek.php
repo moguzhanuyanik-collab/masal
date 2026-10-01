@@ -34,13 +34,27 @@ function ds_statuses(): array {
     ];
 }
 
+function ds_raw_institution_ids(PDO $pdo,int $userId,?string $role=null): array {
+    if(function_exists('auth_user_institution_ids_raw')){
+        return auth_user_institution_ids_raw($pdo,$userId,$role);
+    }
+    return auth_user_institution_ids($pdo,$userId,$role);
+}
+
+function ds_raw_user_in_institution(PDO $pdo,int $userId,int $institutionId,?string $role=null): bool {
+    if(function_exists('auth_user_in_institution_raw')){
+        return auth_user_in_institution_raw($pdo,$userId,$institutionId,$role);
+    }
+    return auth_user_in_institution($pdo,$userId,$institutionId,$role);
+}
+
 function ds_user_institutions(PDO $pdo,array $user): array {
     $role=(string)(auth_effective_role($user)??'');
     if(!array_key_exists($role,ds_requester_roles())) return [];
-    $ids=auth_user_institution_ids($pdo,(int)$user['id'],$role);
+    $ids=ds_raw_institution_ids($pdo,(int)$user['id'],$role);
     if(!$ids) return [];
     $ph=implode(',',array_fill(0,count($ids),'?'));
-    $stmt=$pdo->prepare("SELECT id,ad,kod FROM kurumlar WHERE aktif=1 AND id IN ($ph) ORDER BY ad,id");
+    $stmt=$pdo->prepare("SELECT id,ad,kod,aktif FROM kurumlar WHERE id IN ($ph) ORDER BY aktif DESC,ad,id");
     $stmt->execute($ids);
     $rows=$stmt->fetchAll(PDO::FETCH_ASSOC);
     $stmt->closeCursor();
@@ -53,7 +67,7 @@ function ds_create_ticket(PDO $pdo,array $user,array $input): int {
     if(!array_key_exists($role,ds_requester_roles())) throw new RuntimeException('Bu hesap destek talebi açamaz.');
 
     $institutionId=max(0,(int)($input['kurum_id']??0));
-    if($institutionId<=0 || !auth_user_in_institution($pdo,(int)$user['id'],$institutionId,$role)){
+    if($institutionId<=0 || !ds_raw_user_in_institution($pdo,(int)$user['id'],$institutionId,$role)){
         throw new RuntimeException('Destek talebi için yetkili kurum seç.');
     }
 

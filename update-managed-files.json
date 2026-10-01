@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.46",
+  "version": "1.2.47",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -219,6 +219,7 @@
     "RELEASE-1.2.44.md",
     "RELEASE-1.2.45.md",
     "RELEASE-1.2.46.md",
+    "RELEASE-1.2.47.md",
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
@@ -447,6 +448,8 @@
     "kurumlar-ui.js",
     "kurumlar.php",
     "lesson-ui-fix.js",
+    "lisans-erisim.css",
+    "lisans-erisim.php",
     "login.php",
     "logout.php",
     "manifest.webmanifest",
@@ -578,6 +581,8 @@
     "tests/institution-group-performance-157.cjs",
     "tests/institution-group-performance-db-157.php",
     "tests/institution-license-161.cjs",
+    "tests/institution-license-access-172.cjs",
+    "tests/institution-license-access-db-172.php",
     "tests/institution-license-db-161.php",
     "tests/institution-member-crud-135.cjs",
     "tests/institution-member-crud-db-135.php",
@@ -715,5 +720,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Paket ve lisans veri bütünlüğü sertleştirmesi"
+  "name": "Kurum lisans erişim politikası"
 }

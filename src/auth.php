@@ -321,8 +321,8 @@ if (!function_exists('auth_redirect_to_role_home')) {
     }
 }
 
-if (!function_exists('auth_user_institution_ids')) {
-    function auth_user_institution_ids(PDO $pdo, int $userId, ?string $institutionRole=null): array {
+if (!function_exists('auth_user_institution_ids_raw')) {
+    function auth_user_institution_ids_raw(PDO $pdo, int $userId, ?string $institutionRole=null): array {
         if ($userId<=0 || !auth_runtime_table_exists($pdo,'kurum_kullanicilari')) return [];
         try {
             if ($institutionRole!==null) {
@@ -341,8 +341,121 @@ if (!function_exists('auth_user_institution_ids')) {
     }
 }
 
-if (!function_exists('auth_user_in_institution')) {
-    function auth_user_in_institution(PDO $pdo, int $userId, int $institutionId, ?string $institutionRole=null): bool {
+if (!function_exists('auth_institution_license_access')) {
+    function auth_institution_license_access(PDO $pdo, int $institutionId): array {
+        $base=[
+            'institution_id'=>$institutionId,'institution_name'=>'','allowed'=>true,'has_license'=>false,
+            'reason'=>'legacy_unlicensed','status'=>'','package_name'=>'','start'=>null,'end'=>null
+        ];
+        if($institutionId<=0) return array_replace($base,['allowed'=>false,'reason'=>'institution_missing']);
+        if(!auth_runtime_table_exists($pdo,'kurumlar')) {
+            return array_replace($base,['reason'=>'license_policy_unavailable']);
+        }
+
+        try {
+            $stmt=$pdo->prepare('SELECT id,ad,aktif FROM kurumlar WHERE id=? LIMIT 1');
+            $stmt->execute([$institutionId]);
+            $institution=$stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
+            if(!is_array($institution)) return array_replace($base,['allowed'=>false,'reason'=>'institution_missing']);
+            $base['institution_name']=(string)($institution['ad']??'');
+            if((int)($institution['aktif']??0)!==1){
+                return array_replace($base,['allowed'=>false,'reason'=>'institution_inactive']);
+            }
+
+            if(!auth_runtime_table_exists($pdo,'kurum_lisanslari') || !auth_runtime_table_exists($pdo,'paketler')){
+                return array_replace($base,['reason'=>'license_policy_unavailable']);
+            }
+
+            $stmt=$pdo->prepare("SELECT
+                kl.id,kl.paket_id,kl.baslangic_tarihi,kl.bitis_tarihi,kl.durum,
+                p.id paket_var,p.ad paket_adi,p.aktif paket_aktif
+                FROM kurum_lisanslari kl
+                LEFT JOIN paketler p ON p.id=kl.paket_id
+                WHERE kl.kurum_id=?
+                LIMIT 1");
+            $stmt->execute([$institutionId]);
+            $license=$stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
+
+            if(!is_array($license)) return $base;
+
+            $base['has_license']=true;
+            $base['status']=(string)($license['durum']??'');
+            $base['package_name']=(string)($license['paket_adi']??'');
+            $base['start']=$license['baslangic_tarihi']??null;
+            $base['end']=$license['bitis_tarihi']??null;
+
+            if(empty($license['paket_var'])){
+                return array_replace($base,['allowed'=>false,'reason'=>'license_package_missing']);
+            }
+            if((int)($license['paket_aktif']??0)!==1){
+                return array_replace($base,['allowed'=>false,'reason'=>'package_inactive']);
+            }
+
+            $today=date('Y-m-d');
+            $status=(string)($license['durum']??'aktif');
+            $start=(string)($license['baslangic_tarihi']??'');
+            $end=(string)($license['bitis_tarihi']??'');
+
+            if($status==='askida') return array_replace($base,['allowed'=>false,'reason'=>'license_suspended']);
+            if($status==='iptal') return array_replace($base,['allowed'=>false,'reason'=>'license_cancelled']);
+            if($start!=='' && $start>$today) return array_replace($base,['allowed'=>false,'reason'=>'license_not_started']);
+            if($end!=='' && $end<$today) return array_replace($base,['allowed'=>false,'reason'=>'license_expired']);
+            if(!in_array($status,['aktif','deneme'],true)){
+                return array_replace($base,['allowed'=>false,'reason'=>'license_inactive']);
+            }
+            return array_replace($base,['allowed'=>true,'reason'=>'licensed']);
+        } catch (Throwable) {
+            auth_security_log_once('institution_license_access_failed');
+            return array_replace($base,['reason'=>'license_policy_unavailable']);
+        }
+    }
+}
+
+if (!function_exists('auth_license_reason_label')) {
+    function auth_license_reason_label(string $reason): string {
+        return match($reason){
+            'licensed'=>'Lisans aktif',
+            'legacy_unlicensed'=>'Eski / lisans tanımlanmamış kurum',
+            'license_suspended'=>'Lisans askıda',
+            'license_cancelled'=>'Lisans iptal edildi',
+            'license_expired'=>'Lisans süresi doldu',
+            'license_not_started'=>'Lisans henüz başlamadı',
+            'package_inactive'=>'Paket pasif',
+            'license_package_missing'=>'Lisans paket kaydı bulunamıyor',
+            'institution_inactive'=>'Kurum pasif',
+            'institution_missing'=>'Kurum bulunamadı',
+            'license_inactive'=>'Lisans kullanıma açık değil',
+            'license_policy_unavailable'=>'Lisans politikası henüz uygulanamıyor',
+            default=>'Lisans durumu doğrulanamadı',
+        };
+    }
+}
+
+if (!function_exists('auth_user_institution_ids')) {
+    function auth_user_institution_ids(PDO $pdo, int $userId, ?string $institutionRole=null): array {
+        $ids=auth_user_institution_ids_raw($pdo,$userId,$institutionRole);
+        if(!$ids) return [];
+
+        $role=$institutionRole;
+        if($role===null){
+            $user=auth_fetch_user($pdo,$userId);
+            $role=(string)(auth_effective_role($user)??'');
+        }
+        if(!in_array($role,['ogrenci','veli','ogretmen'],true)) return $ids;
+
+        $allowed=[];
+        foreach($ids as $institutionId){
+            $access=auth_institution_license_access($pdo,$institutionId);
+            if(($access['allowed']??false)===true) $allowed[]=$institutionId;
+        }
+        return $allowed;
+    }
+}
+
+if (!function_exists('auth_user_in_institution_raw')) {
+    function auth_user_in_institution_raw(PDO $pdo, int $userId, int $institutionId, ?string $institutionRole=null): bool {
         if ($userId<=0 || $institutionId<=0 || !auth_runtime_table_exists($pdo,'kurum_kullanicilari')) return false;
         try {
             if ($institutionRole!==null) {
@@ -358,6 +471,51 @@ if (!function_exists('auth_user_in_institution')) {
         } catch (Throwable) {
             return false;
         }
+    }
+}
+
+if (!function_exists('auth_user_in_institution')) {
+    function auth_user_in_institution(PDO $pdo, int $userId, int $institutionId, ?string $institutionRole=null): bool {
+        if(!auth_user_in_institution_raw($pdo,$userId,$institutionId,$institutionRole)) return false;
+        $role=$institutionRole;
+        if($role===null){
+            $user=auth_fetch_user($pdo,$userId);
+            $role=(string)(auth_effective_role($user)??'');
+        }
+        if(!in_array($role,['ogrenci','veli','ogretmen'],true)) return true;
+        return (auth_institution_license_access($pdo,$institutionId)['allowed']??false)===true;
+    }
+}
+
+if (!function_exists('auth_operational_access_summary')) {
+    function auth_operational_access_summary(PDO $pdo, array $user): array {
+        $role=(string)(auth_effective_role($user)??'');
+        if(!in_array($role,['ogrenci','veli','ogretmen'],true)){
+            return ['restricted'=>false,'allowed'=>true,'role'=>$role,'raw_ids'=>[],'allowed_ids'=>[],'institutions'=>[]];
+        }
+
+        $raw=auth_user_institution_ids_raw($pdo,(int)$user['id'],$role);
+        if(!$raw){
+            return ['restricted'=>false,'allowed'=>true,'role'=>$role,'raw_ids'=>[],'allowed_ids'=>[],'institutions'=>[],'reason'=>'direct_user'];
+        }
+
+        $allowed=[];
+        $rows=[];
+        foreach($raw as $institutionId){
+            $access=auth_institution_license_access($pdo,$institutionId);
+            $rows[]=$access;
+            if(($access['allowed']??false)===true) $allowed[]=$institutionId;
+        }
+
+        return [
+            'restricted'=>count($allowed)===0,
+            'allowed'=>count($allowed)>0,
+            'role'=>$role,
+            'raw_ids'=>$raw,
+            'allowed_ids'=>$allowed,
+            'institutions'=>$rows,
+            'reason'=>count($allowed)>0?'institution_available':'no_operational_institution',
+        ];
     }
 }
 
@@ -379,6 +537,20 @@ if (!function_exists('auth_manageable_institution_ids')) {
             return auth_user_institution_ids($pdo,(int)$user['id'],'yonetici');
         }
         return [];
+    }
+}
+
+if (!function_exists('auth_operational_manageable_institution_ids')) {
+    function auth_operational_manageable_institution_ids(PDO $pdo, array $user): array {
+        $ids=auth_manageable_institution_ids($pdo,$user);
+        if(!$ids || auth_user_has_role($user,'super_admin')) return $ids;
+        if(auth_effective_role($user)!=='yonetici') return [];
+        $allowed=[];
+        foreach($ids as $institutionId){
+            $access=auth_institution_license_access($pdo,$institutionId);
+            if(($access['allowed']??false)===true) $allowed[]=$institutionId;
+        }
+        return $allowed;
     }
 }
 
@@ -686,11 +858,35 @@ if (!function_exists('auth_enforce_legal_consent')) {
     }
 }
 
+if (!function_exists('auth_enforce_institution_license_access')) {
+    function auth_enforce_institution_license_access(array $user): void {
+        $role=(string)(auth_effective_role($user)??'');
+        if(!in_array($role,['ogrenci','veli','ogretmen'],true)) return;
+
+        $script=basename((string)($_SERVER['SCRIPT_NAME']??''));
+        if(in_array($script,[
+            'lisans-erisim.php','destek.php','hesap-guvenligi.php','yasal-onay.php',
+            'logout.php','login.php','sifremi-unuttum.php','sifre-sifirla.php'
+        ],true)) return;
+
+        try{
+            $summary=auth_operational_access_summary(db(),$user);
+            if(($summary['restricted']??false)===true){
+                header('Location: lisans-erisim.php');
+                exit;
+            }
+        }catch(Throwable){
+            auth_security_log_once('institution_license_enforce_failed');
+        }
+    }
+}
+
 if (!function_exists('require_login')) {
     function require_login(): array {
         $user=authenticated_user();
         if ($user) {
             auth_enforce_legal_consent($user);
+            auth_enforce_institution_license_access($user);
             return $user;
         }
         header('Location: login.php');
@@ -711,6 +907,7 @@ if (!function_exists('require_student_login')) {
         $user=authenticated_user();
         if ($user && auth_effective_role($user)==='ogrenci') {
             auth_enforce_legal_consent($user);
+            auth_enforce_institution_license_access($user);
             $id=auth_student_id_for_user(db(),(int)$user['id']);
             if ($id!==null) return $id;
         }
@@ -735,6 +932,25 @@ if (!function_exists('require_api_student')) {
                     ],428);
                 }
                 http_response_code(428);
+                exit;
+            }
+            $licenseAccess=auth_operational_access_summary(db(),$user);
+            if(($licenseAccess['restricted']??false)===true){
+                $reasons=[];
+                foreach(($licenseAccess['institutions']??[]) as $institution){
+                    $reason=(string)($institution['reason']??'license_inactive');
+                    if($reason!=='') $reasons[]=$reason;
+                }
+                $reasons=array_values(array_unique($reasons));
+                if (function_exists('json_response')) {
+                    json_response([
+                        'ok'=>false,
+                        'message'=>'Kurum lisansın operasyonel kullanıma açık değil. Kurum yöneticin veya destek ekibiyle iletişime geç.',
+                        'institution_license_required'=>true,
+                        'license_reasons'=>$reasons
+                    ],403);
+                }
+                http_response_code(403);
                 exit;
             }
             $id=auth_student_id_for_user(db(),(int)$user['id']);
@@ -792,6 +1008,9 @@ if (!function_exists('auth_accessible_student_ids')) {
             && auth_runtime_table_exists($pdo,'kurumlar')
             && auth_runtime_column_exists($pdo,'ogretmenler','kullanici_id')) {
             try {
+                $institutionIds=auth_user_institution_ids($pdo,$userId,'ogretmen');
+                if(!$institutionIds) return [];
+                $ph=implode(',',array_fill(0,count($institutionIds),'?'));
                 $stmt=$pdo->prepare("SELECT DISTINCT oo.ogrenci_id
                     FROM ogretmen_ogrenci oo
                     INNER JOIN ogretmenler o
@@ -817,8 +1036,9 @@ if (!function_exists('auth_accessible_student_ids')) {
                      AND ks.kurum_rolu='ogrenci'
                      AND ks.aktif=1
                     WHERE oo.kurum_id=kt.kurum_id
+                      AND kt.kurum_id IN ({$ph})
                     ORDER BY oo.ogrenci_id");
-                $stmt->execute([$userId]);
+                $stmt->execute(array_merge([$userId],$institutionIds));
                 $ids=array_map('intval',$stmt->fetchAll(PDO::FETCH_COLUMN)?:[]);
                 $stmt->closeCursor();
                 return array_values(array_filter($ids,static fn(int $id):bool=>$id>0));
@@ -834,65 +1054,63 @@ if (!function_exists('auth_accessible_student_ids')) {
             && auth_runtime_table_exists($pdo,'kurumlar')
             && auth_runtime_column_exists($pdo,'veliler','kullanici_id')) {
             try {
-                // Kuruma bağlı veliler yalnızca çocuklarıyla ortak aktif kurumda
-                // erişebilir. Eski/bağımsız platform hesapları için, hem veli hem
-                // öğrenci hiçbir aktif kuruma bağlı değilse doğrudan eşleştirme
-                // korunur; bu, kurumlar arası erişim sağlamaz.
-                $stmt=$pdo->prepare("SELECT DISTINCT vo.ogrenci_id
-                    FROM veli_ogrenci vo
-                    INNER JOIN veliler v
-                      ON v.id=vo.veli_id
-                     AND v.kullanici_id=?
-                     AND v.aktif=1
-                    INNER JOIN ogrenciler s
-                      ON s.id=vo.ogrenci_id
-                     AND s.aktif=1
-                    INNER JOIN kullanicilar su
-                      ON su.id=s.kullanici_id
-                     AND su.aktif=1
-                    WHERE (
-                        EXISTS (
-                            SELECT 1
-                            FROM kurum_kullanicilari vk
-                            INNER JOIN kurum_kullanicilari sk
-                              ON sk.kurum_id=vk.kurum_id
-                             AND sk.kullanici_id=s.kullanici_id
-                             AND sk.kurum_rolu='ogrenci'
-                             AND sk.aktif=1
-                            INNER JOIN kurumlar k
-                              ON k.id=vk.kurum_id
-                             AND k.aktif=1
-                            WHERE vk.kullanici_id=v.kullanici_id
-                              AND vk.kurum_rolu='veli'
-                              AND vk.aktif=1
-                              AND vo.kurum_id=vk.kurum_id
-                        )
-                        OR (
-                            NOT EXISTS (
-                                SELECT 1
-                                FROM kurum_kullanicilari vk0
-                                INNER JOIN kurumlar k0
-                                  ON k0.id=vk0.kurum_id
-                                 AND k0.aktif=1
-                                WHERE vk0.kullanici_id=v.kullanici_id
-                                  AND vk0.kurum_rolu='veli'
-                                  AND vk0.aktif=1
-                            )
-                            AND NOT EXISTS (
-                                SELECT 1
-                                FROM kurum_kullanicilari sk0
-                                INNER JOIN kurumlar k1
-                                  ON k1.id=sk0.kurum_id
-                                 AND k1.aktif=1
-                                WHERE sk0.kullanici_id=s.kullanici_id
-                                  AND sk0.kurum_rolu='ogrenci'
-                                  AND sk0.aktif=1
-                            )
-                            AND vo.kurum_id=0
-                        )
-                    )
-                    ORDER BY vo.ogrenci_id");
-                $stmt->execute([$userId]);
+                $rawInstitutionIds=auth_user_institution_ids_raw($pdo,$userId,'veli');
+                if($rawInstitutionIds){
+                    $institutionIds=auth_user_institution_ids($pdo,$userId,'veli');
+                    if(!$institutionIds) return [];
+                    $ph=implode(',',array_fill(0,count($institutionIds),'?'));
+                    $stmt=$pdo->prepare("SELECT DISTINCT vo.ogrenci_id
+                        FROM veli_ogrenci vo
+                        INNER JOIN veliler v
+                          ON v.id=vo.veli_id
+                         AND v.kullanici_id=?
+                         AND v.aktif=1
+                        INNER JOIN ogrenciler s
+                          ON s.id=vo.ogrenci_id
+                         AND s.aktif=1
+                        INNER JOIN kullanicilar su
+                          ON su.id=s.kullanici_id
+                         AND su.aktif=1
+                        INNER JOIN kurum_kullanicilari vk
+                          ON vk.kullanici_id=v.kullanici_id
+                         AND vk.kurum_rolu='veli'
+                         AND vk.aktif=1
+                        INNER JOIN kurum_kullanicilari sk
+                          ON sk.kurum_id=vk.kurum_id
+                         AND sk.kullanici_id=s.kullanici_id
+                         AND sk.kurum_rolu='ogrenci'
+                         AND sk.aktif=1
+                        INNER JOIN kurumlar k
+                          ON k.id=vk.kurum_id
+                         AND k.aktif=1
+                        WHERE vo.kurum_id=vk.kurum_id
+                          AND vk.kurum_id IN ({$ph})
+                        ORDER BY vo.ogrenci_id");
+                    $stmt->execute(array_merge([$userId],$institutionIds));
+                }else{
+                    $stmt=$pdo->prepare("SELECT DISTINCT vo.ogrenci_id
+                        FROM veli_ogrenci vo
+                        INNER JOIN veliler v
+                          ON v.id=vo.veli_id
+                         AND v.kullanici_id=?
+                         AND v.aktif=1
+                        INNER JOIN ogrenciler s
+                          ON s.id=vo.ogrenci_id
+                         AND s.aktif=1
+                        INNER JOIN kullanicilar su
+                          ON su.id=s.kullanici_id
+                         AND su.aktif=1
+                        WHERE vo.kurum_id=0
+                          AND NOT EXISTS (
+                            SELECT 1 FROM kurum_kullanicilari sk0
+                            INNER JOIN kurumlar k0 ON k0.id=sk0.kurum_id AND k0.aktif=1
+                            WHERE sk0.kullanici_id=s.kullanici_id
+                              AND sk0.kurum_rolu='ogrenci'
+                              AND sk0.aktif=1
+                          )
+                        ORDER BY vo.ogrenci_id");
+                    $stmt->execute([$userId]);
+                }
                 $ids=array_map('intval',$stmt->fetchAll(PDO::FETCH_COLUMN)?:[]);
                 $stmt->closeCursor();
                 return array_values(array_filter($ids,static fn(int $id):bool=>$id>0));
@@ -927,6 +1145,29 @@ if (!function_exists('require_api_student_access')) {
             if (function_exists('json_response')) json_response(['ok'=>false,'message'=>'Oturum süresi doldu.','auth_required'=>true],401);
             http_response_code(401); exit;
         }
+
+        $role=(string)(auth_effective_role($user)??'');
+        if(in_array($role,['ogrenci','veli','ogretmen'],true)){
+            $licenseAccess=auth_operational_access_summary($pdo,$user);
+            if(($licenseAccess['restricted']??false)===true){
+                $reasons=[];
+                foreach(($licenseAccess['institutions']??[]) as $institution){
+                    $reason=(string)($institution['reason']??'license_inactive');
+                    if($reason!=='') $reasons[]=$reason;
+                }
+                $reasons=array_values(array_unique($reasons));
+                if (function_exists('json_response')) {
+                    json_response([
+                        'ok'=>false,
+                        'message'=>'Kurum lisansı operasyonel kullanıma açık değil.',
+                        'institution_license_required'=>true,
+                        'license_reasons'=>$reasons
+                    ],403);
+                }
+                http_response_code(403); exit;
+            }
+        }
+
         $ids=auth_accessible_student_ids($pdo,(int)$user['id']);
         $studentId=$requestedStudentId && $requestedStudentId>0 ? $requestedStudentId : ($ids[0]??0);
         if ($studentId<=0 || !in_array($studentId,$ids,true)) {
@@ -939,6 +1180,10 @@ if (!function_exists('require_api_student_access')) {
 
 if (!function_exists('auth_post_login_url')) {
     function auth_post_login_url(array $user): string {
+        try{
+            $summary=auth_operational_access_summary(db(),$user);
+            if(($summary['restricted']??false)===true) return 'lisans-erisim.php';
+        }catch(Throwable){}
         return auth_role_home($user);
     }
 }
