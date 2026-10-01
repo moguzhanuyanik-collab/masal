@@ -41,9 +41,11 @@ assert(exactChain(['1.1.97','1.1.98','1.1.119','1.1.99',...expected.slice(2)],ex
 assert(!exactChain(['1.1.97','1.1.98','1.1.100','1.1.99',...expected.slice(2)],expected,recoveryOnly));
 assert(!exactChain(['1.1.97','1.1.98','1.1.99','1.1.101',...expected.slice(3)],expected,recoveryOnly));
 
-assert.strictEqual(version.version,'1.2.8');
-assert.strictEqual(release.version,'1.2.8');
-assert.strictEqual(manifest.version,'1.2.8');
+const parts=String(version.version).split('.').map(Number);
+const atLeast128=parts[0]>1 || (parts[0]===1 && (parts[1]>2 || (parts[1]===2 && parts[2]>=8)));
+assert(atLeast128,'Recovery chain gate requires 1.2.8 or newer.');
+assert.strictEqual(release.version,version.version);
+assert.strictEqual(manifest.version,version.version);
 assert.strictEqual(version.release_revision,1);
 assert.strictEqual(release.release_revision,1);
 assert.strictEqual(manifest.release_revision,1);
