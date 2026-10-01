@@ -70,9 +70,9 @@ function oi_teacher_students(PDO $pdo,int $teacherId,int $institutionId): array 
              AND kk.kurum_id=?
              AND kk.kurum_rolu='ogrenci'
              AND kk.aktif=1
-            WHERE oo.ogretmen_id=?
+            WHERE oo.ogretmen_id=? AND oo.kurum_id=?
             ORDER BY o.ad,o.id");
-        $s->execute([$institutionId,$teacherId]);
+        $s->execute([$institutionId,$teacherId,$institutionId]);
         $rows=$s->fetchAll();
         $s->closeCursor();
         return is_array($rows)?$rows:[];
@@ -272,7 +272,7 @@ function oi_student_teachers(PDO $pdo,int $studentId): array {
            AND kks.kurum_id=kko.kurum_id
            AND kks.kurum_rolu='ogrenci' AND kks.aktif=1
           INNER JOIN kurumlar k ON k.id=kko.kurum_id AND k.aktif=1
-          WHERE oo.ogrenci_id=?
+          WHERE oo.ogrenci_id=? AND oo.kurum_id=kko.kurum_id
           ORDER BY ku.ad_soyad,k.ad");
         $s->execute([$studentId]);
         $rows=$s->fetchAll();
@@ -298,7 +298,7 @@ function oi_student_contents(PDO $pdo,int $studentId,?int $contentId=null): arra
           INNER JOIN kurumlar k ON k.id=oi.kurum_id AND k.aktif=1
           INNER JOIN dersler d ON d.id=oi.ders_id AND d.aktif=1
           LEFT JOIN ders_modulleri dm ON dm.id=oi.ders_modulu_id
-          INNER JOIN ogretmen_ogrenci oo ON oo.ogretmen_id=oi.ogretmen_id AND oo.ogrenci_id=?
+          INNER JOIN ogretmen_ogrenci oo ON oo.ogretmen_id=oi.ogretmen_id AND oo.ogrenci_id=? AND oo.kurum_id=oi.kurum_id
           INNER JOIN ogrenciler os ON os.id=? AND os.aktif=1
           INNER JOIN kullanicilar ksu ON ksu.id=os.kullanici_id AND ksu.aktif=1
           INNER JOIN kurum_kullanicilari kks
