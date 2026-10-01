@@ -68,7 +68,6 @@ $contracts=$ready?tf_contract_rows($pdo):[];
 $payments=$ready?tf_payment_rows($pdo,80):[];
 $summary=$ready?tf_financial_summary($pdo):[];
 $integrityIssues=$ready?tf_integrity_issues($pdo):[];
-$renewals=kl_tables_ready($pdo)?tf_license_renewal_rows($pdo,30):[];
 
 $editId=max(0,(int)($_GET['sozlesme_id']??0));
 $edit=null;
@@ -90,6 +89,7 @@ foreach($contracts as $row) if((int)$row['id']===$editId){$edit=$row;break;}
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Ticari Finans</small></span></a>
 <div class="sa-page-actions">
 <a class="sa-page-action" href="paketler.php" aria-label="Paketler"><svg><use href="#sa-database"/></svg></a>
+<a class="sa-page-action" href="lisans-yenilemeleri.php" aria-label="Lisans Yenilemeleri"><svg><use href="#sa-refresh"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
 </header>
@@ -98,7 +98,7 @@ foreach($contracts as $row) if((int)$row['id']===$editId){$edit=$row;break;}
 <section class="role-hero">
 <span class="eyeline">SATIŞ & TAHSİLAT</span>
 <h1>Ticari Finans Merkezi</h1>
-<p>Kurum sözleşmelerini, tahsilatları, vadeleri ve yaklaşan lisans yenilemelerini tek ekrandan takip et.</p>
+<p>Kurum sözleşmelerini, tahsilatları ve vadeleri yönet. Lisans süre sonu operasyonu artık ayrı Yenileme Merkezi üzerinden yürütülür.</p>
 <span class="role-hero-art">₺</span>
 </section>
 
@@ -137,18 +137,8 @@ foreach($contracts as $row) if((int)$row['id']===$editId){$edit=$row;break;}
 </section>
 
 <section class="role-section">
-<div class="role-section-head"><div><span class="eyeline">LİSANS YENİLEME</span><h2>30 Günlük Yenileme Radar</h2></div><span class="role-pill"><?=count($renewals)?></span></div>
-<div class="role-list">
-<?php if(!$renewals):?><div class="role-empty"><span>✅</span>Önümüzdeki 30 gün içinde biten veya süresi geçmiş aktif lisans yok.</div><?php endif;?>
-<?php foreach($renewals as $renewal): $days=(int)$renewal['kalan_gun'];?>
-<a class="role-row" href="paketler.php?kurum_id=<?=(int)$renewal['kurum_id']?>">
-<span><?=$days<0?'⚠️':'⏳'?></span>
-<div><strong><?=tfh((string)$renewal['kurum_adi'])?> · <?=tfh((string)$renewal['paket_adi'])?></strong>
-<small><?=tfh((string)$renewal['bitis_tarihi'])?> · <?=$days<0?abs($days).' gün geçti':$days.' gün kaldı'?></small></div>
-<span class="role-pill <?=$days>=0?'ok':''?>"><?=$days<0?'Süresi geçti':'Yenileme'?></span>
-</a>
-<?php endforeach;?>
-</div>
+<div class="role-section-head"><div><span class="eyeline">LİSANS YENİLEME</span><h2>Yenileme Operasyon Merkezi</h2></div><a class="role-pill ok" href="lisans-yenilemeleri.php">Merkezi Aç →</a></div>
+<div class="role-note"><span>⏳</span><p>30/15/7/1 gün uyarıları, süresi geçmiş lisanslar, kurum yöneticisi bildirimleri, takip notları ve gerçek lisans uzatma işlemleri artık Lisans Yenilemeleri merkezinde tutulur.</p></div>
 </section>
 
 <section class="role-section">
@@ -274,6 +264,7 @@ foreach($contracts as $row) if((int)$row['id']===$editId){$edit=$row;break;}
 <nav class="role-bottom">
 <a href="super-admin.php"><span>⌂</span>Panel</a>
 <a href="paketler.php"><span>💼</span>Paketler</a>
+<a href="lisans-yenilemeleri.php"><span>⏳</span>Yenileme</a>
 <a class="active" href="ticari-finans.php"><span>₺</span>Finans</a>
 <a href="guncelleme.php"><span>↻</span>Güncelle</a>
 </nav>
