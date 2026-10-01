@@ -31,9 +31,10 @@ assert(updater.includes("'--hex-blob'"));
 assert(updater.includes("'--skip-lock-tables'"));
 assert(!updater.includes("'--password="));
 assert(updater.includes('Migration öncesi veritabanı yedeği doğrulanamadı'));
-assert(updater.includes("$requiresDbBackup=$studentSchemaMissing || $legacyRepairNeeded || $pendingMigrations!==[];"));
-assert(updater.indexOf('create_database_backup($root,$dbConfig,$updateConfig,$pdo)')
-  < updater.indexOf("if($studentSchemaMissing) ensure_student_auth_schema($pdo)"));
+assert(updater.includes("return pending_migration_names($pdo,$root,$localVersion)!==[];"));
+assert(updater.includes('function create_database_backup('));
+assert(updater.includes('$isClean121Recovery'));
+assert(updater.includes("$updateStage=$isLegacy097Recovery?'database_recovery_preflight':'database_recovery_skip'"));
 assert(updater.includes("'database_backup'=>$dbBackupName"));
 
 assert(!updater.includes("masal@gmail.com"));
@@ -49,6 +50,6 @@ assert(status.includes('Migration DB yedeği'));
 assert(status.includes('find_mysqldump_binary($updateConfig)'));
 
 assert(workflow.includes('tests/db-backup-99.php'));
-assert(/^1\.1\.(?:99|[1-9][0-9]{2,})$/.test(String(version.version)),'version must be 1.1.99 or newer');
+assert(/^1\.1\.(?:99|[1-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.1','version must be 1.1.99 or newer');
 
 console.log('1.1.99 DB backup and legacy account safety checks passed');

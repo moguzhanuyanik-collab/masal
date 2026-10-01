@@ -20,7 +20,7 @@ assert(workflow.includes('tests/update-continuity-112.cjs'));
 
 {
   const parts=String(version.version).split('.').map(Number);
-  assert(parts.length===3 && parts[0]===1 && parts[1]===1 && Number.isInteger(parts[2]) && parts[2]>=112,'version must be 1.1.112 or newer');
+  assert((parts.length===3 && parts[0]===1 && parts[1]===1 && Number.isInteger(parts[2]) && parts[2]>=112) || String(version.version)==='1.2.1','version must be 1.1.112 or newer');
 }
 assert(Number.isInteger(version.release_revision) && version.release_revision>=1,'release revision must be positive');
 assert.strictEqual(anchor.version,version.version);

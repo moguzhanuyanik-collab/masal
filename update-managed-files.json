@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.1.119",
+  "version": "1.2.1",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -178,6 +178,7 @@
     "RELEASE-1.1.97.md",
     "RELEASE-1.1.98.md",
     "RELEASE-1.1.99.md",
+    "RELEASE-1.2.1.md",
     "YETKILENDIRME-1.0.35.md",
     "activities-extra.js",
     "adimbot-ai-bridge.js",
@@ -436,14 +437,17 @@
     "tests/db-backup-99.php",
     "tests/hardening-91.cjs",
     "tests/hardening-94.cjs",
+    "tests/legacy-064-integrity-124.php",
     "tests/migration-safety-93.cjs",
     "tests/pwa-95.cjs",
+    "tests/rebuild-release-121.cjs",
     "tests/recovery-safety-100.cjs",
     "tests/recovery-safety-100.php",
     "tests/security-92.cjs",
     "tests/tenant-isolation-114.cjs",
     "tests/tenant-isolation-db-115.php",
     "tests/tenant-matching-crud-117.cjs",
+    "tests/tenant-recovery-postcondition-125.php",
     "tests/tenant-relation-schema-115.cjs",
     "tests/tenant-schema-guard-116.cjs",
     "tests/update-197-rescue-106.cjs",
@@ -454,6 +458,7 @@
     "tests/update-198-rescue-110.php",
     "tests/update-activation-104.cjs",
     "tests/update-activation-104.php",
+    "tests/update-chain-rebuild-126.cjs",
     "tests/update-continuity-112.cjs",
     "tests/update-continuity-112.php",
     "tests/update-core-handoff-108.cjs",
@@ -461,6 +466,7 @@
     "tests/update-core-handoff-rollback-109.cjs",
     "tests/update-core-handoff-rollback-109.php",
     "tests/update-legacy-bridge-113.cjs",
+    "tests/update-legacy-db-recovery-123.cjs",
     "tests/update-managed-integrity-111.cjs",
     "tests/update-managed-integrity-111.php",
     "tests/update-manifest-contract-103.cjs",
@@ -470,6 +476,7 @@
     "tests/update-quality-catalog-112.cjs",
     "tests/update-quality-catalog-113.cjs",
     "tests/update-rebuild-122.cjs",
+    "tests/update-recovery-119.cjs",
     "tests/update-release-anchor-101.cjs",
     "tests/update-release-head-anchor-109.cjs",
     "tests/update-release-revision-105.cjs",
@@ -499,6 +506,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 13,
-  "application_generation": 117
+  "release_revision": 15
 }

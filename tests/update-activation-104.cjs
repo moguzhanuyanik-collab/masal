@@ -17,7 +17,7 @@ assert(updater.includes("hash_file('sha256'"));
 assert(updater.includes("'.ilkadim-update-'"));
 assert(
   updater.indexOf('assert_update_activation_preflight(')
-  < updater.indexOf("$updateStage='database_mutation';")
+  < updater.indexOf("$updateStage='file_activation';")
 );
 assert(
   updater.indexOf('verify_activated_update_files(')
@@ -27,7 +27,7 @@ assert(updatePage.includes("'Güncelleme hedef'"));
 assert(updatePage.includes("'Güncelleme sonrası'"));
 assert(workflow.includes('tests/update-activation-104.php'));
 assert(workflow.includes('tests/update-activation-104.cjs'));
-assert(/^1\.1\.(?:10[4-9]|1[1-9][0-9]|[2-9][0-9]{2,})$/.test(String(version.version)),'version must be 1.1.104 or newer');
+assert(/^1\.1\.(?:10[4-9]|1[1-9][0-9]|[2-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.1','version must be 1.1.104 or newer');
 assert.strictEqual(anchor.version,version.version);
 assert.strictEqual(manifest.version,version.version);
 

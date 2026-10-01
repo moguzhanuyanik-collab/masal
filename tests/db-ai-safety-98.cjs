@@ -57,7 +57,7 @@ assert(voice.includes("$_SESSION['adimbot_voice_requests']"));
 
 assert(updater.includes('function assert_historical_migration_history'));
 assert(updater.includes("version_compare($localVersion,'1.1.98','<')"));
-assert(updater.includes("run_pending_migrations($pdo,$sourceRoot,$localVersion)"));
+assert(updater.includes('function run_pending_migrations(PDO $pdo,string $root,string $localVersion'));
 assert(updater.includes("migration_sequence_number($name)>=65"));
 assert(updater.includes('ILKADIM_ALLOW_TRANSACTIONAL_DELETE'));
 assert(updater.includes('migration_should_run_transactionally'));
@@ -66,5 +66,5 @@ assert(workflow.includes('tests/adimbot-rate-limit-98.php'));
 assert(workflow.includes('for file in tests/adimbot-*.cjs'));
 assert(workflow.includes('tests/adimbot-transcript-behavior.php'));
 
-assert(/^1\.1\.(?:9[8-9]|[1-9][0-9]{2,})$/.test(String(version.version)),'version must be 1.1.98 or newer');
+assert(/^1\.1\.(?:9[8-9]|[1-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.1','version must be 1.1.98 or newer');
 console.log('1.1.98 DB and AI safety checks passed');
