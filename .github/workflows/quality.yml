@@ -58,6 +58,7 @@ jobs:
           php tests/update-manifest-contract-103.php
           php tests/update-activation-104.php
           php tests/update-release-revision-105.php
+          php tests/update-sequential-selection-144.php
           php tests/update-197-rescue-106.php
           php tests/update-197-rescue-installer-107.php
           php tests/update-core-handoff-108.php

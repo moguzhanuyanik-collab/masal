@@ -104,3 +104,13 @@ Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına 
 
 - Sıralı sürüm regression testi Git geçmişini newest→oldest döndüren `git log` çıktısını doğru biçimde oldest→newest değerlendiriyor.
 - Final release head bu test düzeltmesiyle yeniden ankrajlandı.
+
+
+## Rev 16 — gerçek sıralı updater seçimi
+
+- 1.1.97 → 1.2.1 yeniden kurulumunun kritik kalan hatası düzeltildi: final 1.2.1 updater'ı ara sürümleri atlayıp doğrudan main HEAD'ine gidebiliyordu.
+- Updater artık `update-release.json` commit geçmişini tarıyor ve kurulu sürümün üzerindeki **en küçük semantik sürümü** seçiyor.
+- Aynı sürümde daha yüksek `release_revision` varsa yalnız o revision seçiliyor.
+- Hedef commit mutlaka gerçek 40 karakterlik SHA olmak zorunda; branch adı hedef commit olarak kabul edilmiyor.
+- Ara sürüm eksikse en son sürüme atlama yapılmıyor; işlem fail-closed duruyor.
+- Yeni regression testi 1.1.99 → 1.1.100 ve aynı sürüm revision seçimlerini doğruluyor.

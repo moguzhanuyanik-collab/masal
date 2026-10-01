@@ -483,6 +483,7 @@
     "tests/update-release-revision-105.php",
     "tests/update-safety-102.cjs",
     "tests/update-safety-102.php",
+    "tests/update-sequential-selection-144.php",
     "tests/updater-manifest-96.cjs",
     "tests/web-rescue-197-198-113.cjs",
     "tests/web-rescue-197-198-113.php",
@@ -506,5 +507,5 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 15
+  "release_revision": 16
 }

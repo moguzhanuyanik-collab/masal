@@ -225,14 +225,68 @@ function remote_release_info(array $gh): array {
 }
 
 function next_remote_version_info(array $gh,string $localVersion,int $localRevision=0): array {
+    [$owner,$repo,$branch]=github_repo_info($gh);
     $localVersion=trim($localVersion);
     if($localVersion==='') $localVersion='0.0.0';
+    $localRevision=max(0,$localRevision);
 
-    // 1.2.1: eski ara-sürüm/recovery zinciri tamamen kaldırıldı.
-    // Her kontrol yalnız main dalının gerçek 40 karakterlik HEAD SHA'sına gider.
-    return remote_release_info($gh);
+    // Güncelleme zinciri mutlaka bir sonraki yayınlanmış sürümü seçer.
+    // GitHub commit listesi newest -> oldest gelir; bu yüzden tüm geçmiş taranır
+    // ve local sürümün üzerindeki en küçük semver seçilir. Aynı semver içindeki
+    // hotfix/release revisionlarından en yükseği seçilir.
+    $next=null;
+    $page=1;
+    $maxPages=20;
+
+    while($page<=$maxPages){
+        $url='https://api.github.com/repos/'.rawurlencode($owner).'/'.rawurlencode($repo)
+            .'/commits?sha='.rawurlencode($branch)
+            .'&path=update-release.json&per_page=100&page='.$page
+            .'&cb='.(string)round(microtime(true)*1000);
+
+        $rows=json_decode((string)updater_http($url,$gh),true);
+        if(!is_array($rows)) throw new RuntimeException('GitHub release geçmişi okunamadı.');
+        if($rows===[]) break;
+
+        foreach($rows as $row){
+            $sha=trim((string)($row['sha']??''));
+            if(!preg_match('/^[a-f0-9]{40}$/i',$sha)) continue;
+
+            try{
+                $candidate=remote_release_info_at_ref($gh,$sha);
+            }catch(Throwable $ignored){
+                continue;
+            }
+
+            if(!release_identity_is_newer($candidate,$localVersion,$localRevision)) continue;
+            if(release_identity_should_replace_next($candidate,$next)){
+                $next=$candidate;
+            }
+        }
+
+        if(count($rows)<100) break;
+        $page++;
+    }
+
+    if($next!==null){
+        $targetCommit=trim((string)($next['commit']??''));
+        if(!preg_match('/^[a-f0-9]{40}$/i',$targetCommit)){
+            throw new RuntimeException('Sıradaki güncellemenin commit SHA değeri geçersiz.');
+        }
+        return $next;
+    }
+
+    $latest=remote_release_info($gh);
+    if(!release_identity_is_newer($latest,$localVersion,$localRevision)){
+        return $latest;
+    }
+
+    // Yeni sürüm var ama aradaki yayınlı sürüm bulunamadıysa en son sürüme atlama.
+    throw new RuntimeException(
+        'Sıradaki güncelleme güvenli biçimde belirlenemedi. '
+        .'Ara sürüm zinciri eksik veya bozuk; en son sürüme atlanmadı.'
+    );
 }
-
 function path_is_preserved(string $relative,array $preserve): bool {
     $relative=ltrim(str_replace('\\','/',$relative),'/');
     foreach($preserve as $rule){
