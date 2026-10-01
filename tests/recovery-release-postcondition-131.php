@@ -79,11 +79,13 @@ $pdo->exec("INSERT INTO sistem_migrations(migration) VALUES
     ('066_kurum_eslestirme_schema_guard')");
 
 $root=dirname(__DIR__);
+$versionData=json_decode((string)file_get_contents($root.'/version.json'),true);
 $remote=[
-    'version'=>'1.2.6',
-    'release_revision'=>1,
+    'version'=>is_array($versionData)?(string)($versionData['version']??''):'',
+    'release_revision'=>is_array($versionData)?(int)($versionData['release_revision']??1):1,
     'name'=>'direct recovery test',
 ];
+
 
 assert_recovered_release_postconditions($pdo,$root,$root,$remote);
 

@@ -13,6 +13,8 @@ const testPath='tests/direct-097-recovery-128.cjs';
 
 assert(rescue.includes("installed!=='1.1.97'"),'Direct rescue yalnız 1.1.97 için çalışmalı.');
 assert(rescue.includes('rescue_branch_head_sha'), 'Rescue gerçek branch HEAD SHA çözümlemeli.');
+assert(rescue.includes('function rescue_validate_historical_chain'), 'Rescue tarihsel recovery zincirini doğrulamalı.');
+assert(rescue.includes('1.1.98') && rescue.includes('1.2.1'), 'Rescue 1.1.98 → 1.2.1 zincir sınırlarını bilmeli.');
 assert(rescue.includes('rescue_ref_file'), 'Rescue dosyaları aynı sabit commit üzerinden çekmeli.');
 assert(rescue.includes("^[a-f0-9]{40}$"), 'Rescue gerçek 40 karakter SHA doğrulaması yapmalı.');
 assert(rescue.includes('version_compare($targetVersion,\'1.2.2\',\'<\')'), 'Rescue eski/broken updater hedeflerini reddetmeli.');
