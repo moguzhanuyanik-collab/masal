@@ -19,7 +19,7 @@ assert(
 );
 assert(workflow.includes('tests/update-manifest-contract-103.php'));
 assert(workflow.includes('tests/update-manifest-contract-103.cjs'));
-assert(/^1\.1\.(?:10[3-9]|1[1-9][0-9]|[2-9][0-9]{2,})$/.test(String(version.version)) || String(version.version)==='1.2.1','version must be 1.1.103 or newer');
+assert(/^1\.1\.(?:10[3-9]|1[1-9][0-9]|[2-9][0-9]{2,})$/.test(String(version.version)) || /^1\.2\.\d+$/.test(String(version.version)),'version must be 1.1.103 or newer');
 assert.strictEqual(anchor.version,version.version);
 assert.strictEqual(manifest.version,version.version);
 
