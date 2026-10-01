@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-const ILKADIM_UPDATER_CORE_GENERATION = 121;
+const ILKADIM_UPDATER_CORE_GENERATION = 122;
 
 function updater_core_generation_from_file(string $path): int {
     if(!is_file($path) || is_link($path) || !is_readable($path)) return 0;
@@ -2434,30 +2434,209 @@ function assert_update_zip_safe(ZipArchive $zip,array $updateConfig=[]): array {
     return ['entries'=>$entries,'uncompressed_bytes'=>$totalBytes];
 }
 
+function update_zip_root_prefix(ZipArchive $zip): string {
+    $candidates=[];
+    for($i=0;$i<(int)$zip->numFiles;$i++){
+        $name=str_replace('\\','/',(string)$zip->getNameIndex($i));
+        if($name==='version.json'){
+            $prefix='';
+        }elseif(str_ends_with($name,'/version.json')){
+            $prefix=rtrim(substr($name,0,-strlen('/version.json')),'/');
+        }else{
+            continue;
+        }
+
+        if($prefix!=='' && substr_count($prefix,'/')>2) continue;
+        $base=$prefix===''?'':$prefix.'/';
+        if($zip->locateName($base.'update-release.json')===false) continue;
+        if($zip->locateName($base.'update-managed-files.json')===false) continue;
+        $candidates[$prefix]=true;
+    }
+
+    $roots=array_keys($candidates);
+    if(count($roots)===1) return (string)$roots[0];
+    if($roots===[]) throw new RuntimeException('Manuel güncelleme ZIP paketinde geçerli uygulama kökü bulunamadı.');
+    throw new RuntimeException('Manuel güncelleme ZIP paketinde birden fazla uygulama kökü bulundu.');
+}
+
+function update_zip_file_content(ZipArchive $zip,string $prefix,string $relative): string {
+    $name=($prefix===''?'':rtrim($prefix,'/').'/').$relative;
+    $content=$zip->getFromName($name);
+    if(!is_string($content)){
+        throw new RuntimeException('Manuel güncelleme paketi eksik zorunlu dosya içeriyor: '.$relative);
+    }
+    return $content;
+}
+
+function manual_update_zip_managed_files(
+    ZipArchive $zip,
+    string $prefix,
+    array $preserve
+): array {
+    $base=$prefix===''?'':rtrim($prefix,'/').'/';
+    $files=[];
+    for($i=0;$i<(int)$zip->numFiles;$i++){
+        $name=str_replace('\\','/',(string)$zip->getNameIndex($i));
+        if($name==='' || str_ends_with($name,'/')) continue;
+        if($base!=='' && !str_starts_with($name,$base)) continue;
+
+        $relative=$base===''?$name:substr($name,strlen($base));
+        if($relative==='' || $relative==='.git' || str_starts_with($relative,'.git/')) continue;
+        $relative=managed_relative_path($relative);
+        if(path_is_preserved($relative,$preserve)) continue;
+        $files[]=$relative;
+    }
+
+    sort($files,SORT_STRING);
+    return array_values(array_unique($files));
+}
+
+function manual_update_package_identity(
+    string $zipPath,
+    array $preserve=[],
+    array $updateConfig=[]
+): array {
+    if($zipPath==='' || !is_file($zipPath) || is_link($zipPath) || !is_readable($zipPath)){
+        throw new RuntimeException('Manuel güncelleme ZIP paketi okunamadı.');
+    }
+
+    $limits=update_package_limits($updateConfig);
+    $compressedBytes=max(0,(int)(filesize($zipPath)?:0));
+    if($compressedBytes<1){
+        throw new RuntimeException('Manuel güncelleme ZIP paketi boş.');
+    }
+    if($compressedBytes>$limits['max_download_bytes']){
+        throw new RuntimeException('Manuel güncelleme ZIP paketi boyut sınırını aşıyor.');
+    }
+    if(!class_exists('ZipArchive')){
+        throw new RuntimeException('PHP ZipArchive eklentisi gerekli.');
+    }
+
+    $zip=new ZipArchive();
+    if($zip->open($zipPath)!==true){
+        throw new RuntimeException('Manuel güncelleme ZIP paketi açılamadı.');
+    }
+
+    try{
+        $stats=assert_update_zip_safe($zip,$updateConfig);
+        $prefix=update_zip_root_prefix($zip);
+        $requiredPackageFiles=[
+            'version.json',
+            'update-release.json',
+            'update-managed-files.json',
+            'config/app.php',
+            'src/updater.php',
+            'src/auth.php',
+            'login.php',
+            'index.php',
+        ];
+        $base=$prefix===''?'':rtrim($prefix,'/').'/';
+        foreach($requiredPackageFiles as $requiredFile){
+            if($zip->locateName($base.$requiredFile)===false){
+                throw new RuntimeException('Manuel güncelleme paketi eksik zorunlu dosya içeriyor: '.$requiredFile);
+            }
+        }
+
+        $versionData=json_decode(update_zip_file_content($zip,$prefix,'version.json'),true);
+        $releaseData=json_decode(update_zip_file_content($zip,$prefix,'update-release.json'),true);
+        $manifestData=json_decode(update_zip_file_content($zip,$prefix,'update-managed-files.json'),true);
+        if(!is_array($versionData) || !is_array($releaseData) || !is_array($manifestData)){
+            throw new RuntimeException('Manuel güncelleme paketi metadata dosyaları geçersiz JSON içeriyor.');
+        }
+
+        $version=trim((string)($versionData['version']??''));
+        $releaseVersion=trim((string)($releaseData['version']??''));
+        $manifestVersion=trim((string)($manifestData['version']??''));
+        if($version==='' || $releaseVersion!==$version || $manifestVersion!==$version){
+            throw new RuntimeException('Manuel güncelleme paketi sürüm metadata dosyaları birbiriyle eşleşmiyor.');
+        }
+
+        $revision=normalize_release_revision($versionData['release_revision']??0);
+        $releaseRevision=normalize_release_revision($releaseData['release_revision']??0);
+        $manifestRevision=normalize_release_revision($manifestData['release_revision']??0);
+        if(version_compare($version,'1.1.105','>=') && (
+            $revision<1
+            || $releaseRevision!==$revision
+            || $manifestRevision!==$revision
+        )){
+            throw new RuntimeException('Manuel güncelleme paketi release revision metadata değerleri birbiriyle eşleşmiyor.');
+        }
+
+        $managedFiles=manual_update_zip_managed_files($zip,$prefix,$preserve);
+        assert_packaged_manifest_matches_tree($manifestData,$managedFiles);
+
+        $hash=hash_file('sha256',$zipPath);
+        if(!is_string($hash) || preg_match('/^[a-f0-9]{64}$/',$hash)!==1){
+            throw new RuntimeException('Manuel güncelleme ZIP paketi SHA-256 doğrulaması üretilemedi.');
+        }
+
+        $migrationFiles=0;
+        foreach($managedFiles as $relative){
+            if(str_starts_with($relative,'migrations/') && str_ends_with($relative,'.sql')){
+                $migrationFiles++;
+            }
+        }
+
+        return [
+            'version'=>$version,
+            'release_revision'=>$revision,
+            'name'=>trim((string)($releaseData['name']??($versionData['name']??''))),
+            'commit'=>substr($hash,0,40),
+            'package_sha256'=>$hash,
+            'source'=>'manual_upload',
+            'entries'=>(int)($stats['entries']??0),
+            'uncompressed_bytes'=>(int)($stats['uncompressed_bytes']??0),
+            'managed_files'=>count($managedFiles),
+            'migration_files'=>$migrationFiles,
+        ];
+    }finally{
+        $zip->close();
+    }
+}
+
 function install_github_update(
     string $root,
     array $gh,
     array $preserve,
     array $dbConfig=[],
-    array $updateConfig=[]
+    array $updateConfig=[],
+    ?string $manualPackagePath=null
 ): array {
-    [$owner,$repo,$branch]=github_repo_info($gh);
+    $manualMode=is_string($manualPackagePath) && trim($manualPackagePath)!=='';
+    $owner='';$repo='';$branch='';
     $localVersion=read_app_version();
     $localRevision=read_local_release_revision($root,$localVersion);
-    $remote=next_remote_version_info($gh,$localVersion,$localRevision,$root);
-    if(!release_identity_is_newer($remote,$localVersion,$localRevision)){
-        return [
-            'updated'=>false,
-            'message'=>'Zaten guncel surum kullaniliyor.',
-            'remote'=>$remote,
-            'local'=>$localVersion,
-            'local_revision'=>$localRevision,
-            'migrations'=>[],
-        ];
+
+    if($manualMode){
+        $manualPackagePath=trim((string)$manualPackagePath);
+        $remote=manual_update_package_identity($manualPackagePath,$preserve,$updateConfig);
+        if(!release_identity_is_newer($remote,$localVersion,$localRevision)){
+            throw new RuntimeException(
+                'Manuel güncelleme paketi kurulu sürümden daha yeni değil. '
+                .'Kurulu: '.$localVersion.' rev '.$localRevision
+                .' / Paket: '.(string)$remote['version'].' rev '.normalize_release_revision($remote['release_revision']??0)
+            );
+        }
+    }else{
+        [$owner,$repo,$branch]=github_repo_info($gh);
+        $remote=next_remote_version_info($gh,$localVersion,$localRevision,$root);
+        if(!release_identity_is_newer($remote,$localVersion,$localRevision)){
+            return [
+                'updated'=>false,
+                'message'=>'Zaten guncel surum kullaniliyor.',
+                'remote'=>$remote,
+                'local'=>$localVersion,
+                'local_revision'=>$localRevision,
+                'migrations'=>[],
+            ];
+        }
     }
 
     $targetCommit=trim((string)($remote['commit']??''));
     if(!preg_match('/^[a-f0-9]{40}$/i',$targetCommit)){
+        if($manualMode){
+            throw new RuntimeException('Manuel güncelleme paketi kimliği oluşturulamadı.');
+        }
         // Eski updater sürümlerinde branch adı (ör. "main") commit alanına
         // sızabiliyordu. Kurulumdan önce gerçek HEAD SHA'ya çözümle.
         $targetCommit=github_branch_head_sha($gh);
@@ -2473,7 +2652,7 @@ function install_github_update(
         throw new RuntimeException('Baska bir guncelleme islemi halen devam ediyor.');
     }
     $stamp=date('Ymd_His');
-    $zipPath=$storage.'/updates/github_'.$stamp.'.zip';
+    $zipPath=$storage.'/updates/'.($manualMode?'manual_':'github_').$stamp.'.zip';
     $extractDir=$storage.'/updates/extract_'.$stamp;
     $backupPath=$storage.'/backups/onceki_surum.zip';
 
@@ -2495,6 +2674,7 @@ function install_github_update(
             'to_version'=>(string)$remote['version'],
             'to_revision'=>normalize_release_revision($remote['release_revision']??0),
             'target_commit'=>$targetCommit,
+            'source'=>$manualMode?'manual_upload':'github',
             'status'=>'preparing',
             'stage'=>$updateStage,
             'application_backup'=>null,
@@ -2517,23 +2697,38 @@ function install_github_update(
         $recoveryState['stage']=$updateStage;
         $recoveryState['application_backup']=backup_artifact_metadata($root,$backupName);
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
-        // En son main paketini degil, siradaki surumun sabit commit paketini indir.
-        $downloadUrl='https://codeload.github.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/zip/'.rawurlencode($targetCommit).'?cb='.(string)round(microtime(true)*1000);
-        $updateStage='download';
-        $recoveryState['stage']=$updateStage;
-        $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
-        updater_http($downloadUrl,$gh,$zipPath,$packageLimits['max_download_bytes']);
+        if($manualMode){
+            $updateStage='manual_package_copy';
+            $recoveryState['stage']=$updateStage;
+            $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+            if(!copy((string)$manualPackagePath,$zipPath)){
+                throw new RuntimeException('Manuel güncelleme ZIP paketi geçici alana kopyalanamadı.');
+            }
+            @chmod($zipPath,0600);
+            $copiedHash=hash_file('sha256',$zipPath);
+            $expectedHash=strtolower(trim((string)($remote['package_sha256']??'')));
+            if(!is_string($copiedHash) || !hash_equals($expectedHash,strtolower($copiedHash))){
+                throw new RuntimeException('Manuel güncelleme ZIP paketi kopyalama sonrası bütünlük doğrulamasından geçemedi.');
+            }
+        }else{
+            // En son main paketini degil, siradaki surumun sabit commit paketini indir.
+            $downloadUrl='https://codeload.github.com/'.rawurlencode($owner).'/'.rawurlencode($repo).'/zip/'.rawurlencode($targetCommit).'?cb='.(string)round(microtime(true)*1000);
+            $updateStage='download';
+            $recoveryState['stage']=$updateStage;
+            $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
+            updater_http($downloadUrl,$gh,$zipPath,$packageLimits['max_download_bytes']);
+        }
 
         if(!class_exists('ZipArchive')) throw new RuntimeException('PHP ZipArchive eklentisi gerekli.');
         $zip=new ZipArchive();
-        if($zip->open($zipPath)!==true) throw new RuntimeException('GitHub ZIP paketi acilamadi.');
+        if($zip->open($zipPath)!==true) throw new RuntimeException('Güncelleme ZIP paketi açılamadı.');
         $updateStage='package_validation';
         $recoveryState['stage']=$updateStage;
         $recoveryManifestName=write_recovery_manifest($root,$recoveryState);
         $zipStats=assert_update_zip_safe($zip,$updateConfig);
         assert_backup_disk_space(dirname($extractDir),(int)$zipStats['uncompressed_bytes'],'Güncelleme paketi açılımı');
         if(!is_dir($extractDir)&&!mkdir($extractDir,0775,true)&&!is_dir($extractDir)){ $zip->close(); throw new RuntimeException('Gecici klasor olusturulamadi.'); }
-        if(!$zip->extractTo($extractDir)){ $zip->close(); throw new RuntimeException('GitHub paketi acilamadi.'); }
+        if(!$zip->extractTo($extractDir)){ $zip->close(); throw new RuntimeException('Güncelleme paketi açılamadı.'); }
         $zip->close();
 
         $sourceRoot=detect_update_root($extractDir);
@@ -2750,6 +2945,7 @@ function install_github_update(
 
         $pdo->prepare("INSERT INTO sistem_ayarlar (ayar_anahtari,ayar_degeri) VALUES ('uygulama_surumu',?) ON DUPLICATE KEY UPDATE ayar_degeri=VALUES(ayar_degeri)")->execute([$remote['version']]);
         $historyMessage='Guncelleme tamamlandi. Surum: '.(string)$remote['version'].' rev '.normalize_release_revision($remote['release_revision']??0).'; Yedek: '.$backupName;
+        if($manualMode) $historyMessage.='; kaynak: manuel ZIP';
         if($dbBackupName!=='') $historyMessage.='; DB yedek: '.$dbBackupName;
         if($removedManagedFiles!==[]) $historyMessage.='; temizlenen eski dosya: '.count($removedManagedFiles);
         if($preservedNewerUpdaterCore) $historyMessage.='; daha yeni updater çekirdeği korundu';
@@ -2781,6 +2977,7 @@ function install_github_update(
             'removed_files'=>$removedManagedFiles,
             'managed_files'=>count($newManagedFiles),
             'preserved_newer_updater_core'=>$preservedNewerUpdaterCore,
+            'source'=>$manualMode?'manual_upload':'github',
         ];
     }catch(Throwable $e){
         error_log('[IlkAdim][updater] '.$e->getMessage());
