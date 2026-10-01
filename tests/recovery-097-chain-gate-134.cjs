@@ -17,11 +17,13 @@ const expected=[
   '1.1.116','1.1.117','1.2.1'
 ];
 
-assert(rescue.includes('function rescue_validate_historical_sequence'));\nassert(rescue.includes('function rescue_validate_historical_chain'));
+assert(rescue.includes('function rescue_validate_historical_sequence'));
+assert(rescue.includes('function rescue_validate_historical_chain'));
 assert(rescue.includes('rescue_validate_historical_chain($gh);'));
 assert(rescue.includes('function next_remote_version_info'));
 assert(rescue.includes('function run_legacy_1_1_97_to_1_2_1_recovery'));
-for(const v of expected) assert(rescue.includes("'"+v+"'"),'Aktif recovery zincirinde eksik sürüm: '+v);\nassert(rescue.includes("$recoveryOnly=['1.1.119']"));
+for(const v of expected) assert(rescue.includes("'"+v+"'"),'Aktif recovery zincirinde eksik sürüm: '+v);
+assert(rescue.includes("$recoveryOnly=['1.1.119']"));
 
 assert(updater.includes('/commits?sha='));
 assert(updater.includes('Sıradaki güncelleme güvenli biçimde belirlenemedi.'));
