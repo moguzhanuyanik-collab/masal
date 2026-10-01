@@ -285,7 +285,7 @@ function ds_admin_reply(PDO $pdo,array $admin,int $ticketId,string $message): vo
 
         $stmt=$pdo->prepare("UPDATE destek_talepleri
             SET durum='kullanici_bekleniyor',atanan_kullanici_id=COALESCE(atanan_kullanici_id,?),
-                son_hareket_tarihi=NOW()
+                cozum_tarihi=NULL,kapanis_tarihi=NULL,son_hareket_tarihi=NOW()
             WHERE id=?");
         $stmt->execute([(int)$admin['id'],$ticketId]);
         $stmt->closeCursor();
@@ -305,13 +305,16 @@ function ds_admin_set_status(PDO $pdo,array $admin,int $ticketId,string $status)
     $ticket=ds_ticket_row($pdo,$admin,$ticketId);
     if(!$ticket) throw new RuntimeException('Destek talebi bulunamadı.');
 
-    $resolution=$status==='cozuldu'?'NOW()':'NULL';
-    $closed=$status==='kapali'?'NOW()':'NULL';
-    $assigned=in_array($status,['inceleniyor','kullanici_bekleniyor','cozuldu'],true)?(int)$admin['id']:null;
+    $assigned=in_array($status,['inceleniyor','kullanici_bekleniyor','cozuldu','kapali'],true)?(int)$admin['id']:null;
 
     $sql="UPDATE destek_talepleri SET durum=?,son_hareket_tarihi=NOW(),
-        cozum_tarihi={$resolution},kapanis_tarihi={$closed}";
-    $params=[$status];
+        cozum_tarihi=CASE
+            WHEN ?='cozuldu' THEN NOW()
+            WHEN ?='kapali' THEN COALESCE(cozum_tarihi,NOW())
+            ELSE NULL
+        END,
+        kapanis_tarihi=CASE WHEN ?='kapali' THEN NOW() ELSE NULL END";
+    $params=[$status,$status,$status,$status];
     if($assigned!==null){$sql.=",atanan_kullanici_id=COALESCE(atanan_kullanici_id,?)";$params[]=$assigned;}
     $sql.=" WHERE id=?";
     $params[]=$ticketId;
