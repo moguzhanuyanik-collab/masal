@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.3",
-  "name": "1.1.97 direct updater recovery and migration-safe update handoff",
+  "version": "1.2.4",
+  "name": "Historical recovery postcondition and 1.1.97–1.2.1 update-chain hardening",
   "release_revision": 1
 }
