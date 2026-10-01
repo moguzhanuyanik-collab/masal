@@ -1,0 +1,35 @@
+.app-nav-five{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+.app-nav-five>a{min-width:0}
+.homework-page{padding-bottom:96px}
+.homework-hero{position:relative;overflow:hidden;margin:12px 14px 16px;padding:20px;border:1px solid #e8e1f4;border-radius:24px;background:linear-gradient(135deg,#fff7d9,#efe9ff)}
+.homework-hero small{display:block;color:#866628;font-size:10px;font-weight:950;letter-spacing:.8px}
+.homework-hero h1{max-width:82%;margin:7px 0 6px;font-size:24px;letter-spacing:-.6px}
+.homework-hero p{max-width:82%;margin:0;color:#716b7a;font-size:11px;line-height:1.55}
+.homework-hero-art{position:absolute;right:18px;top:17px;font-size:45px;opacity:.42}
+.homework-flash{margin:0 14px 12px;padding:11px 13px;border:1px solid #d4efdd;border-radius:14px;background:#eef9f2;color:#2f7652;font-size:10px;font-weight:850}
+.homework-flash.bad{border-color:#f0d4d4;background:#fff0f0;color:#a94848}
+.homework-empty{margin:14px;padding:30px 18px;border:1px solid #ece8f2;border-radius:20px;background:#fff;text-align:center;color:#746d7d}
+.homework-empty>span{display:block;margin-bottom:8px;font-size:38px}
+.homework-empty strong{display:block;color:#342f3c;font-size:13px}
+.homework-empty p{margin:6px 0 0;font-size:10px}
+.homework-list{display:grid;gap:11px;margin:0 14px}
+.homework-card{padding:15px;border:1px solid #ebe6f1;border-radius:19px;background:#fff;box-shadow:0 7px 20px rgba(57,44,75,.05)}
+.homework-card.done{border-color:#d8ecdf;background:#fbfffc}
+.homework-card.late{border-color:#f0d8d5;background:#fffdfd}
+.homework-card-head{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:start;gap:10px}
+.homework-subject{display:grid;width:42px;height:42px;place-items:center;border-radius:13px;background:#f2edff;font-size:21px}
+.homework-card-head small{display:block;margin-top:1px;color:#8a8294;font-size:8.5px}
+.homework-card-head h2{margin:4px 0 0;color:#322d3a;font-size:13px}
+.homework-status{display:inline-flex;padding:6px 8px;border-radius:999px;font-size:8px;font-weight:950;white-space:nowrap}
+.homework-status.pending{background:#f2edff;color:#6e52aa}
+.homework-status.done{background:#e8f8ee;color:#2c7752}
+.homework-status.late{background:#fff0ee;color:#a84b43}
+.homework-text{margin:12px 0 0;padding:11px 12px;border-radius:13px;background:#faf8fc;color:#655f6d;font-size:10px;line-height:1.55}
+.homework-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+.homework-meta span{padding:6px 8px;border-radius:999px;background:#f6f4f9;color:#71697b;font-size:8px;font-weight:800}
+.homework-action{margin-top:12px}
+.homework-action button{width:100%;min-height:40px;border:0;border-radius:12px;font:inherit;font-size:10px;font-weight:950;cursor:pointer}
+.homework-action button.primary{background:linear-gradient(120deg,#8666c5,#67489f);color:#fff}
+.homework-action button.secondary{background:#f1f5f2;color:#4c745c}
+.homework-teacher-link{display:flex;align-items:center;justify-content:center;margin:14px;padding:12px 14px;border:1px solid #e6dff0;border-radius:15px;background:#fff;color:#6d52a5;font-size:10px;font-weight:900;text-align:center}
+@media(max-width:430px){.app-nav-five>a{font-size:9px}.homework-hero h1{font-size:21px}.homework-card-head{grid-template-columns:38px minmax(0,1fr)}.homework-subject{width:38px;height:38px}.homework-status{grid-column:2;justify-self:start}}
