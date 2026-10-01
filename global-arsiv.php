@@ -58,7 +58,7 @@ foreach($archived as $row){
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Global Arşiv — İlkAdım</title>
-<link rel="stylesheet" href="super-admin-pages.css?v=1.2.33">
+<link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
 </head>
 <body class="sa-subpage">
 <?php require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -71,22 +71,13 @@ foreach($archived as $row){
 <main id="screen">
 <div class="screen-content">
 <section class="subpage-intro">
-<span><svg><use href="#sa-archive"/></svg></span>
+<span><svg><use href="#sa-database"/></svg></span>
 <h1>Global Arşiv</h1>
 <p>Pasife alınmış kurumdan bağımsız öğrenci ve veli hesaplarını görüntüle ve güvenli biçimde yeniden aktifleştir.</p>
 </section>
 
 <?php if($message):?><div class="role-note"><span><svg><use href="#sa-check"/></svg></span><p><?=ky_h($message)?></p></div><?php endif;?>
 <?php if($error):?><div class="role-note"><span><svg><use href="#sa-alert"/></svg></span><p><?=ky_h($error)?></p></div><?php endif;?>
-
-<section class="role-section">
-<div class="role-section-head"><div><span class="eyeline">ÖZET</span><h2>Arşiv Durumu</h2></div></div>
-<div class="role-stats">
-<div class="role-stat"><span>🗃️</span><strong><?=count($archived)?></strong><small>Filtredeki pasif hesap</small></div>
-<div class="role-stat"><span>🎒</span><strong><?=$studentCount?></strong><small>Pasif öğrenci</small></div>
-<div class="role-stat"><span>👪</span><strong><?=$parentCount?></strong><small>Pasif veli</small></div>
-</div>
-</section>
 
 <section class="role-section">
 <div class="role-section-head"><div><span class="eyeline">FİLTRE</span><h2>Hesap Türü</h2></div></div>
@@ -103,7 +94,7 @@ foreach($archived as $row){
 
 <section class="role-section">
 <div class="sa-data-toolbar">
-<div><span class="eyeline">ARŞİV</span><h2>Pasif Global Hesaplar</h2><small><?=count($archived)?> kayıt</small></div>
+<div><span class="eyeline">ARŞİV</span><h2>Pasif Global Hesaplar</h2><small><?=count($archived)?> kayıt · <?=$studentCount?> öğrenci · <?=$parentCount?> veli</small></div>
 <div class="sa-data-actions">
 <a class="sa-secondary-btn" href="global-ogrenciler.php">Öğrenciler</a>
 <a class="sa-secondary-btn" href="global-veliler.php">Veliler</a>
@@ -126,7 +117,7 @@ foreach($archived as $row){
 <td><span class="role-pill"><?=$isStudent?'Öğrenci':'Veli'?></span></td>
 <td><?=ky_h((string)$row['email'])?></td>
 <td><?=ky_h($linked!==''?$linked:($isStudent?'Veli bağlı değil':'Öğrenci bağlı değil'))?></td>
-<td><span class="role-pill off"><?=((int)$row['kullanici_aktif']===0 && (int)$row['profil_aktif']===0)?'Pasif':'Durum tutarsız'?></span></td>
+<td><span class="role-pill"><?=((int)$row['kullanici_aktif']===0 && (int)$row['profil_aktif']===0)?'Pasif':'Durum tutarsız'?></span></td>
 <td class="sa-row-actions">
 <form method="post" onsubmit="return confirm('Bu global hesap yeniden aktifleştirilsin mi?')">
 <input type="hidden" name="csrf" value="<?=ky_h(csrf_token())?>">
