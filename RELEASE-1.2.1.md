@@ -114,3 +114,9 @@ Bu release GitHub kod ağacını yeniden kurar. Canlı/production veritabanına 
 - Hedef commit mutlaka gerçek 40 karakterlik SHA olmak zorunda; branch adı hedef commit olarak kabul edilmiyor.
 - Ara sürüm eksikse en son sürüme atlama yapılmıyor; işlem fail-closed duruyor.
 - Yeni regression testi 1.1.99 → 1.1.100 ve aynı sürüm revision seçimlerini doğruluyor.
+
+
+## Rev 17 — rebuild branch CI kapısı
+
+- Yeniden kurulum branch'lerinin kendi push'larında Quality Gate çalışacak şekilde CI branch filtresine `rebuild-*` deseni eklendi.
+- Release revision 17 olarak yeniden ankrajlandı; version.json, update-release.json ve managed manifest aynı revision değerini taşıyor.
