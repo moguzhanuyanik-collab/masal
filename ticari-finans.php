@@ -5,6 +5,8 @@ require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
 require __DIR__.'/src/kurum_lisanslari.php';
 require __DIR__.'/src/ticari_finans.php';
+require __DIR__.'/src/lisans_yenileme.php';
+require __DIR__.'/src/lisans_yenileme_ticari.php';
 
 $user=require_role('super_admin');
 $pdo=db();
@@ -68,10 +70,13 @@ $contracts=$ready?tf_contract_rows($pdo):[];
 $payments=$ready?tf_payment_rows($pdo,80):[];
 $summary=$ready?tf_financial_summary($pdo):[];
 $integrityIssues=$ready?tf_integrity_issues($pdo):[];
+$renewalCommercialReady=lyt_tables_ready($pdo);
+$contractRenewals=$renewalCommercialReady?lyt_contract_links($pdo,array_column($contracts,'id')):[];
 
 $editId=max(0,(int)($_GET['sozlesme_id']??0));
 $edit=null;
 foreach($contracts as $row) if((int)$row['id']===$editId){$edit=$row;break;}
+$editRenewal=$edit&&isset($contractRenewals[(int)$edit['id']])?$contractRenewals[(int)$edit['id']]:null;
 ?>
 <!doctype html>
 <html lang="tr">
@@ -142,7 +147,7 @@ foreach($contracts as $row) if((int)$row['id']===$editId){$edit=$row;break;}
 </section>
 
 <section class="role-section">
-<div class="role-section-head"><div><span class="eyeline">SÖZLEŞME</span><h2><?=$edit?'Sözleşmeyi Düzenle':'Yeni Sözleşme'?></h2></div><?php if($edit):?><a class="role-pill" href="ticari-finans.php">Yeni sözleşme</a><?php endif;?></div>
+<div class="role-section-head"><div><span class="eyeline">SÖZLEŞME</span><h2><?=$edit?'Sözleşmeyi Düzenle':'Yeni Sözleşme'?></h2></div><div><?php if($editRenewal):?><a class="role-pill ok" href="lisans-yenilemeleri.php?yenileme_id=<?=(int)$editRenewal['yenileme_id']?>">Yenileme #<?=(int)$editRenewal['yenileme_id']?> →</a><?php endif;?> <?php if($edit):?><a class="role-pill" href="ticari-finans.php">Yeni sözleşme</a><?php endif;?></div></div>
 <form class="role-form" method="post">
 <input type="hidden" name="csrf" value="<?=tfh(csrf_token())?>">
 <input type="hidden" name="action" value="contract_save">
@@ -219,11 +224,11 @@ foreach($contracts as $row) if((int)$row['id']===$editId){$edit=$row;break;}
 <div class="role-section-head"><div><span class="eyeline">SÖZLEŞMELER</span><h2>Ticari Portföy</h2></div><span class="role-pill"><?=count($contracts)?></span></div>
 <div class="role-list">
 <?php if(!$contracts):?><div class="role-empty"><span>📄</span>Henüz sözleşme kaydı yok.</div><?php endif;?>
-<?php foreach($contracts as $contract):?>
+<?php foreach($contracts as $contract): $renewalLink=$contractRenewals[(int)$contract['id']]??null;?>
 <a class="role-row" href="ticari-finans.php?sozlesme_id=<?=(int)$contract['id']?>">
 <span><?=($contract['gecikmis']??false)?'⚠️':'📄'?></span>
 <div><strong><?=tfh((string)$contract['kurum_adi'])?> · <?=tfh((string)$contract['sozlesme_no'])?></strong>
-<small><?=tff($contract['tahsil_edilen'])?> / <?=tff($contract['toplam_tutar'])?> <?=tfh((string)$contract['para_birimi'])?> · Kalan <?=tff($contract['kalan_tutar'])?><?php if((string)$contract['vade_tarihi']!==''):?> · Vade <?=tfh((string)$contract['vade_tarihi'])?><?php endif;?></small></div>
+<small><?=tff($contract['tahsil_edilen'])?> / <?=tff($contract['toplam_tutar'])?> <?=tfh((string)$contract['para_birimi'])?> · Kalan <?=tff($contract['kalan_tutar'])?><?php if((string)$contract['vade_tarihi']!==''):?> · Vade <?=tfh((string)$contract['vade_tarihi'])?><?php endif;?><?php if($renewalLink):?> · Yenileme #<?=(int)$renewalLink['yenileme_id']?><?php endif;?></small></div>
 <span class="role-pill <?=($contract['gecikmis']??false)?'':((string)$contract['durum']==='aktif'?'ok':'')?>"><?=($contract['gecikmis']??false)?'Gecikmiş':tf_status((string)$contract['durum'])?></span>
 </a>
 <?php endforeach;?>
