@@ -17,7 +17,6 @@ const release=JSON.parse(fs.readFileSync('update-release.json','utf8'));
 
 assert(domain.includes("function oi_record_question_reward("),'idempotent reward writer missing');
 assert(domain.includes("INSERT IGNORE INTO ogretmen_icerik_yildiz_odulleri"),'reward writer must be duplicate-safe');
-assert(domain.includes("PRIMARY KEY")===false || true);
 assert(domain.includes("$stars=max(0,min(20,$stars));"),'reward writer must clamp 0-20');
 assert(domain.includes("if($correct && $reward>0)"),'reward may only be issued after a correct answer');
 assert(domain.includes("oi_record_question_reward($pdo,$studentId,$contentId,$reward)"),'answer flow must use idempotent reward writer');
