@@ -33,9 +33,18 @@ for(const name of retired){
 }
 
 assert(updater.includes("SELECT COUNT(*) FROM kurum_kullanicilari"));
-assert(updater.includes("if($rowCount>0)"));
+assert(
+  updater.includes("if($rowCount>0)") ||
+  updater.includes("if($liveCount!==count($members))"),
+  'legacy membership row-count integrity check missing'
+);
 assert(updater.includes("assert_automatic_migration_safe($name,$file)"));
-assert(updater.includes("$rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')"));
+assert(
+  updater.includes("$rel==='config/local.php'||$rel==='.env'||str_starts_with($rel,'storage/')") ||
+  (updater.includes("$rel==='storage'||str_starts_with($rel,'storage/')") &&
+   updater.includes("$rel==='config/local.php'||$rel==='.env'")),
+  'backup secret/runtime exclusion missing'
+);
 
 assert(auth.includes("'email_ip'"));
 assert(auth.includes("INSERT IGNORE INTO giris_guvenlik"));
