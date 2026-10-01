@@ -29,9 +29,10 @@ assert(detail.includes('KURULUM DURUMU') && detail.includes('Kurum Hazırlık'),
 
 assert(workflow.includes('node tests/institution-readiness-160.cjs'),'readiness source test missing from quality gate');
 assert(workflow.includes('php tests/institution-readiness-db-160.php'),'readiness DB test missing from quality gate');
-assert.strictEqual(version.version,'1.2.35');
-assert.strictEqual(release.version,'1.2.35');
-assert.strictEqual(manifest.version,'1.2.35');
+assert(version.version.startsWith('1.2.'),'release version must remain in the 1.2.x line');
+assert(Number(version.version.split('.')[2])>=35,'institution readiness requires 1.2.35 or newer');
+assert.strictEqual(release.version,version.version);
+assert.strictEqual(manifest.version,version.version);
 for(const path of ['RELEASE-1.2.35.md','src/kurum_hazirlik.php','tests/institution-readiness-160.cjs','tests/institution-readiness-db-160.php']){
   assert(manifest.files.includes(path),'manifest missing '+path);
 }
