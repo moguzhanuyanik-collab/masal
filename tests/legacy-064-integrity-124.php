@@ -48,27 +48,27 @@ foreach(glob($root.'/database/migrations/*.sql')?:[] as $file){
     if($number<1 || $number>63 || isset($retired[$migration])) continue;
     $expected[$migration]=true;
 }
-ok(count($expected)>0,'001-063 beklenen migration kümesi oluşturulamadı.');
+ok_124(count($expected)>0,'001-063 beklenen migration kümesi oluşturulamadı.');
 
 $insert=$pdo->prepare('INSERT INTO sistem_migrations(migration) VALUES (?)');
 foreach(array_keys($expected) as $migration) $insert->execute([$migration]);
 $insert->closeCursor();
 
 $applied=recover_missing_064_checkpoint_after_1_1_98_bridge($pdo,$root,'1.1.97');
-ok(auth_table_exists($pdo,'adimbot_rate_limitleri'),'064 eksikken rate-limit tablosu oluşturulmalı.');
-ok($pdo->query("SELECT COUNT(*) FROM sistem_migrations WHERE migration='064_adimbot_rate_limit_ve_migration_checkpoint'")->fetchColumn()===1,
+ok_124(auth_table_exists($pdo,'adimbot_rate_limitleri'),'064 eksikken rate-limit tablosu oluşturulmalı.');
+ok_124($pdo->query("SELECT COUNT(*) FROM sistem_migrations WHERE migration='064_adimbot_rate_limit_ve_migration_checkpoint'")->fetchColumn()===1,
     '064 migration kaydı ilk recovery sonrası tam bir kez bulunmalı.');
-ok(in_array('064_adimbot_rate_limit_ve_migration_checkpoint',$applied,true),
+ok_124(in_array('064_adimbot_rate_limit_ve_migration_checkpoint',$applied,true),
     'İlk 064 recovery uygulanan migrationı raporlamalı.');
 
 $pdo->exec('DROP TABLE adimbot_rate_limitleri');
-ok(!auth_table_exists($pdo,'adimbot_rate_limitleri'),'Bozuk legacy fixture hazırlanamadı.');
+ok_124(!auth_table_exists($pdo,'adimbot_rate_limitleri'),'Bozuk legacy fixture hazırlanamadı.');
 
 $repaired=recover_missing_064_checkpoint_after_1_1_98_bridge($pdo,$root,'1.1.97');
-ok(auth_table_exists($pdo,'adimbot_rate_limitleri'),
+ok_124(auth_table_exists($pdo,'adimbot_rate_limitleri'),
     '064 kaydı mevcut ama tablo eksik olduğunda idempotent şema onarımı çalışmalı.');
-ok($repaired===[],'Kayıt zaten mevcutken ikinci recovery migrationı yeniden uygulanmış saymamalı.');
-ok((int)$pdo->query("SELECT COUNT(*) FROM sistem_migrations WHERE migration='064_adimbot_rate_limit_ve_migration_checkpoint'")===1,
+ok_124($repaired===[],'Kayıt zaten mevcutken ikinci recovery migrationı yeniden uygulanmış saymamalı.');
+ok_124((int)$pdo->query("SELECT COUNT(*) FROM sistem_migrations WHERE migration='064_adimbot_rate_limit_ve_migration_checkpoint'")===1,
     '064 migration kaydı ikinci recoveryde çoğalmamalı.');
 
 $pdo->exec('DROP TABLE adimbot_rate_limitleri');
