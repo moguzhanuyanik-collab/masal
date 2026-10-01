@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.1",
-  "name": "1.2.1 release-chain cache ve updater rate-limit hardening",
-  "release_revision": 21
+  "version": "1.2.2",
+  "name": "Sequential migration execution ve güvenli DB recovery",
+  "release_revision": 1
 }
