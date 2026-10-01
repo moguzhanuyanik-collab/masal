@@ -1,0 +1,14 @@
+.member-crud-row{align-items:flex-start}
+.member-crud-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:8px}
+.member-crud-actions form{margin:0}
+.member-crud-actions button{border:0;background:transparent;font:inherit;font-size:8px;font-weight:950;padding:0;cursor:pointer}
+.member-edit-btn{color:var(--role-accent)}
+.member-danger-btn{color:#ad4c4c}
+.member-restore-btn{color:#39825a}
+.member-edit-dialog{width:min(92vw,520px);max-height:88dvh;padding:0;border:0;border-radius:22px;background:transparent}
+.member-edit-dialog::backdrop{background:#241c306e;backdrop-filter:blur(4px)}
+.member-edit-form{max-height:88dvh;overflow:auto;margin:0;border-radius:22px;box-shadow:0 25px 70px #241c3040}
+.member-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.member-dialog-head h2{margin-top:3px}
+.member-dialog-head button{width:34px;height:34px;border:1px solid var(--role-line);border-radius:11px;background:#fff;color:var(--role-muted);font-size:22px;line-height:1;cursor:pointer}
+.member-help{color:var(--role-muted);font-size:9px;line-height:1.45}
