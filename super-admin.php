@@ -75,6 +75,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
   <a href="ticari-mutabakat-saglik.php"><svg><use href="#sa-chart"/></svg>Mutabakat Sağlığı</a>
   <a href="ticari-mutabakat-hedefleri.php"><svg><use href="#sa-chart"/></svg>Mutabakat Hedefleri</a>
   <a href="ticari-mutabakat-hedef-risk.php"><svg><use href="#sa-alert"/></svg>Mutabakat Hedef Risk</a>
+  <a href="ticari-mutabakat-hedef-risk-bildirim.php"><svg><use href="#sa-alert"/></svg>Hedef Risk Bildirimleri</a>
   <a href="ticari-mutabakat-planlama.php"><svg><use href="#sa-users"/></svg>Mutabakat Planlama</a>
   <a href="ticari-mutabakat-devir.php"><svg><use href="#sa-users"/></svg>Mutabakat Sorumlu Devir</a>
   <a href="ticari-belgeler.php"><svg><use href="#sa-database"/></svg>Ticari Belgeler</a>
@@ -182,6 +183,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
     <a href="ticari-mutabakat-performans.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Mutabakat Operasyon Performansı</strong><small>Çevrim süresi, ilk müdahale, reopen, kapanış ve sorumlu bazlı operasyon göstergeleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="ticari-mutabakat-hedefleri.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Mutabakat Operasyon Hedefleri</strong><small>Versioned ilk müdahale ve çevrim hedefleri; geçmiş döngüleri dönemsel politika ile ölç</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="ticari-mutabakat-hedef-risk.php"><span class="sa-menu-icon"><svg><use href="#sa-alert"/></svg></span><span><strong>Mutabakat Hedef Risk Kuyruğu</strong><small>Hedef dışı, süresi %75+ tüketilmiş ve politika tanımsız açık vakaları aksiyon sırasına getir</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="ticari-mutabakat-hedef-risk-bildirim.php"><span class="sa-menu-icon"><svg><use href="#sa-alert"/></svg></span><span><strong>Mutabakat Hedef Risk Bildirimleri</strong><small>%75+ ve hedef dışı politika sinyallerini vaka sorumlusuna deduplikasyonlu bildir</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="ticari-mutabakat-planlama.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Mutabakat Toplu Planlama</strong><small>Açık vakalara güvenli toplu sorumlu ve sonraki aksiyon tarihi ata</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="ticari-mutabakat-devir.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Mutabakat Sorumlu Devir</strong><small>Sahipsiz, pasif veya rolü geçersiz vaka sahipliklerini aktif Süper Admin'e aktar</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="tahsilat-takvimi.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Tahsilat Takvimi</strong><small>Taksit vadeleri, tek vade sözleşmeler ve beklenen nakit akışı</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
