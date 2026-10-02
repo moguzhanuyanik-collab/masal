@@ -80,8 +80,8 @@ assert(workflow.includes('php tests/installment-plan-db-180.php'),'MariaDB regre
 
 assert(version.version.startsWith('1.2.'),'release version must remain in 1.2.x');
 assert(Number(version.version.split('.')[2])>=55,'installment plan requires 1.2.55 or newer');
-assert.strictEqual(release.version,'1.2.55');
-assert.strictEqual(manifest.version,'1.2.55');
+assert.strictEqual(release.version,version.version);
+assert.strictEqual(manifest.version,version.version);
 
 for(const path of [
   'RELEASE-1.2.55.md',
