@@ -107,6 +107,8 @@ kayıtları tahsil edilmiş tutara girer.
 
 İptal edilmiş tahsilatlar KPI toplamında kullanılmaz.
 
+Aylık trend ve son tahsilat akışı ayrıca bağlı sözleşmenin `aktif` veya `tamamlandi` olmasını ister. Böylece legacy/veri tutarsızlığı nedeniyle taslak veya iptal sözleşmede kalmış aktif tahsilat satırları yönetim KPI'sını şişirmez.
+
 ## Açık Bakiye
 
 Açık bakiye:
@@ -167,7 +169,7 @@ Son 6 ay için gerçek aktif tahsilatlar:
 
 bazında gösterilir.
 
-İptal edilmiş tahsilatlar aylık trende girmez.
+İptal edilmiş tahsilatlar ve taslak/iptal sözleşmeye bağlı tahsilatlar aylık trende girmez.
 
 Trend TRY/USD/EUR için ayrı ölçeklenir.
 
