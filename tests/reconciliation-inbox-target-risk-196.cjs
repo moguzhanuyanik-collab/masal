@@ -46,10 +46,21 @@ assert(page.includes('Risk bildirimi okunmadı'),'unread target-risk summary car
 assert(page.includes('Risk bildirimi bekliyor'),'pending target-risk summary card missing');
 assert(page.includes('aria-label="Hedef Risk Bildirim Sağlığı"'),
   'notification health shortcut missing from inbox');
-assert(page.includes('Hedef-risk sinyali veya bildirim üretmez'),
-  'read-only target-risk integration disclosure missing');
-assert(!page.includes("$_SERVER['REQUEST_METHOD']==='POST'"),
-  'daily inbox must remain write-free');
+if(Number(version.version.split('.')[2])<74){
+  assert(page.includes('Hedef-risk sinyali veya bildirim üretmez'),
+    'legacy read-only target-risk integration disclosure missing');
+  assert(!page.includes("$_SERVER['REQUEST_METHOD']==='POST'"),
+    'legacy daily inbox must remain write-free');
+}else{
+  assert(page.includes('İş Kutusu hedef-risk hesabını değiştirmez.'),
+    '1.2.74+ controlled target-risk send disclosure missing');
+  assert(page.includes("$_SERVER['REQUEST_METHOD']==='POST'"),
+    '1.2.74+ exact-case target-risk POST missing');
+  assert(page.includes("if($action!=='send_target_risk')"),
+    '1.2.74+ target-risk inbox must whitelist the exact send action');
+  assert(page.includes('mi_send_target_risk_case($pdo,$user,$caseId)'),
+    '1.2.74+ target-risk inbox must reuse the exact-case send adapter');
+}
 
 assert(css.includes('.role-pill.target-outside'),'target-outside badge style missing');
 assert(css.includes('.role-pill.target-unread'),'unread target-risk badge style missing');
@@ -74,4 +85,4 @@ for(const path of [
 assert(!manifest.files.includes('database/migrations/091_mutabakat_is_kutusu_hedef_risk.sql'),
   'read-only inbox integration must not invent a migration');
 
-console.log('PASS: target-risk/current-owner/current-cycle notification state integrated into read-only reconciliation inbox');
+console.log('PASS: target-risk/current-owner/current-cycle state with controlled exact-case send integration in reconciliation inbox');
