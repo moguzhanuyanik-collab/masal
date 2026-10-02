@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.61",
+  "version": "1.2.62",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -236,6 +236,7 @@
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.60.md",
     "RELEASE-1.2.61.md",
+    "RELEASE-1.2.62.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
     "RELEASE-1.2.9.md",
@@ -562,6 +563,7 @@
     "src/ticari_finans.php",
     "src/ticari_mutabakat.php",
     "src/ticari_mutabakat_aksiyon.php",
+    "src/ticari_mutabakat_is_kutusu.php",
     "src/ticari_mutabakat_planlama.php",
     "src/ticari_mutabakat_saglik.php",
     "src/ticari_taksit.php",
@@ -683,6 +685,8 @@
     "tests/reconciliation-bulk-planning-db-186.php",
     "tests/reconciliation-health-185.cjs",
     "tests/reconciliation-health-db-185.php",
+    "tests/reconciliation-inbox-187.cjs",
+    "tests/reconciliation-inbox-db-187.php",
     "tests/recovery-safety-100.cjs",
     "tests/recovery-safety-100.php",
     "tests/renewal-commercial-link-174.cjs",
@@ -769,6 +773,8 @@
     "ticari-finans.php",
     "ticari-mutabakat-aksiyon.css",
     "ticari-mutabakat-aksiyon.php",
+    "ticari-mutabakat-is-kutusu.css",
+    "ticari-mutabakat-is-kutusu.php",
     "ticari-mutabakat-planlama.css",
     "ticari-mutabakat-planlama.php",
     "ticari-mutabakat-saglik.css",
@@ -805,5 +811,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Mutabakat toplu aksiyon planlama"
+  "name": "Mutabakat günlük iş kutusu"
 }

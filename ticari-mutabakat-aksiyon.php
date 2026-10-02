@@ -114,6 +114,7 @@ $history=$selected?ma_history_rows($pdo,$selectedId):[];
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Mutabakat Aksiyon Merkezi</small></span></a>
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-mutabakat.php" aria-label="Mutabakat Kontrol"><svg><use href="#sa-chart"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-is-kutusu.php" aria-label="Günlük İş Kutusu"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-saglik.php" aria-label="Mutabakat Sağlığı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-planlama.php" aria-label="Toplu Planlama"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-belgeler.php" aria-label="Ticari Belgeler"><svg><use href="#sa-database"/></svg></a>
@@ -292,6 +293,7 @@ $isOpen=in_array($stage,ma_open_stages(),true);
 <a href="super-admin.php"><span>⌂</span>Panel</a>
 <a href="ticari-dashboard.php"><span>📊</span>KPI</a>
 <a href="ticari-mutabakat.php"><span>⚖️</span>Mutabakat</a>
+<a href="ticari-mutabakat-is-kutusu.php"><span>📥</span>İş Kutusu</a>
 <a class="active" href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 <a href="ticari-mutabakat-planlama.php"><span>🗂️</span>Planlama</a>
 <a href="ticari-belgeler.php"><span>🧾</span>Belgeler</a>
