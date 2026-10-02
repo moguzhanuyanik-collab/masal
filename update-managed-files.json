@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.54",
+  "version": "1.2.55",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -228,6 +228,7 @@
     "RELEASE-1.2.52.md",
     "RELEASE-1.2.53.md",
     "RELEASE-1.2.54.md",
+    "RELEASE-1.2.55.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
@@ -409,6 +410,7 @@
     "database/migrations/081_yenileme_sozlesme_tahsilat_baglantisi.sql",
     "database/migrations/082_ticari_tahsilat_risk_merkezi.sql",
     "database/migrations/083_ticari_tahsilat_hatirlatmalari.sql",
+    "database/migrations/084_sozlesme_taksit_odeme_plani.sql",
     "demo-satis.css",
     "demo-satis.php",
     "destek.css",
@@ -548,6 +550,7 @@
     "src/tahsilat_risk.php",
     "src/ticari_dashboard.php",
     "src/ticari_finans.php",
+    "src/ticari_taksit.php",
     "src/updater.php",
     "src/veli_icerik_dashboard.php",
     "src/veli_icerikleri.php",
@@ -599,6 +602,8 @@
     "tests/homework-completion-db-132.php",
     "tests/homework-status-consistency-146.cjs",
     "tests/homework-status-consistency-146.php",
+    "tests/installment-plan-180.cjs",
+    "tests/installment-plan-db-180.php",
     "tests/institution-class-edit-136.cjs",
     "tests/institution-class-edit-db-136.php",
     "tests/institution-classes-groups-134.cjs",
@@ -732,6 +737,8 @@
     "ticari-dashboard.css",
     "ticari-dashboard.php",
     "ticari-finans.php",
+    "ticari-taksit.css",
+    "ticari-taksit.js",
     "tools/1.1.97-history-checkpoint.sql",
     "tools/apply-updater-1.1.97-rescue.php",
     "tools/apply-updater-1.1.98-rescue.php",
@@ -760,5 +767,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Kurum hesap ekstresi dönem filtresi ve güvenli CSV dışa aktarım"
+  "name": "Sözleşme taksit ödeme planı ve çoklu vade yönetimi"
 }
