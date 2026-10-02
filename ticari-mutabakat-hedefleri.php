@@ -76,6 +76,7 @@ $issue30=$ready?mh_issue_target_summary($pdo,30):[];
 <a class="sa-page-action" href="ticari-mutabakat-performans.php" aria-label="Operasyon Performansı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk.php" aria-label="Hedef Risk Kuyruğu"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk-bildirim.php" aria-label="Hedef Risk Bildirimleri"><svg><use href="#sa-alert"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-hedef-risk-saglik.php" aria-label="Bildirim Sağlığı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-saglik.php" aria-label="Aksiyon Sağlığı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-eskalasyon.php" aria-label="Operasyon Eskalasyonu"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
@@ -189,6 +190,7 @@ $issue30=$ready?mh_issue_target_summary($pdo,30):[];
 <a class="active" href="ticari-mutabakat-hedefleri.php"><span>🎯</span>Hedefler</a>
 <a href="ticari-mutabakat-hedef-risk.php"><span>🎯</span>Hedef Risk</a>
 <a href="ticari-mutabakat-hedef-risk-bildirim.php"><span>🔔</span>Uyarılar</a>
+<a href="ticari-mutabakat-hedef-risk-saglik.php"><span>📨</span>Bildirim Sağlığı</a>
 <a href="ticari-mutabakat-eskalasyon.php"><span>🚨</span>Eskalasyon</a>
 </nav>
 </div>
