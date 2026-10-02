@@ -67,6 +67,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
   <a href="lisans-yenilemeleri.php"><svg><use href="#sa-refresh"/></svg>Lisans Yenilemeleri</a>
   <a href="demo-satis.php"><svg><use href="#sa-chart"/></svg>Demo & Satış</a>
   <a href="ticari-finans.php"><svg><use href="#sa-chart"/></svg>Ticari Finans</a>
+  <a href="ticari-dashboard.php"><svg><use href="#sa-chart"/></svg>Ticari Dashboard</a>
   <a href="tahsilat-risk.php"><svg><use href="#sa-alert"/></svg>Tahsilat Risk Merkezi</a>
   <a href="bildirimler.php"><svg><use href="#sa-users"/></svg>Bildirim & Duyurular</a>
   <a href="destek.php"><svg><use href="#sa-users"/></svg>Destek Merkezi</a>
@@ -159,6 +160,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
     <a href="lisans-yenilemeleri.php"><span class="sa-menu-icon"><svg><use href="#sa-refresh"/></svg></span><span><strong>Lisans Yenilemeleri</strong><small>30/15/7/1 gün radarı, yönetici uyarıları ve yenileme aksiyon kuyruğu</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="demo-satis.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Demo & Satış</strong><small>Deneme kurumları, bitiş radarı, satış notları ve ücretliye dönüşüm</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="ticari-finans.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Ticari Finans</strong><small>Sözleşmeler, tahsilatlar ve vadeler</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="ticari-dashboard.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Ticari Yönetim Dashboardu</strong><small>Gelir, tahsilat, açık bakiye, yenileme geliri ve kurum KPI'ları</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="tahsilat-risk.php"><span class="sa-menu-icon"><svg><use href="#sa-alert"/></svg></span><span><strong>Tahsilat Risk Merkezi</strong><small>Vade yaşlandırma, açık bakiye, yenileme gecikmeleri ve takip aksiyonları</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="bildirimler.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Bildirim & Duyurular</strong><small>Kurum duyuruları, sistem bildirimleri ve okunma takibi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="destek.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Destek Merkezi</strong><small>Kurum talepleri, öncelikler, yanıt geçmişi ve durum yönetimi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
