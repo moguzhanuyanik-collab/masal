@@ -45,8 +45,8 @@ assert(page.includes("if($_SERVER['REQUEST_METHOD']==='POST')"),
   'inbox must expose controlled POST flow');
 assert(page.includes("verify_csrf($_POST['csrf']??null)"),
   'inbox exact-case send must require CSRF');
-assert(page.includes("if($action!=='send_target_risk')"),
-  'inbox POST must whitelist exact send action');
+assert(page.includes("in_array($action,['send_target_risk','send_target_risk_batch'],true)"),
+  'inbox POST must keep exact send action in a closed action whitelist');
 assert(page.includes("ma_sync_cases($pdo,$user)"),
   'inbox POST must refresh reconciliation source state before send');
 assert(page.includes('mi_send_target_risk_case($pdo,$user,$caseId)'),
