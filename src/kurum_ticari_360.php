@@ -244,3 +244,236 @@ function kt360_counts(PDO $pdo,int $institutionId): array {
 
     return $out;
 }
+
+
+function kt360_statement_filters(array $input): array {
+    $defaultStart=(new DateTimeImmutable('first day of january'))->format('Y-m-d');
+    $defaultEnd=(new DateTimeImmutable('today'))->format('Y-m-d');
+
+    $start=trim((string)($input['baslangic']??$defaultStart));
+    $end=trim((string)($input['bitis']??$defaultEnd));
+    $currency=mb_strtoupper(trim((string)($input['para_birimi']??'')),'UTF-8');
+    $type=trim((string)($input['hareket_turu']??'tum'));
+
+    $validDate=static function(string $value): bool {
+        $date=DateTimeImmutable::createFromFormat('!Y-m-d',$value);
+        $errors=DateTimeImmutable::getLastErrors();
+        return (bool)$date
+            && (!is_array($errors) || (($errors['warning_count']??0)===0 && ($errors['error_count']??0)===0))
+            && $date->format('Y-m-d')===$value;
+    };
+
+    if(!$validDate($start) || !$validDate($end)) throw new RuntimeException('Ekstre tarih aralığını kontrol et.');
+    if($start>$end) throw new RuntimeException('Ekstre başlangıç tarihi bitiş tarihinden sonra olamaz.');
+
+    $startDate=new DateTimeImmutable($start);
+    $endDate=new DateTimeImmutable($end);
+    if($startDate->diff($endDate)->days>1096) throw new RuntimeException('Ekstre dönemi en fazla 3 yıl olabilir.');
+
+    if($currency!=='' && !in_array($currency,['TRY','USD','EUR'],true)){
+        throw new RuntimeException('Ekstre para birimi geçersiz.');
+    }
+    if(!in_array($type,['tum','sozlesme','tahsilat'],true)) $type='tum';
+
+    return [
+        'baslangic'=>$start,
+        'bitis'=>$end,
+        'para_birimi'=>$currency,
+        'hareket_turu'=>$type,
+    ];
+}
+
+function kt360_statement(PDO $pdo,int $institutionId,array $filters,int $limit=5000): array {
+    if(!kt360_ready($pdo) || $institutionId<=0){
+        return ['filters'=>$filters,'summary'=>[],'rows'=>[],'truncated'=>false];
+    }
+
+    $filters=kt360_statement_filters($filters);
+    $limit=max(1,min(10000,$limit));
+    $start=(string)$filters['baslangic'];
+    $end=(string)$filters['bitis'];
+    $currency=(string)$filters['para_birimi'];
+    $type=(string)$filters['hareket_turu'];
+
+    $currencySql=$currency!==''?' AND para_birimi=?':'';
+    $currencySqlS=$currency!==''?' AND s.para_birimi=?':'';
+    $currencySqlT=$currency!==''?' AND t.para_birimi=?':'';
+
+    $opening=[];
+    $stmt=$pdo->prepare("SELECT para_birimi,SUM(tutar) tutar FROM (
+        SELECT s.para_birimi,SUM(s.toplam_tutar) tutar
+        FROM kurum_sozlesmeleri s
+        WHERE s.kurum_id=?
+          AND s.durum IN ('aktif','tamamlandi')
+          AND s.baslangic_tarihi<?
+          {$currencySqlS}
+        GROUP BY s.para_birimi
+        UNION ALL
+        SELECT t.para_birimi,-SUM(t.tutar) tutar
+        FROM kurum_tahsilatlari t
+        INNER JOIN kurum_sozlesmeleri s
+          ON s.id=t.sozlesme_id
+         AND s.kurum_id=t.kurum_id
+         AND s.durum IN ('aktif','tamamlandi')
+        WHERE t.kurum_id=?
+          AND t.durum='aktif'
+          AND t.tahsilat_tarihi<?
+          {$currencySqlT}
+        GROUP BY t.para_birimi
+    ) x GROUP BY para_birimi");
+    $params=[$institutionId,$start];
+    if($currency!=='')$params[]=$currency;
+    $params[]=$institutionId;
+    $params[]=$start;
+    if($currency!=='')$params[]=$currency;
+    $stmt->execute($params);
+    foreach($stmt->fetchAll(PDO::FETCH_ASSOC) as $row){
+        $opening[(string)$row['para_birimi']]=(float)$row['tutar'];
+    }
+    $stmt->closeCursor();
+
+    $summary=[];
+    $stmt=$pdo->prepare("SELECT para_birimi,
+        SUM(sozlesme_borcu) sozlesme_borcu,
+        SUM(tahsilat) tahsilat
+        FROM (
+          SELECT s.para_birimi,SUM(s.toplam_tutar) sozlesme_borcu,0 tahsilat
+          FROM kurum_sozlesmeleri s
+          WHERE s.kurum_id=?
+            AND s.durum IN ('aktif','tamamlandi')
+            AND s.baslangic_tarihi BETWEEN ? AND ?
+            {$currencySqlS}
+          GROUP BY s.para_birimi
+          UNION ALL
+          SELECT t.para_birimi,0 sozlesme_borcu,SUM(t.tutar) tahsilat
+          FROM kurum_tahsilatlari t
+          INNER JOIN kurum_sozlesmeleri s
+            ON s.id=t.sozlesme_id
+           AND s.kurum_id=t.kurum_id
+           AND s.durum IN ('aktif','tamamlandi')
+          WHERE t.kurum_id=?
+            AND t.durum='aktif'
+            AND t.tahsilat_tarihi BETWEEN ? AND ?
+            {$currencySqlT}
+          GROUP BY t.para_birimi
+        ) x
+        GROUP BY para_birimi
+        ORDER BY FIELD(para_birimi,'TRY','USD','EUR'),para_birimi");
+    $params=[$institutionId,$start,$end];
+    if($currency!=='')$params[]=$currency;
+    $params[]=$institutionId;
+    $params[]=$start;
+    $params[]=$end;
+    if($currency!=='')$params[]=$currency;
+    $stmt->execute($params);
+    $periodRows=$stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+
+    $currencies=array_unique(array_merge(array_keys($opening),array_map(
+        static fn(array $row):string=>(string)$row['para_birimi'],
+        is_array($periodRows)?$periodRows:[]
+    )));
+    if($currency!=='' && !in_array($currency,$currencies,true))$currencies[]=$currency;
+    $order=['TRY'=>0,'USD'=>1,'EUR'=>2];
+    usort($currencies,static fn(string $a,string $b):int=>($order[$a]??99)<=>($order[$b]??99));
+
+    $periodMap=[];
+    foreach($periodRows as $row)$periodMap[(string)$row['para_birimi']]=$row;
+    foreach($currencies as $ccy){
+        $open=(float)($opening[$ccy]??0);
+        $debit=(float)($periodMap[$ccy]['sozlesme_borcu']??0);
+        $credit=(float)($periodMap[$ccy]['tahsilat']??0);
+        $summary[]=[
+            'para_birimi'=>$ccy,
+            'acilis_bakiyesi'=>number_format($open,2,'.',''),
+            'donem_borcu'=>number_format($debit,2,'.',''),
+            'donem_tahsilati'=>number_format($credit,2,'.',''),
+            'kapanis_bakiyesi'=>number_format($open+$debit-$credit,2,'.',''),
+        ];
+    }
+
+    $rowWhere=[];
+    if($type==='sozlesme')$rowWhere[]="hareket_turu='sozlesme'";
+    elseif($type==='tahsilat')$rowWhere[]="hareket_turu='tahsilat'";
+    $outerWhere=$rowWhere?'WHERE '.implode(' AND ',$rowWhere):'';
+
+    $stmt=$pdo->prepare("SELECT * FROM (
+        SELECT
+          s.baslangic_tarihi hareket_tarihi,
+          'sozlesme' hareket_turu,
+          s.id kaynak_id,
+          s.sozlesme_no referans,
+          CONCAT('Sözleşme borcu · ',COALESCE(p.ad,'Paket yok')) aciklama,
+          s.para_birimi,
+          s.toplam_tutar borc,
+          0 tahsilat,
+          s.id sozlesme_id,
+          NULL odeme_yontemi
+        FROM kurum_sozlesmeleri s
+        LEFT JOIN paketler p ON p.id=s.paket_id
+        WHERE s.kurum_id=?
+          AND s.durum IN ('aktif','tamamlandi')
+          AND s.baslangic_tarihi BETWEEN ? AND ?
+          {$currencySqlS}
+        UNION ALL
+        SELECT
+          t.tahsilat_tarihi hareket_tarihi,
+          'tahsilat' hareket_turu,
+          t.id kaynak_id,
+          COALESCE(NULLIF(t.referans_no,''),CONCAT('TAH-',t.id)) referans,
+          CONCAT('Tahsilat · ',s.sozlesme_no) aciklama,
+          t.para_birimi,
+          0 borc,
+          t.tutar tahsilat,
+          t.sozlesme_id,
+          t.odeme_yontemi
+        FROM kurum_tahsilatlari t
+        INNER JOIN kurum_sozlesmeleri s
+          ON s.id=t.sozlesme_id
+         AND s.kurum_id=t.kurum_id
+         AND s.durum IN ('aktif','tamamlandi')
+        WHERE t.kurum_id=?
+          AND t.durum='aktif'
+          AND t.tahsilat_tarihi BETWEEN ? AND ?
+          {$currencySqlT}
+    ) m
+    {$outerWhere}
+    ORDER BY
+      FIELD(para_birimi,'TRY','USD','EUR'),para_birimi,
+      hareket_tarihi,
+      CASE hareket_turu WHEN 'sozlesme' THEN 0 ELSE 1 END,
+      kaynak_id
+    LIMIT ".($limit+1));
+    $params=[$institutionId,$start,$end];
+    if($currency!=='')$params[]=$currency;
+    $params[]=$institutionId;
+    $params[]=$start;
+    $params[]=$end;
+    if($currency!=='')$params[]=$currency;
+    $stmt->execute($params);
+    $rows=$stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    if(!is_array($rows))$rows=[];
+
+    $truncated=count($rows)>$limit;
+    if($truncated)$rows=array_slice($rows,0,$limit);
+
+    $running=[];
+    foreach($opening as $ccy=>$amount)$running[$ccy]=(float)$amount;
+    foreach($rows as &$row){
+        $ccy=(string)$row['para_birimi'];
+        if(!array_key_exists($ccy,$running))$running[$ccy]=0.0;
+        $running[$ccy]+=(float)$row['borc']-(float)$row['tahsilat'];
+        $row['borc']=number_format((float)$row['borc'],2,'.','');
+        $row['tahsilat']=number_format((float)$row['tahsilat'],2,'.','');
+        $row['bakiye']=number_format($running[$ccy],2,'.','');
+    }
+    unset($row);
+
+    return [
+        'filters'=>$filters,
+        'summary'=>$summary,
+        'rows'=>$rows,
+        'truncated'=>$truncated,
+    ];
+}
