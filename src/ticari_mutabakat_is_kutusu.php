@@ -177,7 +177,7 @@ function mi_send_target_risk_cases(
         throw new RuntimeException('Süper Admin yetkisi gerekli.');
     }
 
-    $maxCases=max(1,min(100,$maxCases));
+    $maxCases=max(1,min(50,$maxCases));
     $normalized=[];
     foreach($caseIds as $value){
         $caseId=(int)$value;
