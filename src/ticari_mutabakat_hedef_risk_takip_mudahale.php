@@ -113,12 +113,8 @@ function mrtm_reschedule_selected(
         }
     }
 
-    $prefixedNote='Takip sağlığı müdahalesi';
-    $note=trim($note);
-    if($note!=='')$prefixedNote.=': '.$note;
-
     $result=map_bulk_reschedule_preserve_owners(
-        $pdo,$actor,$ids,$nextActionDate,$prefixedNote
+        $pdo,$actor,$ids,$nextActionDate,trim($note)
     );
     $result['selected']=count($ids);
     return $result;
