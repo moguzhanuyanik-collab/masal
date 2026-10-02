@@ -190,12 +190,12 @@ $currentMonth=$today->format('Y-m');
 $current=[];
 foreach($monthly as $row) if((string)$row['ay']===$currentMonth)$current[(string)$row['para_birimi']]=$row;
 ok_177((string)$current['TRY']['tahsilat_toplami']==='2600.00',
-    'monthly TRY trend must ignore cancelled payment and draft/cancelled contract status must not alter real active payment history.');
+    'monthly TRY trend must ignore cancelled payments and payments tied to draft/cancelled contracts.');
 ok_177((int)$current['TRY']['tahsilat_sayisi']===4,'monthly TRY active payment count mismatch.');
 ok_177((string)$current['USD']['tahsilat_toplami']==='200.00','monthly USD trend mismatch.');
 
 $recent=td_recent_payments($pdo,20);
-ok_177(count($recent)===7,'recent active payment feed should exclude only cancelled payment.');
+ok_177(count($recent)===5,'recent active payment feed must exclude cancelled payments and payments tied to draft/cancelled contracts.');
 foreach($recent as $row) ok_177((int)$row['id']>0,'recent payment row invalid.');
 $recentIds=array_map(static fn(array $row):int=>(int)$row['id'],$recent);
 $cancelledPaymentId=(int)$pdo->query("SELECT id FROM kurum_tahsilatlari WHERE durum='iptal' LIMIT 1")->fetchColumn();
