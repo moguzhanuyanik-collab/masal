@@ -62,6 +62,7 @@ $rows=$ready?mhs_case_rows($pdo,$filters,900):[];
 <header class="role-topbar">
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Mutabakat Aksiyon Sağlığı</small></span></a>
 <div class="sa-page-actions">
+<a class="sa-page-action" href="ticari-mutabakat-devir.php" aria-label="Sorumlu Devir"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-is-kutusu.php" aria-label="Günlük İş Kutusu"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hatirlatma.php" aria-label="Aksiyon Hatırlatmaları"><svg><use href="#sa-bell"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-aksiyon.php" aria-label="Mutabakat Aksiyon"><svg><use href="#sa-alert"/></svg></a>
@@ -204,6 +205,7 @@ $tags=mhs_health_tags($row);
 <a href="ticari-mutabakat-planlama.php"><span>🗂️</span>Planlama</a>
 <a href="ticari-belgeler.php"><span>🧾</span>Belgeler</a>
 <a href="ticari-finans.php"><span>₺</span>Finans</a>
+<a href="ticari-mutabakat-devir.php"><span>🔁</span>Devir</a>
 </nav>
 </div>
 </body>
