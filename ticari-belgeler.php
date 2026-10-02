@@ -124,6 +124,7 @@ $history=$selected?tb_history_rows($pdo,$selectedId,200):[];
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-dashboard.php" aria-label="Ticari Dashboard"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat.php" aria-label="Ticari Mutabakat"><svg><use href="#sa-chart"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-aksiyon.php" aria-label="Mutabakat Aksiyon"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="ticari-finans.php" aria-label="Ticari Finans"><svg><use href="#sa-database"/></svg></a>
 <a class="sa-page-action" href="tahsilat-takvimi.php" aria-label="Tahsilat Takvimi"><svg><use href="#sa-refresh"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
@@ -382,6 +383,7 @@ Tahsilat <?=((string)$mapping['tahsilat_durumu']==='aktif'?'aktif':((string)$map
 <a href="ticari-dashboard.php"><span>📊</span>KPI</a>
 <a class="active" href="ticari-belgeler.php"><span>🧾</span>Belgeler</a>
 <a href="ticari-mutabakat.php"><span>⚖️</span>Mutabakat</a>
+<a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 <a href="ticari-finans.php"><span>₺</span>Finans</a>
 <a href="tahsilat-takvimi.php"><span>📅</span>Takvim</a>
 </nav>

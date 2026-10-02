@@ -5,9 +5,10 @@ function tm_tables_ready(PDO $pdo): bool {
     return tf_tables_ready($pdo) && tb_tables_ready($pdo);
 }
 
-function tm_contract_rows(PDO $pdo,array $filters=[],int $limit=500): array {
+function tm_contract_rows(PDO $pdo,array $filters=[],int $limit=500,int $offset=0): array {
     if(!tm_tables_ready($pdo)) return [];
     $limit=max(1,min(2000,$limit));
+    $offset=max(0,$offset);
 
     $where=["s.durum IN ('aktif','tamamlandi')"];
     $params=[];
@@ -16,6 +17,12 @@ function tm_contract_rows(PDO $pdo,array $filters=[],int $limit=500): array {
     if($institutionId>0){
         $where[]='s.kurum_id=?';
         $params[]=$institutionId;
+    }
+
+    $contractId=max(0,(int)($filters['sozlesme_id']??0));
+    if($contractId>0){
+        $where[]='s.id=?';
+        $params[]=$contractId;
     }
 
     $currency=mb_strtoupper(trim((string)($filters['para_birimi']??'')),'UTF-8');
@@ -97,7 +104,7 @@ function tm_contract_rows(PDO $pdo,array $filters=[],int $limit=500): array {
          AND a.para_birimi=s.para_birimi
         WHERE ".implode(' AND ',$where)."
         ORDER BY s.kurum_id,s.id DESC
-        LIMIT {$limit}";
+        LIMIT {$limit} OFFSET {$offset}";
 
     $stmt=$pdo->prepare($sql);
     $stmt->execute($params);

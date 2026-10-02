@@ -60,6 +60,7 @@ foreach($contracts as $row){
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Ticari Mutabakat & Kontrol</small></span></a>
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-dashboard.php" aria-label="Ticari Dashboard"><svg><use href="#sa-chart"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-aksiyon.php" aria-label="Mutabakat Aksiyon"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="ticari-belgeler.php" aria-label="Ticari Belgeler"><svg><use href="#sa-database"/></svg></a>
 <a class="sa-page-action" href="ticari-finans.php" aria-label="Ticari Finans"><svg><use href="#sa-database"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
@@ -74,7 +75,7 @@ foreach($contracts as $row){
 <span class="role-hero-art">⚖️</span>
 </section>
 
-<div class="role-note"><span>ℹ️</span><p><strong>Operasyon Açığı</strong> normal süreçte tamamlanması gereken belgeleme/eşleme işidir. <strong>Veri Kontrolü Gerekli</strong> ise tutar limiti, kurum, sözleşme veya para birimi bütünlüğünde anomali bulunduğunu gösterir. Bu ekran hiçbir finansal kaydı değiştirmez.</p></div>
+<div class="role-note"><span>ℹ️</span><p><strong>Operasyon Açığı</strong> normal süreçte tamamlanması gereken belgeleme/eşleme işidir. <strong>Veri Kontrolü Gerekli</strong> ise tutar limiti, kurum, sözleşme veya para birimi bütünlüğünde anomali bulunduğunu gösterir. Bu ekran hiçbir finansal kaydı değiştirmez. Takip/sorumlu işlemleri için <a href="ticari-mutabakat-aksiyon.php">Mutabakat Aksiyon Merkezi</a> kullanılır.</p></div>
 
 <?php if(!$ready):?>
 <div class="role-note"><span>⚠️</span><p>Ticari Finans ve Ticari Belge tabloları hazır değil. 085 migration tamamlandığında bu salt-okunur merkez açılır.</p></div>
@@ -222,6 +223,7 @@ foreach($contracts as $row){
 <a href="super-admin.php"><span>⌂</span>Panel</a>
 <a href="ticari-dashboard.php"><span>📊</span>KPI</a>
 <a class="active" href="ticari-mutabakat.php"><span>⚖️</span>Mutabakat</a>
+<a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 <a href="ticari-belgeler.php"><span>🧾</span>Belgeler</a>
 <a href="ticari-finans.php"><span>₺</span>Finans</a>
 <a href="tahsilat-risk.php"><span>⚠️</span>Risk</a>
