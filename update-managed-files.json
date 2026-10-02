@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.70",
+  "version": "1.2.71",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -246,6 +246,7 @@
     "RELEASE-1.2.69.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.70.md",
+    "RELEASE-1.2.71.md",
     "RELEASE-1.2.8.md",
     "RELEASE-1.2.9.md",
     "YETKILENDIRME-1.0.35.md",
@@ -709,6 +710,8 @@
     "tests/reconciliation-health-db-185.php",
     "tests/reconciliation-inbox-187.cjs",
     "tests/reconciliation-inbox-db-187.php",
+    "tests/reconciliation-inbox-target-risk-196.cjs",
+    "tests/reconciliation-inbox-target-risk-db-196.php",
     "tests/reconciliation-owner-recovery-189.cjs",
     "tests/reconciliation-owner-recovery-db-189.php",
     "tests/reconciliation-performance-191.cjs",
@@ -863,5 +866,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Mutabakat hedef risk bildirim sağlığı ve müdahale dashboardu"
+  "name": "Mutabakat günlük iş kutusu hedef risk entegrasyonu"
 }
