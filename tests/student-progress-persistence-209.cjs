@@ -55,6 +55,11 @@ assert(activityUi.includes('g.resumeRound'));
 assert(activityUi.includes('postProgress(g.id,nextRound,finalRound,false)'));
 assert(activityUi.includes('Bu etkinliği tamamladın'));
 assert(activityUi.includes('tekrar yapmak zorunda değilsin'));
+assert(activityUi.includes('const nativeReplayAllowed=new Set()'));
+assert(activityUi.includes('data.ilkadimCompletedNative') || activityUi.includes('dataset.ilkadimCompletedNative'));
+assert(activityUi.includes("target.closest('.game-list a[href^=\"#/oyun/\"]')"));
+assert(activityUi.includes('showNativeCompleted(gameId)'));
+assert(activityUi.includes("nativeReplayAllowed.add(gameId)"));
 
 assert(curriculum.includes("indexes.find(index=>!completed.has(String(lesson.id)+'-'+index))"),'curriculum entry must target first incomplete question');
 

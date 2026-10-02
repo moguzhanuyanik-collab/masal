@@ -7,6 +7,7 @@
   const PROGRESS_STORE='ilkadim-extra-game-progress-v2';
   let extraGames=[];
   let completed=new Set();
+  const nativeReplayAllowed=new Set();
   let csrfToken='';
   const nativeFetch=window.fetch.bind(window);
 
@@ -161,8 +162,49 @@
       const link=list.querySelector('a[href="#/oyun/'+CSS.escape(id)+'"]');
       const time=link&&link.querySelector('.game-time');
       if(time)time.textContent='✓ Tamamlandı';
+      if(link){
+        link.dataset.ilkadimCompletedNative='1';
+        link.setAttribute('aria-label',(link.getAttribute('aria-label')||link.textContent||id).trim()+' — tamamlandı');
+      }
     });
   }
+
+  function showNativeCompleted(gameId){
+    const screen=document.getElementById('screen');
+    if(!screen)return;
+    const title={
+      hafiza:'Hafıza Oyunu',
+      renkler:'Renkler',
+      oruntu:'Örüntü'
+    }[gameId]||'Etkinlik';
+    screen.innerHTML='<div class="screen-content game-screen"><section class="game-complete">'+
+      '<span>✅</span><h2>Bu etkinliği tamamladın</h2>'+
+      '<p>'+esc(title)+' daha önce tamamlandı. Tekrar yapmak zorunda değilsin.</p>'+
+      '<a class="button primary full" href="#/etkinlikler">Etkinliklere Dön '+arrow()+'</a>'+
+      '<button class="button soft full" id="native-replay">Yeniden Oyna</button></section></div>';
+    const replay=document.getElementById('native-replay');
+    if(replay)replay.addEventListener('click',()=>{
+      nativeReplayAllowed.add(gameId);
+      location.hash='#/oyun/'+encodeURIComponent(gameId);
+      setTimeout(()=>nativeReplayAllowed.delete(gameId),1500);
+    });
+    window.scrollTo({top:0,behavior:'instant'});
+  }
+
+  document.addEventListener('click',event=>{
+    const target=event.target;
+    if(!(target instanceof Element))return;
+    const link=target.closest('.game-list a[href^="#/oyun/"]');
+    if(!(link instanceof HTMLAnchorElement))return;
+    const match=(link.getAttribute('href')||'').match(/^#\/oyun\/([^/?#]+)/);
+    if(!match)return;
+    let gameId='';
+    try{gameId=decodeURIComponent(match[1]);}catch{gameId=match[1];}
+    if(!NATIVE_IDS.includes(gameId)||!completed.has(gameId)||nativeReplayAllowed.has(gameId))return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    showNativeCompleted(gameId);
+  },true);
 
   function card(g){
     return '<a class="game-tile" data-extra-game="'+esc(g.id)+'" href="#/oyun/'+encodeURIComponent(g.id)+'" style="--tint:'+esc(g.color)+'">'+
