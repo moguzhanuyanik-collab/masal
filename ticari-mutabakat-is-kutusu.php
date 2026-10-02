@@ -69,9 +69,47 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         if(!$ready) throw new RuntimeException('Mutabakat aksiyon tabloları hazır değil.');
 
         $action=(string)($_POST['action']??'');
-        if($action!=='send_target_risk') throw new RuntimeException('Geçersiz işlem.');
+        if(!in_array($action,['send_target_risk','send_target_risk_batch'],true)){
+            throw new RuntimeException('Geçersiz işlem.');
+        }
 
         if(function_exists('ma_sync_cases')) ma_sync_cases($pdo,$user);
+
+        if($action==='send_target_risk_batch'){
+            $selected=$_POST['vaka_ids']??[];
+            if(!is_array($selected)) throw new RuntimeException('Toplu vaka seçimi geçersiz.');
+
+            $visibleRows=mi_case_rows($pdo,$user,[
+                'scope'=>(string)($_POST['scope']??'mine'),
+                'window'=>(string)($_POST['window']??'all'),
+                'sorun_turu'=>(string)($_POST['sorun_turu']??''),
+                'risk'=>(string)($_POST['risk']??''),
+                'owner_id'=>(string)($_POST['owner_id']??''),
+                'q'=>(string)($_POST['q']??''),
+            ],700);
+            $allowed=mi_pending_case_ids($visibleRows);
+            $batch=mi_send_target_risk_cases($pdo,$user,$selected,$allowed,50);
+            if((int)$batch['eligible']===0){
+                throw new RuntimeException('Seçilen vakalar mevcut filtrede artık bildirim beklemiyor.');
+            }
+
+            $parts=[
+                (int)$batch['selected'].' seçili',
+                (int)$batch['sent'].' gönderildi',
+            ];
+            if((int)$batch['not_pending']>0)$parts[]=(int)$batch['not_pending'].' artık beklemiyor';
+            if((int)$batch['not_visible']>0)$parts[]=(int)$batch['not_visible'].' görünür/bekleyen değil';
+            if((int)$batch['invalid_owner']>0)$parts[]=(int)$batch['invalid_owner'].' geçersiz sorumlu';
+            if((int)$batch['no_institution']>0)$parts[]=(int)$batch['no_institution'].' kurum bağlamı yok';
+            if((int)$batch['stale_source']>0)$parts[]=(int)$batch['stale_source'].' kaynak sorun çözülmüş';
+            if((int)$batch['no_longer_required']>0)$parts[]=(int)$batch['no_longer_required'].' sinyal değişmiş';
+            if((int)$batch['skipped']>0)$parts[]=(int)$batch['skipped'].' dedup/stale';
+            if((int)$batch['failed']>0)$parts[]=(int)$batch['failed'].' hata';
+
+            header('Location: '.mi_redirect_url($_POST,'Toplu hedef-risk gönderimi: '.implode(' · ',$parts).'.'));
+            exit;
+        }
+
         $caseId=max(0,(int)($_POST['vaka_id']??0));
         $send=mi_send_target_risk_case($pdo,$user,$caseId);
         $status=(string)($send['status']??'failed');
@@ -113,6 +151,7 @@ $query=trim((string)($_GET['q']??$_POST['q']??''));
 
 $summary=$ready?mi_summary($pdo,$user):[];
 $rows=$ready?mi_case_rows($pdo,$user,['scope'=>$scope,'window'=>$window,'sorun_turu'=>$type,'risk'=>$risk,'owner_id'=>$ownerFilter,'q'=>$query],700):[];
+$visiblePendingCount=$ready?count(mi_pending_case_ids($rows)):0;
 $team=$ready?mi_team_workload($pdo,100,$user):[];
 ?>
 <!doctype html>
@@ -123,7 +162,7 @@ $team=$ready?mi_team_workload($pdo,100,$user):[];
 <title>Mutabakat Günlük İş Kutusu — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
-<link rel="stylesheet" href="ticari-mutabakat-is-kutusu.css?v=1.2.74">
+<link rel="stylesheet" href="ticari-mutabakat-is-kutusu.css?v=1.2.75">
 </head>
 <body class="role-page sa-subpage">
 <?php require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -189,10 +228,35 @@ $team=$ready?mi_team_workload($pdo,100,$user):[];
 <a href="ticari-mutabakat-is-kutusu.php">Temizle</a>
 </form>
 
+<?php if($visiblePendingCount>0):?>
+<form id="mi-bulk-risk-form" class="mi-bulk-risk" method="post">
+<input type="hidden" name="csrf" value="<?=mih(csrf_token())?>">
+<input type="hidden" name="action" value="send_target_risk_batch">
+<input type="hidden" name="scope" value="<?=mih($scope)?>">
+<input type="hidden" name="window" value="<?=mih($window)?>">
+<input type="hidden" name="sorun_turu" value="<?=mih($type)?>">
+<input type="hidden" name="risk" value="<?=mih($risk)?>">
+<input type="hidden" name="owner_id" value="<?=mih($ownerFilter)?>">
+<input type="hidden" name="q" value="<?=mih($query)?>">
+<label><input type="checkbox" id="mi-bulk-select-visible"> İlk 50 görünür bekleyen vakayı seç</label>
+<div>
+<strong><?=$visiblePendingCount?> görünür vaka bildirim bekliyor</strong>
+<small>Yalnız seçili, mevcut filtrede görünür ve POST anında hâlâ bekleyen vakalar işlenir. En fazla 50 vaka.</small>
+</div>
+<button type="submit">Seçili Hedef-Risk Bildirimlerini Gönder</button>
+</form>
+<?php endif;?>
+
 <div class="role-list mi-list">
 <?php if(!$rows):?><div class="role-empty"><span>✅</span>Filtreye uyan açık mutabakat vakası yok.</div><?php endif;?>
 <?php foreach($rows as $row):?>
 <div class="mi-row-wrap">
+<?php if(!empty($row['hedef_bildirim_bekliyor'])):?>
+<label class="mi-bulk-select">
+<input class="mi-bulk-risk-check" type="checkbox" name="vaka_ids[]" value="<?=(int)$row['id']?>" form="mi-bulk-risk-form">
+<span>Toplu gönderim için seç</span>
+</label>
+<?php endif;?>
 <a class="role-row mi-row" href="ticari-mutabakat-aksiyon.php?vaka_id=<?=(int)$row['id']?>">
 <span><?=((string)$row['sorun_turu']==='butunluk'?'🚨':'🧩')?></span>
 <div>
@@ -245,7 +309,7 @@ $team=$ready?mi_team_workload($pdo,100,$user):[];
 </div>
 </section>
 
-<div class="role-note"><span>🔒</span><p>İş Kutusu hedef-risk hesabını değiştirmez. Yalnız “Bildirim Bekliyor” vakasında, mevcut 1.2.69/1.2.73 güvenlik motorunu kullanarak seçili vakaya tek-vaka bildirim gönderebilir. Vaka düzenleme için Aksiyon Merkezi'ni kullan.</p></div>
+<div class="role-note"><span>🔒</span><p>İş Kutusu hedef-risk hesabını değiştirmez. Tek-vaka ve seçili toplu gönderim aynı 1.2.69/1.2.73 exact-case güvenlik motorunu kullanır. Toplu işlem yalnız mevcut filtrede görünür ve hâlâ “Bildirim Bekliyor” vakaları işler; vaka state'i veya okundu durumu değiştirilmez.</p></div>
 <?php endif;?>
 </main>
 <nav class="role-bottom">
@@ -261,6 +325,16 @@ $team=$ready?mi_team_workload($pdo,100,$user):[];
 <a href="ticari-mutabakat-devir.php"><span>🔁</span>Devir</a>
 <a href="ticari-mutabakat-performans.php"><span>📈</span>Performans</a>
 </nav>
+<script>
+(() => {
+  const master=document.getElementById('mi-bulk-select-visible');
+  if(!master) return;
+  master.addEventListener('change',() => {
+    const checks=Array.from(document.querySelectorAll('.mi-bulk-risk-check'));
+    checks.forEach((box,index) => { box.checked=master.checked && index<50; });
+  });
+})();
+</script>
 </div>
 </body>
 </html>
