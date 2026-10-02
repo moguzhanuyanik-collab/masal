@@ -5,6 +5,7 @@ require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
 require __DIR__.'/src/kurum_lisanslari.php';
 require __DIR__.'/src/ticari_finans.php';
+require __DIR__.'/src/ticari_taksit.php';
 require __DIR__.'/src/tahsilat_risk.php';
 require __DIR__.'/src/bildirimler.php';
 require __DIR__.'/src/tahsilat_hatirlatma.php';
