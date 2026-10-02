@@ -402,7 +402,7 @@ $localRevision = read_local_release_revision(__DIR__,$local);
             <section class="subpage-intro">
                 <span><svg><use href="#sa-refresh"/></svg></span>
                 <h1>Uygulama Güncelleme</h1>
-                <p>Yeni sürümleri GitHub üzerinden kontrol et ve uygulamayı tek dokunuşla güncelle.</p>
+                <p>Yeni sürümler GitHub üzerinden otomatik bulunur ve güvenli sırayla kurulur.</p>
             </section>
 
             <section class="settings-block">
@@ -537,6 +537,7 @@ $localRevision = read_local_release_revision(__DIR__,$local);
     </nav>
 </div>
 
+<script src="guncelleme-auto.js?v=1.2.79-r2"></script>
 <script>
 (() => {
     const localVersion = document.getElementById('localVersion');
@@ -871,10 +872,22 @@ $localRevision = read_local_release_revision(__DIR__,$local);
         }
     });
 
-    checkButton.addEventListener('click', checkUpdate);
-    installButton.addEventListener('click', installUpdate);
-
-    checkUpdate();
+    window.ILKADIM_UPDATE_UI = {
+        request,
+        applyState,
+        setBusy,
+        showMessage,
+        isBusy: () => busy,
+        statusTitle,
+        statusText,
+        elements: {
+            checkButton,
+            installButton,
+            backupText,
+            messageBox
+        }
+    };
+    window.dispatchEvent(new Event('ilkadim-updater-ready'));
 })();
 </script>
 </body>

@@ -254,6 +254,7 @@
     "RELEASE-1.2.76.md",
     "RELEASE-1.2.77.md",
     "RELEASE-1.2.78.md",
+    "RELEASE-1.2.79-R2.md",
     "RELEASE-1.2.79.md",
     "RELEASE-1.2.8.md",
     "RELEASE-1.2.9.md",
@@ -452,6 +453,7 @@
     "global-ogrenciler.php",
     "global-veliler.php",
     "global.php",
+    "guncelleme-auto.js",
     "guncelleme-manuel.css",
     "guncelleme.php",
     "hesabim.php",
@@ -801,6 +803,7 @@
     "tests/update-198-rescue-110.php",
     "tests/update-activation-104.cjs",
     "tests/update-activation-104.php",
+    "tests/update-auto-bootstrap-r2.cjs",
     "tests/update-chain-rebuild-126.cjs",
     "tests/update-continuity-112.cjs",
     "tests/update-continuity-112.php",
@@ -901,6 +904,6 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 1,
-  "name": "Stale hedef risk takip planı kurtarma merkezi"
+  "release_revision": 2,
+  "name": "Otomatik güncelleyici bootstrap"
 }
