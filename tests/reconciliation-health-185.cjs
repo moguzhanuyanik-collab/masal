@@ -44,12 +44,15 @@ assert(domain.includes("(v.sorumlu_kullanici_id IS NULL OR v.sorumlu_kullanici_i
   'unassigned-case health condition missing');
 assert(domain.includes("v.sonraki_aksiyon_tarihi IS NULL"),
   'missing next-action health condition missing');
-assert(domain.includes("NOT "+'') || true);
+assert(domain.includes("elseif($health==='ilk_mudahale_yok')"),
+  'current-cycle first-intervention gap filter missing');
+assert(domain.includes("$where[]='NOT '.mhs_intervention_exists_expr('v');"),
+  'first-intervention gap must be pushed into SQL');
 
-assert(domain.includes("WHERE ".concat('"').slice(0,0)) || domain.includes("WHERE ".implode"),
-  'queue must push filters into SQL before LIMIT');
-assert(domain.indexOf("WHERE ".implode(' AND ',$where)."") < domain.indexOf("LIMIT {$limit}"),
-  'health filtering must happen before SQL limit');
+const whereIndex=domain.indexOf("WHERE \".implode(' AND ',$where).\"");
+const limitIndex=domain.indexOf("LIMIT {$limit}",whereIndex);
+assert(whereIndex>=0 && limitIndex>whereIndex,
+  'health filtering must happen in SQL WHERE before LIMIT');
 assert(!/\bINSERT\b|\bUPDATE\b|\bDELETE\b/.test(domain),
   'health analytics domain must remain read-only');
 
