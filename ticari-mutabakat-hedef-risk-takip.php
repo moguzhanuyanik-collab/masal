@@ -104,7 +104,7 @@ $ownerOptions=$ready?mrh_owner_options($pdo,$days):[];
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk-saglik.php" aria-label="Bildirim Sağlığı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-is-kutusu.php" aria-label="Günlük İş Kutusu"><svg><use href="#sa-users"/></svg></a>
-<a class="sa-page-action" href="ticari-mutabakat-planlama.php" aria-label="Toplu Planlama"><svg><use href="#sa-calendar"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-planlama.php" aria-label="Toplu Planlama"><svg><use href="#sa-refresh"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
 </header>
