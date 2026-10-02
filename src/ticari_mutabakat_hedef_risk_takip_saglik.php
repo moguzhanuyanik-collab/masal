@@ -189,7 +189,7 @@ function mrts_base_rows(PDO $pdo,int $days=30,int $limit=1500): array {
 
 function mrts_rows(PDO $pdo,array $actor,array $filters=[],int $limit=500): array {
     if((string)(auth_effective_role($actor)??'')!=='super_admin' || !mrts_tables_ready($pdo)) return [];
-    $limit=max(1,min(1000,$limit));
+    $limit=max(1,min(2000,$limit));
     $days=mrh_window_days($filters['days']??30);
     $base=mrts_base_rows($pdo,$days,2000);
     if(!$base) return [];
@@ -273,7 +273,7 @@ function mrts_summary(PDO $pdo,array $actor,int $days=30): array {
         'resolved'=>0,
         'closed'=>0,
     ];
-    foreach(mrts_rows($pdo,$actor,['days'=>$days],1000) as $row){
+    foreach(mrts_rows($pdo,$actor,['days'=>$days],2000) as $row){
         $out['total']++;
         if(!empty($row['takip_attention']))$out['attention']++;
         $state=(string)$row['takip_durumu'];
@@ -293,7 +293,7 @@ function mrts_summary(PDO $pdo,array $actor,int $days=30): array {
 
 function mrts_owner_rows(PDO $pdo,array $actor,int $days=30): array {
     $groups=[];
-    foreach(mrts_rows($pdo,$actor,['days'=>$days],1000) as $row){
+    foreach(mrts_rows($pdo,$actor,['days'=>$days],2000) as $row){
         $ownerId=(int)($row['sorumlu_kullanici_id']??0);
         $key=$ownerId>0?$ownerId:0;
         if(!isset($groups[$key])){
