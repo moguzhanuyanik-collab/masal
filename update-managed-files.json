@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.66",
+  "version": "1.2.67",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -241,6 +241,7 @@
     "RELEASE-1.2.64.md",
     "RELEASE-1.2.65.md",
     "RELEASE-1.2.66.md",
+    "RELEASE-1.2.67.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
     "RELEASE-1.2.9.md",
@@ -426,6 +427,7 @@
     "database/migrations/086_ticari_mutabakat_aksiyon_merkezi.sql",
     "database/migrations/087_mutabakat_aksiyon_hatirlatmalari.sql",
     "database/migrations/088_mutabakat_operasyon_eskalasyonlari.sql",
+    "database/migrations/089_mutabakat_operasyon_hedef_politikalari.sql",
     "demo-satis.css",
     "demo-satis.php",
     "destek.css",
@@ -572,6 +574,7 @@
     "src/ticari_mutabakat_devir.php",
     "src/ticari_mutabakat_eskalasyon.php",
     "src/ticari_mutabakat_hatirlatma.php",
+    "src/ticari_mutabakat_hedef.php",
     "src/ticari_mutabakat_is_kutusu.php",
     "src/ticari_mutabakat_performans.php",
     "src/ticari_mutabakat_planlama.php",
@@ -705,6 +708,8 @@
     "tests/reconciliation-performance-db-191.php",
     "tests/reconciliation-reminders-188.cjs",
     "tests/reconciliation-reminders-db-188.php",
+    "tests/reconciliation-targets-192.cjs",
+    "tests/reconciliation-targets-db-192.php",
     "tests/recovery-safety-100.cjs",
     "tests/recovery-safety-100.php",
     "tests/renewal-commercial-link-174.cjs",
@@ -797,6 +802,8 @@
     "ticari-mutabakat-eskalasyon.php",
     "ticari-mutabakat-hatirlatma.css",
     "ticari-mutabakat-hatirlatma.php",
+    "ticari-mutabakat-hedefleri.css",
+    "ticari-mutabakat-hedefleri.php",
     "ticari-mutabakat-is-kutusu.css",
     "ticari-mutabakat-is-kutusu.php",
     "ticari-mutabakat-performans.css",
@@ -837,5 +844,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Mutabakat operasyon performans dashboardu"
+  "name": "Mutabakat operasyon hedefleri ve politika merkezi"
 }
