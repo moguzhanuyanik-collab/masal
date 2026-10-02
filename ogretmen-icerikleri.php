@@ -65,11 +65,17 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
 $editContent=null;
 if($editContentId>0){
-    $editContent=oi_teacher_content_for_edit($pdo,$user,$editContentId);
-    if(!$editContent && $error==='') $error='Düzenlenecek içerik bulunamadı.';
-    if(is_array($editContent)){
-        $editInstitutionId=(int)$editContent['kurum_id'];
-        if(in_array($editInstitutionId,$institutionIds,true)) $selectedInstitutionId=$editInstitutionId;
+    try{
+        $editContent=oi_teacher_content_for_edit($pdo,$user,$editContentId);
+        if(!$editContent && $error==='') $error='Düzenlenecek içerik bulunamadı.';
+        if(is_array($editContent)){
+            $editInstitutionId=(int)$editContent['kurum_id'];
+            if(in_array($editInstitutionId,$institutionIds,true)) $selectedInstitutionId=$editInstitutionId;
+        }
+    }catch(Throwable $e){
+        error_log('[IlkAdim][teacher-content-edit-open] '.$e->getMessage());
+        $editContent=null;
+        if($error==='') $error='Düzenlenecek içerik şu anda yüklenemedi. Liste görünümünden devam edebilirsin.';
     }
 }
 

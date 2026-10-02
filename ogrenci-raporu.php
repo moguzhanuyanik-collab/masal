@@ -22,15 +22,34 @@ if($studentId<=0 || !can_access_student((int)$user['id'],$studentId)){
     exit;
 }
 
-$stmt=$pdo->prepare('SELECT id,ad,email,egitim_kademesi,sinif_seviyesi,kullanici_id FROM ogrenciler WHERE id=? AND aktif=1 LIMIT 1');
-$stmt->execute([$studentId]);
-$student=$stmt->fetch();
-$stmt->closeCursor();
+$studentColumns=['id'];
+foreach(['ad','email','egitim_kademesi','sinif_seviyesi','kullanici_id'] as $studentColumn){
+    if(auth_runtime_column_exists($pdo,'ogrenciler',$studentColumn)) $studentColumns[]=$studentColumn;
+}
+$studentActiveWhere=auth_runtime_column_exists($pdo,'ogrenciler','aktif')?' AND aktif=1':'';
+try{
+    $stmt=$pdo->prepare('SELECT '.implode(',',$studentColumns).' FROM ogrenciler WHERE id=?'.$studentActiveWhere.' LIMIT 1');
+    $stmt->execute([$studentId]);
+    $student=$stmt->fetch();
+    $stmt->closeCursor();
+}catch(Throwable $e){
+    error_log('[IlkAdim][student-report-open] '.$e->getMessage());
+    http_response_code(503);
+    echo 'Öğrenci raporu şu anda açılamıyor.';
+    exit;
+}
 if(!is_array($student)){
     http_response_code(404);
     echo 'Öğrenci bulunamadı.';
     exit;
 }
+$student=array_merge([
+    'ad'=>'',
+    'email'=>'',
+    'egitim_kademesi'=>'temel_egitim',
+    'sinif_seviyesi'=>1,
+    'kullanici_id'=>null,
+],$student);
 
 $reportInstitutionId=max(0,(int)($_GET['kurum_id']??0));
 $reportInstitutionScoped=false;
@@ -121,16 +140,23 @@ if($effectiveRole==='yonetici'){
         exit;
     }
 }elseif($effectiveRole==='super_admin' && $reportInstitutionId>0){
-    $managerContext=ky_manager_student_report_context($pdo,$user,$studentId,$reportInstitutionId);
-    if(!is_array($managerContext)){
-        http_response_code(403);
-        echo 'Bu kurum için öğrenci raporunu görüntüleme yetkiniz yok.';
+    try{
+        $managerContext=ky_manager_student_report_context($pdo,$user,$studentId,$reportInstitutionId);
+        if(!is_array($managerContext)){
+            http_response_code(403);
+            echo 'Bu kurum için öğrenci raporunu görüntüleme yetkiniz yok.';
+            exit;
+        }
+        $reportInstitutionScoped=true;
+        $reportInstitutionName=(string)$managerContext['institution_name'];
+        $reportBack=(string)$managerContext['back'];
+        $reportBackLabel=(string)$managerContext['back_label'];
+    }catch(Throwable $e){
+        error_log('[IlkAdim][super-admin-report-context] '.$e->getMessage());
+        http_response_code(503);
+        echo 'Süper admin rapor kapsamı şu anda doğrulanamıyor.';
         exit;
     }
-    $reportInstitutionScoped=true;
-    $reportInstitutionName=(string)$managerContext['institution_name'];
-    $reportBack=(string)$managerContext['back'];
-    $reportBackLabel=(string)$managerContext['back_label'];
 }elseif($reportInstitutionId>0 && $effectiveRole==='ogretmen'){
     try{
         $teacherContext=tol_teacher_report_context($pdo,(int)$user['id'],$studentId,$reportInstitutionId);
@@ -215,20 +241,42 @@ if($effectiveRole==='yonetici'){
     }
 }
 
-$summary=normalized_summary($pdo,$studentId);
+try{
+    $summary=normalized_summary($pdo,$studentId);
+}catch(Throwable $e){
+    error_log('[IlkAdim][student-report-summary] '.$e->getMessage());
+    $summary=[
+        'completed_steps'=>0,
+        'answers'=>0,
+        'correct_answers'=>0,
+        'games'=>0,
+        'stars'=>0,
+        'badges'=>0,
+    ];
+}
 $studentGrade=min(8,max(1,(int)($student['sinif_seviyesi']??1)));
 $educationStage=(string)($student['egitim_kademesi']??'temel_egitim');
 if($educationStage!=='temel_egitim')$educationStage='temel_egitim';
 
-$lessonStmt=$pdo->prepare('SELECT d.kod,d.ad,COUNT(DISTINCT m.id) toplam_modul,(SELECT COUNT(*) FROM ogrenci_ilerleme oi WHERE oi.ogrenci_id=? AND oi.sinif_seviyesi=? AND oi.ders_kodu=d.kod AND oi.tamamlandi=1) tamamlanan_modul FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id AND sd.kademe_kodu=? AND sd.sinif_seviyesi=? AND sd.aktif=1 LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.kademe_kodu=? AND m.sinif_seviyesi=? AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod,d.ad,sd.sira ORDER BY sd.sira,d.id');
-$lessonStmt->execute([$studentId,$studentGrade,$educationStage,$studentGrade,$educationStage,$studentGrade]);
-$lessons=$lessonStmt->fetchAll();
-$lessonStmt->closeCursor();
+$lessons=[];
+try{
+    $lessonStmt=$pdo->prepare('SELECT d.kod,d.ad,COUNT(DISTINCT m.id) toplam_modul,(SELECT COUNT(*) FROM ogrenci_ilerleme oi WHERE oi.ogrenci_id=? AND oi.sinif_seviyesi=? AND oi.ders_kodu=d.kod AND oi.tamamlandi=1) tamamlanan_modul FROM dersler d INNER JOIN sinif_dersleri sd ON sd.ders_id=d.id AND sd.kademe_kodu=? AND sd.sinif_seviyesi=? AND sd.aktif=1 LEFT JOIN ders_modulleri m ON m.ders_id=d.id AND m.kademe_kodu=? AND m.sinif_seviyesi=? AND m.aktif=1 WHERE d.aktif=1 GROUP BY d.id,d.kod,d.ad,sd.sira ORDER BY sd.sira,d.id');
+    $lessonStmt->execute([$studentId,$studentGrade,$educationStage,$studentGrade,$educationStage,$studentGrade]);
+    $lessons=$lessonStmt->fetchAll();
+    $lessonStmt->closeCursor();
+}catch(Throwable $e){
+    error_log('[IlkAdim][student-report-lessons] '.$e->getMessage());
+}
 
-$badgeStmt=$pdo->prepare('SELECT r.ad,r.emoji,r.aciklama FROM ogrenci_rozetleri orr INNER JOIN rozetler r ON r.id=orr.rozet_id WHERE orr.ogrenci_id=? ORDER BY r.sira,r.id');
-$badgeStmt->execute([$studentId]);
-$badges=$badgeStmt->fetchAll();
-$badgeStmt->closeCursor();
+$badges=[];
+try{
+    $badgeStmt=$pdo->prepare('SELECT r.ad,r.emoji,r.aciklama FROM ogrenci_rozetleri orr INNER JOIN rozetler r ON r.id=orr.rozet_id WHERE orr.ogrenci_id=? ORDER BY r.sira,r.id');
+    $badgeStmt->execute([$studentId]);
+    $badges=$badgeStmt->fetchAll();
+    $badgeStmt->closeCursor();
+}catch(Throwable $e){
+    error_log('[IlkAdim][student-report-badges] '.$e->getMessage());
+}
 
 $teacherContents=oi_student_contents($pdo,$studentId);
 if($reportInstitutionScoped){

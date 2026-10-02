@@ -112,6 +112,7 @@ jobs:
           node tests/update-release-chain-cache-127.cjs
           node tests/update-auto-bootstrap-r2.cjs
           node tests/update-auto-chain-206.cjs
+          node tests/runtime-page-health-205.cjs
           node tests/update-migration-execution-128.cjs
           node tests/global-scope-integrity-129.cjs
           node tests/manual-update-upload-131.cjs

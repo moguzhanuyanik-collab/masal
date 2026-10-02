@@ -1,6 +1,6 @@
 {
   "format": 1,
   "version": "1.2.80",
-  "name": "Runtime ve sayfa açılış sağlamlaştırması",
-  "release_revision": 3
+  "name": "Çekirdek sayfa açılış sağlamlaştırması",
+  "release_revision": 4
 }
