@@ -250,7 +250,7 @@ $team=$ready?mi_team_workload($pdo,100,$user):[];
 <div class="role-list mi-list">
 <?php if(!$rows):?><div class="role-empty"><span>✅</span>Filtreye uyan açık mutabakat vakası yok.</div><?php endif;?>
 <?php foreach($rows as $row):?>
-<div class="mi-row-wrap">
+<div class="mi-row-wrap <?=!empty($row['hedef_bildirim_bekliyor'])?'bulk-pending':''?>">
 <?php if(!empty($row['hedef_bildirim_bekliyor'])):?>
 <label class="mi-bulk-select">
 <input class="mi-bulk-risk-check" type="checkbox" name="vaka_ids[]" value="<?=(int)$row['id']?>" form="mi-bulk-risk-form">
