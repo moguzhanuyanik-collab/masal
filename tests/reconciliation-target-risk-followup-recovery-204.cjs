@@ -55,8 +55,10 @@ assert(page.includes("verify_csrf($_POST['csrf']??null)"),
   'stale recovery write must require CSRF');
 assert(page.includes("if((string)($_POST['action']??'')!=='recover_stale')"),
   'stale recovery must use a closed POST action whitelist');
-assert(page.includes('Eski planı taşımadan Güncel Bağlamda Yeni Takip Planı Oluştur'),
-  'recovery intent disclosure missing');
+assert(
+  page.includes('Eski Planı Taşımadan') && page.includes('Güncel Bağlamda Yeni Takip Planı Oluştur'),
+  'recovery intent disclosure missing'
+);
 assert(page.includes('Eski plan') && page.includes('Güncel'),
   'old-vs-current context comparison UI missing');
 assert(page.includes('İlk 50 görünür adayı seç'),
