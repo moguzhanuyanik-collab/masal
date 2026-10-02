@@ -140,6 +140,7 @@ jobs:
           node tests/collection-calendar-181.cjs
           node tests/commercial-documents-182.cjs
           node tests/commercial-reconciliation-183.cjs
+          node tests/commercial-reconciliation-actions-184.cjs
           node tests/institution-class-edit-136.cjs
           node tests/institution-reporting-137.cjs
           node tests/institution-report-export-159.cjs
@@ -241,6 +242,7 @@ jobs:
           php tests/collection-calendar-db-181.php
           php tests/commercial-documents-db-182.php
           php tests/commercial-reconciliation-db-183.php
+          php tests/commercial-reconciliation-actions-db-184.php
           php tests/institution-class-edit-db-136.php
           php tests/institution-reporting-db-137.php
           php tests/teacher-content-edit-copy-db-139.php
