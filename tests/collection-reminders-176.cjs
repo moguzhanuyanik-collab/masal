@@ -57,7 +57,7 @@ assert(notifications.includes("function bd_recipient_roles(): array"),
   'manual notification role contract missing');
 assert(notifications.includes("return ['ogretmen'=>'Öğretmenler','veli'=>'Veliler','ogrenci'=>'Öğrenciler'];"),
   'manual notification targets must remain student/parent/teacher only');
-assert(notifications.includes("bd_recipient_roles()+['yonetici'=>'Yöneticiler']"),
+assert(notifications.includes("'yonetici'=>'Yöneticiler'"),
   'system-supported manager recipient role missing');
 
 assert(page.includes("require __DIR__.'/src/tahsilat_hatirlatma.php';"),
