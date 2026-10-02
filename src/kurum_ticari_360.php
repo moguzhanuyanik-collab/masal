@@ -247,7 +247,7 @@ function kt360_counts(PDO $pdo,int $institutionId): array {
 
 
 function kt360_statement_filters(array $input): array {
-    $defaultStart=(new DateTimeImmutable('first day of january'))->format('Y-m-d');
+    $defaultStart=date('Y-01-01');
     $defaultEnd=(new DateTimeImmutable('today'))->format('Y-m-d');
 
     $start=trim((string)($input['baslangic']??$defaultStart));
@@ -392,11 +392,6 @@ function kt360_statement(PDO $pdo,int $institutionId,array $filters,int $limit=5
         ];
     }
 
-    $rowWhere=[];
-    if($type==='sozlesme')$rowWhere[]="hareket_turu='sozlesme'";
-    elseif($type==='tahsilat')$rowWhere[]="hareket_turu='tahsilat'";
-    $outerWhere=$rowWhere?'WHERE '.implode(' AND ',$rowWhere):'';
-
     $stmt=$pdo->prepare("SELECT * FROM (
         SELECT
           s.baslangic_tarihi hareket_tarihi,
@@ -437,7 +432,6 @@ function kt360_statement(PDO $pdo,int $institutionId,array $filters,int $limit=5
           AND t.tahsilat_tarihi BETWEEN ? AND ?
           {$currencySqlT}
     ) m
-    {$outerWhere}
     ORDER BY
       FIELD(para_birimi,'TRY','USD','EUR'),para_birimi,
       hareket_tarihi,
@@ -455,25 +449,31 @@ function kt360_statement(PDO $pdo,int $institutionId,array $filters,int $limit=5
     $stmt->closeCursor();
     if(!is_array($rows))$rows=[];
 
-    $truncated=count($rows)>$limit;
-    if($truncated)$rows=array_slice($rows,0,$limit);
-
     $running=[];
     foreach($opening as $ccy=>$amount)$running[$ccy]=(float)$amount;
-    foreach($rows as &$row){
+
+    $visibleRows=[];
+    foreach($rows as $row){
         $ccy=(string)$row['para_birimi'];
         if(!array_key_exists($ccy,$running))$running[$ccy]=0.0;
         $running[$ccy]+=(float)$row['borc']-(float)$row['tahsilat'];
+
         $row['borc']=number_format((float)$row['borc'],2,'.','');
         $row['tahsilat']=number_format((float)$row['tahsilat'],2,'.','');
         $row['bakiye']=number_format($running[$ccy],2,'.','');
+
+        if($type==='sozlesme' && (string)$row['hareket_turu']!=='sozlesme') continue;
+        if($type==='tahsilat' && (string)$row['hareket_turu']!=='tahsilat') continue;
+        $visibleRows[]=$row;
     }
-    unset($row);
+
+    $truncated=count($visibleRows)>$limit;
+    if($truncated)$visibleRows=array_slice($visibleRows,0,$limit);
 
     return [
         'filters'=>$filters,
         'summary'=>$summary,
-        'rows'=>$rows,
+        'rows'=>$visibleRows,
         'truncated'=>$truncated,
     ];
 }
