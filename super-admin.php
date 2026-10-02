@@ -73,6 +73,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
   <a href="ticari-mutabakat-hatirlatma.php"><svg><use href="#sa-alert"/></svg>Mutabakat Hatırlatmaları</a>
   <a href="ticari-mutabakat-eskalasyon.php"><svg><use href="#sa-alert"/></svg>Mutabakat Eskalasyon</a>
   <a href="ticari-mutabakat-saglik.php"><svg><use href="#sa-chart"/></svg>Mutabakat Sağlığı</a>
+  <a href="ticari-mutabakat-hedefleri.php"><svg><use href="#sa-chart"/></svg>Mutabakat Hedefleri</a>
   <a href="ticari-mutabakat-planlama.php"><svg><use href="#sa-users"/></svg>Mutabakat Planlama</a>
   <a href="ticari-mutabakat-devir.php"><svg><use href="#sa-users"/></svg>Mutabakat Sorumlu Devir</a>
   <a href="ticari-belgeler.php"><svg><use href="#sa-database"/></svg>Ticari Belgeler</a>
