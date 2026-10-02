@@ -252,6 +252,9 @@ function td_operational_counts(PDO $pdo): array {
         'reminder_total'=>0,
         'renewal_open'=>0,
         'renewal_commercial_gap'=>0,
+        'reconciliation_open'=>0,
+        'reconciliation_overdue'=>0,
+        'reconciliation_unassigned'=>0,
     ];
 
     if(function_exists('tr_tables_ready') && tr_tables_ready($pdo)){
@@ -280,6 +283,13 @@ function td_operational_counts(PDO $pdo): array {
             +(int)($gaps['sozlesme_taslak']??0)
             +(int)($gaps['tahsilat_yok']??0)
             +(int)($gaps['kismi_tahsilat']??0);
+    }
+
+    if(function_exists('mhs_tables_ready') && mhs_tables_ready($pdo)){
+        $health=mhs_summary($pdo);
+        $out['reconciliation_open']=(int)($health['open']??0);
+        $out['reconciliation_overdue']=(int)($health['aksiyon_gecikti']??0);
+        $out['reconciliation_unassigned']=(int)($health['sahipsiz']??0);
     }
 
     return $out;
