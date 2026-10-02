@@ -268,7 +268,7 @@ ok_190((int)$pdo->query("SELECT COUNT(*) FROM ticari_mutabakat_eskalasyonlari WH
 
 $pdo->prepare("INSERT INTO ticari_mutabakat_vaka_gecmisi
     (vaka_id,kullanici_id,tur,kod,not_metni,olusturulma_tarihi)
-    VALUES (4,1,'durum','vaka_yeniden_acildi','Yeni döngü',DATE_SUB(NOW(),INTERVAL 4 DAY))")->execute();
+    VALUES (4,1,'durum','vaka_yeniden_acildi','Yeni döngü',DATE_ADD(DATE_SUB(NOW(),INTERVAL 4 DAY),INTERVAL 1 HOUR))")->execute();
 $reopen=me_sync($pdo,$actor);
 ok_190((int)$reopen['sent']===1,'new reopen cycle at same 4-day threshold must allow a fresh escalation.');
 ok_190((int)$pdo->query("SELECT COUNT(*) FROM ticari_mutabakat_eskalasyonlari WHERE vaka_id=4")->fetchColumn()===2,
