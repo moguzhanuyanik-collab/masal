@@ -9,6 +9,7 @@ require __DIR__.'/src/ticari_mutabakat.php';
 require __DIR__.'/src/ticari_mutabakat_aksiyon.php';
 require __DIR__.'/src/ticari_mutabakat_saglik.php';
 require __DIR__.'/src/ticari_mutabakat_performans.php';
+require __DIR__.'/src/ticari_mutabakat_hedef.php';
 
 $user=require_role('super_admin');
 $pdo=db();
@@ -31,6 +32,9 @@ $owners=$ready?mp_owner_rows($pdo,$days,100):[];
 $issues=$ready?mp_issue_rows($pdo,$days):[];
 $monthly=$ready?mp_monthly_closed($pdo,6):[];
 $recent=$ready?mp_recent_closed_rows($pdo,$days,40):[];
+$targetReady=$ready&&mh_tables_ready($pdo);
+$targetClosed=$targetReady?mh_closed_target_summary($pdo,$days):[];
+$targetIssues=$targetReady?mh_issue_target_summary($pdo,$days):[];
 
 $monthMax=0;
 foreach($monthly as $row)$monthMax=max($monthMax,(int)$row['closed_count']);
@@ -43,7 +47,7 @@ foreach($monthly as $row)$monthMax=max($monthMax,(int)$row['closed_count']);
 <title>Mutabakat Operasyon Performansı — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
-<link rel="stylesheet" href="ticari-mutabakat-performans.css?v=1.2.66">
+<link rel="stylesheet" href="ticari-mutabakat-performans.css?v=1.2.67">
 </head>
 <body class="role-page sa-subpage">
 <?php require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -51,6 +55,7 @@ foreach($monthly as $row)$monthMax=max($monthMax,(int)$row['closed_count']);
 <header class="role-topbar">
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Mutabakat Operasyon Performansı</small></span></a>
 <div class="sa-page-actions">
+<a class="sa-page-action" href="ticari-mutabakat-hedefleri.php" aria-label="Operasyon Hedefleri"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-saglik.php" aria-label="Aksiyon Sağlığı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-is-kutusu.php" aria-label="Günlük İş Kutusu"><svg><use href="#sa-card"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-eskalasyon.php" aria-label="Operasyon Eskalasyonu"><svg><use href="#sa-alert"/></svg></a>
@@ -67,7 +72,7 @@ foreach($monthly as $row)$monthMax=max($monthMax,(int)$row['closed_count']);
 <span class="role-hero-art">📈</span>
 </section>
 
-<div class="role-note"><span>ℹ️</span><p>Bu ekran çalışan puanı, başarı notu veya sözleşmesel SLA üretmez. Yalnız mevcut vaka durumu ve append-only geçmişten türetilen objektif operasyon göstergelerini sunar.</p></div>
+<div class="role-note"><span>ℹ️</span><p>Bu ekran çalışan puanı, başarı notu veya sözleşmesel SLA üretmez. 1.2.67 hedef politikaları mevcutsa yalnız iç operasyon hedef uyumunu ayrıca gösterir; eskalasyon eşiklerini veya kullanıcı yetkilerini değiştirmez.</p></div>
 
 <?php if(!$ready):?>
 <div class="role-note"><span>⚠️</span><p>Mutabakat aksiyon tabloları hazır değil. 086 migration kurulduğunda performans görünümü otomatik açılır.</p></div>
@@ -92,6 +97,33 @@ foreach($monthly as $row)$monthMax=max($monthMax,(int)$row['closed_count']);
 <div><strong><?=(int)($summary['reminders']??0)?></strong><span>Hatırlatma</span></div>
 <div><strong><?=(int)($summary['escalations']??0)?></strong><span>Eskalasyon</span></div>
 </section>
+
+<?php if($targetReady):?>
+<section class="role-section">
+<div class="role-section-head">
+<div><span class="eyeline">OPERASYON HEDEFLERİ</span><h2><?=$days?> Günlük Hedef Uyum Görünümü</h2></div>
+<a class="role-pill ok" href="ticari-mutabakat-hedefleri.php">Hedef Politikaları →</a>
+</div>
+<div class="mp-target-summary">
+<div><strong><?=(int)($targetClosed['policy_evaluable']??0)?></strong><span>Politika ile değerlendirilen</span></div>
+<div><strong><?=mpf((float)($targetClosed['cycle_within_rate']??0))?>%</strong><span>Çevrim hedef içi</span></div>
+<div><strong><?=mpf((float)($targetClosed['first_within_rate']??0))?>%</strong><span>İlk müdahale hedef içi</span></div>
+<div><strong><?=(int)($targetClosed['cycle_outside']??0)?></strong><span>Çevrim hedef dışı</span></div>
+<div><strong><?=(int)($targetClosed['first_outside']??0)?></strong><span>İlk müdahale hedef dışı</span></div>
+<div><strong><?=(int)($targetClosed['no_policy']??0)?></strong><span>Politika öncesi</span></div>
+</div>
+<div class="mp-target-issues">
+<?php foreach($targetIssues as $row):?>
+<article>
+<strong><?=mph(mp_issue_label((string)$row['sorun_turu']))?></strong>
+<span><?=(int)$row['eligible']?> değerlendirilen kapanış</span>
+<small>Çevrim <?=mpf((float)$row['cycle_rate'])?>% · İlk müdahale <?=mpf((float)$row['first_rate'])?>%</small>
+</article>
+<?php endforeach;?>
+</div>
+<div class="role-note"><span>🕓</span><p>Her kapanış döngüsü, döngü başladığı anda geçerli olan politika versiyonuyla ölçülür. Sonradan yayınlanan hedefler geçmiş sonuçları geriye dönük değiştirmez.</p></div>
+</section>
+<?php endif;?>
 
 <section class="role-section">
 <div class="role-section-head">
@@ -212,6 +244,7 @@ $width=$monthMax>0?max(4,min(100,((int)$row['closed_count']/$monthMax)*100)):0;
 <a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 <a href="ticari-mutabakat-saglik.php"><span>🩺</span>Sağlık</a>
 <a class="active" href="ticari-mutabakat-performans.php"><span>📈</span>Performans</a>
+<a href="ticari-mutabakat-hedefleri.php"><span>🎯</span>Hedefler</a>
 <a href="ticari-mutabakat-eskalasyon.php"><span>🚨</span>Eskalasyon</a>
 <a href="ticari-mutabakat-devir.php"><span>🔁</span>Devir</a>
 </nav>

@@ -83,6 +83,7 @@ foreach($candidates as $row){
 <header class="role-topbar">
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Mutabakat Operasyon Eskalasyonu</small></span></a>
 <div class="sa-page-actions">
+<a class="sa-page-action" href="ticari-mutabakat-hedefleri.php" aria-label="Operasyon Hedefleri"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-saglik.php" aria-label="Aksiyon Sağlığı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hatirlatma.php" aria-label="Aksiyon Hatırlatmaları"><svg><use href="#sa-bell"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-devir.php" aria-label="Sorumlu Devir"><svg><use href="#sa-users"/></svg></a>
@@ -100,7 +101,7 @@ foreach($candidates as $row){
 <span class="role-hero-art">🚨</span>
 </section>
 
-<div class="role-note"><span>ℹ️</span><p>Bu merkez sözleşmesel veya harici bir SLA tanımlamaz. Eşikler yalnız iç operasyon takibi içindir ve 1.2.60'taki objektif vaka yaşı / ilk müdahale göstergelerini kullanır. Bugün/gecikmiş aksiyon tarihi bildirimleri 1.2.63 Hatırlatma Merkezi'nde ayrı kalır.</p></div>
+<div class="role-note"><span>ℹ️</span><p>Bu merkez sözleşmesel veya harici bir SLA tanımlamaz. 2/4/8/14/30+ eskalasyon eşikleri 1.2.65 davranışı olarak sabit kalır. 1.2.67 <a href="ticari-mutabakat-hedefleri.php">Operasyon Hedefleri</a> raporlama hedefidir ve bu bildirim eşiklerini sessizce değiştirmez. Bugün/gecikmiş aksiyon tarihi bildirimleri 1.2.63 Hatırlatma Merkezi'nde ayrı kalır.</p></div>
 
 <?php if(!$ready):?><div class="role-note"><span>⚠️</span><p>1.2.65 eskalasyon migrationı henüz hazır değil. 088 migration kurulduğunda bu merkez açılır.</p></div><?php endif;?>
 <?php if($error!==''):?><div class="role-note"><span>⚠️</span><p><?=meh($error)?></p></div><?php endif;?>
@@ -192,6 +193,7 @@ $sent=!empty($row['gonderildi']);
 <a href="ticari-mutabakat-saglik.php"><span>🩺</span>Sağlık</a>
 <a href="ticari-mutabakat-devir.php"><span>🔁</span>Devir</a>
 <a href="ticari-mutabakat-performans.php"><span>📈</span>Performans</a>
+<a href="ticari-mutabakat-hedefleri.php"><span>🎯</span>Hedefler</a>
 </nav>
 </div>
 </body>
