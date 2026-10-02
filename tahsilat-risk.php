@@ -267,6 +267,7 @@ $late=$row['gecikme_gunu']===null?null:(int)$row['gecikme_gunu'];
 <small>
 Açık <?=trm($row['kalan_tutar'])?> <?=trh((string)$row['para_birimi'])?>
 · <?=trh((string)$row['risk_etiketi'])?>
+<?php if(!empty($row['taksit_plani_aktif'])):?> · Taksit planı<?php endif;?>
 · <?=trh(tr_stage_labels()[$stage]??$stage)?>
 <?php if(!empty($row['yenileme_baglantili'])):?> · Yenileme #<?=(int)$row['yenileme_id']?><?php endif;?>
 <?php if(!empty($row['sonraki_aksiyon_tarihi'])):?> · Aksiyon <?=trh((string)$row['sonraki_aksiyon_tarihi'])?><?php endif;?>
@@ -300,7 +301,7 @@ $isOpen=in_array($stage,tr_open_stages(),true);
 <div><span>Sözleşme Toplamı</span><strong><?=trm($selected['toplam_tutar'])?> <?=trh((string)$selected['para_birimi'])?></strong></div>
 <div><span>Tahsil Edilen</span><strong><?=trm($selected['tahsil_edilen'])?> <?=trh((string)$selected['para_birimi'])?></strong></div>
 <div><span>Açık Bakiye</span><strong><?=trm($selected['kalan_tutar'])?> <?=trh((string)$selected['para_birimi'])?></strong></div>
-<div><span>Vade</span><strong><?=trh((string)($selected['vade_tarihi']?:'Tanımlı değil'))?></strong><small><?=trh(tr_due_text(($selected['vade_tarihi']??null)!==null?(string)$selected['vade_tarihi']:null,$late))?></small></div>
+<div><span><?=!empty($selected['taksit_plani_aktif'])?'Sonraki Taksit Vadesi':'Vade'?></span><strong><?=trh((string)($selected['vade_tarihi']?:'Tanımlı değil'))?></strong><small><?=trh(tr_due_text(($selected['vade_tarihi']??null)!==null?(string)$selected['vade_tarihi']:null,$late))?><?php if(!empty($selected['taksit_plani_aktif'])):?> · Gecikmiş taksit <?=trm($selected['taksit_gecikmis_tutar'])?> <?=trh((string)$selected['para_birimi'])?><?php endif;?></small></div>
 <div><span>Paket</span><strong><?=trh((string)($selected['paket_adi']?:'—'))?></strong></div>
 <div><span>Sorumlu</span><strong><?=trh((string)$selected['sorumlu_adi'])?></strong></div>
 <div><span>Son Temas</span><strong><?=trh((string)($selected['son_temas_tarihi']?:'—'))?></strong></div>
