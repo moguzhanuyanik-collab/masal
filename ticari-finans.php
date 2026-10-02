@@ -5,6 +5,7 @@ require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
 require __DIR__.'/src/kurum_lisanslari.php';
 require __DIR__.'/src/ticari_finans.php';
+require __DIR__.'/src/ticari_taksit.php';
 require __DIR__.'/src/lisans_yenileme.php';
 require __DIR__.'/src/lisans_yenileme_ticari.php';
 
@@ -54,6 +55,24 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             header('Location: ticari-finans.php?ok='.rawurlencode('Tahsilat iptal edildi; kayıt geçmişte korunuyor.'));
             exit;
         }
+        if($action==='installment_save'){
+            $contractId=max(0,(int)($_POST['sozlesme_id']??0));
+            $version=tp_save_plan($pdo,$user,$contractId,$_POST);
+            header('Location: ticari-finans.php?sozlesme_id='.$contractId.'&ok='.rawurlencode('Taksit planı sürüm '.$version.' taslak olarak kaydedildi.'));
+            exit;
+        }
+        if($action==='installment_activate'){
+            $contractId=max(0,(int)($_POST['sozlesme_id']??0));
+            tp_activate_plan($pdo,$user,$contractId);
+            header('Location: ticari-finans.php?sozlesme_id='.$contractId.'&ok='.rawurlencode('Taksit planı aktif edildi.'));
+            exit;
+        }
+        if($action==='installment_deactivate'){
+            $contractId=max(0,(int)($_POST['sozlesme_id']??0));
+            tp_deactivate_plan($pdo,$user,$contractId);
+            header('Location: ticari-finans.php?sozlesme_id='.$contractId.'&ok='.rawurlencode('Taksit planı pasif hale getirildi; sözleşme tek vade davranışına döndü.'));
+            exit;
+        }
         throw new RuntimeException('Geçersiz işlem.');
     }catch(PDOException $e){
         $mysqlError=(int)($e->errorInfo[1]??0);
@@ -72,11 +91,18 @@ $summary=$ready?tf_financial_summary($pdo):[];
 $integrityIssues=$ready?tf_integrity_issues($pdo):[];
 $renewalCommercialReady=lyt_tables_ready($pdo);
 $contractRenewals=$renewalCommercialReady?lyt_contract_links($pdo,array_column($contracts,'id')):[];
+$installmentReady=tp_tables_ready($pdo);
+$installmentSummaries=$installmentReady?tp_plan_summaries($pdo,array_column($contracts,'id')):[];
 
 $editId=max(0,(int)($_GET['sozlesme_id']??0));
 $edit=null;
 foreach($contracts as $row) if((int)$row['id']===$editId){$edit=$row;break;}
 $editRenewal=$edit&&isset($contractRenewals[(int)$edit['id']])?$contractRenewals[(int)$edit['id']]:null;
+$editPlan=$edit&&$installmentReady?tp_plan_row($pdo,(int)$edit['id']):null;
+$editPlanRows=$editPlan?tp_current_rows($pdo,(int)$edit['id']):[];
+$editPlanState=$editPlan&&((string)$editPlan['durum']==='aktif')?tp_schedule_state($pdo,(int)$edit['id']):null;
+$editPlanHistory=$editPlan?tp_history_rows($pdo,(int)$edit['id'],80):[];
+$editPlanLocked=$edit?tp_payment_history_count($pdo,(int)$edit['id'])>0:false;
 ?>
 <!doctype html>
 <html lang="tr">
@@ -87,6 +113,7 @@ $editRenewal=$edit&&isset($contractRenewals[(int)$edit['id']])?$contractRenewals
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
 <link rel="stylesheet" href="kurum.css?v=1.0.41">
+<link rel="stylesheet" href="ticari-taksit.css?v=1.2.55">
 </head>
 <body class="role-page sa-subpage"><?php require __DIR__.'/src/super_admin_icons.php'; ?>
 <div class="role-shell">
@@ -195,6 +222,112 @@ $editRenewal=$edit&&isset($contractRenewals[(int)$edit['id']])?$contractRenewals
 </form>
 </section>
 
+<?php if($edit):?>
+<section class="role-section">
+<div class="role-section-head">
+<div><span class="eyeline">ÖDEME PLANI</span><h2>Taksit & Çoklu Vade</h2></div>
+<div class="tp-head-actions">
+<?php if($editPlan):?><span class="role-pill <?=((string)$editPlan['durum']==='aktif'?'ok':'')?>">Sürüm <?=(int)$editPlan['aktif_surum']?> · <?=tfh((string)$editPlan['durum'])?></span><?php endif;?>
+<?php if($editPlanLocked):?><span class="role-pill">Tahsilat geçmişi nedeniyle kilitli</span><?php endif;?>
+</div>
+</div>
+
+<?php if(!$installmentReady):?>
+<div class="role-note"><span>ℹ️</span><p>084 migration kurulduğunda taksit/çoklu vade planı kullanılabilir.</p></div>
+<?php else:?>
+<div class="role-note"><span>ℹ️</span><p>Taksit planı yeni bir borç oluşturmaz; sözleşme toplamını vade dilimlerine böler. Plan aktifse Tahsilat Risk Merkezi ve yönetici hatırlatmaları ilk ödenmemiş taksitin vadesini esas alır. Tahsilat geçmişi başladıktan sonra plan değiştirilemez.</p></div>
+
+<?php if($editPlanState):?>
+<div class="tp-state-grid">
+<div><span>Plan kalan</span><strong><?=tff($editPlanState['kalan_plan'])?> <?=tfh((string)$editPlanState['para_birimi'])?></strong></div>
+<div><span>Sonraki vade</span><strong><?=tfh((string)($editPlanState['sonraki_vade']?:'Tamamlandı'))?></strong></div>
+<div><span>Gecikmiş taksit</span><strong><?=tff($editPlanState['gecikmis_tutar'])?> <?=tfh((string)$editPlanState['para_birimi'])?></strong></div>
+<div><span>Tahsil edilen</span><strong><?=tff($editPlanState['tahsil_edilen'])?> <?=tfh((string)$editPlanState['para_birimi'])?></strong></div>
+</div>
+<?php endif;?>
+
+<?php
+$planFormRows=$editPlanRows;
+if(!$planFormRows){
+    $half=number_format(((float)$edit['toplam_tutar'])/2,2,'.','');
+    $planFormRows=[
+        ['vade_tarihi'=>(string)($edit['vade_tarihi']?:$edit['baslangic_tarihi']),'tutar'=>$half,'aciklama'=>'1. taksit'],
+        ['vade_tarihi'=>(string)($edit['bitis_tarihi']?:$edit['vade_tarihi']?:$edit['baslangic_tarihi']),'tutar'=>number_format((float)$edit['toplam_tutar']-(float)$half,2,'.',''),'aciklama'=>'2. taksit'],
+    ];
+}
+?>
+<form class="role-form tp-plan-form" method="post" data-tp-plan>
+<input type="hidden" name="csrf" value="<?=tfh(csrf_token())?>">
+<input type="hidden" name="action" value="installment_save">
+<input type="hidden" name="sozlesme_id" value="<?=(int)$edit['id']?>">
+<div class="tp-plan-table">
+<div class="tp-plan-header"><span>#</span><span>Vade</span><span>Tutar</span><span>Açıklama</span><span></span></div>
+<div data-tp-rows>
+<?php foreach($planFormRows as $idx=>$row):?>
+<div class="tp-plan-row" data-tp-row>
+<span data-tp-number><?=$idx+1?></span>
+<input class="role-input" type="date" name="taksit_vade[]" required value="<?=tfh((string)$row['vade_tarihi'])?>" <?=$editPlanLocked?'disabled':''?>>
+<input class="role-input" inputmode="decimal" name="taksit_tutar[]" required value="<?=tfh((string)$row['tutar'])?>" <?=$editPlanLocked?'disabled':''?>>
+<input class="role-input" name="taksit_aciklama[]" maxlength="500" value="<?=tfh((string)($row['aciklama']??''))?>" <?=$editPlanLocked?'disabled':''?>>
+<button class="role-pill" type="button" data-tp-remove <?=$editPlanLocked?'disabled':''?>>Sil</button>
+</div>
+<?php endforeach;?>
+</div>
+</div>
+<div class="tp-plan-toolbar">
+<button class="role-pill" type="button" data-tp-add <?=$editPlanLocked?'disabled':''?>>+ Taksit Ekle</button>
+<span>En fazla 24 taksit · Toplam sözleşme tutarı: <strong><?=tff($edit['toplam_tutar'])?> <?=tfh((string)$edit['para_birimi'])?></strong></span>
+</div>
+<?php if(!$editPlanLocked):?><button class="role-button" type="submit">Yeni Plan Sürümünü Kaydet</button><?php endif;?>
+</form>
+
+<?php if($editPlan && !$editPlanLocked):?>
+<div class="tp-plan-actions">
+<?php if((string)$editPlan['durum']!=='aktif'):?>
+<form method="post">
+<input type="hidden" name="csrf" value="<?=tfh(csrf_token())?>">
+<input type="hidden" name="action" value="installment_activate">
+<input type="hidden" name="sozlesme_id" value="<?=(int)$edit['id']?>">
+<button class="role-button" type="submit">Planı Aktif Et</button>
+</form>
+<?php else:?>
+<form method="post">
+<input type="hidden" name="csrf" value="<?=tfh(csrf_token())?>">
+<input type="hidden" name="action" value="installment_deactivate">
+<input type="hidden" name="sozlesme_id" value="<?=(int)$edit['id']?>">
+<button class="role-button tp-secondary" type="submit">Planı Pasif Et</button>
+</form>
+<?php endif;?>
+</div>
+<?php endif;?>
+
+<?php if($editPlanState):?>
+<div class="tp-installments">
+<h3>Aktif Plan Dağılımı</h3>
+<?php foreach($editPlanState['taksitler'] as $row):?>
+<div class="tp-installment <?=tfh((string)$row['durum_hesap'])?>">
+<span>#<?=(int)$row['sira_no']?></span>
+<div><strong><?=tfh((string)$row['vade_tarihi'])?> · <?=tff($row['tutar'])?> <?=tfh((string)$editPlanState['para_birimi'])?></strong>
+<small><?=tfh((string)($row['aciklama']?:'Taksit'))?> · Tahsis <?=tff($row['tahsis_edilen'])?> · Kalan <?=tff($row['kalan_tutar'])?></small></div>
+<span class="role-pill"><?=tfh((string)$row['durum_hesap'])?></span>
+</div>
+<?php endforeach;?>
+</div>
+<?php endif;?>
+
+<?php if($editPlanHistory):?>
+<div class="tp-history">
+<h3>Plan Geçmişi</h3>
+<?php foreach($editPlanHistory as $item):?>
+<article><div><strong><?=tfh((string)$item['kullanici_adi'])?> · <?=tfh((string)$item['kod'])?></strong><span><?=tfh(date('d.m.Y H:i',strtotime((string)$item['olusturulma_tarihi'])))?></span></div>
+<?php if((string)($item['not_metni']??'')!==''):?><p><?=tfh((string)$item['not_metni'])?></p><?php endif;?></article>
+<?php endforeach;?>
+</div>
+<?php endif;?>
+<?php endif;?>
+</section>
+<?php endif;?>
+
 <section class="role-section">
 <div class="role-section-head"><div><span class="eyeline">TAHSİLAT</span><h2>Yeni Tahsilat</h2></div></div>
 <form class="role-form" method="post">
@@ -231,12 +364,12 @@ $editRenewal=$edit&&isset($contractRenewals[(int)$edit['id']])?$contractRenewals
 <div class="role-section-head"><div><span class="eyeline">SÖZLEŞMELER</span><h2>Ticari Portföy</h2></div><span class="role-pill"><?=count($contracts)?></span></div>
 <div class="role-list">
 <?php if(!$contracts):?><div class="role-empty"><span>📄</span>Henüz sözleşme kaydı yok.</div><?php endif;?>
-<?php foreach($contracts as $contract): $renewalLink=$contractRenewals[(int)$contract['id']]??null;?>
+<?php foreach($contracts as $contract): $renewalLink=$contractRenewals[(int)$contract['id']]??null; $tpSummary=$installmentSummaries[(int)$contract['id']]??null;?>
 <a class="role-row" href="ticari-finans.php?sozlesme_id=<?=(int)$contract['id']?>">
 <span><?=($contract['gecikmis']??false)?'⚠️':'📄'?></span>
 <div><strong><?=tfh((string)$contract['kurum_adi'])?> · <?=tfh((string)$contract['sozlesme_no'])?></strong>
-<small><?=tff($contract['tahsil_edilen'])?> / <?=tff($contract['toplam_tutar'])?> <?=tfh((string)$contract['para_birimi'])?> · Kalan <?=tff($contract['kalan_tutar'])?><?php if((string)$contract['vade_tarihi']!==''):?> · Vade <?=tfh((string)$contract['vade_tarihi'])?><?php endif;?><?php if($renewalLink):?> · Yenileme #<?=(int)$renewalLink['yenileme_id']?><?php endif;?></small></div>
-<span class="role-pill <?=($contract['gecikmis']??false)?'':((string)$contract['durum']==='aktif'?'ok':'')?>"><?=($contract['gecikmis']??false)?'Gecikmiş':tf_status((string)$contract['durum'])?></span>
+<small><?=tff($contract['tahsil_edilen'])?> / <?=tff($contract['toplam_tutar'])?> <?=tfh((string)$contract['para_birimi'])?> · Kalan <?=tff($contract['kalan_tutar'])?><?php if($tpSummary && (string)$tpSummary['durum']==='aktif'):?> · Taksit <?= (int)$tpSummary['taksit_sayisi']?> · Sonraki <?=tfh((string)($tpSummary['sonraki_vade']?:'Tamamlandı'))?><?php elseif((string)$contract['vade_tarihi']!==''):?> · Vade <?=tfh((string)$contract['vade_tarihi'])?><?php endif;?><?php if($renewalLink):?> · Yenileme #<?=(int)$renewalLink['yenileme_id']?><?php endif;?></small></div>
+<span class="role-pill <?=($tpSummary && (float)($tpSummary['gecikmis_tutar']??0)>0)?'':(($contract['gecikmis']??false)?'':((string)$contract['durum']==='aktif'?'ok':''))?>"><?=($tpSummary && (float)($tpSummary['gecikmis_tutar']??0)>0)?'Taksit Gecikmiş':(($contract['gecikmis']??false)?'Gecikmiş':tf_status((string)$contract['durum']))?></span>
 </a>
 <?php endforeach;?>
 </div>
@@ -283,5 +416,6 @@ $editRenewal=$edit&&isset($contractRenewals[(int)$edit['id']])?$contractRenewals
 <a href="guncelleme.php"><span>↻</span>Güncelle</a>
 </nav>
 </div>
+<script src="ticari-taksit.js?v=1.2.55" defer></script>
 </body>
 </html>

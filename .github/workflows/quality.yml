@@ -136,6 +136,7 @@ jobs:
           node tests/commercial-dashboard-177.cjs
           node tests/institution-commercial-360-178.cjs
           node tests/institution-commercial-statement-179.cjs
+          node tests/installment-plan-180.cjs
           node tests/institution-class-edit-136.cjs
           node tests/institution-reporting-137.cjs
           node tests/institution-report-export-159.cjs
@@ -233,6 +234,7 @@ jobs:
           php tests/commercial-dashboard-db-177.php
           php tests/institution-commercial-360-db-178.php
           php tests/institution-commercial-statement-db-179.php
+          php tests/installment-plan-db-180.php
           php tests/institution-class-edit-db-136.php
           php tests/institution-reporting-db-137.php
           php tests/teacher-content-edit-copy-db-139.php

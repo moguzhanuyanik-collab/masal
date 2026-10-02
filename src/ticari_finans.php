@@ -290,6 +290,26 @@ function tf_save_contract(PDO $pdo,array $actor,array $input): int {
 
             $paid=tf_contract_paid($pdo,$id);
             $paymentCounts=tf_contract_payment_counts($pdo,$id);
+
+            if(auth_runtime_table_exists($pdo,'kurum_sozlesme_taksit_planlari')){
+                $planLock=$pdo->prepare("SELECT durum FROM kurum_sozlesme_taksit_planlari
+                    WHERE sozlesme_id=? LIMIT 1 FOR UPDATE");
+                $planLock->execute([$id]);
+                $planStatus=(string)($planLock->fetchColumn()?:'');
+                $planLock->closeCursor();
+
+                if($planStatus==='aktif'){
+                    if((int)$old['kurum_id']!==$institutionId)
+                        throw new RuntimeException('Aktif taksit planı olan sözleşmenin kurumu değiştirilemez. Önce taksit planını pasif hale getir.');
+                    if((string)$old['para_birimi']!==$currency)
+                        throw new RuntimeException('Aktif taksit planı olan sözleşmenin para birimi değiştirilemez. Önce taksit planını pasif hale getir.');
+                    if(tf_decimal_compare((string)$old['toplam_tutar'],$total)!==0)
+                        throw new RuntimeException('Aktif taksit planı olan sözleşmenin toplam tutarı değiştirilemez. Önce taksit planını pasif hale getir.');
+                    if(in_array($status,['taslak','iptal'],true))
+                        throw new RuntimeException('Aktif taksit planı olan sözleşme taslak veya iptal durumuna alınamaz. Önce taksit planını pasif hale getir.');
+                }
+            }
+
             if(tf_decimal_compare($total,$paid)<0) throw new RuntimeException('Sözleşme tutarı, tahsil edilmiş tutarın altına indirilemez.');
             if((int)$paymentCounts['toplam']>0 && (int)$old['kurum_id']!==$institutionId) throw new RuntimeException('Tahsilat geçmişi olan sözleşmenin kurumu değiştirilemez.');
             if((int)$paymentCounts['toplam']>0 && (string)$old['para_birimi']!==$currency) throw new RuntimeException('Tahsilat geçmişi olan sözleşmenin para birimi değiştirilemez.');

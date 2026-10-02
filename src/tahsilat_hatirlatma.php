@@ -95,20 +95,26 @@ function th_notification_text(array $row,array $milestone): array {
     $currency=(string)($row['para_birimi']??'TRY');
     $late=(int)($milestone['gecikme_gunu']??0);
 
+    $installment=!empty($row['taksit_plani_aktif']);
+    $dueLabel=$installment?'taksit vadesi':'vade';
+    $amountLabel=$installment?'Açık sözleşme bakiyesi':'Açık tutar';
+
     if((string)$milestone['kod']==='vade_7'){
         $days=abs($late);
-        $title='Tahsilat vadesi yaklaşıyor';
-        $message=$institution.' için '.$contract.' numaralı sözleşmenin '.$due.' tarihli vadesine '
-            .$days.' gün kaldı. Açık tutar: '.$remaining.' '.$currency.'.';
+        $title=$installment?'Taksit vadesi yaklaşıyor':'Tahsilat vadesi yaklaşıyor';
+        $message=$institution.' için '.$contract.' numaralı sözleşmenin '.$due.' tarihli '.$dueLabel.'ne '
+            .$days.' gün kaldı. '.$amountLabel.': '.$remaining.' '.$currency.'.';
     }elseif((string)$milestone['kod']==='vade_0'){
-        $title=$late===0?'Tahsilat vadesi bugün':'Tahsilat vadesi geçti';
-        $message=$institution.' için '.$contract.' numaralı sözleşmenin vadesi '.$due.'. Açık tutar: '
+        $title=$late===0
+            ?($installment?'Taksit vadesi bugün':'Tahsilat vadesi bugün')
+            :($installment?'Taksit vadesi geçti':'Tahsilat vadesi geçti');
+        $message=$institution.' için '.$contract.' numaralı sözleşmenin '.$dueLabel.' '.$due.'. '.$amountLabel.': '
             .$remaining.' '.$currency.'.';
         if($late>0)$message.=' Gecikme: '.$late.' gün.';
     }else{
-        $title='Geciken tahsilat hatırlatması';
-        $message=$institution.' için '.$contract.' numaralı sözleşmenin '.$due.' tarihli vadesi '
-            .$late.' gün gecikti. Açık tutar: '.$remaining.' '.$currency.'.';
+        $title=$installment?'Geciken taksit hatırlatması':'Geciken tahsilat hatırlatması';
+        $message=$institution.' için '.$contract.' numaralı sözleşmenin '.$due.' tarihli '.$dueLabel.' '
+            .$late.' gün gecikti. '.$amountLabel.': '.$remaining.' '.$currency.'.';
     }
 
     $message.=' Ödeme/tahsilat durumu için kurum yetkilinizle iletişime geçebilirsiniz.';
