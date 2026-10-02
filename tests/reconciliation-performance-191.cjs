@@ -33,8 +33,10 @@ assert(!/\bINSERT\b|\bUPDATE\b|\bDELETE\b/.test(domain),
   'performance domain must remain read-only');
 
 assert(page.includes("require_role('super_admin')"),'performance dashboard must be Super Admin only');
-assert(page.includes('7 Gün') && page.includes('30 Gün') && page.includes('90 Gün'),
-  '7/30/90 reporting windows missing');
+assert(page.includes('foreach([7,30,90] as $window)'),
+  '7/30/90 reporting window loop missing');
+assert(page.includes('ticari-mutabakat-performans.php?gun=<?=$window?>'),
+  'reporting window links missing');
 assert(page.includes('Ort. çevrim günü'),'average cycle KPI missing');
 assert(page.includes('Ort. ilk müdahale saati'),'first intervention KPI missing');
 assert(page.includes('Reopen oranı'),'reopen KPI missing');
