@@ -43,7 +43,7 @@ $rows=$ready?mrh_rows($pdo,$filters,1200):[];
 <title>Hedef Risk Bildirim Sağlığı — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
-<link rel="stylesheet" href="ticari-mutabakat-hedef-risk-saglik.css?v=1.2.70">
+<link rel="stylesheet" href="ticari-mutabakat-hedef-risk-saglik.css?v=1.2.76">
 </head>
 <body class="role-page sa-subpage">
 <?php require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -53,6 +53,7 @@ $rows=$ready?mrh_rows($pdo,$filters,1200):[];
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk-bildirim.php" aria-label="Hedef Risk Bildirimleri"><svg><use href="#sa-bell"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk.php" aria-label="Hedef Risk Kuyruğu"><svg><use href="#sa-chart"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-hedef-risk-takip.php" aria-label="Okunmamış Risk Takibi"><svg><use href="#sa-calendar"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-performans.php" aria-label="Performans"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
@@ -62,11 +63,11 @@ $rows=$ready?mrh_rows($pdo,$filters,1200):[];
 <section class="role-hero">
 <span class="eyeline">BİLDİRİM SAĞLIĞI</span>
 <h1>Hedef Risk Müdahale Dashboardu</h1>
-<p>%75+ ve hedef dışı mutabakat sinyallerinin okunma durumunu, güncel açık döngüde devam eden vakaları, sorumlu yoğunluğunu ve tarihsel politika dağılımını salt-okunur olarak izle.</p>
+<p>%75+ ve hedef dışı mutabakat sinyallerinin okunma durumunu; yalnız güncel owner + güncel açık döngü eşleşmesiyle, sorumlu yoğunluğu ve tarihsel politika dağılımını salt-okunur olarak izle.</p>
 <span class="role-hero-art">📨</span>
 </section>
 
-<div class="role-note"><span>ℹ️</span><p>Bu ekran bildirim göndermez. Gönderim 1.2.69 Hedef Risk Bildirimleri merkezinde açık POST + CSRF işlemiyle yapılır. Eski reopen döngülerine ait bildirimler tarihsel geçmiş olarak korunur ve bugünkü açık vaka KPI'larına katılmaz.</p></div>
+<div class="role-note"><span>ℹ️</span><p>Bu ekran bildirim göndermez. Eski reopen döngüsü veya eski sorumluya ait bildirimler tarihsel geçmiş olarak korunur ve bugünkü açık vaka KPI'larına katılmaz. Güncel açık + okunmamış vakaları takip tarihine bağlamak için Okunmamış Risk Takip Planlama merkezini kullanabilirsin.</p></div>
 
 <?php if(!$ready):?>
 <div class="role-note"><span>⚠️</span><p>Hedef-risk bildirim, vaka, politika veya merkezi bildirim tabloları hazır değil.</p></div>
@@ -92,6 +93,7 @@ $rows=$ready?mrh_rows($pdo,$filters,1200):[];
 <a href="?days=<?=$days?>&state=guncel_acik"><strong><?=(int)($summary['current_open']??0)?></strong><span>Güncel döngü hâlâ açık</span></a>
 <a href="?days=<?=$days?>&state=guncel_acik_okunmadi"><strong><?=(int)($summary['current_open_unread']??0)?></strong><span>Açık + okunmadı</span></a>
 <a href="?days=<?=$days?>&state=guncel_hedef_disinda"><strong><?=(int)($summary['current_outside_open']??0)?></strong><span>Hedef dışı + açık</span></a>
+<a href="?days=<?=$days?>&state=eski_sorumlu"><strong><?=(int)($summary['old_owner']??0)?></strong><span>Eski sorumlu</span></a>
 <div><strong><?=mrht(isset($summary['avg_read_minutes'])?(float)$summary['avg_read_minutes']:null)?></strong><span>Ort. okunma süresi</span></div>
 <div><strong><?=mrht(isset($summary['avg_close_minutes'])?(float)$summary['avg_close_minutes']:null)?></strong><span>Bildirim sonrası ort. kapanma</span></div>
 </section>
@@ -165,6 +167,7 @@ $rows=$ready?mrh_rows($pdo,$filters,1200):[];
 <option value="guncel_hedef_disinda" <?=$filters['state']==='guncel_hedef_disinda'?'selected':''?>>Hedef dışı + açık</option>
 <option value="kapali" <?=$filters['state']==='kapali'?'selected':''?>>Vaka kapalı</option>
 <option value="eski_dongu" <?=$filters['state']==='eski_dongu'?'selected':''?>>Eski reopen döngüsü</option>
+<option value="eski_sorumlu" <?=$filters['state']==='eski_sorumlu'?'selected':''?>>Eski sorumlu bildirimi</option>
 </select>
 <select name="owner_id">
 <option value="0">Tüm sorumlular</option>
@@ -180,6 +183,7 @@ $rows=$ready?mrh_rows($pdo,$filters,1200):[];
 $read=!empty($row['okundu']);
 $currentOpen=!empty($row['guncel_acik_vaka']);
 $oldCycle=!empty($row['eski_dongu_bildirimi']);
+$oldOwner=!empty($row['eski_sorumlu_bildirimi']);
 $isOutside=(string)$row['esik_kodu']==='hedef_disinda';
 ?>
 <a class="role-row mrh-row" href="ticari-mutabakat-aksiyon.php?vaka_id=<?=(int)$row['vaka_id']?>">
@@ -195,7 +199,8 @@ $isOutside=(string)$row['esik_kodu']==='hedef_disinda';
 </div>
 <div class="mrh-tags">
 <span class="role-pill <?=$read?'ok':'unread'?>"><?=$read?'Okundu':'Okunmadı'?></span>
-<?php if($currentOpen):?><span class="role-pill <?=$isOutside?'outside':'open'?>">Güncel döngü açık</span>
+<?php if($currentOpen):?><span class="role-pill <?=$isOutside?'outside':'open'?>">Güncel owner + döngü açık</span>
+<?php elseif($oldOwner):?><span class="role-pill old-owner">Eski sorumlu</span>
 <?php elseif($oldCycle):?><span class="role-pill old">Eski döngü</span>
 <?php else:?><span class="role-pill closed">Kapalı</span><?php endif;?>
 </div>
@@ -204,7 +209,7 @@ $isOutside=(string)$row['esik_kodu']==='hedef_disinda';
 </div>
 </section>
 
-<div class="role-note"><span>🔒</span><p>Bu dashboard salt-okunurdur. Bildirim göndermez, okundu durumunu değiştirmez, vakaya not eklemez ve hedef politikasını güncellemez. Müdahale gerekiyorsa ilgili vaka Aksiyon Merkezi'nde açılır.</p></div>
+<div class="role-note"><span>🔒</span><p>Bu dashboard salt-okunurdur. Bildirim göndermez veya okundu durumunu değiştirmez. Güncel owner + güncel döngü + okunmamış bildirimleri toplu takip tarihine bağlamak için <a href="ticari-mutabakat-hedef-risk-takip.php">Okunmamış Risk Takip Planlama</a> merkezini kullan.</p></div>
 <?php endif;?>
 </main>
 
@@ -213,6 +218,7 @@ $isOutside=(string)$row['esik_kodu']==='hedef_disinda';
 <a href="ticari-mutabakat-hedef-risk.php"><span>🎯</span>Risk</a>
 <a href="ticari-mutabakat-hedef-risk-bildirim.php"><span>🔔</span>Gönderim</a>
 <a class="active" href="ticari-mutabakat-hedef-risk-saglik.php"><span>📨</span>Sağlık</a>
+<a href="ticari-mutabakat-hedef-risk-takip.php"><span>🗓️</span>Risk Takip</a>
 <a href="ticari-mutabakat-aksiyon.php"><span>✓</span>Aksiyon</a>
 </nav>
 </div>
