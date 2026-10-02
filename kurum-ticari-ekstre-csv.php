@@ -13,12 +13,6 @@ header('Cache-Control: no-store, max-age=0');
 header('Pragma: no-cache');
 header('X-Content-Type-Options: nosniff');
 
-function k360csv_safe(string $value): string {
-    $value=str_replace(["\0"],'',$value);
-    if($value!=='' && preg_match('/^[=+\-@\t\r]/u',$value)===1) return "'".$value;
-    return $value;
-}
-
 $institutionId=max(0,(int)($_GET['kurum_id']??0));
 $institution=kt360_institution($pdo,$institutionId);
 if(!$institution){
@@ -50,7 +44,7 @@ if($out===false) exit;
 fwrite($out,"\xEF\xBB\xBF");
 
 $write=static function($handle,array $cells): void {
-    $safe=array_map(static fn($value):string=>k360csv_safe((string)$value),$cells);
+    $safe=array_map(static fn($value):string=>kt360_csv_safe_cell((string)$value),$cells);
     fputcsv($handle,$safe,';','"','');
 };
 
