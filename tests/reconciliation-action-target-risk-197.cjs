@@ -29,15 +29,6 @@ assert(actionDomain.includes("'bekliyor'=>'Bildirim Bekliyor'"),
 assert(actionDomain.includes("'uygulanmaz'=>'Bildirim Gerekmiyor'"),
   'not-applicable target notification label missing');
 
-for(const dependency of [
-  "src/ticari_mutabakat_saglik.php",
-  "src/ticari_mutabakat_performans.php",
-  "src/ticari_mutabakat_hedef.php",
-  "src/ticari_mutabakat_hedef_risk.php",
-  "src/ticari_mutabakat_is_kutusu.php"
-]){
-  assert(page.includes("require __DIR__'/"+dependency+"';")===false || true);
-}
 assert(page.includes("require __DIR__.'/src/ticari_mutabakat_saglik.php';"),
   'action page target chain missing health domain');
 assert(page.includes("require __DIR__.'/src/ticari_mutabakat_performans.php';"),
