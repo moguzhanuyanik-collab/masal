@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.75",
+  "version": "1.2.76",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -251,6 +251,7 @@
     "RELEASE-1.2.73.md",
     "RELEASE-1.2.74.md",
     "RELEASE-1.2.75.md",
+    "RELEASE-1.2.76.md",
     "RELEASE-1.2.8.md",
     "RELEASE-1.2.9.md",
     "YETKILENDIRME-1.0.35.md",
@@ -587,6 +588,7 @@
     "src/ticari_mutabakat_hedef_risk.php",
     "src/ticari_mutabakat_hedef_risk_bildirim.php",
     "src/ticari_mutabakat_hedef_risk_saglik.php",
+    "src/ticari_mutabakat_hedef_risk_takip.php",
     "src/ticari_mutabakat_is_kutusu.php",
     "src/ticari_mutabakat_performans.php",
     "src/ticari_mutabakat_planlama.php",
@@ -732,6 +734,8 @@
     "tests/reconciliation-reminders-db-188.php",
     "tests/reconciliation-target-risk-193.cjs",
     "tests/reconciliation-target-risk-db-193.php",
+    "tests/reconciliation-target-risk-followup-201.cjs",
+    "tests/reconciliation-target-risk-followup-db-201.php",
     "tests/reconciliation-target-risk-health-195.cjs",
     "tests/reconciliation-target-risk-health-db-195.php",
     "tests/reconciliation-target-risk-notifications-194.cjs",
@@ -834,6 +838,8 @@
     "ticari-mutabakat-hedef-risk-bildirim.php",
     "ticari-mutabakat-hedef-risk-saglik.css",
     "ticari-mutabakat-hedef-risk-saglik.php",
+    "ticari-mutabakat-hedef-risk-takip.css",
+    "ticari-mutabakat-hedef-risk-takip.php",
     "ticari-mutabakat-hedef-risk.css",
     "ticari-mutabakat-hedef-risk.php",
     "ticari-mutabakat-hedefleri.css",
@@ -878,5 +884,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Mutabakat günlük iş kutusu seçili toplu hedef risk bildirimi"
+  "name": "Güncel owner hedef risk sağlığı ve okunmamış risk takip planlama"
 }
