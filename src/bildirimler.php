@@ -24,7 +24,10 @@ function bd_recipient_roles(): array {
 }
 
 function bd_supported_recipient_roles(): array {
-    return bd_recipient_roles()+['yonetici'=>'Yöneticiler'];
+    return bd_recipient_roles()+[
+        'yonetici'=>'Yöneticiler',
+        'super_admin'=>'Süper Admin',
+    ];
 }
 
 function bd_validate_date(string $value): ?string {
