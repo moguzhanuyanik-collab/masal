@@ -7,6 +7,11 @@ require __DIR__.'/src/ticari_finans.php';
 require __DIR__.'/src/ticari_belgeler.php';
 require __DIR__.'/src/ticari_mutabakat.php';
 require __DIR__.'/src/ticari_mutabakat_aksiyon.php';
+require __DIR__.'/src/ticari_mutabakat_saglik.php';
+require __DIR__.'/src/ticari_mutabakat_performans.php';
+require __DIR__.'/src/ticari_mutabakat_hedef.php';
+require __DIR__.'/src/ticari_mutabakat_hedef_risk.php';
+require __DIR__.'/src/ticari_mutabakat_is_kutusu.php';
 
 $user=require_role('super_admin');
 $pdo=db();
@@ -96,6 +101,7 @@ $rows=$ready?ma_queue_rows($pdo,$filters,700):[];
 $selectedId=max(0,(int)($_GET['vaka_id']??0));
 $selected=$selectedId>0&&$ready?ma_case_row($pdo,$selectedId):null;
 $history=$selected?ma_history_rows($pdo,$selectedId):[];
+$targetRisk=$selected?ma_target_risk_context($pdo,$user,$selectedId):null;
 ?>
 <!doctype html>
 <html lang="tr">
@@ -105,7 +111,7 @@ $history=$selected?ma_history_rows($pdo,$selectedId):[];
 <title>Mutabakat Aksiyon Merkezi — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
-<link rel="stylesheet" href="ticari-mutabakat-aksiyon.css?v=1.2.59">
+<link rel="stylesheet" href="ticari-mutabakat-aksiyon.css?v=1.2.72">
 </head>
 <body class="role-page sa-subpage">
 <?php require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -115,6 +121,8 @@ $history=$selected?ma_history_rows($pdo,$selectedId):[];
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-mutabakat.php" aria-label="Mutabakat Kontrol"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-is-kutusu.php" aria-label="Günlük İş Kutusu"><svg><use href="#sa-users"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-hedef-risk.php" aria-label="Hedef Risk Kuyruğu"><svg><use href="#sa-chart"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-hedef-risk-saglik.php" aria-label="Hedef Risk Bildirim Sağlığı"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hatirlatma.php" aria-label="Aksiyon Hatırlatmaları"><svg><use href="#sa-bell"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-saglik.php" aria-label="Mutabakat Sağlığı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-planlama.php" aria-label="Toplu Planlama"><svg><use href="#sa-users"/></svg></a>
@@ -228,6 +236,44 @@ $isOpen=in_array($stage,ma_open_stages(),true);
 <div><span>Sonraki Aksiyon</span><strong><?=mah((string)($selected['sonraki_aksiyon_tarihi']?:'—'))?></strong></div>
 </div>
 
+<?php if($isOpen):?>
+<section class="ma-target-context">
+<div class="ma-target-head">
+<div><span class="eyeline">HEDEF-RİSK BAĞLAMI</span><h3>Güncel Operasyon Hedefi</h3></div>
+<?php if($targetRisk):?>
+<span class="role-pill <?=ma_target_notification_class($targetRisk)?>"><?=mah(ma_target_notification_label($targetRisk))?></span>
+<?php else:?>
+<span class="role-pill">Entegrasyon Hazır Değil / Politika Yok</span>
+<?php endif;?>
+</div>
+
+<?php if($targetRisk):?>
+<div class="ma-target-grid">
+<div><span>Hedef Riski</span><strong><?=mah((string)($targetRisk['hedef_risk_etiketi']?:'—'))?></strong></div>
+<div><span>Hedef Süre Kullanımı</span><strong><?=isset($targetRisk['hedef_sure_kullanim_orani'])&&$targetRisk['hedef_sure_kullanim_orani']!==null?mah(number_format((float)$targetRisk['hedef_sure_kullanim_orani'],1,',','.').'%'):'—'?></strong></div>
+<div><span>Döngü Başlangıcı</span><strong><?=mah((string)($targetRisk['dongu_baslangic_tarihi']?:'—'))?></strong></div>
+<div><span>Hedef Politikası</span><strong><?=!empty($targetRisk['hedef_politika_id'])?'#'.(int)$targetRisk['hedef_politika_id']:'Politika yok'?></strong></div>
+<div><span>Bildirim Durumu</span><strong><?=mah(ma_target_notification_label($targetRisk))?></strong></div>
+<div><span>Okunma Zamanı</span><strong><?=mah((string)($targetRisk['hedef_bildirim_okundu_tarihi']?:'—'))?></strong></div>
+</div>
+<?php if((string)($targetRisk['hedef_bildirim_durumu']??'')==='bekliyor'):?>
+<div class="role-note"><span>🔔</span><p>Bu vaka için güncel sorumlu + güncel reopen döngüsü + güncel hedef-risk sinyaline ait bildirim henüz gönderilmemiş. Gönderim Aksiyon Merkezi'nden yapılmaz; mevcut Hedef Risk Bildirimleri merkezi kullanılır.</p></div>
+<?php elseif((string)($targetRisk['hedef_bildirim_durumu']??'')==='okunmadi'):?>
+<div class="role-note"><span>📨</span><p>Güncel hedef-risk bildirimi mevcut sorumluya gönderilmiş ancak recipient kaydında henüz okunmamış görünüyor.</p></div>
+<?php endif;?>
+<?php else:?>
+<div class="role-note"><span>ℹ️</span><p>Bu açık vaka için hedef-risk bağlamı çözülemedi. Hedef politika/risk tabloları hazır değilse Aksiyon Merkezi eski davranışıyla çalışmaya devam eder.</p></div>
+<?php endif;?>
+
+<div class="ma-target-links">
+<a class="role-pill" href="ticari-mutabakat-hedef-risk.php">Hedef Risk Kuyruğu →</a>
+<a class="role-pill" href="ticari-mutabakat-hedef-risk-bildirim.php">Hedef Risk Bildirimleri →</a>
+<a class="role-pill" href="ticari-mutabakat-hedef-risk-saglik.php">Bildirim Sağlığı →</a>
+<a class="role-pill" href="ticari-mutabakat-hedefleri.php">Operasyon Hedefleri →</a>
+</div>
+</section>
+<?php endif;?>
+
 <div class="ma-diagnosis"><strong>Son kaynak teşhisi</strong><p><?=nl2br(mah((string)($selected['son_aciklama']?:'—')))?></p></div>
 
 <div class="ma-links">
@@ -295,6 +341,7 @@ $isOpen=in_array($stage,ma_open_stages(),true);
 <a href="ticari-dashboard.php"><span>📊</span>KPI</a>
 <a href="ticari-mutabakat.php"><span>⚖️</span>Mutabakat</a>
 <a href="ticari-mutabakat-is-kutusu.php"><span>📥</span>İş Kutusu</a>
+<a href="ticari-mutabakat-hedef-risk.php"><span>🎯</span>Hedef Risk</a>
 <a href="ticari-mutabakat-hatirlatma.php"><span>🔔</span>Hatırlatma</a>
 <a class="active" href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 <a href="ticari-mutabakat-planlama.php"><span>🗂️</span>Planlama</a>
