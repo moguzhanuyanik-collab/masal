@@ -152,6 +152,7 @@ jobs:
           node tests/reconciliation-target-risk-193.cjs
           node tests/reconciliation-target-risk-notifications-194.cjs
           node tests/reconciliation-target-risk-health-195.cjs
+          node tests/reconciliation-inbox-target-risk-196.cjs
           node tests/institution-class-edit-136.cjs
           node tests/institution-reporting-137.cjs
           node tests/institution-report-export-159.cjs
@@ -265,6 +266,7 @@ jobs:
           php tests/reconciliation-target-risk-db-193.php
           php tests/reconciliation-target-risk-notifications-db-194.php
           php tests/reconciliation-target-risk-health-db-195.php
+          php tests/reconciliation-inbox-target-risk-db-196.php
           php tests/institution-class-edit-db-136.php
           php tests/institution-reporting-db-137.php
           php tests/teacher-content-edit-copy-db-139.php

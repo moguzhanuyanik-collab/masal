@@ -7,6 +7,9 @@ require __DIR__.'/src/ticari_belge.php';
 require __DIR__.'/src/ticari_mutabakat.php';
 require __DIR__.'/src/ticari_mutabakat_aksiyon.php';
 require __DIR__.'/src/ticari_mutabakat_saglik.php';
+require __DIR__.'/src/ticari_mutabakat_performans.php';
+require __DIR__.'/src/ticari_mutabakat_hedef.php';
+require __DIR__.'/src/ticari_mutabakat_hedef_risk.php';
 require __DIR__.'/src/ticari_mutabakat_is_kutusu.php';
 
 $user=require_role('super_admin');
@@ -29,12 +32,14 @@ if(!array_key_exists($scope,mi_scope_labels()))$scope='mine';
 $window=(string)($_GET['window']??'all');
 if(!array_key_exists($window,mi_window_labels()))$window='all';
 $type=(string)($_GET['sorun_turu']??'');
+$risk=(string)($_GET['risk']??'');
+if(!array_key_exists($risk,mi_target_risk_labels()))$risk='';
 $ownerFilter=(string)($_GET['owner_id']??'');
 $query=trim((string)($_GET['q']??''));
 
 $summary=$ready?mi_summary($pdo,$user):[];
-$rows=$ready?mi_case_rows($pdo,$user,['scope'=>$scope,'window'=>$window,'sorun_turu'=>$type,'owner_id'=>$ownerFilter,'q'=>$query],700):[];
-$team=$ready?mi_team_workload($pdo,100):[];
+$rows=$ready?mi_case_rows($pdo,$user,['scope'=>$scope,'window'=>$window,'sorun_turu'=>$type,'risk'=>$risk,'owner_id'=>$ownerFilter,'q'=>$query],700):[];
+$team=$ready?mi_team_workload($pdo,100,$user):[];
 ?>
 <!doctype html>
 <html lang="tr">
@@ -44,7 +49,7 @@ $team=$ready?mi_team_workload($pdo,100):[];
 <title>Mutabakat Günlük İş Kutusu — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
-<link rel="stylesheet" href="ticari-mutabakat-is-kutusu.css?v=1.2.62">
+<link rel="stylesheet" href="ticari-mutabakat-is-kutusu.css?v=1.2.71">
 </head>
 <body class="role-page sa-subpage">
 <?php require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -60,6 +65,7 @@ $team=$ready?mi_team_workload($pdo,100):[];
 <a class="sa-page-action" href="ticari-mutabakat-eskalasyon.php" aria-label="Operasyon Eskalasyonu"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-performans.php" aria-label="Operasyon Performansı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk.php" aria-label="Hedef Risk Kuyruğu"><svg><use href="#sa-alert"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-hedef-risk-saglik.php" aria-label="Hedef Risk Bildirim Sağlığı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
 </header>
@@ -67,7 +73,7 @@ $team=$ready?mi_team_workload($pdo,100):[];
 <section class="role-hero">
 <span class="eyeline">GÜNLÜK OPERASYON</span>
 <h1>Mutabakat İş Kutusu</h1>
-<p>Bana atanan, bugün aksiyon bekleyen, gecikmiş veya plansız mutabakat vakalarını tek günlük iş görünümünde takip et.</p>
+<p>Bana atanan, bugün aksiyon bekleyen, gecikmiş veya plansız mutabakat vakalarını; güncel hedef-risk ve bildirim okuma durumuyla birlikte tek günlük iş görünümünde takip et.</p>
 <span class="role-hero-art">📥</span>
 </section>
 
@@ -82,6 +88,10 @@ $team=$ready?mi_team_workload($pdo,100):[];
 <a href="ticari-mutabakat-is-kutusu.php?scope=mine&window=no_date"><strong><?=(int)($summary['mine_no_date']??0)?></strong><span>Tarihsiz</span></a>
 <a href="ticari-mutabakat-is-kutusu.php?scope=mine"><strong><?=(int)($summary['mine_waiting']??0)?></strong><span>Dış aksiyon bekliyor</span></a>
 <a href="ticari-mutabakat-is-kutusu.php?scope=unassigned"><strong><?=(int)($summary['unassigned']??0)?></strong><span>Sahipsiz</span></a>
+<a href="ticari-mutabakat-is-kutusu.php?scope=mine&amp;risk=hedef_disinda"><strong><?=(int)($summary['mine_target_outside']??0)?></strong><span>Hedef dışında</span></a>
+<a href="ticari-mutabakat-is-kutusu.php?scope=mine&amp;risk=yuzde_75"><strong><?=(int)($summary['mine_target_75']??0)?></strong><span>Hedef %75+</span></a>
+<a href="ticari-mutabakat-is-kutusu.php?scope=mine&amp;risk=okunmamis"><strong><?=(int)($summary['mine_target_unread']??0)?></strong><span>Risk bildirimi okunmadı</span></a>
+<a href="ticari-mutabakat-is-kutusu.php?scope=mine&amp;risk=bildirim_bekleyen"><strong><?=(int)($summary['mine_target_pending']??0)?></strong><span>Risk bildirimi bekliyor</span></a>
 </section>
 
 <section class="role-section">
@@ -94,6 +104,9 @@ $team=$ready?mi_team_workload($pdo,100):[];
 <option value="">Tüm sorun türleri</option>
 <option value="butunluk" <?=$type==='butunluk'?'selected':''?>>Veri Bütünlüğü</option>
 <option value="operasyon" <?=$type==='operasyon'?'selected':''?>>Operasyon Açığı</option>
+</select>
+<select name="risk">
+<?php foreach(mi_target_risk_labels() as $v=>$label):?><option value="<?=mih($v)?>" <?=$risk===$v?'selected':''?>><?=mih($label)?></option><?php endforeach;?>
 </select>
 <input type="search" name="q" value="<?=mih($query)?>" placeholder="Kurum, sözleşme veya teşhis">
 <button type="submit">Filtrele</button>
@@ -115,6 +128,12 @@ $team=$ready?mi_team_workload($pdo,100):[];
 <?php if(!empty($row['aksiyon_bugun'])):?><span class="role-pill today">Bugün</span><?php endif;?>
 <?php if(!empty($row['aksiyon_tarihi_yok'])):?><span class="role-pill nodate">Tarih Yok</span><?php endif;?>
 <?php if(!empty($row['ilk_mudahale_yok'])):?><span class="role-pill">İlk Müdahale Yok</span><?php endif;?>
+<?php if((string)($row['hedef_risk_kodu']??'')==='hedef_disinda'):?><span class="role-pill target-outside">Hedef Dışında</span><?php endif;?>
+<?php if((string)($row['hedef_risk_kodu']??'')==='yuzde_75'):?><span class="role-pill target-75">Hedef %75+</span><?php endif;?>
+<?php if((string)($row['hedef_risk_kodu']??'')==='yuzde_50'):?><span class="role-pill target-50">Hedef %50–74</span><?php endif;?>
+<?php if((string)($row['hedef_risk_kodu']??'')==='politika_yok'):?><span class="role-pill target-none">Politika Yok</span><?php endif;?>
+<?php if(!empty($row['hedef_bildirim_okunmadi'])):?><span class="role-pill target-unread">Bildirim Okunmadı</span><?php endif;?>
+<?php if(!empty($row['hedef_bildirim_bekliyor'])):?><span class="role-pill target-pending">Bildirim Bekliyor</span><?php endif;?>
 </div>
 </a>
 <?php endforeach;?>
@@ -127,19 +146,20 @@ $team=$ready?mi_team_workload($pdo,100):[];
 <?php foreach($team as $row):?>
 <a href="ticari-mutabakat-is-kutusu.php?scope=team&amp;owner_id=<?=((int)$row['sorumlu_kullanici_id']>0?(int)$row['sorumlu_kullanici_id']:'unassigned')?>">
 <strong><?=mih((string)$row['sorumlu_adi'])?></strong>
-<span><?=(int)$row['open_count']?> açık · <?=(int)$row['overdue_count']?> gecikmiş · <?=(int)$row['today_count']?> bugün · <?=(int)$row['next7_count']?> 7 gün · <?=(int)$row['no_date_count']?> tarihsiz · <?=(int)$row['integrity_count']?> bütünlük</span>
+<span><?=(int)$row['open_count']?> açık · <?=(int)$row['overdue_count']?> gecikmiş · <?=(int)$row['today_count']?> bugün · <?=(int)$row['next7_count']?> 7 gün · <?=(int)$row['no_date_count']?> tarihsiz · <?=(int)$row['integrity_count']?> bütünlük · <?=(int)($row['target_outside_count']??0)?> hedef dışı · <?=(int)($row['target_unread_count']??0)?> okunmamış risk · <?=(int)($row['target_pending_count']??0)?> gönderim bekliyor</span>
 </a>
 <?php endforeach;?>
 </div>
 </section>
 
-<div class="role-note"><span>🔒</span><p>Bu ekran salt-okunurdur. Vaka sorumlusu, aksiyon tarihi veya aşaması burada değiştirilmez. Vaka düzenleme için Aksiyon Merkezi'ni, toplu sahiplik/tarih planlaması için Toplu Planlama ekranını kullan.</p></div>
+<div class="role-note"><span>🔒</span><p>Bu ekran salt-okunurdur. Hedef-risk sinyali veya bildirim üretmez; yalnız mevcut 1.2.68/1.2.69 verisini güncel açık döngü ve mevcut sorumlu bağlamında gösterir. Vaka düzenleme için Aksiyon Merkezi'ni, bildirim gönderimi için Hedef Risk Bildirimleri merkezini kullan.</p></div>
 <?php endif;?>
 </main>
 <nav class="role-bottom">
 <a href="super-admin.php"><span>⌂</span>Panel</a>
 <a class="active" href="ticari-mutabakat-is-kutusu.php"><span>📥</span>İş Kutusu</a>
 <a href="ticari-mutabakat-hedef-risk.php"><span>🎯</span>Hedef Risk</a>
+<a href="ticari-mutabakat-hedef-risk-saglik.php"><span>📨</span>Risk Sağlığı</a>
 <a href="ticari-mutabakat-hatirlatma.php"><span>🔔</span>Hatırlatma</a>
 <a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 <a href="ticari-mutabakat-saglik.php"><span>🩺</span>Sağlık</a>

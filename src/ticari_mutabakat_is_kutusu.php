@@ -20,6 +20,124 @@ function mi_window_labels(): array {
     ];
 }
 
+function mi_target_risk_labels(): array {
+    return [
+        ''=>'Tüm Hedef Riskleri',
+        'hedef_disinda'=>'Hedef Dışında',
+        'yuzde_75'=>'Süre %75+',
+        'yuzde_50'=>'Süre %50–74',
+        'politika_yok'=>'Politika Yok',
+        'okunmamis'=>'Güncel Bildirim Okunmadı',
+        'bildirim_bekleyen'=>'Güncel Bildirim Bekliyor',
+    ];
+}
+
+function mi_target_risk_ready(PDO $pdo): bool {
+    if(!function_exists('mhr_rows')) return false;
+    foreach([
+        'ticari_mutabakat_hedef_risk_bildirimleri',
+        'kurum_duyuru_alicilari',
+        'ticari_mutabakat_hedef_politikalari',
+    ] as $table){
+        if(!auth_runtime_table_exists($pdo,$table)) return false;
+    }
+    return true;
+}
+
+function mi_target_risk_map(PDO $pdo,array $actor,array $caseIds): array {
+    if((string)(auth_effective_role($actor)??'')!=='super_admin' || !mi_target_risk_ready($pdo)) return [];
+    $caseIds=array_values(array_unique(array_filter(array_map('intval',$caseIds),static fn(int $id):bool=>$id>0)));
+    if(!$caseIds) return [];
+    $wanted=array_fill_keys($caseIds,true);
+    $map=[];
+
+    foreach(mhr_rows($pdo,$actor,['scope'=>'team'],1500) as $risk){
+        $caseId=(int)($risk['id']??0);
+        if($caseId<=0 || !isset($wanted[$caseId])) continue;
+
+        $riskCode=(string)($risk['hedef_risk_kodu']??'');
+        $cycleStart=(string)($risk['dongu_baslangic_tarihi']??'');
+        $expectedSignal=$riskCode==='hedef_disinda'
+            ?'hedef_disinda'
+            :($riskCode==='yuzde_75'?'hedef_75':null);
+
+        $map[$caseId]=[
+            'hedef_risk_kodu'=>$riskCode,
+            'hedef_risk_etiketi'=>(string)($risk['hedef_risk_etiketi']??''),
+            'hedef_sure_kullanim_orani'=>$risk['hedef_sure_kullanim_orani']??null,
+            'hedef_politika_id'=>$risk['hedef_politika_id']??null,
+            'dongu_baslangic_tarihi'=>$cycleStart,
+            'dongu_anahtari'=>$cycleStart!==''?hash('sha256',$caseId.'|'.trim($cycleStart)):'',
+            'sorumlu_kullanici_id'=>(int)($risk['sorumlu_kullanici_id']??0),
+            'beklenen_esik_kodu'=>$expectedSignal,
+            'hedef_bildirim_id'=>null,
+            'hedef_duyuru_id'=>null,
+            'hedef_bildirim_okundu_tarihi'=>null,
+            'hedef_bildirim_durumu'=>$expectedSignal===null?'uygulanmaz':'bekliyor',
+        ];
+    }
+
+    if(!$map) return [];
+
+    $ids=array_keys($map);
+    $marks=implode(',',array_fill(0,count($ids),'?'));
+    $stmt=$pdo->prepare("SELECT
+        b.id,b.vaka_id,b.alici_kullanici_id,b.dongu_anahtari,b.esik_kodu,
+        b.duyuru_id,b.olusturulma_tarihi,da.okundu_tarihi
+        FROM ticari_mutabakat_hedef_risk_bildirimleri b
+        LEFT JOIN kurum_duyuru_alicilari da
+          ON da.duyuru_id=b.duyuru_id
+         AND da.kullanici_id=b.alici_kullanici_id
+        WHERE b.vaka_id IN ({$marks})
+        ORDER BY b.id DESC");
+    $stmt->execute($ids);
+    $notifications=$stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+
+    foreach($notifications as $notification){
+        $caseId=(int)$notification['vaka_id'];
+        if(!isset($map[$caseId])) continue;
+        $current=&$map[$caseId];
+        if($current['hedef_bildirim_id']!==null){
+            unset($current);
+            continue;
+        }
+        if((int)$notification['alici_kullanici_id']!==(int)$current['sorumlu_kullanici_id']
+            || (string)$notification['dongu_anahtari']!==(string)$current['dongu_anahtari']
+            || (string)$notification['esik_kodu']!==(string)($current['beklenen_esik_kodu']??'')){
+            unset($current);
+            continue;
+        }
+
+        $readAt=trim((string)($notification['okundu_tarihi']??''));
+        $current['hedef_bildirim_id']=(int)$notification['id'];
+        $current['hedef_duyuru_id']=(int)($notification['duyuru_id']??0);
+        $current['hedef_bildirim_okundu_tarihi']=$readAt!==''?$readAt:null;
+        $current['hedef_bildirim_durumu']=$readAt!==''?'okundu':'okunmadi';
+        unset($current);
+    }
+
+    return $map;
+}
+
+function mi_risk_priority(array $row): int {
+    $risk=(string)($row['hedef_risk_kodu']??'');
+    $delivery=(string)($row['hedef_bildirim_durumu']??'');
+
+    if($risk==='hedef_disinda' && $delivery==='okunmadi') return 0;
+    if($risk==='hedef_disinda' && $delivery==='bekliyor') return 1;
+    if($risk==='hedef_disinda') return 2;
+    if($risk==='yuzde_75' && $delivery==='okunmadi') return 3;
+    if($risk==='yuzde_75' && $delivery==='bekliyor') return 4;
+    if($risk==='yuzde_75') return 5;
+    if(!empty($row['aksiyon_gecikti'])) return 6;
+    if(!empty($row['aksiyon_bugun'])) return 7;
+    if($risk==='yuzde_50') return 8;
+    if($risk==='politika_yok') return 9;
+    if(empty($row['aksiyon_tarihi_yok'])) return 10;
+    return 11;
+}
+
 function mi_case_rows(PDO $pdo,array $actor,array $filters=[],int $limit=600): array {
     if((string)(auth_effective_role($actor)??'')!=='super_admin') return [];
     if(!mi_tables_ready($pdo)) return [];
@@ -77,6 +195,7 @@ function mi_case_rows(PDO $pdo,array $actor,array $filters=[],int $limit=600): a
         COALESCE(k.kod,'—') kurum_kodu,
         COALESCE(s.sozlesme_no,CONCAT('#',v.sozlesme_id)) sozlesme_no,
         COALESCE(u.ad_soyad,'Atanmamış') sorumlu_adi,
+        {$cycle} dongu_baslangic_tarihi,
         {$ageExpr} acik_gun,
         NOT {$intervention} ilk_mudahale_yok
         FROM ticari_mutabakat_vakalari v
@@ -92,12 +211,13 @@ function mi_case_rows(PDO $pdo,array $actor,array $filters=[],int $limit=600): a
           v.sonraki_aksiyon_tarihi,
           {$ageExpr} DESC,
           v.id DESC
-        LIMIT {$limit}");
+        LIMIT 1500");
     $stmt->execute($params);
     $rows=$stmt->fetchAll(PDO::FETCH_ASSOC);
     $stmt->closeCursor();
     if(!is_array($rows)) return [];
 
+    $riskMap=mi_target_risk_map($pdo,$actor,array_column($rows,'id'));
     foreach($rows as &$row){
         $bucket=mhs_age_bucket((int)$row['acik_gun']);
         $row['yas_etiketi']=$bucket['etiket'];
@@ -105,15 +225,54 @@ function mi_case_rows(PDO $pdo,array $actor,array $filters=[],int $limit=600): a
         $row['aksiyon_gecikti']=$next!=='' && $next<date('Y-m-d');
         $row['aksiyon_bugun']=$next!=='' && $next===date('Y-m-d');
         $row['aksiyon_tarihi_yok']=$next==='';
+
+        $risk=$riskMap[(int)$row['id']]??[];
+        $row['hedef_risk_kodu']=(string)($risk['hedef_risk_kodu']??'');
+        $row['hedef_risk_etiketi']=(string)($risk['hedef_risk_etiketi']??'');
+        $row['hedef_sure_kullanim_orani']=$risk['hedef_sure_kullanim_orani']??null;
+        $row['hedef_politika_id']=$risk['hedef_politika_id']??null;
+        $row['hedef_bildirim_id']=$risk['hedef_bildirim_id']??null;
+        $row['hedef_duyuru_id']=$risk['hedef_duyuru_id']??null;
+        $row['hedef_bildirim_okundu_tarihi']=$risk['hedef_bildirim_okundu_tarihi']??null;
+        $row['hedef_bildirim_durumu']=(string)($risk['hedef_bildirim_durumu']??'yok');
+        $row['hedef_bildirim_okunmadi']=$row['hedef_bildirim_durumu']==='okunmadi';
+        $row['hedef_bildirim_bekliyor']=$row['hedef_bildirim_durumu']==='bekliyor';
     }
     unset($row);
-    return $rows;
+
+    $riskFilter=(string)($filters['risk']??'');
+    if(!array_key_exists($riskFilter,mi_target_risk_labels())) $riskFilter='';
+    if($riskFilter!==''){
+        $rows=array_values(array_filter($rows,static function(array $row) use($riskFilter): bool {
+            if($riskFilter==='okunmamis') return !empty($row['hedef_bildirim_okunmadi']);
+            if($riskFilter==='bildirim_bekleyen') return !empty($row['hedef_bildirim_bekliyor']);
+            return (string)($row['hedef_risk_kodu']??'')===$riskFilter;
+        }));
+    }
+
+    usort($rows,static function(array $a,array $b): int {
+        $pa=mi_risk_priority($a);
+        $pb=mi_risk_priority($b);
+        if($pa!==$pb) return $pa<=>$pb;
+
+        $da=(string)($a['sonraki_aksiyon_tarihi']??'9999-12-31');
+        $db=(string)($b['sonraki_aksiyon_tarihi']??'9999-12-31');
+        if($da!==$db) return $da<=>$db;
+
+        $aa=(int)($a['acik_gun']??0);
+        $ab=(int)($b['acik_gun']??0);
+        if($aa!==$ab) return $ab<=>$aa;
+        return (int)$b['id']<=>(int)$a['id'];
+    });
+
+    return array_slice($rows,0,$limit);
 }
 
 function mi_summary(PDO $pdo,array $actor): array {
     $out=[
         'mine_open'=>0,'mine_overdue'=>0,'mine_today'=>0,'mine_next3'=>0,'mine_next7'=>0,
-        'mine_no_date'=>0,'mine_waiting'=>0,'unassigned'=>0
+        'mine_no_date'=>0,'mine_waiting'=>0,'unassigned'=>0,
+        'mine_target_outside'=>0,'mine_target_75'=>0,'mine_target_unread'=>0,'mine_target_pending'=>0
     ];
     if((string)(auth_effective_role($actor)??'')!=='super_admin' || !mi_tables_ready($pdo)) return $out;
     $userId=(int)$actor['id'];
@@ -132,16 +291,26 @@ function mi_summary(PDO $pdo,array $actor): array {
     $stmt->execute([$userId,$userId,$userId,$userId,$userId,$userId,$userId]);
     $row=$stmt->fetch(PDO::FETCH_ASSOC);
     $stmt->closeCursor();
-    if(!is_array($row)) return $out;
+    if(is_array($row)){
+        foreach(['mine_open','mine_overdue','mine_today','mine_next3','mine_next7','mine_no_date','mine_waiting'] as $key){
+            $out[$key]=(int)($row[$key]??0);
+        }
+        $out['unassigned']=(int)($row['unassigned_count']??0);
+    }
 
-    foreach(array_keys($out) as $key){
-        $source=$key==='unassigned'?'unassigned_count':$key;
-        $out[$key]=(int)($row[$source]??0);
+    if(mi_target_risk_ready($pdo)){
+        foreach(mi_case_rows($pdo,$actor,['scope'=>'mine','window'=>'all'],1500) as $case){
+            $risk=(string)($case['hedef_risk_kodu']??'');
+            if($risk==='hedef_disinda')$out['mine_target_outside']++;
+            if($risk==='yuzde_75')$out['mine_target_75']++;
+            if(!empty($case['hedef_bildirim_okunmadi']))$out['mine_target_unread']++;
+            if(!empty($case['hedef_bildirim_bekliyor']))$out['mine_target_pending']++;
+        }
     }
     return $out;
 }
 
-function mi_team_workload(PDO $pdo,int $limit=100): array {
+function mi_team_workload(PDO $pdo,int $limit=100,?array $actor=null): array {
     if(!mi_tables_ready($pdo)) return [];
     $limit=max(1,min(300,$limit));
     $stmt=$pdo->query("SELECT
@@ -161,5 +330,36 @@ function mi_team_workload(PDO $pdo,int $limit=100): array {
         LIMIT {$limit}");
     $rows=$stmt?$stmt->fetchAll(PDO::FETCH_ASSOC):[];
     if($stmt)$stmt->closeCursor();
-    return is_array($rows)?$rows:[];
+    if(!is_array($rows)) return [];
+
+    foreach($rows as &$row){
+        $row['target_outside_count']=0;
+        $row['target_unread_count']=0;
+        $row['target_pending_count']=0;
+    }
+    unset($row);
+
+    if($actor && (string)(auth_effective_role($actor)??'')==='super_admin' && mi_target_risk_ready($pdo)){
+        $index=[];
+        foreach($rows as $i=>$row)$index[(int)$row['sorumlu_kullanici_id']]=$i;
+        foreach(mi_case_rows($pdo,$actor,['scope'=>'team','window'=>'all'],1500) as $case){
+            $owner=(int)($case['sorumlu_kullanici_id']??0);
+            if(!isset($index[$owner])) continue;
+            $i=$index[$owner];
+            if((string)($case['hedef_risk_kodu']??'')==='hedef_disinda')$rows[$i]['target_outside_count']++;
+            if(!empty($case['hedef_bildirim_okunmadi']))$rows[$i]['target_unread_count']++;
+            if(!empty($case['hedef_bildirim_bekliyor']))$rows[$i]['target_pending_count']++;
+        }
+
+        usort($rows,static function(array $a,array $b): int {
+            return [
+                (int)$b['target_outside_count'],(int)$b['target_unread_count'],
+                (int)$b['overdue_count'],(int)$b['today_count'],(int)$b['open_count']
+            ] <=> [
+                (int)$a['target_outside_count'],(int)$a['target_unread_count'],
+                (int)$a['overdue_count'],(int)$a['today_count'],(int)$a['open_count']
+            ];
+        });
+    }
+    return $rows;
 }
