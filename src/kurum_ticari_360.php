@@ -127,18 +127,32 @@ function kt360_contract_rows(PDO $pdo,int $institutionId): array {
     $stmt->closeCursor();
     if(!is_array($rows)) return [];
 
+    $planSummaries=[];
+    if(function_exists('tp_plan_summaries')){
+        $planSummaries=tp_plan_summaries($pdo,array_column($rows,'id'));
+    }
+
     foreach($rows as &$row){
+        $plan=$planSummaries[(int)$row['id']]??null;
+        $row['taksit_plan_durumu']=is_array($plan)?(string)($plan['durum']??''):'';
+        $row['taksit_sayisi']=is_array($plan)?(int)($plan['taksit_sayisi']??0):0;
+        $row['taksit_plani_aktif']=is_array($plan) && (string)($plan['durum']??'')==='aktif';
+        $row['taksit_sonraki_vade']=$row['taksit_plani_aktif']?($plan['sonraki_vade']??null):null;
+        $row['taksit_gecikmis_tutar']=$row['taksit_plani_aktif']?(string)($plan['gecikmis_tutar']??'0.00'):'0.00';
+
         $total=(float)$row['toplam_tutar'];
         $paid=(float)$row['tahsil_edilen'];
         $remaining=max(0,$total-$paid);
         $row['tahsil_edilen']=number_format($paid,2,'.','');
         $row['kalan_tutar']=number_format($remaining,2,'.','');
-        $row['gecikmis']=(
-            (string)$row['durum']==='aktif'
-            && (string)($row['vade_tarihi']??'')!==''
-            && (string)$row['vade_tarihi']<date('Y-m-d')
-            && $remaining>0.009
-        );
+        $row['gecikmis']=$row['taksit_plani_aktif']
+            ? ((float)$row['taksit_gecikmis_tutar']>0.009)
+            : (
+                (string)$row['durum']==='aktif'
+                && (string)($row['vade_tarihi']??'')!==''
+                && (string)$row['vade_tarihi']<date('Y-m-d')
+                && $remaining>0.009
+            );
     }
     unset($row);
     return $rows;
