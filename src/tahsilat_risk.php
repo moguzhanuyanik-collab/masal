@@ -162,6 +162,22 @@ function tr_sync_cases(PDO $pdo,?array $actor=null): array {
     try{
         if(!$pdo->inTransaction()){$pdo->beginTransaction();$started=true;}
 
+        $planDuePredicate='';
+        if(auth_runtime_table_exists($pdo,'kurum_sozlesme_taksit_planlari')
+            && auth_runtime_table_exists($pdo,'kurum_sozlesme_taksitleri')){
+            $planDuePredicate=" OR EXISTS (
+                SELECT 1
+                FROM kurum_sozlesme_taksit_planlari tp
+                INNER JOIN kurum_sozlesme_taksitleri ti
+                  ON ti.sozlesme_id=tp.sozlesme_id
+                 AND ti.surum_no=tp.aktif_surum
+                WHERE tp.sozlesme_id=s.id
+                  AND tp.kurum_id=s.kurum_id
+                  AND tp.durum='aktif'
+                  AND ti.vade_tarihi<=DATE_ADD(CURDATE(),INTERVAL 7 DAY)
+            )";
+        }
+
         $stmt=$pdo->query("SELECT s.id
             FROM kurum_sozlesmeleri s
             WHERE s.durum='aktif'
@@ -173,6 +189,7 @@ function tr_sync_cases(PDO $pdo,?array $actor=null): array {
               AND (
                 s.vade_tarihi IS NULL
                 OR s.vade_tarihi<=DATE_ADD(CURDATE(),INTERVAL 7 DAY)
+                {$planDuePredicate}
               )
             ORDER BY s.id
             FOR UPDATE");
@@ -341,6 +358,18 @@ function tr_queue_rows(PDO $pdo,array $filters=[],int $limit=500): array {
         $total=(float)($row['toplam_tutar']??0);
         $paid=(float)($row['tahsil_edilen']??0);
         $remaining=max(0,$total-$paid);
+
+        $row['taksit_plani_aktif']=false;
+        $row['taksit_gecikmis_tutar']='0.00';
+        if(function_exists('tp_schedule_state')){
+            $schedule=tp_schedule_state($pdo,(int)$row['sozlesme_id']);
+            if(is_array($schedule)){
+                $row['taksit_plani_aktif']=true;
+                $row['taksit_gecikmis_tutar']=(string)($schedule['gecikmis_tutar']??'0.00');
+                if(!empty($schedule['sonraki_vade'])) $row['vade_tarihi']=(string)$schedule['sonraki_vade'];
+            }
+        }
+
         $risk=tr_risk_bucket(($row['vade_tarihi']??null)!==null?(string)$row['vade_tarihi']:null,$today);
         $row['tahsil_edilen']=number_format($paid,2,'.','');
         $row['kalan_tutar']=number_format($remaining,2,'.','');
