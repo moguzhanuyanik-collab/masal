@@ -29,10 +29,11 @@ if(!array_key_exists($scope,mi_scope_labels()))$scope='mine';
 $window=(string)($_GET['window']??'all');
 if(!array_key_exists($window,mi_window_labels()))$window='all';
 $type=(string)($_GET['sorun_turu']??'');
+$ownerFilter=(string)($_GET['owner_id']??'');
 $query=trim((string)($_GET['q']??''));
 
 $summary=$ready?mi_summary($pdo,$user):[];
-$rows=$ready?mi_case_rows($pdo,$user,['scope'=>$scope,'window'=>$window,'sorun_turu'=>$type,'q'=>$query],700):[];
+$rows=$ready?mi_case_rows($pdo,$user,['scope'=>$scope,'window'=>$window,'sorun_turu'=>$type,'owner_id'=>$ownerFilter,'q'=>$query],700):[];
 $team=$ready?mi_team_workload($pdo,100):[];
 ?>
 <!doctype html>
@@ -118,7 +119,7 @@ $team=$ready?mi_team_workload($pdo,100):[];
 <div class="role-section-head"><div><span class="eyeline">EKİP</span><h2>Sorumlu İş Yükü</h2></div><a class="role-pill ok" href="ticari-mutabakat-planlama.php">Toplu Planlama →</a></div>
 <div class="mi-team">
 <?php foreach($team as $row):?>
-<a href="ticari-mutabakat-is-kutusu.php?scope=team&q=<?=rawurlencode((string)$row['sorumlu_adi'])?>">
+<a href="ticari-mutabakat-is-kutusu.php?scope=team&amp;owner_id=<?=((int)$row['sorumlu_kullanici_id']>0?(int)$row['sorumlu_kullanici_id']:'unassigned')?>">
 <strong><?=mih((string)$row['sorumlu_adi'])?></strong>
 <span><?=(int)$row['open_count']?> açık · <?=(int)$row['overdue_count']?> gecikmiş · <?=(int)$row['today_count']?> bugün · <?=(int)$row['next7_count']?> 7 gün · <?=(int)$row['no_date_count']?> tarihsiz · <?=(int)$row['integrity_count']?> bütünlük</span>
 </a>
