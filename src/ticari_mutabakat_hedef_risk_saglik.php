@@ -99,12 +99,15 @@ function mrh_rows(PDO $pdo,array $filters=[],int $limit=1200): array {
         $currentCycleKey=mrh_cycle_key($caseId,$currentCycleStart);
         $isOpen=in_array((string)$row['vaka_durumu'],['acik','incelemede','beklemede'],true);
         $isCurrentCycle=hash_equals((string)$row['dongu_anahtari'],$currentCycleKey);
+        $isCurrentOwner=(int)$row['alici_kullanici_id']===(int)($row['sorumlu_kullanici_id']??0);
         $isRead=(string)($row['okundu_tarihi']??'')!=='';
 
         $row['guncel_dongu_anahtari']=$currentCycleKey;
         $row['guncel_dongu_bildirimi']=$isCurrentCycle;
-        $row['guncel_acik_vaka']=$isOpen && $isCurrentCycle;
+        $row['guncel_sorumlu_bildirimi']=$isCurrentOwner;
+        $row['guncel_acik_vaka']=$isOpen && $isCurrentCycle && $isCurrentOwner;
         $row['eski_dongu_bildirimi']=$isOpen && !$isCurrentCycle;
+        $row['eski_sorumlu_bildirimi']=$isOpen && $isCurrentCycle && !$isCurrentOwner;
         $row['okundu']=$isRead;
         $row['acik_hedef_disinda']=$row['guncel_acik_vaka'] && (string)$row['esik_kodu']==='hedef_disinda';
 
@@ -128,6 +131,7 @@ function mrh_rows(PDO $pdo,array $filters=[],int $limit=1200): array {
         if($stateFilter==='guncel_hedef_disinda' && !$row['acik_hedef_disinda']) continue;
         if($stateFilter==='kapali' && $isOpen) continue;
         if($stateFilter==='eski_dongu' && !$row['eski_dongu_bildirimi']) continue;
+        if($stateFilter==='eski_sorumlu' && !$row['eski_sorumlu_bildirimi']) continue;
 
         $out[]=$row;
     }
@@ -140,7 +144,7 @@ function mrh_summary(PDO $pdo,int $days=30): array {
         'days'=>$days,
         'total'=>0,'read'=>0,'unread'=>0,'read_rate'=>0.0,
         'current_open'=>0,'current_open_unread'=>0,'current_outside_open'=>0,
-        'closed_after'=>0,'old_cycle'=>0,
+        'closed_after'=>0,'old_cycle'=>0,'old_owner'=>0,
         'avg_read_minutes'=>null,'avg_close_minutes'=>null,
     ];
     if(!mrh_tables_ready($pdo)) return $out;
@@ -165,6 +169,7 @@ function mrh_summary(PDO $pdo,int $days=30): array {
             $closeMinutes[]=(int)$row['kapanma_dakika'];
         }
         if(!empty($row['eski_dongu_bildirimi']))$out['old_cycle']++;
+        if(!empty($row['eski_sorumlu_bildirimi']))$out['old_owner']++;
     }
 
     if($out['total']>0)$out['read_rate']=round(($out['read']/$out['total'])*100,1);
