@@ -801,7 +801,7 @@ SELECT k.id,'mat-top-1','coktan_secmeli','Ece''nin 1 çıkartması vardı. 1 tan
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-top-2','coktan_secmeli','Sayı yolunda 1''den başla, 2 adım ileri git. Hangi sayıya ulaşırsın?','["3","4","2","5"]',0,'1 ve 2 grubunu birleştirince toplam 3 nesne olur.',1,2,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-top-2','coktan_secmeli','Sayı yolunda 1 sayısından başla, 2 adım ileri git. Hangi sayıya ulaşırsın?','["3","4","2","5"]',0,'1 ve 2 grubunu birleştirince toplam 3 nesne olur.',1,2,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -821,7 +821,7 @@ SELECT k.id,'mat-top-6','coktan_secmeli','Ece''nin 1 çıkartması vardı. 6 tan
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-top-7','coktan_secmeli','Sayı yolunda 1''den başla, 7 adım ileri git. Hangi sayıya ulaşırsın?','["9","8","7","10"]',1,'1 ve 7 grubunu birleştirince toplam 8 nesne olur.',1,7,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-top-7','coktan_secmeli','Sayı yolunda 1 sayısından başla, 7 adım ileri git. Hangi sayıya ulaşırsın?','["9","8","7","10"]',1,'1 ve 7 grubunu birleştirince toplam 8 nesne olur.',1,7,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -841,7 +841,7 @@ SELECT k.id,'mat-top-11','coktan_secmeli','Ece''nin 2 çıkartması vardı. 1 ta
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-top-12','coktan_secmeli','Sayı yolunda 2''den başla, 2 adım ileri git. Hangi sayıya ulaşırsın?','["5","3","4","6"]',2,'2 ve 2 grubunu birleştirince toplam 4 nesne olur.',1,12,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-top-12','coktan_secmeli','Sayı yolunda 2 sayısından başla, 2 adım ileri git. Hangi sayıya ulaşırsın?','["5","3","4","6"]',2,'2 ve 2 grubunu birleştirince toplam 4 nesne olur.',1,12,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -861,7 +861,7 @@ SELECT k.id,'mat-top-16','coktan_secmeli','Ece''nin 2 çıkartması vardı. 6 ta
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-top-17','coktan_secmeli','Sayı yolunda 2''den başla, 7 adım ileri git. Hangi sayıya ulaşırsın?','["10","8","11","9"]',3,'2 ve 7 grubunu birleştirince toplam 9 nesne olur.',1,17,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-top-17','coktan_secmeli','Sayı yolunda 2 sayısından başla, 7 adım ileri git. Hangi sayıya ulaşırsın?','["10","8","11","9"]',3,'2 ve 7 grubunu birleştirince toplam 9 nesne olur.',1,17,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -881,7 +881,7 @@ SELECT k.id,'mat-top-21','coktan_secmeli','Ece''nin 3 çıkartması vardı. 1 ta
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-top-22','coktan_secmeli','Sayı yolunda 3''den başla, 2 adım ileri git. Hangi sayıya ulaşırsın?','["5","6","4","7"]',0,'3 ve 2 grubunu birleştirince toplam 5 nesne olur.',1,22,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-top-22','coktan_secmeli','Sayı yolunda 3 sayısından başla, 2 adım ileri git. Hangi sayıya ulaşırsın?','["5","6","4","7"]',0,'3 ve 2 grubunu birleştirince toplam 5 nesne olur.',1,22,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -901,7 +901,7 @@ SELECT k.id,'mat-top-26','coktan_secmeli','Ece''nin 3 çıkartması vardı. 6 ta
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-top-27','coktan_secmeli','Sayı yolunda 3''den başla, 7 adım ileri git. Hangi sayıya ulaşırsın?','["11","10","9","12"]',1,'3 ve 7 grubunu birleştirince toplam 10 nesne olur.',1,27,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-top-27','coktan_secmeli','Sayı yolunda 3 sayısından başla, 7 adım ileri git. Hangi sayıya ulaşırsın?','["11","10","9","12"]',1,'3 ve 7 grubunu birleştirince toplam 10 nesne olur.',1,27,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -921,7 +921,7 @@ SELECT k.id,'mat-top-31','coktan_secmeli','Ece''nin 4 çıkartması vardı. 1 ta
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-top-32','coktan_secmeli','Sayı yolunda 4''den başla, 2 adım ileri git. Hangi sayıya ulaşırsın?','["7","5","6","8"]',2,'4 ve 2 grubunu birleştirince toplam 6 nesne olur.',1,32,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-top-32','coktan_secmeli','Sayı yolunda 4 sayısından başla, 2 adım ileri git. Hangi sayıya ulaşırsın?','["7","5","6","8"]',2,'4 ve 2 grubunu birleştirince toplam 6 nesne olur.',1,32,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -941,7 +941,7 @@ SELECT k.id,'mat-top-36','coktan_secmeli','Ece''nin 4 çıkartması vardı. 6 ta
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-top-37','coktan_secmeli','Sayı yolunda 4''den başla, 7 adım ileri git. Hangi sayıya ulaşırsın?','["12","10","13","11"]',3,'4 ve 7 grubunu birleştirince toplam 11 nesne olur.',2,37,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-top-37','coktan_secmeli','Sayı yolunda 4 sayısından başla, 7 adım ileri git. Hangi sayıya ulaşırsın?','["12","10","13","11"]',3,'4 ve 7 grubunu birleştirince toplam 11 nesne olur.',2,37,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -961,7 +961,7 @@ SELECT k.id,'mat-top-41','coktan_secmeli','Ece''nin 5 çıkartması vardı. 1 ta
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-top-42','coktan_secmeli','Sayı yolunda 5''den başla, 2 adım ileri git. Hangi sayıya ulaşırsın?','["7","8","6","9"]',0,'5 ve 2 grubunu birleştirince toplam 7 nesne olur.',1,42,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-top-42','coktan_secmeli','Sayı yolunda 5 sayısından başla, 2 adım ileri git. Hangi sayıya ulaşırsın?','["7","8","6","9"]',0,'5 ve 2 grubunu birleştirince toplam 7 nesne olur.',1,42,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -981,7 +981,7 @@ SELECT k.id,'mat-top-46','coktan_secmeli','Ece''nin 5 çıkartması vardı. 6 ta
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-top-47','coktan_secmeli','Sayı yolunda 5''den başla, 7 adım ileri git. Hangi sayıya ulaşırsın?','["13","12","11","14"]',1,'5 ve 7 grubunu birleştirince toplam 12 nesne olur.',2,47,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-top-47','coktan_secmeli','Sayı yolunda 5 sayısından başla, 7 adım ileri git. Hangi sayıya ulaşırsın?','["13","12","11","14"]',1,'5 ve 7 grubunu birleştirince toplam 12 nesne olur.',2,47,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1001,7 +1001,7 @@ SELECT k.id,'mat-top-51','coktan_secmeli','Ece''nin 6 çıkartması vardı. 1 ta
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-top-52','coktan_secmeli','Sayı yolunda 6''den başla, 2 adım ileri git. Hangi sayıya ulaşırsın?','["9","7","8","10"]',2,'6 ve 2 grubunu birleştirince toplam 8 nesne olur.',1,52,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-top-52','coktan_secmeli','Sayı yolunda 6 sayısından başla, 2 adım ileri git. Hangi sayıya ulaşırsın?','["9","7","8","10"]',2,'6 ve 2 grubunu birleştirince toplam 8 nesne olur.',1,52,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1021,7 +1021,7 @@ SELECT k.id,'mat-top-56','coktan_secmeli','Ece''nin 6 çıkartması vardı. 6 ta
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-top-57','coktan_secmeli','Sayı yolunda 6''den başla, 7 adım ileri git. Hangi sayıya ulaşırsın?','["14","12","15","13"]',3,'6 ve 7 grubunu birleştirince toplam 13 nesne olur.',2,57,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-top-57','coktan_secmeli','Sayı yolunda 6 sayısından başla, 7 adım ileri git. Hangi sayıya ulaşırsın?','["14","12","15","13"]',3,'6 ve 7 grubunu birleştirince toplam 13 nesne olur.',2,57,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1041,7 +1041,7 @@ SELECT k.id,'mat-top-61','coktan_secmeli','Ece''nin 7 çıkartması vardı. 1 ta
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-top-62','coktan_secmeli','Sayı yolunda 7''den başla, 2 adım ileri git. Hangi sayıya ulaşırsın?','["9","10","8","11"]',0,'7 ve 2 grubunu birleştirince toplam 9 nesne olur.',1,62,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-top-62','coktan_secmeli','Sayı yolunda 7 sayısından başla, 2 adım ileri git. Hangi sayıya ulaşırsın?','["9","10","8","11"]',0,'7 ve 2 grubunu birleştirince toplam 9 nesne olur.',1,62,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1061,7 +1061,7 @@ SELECT k.id,'mat-top-66','coktan_secmeli','Ece''nin 7 çıkartması vardı. 6 ta
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-top-67','coktan_secmeli','Sayı yolunda 7''den başla, 7 adım ileri git. Hangi sayıya ulaşırsın?','["15","14","13","16"]',1,'7 ve 7 grubunu birleştirince toplam 14 nesne olur.',2,67,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-top-67','coktan_secmeli','Sayı yolunda 7 sayısından başla, 7 adım ileri git. Hangi sayıya ulaşırsın?','["15","14","13","16"]',1,'7 ve 7 grubunu birleştirince toplam 14 nesne olur.',2,67,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-toplama' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1081,7 +1081,7 @@ SELECT k.id,'mat-cik-1','coktan_secmeli','2 balondan 1 tanesi patladı. Kaç bal
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-cik-2','coktan_secmeli','Sayı yolunda 3''den 1 adım geri git. Hangi sayıya ulaşırsın?','["2","3","4","5"]',0,'3 nesneden 1 nesneyi ayırınca 2 nesne kalır.',1,2,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-cik-2','coktan_secmeli','Sayı yolunda 3 sayısından 1 adım geri git. Hangi sayıya ulaşırsın?','["2","3","4","5"]',0,'3 nesneden 1 nesneyi ayırınca 2 nesne kalır.',1,2,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1101,7 +1101,7 @@ SELECT k.id,'mat-cik-6','coktan_secmeli','4 balondan 3 tanesi patladı. Kaç bal
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-cik-7','coktan_secmeli','Sayı yolunda 5''den 1 adım geri git. Hangi sayıya ulaşırsın?','["5","6","4","7"]',2,'5 nesneden 1 nesneyi ayırınca 4 nesne kalır.',1,7,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-cik-7','coktan_secmeli','Sayı yolunda 5 sayısından 1 adım geri git. Hangi sayıya ulaşırsın?','["5","6","4","7"]',2,'5 nesneden 1 nesneyi ayırınca 4 nesne kalır.',1,7,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1121,7 +1121,7 @@ SELECT k.id,'mat-cik-11','coktan_secmeli','6 balondan 2 tanesi patladı. Kaç ba
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-cik-12','coktan_secmeli','Sayı yolunda 6''den 3 adım geri git. Hangi sayıya ulaşırsın?','["4","3","5","6"]',1,'6 nesneden 3 nesneyi ayırınca 3 nesne kalır.',1,12,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-cik-12','coktan_secmeli','Sayı yolunda 6 sayısından 3 adım geri git. Hangi sayıya ulaşırsın?','["4","3","5","6"]',1,'6 nesneden 3 nesneyi ayırınca 3 nesne kalır.',1,12,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1141,7 +1141,7 @@ SELECT k.id,'mat-cik-16','coktan_secmeli','7 balondan 3 tanesi patladı. Kaç ba
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-cik-17','coktan_secmeli','Sayı yolunda 7''den 5 adım geri git. Hangi sayıya ulaşırsın?','["2","3","4","5"]',0,'7 nesneden 5 nesneyi ayırınca 2 nesne kalır.',1,17,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-cik-17','coktan_secmeli','Sayı yolunda 7 sayısından 5 adım geri git. Hangi sayıya ulaşırsın?','["2","3","4","5"]',0,'7 nesneden 5 nesneyi ayırınca 2 nesne kalır.',1,17,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1161,7 +1161,7 @@ SELECT k.id,'mat-cik-21','coktan_secmeli','8 balondan 4 tanesi patladı. Kaç ba
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-cik-22','coktan_secmeli','Sayı yolunda 8''den 6 adım geri git. Hangi sayıya ulaşırsın?','["3","4","2","5"]',2,'8 nesneden 6 nesneyi ayırınca 2 nesne kalır.',1,22,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-cik-22','coktan_secmeli','Sayı yolunda 8 sayısından 6 adım geri git. Hangi sayıya ulaşırsın?','["3","4","2","5"]',2,'8 nesneden 6 nesneyi ayırınca 2 nesne kalır.',1,22,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1181,7 +1181,7 @@ SELECT k.id,'mat-cik-26','coktan_secmeli','9 balondan 5 tanesi patladı. Kaç ba
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-cik-27','coktan_secmeli','Sayı yolunda 9''den 7 adım geri git. Hangi sayıya ulaşırsın?','["2","3","4","5"]',0,'9 nesneden 7 nesneyi ayırınca 2 nesne kalır.',1,27,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-cik-27','coktan_secmeli','Sayı yolunda 9 sayısından 7 adım geri git. Hangi sayıya ulaşırsın?','["2","3","4","5"]',0,'9 nesneden 7 nesneyi ayırınca 2 nesne kalır.',1,27,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1201,7 +1201,7 @@ SELECT k.id,'mat-cik-31','coktan_secmeli','10 balondan 4 tanesi patladı. Kaç b
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-cik-32','coktan_secmeli','Sayı yolunda 10''den 6 adım geri git. Hangi sayıya ulaşırsın?','["4","5","6","7"]',0,'10 nesneden 6 nesneyi ayırınca 4 nesne kalır.',1,32,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-cik-32','coktan_secmeli','Sayı yolunda 10 sayısından 6 adım geri git. Hangi sayıya ulaşırsın?','["4","5","6","7"]',0,'10 nesneden 6 nesneyi ayırınca 4 nesne kalır.',1,32,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1221,7 +1221,7 @@ SELECT k.id,'mat-cik-36','coktan_secmeli','11 balondan 3 tanesi patladı. Kaç b
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-cik-37','coktan_secmeli','Sayı yolunda 11''den 5 adım geri git. Hangi sayıya ulaşırsın?','["6","7","8","9"]',0,'11 nesneden 5 nesneyi ayırınca 6 nesne kalır.',2,37,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-cik-37','coktan_secmeli','Sayı yolunda 11 sayısından 5 adım geri git. Hangi sayıya ulaşırsın?','["6","7","8","9"]',0,'11 nesneden 5 nesneyi ayırınca 6 nesne kalır.',2,37,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1241,7 +1241,7 @@ SELECT k.id,'mat-cik-41','coktan_secmeli','12 balondan 2 tanesi patladı. Kaç b
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-cik-42','coktan_secmeli','Sayı yolunda 12''den 3 adım geri git. Hangi sayıya ulaşırsın?','["10","11","12","9"]',3,'12 nesneden 3 nesneyi ayırınca 9 nesne kalır.',2,42,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-cik-42','coktan_secmeli','Sayı yolunda 12 sayısından 3 adım geri git. Hangi sayıya ulaşırsın?','["10","11","12","9"]',3,'12 nesneden 3 nesneyi ayırınca 9 nesne kalır.',2,42,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1261,7 +1261,7 @@ SELECT k.id,'mat-cik-46','coktan_secmeli','12 balondan 10 tanesi patladı. Kaç 
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-cik-47','coktan_secmeli','Sayı yolunda 13''den 1 adım geri git. Hangi sayıya ulaşırsın?','["13","14","12","15"]',2,'13 nesneden 1 nesneyi ayırınca 12 nesne kalır.',2,47,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-cik-47','coktan_secmeli','Sayı yolunda 13 sayısından 1 adım geri git. Hangi sayıya ulaşırsın?','["13","14","12","15"]',2,'13 nesneden 1 nesneyi ayırınca 12 nesne kalır.',2,47,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1281,7 +1281,7 @@ SELECT k.id,'mat-cik-51','coktan_secmeli','13 balondan 7 tanesi patladı. Kaç b
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-cik-52','coktan_secmeli','Sayı yolunda 13''den 9 adım geri git. Hangi sayıya ulaşırsın?','["5","6","4","7"]',2,'13 nesneden 9 nesneyi ayırınca 4 nesne kalır.',2,52,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-cik-52','coktan_secmeli','Sayı yolunda 13 sayısından 9 adım geri git. Hangi sayıya ulaşırsın?','["5","6","4","7"]',2,'13 nesneden 9 nesneyi ayırınca 4 nesne kalır.',2,52,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1301,7 +1301,7 @@ SELECT k.id,'mat-cik-56','coktan_secmeli','14 balondan 3 tanesi patladı. Kaç b
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-cik-57','coktan_secmeli','Sayı yolunda 14''den 4 adım geri git. Hangi sayıya ulaşırsın?','["11","12","10","13"]',2,'14 nesneden 4 nesneyi ayırınca 10 nesne kalır.',2,57,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-cik-57','coktan_secmeli','Sayı yolunda 14 sayısından 4 adım geri git. Hangi sayıya ulaşırsın?','["11","12","10","13"]',2,'14 nesneden 4 nesneyi ayırınca 10 nesne kalır.',2,57,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1321,7 +1321,7 @@ SELECT k.id,'mat-cik-61','coktan_secmeli','14 balondan 12 tanesi patladı. Kaç 
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-cik-62','coktan_secmeli','Sayı yolunda 15''den 1 adım geri git. Hangi sayıya ulaşırsın?','["14","15","16","17"]',0,'15 nesneden 1 nesneyi ayırınca 14 nesne kalır.',2,62,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-cik-62','coktan_secmeli','Sayı yolunda 15 sayısından 1 adım geri git. Hangi sayıya ulaşırsın?','["14","15","16","17"]',0,'15 nesneden 1 nesneyi ayırınca 14 nesne kalır.',2,62,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
@@ -1341,7 +1341,7 @@ SELECT k.id,'mat-cik-66','coktan_secmeli','15 balondan 7 tanesi patladı. Kaç b
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)
-SELECT k.id,'mat-cik-67','coktan_secmeli','Sayı yolunda 15''den 9 adım geri git. Hangi sayıya ulaşırsın?','["6","7","8","9"]',0,'15 nesneden 9 nesneyi ayırınca 6 nesne kalır.',2,67,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
+SELECT k.id,'mat-cik-67','coktan_secmeli','Sayı yolunda 15 sayısından 9 adım geri git. Hangi sayıya ulaşırsın?','["6","7","8","9"]',0,'15 nesneden 9 nesneyi ayırınca 6 nesne kalır.',2,67,1 FROM ders_konulari k INNER JOIN dersler d ON d.id=k.ders_id WHERE k.kademe_kodu='temel_egitim' AND k.sinif_seviyesi=1 AND k.konu_kodu='mat-cikarma' AND (d.kod='matematik' OR d.ad='Matematik')
 ON DUPLICATE KEY UPDATE soru=VALUES(soru),secenekler_json=VALUES(secenekler_json),dogru_cevap_indeksi=VALUES(dogru_cevap_indeksi),aciklama=VALUES(aciklama),zorluk=VALUES(zorluk),sira=VALUES(sira),aktif=1;
 
 INSERT INTO ders_sorulari (konu_id,soru_kodu,soru_turu,soru,secenekler_json,dogru_cevap_indeksi,aciklama,zorluk,sira,aktif)

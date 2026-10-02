@@ -1276,7 +1276,7 @@ WHERE s.soru_kodu='mat-top-1'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 1''den başla, 2 adım ileri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 1 sayısından başla, 2 adım ileri git. Hangi sayıya ulaşırsın?',
     s.aciklama='1 ve 2 grubunu birleştirince toplam 3 nesne olur.'
 WHERE s.soru_kodu='mat-top-2'
   AND k.kademe_kodu='temel_egitim'
@@ -1326,7 +1326,7 @@ WHERE s.soru_kodu='mat-top-6'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 1''den başla, 7 adım ileri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 1 sayısından başla, 7 adım ileri git. Hangi sayıya ulaşırsın?',
     s.aciklama='1 ve 7 grubunu birleştirince toplam 8 nesne olur.'
 WHERE s.soru_kodu='mat-top-7'
   AND k.kademe_kodu='temel_egitim'
@@ -1376,7 +1376,7 @@ WHERE s.soru_kodu='mat-top-11'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 2''den başla, 2 adım ileri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 2 sayısından başla, 2 adım ileri git. Hangi sayıya ulaşırsın?',
     s.aciklama='2 ve 2 grubunu birleştirince toplam 4 nesne olur.'
 WHERE s.soru_kodu='mat-top-12'
   AND k.kademe_kodu='temel_egitim'
@@ -1426,7 +1426,7 @@ WHERE s.soru_kodu='mat-top-16'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 2''den başla, 7 adım ileri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 2 sayısından başla, 7 adım ileri git. Hangi sayıya ulaşırsın?',
     s.aciklama='2 ve 7 grubunu birleştirince toplam 9 nesne olur.'
 WHERE s.soru_kodu='mat-top-17'
   AND k.kademe_kodu='temel_egitim'
@@ -1476,7 +1476,7 @@ WHERE s.soru_kodu='mat-top-21'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 3''den başla, 2 adım ileri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 3 sayısından başla, 2 adım ileri git. Hangi sayıya ulaşırsın?',
     s.aciklama='3 ve 2 grubunu birleştirince toplam 5 nesne olur.'
 WHERE s.soru_kodu='mat-top-22'
   AND k.kademe_kodu='temel_egitim'
@@ -1526,7 +1526,7 @@ WHERE s.soru_kodu='mat-top-26'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 3''den başla, 7 adım ileri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 3 sayısından başla, 7 adım ileri git. Hangi sayıya ulaşırsın?',
     s.aciklama='3 ve 7 grubunu birleştirince toplam 10 nesne olur.'
 WHERE s.soru_kodu='mat-top-27'
   AND k.kademe_kodu='temel_egitim'
@@ -1576,7 +1576,7 @@ WHERE s.soru_kodu='mat-top-31'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 4''den başla, 2 adım ileri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 4 sayısından başla, 2 adım ileri git. Hangi sayıya ulaşırsın?',
     s.aciklama='4 ve 2 grubunu birleştirince toplam 6 nesne olur.'
 WHERE s.soru_kodu='mat-top-32'
   AND k.kademe_kodu='temel_egitim'
@@ -1626,7 +1626,7 @@ WHERE s.soru_kodu='mat-top-36'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 4''den başla, 7 adım ileri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 4 sayısından başla, 7 adım ileri git. Hangi sayıya ulaşırsın?',
     s.aciklama='4 ve 7 grubunu birleştirince toplam 11 nesne olur.'
 WHERE s.soru_kodu='mat-top-37'
   AND k.kademe_kodu='temel_egitim'
@@ -1676,7 +1676,7 @@ WHERE s.soru_kodu='mat-top-41'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 5''den başla, 2 adım ileri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 5 sayısından başla, 2 adım ileri git. Hangi sayıya ulaşırsın?',
     s.aciklama='5 ve 2 grubunu birleştirince toplam 7 nesne olur.'
 WHERE s.soru_kodu='mat-top-42'
   AND k.kademe_kodu='temel_egitim'
@@ -1726,7 +1726,7 @@ WHERE s.soru_kodu='mat-top-46'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 5''den başla, 7 adım ileri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 5 sayısından başla, 7 adım ileri git. Hangi sayıya ulaşırsın?',
     s.aciklama='5 ve 7 grubunu birleştirince toplam 12 nesne olur.'
 WHERE s.soru_kodu='mat-top-47'
   AND k.kademe_kodu='temel_egitim'
@@ -1776,7 +1776,7 @@ WHERE s.soru_kodu='mat-top-51'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 6''den başla, 2 adım ileri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 6 sayısından başla, 2 adım ileri git. Hangi sayıya ulaşırsın?',
     s.aciklama='6 ve 2 grubunu birleştirince toplam 8 nesne olur.'
 WHERE s.soru_kodu='mat-top-52'
   AND k.kademe_kodu='temel_egitim'
@@ -1826,7 +1826,7 @@ WHERE s.soru_kodu='mat-top-56'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 6''den başla, 7 adım ileri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 6 sayısından başla, 7 adım ileri git. Hangi sayıya ulaşırsın?',
     s.aciklama='6 ve 7 grubunu birleştirince toplam 13 nesne olur.'
 WHERE s.soru_kodu='mat-top-57'
   AND k.kademe_kodu='temel_egitim'
@@ -1876,7 +1876,7 @@ WHERE s.soru_kodu='mat-top-61'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 7''den başla, 2 adım ileri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 7 sayısından başla, 2 adım ileri git. Hangi sayıya ulaşırsın?',
     s.aciklama='7 ve 2 grubunu birleştirince toplam 9 nesne olur.'
 WHERE s.soru_kodu='mat-top-62'
   AND k.kademe_kodu='temel_egitim'
@@ -1926,7 +1926,7 @@ WHERE s.soru_kodu='mat-top-66'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 7''den başla, 7 adım ileri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 7 sayısından başla, 7 adım ileri git. Hangi sayıya ulaşırsın?',
     s.aciklama='7 ve 7 grubunu birleştirince toplam 14 nesne olur.'
 WHERE s.soru_kodu='mat-top-67'
   AND k.kademe_kodu='temel_egitim'
@@ -1976,7 +1976,7 @@ WHERE s.soru_kodu='mat-cik-1'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 3''den 1 adım geri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 3 sayısından 1 adım geri git. Hangi sayıya ulaşırsın?',
     s.aciklama='3 nesneden 1 nesneyi ayırınca 2 nesne kalır.'
 WHERE s.soru_kodu='mat-cik-2'
   AND k.kademe_kodu='temel_egitim'
@@ -2026,7 +2026,7 @@ WHERE s.soru_kodu='mat-cik-6'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 5''den 1 adım geri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 5 sayısından 1 adım geri git. Hangi sayıya ulaşırsın?',
     s.aciklama='5 nesneden 1 nesneyi ayırınca 4 nesne kalır.'
 WHERE s.soru_kodu='mat-cik-7'
   AND k.kademe_kodu='temel_egitim'
@@ -2076,7 +2076,7 @@ WHERE s.soru_kodu='mat-cik-11'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 6''den 3 adım geri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 6 sayısından 3 adım geri git. Hangi sayıya ulaşırsın?',
     s.aciklama='6 nesneden 3 nesneyi ayırınca 3 nesne kalır.'
 WHERE s.soru_kodu='mat-cik-12'
   AND k.kademe_kodu='temel_egitim'
@@ -2126,7 +2126,7 @@ WHERE s.soru_kodu='mat-cik-16'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 7''den 5 adım geri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 7 sayısından 5 adım geri git. Hangi sayıya ulaşırsın?',
     s.aciklama='7 nesneden 5 nesneyi ayırınca 2 nesne kalır.'
 WHERE s.soru_kodu='mat-cik-17'
   AND k.kademe_kodu='temel_egitim'
@@ -2176,7 +2176,7 @@ WHERE s.soru_kodu='mat-cik-21'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 8''den 6 adım geri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 8 sayısından 6 adım geri git. Hangi sayıya ulaşırsın?',
     s.aciklama='8 nesneden 6 nesneyi ayırınca 2 nesne kalır.'
 WHERE s.soru_kodu='mat-cik-22'
   AND k.kademe_kodu='temel_egitim'
@@ -2226,7 +2226,7 @@ WHERE s.soru_kodu='mat-cik-26'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 9''den 7 adım geri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 9 sayısından 7 adım geri git. Hangi sayıya ulaşırsın?',
     s.aciklama='9 nesneden 7 nesneyi ayırınca 2 nesne kalır.'
 WHERE s.soru_kodu='mat-cik-27'
   AND k.kademe_kodu='temel_egitim'
@@ -2276,7 +2276,7 @@ WHERE s.soru_kodu='mat-cik-31'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 10''den 6 adım geri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 10 sayısından 6 adım geri git. Hangi sayıya ulaşırsın?',
     s.aciklama='10 nesneden 6 nesneyi ayırınca 4 nesne kalır.'
 WHERE s.soru_kodu='mat-cik-32'
   AND k.kademe_kodu='temel_egitim'
@@ -2326,7 +2326,7 @@ WHERE s.soru_kodu='mat-cik-36'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 11''den 5 adım geri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 11 sayısından 5 adım geri git. Hangi sayıya ulaşırsın?',
     s.aciklama='11 nesneden 5 nesneyi ayırınca 6 nesne kalır.'
 WHERE s.soru_kodu='mat-cik-37'
   AND k.kademe_kodu='temel_egitim'
@@ -2376,7 +2376,7 @@ WHERE s.soru_kodu='mat-cik-41'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 12''den 3 adım geri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 12 sayısından 3 adım geri git. Hangi sayıya ulaşırsın?',
     s.aciklama='12 nesneden 3 nesneyi ayırınca 9 nesne kalır.'
 WHERE s.soru_kodu='mat-cik-42'
   AND k.kademe_kodu='temel_egitim'
@@ -2426,7 +2426,7 @@ WHERE s.soru_kodu='mat-cik-46'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 13''den 1 adım geri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 13 sayısından 1 adım geri git. Hangi sayıya ulaşırsın?',
     s.aciklama='13 nesneden 1 nesneyi ayırınca 12 nesne kalır.'
 WHERE s.soru_kodu='mat-cik-47'
   AND k.kademe_kodu='temel_egitim'
@@ -2476,7 +2476,7 @@ WHERE s.soru_kodu='mat-cik-51'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 13''den 9 adım geri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 13 sayısından 9 adım geri git. Hangi sayıya ulaşırsın?',
     s.aciklama='13 nesneden 9 nesneyi ayırınca 4 nesne kalır.'
 WHERE s.soru_kodu='mat-cik-52'
   AND k.kademe_kodu='temel_egitim'
@@ -2526,7 +2526,7 @@ WHERE s.soru_kodu='mat-cik-56'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 14''den 4 adım geri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 14 sayısından 4 adım geri git. Hangi sayıya ulaşırsın?',
     s.aciklama='14 nesneden 4 nesneyi ayırınca 10 nesne kalır.'
 WHERE s.soru_kodu='mat-cik-57'
   AND k.kademe_kodu='temel_egitim'
@@ -2576,7 +2576,7 @@ WHERE s.soru_kodu='mat-cik-61'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 15''den 1 adım geri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 15 sayısından 1 adım geri git. Hangi sayıya ulaşırsın?',
     s.aciklama='15 nesneden 1 nesneyi ayırınca 14 nesne kalır.'
 WHERE s.soru_kodu='mat-cik-62'
   AND k.kademe_kodu='temel_egitim'
@@ -2626,7 +2626,7 @@ WHERE s.soru_kodu='mat-cik-66'
 UPDATE ders_sorulari s
 INNER JOIN ders_konulari k ON k.id=s.konu_id
 INNER JOIN dersler d ON d.id=k.ders_id
-SET s.soru='Sayı yolunda 15''den 9 adım geri git. Hangi sayıya ulaşırsın?',
+SET s.soru='Sayı yolunda 15 sayısından 9 adım geri git. Hangi sayıya ulaşırsın?',
     s.aciklama='15 nesneden 9 nesneyi ayırınca 6 nesne kalır.'
 WHERE s.soru_kodu='mat-cik-67'
   AND k.kademe_kodu='temel_egitim'

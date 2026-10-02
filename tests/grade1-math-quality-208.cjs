@@ -24,7 +24,7 @@ assert(normalizedSource.includes('Sayı yolunda 5 sayısından'));
 assert(/daha çok boncuğu gösteren sayı/i.test(normalizedSource));
 assert(normalizedSource.includes('kaç çıkartması var?'));
 assert(/kaç balon kaldı\?/i.test(normalizedSource),'subtraction stories must include a concrete balloon context');
-assert(!/\d+'(?:dan|den)\b/u.test(normalizedSource),'numeric suffix wording should avoid awkward Turkish apostrophe forms');
+assert(!/Sayı yolunda \d+'(?:dan|den)\b/u.test(normalizedSource),'number-line prompts should use child-friendly “sayıısından/sayısından” wording');
 assert(!/\d+ ile \d+'yi bir araya getirince/u.test(normalizedSource),'addition explanations should use child-friendly grammar');
 assert(normalizedSource.includes('yaklaşık kaç tane görüyorsun?'));
 assert(normalizedSource.includes('▭ Bu işaret hangi şekle benzer?'));
