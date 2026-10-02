@@ -42,7 +42,8 @@ assert(migration.includes("d.kod='matematik'"));
 
 assert(workflow.includes('node tests/grade1-math-quality-208.cjs'));
 
-assert.strictEqual(version.version,'1.2.81');
+const versionParts=String(version.version).split('.').map(Number);
+assert(versionParts.length===3 && versionParts[0]===1 && versionParts[1]===2 && versionParts[2]>=81);
 assert(Number(version.release_revision)>=1);
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(release.release_revision,version.release_revision);
@@ -50,7 +51,7 @@ assert.strictEqual(manifest.version,version.version);
 assert.strictEqual(manifest.release_revision,version.release_revision);
 assert(manifest.files.includes('database/migrations/091_1_sinif_matematik_soru_kalitesi.sql'));
 assert(manifest.files.includes('tests/grade1-math-quality-208.cjs'));
-assert.strictEqual(manifest.files.length,910);
+assert(manifest.files.length>=910,'grade1 math managed-file baseline must be retained');
 assert.deepStrictEqual(manifest.files,[...manifest.files].sort());
 assert.strictEqual(new Set(manifest.files).size,manifest.files.length);
 

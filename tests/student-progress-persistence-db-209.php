@@ -18,6 +18,27 @@ try{
     ]);
 }catch(Throwable $e){ fail_209('MariaDB bağlantısı kurulamadı: '.$e->getMessage()); }
 
+function run_092(PDO $pdo): void {
+    $path=__DIR__.'/../database/migrations/092_ogrenci_etkinlik_ilerleme.sql';
+    $raw=file_get_contents($path);
+    if(!is_string($raw)) fail_209('092 migration okunamadı.');
+    $buffer='';
+    foreach(preg_split('/\\R/',$raw) as $line){
+        $trim=trim($line);
+        if($trim==='' || str_starts_with($trim,'--')) continue;
+        $buffer.=$line."\n";
+        if(str_ends_with(rtrim($line),';')){
+            $sql=trim($buffer);
+            $buffer='';
+            if($sql!=='') $pdo->exec($sql);
+        }
+    }
+    if(trim($buffer)!=='') $pdo->exec(trim($buffer));
+}
+
+run_092($pdo);
+run_092($pdo);
+
 $table=(int)$pdo->query("SELECT COUNT(*) FROM information_schema.tables
     WHERE table_schema=DATABASE() AND table_name='etkinlik_ilerleme'")->fetchColumn();
 ok_209($table===1,'etkinlik_ilerleme tablosu oluşmalı.');
