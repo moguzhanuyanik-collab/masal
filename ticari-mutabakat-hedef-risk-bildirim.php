@@ -77,6 +77,7 @@ $history=$ready?mrb_history_rows($pdo,120):[];
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Hedef Risk Bildirimleri</small></span></a>
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk.php" aria-label="Hedef Risk Kuyruğu"><svg><use href="#sa-chart"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-hedef-risk-saglik.php" aria-label="Bildirim Sağlığı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-aksiyon.php" aria-label="Aksiyon Merkezi"><svg><use href="#sa-card"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hedefleri.php" aria-label="Operasyon Hedefleri"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
@@ -172,6 +173,7 @@ $code=(string)$row['esik_kodu'];
 <a href="super-admin.php"><span>⌂</span>Panel</a>
 <a href="ticari-mutabakat-hedef-risk.php"><span>🎯</span>Risk</a>
 <a class="active" href="ticari-mutabakat-hedef-risk-bildirim.php"><span>🔔</span>Uyarılar</a>
+<a href="ticari-mutabakat-hedef-risk-saglik.php"><span>📨</span>Sağlık</a>
 <a href="ticari-mutabakat-aksiyon.php"><span>✓</span>Aksiyon</a>
 <a href="ticari-mutabakat-hedefleri.php"><span>◎</span>Hedefler</a>
 </nav>
