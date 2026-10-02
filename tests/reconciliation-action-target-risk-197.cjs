@@ -57,9 +57,9 @@ assert(page.includes('Hedef Risk Bildirimleri →'),
 assert(page.includes('Bildirim Sağlığı →'),
   'action detail notification health link missing');
 
-assert(!page.includes("name="action" value="target"),
+assert(!page.includes('name="action" value="target'),
   'target-risk detail must not add a new write POST action');
-assert(!page.includes("name="action" value="hedef"),
+assert(!page.includes('name="action" value="hedef'),
   'target-risk detail must not mutate target policy or notification state');
 assert(css.includes('.ma-target-context'),'target-risk context styles missing');
 assert(css.includes('.ma-target-grid'),'target-risk grid styles missing');
