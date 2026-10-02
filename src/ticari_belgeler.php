@@ -133,6 +133,12 @@ function tb_document_rows(PDO $pdo,array $filters=[],int $limit=500): array {
     $where=['1=1'];
     $params=[];
 
+    $institutionId=max(0,(int)($filters['kurum_id']??0));
+    if($institutionId>0){
+        $where[]='b.kurum_id=?';
+        $params[]=$institutionId;
+    }
+
     $status=trim((string)($filters['durum']??''));
     if($status!=='' && in_array($status,['aktif','iptal'],true)){
         $where[]='b.durum=?';
