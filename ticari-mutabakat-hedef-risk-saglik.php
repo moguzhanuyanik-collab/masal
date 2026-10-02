@@ -53,7 +53,7 @@ $rows=$ready?mrh_rows($pdo,$filters,1200):[];
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk-bildirim.php" aria-label="Hedef Risk Bildirimleri"><svg><use href="#sa-bell"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk.php" aria-label="Hedef Risk Kuyruğu"><svg><use href="#sa-chart"/></svg></a>
-<a class="sa-page-action" href="ticari-mutabakat-hedef-risk-takip.php" aria-label="Okunmamış Risk Takibi"><svg><use href="#sa-calendar"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-hedef-risk-takip.php" aria-label="Okunmamış Risk Takibi"><svg><use href="#sa-refresh"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-performans.php" aria-label="Performans"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
