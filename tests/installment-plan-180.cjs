@@ -28,7 +28,7 @@ assert(domain.includes('Taksit planı için en az 2 vade satırı gerekli.'),'mi
 assert(domain.includes('Taksit vadeleri artan sırada ve birbirinden farklı olmalı.'),'strict due-order guard missing');
 assert(domain.includes('Taksit toplamı sözleşme toplamına eşit olmalı.'),'plan/contract total equality guard missing');
 assert(domain.includes("durum='taslak',aktif_surum=?"),'new plan revision must return plan to draft');
-assert(domain.includes('aktif_surum']+1') || domain.includes("aktif_surum']+1"),'version increment missing');
+assert(domain.includes("['aktif_surum']+1"),'version increment missing');
 assert(domain.includes("WHERE sozlesme_id=? AND surum_no=?"),'current-version installment lookup missing');
 assert(domain.includes("Tahsilat geçmişi başlayan sözleşmenin taksit planı değiştirilemez."),
   'payment-history structural lock missing');
