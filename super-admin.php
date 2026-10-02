@@ -60,47 +60,22 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
 <div class="sa-shell">
 <aside class="sa-sidebar" aria-label="Süper Admin gezinme">
   <a class="sa-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Yönetim Merkezi</small></span></a>
-  <p class="sa-sidebar-label">ÇALIŞMA ALANI</p>
+  <p class="sa-sidebar-label">EĞİTİM YÖNETİMİ</p>
   <a class="active" href="super-admin.php"><svg><use href="#sa-home"/></svg>Genel Bakış</a>
-  <a href="kurumlar.php"><svg><use href="#sa-building"/></svg>Kurum Yönetimi</a>
-  <a href="paketler.php"><svg><use href="#sa-database"/></svg>Paket & Lisanslar</a>
-  <a href="lisans-yenilemeleri.php"><svg><use href="#sa-refresh"/></svg>Lisans Yenilemeleri</a>
-  <a href="demo-satis.php"><svg><use href="#sa-chart"/></svg>Demo & Satış</a>
-  <a href="ticari-finans.php"><svg><use href="#sa-chart"/></svg>Ticari Finans</a>
-  <a href="ticari-dashboard.php"><svg><use href="#sa-chart"/></svg>Ticari Dashboard</a>
-  <a href="ticari-mutabakat-aksiyon.php"><svg><use href="#sa-alert"/></svg>Mutabakat Aksiyon</a>
-  <a href="ticari-mutabakat-is-kutusu.php"><svg><use href="#sa-users"/></svg>Mutabakat İş Kutusu</a>
-  <a href="ticari-mutabakat-hatirlatma.php"><svg><use href="#sa-alert"/></svg>Mutabakat Hatırlatmaları</a>
-  <a href="ticari-mutabakat-eskalasyon.php"><svg><use href="#sa-alert"/></svg>Mutabakat Eskalasyon</a>
-  <a href="ticari-mutabakat-saglik.php"><svg><use href="#sa-chart"/></svg>Mutabakat Sağlığı</a>
-  <a href="ticari-mutabakat-hedefleri.php"><svg><use href="#sa-chart"/></svg>Mutabakat Hedefleri</a>
-  <a href="ticari-mutabakat-hedef-risk.php"><svg><use href="#sa-alert"/></svg>Mutabakat Hedef Risk</a>
-  <a href="ticari-mutabakat-hedef-risk-bildirim.php"><svg><use href="#sa-alert"/></svg>Hedef Risk Bildirimleri</a>
-  <a href="ticari-mutabakat-hedef-risk-saglik.php"><svg><use href="#sa-chart"/></svg>Hedef Risk Bildirim Sağlığı</a>
-  <a href="ticari-mutabakat-hedef-risk-takip.php"><svg><use href="#sa-users"/></svg>Okunmamış Risk Takibi</a>
-  <a href="ticari-mutabakat-hedef-risk-takip-saglik.php"><svg><use href="#sa-chart"/></svg>Takip Planı Sağlığı</a>
-  <a href="ticari-mutabakat-hedef-risk-takip-mudahale.php"><svg><use href="#sa-alert"/></svg>Takip Sağlığı Müdahale</a>
-  <a href="ticari-mutabakat-hedef-risk-takip-kurtarma.php"><svg><use href="#sa-refresh"/></svg>Stale Takip Kurtarma</a>
-  <a href="ticari-mutabakat-planlama.php"><svg><use href="#sa-users"/></svg>Mutabakat Planlama</a>
-  <a href="ticari-mutabakat-devir.php"><svg><use href="#sa-users"/></svg>Mutabakat Sorumlu Devir</a>
-  <a href="ticari-belgeler.php"><svg><use href="#sa-database"/></svg>Ticari Belgeler</a>
-  <a href="tahsilat-takvimi.php"><svg><use href="#sa-chart"/></svg>Tahsilat Takvimi</a>
-  <a href="tahsilat-risk.php"><svg><use href="#sa-alert"/></svg>Tahsilat Risk Merkezi</a>
-  <a href="bildirimler.php"><svg><use href="#sa-users"/></svg>Bildirim & Duyurular</a>
-  <a href="destek.php"><svg><use href="#sa-users"/></svg>Destek Merkezi</a>
-  <a href="yasal-belgeler.php"><svg><use href="#sa-shield"/></svg>Yasal Belgeler</a>
-  <a href="kurumlar.php?sekme=yoneticiler"><svg><use href="#sa-shield"/></svg>Kurum Yöneticileri</a>
+  <a href="kurumlar.php"><svg><use href="#sa-building"/></svg>Kurumlar</a>
+  <a href="kurumlar.php?sekme=yoneticiler"><svg><use href="#sa-shield"/></svg>Yöneticiler</a>
   <a href="kurumlar.php?sekme=ogretmenler"><svg><use href="#sa-users"/></svg>Öğretmenler</a>
+  <a href="kurumlar.php?sekme=ogrenciler"><svg><use href="#sa-student"/></svg>Öğrenciler</a>
   <a href="kurumlar.php?sekme=veliler"><svg><use href="#sa-users"/></svg>Veliler</a>
-  <p class="sa-sidebar-label">GLOBAL</p>
-  <a href="global-ogrenciler.php"><svg><use href="#sa-student"/></svg>Global Öğrenciler</a>
-  <a href="global-veliler.php"><svg><use href="#sa-users"/></svg>Global Veliler</a>
-  <a href="global-eslestirme.php"><svg><use href="#sa-link"/></svg>Eşleştirme</a>
-  <p class="sa-sidebar-label">YETKİLENDİRME</p>
+  <a href="global-eslestirme.php"><svg><use href="#sa-link"/></svg>Öğrenci · Veli Eşleştirme</a>
+  <a href="bildirimler.php"><svg><use href="#sa-bell"/></svg>Bildirim & Duyurular</a>
+  <a href="destek.php"><svg><use href="#sa-users"/></svg>Destek Merkezi</a>
+  <p class="sa-sidebar-label">GÜVENLİK & YASAL</p>
+  <a href="yasal-belgeler.php"><svg><use href="#sa-shield"/></svg>Açık Rıza & Yasal Metinler</a>
   <a href="yonetici-yetkileri.php"><svg><use href="#sa-shield"/></svg>Yönetici Yetkileri</a>
   <p class="sa-sidebar-label">SİSTEM</p>
+  <a href="adimbot-ayarlari.php"><svg><use href="#sa-settings"/></svg>AdımBot Ayarları</a>
   <a href="eposta-ayarlari.php"><svg><use href="#sa-settings"/></svg>E-posta & SMTP</a>
-  <a href="adimbot-ayarlari.php"><svg><use href="#sa-settings"/></svg>AdımBot AI Ayarları</a>
   <a href="sistem-durum.php"><svg><use href="#sa-database"/></svg>Sistem Durumu</a>
   <a href="guncelleme.php"><svg><use href="#sa-refresh"/></svg>Güncellemeler</a>
   <a href="super-admin-profil.php"><svg><use href="#sa-user"/></svg>Profilim</a>
@@ -173,36 +148,16 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
   <section class="sa-section">
    <div class="sa-section-title"><div><small>SİSTEM</small><h2>Durum</h2></div><a class="sa-update-link" href="guncelleme.php"><svg><use href="#sa-refresh"/></svg>Sistemi Güncelle</a></div>
    <div class="sa-menu-grid">
-    <a href="paketler.php"><span class="sa-menu-icon"><svg><use href="#sa-database"/></svg></span><span><strong>Paket & Lisanslar</strong><small>Kurum planları, kapasite limitleri ve lisans tarihleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="lisans-yenilemeleri.php"><span class="sa-menu-icon"><svg><use href="#sa-refresh"/></svg></span><span><strong>Lisans Yenilemeleri</strong><small>30/15/7/1 gün radarı, yönetici uyarıları ve yenileme aksiyon kuyruğu</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="demo-satis.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Demo & Satış</strong><small>Deneme kurumları, bitiş radarı, satış notları ve ücretliye dönüşüm</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-finans.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Ticari Finans</strong><small>Sözleşmeler, tahsilatlar ve vadeler</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-dashboard.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Ticari Yönetim Dashboardu</strong><small>Gelir, tahsilat, açık bakiye, yenileme geliri ve kurum KPI'ları</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-belgeler.php"><span class="sa-menu-icon"><svg><use href="#sa-database"/></svg></span><span><strong>Ticari Belge & Tahakkuk</strong><small>Harici fatura/e-Belge referansları, iç tahakkuklar ve tahsilat eşlemeleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Ticari Mutabakat & Kontrol</strong><small>Sözleşme, belge, tahsilat ve eşleme açıkları ile veri bütünlüğü kontrolleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-aksiyon.php"><span class="sa-menu-icon"><svg><use href="#sa-alert"/></svg></span><span><strong>Mutabakat Aksiyon Merkezi</strong><small>Mutabakat açıkları, veri istisnaları, sorumlu ve takip aksiyonları</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-is-kutusu.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Mutabakat Günlük İş Kutusu</strong><small>Bana atanan, bugün, gecikmiş, tarihsiz ve sahipsiz açık vakalar</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-hatirlatma.php"><span class="sa-menu-icon"><svg><use href="#sa-alert"/></svg></span><span><strong>Mutabakat Aksiyon Hatırlatmaları</strong><small>Bugün ve gecikmiş aksiyonları sorumlu Süper Admin'e deduplikasyonlu bildir</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-eskalasyon.php"><span class="sa-menu-icon"><svg><use href="#sa-alert"/></svg></span><span><strong>Mutabakat Operasyon Eskalasyonu</strong><small>İlk müdahale ve açık döngü yaşına göre 2/4/8/14/30+ gün iç operasyon eşikleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-saglik.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Mutabakat Aksiyon Sağlığı</strong><small>Vaka yaşlandırma, gecikmiş aksiyon, sahipsiz işler ve sorumlu iş yükü</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-performans.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Mutabakat Operasyon Performansı</strong><small>Çevrim süresi, ilk müdahale, reopen, kapanış ve sorumlu bazlı operasyon göstergeleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-hedefleri.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Mutabakat Operasyon Hedefleri</strong><small>Versioned ilk müdahale ve çevrim hedefleri; geçmiş döngüleri dönemsel politika ile ölç</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-hedef-risk.php"><span class="sa-menu-icon"><svg><use href="#sa-alert"/></svg></span><span><strong>Mutabakat Hedef Risk Kuyruğu</strong><small>Hedef dışı, süresi %75+ tüketilmiş ve politika tanımsız açık vakaları aksiyon sırasına getir</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-hedef-risk-bildirim.php"><span class="sa-menu-icon"><svg><use href="#sa-alert"/></svg></span><span><strong>Mutabakat Hedef Risk Bildirimleri</strong><small>%75+ ve hedef dışı politika sinyallerini vaka sorumlusuna deduplikasyonlu bildir</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-hedef-risk-saglik.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Hedef Risk Bildirim Sağlığı</strong><small>Current owner, okunma, güncel açık döngü ve tarihsel bildirim görünümü</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-hedef-risk-takip.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Okunmamış Hedef Risk Takibi</strong><small>Güncel owner + döngü + sinyal eşleşen okunmamış vakalara owner değiştirmeden takip tarihi planla</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-hedef-risk-takip-saglik.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Hedef Risk Takip Planı Sağlığı</strong><small>Planlanan okunmamış risklerin owner, reopen döngüsü, sinyal, okunma ve aksiyon tarihini güncel bağlamla karşılaştır</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-hedef-risk-takip-mudahale.php"><span class="sa-menu-icon"><svg><use href="#sa-alert"/></svg></span><span><strong>Takip Sağlığı Müdahale</strong><small>Gecikmiş, bugün veya tarihsiz current-context hedef-risk takiplerini owner değiştirmeden yeniden planla</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-hedef-risk-takip-kurtarma.php"><span class="sa-menu-icon"><svg><use href="#sa-refresh"/></svg></span><span><strong>Stale Hedef Risk Takip Kurtarma</strong><small>Owner, döngü, sinyal veya notification bağlamı değişen eski planları güncel exact unread context ile yeni plana dönüştür</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-planlama.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Mutabakat Toplu Planlama</strong><small>Açık vakalara güvenli toplu sorumlu ve sonraki aksiyon tarihi ata</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="ticari-mutabakat-devir.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Mutabakat Sorumlu Devir</strong><small>Sahipsiz, pasif veya rolü geçersiz vaka sahipliklerini aktif Süper Admin'e aktar</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="tahsilat-takvimi.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Tahsilat Takvimi</strong><small>Taksit vadeleri, tek vade sözleşmeler ve beklenen nakit akışı</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="tahsilat-risk.php"><span class="sa-menu-icon"><svg><use href="#sa-alert"/></svg></span><span><strong>Tahsilat Risk Merkezi</strong><small>Vade yaşlandırma, açık bakiye, yenileme gecikmeleri ve takip aksiyonları</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="bildirimler.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Bildirim & Duyurular</strong><small>Kurum duyuruları, sistem bildirimleri ve okunma takibi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="destek.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Destek Merkezi</strong><small>Kurum talepleri, öncelikler, yanıt geçmişi ve durum yönetimi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="yasal-belgeler.php"><span class="sa-menu-icon"><svg><use href="#sa-shield"/></svg></span><span><strong>Yasal Belgeler</strong><small>Versiyonlu metinler, zorunlu onaylar ve kullanıcı onay raporu</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="eposta-ayarlari.php"><span class="sa-menu-icon"><svg><use href="#sa-settings"/></svg></span><span><strong>E-posta & SMTP</strong><small>Şifre kurtarma, SMTP bağlantısı ve test e-postası</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
-    <a href="adimbot-ayarlari.php"><span class="sa-menu-icon"><svg><use href="#sa-settings"/></svg></span><span><strong>AdımBot AI Ayarları</strong><small>Groq API anahtarı, model ve kullanım sınırı</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="kurumlar.php"><span class="sa-menu-icon"><svg><use href="#sa-building"/></svg></span><span><strong>Kurum & Kullanıcı Yönetimi</strong><small>Yönetici, öğretmen, öğrenci ve veli hesaplarını kurum bazında yönet.</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="kurumlar.php?sekme=ogretmenler"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Öğretmenler</strong><small>Ders, soru, içerik ve ödev hazırlayacak öğretmen hesaplarını yönet.</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="kurumlar.php?sekme=ogrenciler"><span class="sa-menu-icon"><svg><use href="#sa-student"/></svg></span><span><strong>Öğrenciler</strong><small>Öğrenci hesapları, sınıf bilgileri ve kurum bağlantılarını yönet.</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="kurumlar.php?sekme=veliler"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Veliler</strong><small>Veli hesaplarını ve öğrenci bağlantılarını yönet.</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="global-eslestirme.php"><span class="sa-menu-icon"><svg><use href="#sa-link"/></svg></span><span><strong>Öğrenci · Veli Eşleştirme</strong><small>Öğrenci ile veli ilişkilerini kontrol et ve düzenle.</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="yasal-belgeler.php"><span class="sa-menu-icon"><svg><use href="#sa-shield"/></svg></span><span><strong>Açık Rıza & Yasal Metinler</strong><small>Açık rıza ve gerekli yasal metinleri sürümleyip kullanıcı onaylarını takip et.</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="bildirimler.php"><span class="sa-menu-icon"><svg><use href="#sa-bell"/></svg></span><span><strong>Bildirim & Duyurular</strong><small>Kurum duyuruları ve önemli sistem bildirimlerini yönet.</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="yonetici-yetkileri.php"><span class="sa-menu-icon"><svg><use href="#sa-shield"/></svg></span><span><strong>Yönetici Yetkileri</strong><small>Yönetici erişimlerini eğitim sistemi ihtiyaçlarına göre düzenle.</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="adimbot-ayarlari.php"><span class="sa-menu-icon"><svg><use href="#sa-settings"/></svg></span><span><strong>AdımBot Ayarları</strong><small>Ses, yapay zekâ sağlayıcısı ve kullanım ayarlarını yönet.</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="sistem-durum.php"><span class="sa-menu-icon"><svg><use href="#sa-database"/></svg></span><span><strong>Sistem Durumu</strong><small>Veritabanı ve temel çalışma ortamını kontrol et.</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
    </div>
    <div class="sa-status-list">
     <div><span class="sa-status-icon"><svg><use href="#sa-database"/></svg></span><p><strong>MySQL</strong><small>Veritabanı bağlantısı</small></p><b><i></i>Çalışıyor</b></div>

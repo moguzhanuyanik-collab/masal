@@ -116,6 +116,8 @@ jobs:
           node tests/student-lesson-ui-207.cjs
           node tests/grade1-math-quality-208.cjs
           node tests/student-progress-persistence-209.cjs
+          node tests/adimbot-microphone-flow.cjs
+          node tests/super-admin-core-scope-210.cjs
           node tests/update-migration-execution-128.cjs
           node tests/global-scope-integrity-129.cjs
           node tests/manual-update-upload-131.cjs
