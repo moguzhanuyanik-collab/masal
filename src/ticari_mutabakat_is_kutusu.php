@@ -45,6 +45,14 @@ function mi_case_rows(PDO $pdo,array $actor,array $filters=[],int $limit=600): a
     elseif($window==='next7') $where[]='v.sonraki_aksiyon_tarihi BETWEEN DATE_ADD(CURDATE(),INTERVAL 1 DAY) AND DATE_ADD(CURDATE(),INTERVAL 7 DAY)';
     elseif($window==='no_date') $where[]='v.sonraki_aksiyon_tarihi IS NULL';
 
+    $ownerId=max(0,(int)($filters['owner_id']??0));
+    if($scope==='team' && $ownerId>0){
+        $where[]='v.sorumlu_kullanici_id=?';
+        $params[]=$ownerId;
+    }elseif($scope==='team' && (string)($filters['owner_id']??'')==='unassigned'){
+        $where[]='(v.sorumlu_kullanici_id IS NULL OR v.sorumlu_kullanici_id=0)';
+    }
+
     $type=(string)($filters['sorun_turu']??'');
     if(in_array($type,['operasyon','butunluk'],true)){
         $where[]='v.sorun_turu=?';
