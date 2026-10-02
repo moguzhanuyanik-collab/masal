@@ -144,6 +144,7 @@ jobs:
           node tests/reconciliation-health-185.cjs
           node tests/reconciliation-bulk-planning-186.cjs
           node tests/reconciliation-inbox-187.cjs
+          node tests/reconciliation-reminders-188.cjs
           node tests/institution-class-edit-136.cjs
           node tests/institution-reporting-137.cjs
           node tests/institution-report-export-159.cjs
@@ -249,6 +250,7 @@ jobs:
           php tests/reconciliation-health-db-185.php
           php tests/reconciliation-bulk-planning-db-186.php
           php tests/reconciliation-inbox-db-187.php
+          php tests/reconciliation-reminders-db-188.php
           php tests/institution-class-edit-db-136.php
           php tests/institution-reporting-db-137.php
           php tests/teacher-content-edit-copy-db-139.php

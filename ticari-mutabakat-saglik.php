@@ -63,6 +63,7 @@ $rows=$ready?mhs_case_rows($pdo,$filters,900):[];
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Mutabakat Aksiyon Sağlığı</small></span></a>
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-mutabakat-is-kutusu.php" aria-label="Günlük İş Kutusu"><svg><use href="#sa-users"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-hatirlatma.php" aria-label="Aksiyon Hatırlatmaları"><svg><use href="#sa-bell"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-aksiyon.php" aria-label="Mutabakat Aksiyon"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-planlama.php" aria-label="Toplu Planlama"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat.php" aria-label="Mutabakat Kontrol"><svg><use href="#sa-chart"/></svg></a>
@@ -197,6 +198,7 @@ $tags=mhs_health_tags($row);
 <a href="ticari-dashboard.php"><span>📊</span>KPI</a>
 <a href="ticari-mutabakat.php"><span>⚖️</span>Mutabakat</a>
 <a href="ticari-mutabakat-is-kutusu.php"><span>📥</span>İş Kutusu</a>
+<a href="ticari-mutabakat-hatirlatma.php"><span>🔔</span>Hatırlatma</a>
 <a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 <a class="active" href="ticari-mutabakat-saglik.php"><span>🩺</span>Sağlık</a>
 <a href="ticari-mutabakat-planlama.php"><span>🗂️</span>Planlama</a>
