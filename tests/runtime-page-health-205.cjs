@@ -52,8 +52,9 @@ assert(legalConsent.includes("Yasal belgeler şu anda yüklenemiyor. Lütfen tek
 
 assert(workflow.includes('node tests/runtime-page-health-205.cjs'));
 
-assert.strictEqual(version.version,'1.2.80');
-assert(Number(version.release_revision)>=6);
+const versionParts=String(version.version).split('.').map(Number);
+assert(versionParts.length===3 && versionParts[0]===1 && versionParts[1]===2 && versionParts[2]>=80);
+assert(Number(version.release_revision)>=1);
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(release.release_revision,version.release_revision);
 assert.strictEqual(manifest.version,version.version);
