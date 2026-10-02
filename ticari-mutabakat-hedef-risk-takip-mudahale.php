@@ -87,6 +87,7 @@ $ownerOptions=$ready?mrts_owner_options($pdo,$user,$days):[];
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Takip Sağlığı Müdahale</small></span></a>
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk-takip-saglik.php" aria-label="Takip Planı Sağlığı"><svg><use href="#sa-chart"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-hedef-risk-takip-kurtarma.php" aria-label="Stale Plan Kurtarma"><svg><use href="#sa-refresh"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk-takip.php" aria-label="Okunmamış Risk Takibi"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-is-kutusu.php" aria-label="Günlük İş Kutusu"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
@@ -118,7 +119,7 @@ $ownerOptions=$ready?mrts_owner_options($pdo,$user,$days):[];
 </section>
 
 <section class="role-section">
-<div class="role-section-head"><div><span class="eyeline">FİLTRE</span><h2>Current-Context Müdahale Allowlisti</h2></div><a class="role-pill" href="ticari-mutabakat-hedef-risk-takip-saglik.php">Plan Sağlığı →</a></div>
+<div class="role-section-head"><div><span class="eyeline">FİLTRE</span><h2>Current-Context Müdahale Allowlisti</h2></div><div><a class="role-pill" href="ticari-mutabakat-hedef-risk-takip-saglik.php">Plan Sağlığı →</a> <a class="role-pill" href="ticari-mutabakat-hedef-risk-takip-kurtarma.php">Stale Kurtarma →</a></div></div>
 <form class="mrtm-filter" method="get">
 <select name="days">
 <?php foreach([7,30,90,180,365] as $option):?><option value="<?=$option?>" <?=$days===$option?'selected':''?>>Son <?=$option?> gün</option><?php endforeach;?>
@@ -199,6 +200,7 @@ $state=(string)$row['takip_durumu'];
 <a href="ticari-mutabakat-hedef-risk-takip.php"><span>🗓️</span>Planla</a>
 <a href="ticari-mutabakat-hedef-risk-takip-saglik.php"><span>🩺</span>Plan Sağlığı</a>
 <a class="active" href="ticari-mutabakat-hedef-risk-takip-mudahale.php"><span>🛠️</span>Müdahale</a>
+<a href="ticari-mutabakat-hedef-risk-takip-kurtarma.php"><span>♻️</span>Kurtarma</a>
 <a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 </nav>
 <script>
