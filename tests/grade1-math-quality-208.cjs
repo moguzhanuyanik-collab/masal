@@ -4,6 +4,7 @@ const fs=require('fs');
 const assert=require('assert');
 
 const source=fs.readFileSync('database/content/grade1/20_matematik_soru_havuzu.sql','utf8');
+const normalizedSource=source.replace(/''/g,"'");
 const migration=fs.readFileSync('database/migrations/091_1_sinif_matematik_soru_kalitesi.sql','utf8');
 const workflow=fs.readFileSync('.github/workflows/quality.yml','utf8');
 const version=JSON.parse(fs.readFileSync('version.json','utf8'));
@@ -13,19 +14,19 @@ const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
 const insertCount=(source.match(/INSERT INTO ders_sorulari/g)||[]).length;
 assert.strictEqual(insertCount,395,'grade1 math source must keep 395 question identities');
 
-assert(!/Hangi seçenek \d+ sayısını gösterir\?/u.test(source),'mechanical number-identification prompts must be removed');
-assert(!/\d+ \+ \d+ işleminin sonucu kaçtır\?/u.test(source),'mechanical addition prompt pattern must be removed');
-assert(!/\d+ - \d+ işleminin sonucu kaçtır\?/u.test(source),'mechanical subtraction prompt pattern must be removed');
-assert(!/sayısından hemen önce hangi sayı gelir\?/u.test(source),'mechanical previous-number prompt must be removed');
-assert(!/sayısından hemen sonra hangi sayı gelir\?/u.test(source),'mechanical next-number prompt must be removed');
+assert(!/Hangi seçenek \d+ sayısını gösterir\?/u.test(normalizedSource),'mechanical number-identification prompts must be removed');
+assert(!/\d+ \+ \d+ işleminin sonucu kaçtır\?/u.test(normalizedSource),'mechanical addition prompt pattern must be removed');
+assert(!/\d+ - \d+ işleminin sonucu kaçtır\?/u.test(normalizedSource),'mechanical subtraction prompt pattern must be removed');
+assert(!/sayısından hemen önce hangi sayı gelir\?/u.test(normalizedSource),'mechanical previous-number prompt must be removed');
+assert(!/sayısından hemen sonra hangi sayı gelir\?/u.test(normalizedSource),'mechanical next-number prompt must be removed');
 
 assert(source.includes("Sayı yolunda 5'den"));
-assert(source.includes('daha çok boncuğu gösteren sayı'));
-assert(source.includes('kaç çıkartması var?'));
-assert(source.includes('kaç balon kaldı?'));
-assert(source.includes('yaklaşık kaç tane görüyorsun?'));
-assert(source.includes('▭ Bu işaret hangi şekle benzer?'));
-assert(source.includes('Kırmızı: 🔴🔴🔴🔴🔴🔴'));
+assert(normalizedSource.includes('daha çok boncuğu gösteren sayı'));
+assert(normalizedSource.includes('kaç çıkartması var?'));
+assert(normalizedSource.includes('kaç balon kaldı?'));
+assert(normalizedSource.includes('yaklaşık kaç tane görüyorsun?'));
+assert(normalizedSource.includes('▭ Bu işaret hangi şekle benzer?'));
+assert(normalizedSource.includes('Kırmızı: 🔴🔴🔴🔴🔴🔴'));
 
 const updateCount=(migration.match(/UPDATE ders_sorulari s/g)||[]).length;
 assert.strictEqual(updateCount,295,'migration must apply all curated grade1 math rewrites');
