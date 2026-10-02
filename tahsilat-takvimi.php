@@ -88,6 +88,7 @@ foreach($forecast as $item){
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-dashboard.php" aria-label="Ticari Dashboard"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-finans.php" aria-label="Ticari Finans"><svg><use href="#sa-database"/></svg></a>
+<a class="sa-page-action" href="ticari-belgeler.php" aria-label="Ticari Belgeler"><svg><use href="#sa-database"/></svg></a>
 <a class="sa-page-action" href="tahsilat-risk.php" aria-label="Tahsilat Risk Merkezi"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
@@ -196,6 +197,7 @@ $width=$max>0?max(3,min(100,((float)$item['beklenen_tutar']/$max)*100)):0;
 <a href="super-admin.php"><span>⌂</span>Panel</a>
 <a href="ticari-dashboard.php"><span>📊</span>KPI</a>
 <a class="active" href="tahsilat-takvimi.php"><span>🗓️</span>Takvim</a>
+<a href="ticari-belgeler.php"><span>🧾</span>Belgeler</a>
 <a href="ticari-finans.php"><span>₺</span>Finans</a>
 <a href="tahsilat-risk.php"><span>⚠️</span>Risk</a>
 </nav>

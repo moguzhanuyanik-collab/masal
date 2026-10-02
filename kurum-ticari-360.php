@@ -92,6 +92,7 @@ $statementQuery=http_build_query([
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-dashboard.php" aria-label="Ticari Dashboard"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-finans.php" aria-label="Ticari Finans"><svg><use href="#sa-database"/></svg></a>
+<?php if($institutionId>0):?><a class="sa-page-action" href="ticari-belgeler.php?kurum_id=<?=$institutionId?>" aria-label="Ticari Belgeler"><svg><use href="#sa-database"/></svg></a><?php endif;?>
 <a class="sa-page-action" href="tahsilat-risk.php" aria-label="Tahsilat Risk Merkezi"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
@@ -119,6 +120,7 @@ $statementQuery=http_build_query([
 
 <div class="k360-links">
 <a class="role-pill ok" href="ticari-finans.php">Ticari Finans →</a>
+<a class="role-pill" href="ticari-belgeler.php?kurum_id=<?=$institutionId?>">Ticari Belgeler →</a>
 <a class="role-pill" href="tahsilat-risk.php">Tahsilat Risk →</a>
 <a class="role-pill" href="lisans-yenilemeleri.php">Lisans Yenilemeleri →</a>
 <a class="role-pill" href="kurumlar.php?sekme=kurumlar&amp;kurum_id=<?=$institutionId?>">Kurum Yönetimi →</a>
@@ -319,6 +321,7 @@ $statementQuery=http_build_query([
 <a href="super-admin.php"><span>⌂</span>Panel</a>
 <a href="ticari-dashboard.php"><span>📊</span>KPI</a>
 <a class="active" href="#"><span>360°</span>Kurum 360</a>
+<a href="ticari-belgeler.php?kurum_id=<?=$institutionId?>"><span>🧾</span>Belgeler</a>
 <a href="ticari-finans.php"><span>₺</span>Finans</a>
 <a href="tahsilat-risk.php"><span>⚠️</span>Risk</a>
 </nav>
