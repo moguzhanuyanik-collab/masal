@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.55",
+  "version": "1.2.56",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -229,6 +229,7 @@
     "RELEASE-1.2.53.md",
     "RELEASE-1.2.54.md",
     "RELEASE-1.2.55.md",
+    "RELEASE-1.2.56.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
@@ -548,6 +549,7 @@
     "src/super_admin_icons.php",
     "src/tahsilat_hatirlatma.php",
     "src/tahsilat_risk.php",
+    "src/tahsilat_takvimi.php",
     "src/ticari_dashboard.php",
     "src/ticari_finans.php",
     "src/ticari_taksit.php",
@@ -562,6 +564,8 @@
     "super-admin.php",
     "tahsilat-risk.css",
     "tahsilat-risk.php",
+    "tahsilat-takvimi.css",
+    "tahsilat-takvimi.php",
     "test-progress-reset.js",
     "tests/adimbot-api-auth-130.cjs",
     "tests/adimbot-audio-88.cjs",
@@ -580,6 +584,8 @@
     "tests/adimbot-speech-81.cjs",
     "tests/adimbot-transcript-behavior.php",
     "tests/adimbot-voice-83.cjs",
+    "tests/collection-calendar-181.cjs",
+    "tests/collection-calendar-db-181.php",
     "tests/collection-reminders-176.cjs",
     "tests/collection-reminders-db-176.php",
     "tests/commercial-dashboard-177.cjs",
@@ -767,5 +773,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Sözleşme taksit ödeme planı ve çoklu vade yönetimi"
+  "name": "Tahsilat takvimi ve beklenen nakit akışı"
 }
