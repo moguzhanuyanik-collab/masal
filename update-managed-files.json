@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.64",
+  "version": "1.2.65",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -239,6 +239,7 @@
     "RELEASE-1.2.62.md",
     "RELEASE-1.2.63.md",
     "RELEASE-1.2.64.md",
+    "RELEASE-1.2.65.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
     "RELEASE-1.2.9.md",
@@ -423,6 +424,7 @@
     "database/migrations/085_ticari_belge_tahakkuk_merkezi.sql",
     "database/migrations/086_ticari_mutabakat_aksiyon_merkezi.sql",
     "database/migrations/087_mutabakat_aksiyon_hatirlatmalari.sql",
+    "database/migrations/088_mutabakat_operasyon_eskalasyonlari.sql",
     "demo-satis.css",
     "demo-satis.php",
     "destek.css",
@@ -567,6 +569,7 @@
     "src/ticari_mutabakat.php",
     "src/ticari_mutabakat_aksiyon.php",
     "src/ticari_mutabakat_devir.php",
+    "src/ticari_mutabakat_eskalasyon.php",
     "src/ticari_mutabakat_hatirlatma.php",
     "src/ticari_mutabakat_is_kutusu.php",
     "src/ticari_mutabakat_planlama.php",
@@ -688,6 +691,8 @@
     "tests/rebuild-release-121.cjs",
     "tests/reconciliation-bulk-planning-186.cjs",
     "tests/reconciliation-bulk-planning-db-186.php",
+    "tests/reconciliation-escalation-190.cjs",
+    "tests/reconciliation-escalation-db-190.php",
     "tests/reconciliation-health-185.cjs",
     "tests/reconciliation-health-db-185.php",
     "tests/reconciliation-inbox-187.cjs",
@@ -784,6 +789,8 @@
     "ticari-mutabakat-aksiyon.php",
     "ticari-mutabakat-devir.css",
     "ticari-mutabakat-devir.php",
+    "ticari-mutabakat-eskalasyon.css",
+    "ticari-mutabakat-eskalasyon.php",
     "ticari-mutabakat-hatirlatma.css",
     "ticari-mutabakat-hatirlatma.php",
     "ticari-mutabakat-is-kutusu.css",
@@ -824,5 +831,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Mutabakat sorumlu devir ve yetim vaka kurtarma"
+  "name": "Mutabakat operasyon eskalasyon merkezi"
 }
