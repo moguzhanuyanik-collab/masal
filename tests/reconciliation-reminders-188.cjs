@@ -90,9 +90,14 @@ if(Number(version.version.split('.')[2])<74){
     'legacy daily inbox must not absorb reminder POST writes');
 }else{
   assert(inbox.includes("$_SERVER['REQUEST_METHOD']==='POST'"),
-    '1.2.74+ daily inbox exact-case target-risk POST missing');
-  assert(inbox.includes("if($action!=='send_target_risk')"),
-    '1.2.74+ daily inbox must not absorb reminder or arbitrary POST writes');
+    '1.2.74+ daily inbox target-risk POST missing');
+  if(Number(version.version.split('.')[2])<75){
+    assert(inbox.includes("if($action!=='send_target_risk')"),
+      '1.2.74 daily inbox must allow only exact target-risk send');
+  }else{
+    assert(inbox.includes("in_array($action,['send_target_risk','send_target_risk_batch'],true)"),
+      '1.2.75+ daily inbox must keep only single/batch target-risk writes in its closed whitelist');
+  }
   assert(!inbox.includes("name=\"action\" value=\"sync\""),
     'daily inbox must not absorb action-reminder sync');
 }
