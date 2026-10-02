@@ -12,6 +12,8 @@ require __DIR__.'/src/ticari_mutabakat_performans.php';
 require __DIR__.'/src/ticari_mutabakat_hedef.php';
 require __DIR__.'/src/ticari_mutabakat_hedef_risk.php';
 require __DIR__.'/src/ticari_mutabakat_is_kutusu.php';
+require __DIR__.'/src/bildirimler.php';
+require __DIR__.'/src/ticari_mutabakat_hedef_risk_bildirim.php';
 
 $user=require_role('super_admin');
 $pdo=db();
@@ -63,6 +65,46 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         ma_sync_cases($pdo,$user);
         $caseId=max(0,(int)($_POST['vaka_id']??0));
 
+        if($action==='send_target_risk'){
+            if(!mrb_tables_ready($pdo)) throw new RuntimeException('Hedef-risk bildirim altyapısı henüz hazır değil.');
+
+            $context=ma_target_risk_context($pdo,$user,$caseId);
+            if(!$context) throw new RuntimeException('Bu vaka için güncel hedef-risk bağlamı çözülemedi.');
+
+            if((string)($context['hedef_bildirim_durumu']??'')!=='bekliyor'){
+                header('Location: ticari-mutabakat-aksiyon.php?vaka_id='.$caseId.'&ok='.rawurlencode(
+                    'Bu vaka için güncel hedef-risk bildirimi artık gönderim beklemiyor.'
+                ));
+                exit;
+            }
+
+            $result=mrb_sync_case($pdo,$user,$caseId);
+
+            if((int)$result['sent']===1){
+                header('Location: ticari-mutabakat-aksiyon.php?vaka_id='.$caseId.'&ok='.rawurlencode(
+                    'Güncel hedef-risk bildirimi vaka sorumlusu Süper Admin kullanıcısına gönderildi.'
+                ));
+                exit;
+            }
+            if((int)$result['invalid_owner']>0){
+                throw new RuntimeException('Vakanın bildirim alabilecek aktif Süper Admin sorumlusu bulunmuyor.');
+            }
+            if((int)$result['no_institution']>0){
+                throw new RuntimeException('Vakanın kurum bağlamı olmadığı için hedef-risk bildirimi gönderilemedi.');
+            }
+            if((int)$result['failed']>0){
+                throw new RuntimeException('Hedef-risk bildirimi oluşturulamadı.');
+            }
+
+            $message=(int)$result['stale_source']>0
+                ?'Kaynak sorun artık açık olmadığı için hedef-risk bildirimi gönderilmedi.'
+                :((int)$result['candidate_count']===0
+                    ?'Vakanın güncel hedef-risk sinyali artık bildirim gerektirmiyor.'
+                    :'Bildirim daha önce gönderilmiş veya vaka bağlamı işlem sırasında değişmiş.');
+            header('Location: ticari-mutabakat-aksiyon.php?vaka_id='.$caseId.'&ok='.rawurlencode($message));
+            exit;
+        }
+
         if($action==='stage'){
             ma_set_stage($pdo,$user,$caseId,(string)($_POST['durum']??''));
             header('Location: ticari-mutabakat-aksiyon.php?vaka_id='.$caseId.'&ok='.rawurlencode('Vaka aşaması güncellendi.'));
@@ -102,6 +144,7 @@ $selectedId=max(0,(int)($_GET['vaka_id']??0));
 $selected=$selectedId>0&&$ready?ma_case_row($pdo,$selectedId):null;
 $history=$selected?ma_history_rows($pdo,$selectedId):[];
 $targetRisk=$selected?ma_target_risk_context($pdo,$user,$selectedId):null;
+$targetNotificationReady=$ready&&function_exists('mrb_tables_ready')&&mrb_tables_ready($pdo);
 ?>
 <!doctype html>
 <html lang="tr">
@@ -111,7 +154,7 @@ $targetRisk=$selected?ma_target_risk_context($pdo,$user,$selectedId):null;
 <title>Mutabakat Aksiyon Merkezi — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
-<link rel="stylesheet" href="ticari-mutabakat-aksiyon.css?v=1.2.72">
+<link rel="stylesheet" href="ticari-mutabakat-aksiyon.css?v=1.2.73">
 </head>
 <body class="role-page sa-subpage">
 <?php require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -257,7 +300,18 @@ $isOpen=in_array($stage,ma_open_stages(),true);
 <div><span>Okunma Zamanı</span><strong><?=mah((string)($targetRisk['hedef_bildirim_okundu_tarihi']?:'—'))?></strong></div>
 </div>
 <?php if((string)($targetRisk['hedef_bildirim_durumu']??'')==='bekliyor'):?>
-<div class="role-note"><span>🔔</span><p>Bu vaka için güncel sorumlu + güncel reopen döngüsü + güncel hedef-risk sinyaline ait bildirim henüz gönderilmemiş. Gönderim Aksiyon Merkezi'nden yapılmaz; mevcut Hedef Risk Bildirimleri merkezi kullanılır.</p></div>
+<div class="role-note"><span>🔔</span><p>Bu vaka için güncel sorumlu + güncel reopen döngüsü + güncel hedef-risk sinyaline ait bildirim henüz gönderilmemiş.</p></div>
+<?php if($targetNotificationReady):?>
+<form class="ma-target-send" method="post">
+<input type="hidden" name="csrf" value="<?=mah(csrf_token())?>">
+<input type="hidden" name="action" value="send_target_risk">
+<input type="hidden" name="vaka_id" value="<?=(int)$selected['id']?>">
+<button class="role-button" type="submit">Güncel Hedef-Risk Bildirimini Gönder</button>
+<small>Aynı vaka + current owner + current reopen döngüsü + current sinyal ikinci kez gönderilemez.</small>
+</form>
+<?php else:?>
+<div class="role-note"><span>ℹ️</span><p>Bildirim altyapısı hazır olmadığından tek-vaka gönderimi kullanılamıyor. Hedef Risk Bildirimleri merkezindeki sistem durumunu kontrol et.</p></div>
+<?php endif;?>
 <?php elseif((string)($targetRisk['hedef_bildirim_durumu']??'')==='okunmadi'):?>
 <div class="role-note"><span>📨</span><p>Güncel hedef-risk bildirimi mevcut sorumluya gönderilmiş ancak recipient kaydında henüz okunmamış görünüyor.</p></div>
 <?php endif;?>
