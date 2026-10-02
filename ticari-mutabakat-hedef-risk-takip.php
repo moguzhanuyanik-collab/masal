@@ -103,6 +103,7 @@ $ownerOptions=$ready?mrh_owner_options($pdo,$days):[];
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Okunmamış Risk Takip Planlama</small></span></a>
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk-saglik.php" aria-label="Bildirim Sağlığı"><svg><use href="#sa-chart"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-hedef-risk-takip-saglik.php" aria-label="Takip Planı Sağlığı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-is-kutusu.php" aria-label="Günlük İş Kutusu"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-planlama.php" aria-label="Toplu Planlama"><svg><use href="#sa-refresh"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
@@ -204,6 +205,7 @@ $ownerOptions=$ready?mrh_owner_options($pdo,$days):[];
 <a href="ticari-mutabakat-is-kutusu.php"><span>📥</span>İş Kutusu</a>
 <a href="ticari-mutabakat-hedef-risk-saglik.php"><span>📨</span>Sağlık</a>
 <a class="active" href="ticari-mutabakat-hedef-risk-takip.php"><span>🗓️</span>Risk Takip</a>
+<a href="ticari-mutabakat-hedef-risk-takip-saglik.php"><span>🩺</span>Plan Sağlığı</a>
 <a href="ticari-mutabakat-planlama.php"><span>🗂️</span>Planlama</a>
 <a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 </nav>
