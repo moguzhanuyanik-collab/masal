@@ -147,6 +147,7 @@ jobs:
           node tests/reconciliation-reminders-188.cjs
           node tests/reconciliation-owner-recovery-189.cjs
           node tests/reconciliation-escalation-190.cjs
+          node tests/reconciliation-performance-191.cjs
           node tests/institution-class-edit-136.cjs
           node tests/institution-reporting-137.cjs
           node tests/institution-report-export-159.cjs
@@ -255,6 +256,7 @@ jobs:
           php tests/reconciliation-reminders-db-188.php
           php tests/reconciliation-owner-recovery-db-189.php
           php tests/reconciliation-escalation-db-190.php
+          php tests/reconciliation-performance-db-191.php
           php tests/institution-class-edit-db-136.php
           php tests/institution-reporting-db-137.php
           php tests/teacher-content-edit-copy-db-139.php
