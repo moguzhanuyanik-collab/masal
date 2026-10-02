@@ -10,7 +10,14 @@ if(!$user){
     header('Location: login.php');
     exit;
 }
-$pdo=db();
+try{
+    $pdo=db();
+}catch(Throwable $e){
+    error_log('[IlkAdim][legal-consent-open] database_unavailable');
+    http_response_code(503);
+    echo 'Yasal belgeler şu anda yüklenemiyor. Lütfen tekrar deneyin.';
+    exit;
+}
 header('Cache-Control: no-store, max-age=0');
 
 function ylh(string $value): string { return htmlspecialchars($value,ENT_QUOTES,'UTF-8'); }
@@ -28,8 +35,15 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     }
 }
 
-$pending=yl_pending_documents($pdo,$user);
-$history=yl_user_acceptance_rows($pdo,(int)$user['id']);
+try{
+    $pending=yl_pending_documents($pdo,$user);
+    $history=yl_user_acceptance_rows($pdo,(int)$user['id']);
+}catch(Throwable $e){
+    error_log('[IlkAdim][legal-consent-open] '.$e->getMessage());
+    http_response_code(503);
+    echo 'Yasal belgeler şu anda yüklenemiyor. Lütfen tekrar deneyin.';
+    exit;
+}
 ?>
 <!doctype html>
 <html lang="tr">

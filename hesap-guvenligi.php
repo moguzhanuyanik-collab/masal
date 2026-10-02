@@ -65,9 +65,13 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
         $user=auth_fetch_user($pdo,(int)$user['id'])??$user;
         $message=$newHash!==null?'E-posta ve şifre güncellendi.':'E-posta adresi güncellendi.';
     } catch (PDOException $e) {
+        error_log('[IlkAdim][account-security-db] '.$e->getMessage());
         $error=$e->getCode()==='23000'?'Bu e-posta zaten kullanılıyor.':'Hesap bilgileri güncellenemedi.';
-    } catch (Throwable $e) {
+    } catch (RuntimeException $e) {
         $error=$e->getMessage();
+    } catch (Throwable $e) {
+        error_log('[IlkAdim][account-security] '.$e->getMessage());
+        $error='Hesap bilgileri şu anda güncellenemedi. Lütfen tekrar deneyin.';
     }
 }
 ?><!DOCTYPE html>

@@ -9,9 +9,26 @@ app_session_start();
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Referrer-Policy: no-referrer');
 
+$pdo=null;
+try{
+    $pdo=db();
+}catch(Throwable $e){
+    error_log('[IlkAdim][password-reset] database_unavailable');
+}
+
+function prrh_token_valid(?PDO $pdo,string $token): bool {
+    if(!$pdo || $token==='') return false;
+    try{
+        return pr_token_is_valid($pdo,$token);
+    }catch(Throwable $e){
+        error_log('[IlkAdim][password-reset] token_validation_failed');
+        return false;
+    }
+}
+
 $queryToken=trim((string)($_GET['token']??''));
 if($queryToken!==''){
-    if(preg_match('/^[a-f0-9]{64}$/D',$queryToken) && pr_token_is_valid(db(),$queryToken)){
+    if(preg_match('/^[a-f0-9]{64}$/D',$queryToken) && prrh_token_valid($pdo,$queryToken)){
         $_SESSION['password_reset_token']=$queryToken;
         header('Location: sifre-sifirla.php');
         exit;
@@ -20,18 +37,19 @@ if($queryToken!==''){
 }
 
 $token=(string)($_SESSION['password_reset_token']??'');
-$valid=$token!=='' && pr_token_is_valid(db(),$token);
-$error='';
+$valid=prrh_token_valid($pdo,$token);
+$error=$pdo instanceof PDO?'':'Şifre sıfırlama servisi şu anda kullanılamıyor. Lütfen tekrar deneyin.';
 
 if($_SERVER['REQUEST_METHOD']==='POST'){
     try{
         if(!verify_csrf($_POST['csrf']??null)) throw new RuntimeException('Güvenlik doğrulaması başarısız. Sayfayı yenileyip tekrar deneyin.');
+        if(!$pdo) throw new RuntimeException('Şifre sıfırlama servisi şu anda kullanılamıyor. Lütfen tekrar deneyin.');
         if(!$valid) throw new RuntimeException('Şifre sıfırlama bağlantısı geçersiz veya süresi dolmuş.');
         $password=(string)($_POST['password']??'');
         $repeat=(string)($_POST['password_repeat']??'');
         if($password!==$repeat) throw new RuntimeException('Yeni şifreler eşleşmiyor.');
 
-        pr_reset_password(db(),$token,$password);
+        pr_reset_password($pdo,$token,$password);
 
         unset(
             $_SESSION['password_reset_token'],
@@ -47,7 +65,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         exit;
     }catch(RuntimeException $e){
         $error=$e->getMessage();
-        $valid=$token!=='' && pr_token_is_valid(db(),$token);
+        $valid=prrh_token_valid($pdo,$token);
     }catch(Throwable $e){
         error_log('[IlkAdim][password-reset] reset_page_failed');
         $error='Şifre şu anda yenilenemedi. Lütfen yeni bir sıfırlama bağlantısı iste.';
