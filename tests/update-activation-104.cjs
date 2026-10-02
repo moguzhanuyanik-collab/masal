@@ -15,6 +15,11 @@ assert(updater.includes('function assert_update_activation_preflight('));
 assert(updater.includes('function verify_activated_update_files('));
 assert(updater.includes("hash_file('sha256'"));
 assert(updater.includes("'.ilkadim-update-'"));
+assert(updater.includes("const ILKADIM_UPDATER_CORE_GENERATION = 123;"));
+assert(updater.includes("'repaired_files'=>array_keys($repaired)"));
+assert(updater.includes("'repaired_count'=>count($repaired)"));
+assert(updater.includes("Güncelleme hedef dosyası kurtarılamadı: "));
+assert(updater.includes("atomic_replace_update_file($source,$target,$relative)"));
 assert(
   updater.indexOf('assert_update_activation_preflight(')
   < updater.indexOf("$updateStage='file_activation';")

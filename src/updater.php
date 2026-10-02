@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-const ILKADIM_UPDATER_CORE_GENERATION = 122;
+const ILKADIM_UPDATER_CORE_GENERATION = 123;
 
 function updater_core_generation_from_file(string $path): int {
     if(!is_file($path) || is_link($path) || !is_readable($path)) return 0;
@@ -1136,23 +1136,54 @@ function assert_update_activation_preflight(
 function verify_activated_update_files(string $sourceRoot,string $root,array $files,array $preserve): array {
     $verified=0;
     $bytes=0;
+    $repaired=[];
     foreach($files as $relative){
         $relative=managed_relative_path((string)$relative);
         if(path_is_preserved($relative,$preserve)) continue;
         $source=$sourceRoot.'/'.$relative;
         $target=assert_managed_target_safe($root,$relative);
+
+        $repair=static function() use($source,$target,$relative,&$repaired): void {
+            if(is_link($target)){
+                throw new RuntimeException('Güncelleme hedef dosyası sembolik bağlantı olamaz: '.$relative);
+            }
+            try{
+                atomic_replace_update_file($source,$target,$relative);
+            }catch(Throwable $repairError){
+                throw new RuntimeException(
+                    'Güncelleme hedef dosyası kurtarılamadı: '.$relative
+                    .' · '.$repairError->getMessage()
+                );
+            }
+            $repaired[$relative]=true;
+        };
+
+        if(!is_file($target) || is_link($target)){
+            $repair();
+        }
         if(!is_file($target) || is_link($target)){
             throw new RuntimeException('Güncelleme sonrası dosya bulunamadı veya geçersiz: '.$relative);
         }
+
         $sourceHash=update_file_sha256($source,'Kaynak güncelleme dosyası');
         $targetHash=update_file_sha256($target,'Etkin güncelleme dosyası');
         if(!hash_equals($sourceHash,$targetHash)){
+            $repair();
+            $targetHash=update_file_sha256($target,'Etkin güncelleme dosyası');
+        }
+        if(!hash_equals($sourceHash,$targetHash)){
             throw new RuntimeException('Güncelleme sonrası dosya bütünlüğü doğrulanamadı: '.$relative);
         }
+
         $verified++;
         $bytes+=max(0,(int)(filesize($target)?:0));
     }
-    return ['files'=>$verified,'bytes'=>$bytes];
+    return [
+        'files'=>$verified,
+        'bytes'=>$bytes,
+        'repaired_files'=>array_keys($repaired),
+        'repaired_count'=>count($repaired),
+    ];
 }
 
 function assert_stale_managed_files_safe(

@@ -11,6 +11,7 @@ const anchor=JSON.parse(fs.readFileSync('update-release.json','utf8'));
 const manifest=JSON.parse(fs.readFileSync('update-managed-files.json','utf8'));
 
 assert(updater.includes('function prepare_updater_core_handoff('));
+assert(updater.includes('const ILKADIM_UPDATER_CORE_GENERATION = 123;'));
 assert(updater.includes('function read_updater_core_handoff_marker('));
 assert(updater.includes("durum='yeniden_dene'"));
 assert(updater.includes("'retry_required'=>true"));
