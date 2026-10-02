@@ -22,7 +22,8 @@ assert(page.includes('id="manualUpdateFile"'),'manual ZIP picker missing');
 assert(page.includes("body.append('update_zip', file, file.name)"),'manual request must send selected ZIP');
 assert(page.includes("request('manual_install', manualFormData())"),'manual install request missing');
 
-assert(updater.includes('const ILKADIM_UPDATER_CORE_GENERATION = 122;'),'updater generation must advance');
+const generationMatch=updater.match(/ILKADIM_UPDATER_CORE_GENERATION\s*=\s*(\d+)\s*;/);
+assert(generationMatch && Number(generationMatch[1])>=123,'updater generation must advance');
 assert(updater.includes('function manual_update_package_identity('),'manual package identity validator missing');
 assert(updater.includes('function update_zip_root_prefix('),'manual ZIP root detector missing');
 assert(updater.includes('function manual_update_zip_managed_files('),'manual manifest/tree collector missing');
