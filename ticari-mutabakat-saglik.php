@@ -8,6 +8,8 @@ require __DIR__.'/src/ticari_belgeler.php';
 require __DIR__.'/src/ticari_mutabakat.php';
 require __DIR__.'/src/ticari_mutabakat_aksiyon.php';
 require __DIR__.'/src/ticari_mutabakat_saglik.php';
+require __DIR__.'/src/ticari_mutabakat_performans.php';
+require __DIR__.'/src/ticari_mutabakat_hedef.php';
 
 $user=require_role('super_admin');
 $pdo=db();
@@ -45,6 +47,8 @@ $summary=$ready?mhs_summary($pdo):[];
 $owners=$ready?mhs_owner_workload($pdo,100):[];
 $closed=$ready?mhs_recent_closed_metrics($pdo,30):[];
 $rows=$ready?mhs_case_rows($pdo,$filters,900):[];
+$targetReady=$ready&&mh_tables_ready($pdo);
+$targetOpen=$targetReady?mh_open_target_summary($pdo):[];
 ?>
 <!doctype html>
 <html lang="tr">
@@ -54,7 +58,7 @@ $rows=$ready?mhs_case_rows($pdo,$filters,900):[];
 <title>Mutabakat Aksiyon Sağlığı — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
-<link rel="stylesheet" href="ticari-mutabakat-saglik.css?v=1.2.60">
+<link rel="stylesheet" href="ticari-mutabakat-saglik.css?v=1.2.67">
 </head>
 <body class="role-page sa-subpage">
 <?php require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -62,6 +66,7 @@ $rows=$ready?mhs_case_rows($pdo,$filters,900):[];
 <header class="role-topbar">
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Mutabakat Aksiyon Sağlığı</small></span></a>
 <div class="sa-page-actions">
+<a class="sa-page-action" href="ticari-mutabakat-hedefleri.php" aria-label="Operasyon Hedefleri"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-devir.php" aria-label="Sorumlu Devir"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-is-kutusu.php" aria-label="Günlük İş Kutusu"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hatirlatma.php" aria-label="Aksiyon Hatırlatmaları"><svg><use href="#sa-bell"/></svg></a>
@@ -83,7 +88,7 @@ $rows=$ready?mhs_case_rows($pdo,$filters,900):[];
 <span class="role-hero-art">🩺</span>
 </section>
 
-<div class="role-note"><span>ℹ️</span><p>Bu ekran SLA kararı vermez ve keyfi puan üretmez. Yalnız mevcut vaka yaşı, sorumlu, takip tarihi ve append-only geçmişten türetilen objektif operasyon göstergelerini sunar. Vaka bazlı işlem için <a href="ticari-mutabakat-aksiyon.php">Mutabakat Aksiyon Merkezi</a>, çoklu sahiplik/tarih planlaması için <a href="ticari-mutabakat-planlama.php">Toplu Planlama</a> kullanılır.</p></div>
+<div class="role-note"><span>ℹ️</span><p>Bu ekran sözleşmesel SLA kararı vermez ve keyfi puan üretmez. 1.2.67 hedef politikaları mevcutsa açık döngülerin yalnız iç operasyon hedef durumunu ayrıca gösterir. Vaka bazlı işlem için <a href="ticari-mutabakat-aksiyon.php">Mutabakat Aksiyon Merkezi</a>, çoklu sahiplik/tarih planlaması için <a href="ticari-mutabakat-planlama.php">Toplu Planlama</a> kullanılır.</p></div>
 
 <?php if(!$ready):?>
 <div class="role-note"><span>⚠️</span><p>1.2.59 mutabakat aksiyon tabloları hazır değil. 086 migration kurulduğunda sağlık görünümü otomatik açılır.</p></div>
@@ -99,6 +104,20 @@ $rows=$ready?mhs_case_rows($pdo,$filters,900):[];
 <a href="ticari-mutabakat-saglik.php?yas=8_plus"><strong><?=(int)($summary['yas_8_plus']??0)?></strong><span>8+ gün açık</span></a>
 <a href="ticari-mutabakat-saglik.php?saglik=beklemede"><strong><?=(int)($summary['beklemede']??0)?></strong><span>Dış aksiyon</span></a>
 </section>
+
+<?php if($targetReady):?>
+<section class="role-section">
+<div class="role-section-head"><div><span class="eyeline">OPERASYON HEDEFLERİ</span><h2>Mevcut Açık Döngü Hedef Durumu</h2></div><a class="role-pill ok" href="ticari-mutabakat-hedefleri.php">Hedefleri Yönet →</a></div>
+<div class="mhs-target-grid">
+<div><strong><?=(int)($targetOpen['policy_evaluable']??0)?></strong><span>Politika ile izlenen</span></div>
+<div><strong><?=(int)($targetOpen['cycle_outside']??0)?></strong><span>Çevrim hedefi dışında</span></div>
+<div><strong><?=(int)($targetOpen['first_outside']??0)?></strong><span>İlk müdahale hedefi dışında</span></div>
+<div><strong><?=(int)($targetOpen['first_waiting']??0)?></strong><span>İlk müdahale süresi işliyor</span></div>
+<div><strong><?=(int)($targetOpen['no_policy']??0)?></strong><span>Politika öncesi / tanımsız</span></div>
+</div>
+<div class="role-note"><span>🎯</span><p>Hedef durumu vaka döngüsünün başlangıcında geçerli olan politika versiyonuna göre hesaplanır. Yeni hedef yayınlamak mevcut eski döngünün referansını geriye dönük değiştirmez.</p></div>
+</section>
+<?php endif;?>
 
 <section class="role-section">
 <div class="role-section-head"><div><span class="eyeline">YAŞLANDIRMA</span><h2>Açık Vaka Dağılımı</h2></div><span class="role-pill">Mevcut açık döngü</span></div>
@@ -210,6 +229,7 @@ $tags=mhs_health_tags($row);
 <a href="ticari-mutabakat-eskalasyon.php"><span>🚨</span>Eskalasyon</a>
 <a href="ticari-mutabakat-devir.php"><span>🔁</span>Devir</a>
 <a href="ticari-mutabakat-performans.php"><span>📈</span>Performans</a>
+<a href="ticari-mutabakat-hedefleri.php"><span>🎯</span>Hedefler</a>
 </nav>
 </div>
 </body>
