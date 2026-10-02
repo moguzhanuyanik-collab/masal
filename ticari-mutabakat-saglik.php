@@ -69,6 +69,7 @@ $rows=$ready?mhs_case_rows($pdo,$filters,900):[];
 <a class="sa-page-action" href="ticari-mutabakat-planlama.php" aria-label="Toplu Planlama"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat.php" aria-label="Mutabakat Kontrol"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-dashboard.php" aria-label="Ticari Dashboard"><svg><use href="#sa-chart"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-eskalasyon.php" aria-label="Operasyon Eskalasyonu"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
 </header>
@@ -205,6 +206,7 @@ $tags=mhs_health_tags($row);
 <a href="ticari-mutabakat-planlama.php"><span>🗂️</span>Planlama</a>
 <a href="ticari-belgeler.php"><span>🧾</span>Belgeler</a>
 <a href="ticari-finans.php"><span>₺</span>Finans</a>
+<a href="ticari-mutabakat-eskalasyon.php"><span>🚨</span>Eskalasyon</a>
 <a href="ticari-mutabakat-devir.php"><span>🔁</span>Devir</a>
 </nav>
 </div>
