@@ -64,6 +64,7 @@ foreach($monthly as $row){
 <a class="sa-page-action" href="ticari-mutabakat.php" aria-label="Ticari Mutabakat"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-aksiyon.php" aria-label="Mutabakat Aksiyon"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-saglik.php" aria-label="Mutabakat Sağlığı"><svg><use href="#sa-chart"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-planlama.php" aria-label="Mutabakat Planlama"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="tahsilat-takvimi.php" aria-label="Tahsilat Takvimi"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="tahsilat-risk.php" aria-label="Tahsilat Risk Merkezi"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="lisans-yenilemeleri.php" aria-label="Lisans Yenilemeleri"><svg><use href="#sa-refresh"/></svg></a>
@@ -207,6 +208,7 @@ $width=$max>0?max(3,min(100,((float)$row['tahsilat_toplami']/$max)*100)):0;
 <a href="ticari-mutabakat.php"><span>⚖️</span>Mutabakat</a>
 <a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 <a href="ticari-mutabakat-saglik.php"><span>🩺</span>Sağlık</a>
+<a href="ticari-mutabakat-planlama.php"><span>🗂️</span>Planlama</a>
 <a href="tahsilat-takvimi.php"><span>🗓️</span>Takvim</a>
 <a href="ticari-finans.php"><span>₺</span>Finans</a>
 <a href="tahsilat-risk.php"><span>⚠️</span>Risk</a>

@@ -70,6 +70,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
   <a href="ticari-dashboard.php"><svg><use href="#sa-chart"/></svg>Ticari Dashboard</a>
   <a href="ticari-mutabakat-aksiyon.php"><svg><use href="#sa-alert"/></svg>Mutabakat Aksiyon</a>
   <a href="ticari-mutabakat-saglik.php"><svg><use href="#sa-chart"/></svg>Mutabakat Sağlığı</a>
+  <a href="ticari-mutabakat-planlama.php"><svg><use href="#sa-users"/></svg>Mutabakat Planlama</a>
   <a href="ticari-belgeler.php"><svg><use href="#sa-database"/></svg>Ticari Belgeler</a>
   <a href="tahsilat-takvimi.php"><svg><use href="#sa-chart"/></svg>Tahsilat Takvimi</a>
   <a href="tahsilat-risk.php"><svg><use href="#sa-alert"/></svg>Tahsilat Risk Merkezi</a>
@@ -169,6 +170,7 @@ $profilePhoto=is_file($photoBase.'.webp')?$photoBase.'.webp':(is_file($photoBase
     <a href="ticari-mutabakat.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Ticari Mutabakat & Kontrol</strong><small>Sözleşme, belge, tahsilat ve eşleme açıkları ile veri bütünlüğü kontrolleri</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="ticari-mutabakat-aksiyon.php"><span class="sa-menu-icon"><svg><use href="#sa-alert"/></svg></span><span><strong>Mutabakat Aksiyon Merkezi</strong><small>Mutabakat açıkları, veri istisnaları, sorumlu ve takip aksiyonları</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="ticari-mutabakat-saglik.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Mutabakat Aksiyon Sağlığı</strong><small>Vaka yaşlandırma, gecikmiş aksiyon, sahipsiz işler ve sorumlu iş yükü</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
+    <a href="ticari-mutabakat-planlama.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Mutabakat Toplu Planlama</strong><small>Açık vakalara güvenli toplu sorumlu ve sonraki aksiyon tarihi ata</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="tahsilat-takvimi.php"><span class="sa-menu-icon"><svg><use href="#sa-chart"/></svg></span><span><strong>Tahsilat Takvimi</strong><small>Taksit vadeleri, tek vade sözleşmeler ve beklenen nakit akışı</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="tahsilat-risk.php"><span class="sa-menu-icon"><svg><use href="#sa-alert"/></svg></span><span><strong>Tahsilat Risk Merkezi</strong><small>Vade yaşlandırma, açık bakiye, yenileme gecikmeleri ve takip aksiyonları</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
     <a href="bildirimler.php"><span class="sa-menu-icon"><svg><use href="#sa-users"/></svg></span><span><strong>Bildirim & Duyurular</strong><small>Kurum duyuruları, sistem bildirimleri ve okunma takibi</small></span><svg class="sa-row-arrow"><use href="#sa-arrow"/></svg></a>
