@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.57",
+  "version": "1.2.58",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -231,6 +231,7 @@
     "RELEASE-1.2.55.md",
     "RELEASE-1.2.56.md",
     "RELEASE-1.2.57.md",
+    "RELEASE-1.2.58.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
@@ -555,6 +556,7 @@
     "src/ticari_belgeler.php",
     "src/ticari_dashboard.php",
     "src/ticari_finans.php",
+    "src/ticari_mutabakat.php",
     "src/ticari_taksit.php",
     "src/updater.php",
     "src/veli_icerik_dashboard.php",
@@ -599,6 +601,8 @@
     "tests/commercial-finance-db-163.php",
     "tests/commercial-finance-integrity-169.cjs",
     "tests/commercial-finance-integrity-db-169.php",
+    "tests/commercial-reconciliation-183.cjs",
+    "tests/commercial-reconciliation-db-183.php",
     "tests/commercial-risk-center-175.cjs",
     "tests/commercial-risk-center-db-175.php",
     "tests/db-ai-safety-98.cjs",
@@ -750,6 +754,8 @@
     "ticari-dashboard.css",
     "ticari-dashboard.php",
     "ticari-finans.php",
+    "ticari-mutabakat.css",
+    "ticari-mutabakat.php",
     "ticari-taksit.css",
     "ticari-taksit.js",
     "tools/1.1.97-history-checkpoint.sql",
@@ -780,5 +786,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Ticari belge ve tahakkuk merkezi"
+  "name": "Ticari mutabakat ve kontrol merkezi"
 }
