@@ -31,6 +31,17 @@ function tm_contract_rows(PDO $pdo,array $filters=[],int $limit=500): array {
         array_push($params,$like,$like,$like);
     }
 
+    $statusFilter=trim((string)($filters['mutabakat']??''));
+    $errorExpr="(COALESCE(d.belge_toplami,0)>s.toplam_tutar+0.009
+        OR COALESCE(a.eslesen_tutar,0)>COALESCE(d.belge_toplami,0)+0.009
+        OR COALESCE(a.eslesen_tutar,0)>COALESCE(p.tahsilat_toplami,0)+0.009)";
+    $gapExpr="(s.toplam_tutar-COALESCE(d.belge_toplami,0)>0.009
+        OR COALESCE(d.belge_toplami,0)-COALESCE(a.eslesen_tutar,0)>0.009
+        OR COALESCE(p.tahsilat_toplami,0)-COALESCE(a.eslesen_tutar,0)>0.009)";
+    if($statusFilter==='hata') $where[]=$errorExpr;
+    elseif($statusFilter==='eksik') $where[]='NOT '.$errorExpr.' AND '.$gapExpr;
+    elseif($statusFilter==='tam') $where[]='NOT '.$errorExpr.' AND NOT '.$gapExpr;
+
     $sql="SELECT
         s.id sozlesme_id,s.kurum_id,s.sozlesme_no,s.toplam_tutar,s.para_birimi,s.durum sozlesme_durum,
         k.ad kurum_adi,k.kod kurum_kodu,
@@ -94,7 +105,6 @@ function tm_contract_rows(PDO $pdo,array $filters=[],int $limit=500): array {
     $stmt->closeCursor();
     if(!is_array($rows)) return [];
 
-    $statusFilter=trim((string)($filters['mutabakat']??''));
     $out=[];
     foreach($rows as $row){
         $contract=(float)$row['toplam_tutar'];
@@ -120,8 +130,6 @@ function tm_contract_rows(PDO $pdo,array $filters=[],int $limit=500): array {
         $row['mutabakat_durumu']=$hasError?'hata':($hasGap?'eksik':'tam');
         $row['mutabakat_etiketi']=$hasError?'Veri Kontrolü Gerekli':($hasGap?'Operasyon Açığı':'Mutabık');
 
-        if($statusFilter!=='' && in_array($statusFilter,['hata','eksik','tam'],true)
-            && $row['mutabakat_durumu']!==$statusFilter) continue;
         $out[]=$row;
     }
 
@@ -140,37 +148,100 @@ function tm_contract_rows(PDO $pdo,array $filters=[],int $limit=500): array {
 
 function tm_currency_summary(PDO $pdo): array {
     if(!tm_tables_ready($pdo)) return [];
-    $rows=tm_contract_rows($pdo,[],2000);
-    $out=[];
-    foreach($rows as $row){
-        $currency=(string)$row['para_birimi'];
-        if(!isset($out[$currency])){
-            $out[$currency]=[
-                'para_birimi'=>$currency,
-                'sozlesme_toplami'=>0.0,
-                'belge_toplami'=>0.0,
-                'tahsilat_toplami'=>0.0,
-                'eslesen_tutar'=>0.0,
-                'belgesiz_tutar'=>0.0,
-                'acik_belge_tutari'=>0.0,
-                'dagitilmamis_tahsilat'=>0.0,
-                'hata_sayisi'=>0,
-                'eksik_sayisi'=>0,
-                'tam_sayisi'=>0,
-            ];
-        }
-        $out[$currency]['sozlesme_toplami']+=(float)$row['toplam_tutar'];
-        $out[$currency]['belge_toplami']+=(float)$row['belge_toplami'];
-        $out[$currency]['tahsilat_toplami']+=(float)$row['tahsilat_toplami'];
-        $out[$currency]['eslesen_tutar']+=(float)$row['eslesen_tutar'];
-        $out[$currency]['belgesiz_tutar']+=(float)$row['belgesiz_tutar'];
-        $out[$currency]['acik_belge_tutari']+=(float)$row['acik_belge_tutari'];
-        $out[$currency]['dagitilmamis_tahsilat']+=(float)$row['dagitilmamis_tahsilat'];
-        $status=(string)$row['mutabakat_durumu'];
-        if(isset($out[$currency][$status.'_sayisi'])) $out[$currency][$status.'_sayisi']++;
-    }
 
-    foreach($out as &$row){
+    $stmt=$pdo->query("SELECT
+        x.para_birimi,
+        COUNT(*) sozlesme_sayisi,
+        COALESCE(SUM(x.toplam_tutar),0) sozlesme_toplami,
+        COALESCE(SUM(x.belge_toplami),0) belge_toplami,
+        COALESCE(SUM(x.tahsilat_toplami),0) tahsilat_toplami,
+        COALESCE(SUM(x.eslesen_tutar),0) eslesen_tutar,
+        COALESCE(SUM(GREATEST(0,x.toplam_tutar-x.belge_toplami)),0) belgesiz_tutar,
+        COALESCE(SUM(GREATEST(0,x.belge_toplami-x.eslesen_tutar)),0) acik_belge_tutari,
+        COALESCE(SUM(GREATEST(0,x.tahsilat_toplami-x.eslesen_tutar)),0) dagitilmamis_tahsilat,
+        SUM(CASE WHEN
+            x.belge_toplami>x.toplam_tutar+0.009
+            OR x.eslesen_tutar>x.belge_toplami+0.009
+            OR x.eslesen_tutar>x.tahsilat_toplami+0.009
+          THEN 1 ELSE 0 END) hata_sayisi,
+        SUM(CASE WHEN
+            NOT (
+              x.belge_toplami>x.toplam_tutar+0.009
+              OR x.eslesen_tutar>x.belge_toplami+0.009
+              OR x.eslesen_tutar>x.tahsilat_toplami+0.009
+            )
+            AND (
+              x.toplam_tutar-x.belge_toplami>0.009
+              OR x.belge_toplami-x.eslesen_tutar>0.009
+              OR x.tahsilat_toplami-x.eslesen_tutar>0.009
+            )
+          THEN 1 ELSE 0 END) eksik_sayisi,
+        SUM(CASE WHEN
+            NOT (
+              x.belge_toplami>x.toplam_tutar+0.009
+              OR x.eslesen_tutar>x.belge_toplami+0.009
+              OR x.eslesen_tutar>x.tahsilat_toplami+0.009
+            )
+            AND NOT (
+              x.toplam_tutar-x.belge_toplami>0.009
+              OR x.belge_toplami-x.eslesen_tutar>0.009
+              OR x.tahsilat_toplami-x.eslesen_tutar>0.009
+            )
+          THEN 1 ELSE 0 END) tam_sayisi
+        FROM (
+          SELECT
+            s.id,s.para_birimi,s.toplam_tutar,
+            COALESCE(d.belge_toplami,0) belge_toplami,
+            COALESCE(p.tahsilat_toplami,0) tahsilat_toplami,
+            COALESCE(a.eslesen_tutar,0) eslesen_tutar
+          FROM kurum_sozlesmeleri s
+          LEFT JOIN (
+            SELECT b.sozlesme_id,b.kurum_id,b.para_birimi,SUM(b.tutar) belge_toplami
+            FROM ticari_belgeler b
+            WHERE b.durum='aktif'
+            GROUP BY b.sozlesme_id,b.kurum_id,b.para_birimi
+          ) d
+            ON d.sozlesme_id=s.id
+           AND d.kurum_id=s.kurum_id
+           AND d.para_birimi=s.para_birimi
+          LEFT JOIN (
+            SELECT t.sozlesme_id,t.kurum_id,t.para_birimi,SUM(t.tutar) tahsilat_toplami
+            FROM kurum_tahsilatlari t
+            WHERE t.durum='aktif'
+            GROUP BY t.sozlesme_id,t.kurum_id,t.para_birimi
+          ) p
+            ON p.sozlesme_id=s.id
+           AND p.kurum_id=s.kurum_id
+           AND p.para_birimi=s.para_birimi
+          LEFT JOIN (
+            SELECT e.sozlesme_id,e.kurum_id,b.para_birimi,SUM(e.tutar) eslesen_tutar
+            FROM ticari_belge_tahsilat_eslemeleri e
+            INNER JOIN ticari_belgeler b
+              ON b.id=e.belge_id
+             AND b.sozlesme_id=e.sozlesme_id
+             AND b.kurum_id=e.kurum_id
+             AND b.durum='aktif'
+            INNER JOIN kurum_tahsilatlari t
+              ON t.id=e.tahsilat_id
+             AND t.sozlesme_id=e.sozlesme_id
+             AND t.kurum_id=e.kurum_id
+             AND t.para_birimi=b.para_birimi
+             AND t.durum='aktif'
+            WHERE e.durum='aktif'
+            GROUP BY e.sozlesme_id,e.kurum_id,b.para_birimi
+          ) a
+            ON a.sozlesme_id=s.id
+           AND a.kurum_id=s.kurum_id
+           AND a.para_birimi=s.para_birimi
+          WHERE s.durum IN ('aktif','tamamlandi')
+        ) x
+        GROUP BY x.para_birimi
+        ORDER BY FIELD(x.para_birimi,'TRY','USD','EUR'),x.para_birimi");
+    $rows=$stmt?$stmt->fetchAll(PDO::FETCH_ASSOC):[];
+    if($stmt)$stmt->closeCursor();
+    if(!is_array($rows)) return [];
+
+    foreach($rows as &$row){
         foreach([
             'sozlesme_toplami','belge_toplami','tahsilat_toplami','eslesen_tutar',
             'belgesiz_tutar','acik_belge_tutari','dagitilmamis_tahsilat'
@@ -179,12 +250,7 @@ function tm_currency_summary(PDO $pdo): array {
         }
     }
     unset($row);
-
-    uksort($out,static function(string $a,string $b): int {
-        $rank=['TRY'=>0,'USD'=>1,'EUR'=>2];
-        return ($rank[$a]??99)<=>($rank[$b]??99);
-    });
-    return array_values($out);
+    return $rows;
 }
 
 function tm_open_documents(PDO $pdo,array $filters=[],int $limit=300): array {
@@ -221,6 +287,9 @@ function tm_open_documents(PDO $pdo,array $filters=[],int $limit=300): array {
            AND t.durum='aktif'
           INNER JOIN ticari_belgeler bx
             ON bx.id=e.belge_id
+           AND bx.sozlesme_id=e.sozlesme_id
+           AND bx.kurum_id=e.kurum_id
+           AND bx.para_birimi=t.para_birimi
            AND bx.durum='aktif'
           WHERE e.durum='aktif'
           GROUP BY e.belge_id
@@ -276,6 +345,9 @@ function tm_unallocated_payments(PDO $pdo,array $filters=[],int $limit=300): arr
            AND b.durum='aktif'
           INNER JOIN kurum_tahsilatlari tx
             ON tx.id=e.tahsilat_id
+           AND tx.sozlesme_id=e.sozlesme_id
+           AND tx.kurum_id=e.kurum_id
+           AND tx.para_birimi=b.para_birimi
            AND tx.durum='aktif'
           WHERE e.durum='aktif'
           GROUP BY e.tahsilat_id
