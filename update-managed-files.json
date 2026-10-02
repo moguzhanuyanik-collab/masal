@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.80",
+  "version": "1.2.81",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -443,6 +443,7 @@
     "database/migrations/088_mutabakat_operasyon_eskalasyonlari.sql",
     "database/migrations/089_mutabakat_operasyon_hedef_politikalari.sql",
     "database/migrations/090_mutabakat_hedef_risk_bildirimleri.sql",
+    "database/migrations/091_1_sinif_matematik_soru_kalitesi.sql",
     "demo-satis.css",
     "demo-satis.php",
     "destek.css",
@@ -660,6 +661,7 @@
     "tests/global-archive-158.cjs",
     "tests/global-archive-db-158.php",
     "tests/global-scope-integrity-129.cjs",
+    "tests/grade1-math-quality-208.cjs",
     "tests/hardening-91.cjs",
     "tests/hardening-94.cjs",
     "tests/homework-completion-132.cjs",
@@ -911,6 +913,6 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 13,
-  "name": "Öğrenci alt menü hizalama düzeltmesi"
+  "release_revision": 1,
+  "name": "1. sınıf matematik soru kalitesi"
 }
