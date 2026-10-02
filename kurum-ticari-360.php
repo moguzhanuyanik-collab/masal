@@ -51,6 +51,27 @@ $payments=$institution?kt360_payment_rows($pdo,$institutionId,300):[];
 $renewals=$institution?kt360_renewal_rows($pdo,$institutionId,150):[];
 $reminders=$institution?kt360_reminder_rows($pdo,$institutionId,150):[];
 $counts=$institution?kt360_counts($pdo,$institutionId):[];
+
+$statementError='';
+$statementFilters=kt360_statement_filters([]);
+$statement=['summary'=>[],'rows'=>[],'truncated'=>false];
+if($institution){
+    try{
+        $statementFilters=kt360_statement_filters($_GET);
+        $statement=kt360_statement($pdo,$institutionId,$statementFilters,500);
+    }catch(Throwable $e){
+        $statementError=$e->getMessage();
+        $statementFilters=kt360_statement_filters([]);
+        $statement=kt360_statement($pdo,$institutionId,$statementFilters,500);
+    }
+}
+$statementQuery=http_build_query([
+    'kurum_id'=>$institutionId,
+    'baslangic'=>$statementFilters['baslangic'],
+    'bitis'=>$statementFilters['bitis'],
+    'para_birimi'=>$statementFilters['para_birimi'],
+    'hareket_turu'=>$statementFilters['hareket_turu'],
+]);
 ?>
 <!doctype html>
 <html lang="tr">
@@ -60,7 +81,7 @@ $counts=$institution?kt360_counts($pdo,$institutionId):[];
 <title>Kurum Ticari 360 — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
-<link rel="stylesheet" href="kurum-ticari-360.css?v=1.2.53">
+<link rel="stylesheet" href="kurum-ticari-360.css?v=1.2.54">
 </head>
 <body class="role-page sa-subpage">
 <?php require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -131,6 +152,80 @@ $counts=$institution?kt360_counts($pdo,$institutionId):[];
 </article>
 <?php endforeach;?>
 </div>
+</section>
+
+<section class="role-section">
+<div class="role-section-head">
+<div><span class="eyeline">HESAP EKSTRESİ</span><h2>Dönemsel Ticari Hareketler</h2></div>
+<a class="role-pill ok" href="kurum-ticari-ekstre-csv.php?<?=k360h($statementQuery)?>">CSV / Excel'e Aktar ↓</a>
+</div>
+
+<?php if($statementError!==''):?><div class="role-note"><span>⚠️</span><p><?=k360h($statementError)?> Varsayılan dönem gösteriliyor.</p></div><?php endif;?>
+
+<form class="k360-statement-filter" method="get">
+<input type="hidden" name="kurum_id" value="<?=$institutionId?>">
+<label>Başlangıç
+<input type="date" name="baslangic" value="<?=k360h((string)$statementFilters['baslangic'])?>" required>
+</label>
+<label>Bitiş
+<input type="date" name="bitis" value="<?=k360h((string)$statementFilters['bitis'])?>" required>
+</label>
+<label>Para Birimi
+<select name="para_birimi">
+<option value="">Tümü</option>
+<?php foreach(['TRY','USD','EUR'] as $ccy):?><option value="<?=$ccy?>" <?=$statementFilters['para_birimi']===$ccy?'selected':''?>><?=$ccy?></option><?php endforeach;?>
+</select>
+</label>
+<label>Hareket
+<select name="hareket_turu">
+<option value="tum" <?=$statementFilters['hareket_turu']==='tum'?'selected':''?>>Tüm hareketler</option>
+<option value="sozlesme" <?=$statementFilters['hareket_turu']==='sozlesme'?'selected':''?>>Sözleşme borçları</option>
+<option value="tahsilat" <?=$statementFilters['hareket_turu']==='tahsilat'?'selected':''?>>Tahsilatlar</option>
+</select>
+</label>
+<button type="submit">Ekstreyi Getir</button>
+<a href="kurum-ticari-360.php?kurum_id=<?=$institutionId?>">Bu Yıl</a>
+</form>
+
+<div class="k360-statement-summary">
+<?php if(!$statement['summary']):?><div class="role-empty">Seçilen dönem için finansal hareket yok.</div><?php endif;?>
+<?php foreach($statement['summary'] as $row):?>
+<article>
+<div><strong><?=k360h((string)$row['para_birimi'])?></strong><span><?=k360h((string)$statementFilters['baslangic'])?> → <?=k360h((string)$statementFilters['bitis'])?></span></div>
+<div class="k360-statement-summary-grid">
+<div><span>Açılış</span><strong><?=k360m($row['acilis_bakiyesi'])?></strong></div>
+<div><span>Dönem Borcu</span><strong><?=k360m($row['donem_borcu'])?></strong></div>
+<div><span>Dönem Tahsilatı</span><strong><?=k360m($row['donem_tahsilati'])?></strong></div>
+<div><span>Kapanış</span><strong><?=k360m($row['kapanis_bakiyesi'])?></strong></div>
+</div>
+</article>
+<?php endforeach;?>
+</div>
+
+<div class="k360-statement-wrap">
+<table class="k360-statement-table">
+<thead><tr>
+<th>Tarih</th><th>Tür</th><th>Referans</th><th>Açıklama</th><th>PB</th><th>Borç</th><th>Tahsilat</th><th>Bakiye</th>
+</tr></thead>
+<tbody>
+<?php if(!$statement['rows']):?><tr><td colspan="8">Seçilen filtreye uyan finansal hareket yok.</td></tr><?php endif;?>
+<?php foreach($statement['rows'] as $row):?>
+<tr>
+<td><?=k360h((string)$row['hareket_tarihi'])?></td>
+<td><span class="role-pill <?=$row['hareket_turu']==='tahsilat'?'ok':''?>"><?=$row['hareket_turu']==='sozlesme'?'Sözleşme':'Tahsilat'?></span></td>
+<td><?=k360h((string)$row['referans'])?></td>
+<td><?=k360h((string)$row['aciklama'])?><?php if((string)($row['odeme_yontemi']??'')!==''):?><small><?=k360h((string)$row['odeme_yontemi'])?></small><?php endif;?></td>
+<td><?=k360h((string)$row['para_birimi'])?></td>
+<td><?=((float)$row['borc']!==0.0?k360m($row['borc']):'—')?></td>
+<td><?=((float)$row['tahsilat']!==0.0?k360m($row['tahsilat']):'—')?></td>
+<td><strong><?=k360m($row['bakiye'])?></strong></td>
+</tr>
+<?php endforeach;?>
+</tbody>
+</table>
+</div>
+<?php if(!empty($statement['truncated'])):?><div class="role-note"><span>ℹ️</span><p>Ekran ilk 500 hareketi gösteriyor. CSV dışa aktarımı 10.000 harekete kadar destekler; daha geniş kayıt için tarih aralığını daralt.</p></div><?php endif;?>
+<div class="role-note"><span>ℹ️</span><p>Ekstre bakiyesi yalnız aktif/tamamlanmış sözleşme borçları ile aktif tahsilatlardan hesaplanır. İptal tahsilatlar finansal bakiyeyi değiştirmez; audit geçmişinde aşağıdaki “Aktif & İptal Tahsilat Geçmişi” bölümünde korunur.</p></div>
 </section>
 
 <section class="role-section">

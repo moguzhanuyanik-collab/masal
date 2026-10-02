@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.53",
+  "version": "1.2.54",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -227,6 +227,7 @@
     "RELEASE-1.2.51.md",
     "RELEASE-1.2.52.md",
     "RELEASE-1.2.53.md",
+    "RELEASE-1.2.54.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
@@ -447,6 +448,7 @@
     "kurum-siniflari.php",
     "kurum-ticari-360.css",
     "kurum-ticari-360.php",
+    "kurum-ticari-ekstre-csv.php",
     "kurum-velileri.php",
     "kurum-yoneticileri.php",
     "kurum.css",
@@ -603,6 +605,8 @@
     "tests/institution-classes-groups-db-134.php",
     "tests/institution-commercial-360-178.cjs",
     "tests/institution-commercial-360-db-178.php",
+    "tests/institution-commercial-statement-179.cjs",
+    "tests/institution-commercial-statement-db-179.php",
     "tests/institution-content-center-133.cjs",
     "tests/institution-content-detail-141.cjs",
     "tests/institution-content-detail-db-141.php",
@@ -756,5 +760,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Kurum ticari 360 ve hesap ekstresi görünümü"
+  "name": "Kurum hesap ekstresi dönem filtresi ve güvenli CSV dışa aktarım"
 }
