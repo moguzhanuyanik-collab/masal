@@ -91,6 +91,20 @@ function tr_contract_financial_state(PDO $pdo,int $contractId,bool $forUpdate=fa
     $paid=(float)$row['tahsil_edilen'];
     $row['tahsil_edilen']=number_format($paid,2,'.','');
     $row['kalan_tutar']=number_format(max(0,$total-$paid),2,'.','');
+
+    $row['taksit_plani_aktif']=false;
+    $row['taksit_sonraki_vade']=null;
+    $row['taksit_gecikmis_tutar']='0.00';
+    if(function_exists('tp_schedule_state')){
+        $schedule=tp_schedule_state($pdo,$contractId);
+        if(is_array($schedule)){
+            $row['taksit_plani_aktif']=true;
+            $row['taksit_sonraki_vade']=$schedule['sonraki_vade']??null;
+            $row['taksit_gecikmis_tutar']=(string)($schedule['gecikmis_tutar']??'0.00');
+            if(!empty($schedule['sonraki_vade'])) $row['vade_tarihi']=(string)$schedule['sonraki_vade'];
+        }
+    }
+
     return $row;
 }
 
