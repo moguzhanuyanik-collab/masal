@@ -152,7 +152,7 @@ $width=$max>0?max(3,min(100,((float)$row['tahsilat_toplami']/$max)*100)):0;
 <?php if(!$institutions):?><tr><td colspan="10">Filtreye uyan ticari kurum kaydı yok.</td></tr><?php endif;?>
 <?php foreach($institutions as $row):?>
 <tr>
-<td><a href="kurumlar.php?sekme=kurumlar&amp;kurum_id=<?=(int)$row['kurum_id']?>"><strong><?=tdh((string)$row['kurum_adi'])?></strong><small><?=tdh((string)$row['kurum_kodu'])?></small></a></td>
+<td><a href="kurum-ticari-360.php?kurum_id=<?=(int)$row['kurum_id']?>"><strong><?=tdh((string)$row['kurum_adi'])?></strong><small><?=tdh((string)$row['kurum_kodu'])?> · Ticari 360</small></a></td>
 <td><?=tdh((string)$row['para_birimi'])?></td>
 <td><?=(int)$row['sozlesme_sayisi']?> <small>(<?=(int)$row['aktif_sozlesme']?> aktif)</small></td>
 <td><?=tdm($row['sozlesme_toplami'])?></td>
