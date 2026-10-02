@@ -34,7 +34,9 @@ assert(domain.includes("kso.kurum_sinif_id=?"),'group membership filter must tar
 assert(domain.includes("COUNT(DISTINCT CASE"),'homework status aggregation must avoid duplicate content counts');
 assert(domain.includes("oi.teslim_tarihi<NOW()"),'overdue homework calculation missing');
 
-assert(studentReport.includes("SELECT id,ad,email,egitim_kademesi,sinif_seviyesi,kullanici_id FROM ogrenciler"),'student report must load display name and user id');
+assert(studentReport.includes("$studentColumns=['id'];"),'student report must build a guarded student column list');
+assert(studentReport.includes("['ad','email','egitim_kademesi','sinif_seviyesi','kullanici_id']"),'student report must preserve display name, education stage, class and user id fields');
+assert(studentReport.includes("auth_runtime_column_exists($pdo,'ogrenciler',$studentColumn)"),'student report must guard optional student columns');
 assert(studentReport.includes('ky_manager_student_report_context($pdo,$user,$studentId,$reportInstitutionId)'),'student report return context must use strict manager scope');
 assert(management.includes('ky_assert_manageable($pdo,$user,$institutionId)'),'student report return context must verify manageable institution');
 assert(management.includes("sk.kurum_id=?"),'student report return context must verify student membership in selected institution');

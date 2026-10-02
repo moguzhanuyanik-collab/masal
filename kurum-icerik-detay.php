@@ -22,7 +22,14 @@ try{
     exit;
 }
 
-$detail=kid_content_detail($pdo,$institutionId,$contentId,$groupId);
+try{
+    $detail=kid_content_detail($pdo,$institutionId,$contentId,$groupId);
+}catch(Throwable $e){
+    error_log('[IlkAdim][institution-content-detail-open] '.$e->getMessage());
+    http_response_code(503);
+    echo 'Kurum içerik detayı şu anda yüklenemiyor.';
+    exit;
+}
 if(!$detail){
     http_response_code(404);
     echo 'İçerik bulunamadı veya bu kuruma ait değil.';

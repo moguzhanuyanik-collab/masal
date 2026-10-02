@@ -9,6 +9,8 @@ const homework=fs.readFileSync('ogretmen-odevleri.php','utf8');
 const questions=fs.readFileSync('ogretmen-sorulari.php','utf8');
 const report=fs.readFileSync('ogrenci-raporu.php','utf8');
 const teacherContent=fs.readFileSync('ogretmen-icerikleri.php','utf8');
+const teacherDetail=fs.readFileSync('ogretmen-icerik-detay.php','utf8');
+const institutionDetail=fs.readFileSync('kurum-icerik-detay.php','utf8');
 const workflow=fs.readFileSync('.github/workflows/quality.yml','utf8');
 const version=JSON.parse(fs.readFileSync('version.json','utf8'));
 const release=JSON.parse(fs.readFileSync('update-release.json','utf8'));
@@ -30,11 +32,15 @@ assert(report.includes("'correct_answers'=>0"));
 
 assert(teacherContent.includes("[IlkAdim][teacher-content-edit-open]"));
 assert(teacherContent.includes("Düzenlenecek içerik şu anda yüklenemedi. Liste görünümünden devam edebilirsin."));
+assert(teacherDetail.includes("[IlkAdim][teacher-content-detail-open]"));
+assert(teacherDetail.includes("İçerik detayı şu anda yüklenemiyor."));
+assert(institutionDetail.includes("[IlkAdim][institution-content-detail-open]"));
+assert(institutionDetail.includes("Kurum içerik detayı şu anda yüklenemiyor."));
 
 assert(workflow.includes('node tests/runtime-page-health-205.cjs'));
 
 assert.strictEqual(version.version,'1.2.80');
-assert(Number(version.release_revision)>=4);
+assert(Number(version.release_revision)>=5);
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(release.release_revision,version.release_revision);
 assert.strictEqual(manifest.version,version.version);

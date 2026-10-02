@@ -9,7 +9,14 @@ $user=require_role('ogretmen');
 $pdo=db();
 $contentId=max(0,(int)($_GET['id']??0));
 $groupId=max(0,(int)($_GET['grup_id']??0));
-$detail=oi_teacher_content_detail($pdo,$user,$contentId,$groupId);
+try{
+    $detail=oi_teacher_content_detail($pdo,$user,$contentId,$groupId);
+}catch(Throwable $e){
+    error_log('[IlkAdim][teacher-content-detail-open] '.$e->getMessage());
+    http_response_code(503);
+    echo 'İçerik detayı şu anda yüklenemiyor.';
+    exit;
+}
 
 if(!$detail){
     http_response_code(404);

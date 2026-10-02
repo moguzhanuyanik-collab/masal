@@ -909,6 +909,6 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 4,
-  "name": "Çekirdek sayfa açılış sağlamlaştırması"
+  "release_revision": 5,
+  "name": "İçerik detay ve rapor test sağlamlaştırması"
 }
