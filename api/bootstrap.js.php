@@ -20,6 +20,7 @@ $lessons=[];
 $state=null;
 $summary=null;
 $completedSteps=[];
+$questionStepMap=[];
 $studentGrade=1;
 $educationStage='temel_egitim';
 $error=null;
@@ -194,6 +195,11 @@ try {
                         $topicIcon=ilkadim_topic_icon((string)$topic['konu_kodu'],(string)($row['emoji']??''));
                         foreach($questions as $questionIndex=>$q){
                             $opts=json_decode((string)$q['secenekler_json'],true);
+                            $moduleIndex=count($modules);
+                            $lessonCode=(string)$row['kod'];
+                            $questionCode=(string)$q['soru_kodu'];
+                            $stepKey=$lessonCode.'-'.$moduleIndex;
+                            if($questionCode!=='') $questionStepMap[$lessonCode][$questionCode]=$moduleIndex;
                             $modules[]=[
                                 'title'=>(string)$topic['ad'],
                                 'subtitle'=>(string)$section['ad'].' • '.$questionCount.' soru',
@@ -204,6 +210,7 @@ try {
                                 'options'=>is_array($opts)?array_values($opts):[],
                                 'answer'=>(int)$q['dogru_cevap_indeksi'],
                                 'explanation'=>(string)($q['aciklama']??''),
+                                'stepKey'=>$stepKey,
                                 'curriculum'=>[
                                     'sectionId'=>(int)$section['id'],
                                     'sectionCode'=>(string)$section['kod'],
@@ -315,20 +322,57 @@ try {
             $attemptStmt=$pdo->prepare('SELECT ders_kodu,soru_anahtari,secilen_cevap,dogru,sure_ms,cevap_tarihi FROM ogrenci_cevaplari WHERE ogrenci_id=? AND sinif_seviyesi=? ORDER BY id');
             $attemptStmt->execute([$studentId,$studentGrade]);
             $gradeAttempts=[];
+            $healedSteps=[];
             foreach ($attemptStmt->fetchAll() as $attemptRow) {
+                $lessonCode=trim((string)($attemptRow['ders_kodu']??''));
+                $attemptKey=trim((string)($attemptRow['soru_anahtari']??''));
+                $correct=(int)($attemptRow['dogru']??0)===1;
                 $selected=json_decode((string)($attemptRow['secilen_cevap']??'null'),true);
                 $at=strtotime((string)($attemptRow['cevap_tarihi']??''));
                 $gradeAttempts[]=[
-                    'lesson'=>(string)($attemptRow['ders_kodu']??''),
-                    'index'=>(string)($attemptRow['soru_anahtari']??''),
+                    'lesson'=>$lessonCode,
+                    'index'=>$attemptKey,
                     'selected'=>$selected,
-                    'correct'=>(int)($attemptRow['dogru']??0)===1,
+                    'correct'=>$correct,
                     'ms'=>(int)($attemptRow['sure_ms']??0),
                     'at'=>$at!==false?$at*1000:(int)round(microtime(true)*1000),
                 ];
+
+                if(!$correct||$lessonCode===''||$attemptKey==='') continue;
+
+                $stepIndex=null;
+                if(ctype_digit($attemptKey)){
+                    $stepIndex=(int)$attemptKey;
+                }elseif(preg_match('/^'.preg_quote($lessonCode,'/').'-(\\d+)$/',$attemptKey,$stepMatch)){
+                    $stepIndex=(int)$stepMatch[1];
+                }elseif(isset($questionStepMap[$lessonCode][$attemptKey])){
+                    $stepIndex=(int)$questionStepMap[$lessonCode][$attemptKey];
+                }
+
+                if($stepIndex===null||$stepIndex<0) continue;
+                $stepKey=$lessonCode.'-'.$stepIndex;
+                if(!isset($completedSteps[$stepKey])){
+                    $completedSteps[$stepKey]=true;
+                    $gradeSteps[]=$stepKey;
+                    $healedSteps[$stepKey]=[$lessonCode,$stepIndex];
+                }
             }
+            $attemptStmt->closeCursor();
+
+            if($healedSteps!==[]){
+                $healStmt=$pdo->prepare('INSERT INTO ogrenci_ilerleme (ogrenci_id,sinif_seviyesi,ders_kodu,modul_indeksi,tamamlandi) VALUES (?,?,?,?,1) ON DUPLICATE KEY UPDATE tamamlandi=1,guncellenme_tarihi=CURRENT_TIMESTAMP');
+                foreach($healedSteps as [$lessonCode,$stepIndex]){
+                    $healStmt->execute([$studentId,$studentGrade,$lessonCode,$stepIndex]);
+                }
+                $gradeSteps=array_values(array_unique($gradeSteps));
+                sort($gradeSteps,SORT_NATURAL);
+                $state['steps']=$gradeSteps;
+            }
+
             if ($gradeAttempts!==[] || $studentGrade!==1) $state['attempts']=$gradeAttempts;
-        } catch (Throwable) {}
+        } catch (Throwable $e) {
+            error_log('[IlkAdim][bootstrap-progress-heal] '.$e->getMessage());
+        }
     }
 
     $summary=function_exists('student_database_summary')?student_database_summary($pdo,$studentId):null;

@@ -34,7 +34,7 @@ $assetVersion=static function(string $path): string {
   <link rel="stylesheet" href="adimbot-student.css?v=<?=$assetVersion('adimbot-student.css')?>">
   <link rel="stylesheet" href="student-responsive-fix.css?v=<?=$assetVersion('student-responsive-fix.css')?>">
   <script src="api/bootstrap.js.php?v=<?=$assetVersion('api/bootstrap.js.php')?>" defer></script>
-  <script src="test-progress-reset.js?v=<?=$assetVersion('test-progress-reset.js')?>" defer></script>
+  <script src="student-progress-persistence.js?v=<?=$assetVersion('student-progress-persistence.js')?>" defer></script>
   <script src="activities-extra.js?v=<?=$assetVersion('activities-extra.js')?>" defer></script>
   <script src="app-runtime.js?v=<?=$assetVersion('app-runtime.js')?>" defer></script>
   <script src="curriculum-menu-bridge.js?v=<?=$assetVersion('curriculum-menu-bridge.js')?>" defer></script>

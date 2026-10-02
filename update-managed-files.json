@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.81",
+  "version": "1.2.82",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -444,6 +444,7 @@
     "database/migrations/089_mutabakat_operasyon_hedef_politikalari.sql",
     "database/migrations/090_mutabakat_hedef_risk_bildirimleri.sql",
     "database/migrations/091_1_sinif_matematik_soru_kalitesi.sql",
+    "database/migrations/092_ogrenci_etkinlik_ilerleme.sql",
     "demo-satis.css",
     "demo-satis.php",
     "destek.css",
@@ -610,6 +611,7 @@
     "src/veli_icerikleri.php",
     "src/yasal_onay.php",
     "src/yonetici_yetkileri.php",
+    "student-progress-persistence.js",
     "student-responsive-fix.css",
     "super-admin-pages.css",
     "super-admin-profil.php",
@@ -771,6 +773,8 @@
     "tests/student-homework-dashboard-149.cjs",
     "tests/student-homework-dashboard-db-149.php",
     "tests/student-lesson-ui-207.cjs",
+    "tests/student-progress-persistence-209.cjs",
+    "tests/student-progress-persistence-db-209.php",
     "tests/student-report-detail-138.cjs",
     "tests/student-report-detail-138.php",
     "tests/student-teacher-content-dashboard-152.cjs",
@@ -913,6 +917,6 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 11,
-  "name": "1. sınıf matematik soru kalitesi"
+  "release_revision": 1,
+  "name": "Öğrenci ilerleme ve kaldığı yerden devam"
 }

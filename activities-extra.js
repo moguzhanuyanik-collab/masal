@@ -4,6 +4,7 @@
   const NATIVE_IDS=["hafiza","renkler","oruntu"];
   const ALL_GAME_IDS=[...NATIVE_IDS,...EXTRA_IDS];
   const STORE='ilkadim-extra-games-v1';
+  const PROGRESS_STORE='ilkadim-extra-game-progress-v2';
   let extraGames=[];
   let completed=new Set();
   let csrfToken='';
@@ -17,6 +18,18 @@
   };
   const writeStored=()=>{
     try{localStorage.setItem(STORE,JSON.stringify([...completed].filter(x=>EXTRA_IDS.includes(x))));}catch{}
+  };
+  const readProgress=()=>{
+    try{
+      const data=JSON.parse(localStorage.getItem(PROGRESS_STORE)||'{}');
+      return data&&typeof data==='object'?data:{};
+    }catch{return {};}
+  };
+  const writeProgress=(gameId,nextRound)=>{
+    if(!EXTRA_IDS.includes(gameId))return;
+    const data=readProgress();
+    data[gameId]=Math.max(0,Number(nextRound)||0);
+    try{localStorage.setItem(PROGRESS_STORE,JSON.stringify(data));}catch{}
   };
   const captureServerGames=()=>{
     try{
@@ -56,12 +69,47 @@
       .then(data=>{
         if(!data||data.ok!==true||!Array.isArray(data.games))return;
         csrfToken=typeof data.csrf==='string'?data.csrf:'';
-        extraGames=data.games.filter(g=>EXTRA_IDS.includes(g.id));
+        const localProgress=readProgress();
+        extraGames=data.games.filter(g=>EXTRA_IDS.includes(g.id)).map(g=>{
+          const serverRound=Math.max(0,Number(g?.progress?.next_round)||0);
+          const localRound=Math.max(0,Number(localProgress[g.id])||0);
+          return {...g,resumeRound:Math.max(serverRound,localRound)};
+        });
         data.games.filter(g=>g.completed&&ALL_GAME_IDS.includes(g.id)).forEach(g=>completed.add(g.id));
         writeStored();
         schedule();
       })
       .catch(err=>console.warn('İlkAdım etkinlik verileri:',err));
+  }
+
+  function postProgress(gameId,nextRound,isCompleted=false,resetProgress=false){
+    if(!ALL_GAME_IDS.includes(gameId))return;
+    if(EXTRA_IDS.includes(gameId))writeProgress(gameId,nextRound);
+
+    const send=()=>{
+      if(!csrfToken)return;
+      nativeFetch('api/activities.php',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json','X-CSRF-Token':csrfToken},
+        body:JSON.stringify({
+          game:gameId,
+          next_round:Math.max(0,Number(nextRound)||0),
+          completed:isCompleted===true,
+          reset_progress:resetProgress===true
+        }),
+        credentials:'same-origin'
+      }).catch(()=>{});
+    };
+
+    if(csrfToken){send();return;}
+    nativeFetch('api/activities.php',{
+      headers:{'Accept':'application/json'},
+      credentials:'same-origin',
+      cache:'no-store'
+    }).then(r=>r.ok?r.json():null).then(data=>{
+      if(data&&typeof data.csrf==='string')csrfToken=data.csrf;
+      send();
+    }).catch(()=>{});
   }
 
   function postCompletion(gameId){
@@ -150,7 +198,7 @@
     }catch{}
   }
 
-  function play(g){
+  function play(g,forceReplay=false){
     const screen=document.getElementById('screen');
     if(!screen)return;
     const mounted=screen.querySelector('[data-extra-game-screen="'+g.id+'"]');
@@ -161,8 +209,22 @@
       '<span>'+esc(g.emoji)+'</span><h1>'+esc(g.name)+'</h1><p>'+esc(g.description)+'</p></div><div id="game-board"></div></div>';
 
     const qs=Array.isArray(g.questions)?g.questions:[];
-    let round=0;
+    let round=forceReplay?0:Math.max(0,Math.min(Number(g.resumeRound)||0,Math.max(0,qs.length-1)));
     const board=document.getElementById('game-board');
+
+    const showCompleted=()=>{
+      board.innerHTML='<section class="game-complete"><span>✅</span><h2>Bu etkinliği tamamladın</h2><p>Daha önce bitirdiğin için tekrar yapmak zorunda değilsin.</p>'+
+        '<a class="button primary full" href="#/etkinlikler">Etkinliklere Dön '+arrow()+'</a>'+
+        '<button class="button soft full" id="extra-replay">Yeniden Oyna</button></section>';
+      const replay=document.getElementById('extra-replay');
+      if(replay)replay.addEventListener('click',()=>{
+        round=0;
+        g.resumeRound=0;
+        postProgress(g.id,0,false,true);
+        show();
+      });
+    };
+
     const show=()=>{
       if(!qs.length){
         board.innerHTML='<section class="game-complete"><span>🧩</span><h2>İçerik hazırlanıyor</h2><p>Bu oyunun görevleri henüz yüklenemedi.</p><a class="button primary full" href="#/etkinlikler">Oyunlara Dön '+arrow()+'</a></section>';
@@ -187,6 +249,16 @@
           feedback.classList.add('success');
           feedback.textContent='🌟 Doğru cevap: '+q.result+'. '+(q.explanation||'Harikasın!');
           board.querySelectorAll('[data-extra-choice]').forEach(x=>x.disabled=true);
+
+          const nextRound=round+1;
+          const finalRound=nextRound>=total;
+          g.resumeRound=nextRound;
+          postProgress(g.id,nextRound,finalRound,false);
+          if(finalRound){
+            completed.add(g.id);
+            writeStored();
+          }
+
           const next=document.getElementById('next-extra-round');
           next.innerHTML='<button class="button primary full" id="advance-extra">'+(round===total-1?'Oyunu Tamamla ✨':'Sonraki Keşif '+arrow())+'</button>';
           document.getElementById('advance-extra').addEventListener('click',()=>{
@@ -194,10 +266,16 @@
             if(round<total) show();
             else{
               markComplete(g);
+              g.resumeRound=total;
               board.innerHTML='<section class="game-complete"><span>🎉</span><h2>Harika iş!</h2><p>'+total+' keşfin tamamını bitirdin.<br>Başarın kaydedildi.</p>'+
                 '<a class="button primary full" href="#/etkinlikler">Oyunlara Dön '+arrow()+'</a>'+
                 '<button class="button soft full" id="extra-again">Yeniden Oyna</button></section>';
-              document.getElementById('extra-again').addEventListener('click',()=>{round=0;show();});
+              document.getElementById('extra-again').addEventListener('click',()=>{
+                round=0;
+                g.resumeRound=0;
+                postProgress(g.id,0,false,true);
+                show();
+              });
             }
           });
         }else{
@@ -206,7 +284,8 @@
         }
       }));
     };
-    show();
+    if(completed.has(g.id)&&!forceReplay)showCompleted();
+    else show();
     window.scrollTo({top:0,behavior:'instant'});
   }
 

@@ -14,6 +14,19 @@ try {
         $completedStmt->execute([$studentId]);
         $completed = array_fill_keys(array_map('strval', $completedStmt->fetchAll(PDO::FETCH_COLUMN)), true);
 
+        $progress = [];
+        try {
+            $progressStmt = $pdo->prepare("SELECT oyun_kodu,sonraki_soru_indeksi,tamamlandi FROM etkinlik_ilerleme WHERE ogrenci_id=?");
+            $progressStmt->execute([$studentId]);
+            foreach ($progressStmt->fetchAll() as $row) {
+                $progress[(string)$row['oyun_kodu']] = [
+                    'next_round'=>(int)$row['sonraki_soru_indeksi'],
+                    'completed'=>(int)$row['tamamlandi']===1,
+                ];
+            }
+            $progressStmt->closeCursor();
+        } catch (Throwable) {}
+
         $out = [];
         foreach ($games as $game) {
             $questionStmt->execute([(int)$game['id']]);
@@ -39,6 +52,7 @@ try {
                 'color'=>(string)$game['renk'],
                 'description'=>(string)$game['aciklama'],
                 'completed'=>isset($completed[(string)$game['kod']]),
+                'progress'=>$progress[(string)$game['kod']] ?? ['next_round'=>0,'completed'=>false],
                 'questions'=>$questions,
             ];
         }
@@ -63,18 +77,61 @@ try {
         json_response(['ok'=>false,'message'=>'Geçersiz oyun kodu.'],400);
     }
 
-    $check = $pdo->prepare("SELECT COUNT(*) FROM etkinlik_oyunlari WHERE kod=? AND aktif=1");
+    $check = $pdo->prepare("SELECT o.id,(SELECT COUNT(*) FROM etkinlik_sorulari s WHERE s.oyun_id=o.id AND s.aktif=1) soru_sayisi FROM etkinlik_oyunlari o WHERE o.kod=? AND o.aktif=1 LIMIT 1");
     $check->execute([$gameCode]);
-    if ((int)$check->fetchColumn() < 1) {
+    $gameRow=$check->fetch();
+    $check->closeCursor();
+    if (!is_array($gameRow)) {
         json_response(['ok'=>false,'message'=>'Oyun bulunamadı.'],404);
     }
 
-    $stmt = $pdo->prepare("INSERT INTO oyun_tamamlamalari (ogrenci_id,oyun_kodu,tamamlanma_tarihi)
-                           VALUES (?,?,NOW())
-                           ON DUPLICATE KEY UPDATE tamamlanma_tarihi=VALUES(tamamlanma_tarihi)");
-    $stmt->execute([$studentId,$gameCode]);
+    $hasProgress=is_array($payload) && array_key_exists('next_round',$payload);
+    $nextRound=$hasProgress?(int)$payload['next_round']:0;
+    $questionCount=max(0,(int)($gameRow['soru_sayisi']??0));
+    if($nextRound<0 || $nextRound>$questionCount){
+        json_response(['ok'=>false,'message'=>'Geçersiz etkinlik ilerlemesi.'],400);
+    }
 
-    json_response(['ok'=>true,'game'=>$gameCode,'completed'=>true]);
+    $resetProgress=is_array($payload) && ($payload['reset_progress']??false)===true;
+    $markCompleted=is_array($payload)
+        ? (($payload['completed']??false)===true || !$hasProgress)
+        : true;
+
+    try {
+        if($resetProgress){
+            $progressStmt=$pdo->prepare("INSERT INTO etkinlik_ilerleme (ogrenci_id,oyun_kodu,sonraki_soru_indeksi,tamamlandi)
+                                         VALUES (?,?,0,0)
+                                         ON DUPLICATE KEY UPDATE sonraki_soru_indeksi=0");
+            $progressStmt->execute([$studentId,$gameCode]);
+        }else{
+            $progressStmt=$pdo->prepare("INSERT INTO etkinlik_ilerleme (ogrenci_id,oyun_kodu,sonraki_soru_indeksi,tamamlandi)
+                                         VALUES (?,?,?,?)
+                                         ON DUPLICATE KEY UPDATE
+                                           sonraki_soru_indeksi=GREATEST(sonraki_soru_indeksi,VALUES(sonraki_soru_indeksi)),
+                                           tamamlandi=GREATEST(tamamlandi,VALUES(tamamlandi))");
+            $progressStmt->execute([$studentId,$gameCode,$nextRound,$markCompleted?1:0]);
+        }
+    } catch (Throwable $e) {
+        error_log('[IlkAdim][activities-progress] '.$e->getMessage());
+        if($hasProgress){
+            json_response(['ok'=>false,'message'=>'Etkinlik ilerlemesi kaydedilemedi.'],500);
+        }
+    }
+
+    if($markCompleted){
+        $stmt = $pdo->prepare("INSERT INTO oyun_tamamlamalari (ogrenci_id,oyun_kodu,tamamlanma_tarihi)
+                               VALUES (?,?,NOW())
+                               ON DUPLICATE KEY UPDATE tamamlanma_tarihi=VALUES(tamamlanma_tarihi)");
+        $stmt->execute([$studentId,$gameCode]);
+    }
+
+    json_response([
+        'ok'=>true,
+        'game'=>$gameCode,
+        'completed'=>$markCompleted,
+        'next_round'=>$nextRound,
+        'question_count'=>$questionCount,
+    ]);
 } catch (Throwable $e) {
     error_log('[IlkAdim][activities] '.$e->getMessage());
     json_response(['ok'=>false,'message'=>'Etkinlik verileri şu anda alınamadı. Lütfen tekrar deneyin.'],500);
