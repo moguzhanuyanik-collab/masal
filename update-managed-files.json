@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.74",
+  "version": "1.2.75",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -250,6 +250,7 @@
     "RELEASE-1.2.72.md",
     "RELEASE-1.2.73.md",
     "RELEASE-1.2.74.md",
+    "RELEASE-1.2.75.md",
     "RELEASE-1.2.8.md",
     "RELEASE-1.2.9.md",
     "YETKILENDIRME-1.0.35.md",
@@ -718,6 +719,8 @@
     "tests/reconciliation-inbox-187.cjs",
     "tests/reconciliation-inbox-db-187.php",
     "tests/reconciliation-inbox-target-risk-196.cjs",
+    "tests/reconciliation-inbox-target-risk-bulk-send-200.cjs",
+    "tests/reconciliation-inbox-target-risk-bulk-send-db-200.php",
     "tests/reconciliation-inbox-target-risk-db-196.php",
     "tests/reconciliation-inbox-target-risk-send-199.cjs",
     "tests/reconciliation-inbox-target-risk-send-db-199.php",
@@ -875,5 +878,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Mutabakat günlük iş kutusu tek vaka hedef risk bildirimi"
+  "name": "Mutabakat günlük iş kutusu seçili toplu hedef risk bildirimi"
 }
