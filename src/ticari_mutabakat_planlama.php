@@ -151,6 +151,110 @@ function map_bulk_plan(
     ];
 }
 
+function map_bulk_reschedule_preserve_owners(
+    PDO $pdo,
+    array $actor,
+    array $caseIds,
+    string $nextActionDate,
+    string $note=''
+): array {
+    if((string)(auth_effective_role($actor)??'')!=='super_admin'){
+        throw new RuntimeException('Süper Admin yetkisi gerekli.');
+    }
+    if(!map_tables_ready($pdo)){
+        throw new RuntimeException('Mutabakat aksiyon tabloları henüz hazır değil.');
+    }
+
+    $ids=map_normalize_case_ids($caseIds);
+    $next=ma_validate_date($nextActionDate);
+    if($next===null) throw new RuntimeException('Sonraki aksiyon tarihi zorunludur.');
+    if($next<date('Y-m-d')) throw new RuntimeException('Sonraki aksiyon tarihi geçmişte olamaz.');
+
+    $note=trim($note);
+    if(mb_strlen($note)>600) throw new RuntimeException('Toplu takip notu en fazla 600 karakter olabilir.');
+
+    $actorId=max(0,(int)($actor['id']??0));
+    $ph=implode(',',array_fill(0,count($ids),'?'));
+    $owners=[];
+
+    $started=false;
+    try{
+        if(!$pdo->inTransaction()){$pdo->beginTransaction();$started=true;}
+
+        $stmt=$pdo->prepare("SELECT *
+            FROM ticari_mutabakat_vakalari
+            WHERE id IN ({$ph})
+            ORDER BY id
+            FOR UPDATE");
+        $stmt->execute($ids);
+        $cases=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+
+        if(count($cases)!==count($ids)){
+            throw new RuntimeException('Seçilen vakalardan biri artık bulunamıyor.');
+        }
+
+        foreach($cases as $case){
+            if(!in_array((string)$case['durum'],ma_open_stages(),true)){
+                throw new RuntimeException('Seçilen vakalardan biri artık açık değil. Listeyi yenileyip tekrar dene.');
+            }
+            if(!ma_case_source_still_open($pdo,$case)){
+                throw new RuntimeException('Seçilen vakalardan birinin kaynak sorunu artık açık değil. Listeyi yenileyip tekrar dene.');
+            }
+            $ownerId=(int)($case['sorumlu_kullanici_id']??0);
+            if($ownerId<=0) throw new RuntimeException('Seçilen vakalardan birinin güncel sorumlusu yok.');
+            if(!isset($owners[$ownerId])){
+                $owners[$ownerId]=map_validate_owner($pdo,$ownerId);
+            }
+        }
+
+        $update=$pdo->prepare("UPDATE ticari_mutabakat_vakalari
+            SET sonraki_aksiyon_tarihi=?,guncelleyen_kullanici_id=?
+            WHERE id=? AND durum IN ('acik','incelemede','beklemede')");
+
+        foreach($cases as $case){
+            $caseId=(int)$case['id'];
+            $ownerId=(int)$case['sorumlu_kullanici_id'];
+            $ownerName=trim((string)($owners[$ownerId]['ad_soyad']??('Kullanıcı #'.$ownerId)));
+            $oldDate=(string)($case['sonraki_aksiyon_tarihi']??'');
+
+            $update->execute([$next,$actorId>0?$actorId:null,$caseId]);
+            if($update->rowCount()>1){
+                throw new RuntimeException('Toplu takip planlama güncellemesi beklenmeyen satır sayısı üretti.');
+            }
+
+            $parts=[
+                'Sorumlu korunuyor: '.$ownerName.' (#'.$ownerId.')',
+                'Sonraki aksiyon: '.($oldDate!==''?$oldDate:'Yok').' → '.$next,
+            ];
+            if($note!=='')$parts[]='Takip notu: '.$note;
+
+            ma_history_add(
+                $pdo,$caseId,$actorId>0?$actorId:null,
+                'planlama','toplu_takip_planlama',implode(' · ',$parts)
+            );
+        }
+        $update->closeCursor();
+
+        if($started)$pdo->commit();
+    }catch(Throwable $e){
+        if($started && $pdo->inTransaction())$pdo->rollBack();
+        throw $e;
+    }
+
+    auth_audit(
+        $pdo,$actorId>0?$actorId:null,null,
+        'mutabakat_toplu_takip_planlama',
+        count($ids).' vaka · '.count($owners).' mevcut sorumlu · aksiyon '.$next
+    );
+
+    return [
+        'updated'=>count($ids),
+        'owner_count'=>count($owners),
+        'next_action_date'=>$next,
+    ];
+}
+
 function map_recent_planning(PDO $pdo,int $limit=100): array {
     if(!map_tables_ready($pdo)) return [];
     $limit=max(1,min(300,$limit));
