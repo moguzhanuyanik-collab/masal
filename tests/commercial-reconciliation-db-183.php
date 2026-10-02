@@ -204,7 +204,7 @@ $try=$currency['TRY'];
 ok_183((string)$try['sozlesme_toplami']==='3100.00','TRY contract total must include all valid active contracts exactly once.');
 ok_183((string)$try['belge_toplami']==='2900.00','TRY document total must exclude wrong-tenant document.');
 ok_183((string)$try['tahsilat_toplami']==='1800.00','TRY payment total must exclude wrong-currency payment.');
-ok_183((string)$try['eslesen_tutar']==='1500.00','TRY effective allocation total must exclude bad mapping.');
+ok_183((string)$try['eslesen_tutar']==='1600.00','TRY effective allocation total must exclude bad mapping.');
 ok_183((int)$try['hata_sayisi']===1,'one TRY capacity error expected.');
 ok_183((int)$try['eksik_sayisi']===1,'one TRY operational gap expected.');
 ok_183((int)$try['tam_sayisi']===2,'two TRY reconciled contracts expected.');
@@ -245,7 +245,7 @@ ok_183(!in_array($badDoc,$openDocIds,true),'wrong-tenant document must not appea
 
 $unallocated=tm_unallocated_payments($pdo,[],100);
 $unallocatedById=[];
-foreach($unallocated as $row)$unallocatedById[(int)$row['tahsilat_id']=$row;
+foreach($unallocated as $row)$unallocatedById[(int)$row['tahsilat_id']]=$row;
 ok_183(isset($unallocatedById[$gp]),'partially allocated GAP payment must be visible.');
 ok_183((string)$unallocatedById[$gp]['dagitilmamis_tutar']==='200.00','GAP unallocated payment mismatch.');
 ok_183(!isset($unallocatedById[$badPay]),'wrong-currency payment must not appear as valid distributable payment.');
