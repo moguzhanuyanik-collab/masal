@@ -63,6 +63,7 @@ $rows=$ready?mhs_case_rows($pdo,$filters,900):[];
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Mutabakat Aksiyon Sağlığı</small></span></a>
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-mutabakat-aksiyon.php" aria-label="Mutabakat Aksiyon"><svg><use href="#sa-alert"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-planlama.php" aria-label="Toplu Planlama"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat.php" aria-label="Mutabakat Kontrol"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-dashboard.php" aria-label="Ticari Dashboard"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
@@ -77,7 +78,7 @@ $rows=$ready?mhs_case_rows($pdo,$filters,900):[];
 <span class="role-hero-art">🩺</span>
 </section>
 
-<div class="role-note"><span>ℹ️</span><p>Bu ekran SLA kararı vermez ve keyfi puan üretmez. Yalnız mevcut vaka yaşı, sorumlu, takip tarihi ve append-only geçmişten türetilen objektif operasyon göstergelerini sunar. Vaka üzerinde işlem yapmak için <a href="ticari-mutabakat-aksiyon.php">Mutabakat Aksiyon Merkezi</a> kullanılır.</p></div>
+<div class="role-note"><span>ℹ️</span><p>Bu ekran SLA kararı vermez ve keyfi puan üretmez. Yalnız mevcut vaka yaşı, sorumlu, takip tarihi ve append-only geçmişten türetilen objektif operasyon göstergelerini sunar. Vaka bazlı işlem için <a href="ticari-mutabakat-aksiyon.php">Mutabakat Aksiyon Merkezi</a>, çoklu sahiplik/tarih planlaması için <a href="ticari-mutabakat-planlama.php">Toplu Planlama</a> kullanılır.</p></div>
 
 <?php if(!$ready):?>
 <div class="role-note"><span>⚠️</span><p>1.2.59 mutabakat aksiyon tabloları hazır değil. 086 migration kurulduğunda sağlık görünümü otomatik açılır.</p></div>
@@ -196,6 +197,7 @@ $tags=mhs_health_tags($row);
 <a href="ticari-mutabakat.php"><span>⚖️</span>Mutabakat</a>
 <a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 <a class="active" href="ticari-mutabakat-saglik.php"><span>🩺</span>Sağlık</a>
+<a href="ticari-mutabakat-planlama.php"><span>🗂️</span>Planlama</a>
 <a href="ticari-belgeler.php"><span>🧾</span>Belgeler</a>
 <a href="ticari-finans.php"><span>₺</span>Finans</a>
 </nav>
