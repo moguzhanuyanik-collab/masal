@@ -25,7 +25,8 @@ assert(domain.includes('function mdv_recent_transfers('),'owner transfer audit f
 for(const code of ['sahipsiz','pasif','rol_gecersiz','kullanici_yok','gecerli']){
   assert(domain.includes("'kod'=>'"+code+"'"),'owner state missing: '+code);
 }
-assert(domain.includes("u.aktif")===false || true,'placeholder');
+assert(domain.includes("if((int)($row['aktif']??0)!==1)"),
+  'inactive owner detection missing');
 assert(domain.includes("rol='super_admin'"),'secondary Super Admin owner validation missing');
 assert(domain.includes("if(count($ids)>100)"),'100-case recovery cap missing');
 assert(domain.includes("SELECT *") && domain.includes('FOR UPDATE'),'selected recovery cases must be row-locked');
