@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.63",
+  "version": "1.2.64",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -238,6 +238,7 @@
     "RELEASE-1.2.61.md",
     "RELEASE-1.2.62.md",
     "RELEASE-1.2.63.md",
+    "RELEASE-1.2.64.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
     "RELEASE-1.2.9.md",
@@ -565,6 +566,7 @@
     "src/ticari_finans.php",
     "src/ticari_mutabakat.php",
     "src/ticari_mutabakat_aksiyon.php",
+    "src/ticari_mutabakat_devir.php",
     "src/ticari_mutabakat_hatirlatma.php",
     "src/ticari_mutabakat_is_kutusu.php",
     "src/ticari_mutabakat_planlama.php",
@@ -690,6 +692,8 @@
     "tests/reconciliation-health-db-185.php",
     "tests/reconciliation-inbox-187.cjs",
     "tests/reconciliation-inbox-db-187.php",
+    "tests/reconciliation-owner-recovery-189.cjs",
+    "tests/reconciliation-owner-recovery-db-189.php",
     "tests/reconciliation-reminders-188.cjs",
     "tests/reconciliation-reminders-db-188.php",
     "tests/recovery-safety-100.cjs",
@@ -778,6 +782,8 @@
     "ticari-finans.php",
     "ticari-mutabakat-aksiyon.css",
     "ticari-mutabakat-aksiyon.php",
+    "ticari-mutabakat-devir.css",
+    "ticari-mutabakat-devir.php",
     "ticari-mutabakat-hatirlatma.css",
     "ticari-mutabakat-hatirlatma.php",
     "ticari-mutabakat-is-kutusu.css",
@@ -818,5 +824,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Mutabakat aksiyon hatırlatmaları"
+  "name": "Mutabakat sorumlu devir ve yetim vaka kurtarma"
 }

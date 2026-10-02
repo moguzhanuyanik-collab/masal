@@ -52,6 +52,7 @@ $team=$ready?mi_team_workload($pdo,100):[];
 <header class="role-topbar">
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Mutabakat Günlük İş Kutusu</small></span></a>
 <div class="sa-page-actions">
+<a class="sa-page-action" href="ticari-mutabakat-devir.php" aria-label="Sorumlu Devir"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-aksiyon.php" aria-label="Aksiyon Merkezi"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hatirlatma.php" aria-label="Aksiyon Hatırlatmaları"><svg><use href="#sa-bell"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-planlama.php" aria-label="Toplu Planlama"><svg><use href="#sa-refresh"/></svg></a>
@@ -139,6 +140,7 @@ $team=$ready?mi_team_workload($pdo,100):[];
 <a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 <a href="ticari-mutabakat-saglik.php"><span>🩺</span>Sağlık</a>
 <a href="ticari-mutabakat-planlama.php"><span>🗂️</span>Planlama</a>
+<a href="ticari-mutabakat-devir.php"><span>🔁</span>Devir</a>
 </nav>
 </div>
 </body>

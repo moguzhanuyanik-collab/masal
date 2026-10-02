@@ -79,6 +79,7 @@ foreach($candidates as $row){
 <a class="sa-page-action" href="ticari-mutabakat-is-kutusu.php" aria-label="Günlük İş Kutusu"><svg><use href="#sa-card"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-aksiyon.php" aria-label="Aksiyon Merkezi"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-planlama.php" aria-label="Toplu Planlama"><svg><use href="#sa-refresh"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-devir.php" aria-label="Sorumlu Devir"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
 </header>
@@ -99,7 +100,7 @@ foreach($candidates as $row){
 <section class="mr-summary">
 <div><strong><?=$pending?></strong><span>Gönderim bekliyor</span></div>
 <div><strong><?=$sentCurrent?></strong><span>Mevcut eşik gönderildi</span></div>
-<div><strong><?=$invalidOwner?></strong><span>Geçersiz/pasif sorumlu</span></div>
+<a href="ticari-mutabakat-devir.php"><strong><?=$invalidOwner?></strong><span>Geçersiz/pasif sorumlu</span></a>
 <div><strong><?=$noInstitution?></strong><span>Kurumsuz vaka</span></div>
 <div><strong><?=(int)($summary['toplam']??0)?></strong><span>Toplam geçmiş</span></div>
 </section>
@@ -177,6 +178,7 @@ $sent=!empty($row['gonderildi']);
 <a class="active" href="ticari-mutabakat-hatirlatma.php"><span>🔔</span>Hatırlatma</a>
 <a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 <a href="ticari-mutabakat-planlama.php"><span>🗂️</span>Planlama</a>
+<a href="ticari-mutabakat-devir.php"><span>🔁</span>Devir</a>
 </nav>
 </div>
 </body>
