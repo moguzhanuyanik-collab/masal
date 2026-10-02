@@ -55,9 +55,14 @@ if(Number(version.version.split('.')[2])<74){
   assert(page.includes('İş Kutusu hedef-risk hesabını değiştirmez.'),
     '1.2.74+ controlled target-risk send disclosure missing');
   assert(page.includes("$_SERVER['REQUEST_METHOD']==='POST'"),
-    '1.2.74+ exact-case target-risk POST missing');
-  assert(page.includes("if($action!=='send_target_risk')"),
-    '1.2.74+ target-risk inbox must whitelist the exact send action');
+    '1.2.74+ target-risk POST missing');
+  if(Number(version.version.split('.')[2])<75){
+    assert(page.includes("if($action!=='send_target_risk')"),
+      '1.2.74 target-risk inbox must whitelist the exact send action');
+  }else{
+    assert(page.includes("in_array($action,['send_target_risk','send_target_risk_batch'],true)"),
+      '1.2.75+ target-risk inbox must keep single/batch target-risk actions in a closed whitelist');
+  }
   assert(page.includes('mi_send_target_risk_case($pdo,$user,$caseId)'),
     '1.2.74+ target-risk inbox must reuse the exact-case send adapter');
 }
