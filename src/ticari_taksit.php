@@ -256,8 +256,9 @@ function tp_deactivate_plan(PDO $pdo,array $actor,int $contractId): void {
         $contract=$contractLock->fetch(PDO::FETCH_ASSOC);
         $contractLock->closeCursor();
         if(!is_array($contract)) throw new RuntimeException('Sözleşme bulunamadı.');
-        if(tp_payment_history_count($pdo,$contractId)>0){
-            throw new RuntimeException('Tahsilat geçmişi başlayan sözleşmenin aktif taksit planı kapatılamaz.');
+        $paymentCounts=tf_contract_payment_counts($pdo,$contractId);
+        if((int)($paymentCounts['aktif']??0)>0){
+            throw new RuntimeException('Aktif tahsilatı bulunan sözleşmenin taksit planı pasif hale getirilemez. Önce aktif tahsilatları iptal et.');
         }
 
         $plan=tp_plan_row($pdo,$contractId,true);
