@@ -11,6 +11,8 @@ require __DIR__.'/src/ticari_mutabakat_performans.php';
 require __DIR__.'/src/ticari_mutabakat_hedef.php';
 require __DIR__.'/src/ticari_mutabakat_hedef_risk.php';
 require __DIR__.'/src/ticari_mutabakat_is_kutusu.php';
+require __DIR__.'/src/bildirimler.php';
+require __DIR__.'/src/ticari_mutabakat_hedef_risk_bildirim.php';
 
 $user=require_role('super_admin');
 $pdo=db();
@@ -26,16 +28,88 @@ function mi_due_label(?string $value): string {
     return $value;
 }
 
+function mi_return_query(array $source): string {
+    $out=[];
+    $scope=(string)($source['scope']??'mine');
+    if(array_key_exists($scope,mi_scope_labels()) && $scope!=='mine')$out['scope']=$scope;
+
+    $window=(string)($source['window']??'all');
+    if(array_key_exists($window,mi_window_labels()) && $window!=='all')$out['window']=$window;
+
+    $type=(string)($source['sorun_turu']??'');
+    if(in_array($type,['operasyon','butunluk'],true))$out['sorun_turu']=$type;
+
+    $risk=(string)($source['risk']??'');
+    if(array_key_exists($risk,mi_target_risk_labels()) && $risk!=='')$out['risk']=$risk;
+
+    $owner=(string)($source['owner_id']??'');
+    if($owner==='unassigned')$out['owner_id']='unassigned';
+    elseif((int)$owner>0)$out['owner_id']=(string)(int)$owner;
+
+    $q=trim((string)($source['q']??''));
+    if($q!=='')$out['q']=mb_substr($q,0,160);
+
+    return http_build_query($out);
+}
+
+function mi_redirect_url(array $source,string $message): string {
+    $query=mi_return_query($source);
+    $query.=$query!==''?'&':'';
+    $query.='ok='.rawurlencode($message);
+    return 'ticari-mutabakat-is-kutusu.php?'.$query;
+}
+
+$error='';
+$success=trim((string)($_GET['ok']??''));
 $ready=mi_tables_ready($pdo);
-$scope=(string)($_GET['scope']??'mine');
+
+if($_SERVER['REQUEST_METHOD']==='POST'){
+    try{
+        if(!verify_csrf($_POST['csrf']??null)) throw new RuntimeException('Güvenlik doğrulaması başarısız. Sayfayı yenileyip tekrar dene.');
+        if(!$ready) throw new RuntimeException('Mutabakat aksiyon tabloları hazır değil.');
+
+        $action=(string)($_POST['action']??'');
+        if($action!=='send_target_risk') throw new RuntimeException('Geçersiz işlem.');
+
+        if(function_exists('ma_sync_cases')) ma_sync_cases($pdo,$user);
+        $caseId=max(0,(int)($_POST['vaka_id']??0));
+        $send=mi_send_target_risk_case($pdo,$user,$caseId);
+        $status=(string)($send['status']??'failed');
+
+        $message=match($status){
+            'sent'=>'Güncel hedef-risk bildirimi vaka sorumlusu Süper Admin kullanıcısına gönderildi.',
+            'not_pending'=>'Bu vaka için güncel hedef-risk bildirimi artık gönderim beklemiyor.',
+            'no_context'=>'Vakanın güncel hedef-risk bağlamı artık çözülemiyor.',
+            'invalid_owner'=>'Vakanın bildirim alabilecek aktif Süper Admin sorumlusu bulunmuyor.',
+            'no_institution'=>'Vakanın kurum bağlamı olmadığı için hedef-risk bildirimi gönderilemedi.',
+            'stale_source'=>'Kaynak sorun artık açık olmadığı için hedef-risk bildirimi gönderilmedi.',
+            'no_longer_required'=>'Vakanın güncel hedef-risk sinyali artık bildirim gerektirmiyor.',
+            'skipped'=>'Bildirim daha önce gönderilmiş veya vaka bağlamı işlem sırasında değişmiş.',
+            default=>'Hedef-risk bildirimi oluşturulamadı.',
+        };
+
+        if(in_array($status,['invalid_owner','no_institution','failed'],true)){
+            throw new RuntimeException($message);
+        }
+
+        header('Location: '.mi_redirect_url($_POST,$message));
+        exit;
+    }catch(PDOException $e){
+        $error='Veritabanı işlemi tamamlanamadı.';
+    }catch(Throwable $e){
+        $error=$e->getMessage();
+    }
+}
+
+$scope=(string)($_GET['scope']??$_POST['scope']??'mine');
 if(!array_key_exists($scope,mi_scope_labels()))$scope='mine';
-$window=(string)($_GET['window']??'all');
+$window=(string)($_GET['window']??$_POST['window']??'all');
 if(!array_key_exists($window,mi_window_labels()))$window='all';
-$type=(string)($_GET['sorun_turu']??'');
-$risk=(string)($_GET['risk']??'');
+$type=(string)($_GET['sorun_turu']??$_POST['sorun_turu']??'');
+$risk=(string)($_GET['risk']??$_POST['risk']??'');
 if(!array_key_exists($risk,mi_target_risk_labels()))$risk='';
-$ownerFilter=(string)($_GET['owner_id']??'');
-$query=trim((string)($_GET['q']??''));
+$ownerFilter=(string)($_GET['owner_id']??$_POST['owner_id']??'');
+$query=trim((string)($_GET['q']??$_POST['q']??''));
 
 $summary=$ready?mi_summary($pdo,$user):[];
 $rows=$ready?mi_case_rows($pdo,$user,['scope'=>$scope,'window'=>$window,'sorun_turu'=>$type,'risk'=>$risk,'owner_id'=>$ownerFilter,'q'=>$query],700):[];
@@ -49,7 +123,7 @@ $team=$ready?mi_team_workload($pdo,100,$user):[];
 <title>Mutabakat Günlük İş Kutusu — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
-<link rel="stylesheet" href="ticari-mutabakat-is-kutusu.css?v=1.2.71">
+<link rel="stylesheet" href="ticari-mutabakat-is-kutusu.css?v=1.2.74">
 </head>
 <body class="role-page sa-subpage">
 <?php require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -77,6 +151,8 @@ $team=$ready?mi_team_workload($pdo,100,$user):[];
 <span class="role-hero-art">📥</span>
 </section>
 
+<?php if($error!==''):?><div class="role-note"><span>⚠️</span><p><?=mih($error)?></p></div><?php endif;?>
+<?php if($success!==''):?><div class="role-note"><span>✅</span><p><?=mih($success)?></p></div><?php endif;?>
 <?php if(!$ready):?><div class="role-note"><span>⚠️</span><p>Mutabakat aksiyon tabloları hazır değil.</p></div><?php else:?>
 
 <section class="mi-summary">
@@ -116,6 +192,7 @@ $team=$ready?mi_team_workload($pdo,100,$user):[];
 <div class="role-list mi-list">
 <?php if(!$rows):?><div class="role-empty"><span>✅</span>Filtreye uyan açık mutabakat vakası yok.</div><?php endif;?>
 <?php foreach($rows as $row):?>
+<div class="mi-row-wrap">
 <a class="role-row mi-row" href="ticari-mutabakat-aksiyon.php?vaka_id=<?=(int)$row['id']?>">
 <span><?=((string)$row['sorun_turu']==='butunluk'?'🚨':'🧩')?></span>
 <div>
@@ -136,6 +213,22 @@ $team=$ready?mi_team_workload($pdo,100,$user):[];
 <?php if(!empty($row['hedef_bildirim_bekliyor'])):?><span class="role-pill target-pending">Bildirim Bekliyor</span><?php endif;?>
 </div>
 </a>
+<?php if(!empty($row['hedef_bildirim_bekliyor'])):?>
+<form class="mi-risk-send" method="post">
+<input type="hidden" name="csrf" value="<?=mih(csrf_token())?>">
+<input type="hidden" name="action" value="send_target_risk">
+<input type="hidden" name="vaka_id" value="<?=(int)$row['id']?>">
+<input type="hidden" name="scope" value="<?=mih($scope)?>">
+<input type="hidden" name="window" value="<?=mih($window)?>">
+<input type="hidden" name="sorun_turu" value="<?=mih($type)?>">
+<input type="hidden" name="risk" value="<?=mih($risk)?>">
+<input type="hidden" name="owner_id" value="<?=mih($ownerFilter)?>">
+<input type="hidden" name="q" value="<?=mih($query)?>">
+<button type="submit">Güncel Hedef-Risk Bildirimini Gönder</button>
+<small>Aynı vaka + current owner + current reopen döngüsü + current sinyal ikinci kez gönderilemez.</small>
+</form>
+<?php endif;?>
+</div>
 <?php endforeach;?>
 </div>
 </section>
@@ -152,7 +245,7 @@ $team=$ready?mi_team_workload($pdo,100,$user):[];
 </div>
 </section>
 
-<div class="role-note"><span>🔒</span><p>Bu ekran salt-okunurdur. Hedef-risk sinyali veya bildirim üretmez; yalnız mevcut 1.2.68/1.2.69 verisini güncel açık döngü ve mevcut sorumlu bağlamında gösterir. Vaka düzenleme için Aksiyon Merkezi'ni, bildirim gönderimi için Hedef Risk Bildirimleri merkezini kullan.</p></div>
+<div class="role-note"><span>🔒</span><p>İş Kutusu hedef-risk hesabını değiştirmez. Yalnız “Bildirim Bekliyor” vakasında, mevcut 1.2.69/1.2.73 güvenlik motorunu kullanarak seçili vakaya tek-vaka bildirim gönderebilir. Vaka düzenleme için Aksiyon Merkezi'ni kullan.</p></div>
 <?php endif;?>
 </main>
 <nav class="role-bottom">

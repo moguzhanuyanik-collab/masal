@@ -83,10 +83,19 @@ assert(!page.includes("mr_sync($pdo,$user);\n$summary"),
 for(const content of [inbox,action,health,planning,dashboard,admin]){
   assert(content.includes('ticari-mutabakat-hatirlatma.php'),'cross-navigation to reminder center missing');
 }
-assert(inbox.includes('Bu ekran salt-okunurdur.'),
-  'daily inbox must remain read-only after reminder release');
-assert(!inbox.includes("$_SERVER['REQUEST_METHOD']==='POST'"),
-  'daily inbox must not absorb reminder POST writes');
+if(Number(version.version.split('.')[2])<74){
+  assert(inbox.includes('Bu ekran salt-okunurdur.'),
+    'legacy daily inbox must remain read-only after reminder release');
+  assert(!inbox.includes("$_SERVER['REQUEST_METHOD']==='POST'"),
+    'legacy daily inbox must not absorb reminder POST writes');
+}else{
+  assert(inbox.includes("$_SERVER['REQUEST_METHOD']==='POST'"),
+    '1.2.74+ daily inbox exact-case target-risk POST missing');
+  assert(inbox.includes("if($action!=='send_target_risk')"),
+    '1.2.74+ daily inbox must not absorb reminder or arbitrary POST writes');
+  assert(!inbox.includes("name=\"action\" value=\"sync\""),
+    'daily inbox must not absorb action-reminder sync');
+}
 
 assert(css.includes('.mr-summary'),'reminder summary styles missing');
 assert(css.includes('.mr-history'),'reminder history styles missing');
@@ -119,4 +128,4 @@ for(const path of [
   'tests/reconciliation-reminders-db-188.php'
 ]) assert(manifest.files.includes(path),'manifest missing '+path);
 
-console.log('PASS: reconciliation action reminders, Super Admin recipient support, dedup and read-only inbox separation');
+console.log('PASS: reconciliation action reminders, Super Admin recipient support, dedup and controlled inbox-write separation');
