@@ -67,7 +67,7 @@ $rows=$ready?mrh_rows($pdo,$filters,1200):[];
 <span class="role-hero-art">📨</span>
 </section>
 
-<div class="role-note"><span>ℹ️</span><p>Bu ekran bildirim göndermez. Eski reopen döngüsü veya eski sorumluya ait bildirimler tarihsel geçmiş olarak korunur ve bugünkü açık vaka KPI'larına katılmaz. Güncel açık + okunmamış vakaları takip tarihine bağlamak için Okunmamış Risk Takip Planlama merkezini kullanabilirsin.</p></div>
+<div class="role-note"><span>ℹ️</span><p>Bu ekran bildirim göndermez. Eski reopen döngülerine ait bildirimler tarihsel geçmiş olarak korunur ve bugünkü açık vaka KPI'larına katılmaz. Aynı current döngüde eski sorumluya ait bildirimler de tarihsel geçmişte ayrı tutulur. Güncel açık + okunmamış vakaları takip tarihine bağlamak için Okunmamış Risk Takip Planlama merkezini kullanabilirsin.</p></div>
 
 <?php if(!$ready):?>
 <div class="role-note"><span>⚠️</span><p>Hedef-risk bildirim, vaka, politika veya merkezi bildirim tabloları hazır değil.</p></div>
