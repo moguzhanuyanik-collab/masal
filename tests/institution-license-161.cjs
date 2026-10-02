@@ -41,7 +41,7 @@ assert(page.includes("name=\"veli_limiti\""),'parent limit form missing');
 assert(page.includes("name=\"ai_aylik_kota\""),'AI quota field missing');
 assert(page.includes("name=\"baslangic_tarihi\""),'license start date missing');
 assert(page.includes("name=\"bitis_tarihi\""),'license end date missing');
-assert(admin.includes('href="paketler.php"'),'Super Admin package navigation missing');
+assert(!admin.includes('href="paketler.php"'),'legacy package navigation must stay hidden from the education-focused Super Admin');
 
 assert(migration.includes('CREATE TABLE IF NOT EXISTS paketler'),'package table migration missing');
 assert(migration.includes('CREATE TABLE IF NOT EXISTS kurum_lisanslari'),'institution license table migration missing');
