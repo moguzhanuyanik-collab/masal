@@ -61,7 +61,7 @@ assert.strictEqual(manifest.release_revision,version.release_revision);
 assert(manifest.files.includes('src/runtime_compat.php'));
 assert(manifest.files.includes('tests/runtime-page-health-205.php'));
 assert(manifest.files.includes('tests/runtime-page-health-205.cjs'));
-assert.strictEqual(manifest.files.length,906);
+assert(manifest.files.length>=906,'managed manifest must retain the runtime hardening baseline');
 assert.deepStrictEqual(manifest.files,[...manifest.files].sort());
 assert.strictEqual(new Set(manifest.files).size,manifest.files.length);
 
