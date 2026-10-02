@@ -202,7 +202,7 @@ $newPlanId=add_plan_202($pdo,1,$plan,'Yeni plan');
 // Standard notices + plans.
 for($id=2;$id<=10;$id++){
     $signal=in_array($id,[8],true)?'hedef_75':'hedef_disinda';
-    add_notice_202($pdo,100+$id,$id,1,$cycles[$id],$signal,1000+$id,$sent,$id===5?$fmt($now->modify('-12 hours')):null);
+    add_notice_202($pdo,200+$id,$id,1,$cycles[$id],$signal,1000+$id,$sent,$id===5?$fmt($now->modify('-12 hours')):null);
     add_plan_202($pdo,$id,$plan,'Plan '.$id);
 }
 
@@ -210,7 +210,7 @@ for($id=2;$id<=10;$id++){
 add_plan_202($pdo,11,$plan,'Bildirimsiz plan');
 
 // Case 12: planned notice differs from exact current notification.
-add_notice_202($pdo,112,12,1,$cycles[12],'hedef_disinda',1012,$sent);
+add_notice_202($pdo,212,12,1,$cycles[12],'hedef_disinda',1012,$sent);
 add_plan_202($pdo,12,$plan,'Bildirim değişim planı');
 
 $reopen=$fmt($now->modify('-6 hours'));
@@ -219,22 +219,22 @@ $pdo->prepare("INSERT INTO ticari_mutabakat_vaka_gecmisi
   VALUES (7,1,'durum','vaka_yeniden_acildi','Yeni döngü',?)")->execute([$reopen]);
 
 $GLOBALS['map_202']=[
-  1=>['hedef_bildirim_id'=>102,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
+  1=>['hedef_bildirim_id'=>202,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
   2=>['hedef_bildirim_id'=>102,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
-  3=>['hedef_bildirim_id'=>103,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
-  4=>['hedef_bildirim_id'=>104,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
-  5=>['hedef_bildirim_id'=>105,'hedef_bildirim_durumu'=>'okundu','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
-  6=>['hedef_bildirim_id'=>106,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>2,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
+  3=>['hedef_bildirim_id'=>203,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
+  4=>['hedef_bildirim_id'=>204,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
+  5=>['hedef_bildirim_id'=>205,'hedef_bildirim_durumu'=>'okundu','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
+  6=>['hedef_bildirim_id'=>206,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>2,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
   7=>['hedef_bildirim_id'=>null,'hedef_bildirim_durumu'=>'bekliyor','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
-  8=>['hedef_bildirim_id'=>108,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
+  8=>['hedef_bildirim_id'=>208,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
   9=>null,
-  10=>['hedef_bildirim_id'=>110,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
+  10=>['hedef_bildirim_id'=>210,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
   11=>null,
   12=>['hedef_bildirim_id'=>999,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
 ];
 
 // Case 6 notice was sent to old owner 1 while current owner is 2.
-$pdo->exec("UPDATE ticari_mutabakat_hedef_risk_bildirimleri SET alici_kullanici_id=1 WHERE id=106");
+$pdo->exec("UPDATE ticari_mutabakat_hedef_risk_bildirimleri SET alici_kullanici_id=1 WHERE id=206");
 $pdo->exec("DELETE FROM kurum_duyuru_alicilari WHERE duyuru_id=1006");
 $pdo->exec("INSERT INTO kurum_duyuru_alicilari(duyuru_id,kullanici_id) VALUES (1006,1)");
 
