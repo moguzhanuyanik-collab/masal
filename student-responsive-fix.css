@@ -1,0 +1,221 @@
+/* İlkAdım öğrenci mobil/responsive düzeltmeleri — 1.2.80 rev11 */
+html,
+body{
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+.app-shell,
+#screen,
+.screen-content{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+}
+
+#screen,
+.screen-content{
+  overflow-x:clip;
+}
+
+.screen-content > *,
+.course-list,
+.course-row,
+.course-row > a,
+.lesson-step,
+.question-card,
+.quiz-question,
+.exercise-question,
+.question-block,
+.answers,
+.answer{
+  min-width:0;
+  max-width:100%;
+  box-sizing:border-box;
+}
+
+.screen-content img,
+.screen-content video,
+.screen-content canvas,
+.screen-content svg{
+  max-width:100%;
+}
+
+.question-card,
+.quiz-question,
+.exercise-question,
+.question-block{
+  overflow-wrap:anywhere;
+}
+
+.answers{
+  grid-template-columns:minmax(0,1fr);
+}
+
+.answer,
+.teacher-option{
+  width:100%;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+
+@media (max-width:720px){
+  .screen-content{
+    padding-left:clamp(12px,4vw,18px)!important;
+    padding-right:clamp(12px,4vw,18px)!important;
+  }
+
+  .app-nav.app-nav-five{
+    left:0!important;
+    right:0!important;
+    bottom:0!important;
+    width:100%!important;
+    max-width:none!important;
+    min-height:58px!important;
+    padding:
+      6px max(6px,env(safe-area-inset-right))
+      max(6px,env(safe-area-inset-bottom))
+      max(6px,env(safe-area-inset-left))!important;
+    display:grid!important;
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    gap:2px!important;
+    box-sizing:border-box!important;
+  }
+
+  .app-nav.app-nav-five > a{
+    min-width:0!important;
+    min-height:48px!important;
+    padding:5px 2px!important;
+    gap:2px!important;
+    font-size:clamp(9px,2.55vw,11px)!important;
+    line-height:1.08!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    justify-content:center!important;
+  }
+
+  .app-nav.app-nav-five > a > span{
+    width:28px!important;
+    height:28px!important;
+    min-width:28px!important;
+    min-height:28px!important;
+    margin:0 auto!important;
+  }
+
+  .app-nav.app-nav-five > a svg{
+    width:19px!important;
+    height:19px!important;
+  }
+
+  .course-list{
+    gap:10px!important;
+  }
+
+  .course-row > a,
+  .lesson-step{
+    width:100%!important;
+    padding:12px!important;
+    gap:10px!important;
+  }
+
+  .course-row h3,
+  .lesson-step h3,
+  .lesson-step strong{
+    font-size:clamp(15px,4vw,18px)!important;
+    line-height:1.2!important;
+  }
+
+  .course-row p,
+  .lesson-step p,
+  .lesson-step small{
+    font-size:clamp(11px,3vw,13px)!important;
+    line-height:1.35!important;
+  }
+
+  .question-card,
+  .quiz-question,
+  .exercise-question,
+  .question-block{
+    width:100%!important;
+    padding:clamp(12px,4vw,18px)!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+
+  .puzzle-question,
+  [data-question-text],
+  .question-text,
+  .question-title,
+  .question-prompt,
+  .question-stem{
+    font-size:clamp(17px,4.7vw,22px)!important;
+    line-height:1.35!important;
+  }
+
+  .answers{
+    width:100%!important;
+    gap:9px!important;
+  }
+
+  .answer,
+  .teacher-option{
+    min-height:48px!important;
+    padding:11px 12px!important;
+    font-size:clamp(13px,3.6vw,16px)!important;
+    line-height:1.3!important;
+  }
+
+  #screen .button,
+  #screen button,
+  #screen a.button{
+    max-width:100%;
+    box-sizing:border-box;
+  }
+
+  #screen{
+    padding-bottom:calc(74px + env(safe-area-inset-bottom))!important;
+  }
+}
+
+@media (max-width:390px){
+  .app-nav.app-nav-five > a{
+    font-size:9px!important;
+  }
+
+  .app-nav.app-nav-five > a > span{
+    width:25px!important;
+    height:25px!important;
+    min-width:25px!important;
+    min-height:25px!important;
+  }
+
+  .course-row > a,
+  .lesson-step{
+    padding:10px!important;
+  }
+
+  .question-card,
+  .quiz-question,
+  .exercise-question,
+  .question-block{
+    padding:12px!important;
+  }
+}
+
+@media (max-height:520px) and (orientation:landscape){
+  .app-nav.app-nav-five{
+    min-height:50px!important;
+    padding-top:3px!important;
+    padding-bottom:max(3px,env(safe-area-inset-bottom))!important;
+  }
+
+  .app-nav.app-nav-five > a{
+    min-height:42px!important;
+  }
+
+  #screen{
+    padding-bottom:calc(60px + env(safe-area-inset-bottom))!important;
+  }
+}

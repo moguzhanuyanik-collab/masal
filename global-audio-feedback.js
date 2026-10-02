@@ -706,9 +706,25 @@
     return true;
   };
 
+  const immediateNavigationControl=target=>{
+    if(!(target instanceof Element))return null;
+    const control=target.closest('a[href],button,[role="button"],[role="link"],summary');
+    if(!(control instanceof Element))return null;
+    const label=clean(control.getAttribute('aria-label')||control.textContent).toLocaleLowerCase('tr-TR');
+    if(/\b(sonraki(?:\s+aşama)?|devam|ileri|ilerle|tamam|bitir|derslere\s+dön|geri\s+dön)\b/i.test(label))return control;
+    return null;
+  };
+
   const handleReadableClick=e=>{
     const target=e.target;
     if(!(target instanceof Element)||!canSpeak())return;
+
+    const navigationControl=immediateNavigationControl(target);
+    if(navigationControl){
+      disarmCard(armedCard);
+      stopSpeech();
+      return;
+    }
 
     // Hint controls have their own reader. Do not also read the enclosing
     // lesson/question card when the student taps a hint or its text.
@@ -720,7 +736,7 @@
     }
 
     const question=target.closest('[data-adimbot-question-read]');
-    if(question&&!target.closest('button,input,select,textarea,label,.answers,.teacher-option,form,.feedback,.game-feedback,'+hintContentSelector)){
+    if(question&&!target.closest('a[href],button,input,select,textarea,label,summary,[role="button"],[role="link"],.answers,.teacher-option,form,.feedback,.game-feedback,'+hintContentSelector)){
       e.preventDefault();
       e.stopImmediatePropagation();
       const text=stripReadingLabels(question.getAttribute('data-adimbot-text'))||questionSpeechText(question);

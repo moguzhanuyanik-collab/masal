@@ -609,6 +609,7 @@
     "src/veli_icerikleri.php",
     "src/yasal_onay.php",
     "src/yonetici_yetkileri.php",
+    "student-responsive-fix.css",
     "super-admin-pages.css",
     "super-admin-profil.php",
     "super-admin.css",
@@ -767,6 +768,7 @@
     "tests/security-92.cjs",
     "tests/student-homework-dashboard-149.cjs",
     "tests/student-homework-dashboard-db-149.php",
+    "tests/student-lesson-ui-207.cjs",
     "tests/student-report-detail-138.cjs",
     "tests/student-report-detail-138.php",
     "tests/student-teacher-content-dashboard-152.cjs",
@@ -909,6 +911,6 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 10,
-  "name": "Updater dosya kurtarma çekirdeği"
+  "release_revision": 11,
+  "name": "Öğrenci ders akışı ve responsive düzeltmesi"
 }
