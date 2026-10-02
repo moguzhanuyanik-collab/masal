@@ -202,7 +202,7 @@ $newPlanId=add_plan_202($pdo,1,$plan,'Yeni plan');
 // Standard notices + plans.
 for($id=2;$id<=10;$id++){
     $signal=in_array($id,[8],true)?'hedef_75':'hedef_disinda';
-    add_notice_202($pdo,200+$id,$id,1,$cycles[$id],$signal,1000+$id,$sent,$id===5?$fmt($now->modify('-12 hours')):null);
+    add_notice_202($pdo,200+$id,$id,1,$cycles[$id],$signal,2000+$id,$sent,$id===5?$fmt($now->modify('-12 hours')):null);
     add_plan_202($pdo,$id,$plan,'Plan '.$id);
 }
 
@@ -235,8 +235,8 @@ $GLOBALS['map_202']=[
 
 // Case 6 notice was sent to old owner 1 while current owner is 2.
 $pdo->exec("UPDATE ticari_mutabakat_hedef_risk_bildirimleri SET alici_kullanici_id=1 WHERE id=206");
-$pdo->exec("DELETE FROM kurum_duyuru_alicilari WHERE duyuru_id=1006");
-$pdo->exec("INSERT INTO kurum_duyuru_alicilari(duyuru_id,kullanici_id) VALUES (1006,1)");
+$pdo->exec("DELETE FROM kurum_duyuru_alicilari WHERE duyuru_id=2006");
+$pdo->exec("INSERT INTO kurum_duyuru_alicilari(duyuru_id,kullanici_id) VALUES (2006,1)");
 
 $rows=mrts_rows($pdo,$actor,['days'=>30],100);
 ok_202(count($rows)===12,'latest plan health must contain exactly one row per planned case.');
