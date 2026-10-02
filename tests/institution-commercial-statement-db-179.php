@@ -206,7 +206,6 @@ foreach($statement['rows'] as $row){
 
 ok_179(kt360_csv_safe_cell('Normal metin')==='Normal metin','normal CSV cell should remain unchanged.');
 ok_179(kt360_csv_safe_cell('=SUM(A1:A2)')==="'=SUM(A1:A2)",'equals formula must be neutralized.');
-ok_179(kt360_csv_safe_cell('+CMD')==="' +CMD" ? false : true,'guard sanity placeholder');
 ok_179(kt360_csv_safe_cell('+CMD')==="'+CMD",'plus formula must be neutralized.');
 ok_179(kt360_csv_safe_cell('-10+20')==="'-10+20",'minus formula must be neutralized.');
 ok_179(kt360_csv_safe_cell('@SUM(A1)')==="'@SUM(A1)",'at formula must be neutralized.');
