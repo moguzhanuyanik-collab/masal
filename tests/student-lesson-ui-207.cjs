@@ -18,7 +18,10 @@ assert(audio.includes('disarmCard(armedCard);'));
 assert(audio.includes('stopSpeech();'));
 
 assert(index.includes("student-responsive-fix.css?v=<?=$assetVersion('student-responsive-fix.css')?>"));
-assert(css.includes('grid-template-columns:repeat(5,minmax(0,1fr))'));
+assert(css.includes('display:flex!important'));
+assert(css.includes('transform:none!important'));
+assert(css.includes('flex:1 1 20%!important'));
+assert(css.includes('width:20%!important'));
 assert(css.includes('overflow-x:clip'));
 assert(css.includes('.question-card'));
 assert(css.includes('.answers'));
