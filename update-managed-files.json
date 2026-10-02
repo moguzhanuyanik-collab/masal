@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.56",
+  "version": "1.2.57",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -230,6 +230,7 @@
     "RELEASE-1.2.54.md",
     "RELEASE-1.2.55.md",
     "RELEASE-1.2.56.md",
+    "RELEASE-1.2.57.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
@@ -412,6 +413,7 @@
     "database/migrations/082_ticari_tahsilat_risk_merkezi.sql",
     "database/migrations/083_ticari_tahsilat_hatirlatmalari.sql",
     "database/migrations/084_sozlesme_taksit_odeme_plani.sql",
+    "database/migrations/085_ticari_belge_tahakkuk_merkezi.sql",
     "demo-satis.css",
     "demo-satis.php",
     "destek.css",
@@ -550,6 +552,7 @@
     "src/tahsilat_hatirlatma.php",
     "src/tahsilat_risk.php",
     "src/tahsilat_takvimi.php",
+    "src/ticari_belgeler.php",
     "src/ticari_dashboard.php",
     "src/ticari_finans.php",
     "src/ticari_taksit.php",
@@ -590,6 +593,8 @@
     "tests/collection-reminders-db-176.php",
     "tests/commercial-dashboard-177.cjs",
     "tests/commercial-dashboard-db-177.php",
+    "tests/commercial-documents-182.cjs",
+    "tests/commercial-documents-db-182.php",
     "tests/commercial-finance-163.cjs",
     "tests/commercial-finance-db-163.php",
     "tests/commercial-finance-integrity-169.cjs",
@@ -740,6 +745,8 @@
     "tests/updater-manifest-96.cjs",
     "tests/web-rescue-197-198-113.cjs",
     "tests/web-rescue-197-198-113.php",
+    "ticari-belgeler.css",
+    "ticari-belgeler.php",
     "ticari-dashboard.css",
     "ticari-dashboard.php",
     "ticari-finans.php",
@@ -773,5 +780,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Tahsilat takvimi ve beklenen nakit akışı"
+  "name": "Ticari belge ve tahakkuk merkezi"
 }
