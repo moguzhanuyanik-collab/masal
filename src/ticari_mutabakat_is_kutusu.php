@@ -156,6 +156,82 @@ function mi_send_target_risk_case(PDO $pdo,array $actor,int $caseId): array {
     return ['status'=>$status,'context'=>$context,'result'=>$result];
 }
 
+function mi_pending_case_ids(array $rows): array {
+    $out=[];
+    foreach($rows as $row){
+        $caseId=(int)($row['id']??0);
+        if($caseId<=0 || empty($row['hedef_bildirim_bekliyor'])) continue;
+        $out[$caseId]=$caseId;
+    }
+    return array_values($out);
+}
+
+function mi_send_target_risk_cases(
+    PDO $pdo,
+    array $actor,
+    array $caseIds,
+    array $allowedCaseIds,
+    int $maxCases=50
+): array {
+    if((string)(auth_effective_role($actor)??'')!=='super_admin'){
+        throw new RuntimeException('Süper Admin yetkisi gerekli.');
+    }
+
+    $maxCases=max(1,min(100,$maxCases));
+    $normalized=[];
+    foreach($caseIds as $value){
+        $caseId=(int)$value;
+        if($caseId<=0) continue;
+        $normalized[$caseId]=$caseId;
+    }
+    $caseIds=array_values($normalized);
+    if(!$caseIds) throw new RuntimeException('Toplu gönderim için en az bir vaka seç.');
+    if(count($caseIds)>$maxCases){
+        throw new RuntimeException('Tek toplu işlemde en fazla '.$maxCases.' vaka seçilebilir.');
+    }
+
+    $allowed=[];
+    foreach($allowedCaseIds as $value){
+        $caseId=(int)$value;
+        if($caseId>0)$allowed[$caseId]=true;
+    }
+
+    $out=[
+        'selected'=>count($caseIds),
+        'eligible'=>0,
+        'sent'=>0,
+        'not_pending'=>0,
+        'no_context'=>0,
+        'invalid_owner'=>0,
+        'no_institution'=>0,
+        'stale_source'=>0,
+        'no_longer_required'=>0,
+        'skipped'=>0,
+        'failed'=>0,
+        'not_visible'=>0,
+    ];
+
+    foreach($caseIds as $caseId){
+        if(!isset($allowed[$caseId])){
+            $out['not_visible']++;
+            continue;
+        }
+        $out['eligible']++;
+
+        try{
+            $result=mi_send_target_risk_case($pdo,$actor,$caseId);
+            $status=(string)($result['status']??'failed');
+        }catch(Throwable $e){
+            $status='failed';
+        }
+
+        if(!array_key_exists($status,$out))$status='failed';
+        $out[$status]++;
+    }
+
+    return $out;
+}
+
 function mi_risk_priority(array $row): int {
     $risk=(string)($row['hedef_risk_kodu']??'');
     $delivery=(string)($row['hedef_bildirim_durumu']??'');
