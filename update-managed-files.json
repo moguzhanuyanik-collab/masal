@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.58",
+  "version": "1.2.59",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -232,6 +232,7 @@
     "RELEASE-1.2.56.md",
     "RELEASE-1.2.57.md",
     "RELEASE-1.2.58.md",
+    "RELEASE-1.2.59.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
@@ -415,6 +416,7 @@
     "database/migrations/083_ticari_tahsilat_hatirlatmalari.sql",
     "database/migrations/084_sozlesme_taksit_odeme_plani.sql",
     "database/migrations/085_ticari_belge_tahakkuk_merkezi.sql",
+    "database/migrations/086_ticari_mutabakat_aksiyon_merkezi.sql",
     "demo-satis.css",
     "demo-satis.php",
     "destek.css",
@@ -557,6 +559,7 @@
     "src/ticari_dashboard.php",
     "src/ticari_finans.php",
     "src/ticari_mutabakat.php",
+    "src/ticari_mutabakat_aksiyon.php",
     "src/ticari_taksit.php",
     "src/updater.php",
     "src/veli_icerik_dashboard.php",
@@ -602,6 +605,8 @@
     "tests/commercial-finance-integrity-169.cjs",
     "tests/commercial-finance-integrity-db-169.php",
     "tests/commercial-reconciliation-183.cjs",
+    "tests/commercial-reconciliation-actions-184.cjs",
+    "tests/commercial-reconciliation-actions-db-184.php",
     "tests/commercial-reconciliation-db-183.php",
     "tests/commercial-risk-center-175.cjs",
     "tests/commercial-risk-center-db-175.php",
@@ -754,6 +759,8 @@
     "ticari-dashboard.css",
     "ticari-dashboard.php",
     "ticari-finans.php",
+    "ticari-mutabakat-aksiyon.css",
+    "ticari-mutabakat-aksiyon.php",
     "ticari-mutabakat.css",
     "ticari-mutabakat.php",
     "ticari-taksit.css",
@@ -786,5 +793,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Ticari mutabakat ve kontrol merkezi"
+  "name": "Ticari mutabakat aksiyon ve istisna merkezi"
 }
