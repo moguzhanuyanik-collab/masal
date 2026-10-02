@@ -219,8 +219,8 @@ $pdo->prepare("INSERT INTO ticari_mutabakat_vaka_gecmisi
   VALUES (7,1,'durum','vaka_yeniden_acildi','Yeni döngü',?)")->execute([$reopen]);
 
 $GLOBALS['map_202']=[
-  1=>['hedef_bildirim_id'=>202,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
-  2=>['hedef_bildirim_id'=>102,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
+  1=>['hedef_bildirim_id'=>102,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
+  2=>['hedef_bildirim_id'=>202,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
   3=>['hedef_bildirim_id'=>203,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
   4=>['hedef_bildirim_id'=>204,'hedef_bildirim_durumu'=>'okunmadi','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
   5=>['hedef_bildirim_id'=>205,'hedef_bildirim_durumu'=>'okundu','sorumlu_kullanici_id'=>1,'hedef_risk_kodu'=>'hedef_disinda','hedef_risk_etiketi'=>'Hedef dışında','beklenen_esik_kodu'=>'hedef_disinda'],
