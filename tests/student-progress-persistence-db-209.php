@@ -18,6 +18,20 @@ try{
     ]);
 }catch(Throwable $e){ fail_209('MariaDB bağlantısı kurulamadı: '.$e->getMessage()); }
 
+$pdo->exec('DROP TABLE IF EXISTS etkinlik_ilerleme');
+$pdo->exec("CREATE TABLE IF NOT EXISTS ogrenciler (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+$pdo->exec("CREATE TABLE IF NOT EXISTS oyun_tamamlamalari (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ogrenci_id BIGINT UNSIGNED NOT NULL,
+    oyun_kodu VARCHAR(50) NOT NULL,
+    tamamlanma_tarihi DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id),
+    UNIQUE KEY uk_oyun_tamamlama_test (ogrenci_id,oyun_kodu)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
 function run_092(PDO $pdo): void {
     $path=__DIR__.'/../database/migrations/092_ogrenci_etkinlik_ilerleme.sql';
     $raw=file_get_contents($path);
