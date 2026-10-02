@@ -61,6 +61,7 @@ foreach($contracts as $row){
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-dashboard.php" aria-label="Ticari Dashboard"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-aksiyon.php" aria-label="Mutabakat Aksiyon"><svg><use href="#sa-alert"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-saglik.php" aria-label="Mutabakat Sağlığı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-belgeler.php" aria-label="Ticari Belgeler"><svg><use href="#sa-database"/></svg></a>
 <a class="sa-page-action" href="ticari-finans.php" aria-label="Ticari Finans"><svg><use href="#sa-database"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
@@ -224,6 +225,7 @@ foreach($contracts as $row){
 <a href="ticari-dashboard.php"><span>📊</span>KPI</a>
 <a class="active" href="ticari-mutabakat.php"><span>⚖️</span>Mutabakat</a>
 <a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
+<a href="ticari-mutabakat-saglik.php"><span>🩺</span>Sağlık</a>
 <a href="ticari-belgeler.php"><span>🧾</span>Belgeler</a>
 <a href="ticari-finans.php"><span>₺</span>Finans</a>
 <a href="tahsilat-risk.php"><span>⚠️</span>Risk</a>
