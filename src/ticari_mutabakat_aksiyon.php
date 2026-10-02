@@ -621,3 +621,34 @@ function ma_add_note(
 
     auth_audit($pdo,(int)$actor['id'],null,'mutabakat_vaka_not','Mutabakat vaka #'.$caseId);
 }
+
+
+function ma_target_risk_context(PDO $pdo,array $actor,int $caseId): ?array {
+    if((string)(auth_effective_role($actor)??'')!=='super_admin' || $caseId<=0) return null;
+    if(!function_exists('mi_target_risk_map')) return null;
+
+    $map=mi_target_risk_map($pdo,$actor,[$caseId]);
+    $row=$map[$caseId]??null;
+    return is_array($row)?$row:null;
+}
+
+function ma_target_notification_label(?array $risk): string {
+    if(!$risk) return 'Hedef-risk verisi yok';
+    return match((string)($risk['hedef_bildirim_durumu']??'')){
+        'okundu'=>'Bildirim Okundu',
+        'okunmadi'=>'Bildirim Okunmadı',
+        'bekliyor'=>'Bildirim Bekliyor',
+        'uygulanmaz'=>'Bildirim Gerekmiyor',
+        default=>'Bildirim Durumu Yok',
+    };
+}
+
+function ma_target_notification_class(?array $risk): string {
+    if(!$risk) return '';
+    return match((string)($risk['hedef_bildirim_durumu']??'')){
+        'okunmadi'=>'danger',
+        'bekliyor'=>'warning',
+        'okundu'=>'ok',
+        default=>'',
+    };
+}
