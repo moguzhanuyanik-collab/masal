@@ -38,8 +38,8 @@ assert(!/\bINSERT\b|\bUPDATE\b|\bDELETE\b/.test(domain),'inbox domain must remai
 assert(page.includes("require_role('super_admin')"),'inbox must be Super Admin only');
 assert(page.includes('Bana atanan'),'mine summary missing');
 assert(page.includes('Gecikmiş'),'overdue summary missing');
-assert(page.includes('Önümüzdeki 3 Gün'),'next-3-day filter missing');
-assert(page.includes('Önümüzdeki 7 Gün'),'next-7-day filter missing');
+assert(domain.includes("'next3'=>'Önümüzdeki 3 Gün'"),'next-3-day filter missing');
+assert(domain.includes("'next7'=>'Önümüzdeki 7 Gün'"),'next-7-day filter missing');
 assert(page.includes('Sahipsiz'),'unassigned view missing');
 assert(page.includes('Sorumlu İş Yükü'),'team workload section missing');
 assert(page.includes('Bu ekran salt-okunurdur.'),'read-only disclosure missing');
