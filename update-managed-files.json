@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.65",
+  "version": "1.2.66",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -240,6 +240,7 @@
     "RELEASE-1.2.63.md",
     "RELEASE-1.2.64.md",
     "RELEASE-1.2.65.md",
+    "RELEASE-1.2.66.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
     "RELEASE-1.2.9.md",
@@ -572,6 +573,7 @@
     "src/ticari_mutabakat_eskalasyon.php",
     "src/ticari_mutabakat_hatirlatma.php",
     "src/ticari_mutabakat_is_kutusu.php",
+    "src/ticari_mutabakat_performans.php",
     "src/ticari_mutabakat_planlama.php",
     "src/ticari_mutabakat_saglik.php",
     "src/ticari_taksit.php",
@@ -699,6 +701,8 @@
     "tests/reconciliation-inbox-db-187.php",
     "tests/reconciliation-owner-recovery-189.cjs",
     "tests/reconciliation-owner-recovery-db-189.php",
+    "tests/reconciliation-performance-191.cjs",
+    "tests/reconciliation-performance-db-191.php",
     "tests/reconciliation-reminders-188.cjs",
     "tests/reconciliation-reminders-db-188.php",
     "tests/recovery-safety-100.cjs",
@@ -795,6 +799,8 @@
     "ticari-mutabakat-hatirlatma.php",
     "ticari-mutabakat-is-kutusu.css",
     "ticari-mutabakat-is-kutusu.php",
+    "ticari-mutabakat-performans.css",
+    "ticari-mutabakat-performans.php",
     "ticari-mutabakat-planlama.css",
     "ticari-mutabakat-planlama.php",
     "ticari-mutabakat-saglik.css",
@@ -831,5 +837,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Mutabakat operasyon eskalasyon merkezi"
+  "name": "Mutabakat operasyon performans dashboardu"
 }

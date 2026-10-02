@@ -87,6 +87,7 @@ foreach($candidates as $row){
 <a class="sa-page-action" href="ticari-mutabakat-hatirlatma.php" aria-label="Aksiyon Hatırlatmaları"><svg><use href="#sa-bell"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-devir.php" aria-label="Sorumlu Devir"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-is-kutusu.php" aria-label="Günlük İş Kutusu"><svg><use href="#sa-card"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-performans.php" aria-label="Operasyon Performansı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
 </header>
@@ -190,6 +191,7 @@ $sent=!empty($row['gonderildi']);
 <a class="active" href="ticari-mutabakat-eskalasyon.php"><span>🚨</span>Eskalasyon</a>
 <a href="ticari-mutabakat-saglik.php"><span>🩺</span>Sağlık</a>
 <a href="ticari-mutabakat-devir.php"><span>🔁</span>Devir</a>
+<a href="ticari-mutabakat-performans.php"><span>📈</span>Performans</a>
 </nav>
 </div>
 </body>
