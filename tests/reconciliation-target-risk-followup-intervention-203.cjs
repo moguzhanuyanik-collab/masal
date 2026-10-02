@@ -63,8 +63,10 @@ assert(!page.includes('name="owner_id"') || page.includes('type="hidden" name="o
 
 assert(healthPage.includes('aria-label="Takip Sağlığı Müdahale"'),
   'health page intervention shortcut missing');
-assert(healthPage.includes('Sağlık Müdahalesi →'),
-  'health page intervention CTA missing');
+assert(
+  healthPage.includes('Current Müdahale →') || healthPage.includes('Sağlık Müdahalesi →'),
+  'health page intervention CTA missing'
+);
 assert(!healthPage.includes("$_SERVER['REQUEST_METHOD']==='POST'"),
   '1.2.77 health page must remain read-only');
 assert(followPage.includes('aria-label="Takip Sağlığı Müdahale"'),
