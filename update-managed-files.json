@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.68",
+  "version": "1.2.69",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -243,6 +243,7 @@
     "RELEASE-1.2.66.md",
     "RELEASE-1.2.67.md",
     "RELEASE-1.2.68.md",
+    "RELEASE-1.2.69.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
     "RELEASE-1.2.9.md",
@@ -429,6 +430,7 @@
     "database/migrations/087_mutabakat_aksiyon_hatirlatmalari.sql",
     "database/migrations/088_mutabakat_operasyon_eskalasyonlari.sql",
     "database/migrations/089_mutabakat_operasyon_hedef_politikalari.sql",
+    "database/migrations/090_mutabakat_hedef_risk_bildirimleri.sql",
     "demo-satis.css",
     "demo-satis.php",
     "destek.css",
@@ -577,6 +579,7 @@
     "src/ticari_mutabakat_hatirlatma.php",
     "src/ticari_mutabakat_hedef.php",
     "src/ticari_mutabakat_hedef_risk.php",
+    "src/ticari_mutabakat_hedef_risk_bildirim.php",
     "src/ticari_mutabakat_is_kutusu.php",
     "src/ticari_mutabakat_performans.php",
     "src/ticari_mutabakat_planlama.php",
@@ -712,6 +715,8 @@
     "tests/reconciliation-reminders-db-188.php",
     "tests/reconciliation-target-risk-193.cjs",
     "tests/reconciliation-target-risk-db-193.php",
+    "tests/reconciliation-target-risk-notifications-194.cjs",
+    "tests/reconciliation-target-risk-notifications-db-194.php",
     "tests/reconciliation-targets-192.cjs",
     "tests/reconciliation-targets-db-192.php",
     "tests/recovery-safety-100.cjs",
@@ -806,6 +811,8 @@
     "ticari-mutabakat-eskalasyon.php",
     "ticari-mutabakat-hatirlatma.css",
     "ticari-mutabakat-hatirlatma.php",
+    "ticari-mutabakat-hedef-risk-bildirim.css",
+    "ticari-mutabakat-hedef-risk-bildirim.php",
     "ticari-mutabakat-hedef-risk.css",
     "ticari-mutabakat-hedef-risk.php",
     "ticari-mutabakat-hedefleri.css",
@@ -850,5 +857,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Mutabakat hedef risk ve aksiyon kuyruğu"
+  "name": "Mutabakat hedef risk bildirimleri"
 }
