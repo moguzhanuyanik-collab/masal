@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.79",
-  "name": "Otomatik güncelleyici bootstrap",
-  "release_revision": 2
+  "version": "1.2.80",
+  "name": "Runtime ve sayfa açılış sağlamlaştırması",
+  "release_revision": 1
 }

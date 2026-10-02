@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__.'/runtime_compat.php';
 
 if (!function_exists('app_session_start')) {
     function app_session_start(): void {

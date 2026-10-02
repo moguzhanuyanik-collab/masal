@@ -537,7 +537,7 @@ $localRevision = read_local_release_revision(__DIR__,$local);
     </nav>
 </div>
 
-<script src="guncelleme-auto.js?v=1.2.79-r2"></script>
+<script src="guncelleme-auto.js?v=1.2.80"></script>
 <script>
 (() => {
     const localVersion = document.getElementById('localVersion');

@@ -49,7 +49,12 @@ if($institutionId>0 && !in_array($institutionId,$institutionIds,true)){
     exit;
 }
 
-$groups=oi_teacher_dashboard_target_groups($pdo,(int)$user['id'],$institutionId,'odev');
+$groups=[];
+try{
+    $groups=oi_teacher_dashboard_target_groups($pdo,(int)$user['id'],$institutionId,'odev');
+}catch(Throwable $e){
+    error_log('[IlkAdim][teacher-homework-groups] '.$e->getMessage());
+}
 $groupIds=array_map('intval',array_column($groups,'id'));
 $groupId=max(0,(int)($_GET['grup_id']??0));
 if($groupId>0 && !in_array($groupId,$groupIds,true)){

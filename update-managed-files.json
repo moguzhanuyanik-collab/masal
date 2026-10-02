@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.79",
+  "version": "1.2.80",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -257,6 +257,7 @@
     "RELEASE-1.2.79-R2.md",
     "RELEASE-1.2.79.md",
     "RELEASE-1.2.8.md",
+    "RELEASE-1.2.80.md",
     "RELEASE-1.2.9.md",
     "YETKILENDIRME-1.0.35.md",
     "activities-extra.js",
@@ -577,6 +578,7 @@
     "src/ogretmen_ogrenci_listesi.php",
     "src/ogretmen_soru_dashboard.php",
     "src/password_reset.php",
+    "src/runtime_compat.php",
     "src/super_admin_icons.php",
     "src/tahsilat_hatirlatma.php",
     "src/tahsilat_risk.php",
@@ -760,6 +762,8 @@
     "tests/recovery-safety-100.php",
     "tests/renewal-commercial-link-174.cjs",
     "tests/renewal-commercial-link-db-174.php",
+    "tests/runtime-page-health-205.cjs",
+    "tests/runtime-page-health-205.php",
     "tests/security-92.cjs",
     "tests/student-homework-dashboard-149.cjs",
     "tests/student-homework-dashboard-db-149.php",
@@ -804,6 +808,7 @@
     "tests/update-activation-104.cjs",
     "tests/update-activation-104.php",
     "tests/update-auto-bootstrap-r2.cjs",
+    "tests/update-auto-chain-206.cjs",
     "tests/update-chain-rebuild-126.cjs",
     "tests/update-continuity-112.cjs",
     "tests/update-continuity-112.php",
@@ -904,6 +909,6 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 2,
-  "name": "Otomatik güncelleyici bootstrap"
+  "release_revision": 1,
+  "name": "Runtime ve sayfa açılış sağlamlaştırması"
 }

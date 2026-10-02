@@ -61,7 +61,7 @@ $recoveryLabel=match($recoveryStatus){
 $checks=[
     ['name'=>'Veritabanı','detail'=>'MySQL bağlantısı ve basit sorgu','status'=>sd_status($databaseOk,'Hazır','Bağlantı kurulamadı')],
     ['name'=>'PDO MySQL','detail'=>'Veritabanı sürücüsü','status'=>sd_status(extension_loaded('pdo_mysql'),'Yüklü','Eksik')],
-    ['name'=>'Mbstring','detail'=>'Türkçe metin işlemleri','status'=>sd_status(extension_loaded('mbstring'),'Yüklü','Eksik')],
+    ['name'=>'Mbstring','detail'=>'Türkçe metin işlemleri · native uzantı yoksa runtime fallback kullanılır','status'=>sd_status(function_exists('mb_strlen'),extension_loaded('mbstring')?'Yüklü':'Fallback aktif','Eksik')],
     ['name'=>'ZIP','detail'=>'Güncelleme paketlerini açma','status'=>sd_status(extension_loaded('zip'),'Yüklü','Eksik')],
     ['name'=>'GD','detail'=>'Profil fotoğrafı işleme','status'=>sd_status(extension_loaded('gd'),'Yüklü','Eksik')],
     ['name'=>'Storage','detail'=>'Uygulama çalışma verileri','status'=>sd_writable_status(__DIR__.'/storage')],
