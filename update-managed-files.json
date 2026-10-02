@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.72",
+  "version": "1.2.73",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -248,6 +248,7 @@
     "RELEASE-1.2.70.md",
     "RELEASE-1.2.71.md",
     "RELEASE-1.2.72.md",
+    "RELEASE-1.2.73.md",
     "RELEASE-1.2.8.md",
     "RELEASE-1.2.9.md",
     "YETKILENDIRME-1.0.35.md",
@@ -705,6 +706,8 @@
     "tests/rebuild-release-121.cjs",
     "tests/reconciliation-action-target-risk-197.cjs",
     "tests/reconciliation-action-target-risk-db-197.php",
+    "tests/reconciliation-action-target-risk-send-198.cjs",
+    "tests/reconciliation-action-target-risk-send-db-198.php",
     "tests/reconciliation-bulk-planning-186.cjs",
     "tests/reconciliation-bulk-planning-db-186.php",
     "tests/reconciliation-escalation-190.cjs",
@@ -869,5 +872,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Mutabakat aksiyon detayı hedef risk entegrasyonu"
+  "name": "Mutabakat aksiyon detayı tek vaka hedef risk bildirimi"
 }
