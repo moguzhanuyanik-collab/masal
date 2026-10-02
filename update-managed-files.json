@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.59",
+  "version": "1.2.60",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -234,6 +234,7 @@
     "RELEASE-1.2.58.md",
     "RELEASE-1.2.59.md",
     "RELEASE-1.2.6.md",
+    "RELEASE-1.2.60.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
     "RELEASE-1.2.9.md",
@@ -560,6 +561,7 @@
     "src/ticari_finans.php",
     "src/ticari_mutabakat.php",
     "src/ticari_mutabakat_aksiyon.php",
+    "src/ticari_mutabakat_saglik.php",
     "src/ticari_taksit.php",
     "src/updater.php",
     "src/veli_icerik_dashboard.php",
@@ -675,6 +677,8 @@
     "tests/password-recovery-db-165.php",
     "tests/pwa-95.cjs",
     "tests/rebuild-release-121.cjs",
+    "tests/reconciliation-health-185.cjs",
+    "tests/reconciliation-health-db-185.php",
     "tests/recovery-safety-100.cjs",
     "tests/recovery-safety-100.php",
     "tests/renewal-commercial-link-174.cjs",
@@ -761,6 +765,8 @@
     "ticari-finans.php",
     "ticari-mutabakat-aksiyon.css",
     "ticari-mutabakat-aksiyon.php",
+    "ticari-mutabakat-saglik.css",
+    "ticari-mutabakat-saglik.php",
     "ticari-mutabakat.css",
     "ticari-mutabakat.php",
     "ticari-taksit.css",
@@ -793,5 +799,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Ticari mutabakat aksiyon ve istisna merkezi"
+  "name": "Mutabakat aksiyon sağlığı ve vaka yaşlandırma dashboardu"
 }
