@@ -42,8 +42,17 @@ assert(domain.includes("'next3'=>'Önümüzdeki 3 Gün'"),'next-3-day filter mis
 assert(domain.includes("'next7'=>'Önümüzdeki 7 Gün'"),'next-7-day filter missing');
 assert(page.includes('Sahipsiz'),'unassigned view missing');
 assert(page.includes('Sorumlu İş Yükü'),'team workload section missing');
-assert(page.includes('Bu ekran salt-okunurdur.'),'read-only disclosure missing');
-assert(!page.includes("$_SERVER['REQUEST_METHOD']==='POST'"),'inbox page must not expose POST writes');
+if(Number(version.version.split('.')[2])<74){
+  assert(page.includes('Bu ekran salt-okunurdur.'),'legacy read-only disclosure missing');
+  assert(!page.includes("$_SERVER['REQUEST_METHOD']==='POST'"),'legacy inbox page must not expose POST writes');
+}else{
+  assert(page.includes("$_SERVER['REQUEST_METHOD']==='POST'"),'1.2.74+ inbox exact-case notification POST missing');
+  assert(page.includes("if($action!=='send_target_risk')"),'1.2.74+ inbox POST must allow only target-risk send');
+  assert(!page.includes('ma_set_stage('),'inbox must not edit reconciliation case stage');
+  assert(!page.includes('ma_add_note('),'inbox must not edit reconciliation case notes or action date');
+  assert(page.includes('İş Kutusu hedef-risk hesabını değiştirmez.'),
+    '1.2.74+ limited-write disclosure missing');
+}
 assert(page.includes('name="owner_id"'),'owner filter preservation missing');
 
 assert(css.includes('.mi-summary'),'inbox summary styles missing');
@@ -71,4 +80,4 @@ for(const path of [
   'tests/reconciliation-inbox-db-187.php'
 ]) assert(manifest.files.includes(path),'manifest missing '+path);
 
-console.log('PASS: personal reconciliation inbox, due windows, team workload and read-only source contract');
+console.log('PASS: personal reconciliation inbox, due windows, team workload and controlled target-risk-send compatibility contract');
