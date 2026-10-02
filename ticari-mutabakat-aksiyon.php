@@ -115,6 +115,7 @@ $history=$selected?ma_history_rows($pdo,$selectedId):[];
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-mutabakat.php" aria-label="Mutabakat Kontrol"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-saglik.php" aria-label="Mutabakat Sağlığı"><svg><use href="#sa-chart"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-planlama.php" aria-label="Toplu Planlama"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-belgeler.php" aria-label="Ticari Belgeler"><svg><use href="#sa-database"/></svg></a>
 <a class="sa-page-action" href="ticari-finans.php" aria-label="Ticari Finans"><svg><use href="#sa-database"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
@@ -292,6 +293,7 @@ $isOpen=in_array($stage,ma_open_stages(),true);
 <a href="ticari-dashboard.php"><span>📊</span>KPI</a>
 <a href="ticari-mutabakat.php"><span>⚖️</span>Mutabakat</a>
 <a class="active" href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
+<a href="ticari-mutabakat-planlama.php"><span>🗂️</span>Planlama</a>
 <a href="ticari-belgeler.php"><span>🧾</span>Belgeler</a>
 <a href="ticari-finans.php"><span>₺</span>Finans</a>
 </nav>
