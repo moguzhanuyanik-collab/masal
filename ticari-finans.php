@@ -96,6 +96,7 @@ $editRenewal=$edit&&isset($contractRenewals[(int)$edit['id']])?$contractRenewals
 <a class="sa-page-action" href="paketler.php" aria-label="Paketler"><svg><use href="#sa-database"/></svg></a>
 <a class="sa-page-action" href="lisans-yenilemeleri.php" aria-label="Lisans Yenilemeleri"><svg><use href="#sa-refresh"/></svg></a>
 <a class="sa-page-action" href="tahsilat-risk.php" aria-label="Tahsilat Risk Merkezi"><svg><use href="#sa-alert"/></svg></a>
+<a class="sa-page-action" href="ticari-dashboard.php" aria-label="Ticari Dashboard"><svg><use href="#sa-database"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
 </header>
@@ -276,6 +277,7 @@ $editRenewal=$edit&&isset($contractRenewals[(int)$edit['id']])?$contractRenewals
 <a href="super-admin.php"><span>⌂</span>Panel</a>
 <a href="paketler.php"><span>💼</span>Paketler</a>
 <a href="lisans-yenilemeleri.php"><span>⏳</span>Yenileme</a>
+<a href="ticari-dashboard.php"><span>📊</span>KPI</a>
 <a class="active" href="ticari-finans.php"><span>₺</span>Finans</a>
 <a href="tahsilat-risk.php"><span>⚠️</span>Risk</a>
 <a href="guncelleme.php"><span>↻</span>Güncelle</a>
