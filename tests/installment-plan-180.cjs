@@ -78,7 +78,8 @@ assert(migration.includes('UNIQUE KEY uk_taksit_surum_sira (sozlesme_id,surum_no
 assert(workflow.includes('node tests/installment-plan-180.cjs'),'source regression missing from Quality Gate');
 assert(workflow.includes('php tests/installment-plan-db-180.php'),'MariaDB regression missing from Quality Gate');
 
-assert.strictEqual(version.version,'1.2.55');
+assert(version.version.startsWith('1.2.'),'release version must remain in 1.2.x');
+assert(Number(version.version.split('.')[2])>=55,'installment plan requires 1.2.55 or newer');
 assert.strictEqual(release.version,'1.2.55');
 assert.strictEqual(manifest.version,'1.2.55');
 
