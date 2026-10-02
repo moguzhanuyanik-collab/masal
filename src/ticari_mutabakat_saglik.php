@@ -231,7 +231,7 @@ function mhs_recent_closed_metrics(PDO $pdo,int $days=30): array {
     $stmt=$pdo->query("SELECT
         COUNT(*) closed_count,
         COALESCE(AVG(GREATEST(0,TIMESTAMPDIFF(HOUR,{$cycle},v.kapanma_tarihi))/24),0) avg_cycle_days,
-        COALESCE(MAX(GREATEST(0,TIMESTAMPDIFF(DAY,DATE({$cycle}),DATE(v.kapanma_tarihi))),0) max_cycle_days,
+        COALESCE(MAX(GREATEST(0,TIMESTAMPDIFF(DAY,DATE({$cycle}),DATE(v.kapanma_tarihi)))),0) max_cycle_days,
         SUM(CASE WHEN EXISTS(
             SELECT 1 FROM ticari_mutabakat_vaka_gecmisi gr
             WHERE gr.vaka_id=v.id AND gr.kod='vaka_yeniden_acildi'
