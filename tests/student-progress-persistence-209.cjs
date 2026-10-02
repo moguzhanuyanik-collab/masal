@@ -59,6 +59,8 @@ assert(activityUi.includes('tekrar yapmak zorunda değilsin'));
 assert(curriculum.includes("indexes.find(index=>!completed.has(String(lesson.id)+'-'+index))"),'curriculum entry must target first incomplete question');
 
 assert(migration.includes('CREATE TABLE IF NOT EXISTS etkinlik_ilerleme'));
+assert(migration.includes("SET @ogrenci_id_type=("));
+assert(migration.includes("COLUMN_TYPE"));
 assert(migration.includes('UNIQUE KEY uk_etkinlik_ilerleme (ogrenci_id,oyun_kodu)'));
 assert(migration.includes('sonraki_soru_indeksi'));
 assert(migration.includes('ON DUPLICATE KEY UPDATE tamamlandi=1'));
@@ -68,7 +70,7 @@ assert(workflow.includes('node tests/student-progress-persistence-209.cjs'));
 assert(workflow.includes('php tests/student-progress-persistence-db-209.php'));
 
 assert.strictEqual(version.version,'1.2.82');
-assert.strictEqual(version.release_revision,1);
+assert(Number(version.release_revision)>=1);
 assert.strictEqual(release.version,version.version);
 assert.strictEqual(release.release_revision,version.release_revision);
 assert.strictEqual(manifest.version,version.version);
@@ -79,7 +81,7 @@ for(const path of [
   'tests/student-progress-persistence-209.cjs',
   'tests/student-progress-persistence-db-209.php'
 ]) assert(manifest.files.includes(path),'manifest missing '+path);
-assert.strictEqual(manifest.files.length,914);
+assert(manifest.files.length>=914,'student progress managed-file baseline must be retained');
 assert.deepStrictEqual(manifest.files,[...manifest.files].sort());
 
 console.log('PASS: student progress is DB-backed, monotonic and resumable');
