@@ -55,7 +55,7 @@ assert(!domain.includes('DELETE FROM kurum_lisans_yenileme_gecmisi'),
 
 assert(notifications.includes('function bd_supported_recipient_roles('),
   'system-supported notification roles missing');
-assert(notifications.includes("['yonetici'=>'Yöneticiler']"),
+assert(notifications.includes("'yonetici'=>'Yöneticiler'"),
   'manager internal system notification role missing');
 assert(notifications.includes("array_keys(bd_supported_recipient_roles())"),
   'system notification recipient validation must accept manager');
