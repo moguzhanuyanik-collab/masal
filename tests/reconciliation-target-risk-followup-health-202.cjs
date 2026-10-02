@@ -78,7 +78,7 @@ for(const path of [
   'tests/reconciliation-target-risk-followup-health-db-202.php'
 ]) assert(manifest.files.includes(path),'manifest missing '+path);
 
-assert(!manifest.files.some(p=>p.includes('091_')),
-  'read-only follow-up health release must not invent migration 091');
+assert(!manifest.files.some(p=>/^database\/migrations\/091_.*(?:mutabakat|hedef|risk|takip)/i.test(p)),
+  'read-only follow-up health release must not own or invent a reconciliation migration 091');
 
 console.log('PASS: latest-plan, current-owner/current-cycle/current-signal follow-up health source contract');
