@@ -88,7 +88,7 @@ $targetOpen=$targetReady?mh_open_target_summary($pdo):[];
 <span class="role-hero-art">🩺</span>
 </section>
 
-<div class="role-note"><span>ℹ️</span><p>Bu ekran sözleşmesel SLA kararı vermez ve keyfi puan üretmez. 1.2.67 hedef politikaları mevcutsa açık döngülerin yalnız iç operasyon hedef durumunu ayrıca gösterir. Vaka bazlı işlem için <a href="ticari-mutabakat-aksiyon.php">Mutabakat Aksiyon Merkezi</a>, çoklu sahiplik/tarih planlaması için <a href="ticari-mutabakat-planlama.php">Toplu Planlama</a> kullanılır.</p></div>
+<div class="role-note"><span>ℹ️</span><p>Bu ekran SLA kararı vermez; sözleşmesel SLA üretmez ve keyfi puan üretmez. 1.2.67 hedef politikaları mevcutsa açık döngülerin yalnız iç operasyon hedef durumunu ayrıca gösterir. Vaka bazlı işlem için <a href="ticari-mutabakat-aksiyon.php">Mutabakat Aksiyon Merkezi</a>, çoklu sahiplik/tarih planlaması için <a href="ticari-mutabakat-planlama.php">Toplu Planlama</a> kullanılır.</p></div>
 
 <?php if(!$ready):?>
 <div class="role-note"><span>⚠️</span><p>1.2.59 mutabakat aksiyon tabloları hazır değil. 086 migration kurulduğunda sağlık görünümü otomatik açılır.</p></div>
