@@ -46,8 +46,13 @@ if(Number(version.version.split('.')[2])<74){
   assert(page.includes('Bu ekran salt-okunurdur.'),'legacy read-only disclosure missing');
   assert(!page.includes("$_SERVER['REQUEST_METHOD']==='POST'"),'legacy inbox page must not expose POST writes');
 }else{
-  assert(page.includes("$_SERVER['REQUEST_METHOD']==='POST'"),'1.2.74+ inbox exact-case notification POST missing');
-  assert(page.includes("if($action!=='send_target_risk')"),'1.2.74+ inbox POST must allow only target-risk send');
+  assert(page.includes("$_SERVER['REQUEST_METHOD']==='POST'"),'1.2.74+ inbox target-risk notification POST missing');
+  if(Number(version.version.split('.')[2])<75){
+    assert(page.includes("if($action!=='send_target_risk')"),'1.2.74 inbox POST must allow only exact target-risk send');
+  }else{
+    assert(page.includes("in_array($action,['send_target_risk','send_target_risk_batch'],true)"),
+      '1.2.75+ inbox POST must keep single and batch target-risk sends in a closed whitelist');
+  }
   assert(!page.includes('ma_set_stage('),'inbox must not edit reconciliation case stage');
   assert(!page.includes('ma_add_note('),'inbox must not edit reconciliation case notes or action date');
   assert(page.includes('İş Kutusu hedef-risk hesabını değiştirmez.'),
