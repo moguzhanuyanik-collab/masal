@@ -120,6 +120,42 @@ function mi_target_risk_map(PDO $pdo,array $actor,array $caseIds): array {
     return $map;
 }
 
+function mi_target_risk_case(PDO $pdo,array $actor,int $caseId): ?array {
+    if($caseId<=0 || (string)(auth_effective_role($actor)??'')!=='super_admin') return null;
+    $map=mi_target_risk_map($pdo,$actor,[$caseId]);
+    $row=$map[$caseId]??null;
+    return is_array($row)?$row:null;
+}
+
+function mi_send_target_risk_case(PDO $pdo,array $actor,int $caseId): array {
+    if((string)(auth_effective_role($actor)??'')!=='super_admin'){
+        throw new RuntimeException('Süper Admin yetkisi gerekli.');
+    }
+    if($caseId<=0) throw new RuntimeException('Mutabakat vakası bulunamadı.');
+    if(!function_exists('mrb_tables_ready') || !mrb_tables_ready($pdo) || !function_exists('mrb_sync_case')){
+        throw new RuntimeException('Hedef-risk bildirim altyapısı henüz hazır değil.');
+    }
+
+    $context=mi_target_risk_case($pdo,$actor,$caseId);
+    if(!$context){
+        return ['status'=>'no_context','context'=>null,'result'=>null];
+    }
+    if((string)($context['hedef_bildirim_durumu']??'')!=='bekliyor'){
+        return ['status'=>'not_pending','context'=>$context,'result'=>null];
+    }
+
+    $result=mrb_sync_case($pdo,$actor,$caseId);
+    $status='skipped';
+    if((int)($result['sent']??0)===1) $status='sent';
+    elseif((int)($result['invalid_owner']??0)>0) $status='invalid_owner';
+    elseif((int)($result['no_institution']??0)>0) $status='no_institution';
+    elseif((int)($result['stale_source']??0)>0) $status='stale_source';
+    elseif((int)($result['failed']??0)>0) $status='failed';
+    elseif((int)($result['candidate_count']??0)===0) $status='no_longer_required';
+
+    return ['status'=>$status,'context'=>$context,'result'=>$result];
+}
+
 function mi_risk_priority(array $row): int {
     $risk=(string)($row['hedef_risk_kodu']??'');
     $delivery=(string)($row['hedef_bildirim_durumu']??'');
