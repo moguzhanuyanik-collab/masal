@@ -243,6 +243,47 @@ function tp_activate_plan(PDO $pdo,array $actor,int $contractId): void {
     auth_audit($pdo,(int)$actor['id'],null,'ticari_taksit_plan_aktif','Sözleşme #'.$contractId);
 }
 
+function tp_deactivate_plan(PDO $pdo,array $actor,int $contractId): void {
+    if((string)(auth_effective_role($actor)??'')!=='super_admin') throw new RuntimeException('Süper Admin yetkisi gerekli.');
+    if(!tp_tables_ready($pdo)) throw new RuntimeException('Taksit planı migrationı henüz kurulmamış.');
+
+    $started=false;
+    try{
+        if(!$pdo->inTransaction()){$pdo->beginTransaction();$started=true;}
+
+        $contractLock=$pdo->prepare("SELECT id,kurum_id,durum FROM kurum_sozlesmeleri WHERE id=? LIMIT 1 FOR UPDATE");
+        $contractLock->execute([$contractId]);
+        $contract=$contractLock->fetch(PDO::FETCH_ASSOC);
+        $contractLock->closeCursor();
+        if(!is_array($contract)) throw new RuntimeException('Sözleşme bulunamadı.');
+        if(tp_payment_history_count($pdo,$contractId)>0){
+            throw new RuntimeException('Tahsilat geçmişi başlayan sözleşmenin aktif taksit planı kapatılamaz.');
+        }
+
+        $plan=tp_plan_row($pdo,$contractId,true);
+        if(!$plan) throw new RuntimeException('Taksit planı bulunamadı.');
+        if((string)$plan['durum']!=='aktif') throw new RuntimeException('Yalnız aktif taksit planı kapatılabilir.');
+
+        $stmt=$pdo->prepare("UPDATE kurum_sozlesme_taksit_planlari
+            SET durum='pasif',guncelleyen_kullanici_id=? WHERE sozlesme_id=?");
+        $stmt->execute([(int)$actor['id'],$contractId]);
+        $stmt->closeCursor();
+
+        tp_history_add(
+            $pdo,$contractId,(int)$contract['kurum_id'],(int)$actor['id'],
+            'plan','plan_pasif',(int)$plan['aktif_surum'],
+            'Taksit planı pasif duruma alındı. Sözleşme tek vade davranışına döndü.'
+        );
+
+        if($started)$pdo->commit();
+    }catch(Throwable $e){
+        if($started && $pdo->inTransaction())$pdo->rollBack();
+        throw $e;
+    }
+
+    auth_audit($pdo,(int)$actor['id'],null,'ticari_taksit_plan_pasif','Sözleşme #'.$contractId);
+}
+
 function tp_schedule_state(PDO $pdo,int $contractId): ?array {
     $plan=tp_plan_row($pdo,$contractId,false);
     if(!$plan || (string)$plan['durum']!=='aktif') return null;
