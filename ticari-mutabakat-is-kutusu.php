@@ -181,6 +181,7 @@ $team=$ready?mi_team_workload($pdo,100,$user):[];
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk-saglik.php" aria-label="Hedef Risk Bildirim Sağlığı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk-takip.php" aria-label="Okunmamış Risk Takibi"><svg><use href="#sa-refresh"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk-takip-saglik.php" aria-label="Takip Planı Sağlığı"><svg><use href="#sa-chart"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-hedef-risk-takip-mudahale.php" aria-label="Takip Sağlığı Müdahale"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
 </header>
@@ -321,6 +322,7 @@ $team=$ready?mi_team_workload($pdo,100,$user):[];
 <a href="ticari-mutabakat-hedef-risk-saglik.php"><span>📨</span>Risk Sağlığı</a>
 <a href="ticari-mutabakat-hedef-risk-takip.php"><span>🗓️</span>Risk Takip</a>
 <a href="ticari-mutabakat-hedef-risk-takip-saglik.php"><span>🩺</span>Plan Sağlığı</a>
+<a href="ticari-mutabakat-hedef-risk-takip-mudahale.php"><span>🛠️</span>Müdahale</a>
 <a href="ticari-mutabakat-hatirlatma.php"><span>🔔</span>Hatırlatma</a>
 <a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 <a href="ticari-mutabakat-saglik.php"><span>🩺</span>Sağlık</a>

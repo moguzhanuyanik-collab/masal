@@ -64,9 +64,10 @@ assert(workflow.includes('node tests/reconciliation-target-risk-followup-health-
 assert(workflow.includes('php tests/reconciliation-target-risk-followup-health-db-202.php'),
   'follow-up health MariaDB regression missing from quality gate');
 
-assert.strictEqual(version.version,'1.2.77');
-assert.strictEqual(release.version,'1.2.77');
-assert.strictEqual(manifest.version,'1.2.77');
+assert(version.version.startsWith('1.2.'),'release version must remain in 1.2.x');
+assert(Number(version.version.split('.')[2])>=77,'target-risk follow-up health requires 1.2.77 or newer');
+assert.strictEqual(release.version,version.version);
+assert.strictEqual(manifest.version,version.version);
 
 for(const path of [
   'RELEASE-1.2.77.md',

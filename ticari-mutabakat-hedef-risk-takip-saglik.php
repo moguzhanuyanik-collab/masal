@@ -67,6 +67,7 @@ $ownerOptions=$ready?mrts_owner_options($pdo,$user,$days):[];
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Hedef-Risk Takip Planı Sağlığı</small></span></a>
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk-takip.php" aria-label="Okunmamış Risk Takibi"><svg><use href="#sa-users"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-hedef-risk-takip-mudahale.php" aria-label="Takip Sağlığı Müdahale"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hedef-risk-saglik.php" aria-label="Bildirim Sağlığı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-is-kutusu.php" aria-label="Günlük İş Kutusu"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
@@ -101,7 +102,7 @@ $ownerOptions=$ready?mrts_owner_options($pdo,$user,$days):[];
 <section class="role-section">
 <div class="role-section-head">
 <div><span class="eyeline">FİLTRE</span><h2>Takip Planı Durumları</h2></div>
-<a class="role-pill" href="ticari-mutabakat-hedef-risk-takip.php">Yeni Takip Planla →</a>
+<div><a class="role-pill" href="ticari-mutabakat-hedef-risk-takip.php">Yeni Takip Planla →</a> <a class="role-pill" href="ticari-mutabakat-hedef-risk-takip-mudahale.php">Sağlık Müdahalesi →</a></div>
 </div>
 <form class="mrts-filter" method="get">
 <select name="days">
@@ -197,6 +198,7 @@ $next=(string)($row['sonraki_aksiyon_tarihi']??'');
 <a href="ticari-mutabakat-hedef-risk-saglik.php"><span>📨</span>Bildirim</a>
 <a href="ticari-mutabakat-hedef-risk-takip.php"><span>🗓️</span>Planla</a>
 <a class="active" href="ticari-mutabakat-hedef-risk-takip-saglik.php"><span>🩺</span>Plan Sağlığı</a>
+<a href="ticari-mutabakat-hedef-risk-takip-mudahale.php"><span>🛠️</span>Müdahale</a>
 <a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 </nav>
 </div>
