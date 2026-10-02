@@ -917,6 +917,6 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 3,
-  "name": "Öğrenci ilerleme ve kaldığı yerden devam"
+  "release_revision": 4,
+  "name": "Anlık AdımBot mikrofonu ve sade sohbet"
 }

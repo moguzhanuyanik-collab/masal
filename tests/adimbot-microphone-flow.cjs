@@ -1,5 +1,11 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const source=fs.readFileSync(__dirname+'/../adimbot-chat-ui.js','utf8');
+assert.ok(!source.includes('🔊 Tekrar dinle'));
+assert.ok(!source.includes('data-adimbot-chat-clear'));
+assert.ok(!source.includes('adb-chat-suggestions'));
+assert.ok(!source.includes('saniye kaldı'));
+assert.ok(source.includes("recognition.interimResults=true"));
+assert.ok(source.includes('Date.now()-recordingSession.lastSpeechAt>=700'));
 function create(provider='groq'){
  let now=1000,id=0,jobs=new Map(),listener,sent=[],stops=0,started=0;
  const status={textContent:''},mic={textContent:'',setAttribute(k,v){this[k]=v;},addEventListener(_,f){listener=f;}};
@@ -14,11 +20,11 @@ function create(provider='groq'){
 async function run(){
  {const h=create('unknown');await h.click();assert.equal(h.started(),0);assert.match(h.status.textContent,/geçersiz/);}
  {const h=create(' GROQ ');await h.click();assert.equal(h.started(),1);}
- {const h=create('browser');let rec;h.c.window.SpeechRecognition=class{constructor(){rec=this;}start(){}stop(){}};await h.click();assert.equal(h.c.voiceSession.pending,true);assert.match(h.status.textContent,/izni bekleniyor/);h.advance(5000);rec.onstart();assert.equal(h.c.voiceSession.startedAt,h.time());assert.equal(h.c.voiceSession.pending,false);assert.ok([...h.jobs.values()].some(x=>x.ms===15000));rec.onresult({results:[{isFinal:true,0:{transcript:'Merhaba'}}]});rec.onresult({results:[{isFinal:true,0:{transcript:'Merhaba'}}]});assert.deepEqual(h.c.voiceSession,null);assert.equal(h.jobs.size,0);}
+ {const h=create('browser');let rec;h.c.window.SpeechRecognition=class{constructor(){rec=this;}start(){}stop(){}};await h.click();assert.equal(h.c.voiceSession.pending,true);assert.match(h.status.textContent,/izni bekleniyor/);h.advance(5000);rec.onstart();assert.equal(h.c.voiceSession.startedAt,h.time());assert.equal(h.c.voiceSession.pending,false);assert.ok([...h.jobs.values()].some(x=>x.ms===30000));rec.onresult({results:[{isFinal:true,0:{transcript:'Merhaba'}}]});rec.onresult({results:[{isFinal:true,0:{transcript:'Merhaba'}}]});assert.deepEqual(h.c.voiceSession,null);assert.equal(h.jobs.size,0);}
  {const h=create();let resolve;h.c.navigator.mediaDevices.getUserMedia=()=>new Promise(r=>resolve=r);const p=h.click();assert.equal(h.mic['aria-label'],'Mikrofon isteğini iptal et');await h.click();resolve(h.stream);await p;assert.equal(h.started(),0);assert.equal(h.stops(),1);assert.equal(h.jobs.size,0);}
- {const h=create();let resolve;h.c.navigator.mediaDevices.getUserMedia=()=>new Promise(r=>resolve=r);const p=h.click();assert.ok(h.c.voiceSession.countdownTimer);resolve(h.stream);await p;assert.equal(h.jobs.size,2);}
- {const h=create();let loud=true;h.c.window.AudioContext=class{constructor(){this.state='running';}createAnalyser(){return {fftSize:256,getByteTimeDomainData(a){a.fill(loud?145:128);}};}createMediaStreamSource(){return {connect(){}};}resume(){}close(){return Promise.resolve();}};await h.click();const session=h.c.voiceSession,meter=h.jobs.get(session.meterTimer).f;meter();h.advance(160);meter();h.advance(160);meter();assert.equal(session.detectedSpeech,true);loud=false;h.advance(1801);meter();assert.equal(h.c.voiceSession,null);assert.equal(session.recorder.state,'inactive');assert.equal(h.jobs.size,0);}
+ {const h=create();let resolve;h.c.navigator.mediaDevices.getUserMedia=()=>new Promise(r=>resolve=r);const p=h.click();assert.equal(h.c.voiceSession.countdownTimer,undefined);resolve(h.stream);await p;assert.equal(h.jobs.size,1);}
+ {const h=create();let loud=true;h.c.window.AudioContext=class{constructor(){this.state='running';}createAnalyser(){return {fftSize:256,getByteTimeDomainData(a){a.fill(loud?145:128);}};}createMediaStreamSource(){return {connect(){}};}resume(){}close(){return Promise.resolve();}};await h.click();const session=h.c.voiceSession,meter=h.jobs.get(session.meterTimer).f;meter();h.advance(160);meter();assert.equal(session.detectedSpeech,true);loud=false;h.advance(701);meter();assert.equal(h.c.voiceSession,null);assert.equal(session.recorder.state,'inactive');assert.equal(h.jobs.size,0);}
  {const h=create();await h.click();const old=h.c.voiceSession,timer=h.jobs.get(old.timer).f;h.c.voiceGeneration++;h.c.voiceSession={new:true};timer();assert.equal(h.c.voiceSession.new,true);}
- console.log('PASS: provider normalization, recognition permission/start/result ownership, pending cancel, permission timer cleanup, automatic silence stop and stale recording timeout.');
+ console.log('PASS: provider normalization, recognition permission/start/result ownership, pending cancel, permission timer cleanup, instant silence stop, simplified chat controls and stale recording timeout.');
 }
 run().catch(e=>{console.error(e);process.exitCode=1;});
