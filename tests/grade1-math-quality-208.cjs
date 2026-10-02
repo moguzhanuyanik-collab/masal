@@ -20,7 +20,7 @@ assert(!/\d+ - \d+ işleminin sonucu kaçtır\?/u.test(normalizedSource),'mechan
 assert(!/sayısından hemen önce hangi sayı gelir\?/u.test(normalizedSource),'mechanical previous-number prompt must be removed');
 assert(!/sayısından hemen sonra hangi sayı gelir\?/u.test(normalizedSource),'mechanical next-number prompt must be removed');
 
-assert(source.includes("Sayı yolunda 5'den"));
+assert(normalizedSource.includes("Sayı yolunda 5'den"));
 assert(normalizedSource.includes('daha çok boncuğu gösteren sayı'));
 assert(normalizedSource.includes('kaç çıkartması var?'));
 assert(normalizedSource.includes('kaç balon kaldı?'));
