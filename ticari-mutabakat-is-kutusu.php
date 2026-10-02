@@ -82,6 +82,7 @@ $team=$ready?mi_team_workload($pdo,100):[];
 <section class="role-section">
 <div class="role-section-head"><div><span class="eyeline">FİLTRE</span><h2>Günlük İş Listesi</h2></div><span class="role-pill"><?=count($rows)?> vaka</span></div>
 <form class="mi-filter" method="get">
+<?php if($ownerFilter!==''):?><input type="hidden" name="owner_id" value="<?=mih($ownerFilter)?>"><?php endif;?>
 <select name="scope"><?php foreach(mi_scope_labels() as $v=>$label):?><option value="<?=$v?>" <?=$scope===$v?'selected':''?>><?=mih($label)?></option><?php endforeach;?></select>
 <select name="window"><?php foreach(mi_window_labels() as $v=>$label):?><option value="<?=$v?>" <?=$window===$v?'selected':''?>><?=mih($label)?></option><?php endforeach;?></select>
 <select name="sorun_turu">
