@@ -89,6 +89,7 @@ $recent=$ready?map_recent_planning($pdo,30):[];
 <a class="sa-page-action" href="ticari-mutabakat-saglik.php" aria-label="Aksiyon Sağlığı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-aksiyon.php" aria-label="Mutabakat Aksiyon"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat.php" aria-label="Mutabakat Kontrol"><svg><use href="#sa-chart"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-eskalasyon.php" aria-label="Operasyon Eskalasyonu"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
 </header>
@@ -219,6 +220,7 @@ $recent=$ready?map_recent_planning($pdo,30):[];
 <a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 <a href="ticari-mutabakat-saglik.php"><span>🩺</span>Sağlık</a>
 <a class="active" href="ticari-mutabakat-planlama.php"><span>🗂️</span>Planlama</a>
+<a href="ticari-mutabakat-eskalasyon.php"><span>🚨</span>Eskalasyon</a>
 <a href="ticari-mutabakat-devir.php"><span>🔁</span>Devir</a>
 </nav>
 </div>
