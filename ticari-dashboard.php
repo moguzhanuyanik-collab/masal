@@ -56,6 +56,7 @@ foreach($monthly as $row){
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Ticari Yönetim Dashboardu</small></span></a>
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-finans.php" aria-label="Ticari Finans"><svg><use href="#sa-database"/></svg></a>
+<a class="sa-page-action" href="tahsilat-takvimi.php" aria-label="Tahsilat Takvimi"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="tahsilat-risk.php" aria-label="Tahsilat Risk Merkezi"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="lisans-yenilemeleri.php" aria-label="Lisans Yenilemeleri"><svg><use href="#sa-refresh"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
@@ -191,6 +192,7 @@ $width=$max>0?max(3,min(100,((float)$row['tahsilat_toplami']/$max)*100)):0;
 <nav class="role-bottom">
 <a href="super-admin.php"><span>⌂</span>Panel</a>
 <a class="active" href="ticari-dashboard.php"><span>📊</span>KPI</a>
+<a href="tahsilat-takvimi.php"><span>🗓️</span>Takvim</a>
 <a href="ticari-finans.php"><span>₺</span>Finans</a>
 <a href="tahsilat-risk.php"><span>⚠️</span>Risk</a>
 <a href="lisans-yenilemeleri.php"><span>⏳</span>Yenileme</a>
