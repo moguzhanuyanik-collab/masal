@@ -75,4 +75,8 @@ $fk=(int)$pdo->query("SELECT COUNT(*) FROM information_schema.referential_constr
       AND delete_rule='CASCADE'")->fetchColumn();
 ok_209($fk===1,'etkinlik ilerleme öğrenci FK CASCADE olmalı.');
 
+$pdo->exec('DROP TABLE IF EXISTS etkinlik_ilerleme');
+$pdo->exec('DROP TABLE IF EXISTS oyun_tamamlamalari');
+$pdo->exec('DROP TABLE IF EXISTS ogrenciler');
+
 echo "PASS: student activity progress DB schema\n";
