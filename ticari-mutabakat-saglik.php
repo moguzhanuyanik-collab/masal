@@ -67,6 +67,7 @@ $targetOpen=$targetReady?mh_open_target_summary($pdo):[];
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Mutabakat Aksiyon Sağlığı</small></span></a>
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-mutabakat-hedefleri.php" aria-label="Operasyon Hedefleri"><svg><use href="#sa-chart"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-hedef-risk.php" aria-label="Hedef Risk Kuyruğu"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-devir.php" aria-label="Sorumlu Devir"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-is-kutusu.php" aria-label="Günlük İş Kutusu"><svg><use href="#sa-users"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-hatirlatma.php" aria-label="Aksiyon Hatırlatmaları"><svg><use href="#sa-bell"/></svg></a>
@@ -223,6 +224,7 @@ $tags=mhs_health_tags($row);
 <a href="ticari-mutabakat-hatirlatma.php"><span>🔔</span>Hatırlatma</a>
 <a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 <a class="active" href="ticari-mutabakat-saglik.php"><span>🩺</span>Sağlık</a>
+<a href="ticari-mutabakat-hedef-risk.php"><span>🎯</span>Hedef Risk</a>
 <a href="ticari-mutabakat-planlama.php"><span>🗂️</span>Planlama</a>
 <a href="ticari-belgeler.php"><span>🧾</span>Belgeler</a>
 <a href="ticari-finans.php"><span>₺</span>Finans</a>

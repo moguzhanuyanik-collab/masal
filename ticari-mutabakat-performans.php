@@ -56,6 +56,7 @@ foreach($monthly as $row)$monthMax=max($monthMax,(int)$row['closed_count']);
 <a class="sa-page-brand" href="super-admin.php"><span class="sa-brand-mark">İA</span><span><strong>İlkAdım</strong><small>Mutabakat Operasyon Performansı</small></span></a>
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-mutabakat-hedefleri.php" aria-label="Operasyon Hedefleri"><svg><use href="#sa-chart"/></svg></a>
+<a class="sa-page-action" href="ticari-mutabakat-hedef-risk.php" aria-label="Hedef Risk Kuyruğu"><svg><use href="#sa-alert"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-saglik.php" aria-label="Aksiyon Sağlığı"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-is-kutusu.php" aria-label="Günlük İş Kutusu"><svg><use href="#sa-card"/></svg></a>
 <a class="sa-page-action" href="ticari-mutabakat-eskalasyon.php" aria-label="Operasyon Eskalasyonu"><svg><use href="#sa-alert"/></svg></a>
@@ -244,6 +245,7 @@ $width=$monthMax>0?max(4,min(100,((int)$row['closed_count']/$monthMax)*100)):0;
 <a href="ticari-mutabakat-aksiyon.php"><span>🧭</span>Aksiyon</a>
 <a href="ticari-mutabakat-saglik.php"><span>🩺</span>Sağlık</a>
 <a class="active" href="ticari-mutabakat-performans.php"><span>📈</span>Performans</a>
+<a href="ticari-mutabakat-hedef-risk.php"><span>🎯</span>Hedef Risk</a>
 <a href="ticari-mutabakat-hedefleri.php"><span>🎯</span>Hedefler</a>
 <a href="ticari-mutabakat-eskalasyon.php"><span>🚨</span>Eskalasyon</a>
 <a href="ticari-mutabakat-devir.php"><span>🔁</span>Devir</a>
