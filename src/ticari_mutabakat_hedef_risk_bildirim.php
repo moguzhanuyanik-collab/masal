@@ -67,7 +67,7 @@ function mrb_case_state(PDO $pdo,array $actor,int $caseId): ?array {
     return null;
 }
 
-function mrb_candidate_rows(PDO $pdo,array $actor,int $limit=1200): array {
+function mrb_candidate_rows(PDO $pdo,array $actor,int $limit=1200,?int $onlyCaseId=null): array {
     if((string)(auth_effective_role($actor)??'')!=='super_admin' || !mrb_tables_ready($pdo)) return [];
     $limit=max(1,min(1500,$limit));
     $out=[];
@@ -76,6 +76,7 @@ function mrb_candidate_rows(PDO $pdo,array $actor,int $limit=1200): array {
         if(!$signal) continue;
 
         $caseId=(int)($row['id']??0);
+        if($onlyCaseId!==null && $caseId!==$onlyCaseId) continue;
         $ownerId=(int)($row['sorumlu_kullanici_id']??0);
         $institutionId=(int)($row['kurum_id']??0);
         $policyId=(int)($row['hedef_politika_id']??0);
@@ -141,12 +142,15 @@ function mrb_notification_text(array $row,array $signal): array {
     return [$title,$message];
 }
 
-function mrb_sync(PDO $pdo,array $actor): array {
+function mrb_sync(PDO $pdo,array $actor,?int $onlyCaseId=null): array {
     if((string)(auth_effective_role($actor)??'')!=='super_admin'){
         throw new RuntimeException('Süper Admin yetkisi gerekli.');
     }
     if(!mrb_tables_ready($pdo)){
         throw new RuntimeException('Mutabakat hedef-risk bildirim migrationı henüz kurulmamış.');
+    }
+    if($onlyCaseId!==null && $onlyCaseId<=0){
+        throw new RuntimeException('Mutabakat vakası bulunamadı.');
     }
 
     $sent=0;
@@ -156,7 +160,10 @@ function mrb_sync(PDO $pdo,array $actor): array {
     $staleSource=0;
     $failed=0;
 
-    foreach(mrb_candidate_rows($pdo,$actor,1500) as $candidate){
+    $candidates=mrb_candidate_rows($pdo,$actor,1500,$onlyCaseId);
+    $candidateCount=count($candidates);
+
+    foreach($candidates as $candidate){
         $caseId=(int)$candidate['vaka_id'];
         $ownerId=(int)($candidate['sorumlu_kullanici_id']??0);
         $institutionId=(int)($candidate['kurum_id']??0);
@@ -286,6 +293,7 @@ function mrb_sync(PDO $pdo,array $actor): array {
     }
 
     return [
+        'candidate_count'=>$candidateCount,
         'sent'=>$sent,
         'skipped'=>$skipped,
         'invalid_owner'=>$invalidOwner,
@@ -293,6 +301,10 @@ function mrb_sync(PDO $pdo,array $actor): array {
         'stale_source'=>$staleSource,
         'failed'=>$failed,
     ];
+}
+
+function mrb_sync_case(PDO $pdo,array $actor,int $caseId): array {
+    return mrb_sync($pdo,$actor,$caseId);
 }
 
 function mrb_history_rows(PDO $pdo,int $limit=300): array {
