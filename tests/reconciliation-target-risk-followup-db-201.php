@@ -385,10 +385,6 @@ throws_201(
     fn()=>mrt_normalize_case_ids(range(1,51)),
     'en fazla 50 vaka'
 );
-throws_201(
-    fn()=>mrt_rows($pdo,['id'=>99,'role'=>'yonetici'],['days'=>30],100),
-    ''
-);
 ok_201(mrt_rows($pdo,['id'=>99,'role'=>'yonetici'],['days'=>30],100)===[],
     'non-Super-Admin follow-up resolver must fail closed.');
 
