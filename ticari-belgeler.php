@@ -89,10 +89,12 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 }
 
 $filters=[
+    'kurum_id'=>(string)($_GET['kurum_id']??''),
     'durum'=>(string)($_GET['durum']??''),
     'belge_turu'=>(string)($_GET['belge_turu']??''),
     'q'=>(string)($_GET['q']??''),
 ];
+$filterInstitutionId=max(0,(int)$filters['kurum_id']);
 
 $summary=$ready?tb_currency_summary($pdo):[];
 $contracts=$ready?tb_contract_options($pdo,500):[];
@@ -222,6 +224,7 @@ $history=$selected?tb_history_rows($pdo,$selectedId,200):[];
 <section class="role-section">
 <div class="role-section-head"><div><span class="eyeline">BELGE HAVUZU</span><h2>Ticari Belgeler</h2></div><span class="role-pill"><?=count($rows)?></span></div>
 <form class="tb-filter" method="get">
+<?php if($filterInstitutionId>0):?><input type="hidden" name="kurum_id" value="<?=$filterInstitutionId?>"><?php endif;?>
 <input type="search" name="q" value="<?=tbh((string)$filters['q'])?>" placeholder="Belge no, sözleşme, kurum...">
 <select name="belge_turu">
 <option value="">Tüm belge türleri</option>
@@ -235,6 +238,7 @@ $history=$selected?tb_history_rows($pdo,$selectedId,200):[];
 <button type="submit">Filtrele</button>
 <a href="ticari-belgeler.php">Temizle</a>
 </form>
+<?php if($filterInstitutionId>0):?><div class="role-note"><span>🏢</span><p>Kurum filtresi aktif: #<?=$filterInstitutionId?>. Tüm belge havuzuna dönmek için “Temizle”yi kullan.</p></div><?php endif;?>
 
 <div class="role-list tb-list">
 <?php if(!$rows):?><div class="role-empty"><span>🧾</span>Filtreye uyan ticari belge yok.</div><?php endif;?>
