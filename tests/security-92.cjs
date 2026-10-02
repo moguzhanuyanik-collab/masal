@@ -10,6 +10,7 @@ const groq=fs.readFileSync('src/adimbot_groq.php','utf8');
 const ai=fs.readFileSync('api/adimbot-ai.php','utf8');
 const voice=fs.readFileSync('api/adimbot-transcribe.php','utf8');
 const updater=fs.readFileSync('src/updater.php','utf8');
+const activities=fs.readFileSync('api/activities.php','utf8');
 
 // 1.1.92 ile eklenen güvenlik davranışlarının güncel uygulamada korunmasını denetler.
 // Sayısal eşikler daha sonraki sürümlerde güvenli biçimde değiştirilebilir.
@@ -32,5 +33,10 @@ assert(voice.includes('voice_provider_error($status,$body,$providerRetryAfter)')
 
 assert(updater.includes('LOCK_EX|LOCK_NB'));
 assert(updater.includes('flock($updateLock,LOCK_UN)'));
+
+assert(activities.includes("verify_csrf($_SERVER['HTTP_X_CSRF_TOKEN'] ?? null)"));
+assert(activities.includes("strlen($raw) > 20000"));
+assert(activities.includes("Geçersiz veya çok büyük istek."));
+assert(activities.includes("],413)"));
 
 console.log('1.1.92 security compatibility checks passed');

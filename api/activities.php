@@ -54,7 +54,10 @@ try {
     }
 
     $raw = file_get_contents('php://input');
-    $payload = json_decode(is_string($raw) ? $raw : '', true);
+    if (!is_string($raw) || strlen($raw) > 20000) {
+        json_response(['ok'=>false,'message'=>'Geçersiz veya çok büyük istek.'],413);
+    }
+    $payload = json_decode($raw, true);
     $gameCode = is_array($payload) ? trim((string)($payload['game'] ?? '')) : '';
     if (!preg_match('/^[a-z0-9_-]{1,50}$/i', $gameCode)) {
         json_response(['ok'=>false,'message'=>'Geçersiz oyun kodu.'],400);
