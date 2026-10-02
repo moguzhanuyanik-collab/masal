@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.51",
+  "version": "1.2.52",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -225,6 +225,7 @@
     "RELEASE-1.2.5.md",
     "RELEASE-1.2.50.md",
     "RELEASE-1.2.51.md",
+    "RELEASE-1.2.52.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
@@ -539,6 +540,7 @@
     "src/super_admin_icons.php",
     "src/tahsilat_hatirlatma.php",
     "src/tahsilat_risk.php",
+    "src/ticari_dashboard.php",
     "src/ticari_finans.php",
     "src/updater.php",
     "src/veli_icerik_dashboard.php",
@@ -571,6 +573,8 @@
     "tests/adimbot-voice-83.cjs",
     "tests/collection-reminders-176.cjs",
     "tests/collection-reminders-db-176.php",
+    "tests/commercial-dashboard-177.cjs",
+    "tests/commercial-dashboard-db-177.php",
     "tests/commercial-finance-163.cjs",
     "tests/commercial-finance-db-163.php",
     "tests/commercial-finance-integrity-169.cjs",
@@ -715,6 +719,8 @@
     "tests/updater-manifest-96.cjs",
     "tests/web-rescue-197-198-113.cjs",
     "tests/web-rescue-197-198-113.php",
+    "ticari-dashboard.css",
+    "ticari-dashboard.php",
     "ticari-finans.php",
     "tools/1.1.97-history-checkpoint.sql",
     "tools/apply-updater-1.1.97-rescue.php",
@@ -744,5 +750,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Ticari yönetici bildirimleri ve tahsilat hatırlatma merkezi"
+  "name": "Ticari yönetim dashboardu ve gelir tahsilat KPI merkezi"
 }
