@@ -59,7 +59,7 @@ assert(css.includes('.map-row'),'case-selection styles missing');
 assert(action.includes('href="ticari-mutabakat-planlama.php"'),'action-center planning link missing');
 assert(health.includes('href="ticari-mutabakat-planlama.php"'),'health-dashboard planning link missing');
 assert(dashboard.includes('aria-label="Mutabakat Planlama"'),'commercial dashboard planning shortcut missing');
-assert(admin.includes('Mutabakat Toplu Planlama'),'Super Admin planning navigation missing');
+assert(!admin.includes('Mutabakat Toplu Planlama'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 
 assert(workflow.includes('node tests/reconciliation-bulk-planning-186.cjs'),
   'bulk planning source regression missing from quality gate');

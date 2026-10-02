@@ -81,8 +81,7 @@ assert(dashboard.includes('href="ticari-mutabakat-aksiyon.php"'),
   'commercial dashboard must link to reconciliation action center');
 assert(documents.includes('href="ticari-mutabakat-aksiyon.php"'),
   'commercial documents must link to reconciliation action center');
-assert(admin.includes('Mutabakat Aksiyon Merkezi'),
-  'Super Admin navigation must expose reconciliation action center');
+assert(!admin.includes('Mutabakat Aksiyon Merkezi'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 
 assert(migration.includes('CREATE TABLE IF NOT EXISTS ticari_mutabakat_vakalari'),
   'reconciliation action case table missing');

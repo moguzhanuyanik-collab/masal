@@ -56,8 +56,9 @@ assert(css.includes('.mhr-summary'),'target risk summary styles missing');
 assert(css.includes('.mhr-progress'),'target-time usage progress styles missing');
 assert(css.includes('.mhr-table'),'owner workload table styles missing');
 
-for(const content of [inbox,health,performance,targets,admin])
-  assert(content.includes('ticari-mutabakat-hedef-risk.php'),'target risk navigation missing');
+for(const content of [inbox,health,performance,targets])
+  assert(content.includes('ticari-mutabakat-hedef-risk.php'),'target risk cross-navigation missing');
+assert(!admin.includes('ticari-mutabakat-hedef-risk.php'),'legacy target-risk navigation must stay hidden from the education-focused Super Admin');
 
 assert(escalationDomain.includes("if($days>=30)") && escalationDomain.includes("if($days>=14)")
   && escalationDomain.includes("if($days>=8)") && escalationDomain.includes("if($days>=4)"),

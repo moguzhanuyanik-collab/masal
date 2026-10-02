@@ -56,7 +56,7 @@ assert(reminderPage.includes('href="ticari-mutabakat-devir.php"'),
   'invalid reminder owner must route to recovery center');
 assert(reminderCss.includes('.mr-summary>a'),
   'reminder summary recovery link must preserve card styling');
-assert(admin.includes('Mutabakat Sorumlu Devir'),'Super Admin recovery navigation missing');
+assert(!admin.includes('Mutabakat Sorumlu Devir'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 
 assert(workflow.includes('node tests/reconciliation-owner-recovery-189.cjs'),
   'owner recovery source regression missing from quality gate');

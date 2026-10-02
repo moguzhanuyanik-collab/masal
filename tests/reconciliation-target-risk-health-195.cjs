@@ -66,7 +66,7 @@ assert(css.includes('.mrh-summary'),'notification health KPI styles missing');
 assert(css.includes('.mrh-owner-grid'),'owner health styles missing');
 assert(css.includes('.mrh-policy-grid'),'policy health styles missing');
 
-assert(admin.includes('Hedef Risk Bildirim Sağlığı'),'Super Admin health navigation missing');
+assert(!admin.includes('Hedef Risk Bildirim Sağlığı'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 assert(sendPage.includes('aria-label="Bildirim Sağlığı"'),'send center health shortcut missing');
 assert(riskPage.includes('aria-label="Bildirim Sağlığı"'),'target-risk queue health shortcut missing');
 assert(targetPage.includes('aria-label="Bildirim Sağlığı"'),'target policy health shortcut missing');

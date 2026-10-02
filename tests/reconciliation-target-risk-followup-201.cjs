@@ -85,8 +85,7 @@ assert(followCss.includes('.mrt-row'),'follow-up selection styles missing');
 
 assert(inbox.includes('aria-label="Okunmamış Risk Takibi"'),
   'daily inbox follow-up shortcut missing');
-assert(admin.includes('Okunmamış Hedef Risk Takibi'),
-  'Super Admin follow-up navigation missing');
+assert(!admin.includes('Okunmamış Hedef Risk Takibi'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 
 assert(workflow.includes('node tests/reconciliation-target-risk-followup-201.cjs'),
   '201 source regression missing from quality gate');

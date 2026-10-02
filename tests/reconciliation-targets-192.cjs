@@ -55,8 +55,9 @@ assert(page.includes('1.2.65 eskalasyon eşikleri bu sürümde değiştirilmez')
   'fixed escalation separation disclosure missing');
 assert(page.includes('Politika öncesi'),'pre-policy historical handling UI missing');
 
-for(const content of [performance,health,escalation,admin])
-  assert(content.includes('ticari-mutabakat-hedefleri.php'),'target policy navigation missing');
+for(const content of [performance,health,escalation])
+  assert(content.includes('ticari-mutabakat-hedefleri.php'),'target policy cross-navigation missing');
+assert(!admin.includes('ticari-mutabakat-hedefleri.php'),'legacy target-policy navigation must stay hidden from the education-focused Super Admin');
 
 assert(performance.includes('mh_closed_target_summary('),
   'performance dashboard target compliance missing');

@@ -75,8 +75,7 @@ for(const text of [health,reminder,transfer]){
   assert(text.includes('href="ticari-mutabakat-eskalasyon.php"'),
     'mutabakat operation page missing escalation navigation');
 }
-assert(admin.includes('Mutabakat Operasyon Eskalasyonu'),
-  'Super Admin escalation menu missing');
+assert(!admin.includes('Mutabakat Operasyon Eskalasyonu'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 
 assert(workflow.includes('node tests/reconciliation-escalation-190.cjs'),
   'escalation source regression missing from quality gate');

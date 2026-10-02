@@ -75,7 +75,7 @@ assert(page.includes('Bu işlem lisansı erken iptal etmez'),
 assert(finance.includes('Yenileme Operasyon Merkezi'),'finance handoff to renewal center missing');
 assert(finance.includes('href="lisans-yenilemeleri.php"'),'finance renewal-center link missing');
 assert(packages.includes('href="lisans-yenilemeleri.php"'),'package center renewal shortcut missing');
-assert(admin.includes('href="lisans-yenilemeleri.php"'),'Super Admin renewal navigation missing');
+assert(!admin.includes('href="lisans-yenilemeleri.php"'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 
 assert(migration.includes('CREATE TABLE IF NOT EXISTS kurum_lisans_yenilemeleri'),'renewal case table missing');
 assert(migration.includes('CREATE TABLE IF NOT EXISTS kurum_lisans_yenileme_gecmisi'),'renewal history table missing');

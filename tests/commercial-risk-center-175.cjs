@@ -72,7 +72,7 @@ assert(css.includes('.role-pill.critical'),'critical risk styling missing');
 
 assert(finance.includes('href="tahsilat-risk.php"'),'commercial finance risk-center shortcut missing');
 assert(renewals.includes('href="tahsilat-risk.php"'),'renewal center risk-center shortcut missing');
-assert(admin.includes('Tahsilat Risk Merkezi'),'Super Admin risk navigation missing');
+assert(!admin.includes('Tahsilat Risk Merkezi'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 
 assert(migration.includes('CREATE TABLE IF NOT EXISTS ticari_tahsilat_takipleri'),'risk tracking table missing');
 assert(migration.includes('PRIMARY KEY(sozlesme_id)'),'one risk case per contract invariant missing');

@@ -73,8 +73,7 @@ assert(followPage.includes('aria-label="Takip Sağlığı Müdahale"'),
   'follow-up planner intervention shortcut missing');
 assert(inbox.includes('aria-label="Takip Sağlığı Müdahale"'),
   'daily inbox intervention shortcut missing');
-assert(admin.includes('Takip Sağlığı Müdahale'),
-  'Super Admin intervention navigation missing');
+assert(!admin.includes('Takip Sağlığı Müdahale'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 
 assert(css.includes('.mrtm-summary'),'intervention summary styles missing');
 assert(css.includes('.mrtm-row'),'intervention candidate styles missing');

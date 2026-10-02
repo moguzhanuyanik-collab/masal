@@ -80,9 +80,10 @@ assert(page.includes('sayfayı açmak bildirim üretmez'),'GET no-send disclosur
 assert(!page.includes("mr_sync($pdo,$user);\n$summary"),
   'GET page load must not synchronize reminders');
 
-for(const content of [inbox,action,health,planning,dashboard,admin]){
-  assert(content.includes('ticari-mutabakat-hatirlatma.php'),'cross-navigation to reminder center missing');
+for(const content of [inbox,action,health,planning,dashboard]){
+  assert(content.includes('ticari-mutabakat-hatirlatma.php'),'commercial cross-navigation to reminder center missing');
 }
+assert(!admin.includes('ticari-mutabakat-hatirlatma.php'),'legacy reminder navigation must stay hidden from the education-focused Super Admin');
 if(Number(version.version.split('.')[2])<74){
   assert(inbox.includes('Bu ekran salt-okunurdur.'),
     'legacy daily inbox must remain read-only after reminder release');

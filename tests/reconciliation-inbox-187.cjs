@@ -63,9 +63,10 @@ assert(page.includes('name="owner_id"'),'owner filter preservation missing');
 assert(css.includes('.mi-summary'),'inbox summary styles missing');
 assert(css.includes('.mi-team'),'team workload styles missing');
 
-for(const content of [admin,action,health,planning,dashboard]){
-  assert(content.includes('ticari-mutabakat-is-kutusu.php'),'cross-navigation to daily inbox missing');
+for(const content of [action,health,planning,dashboard]){
+  assert(content.includes('ticari-mutabakat-is-kutusu.php'),'commercial cross-navigation to daily inbox missing');
 }
+assert(!admin.includes('ticari-mutabakat-is-kutusu.php'),'legacy reconciliation inbox navigation must stay hidden from the education-focused Super Admin');
 
 assert(workflow.includes('node tests/reconciliation-inbox-187.cjs'),'inbox source regression missing from quality gate');
 assert(workflow.includes('php tests/reconciliation-inbox-db-187.php'),'inbox DB regression missing from quality gate');

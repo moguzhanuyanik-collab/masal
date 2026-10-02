@@ -54,10 +54,11 @@ assert(css.includes('.mrts-summary'),'summary styles missing');
 assert(css.includes('.mrts-row.stale'),'stale-context styles missing');
 assert(css.includes('.mrts-owner-table'),'owner table styles missing');
 
-for(const content of [planning,health,inbox,admin]){
+for(const content of [planning,health,inbox]){
   assert(content.includes('ticari-mutabakat-hedef-risk-takip-saglik.php'),
-    'navigation integration missing');
+    'commercial navigation integration missing');
 }
+assert(!admin.includes('ticari-mutabakat-hedef-risk-takip-saglik.php'),'legacy follow-up health navigation must stay hidden from the education-focused Super Admin');
 
 assert(workflow.includes('node tests/reconciliation-target-risk-followup-health-202.cjs'),
   'follow-up health source regression missing from quality gate');

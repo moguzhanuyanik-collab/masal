@@ -67,7 +67,7 @@ assert(css.includes('.ttk-summary'),'calendar summary styles missing');
 assert(css.includes('.ttk-forecast'),'forecast styles missing');
 assert(css.includes('.ttk-filter'),'calendar filters styles missing');
 
-assert(admin.includes('href="tahsilat-takvimi.php"'),'Super Admin calendar navigation missing');
+assert(!admin.includes('href="tahsilat-takvimi.php"'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 assert(dashboard.includes('aria-label="Tahsilat Takvimi"'),'dashboard calendar shortcut missing');
 assert(finance.includes('aria-label="Tahsilat Takvimi"'),'finance calendar shortcut missing');
 assert(risk.includes('aria-label="Tahsilat Takvimi"'),'risk calendar shortcut missing');

@@ -77,8 +77,7 @@ for(const [name,content] of [
   assert(content.includes('ticari-mutabakat-hedef-risk-takip-kurtarma.php'),
     name+' navigation to stale recovery missing');
 }
-assert(admin.includes('Stale Hedef Risk Takip Kurtarma'),
-  'Super Admin stale recovery navigation missing');
+assert(!admin.includes('Stale Hedef Risk Takip Kurtarma'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 
 assert(css.includes('.mrtr-summary'),'stale recovery summary styles missing');
 assert(css.includes('.mrtr-context'),'old/current context comparison styles missing');

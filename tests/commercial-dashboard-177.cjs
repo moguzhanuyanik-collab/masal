@@ -62,7 +62,7 @@ assert(css.includes('.td-kpi-grid'),'dashboard KPI styles missing');
 assert(css.includes('.td-trend'),'dashboard trend styles missing');
 assert(css.includes('.td-table'),'dashboard institution table styles missing');
 
-assert(admin.includes('href="ticari-dashboard.php"'),'Super Admin dashboard navigation missing');
+assert(!admin.includes('href="ticari-dashboard.php"'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 assert(finance.includes('aria-label="Ticari Dashboard"'),'finance dashboard shortcut missing');
 assert(risk.includes('aria-label="Ticari Dashboard"'),'risk dashboard shortcut missing');
 assert(renewal.includes('aria-label="Ticari Dashboard"'),'renewal dashboard shortcut missing');

@@ -49,7 +49,7 @@ assert(page.includes('Satış Geçmişi'),'sales note history UI missing');
 assert(page.includes("Sözleşme ve tahsilat kaydı Ticari Finans'ta ayrıca oluşturulur."),
   'conversion must not falsely imply contract/payment creation');
 
-assert(admin.includes('href="demo-satis.php"'),'Super Admin demo sales navigation missing');
+assert(!admin.includes('href="demo-satis.php"'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 assert(packages.includes('href="demo-satis.php"'),'package center demo sales shortcut missing');
 
 assert(migration.includes('CREATE TABLE IF NOT EXISTS kurum_deneme_satislari'),'trial sales table missing');

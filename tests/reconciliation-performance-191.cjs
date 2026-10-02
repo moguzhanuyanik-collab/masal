@@ -47,8 +47,9 @@ assert(page.includes('Bu dashboard salt-okunurdur.'),
 assert(!page.includes("$_SERVER['REQUEST_METHOD']==='POST'"),
   'performance dashboard must not expose write actions');
 
-for(const content of [admin,health,inbox,escalation])
-  assert(content.includes('ticari-mutabakat-performans.php'),'performance navigation missing');
+for(const content of [health,inbox,escalation])
+  assert(content.includes('ticari-mutabakat-performans.php'),'performance cross-navigation missing');
+assert(!admin.includes('ticari-mutabakat-performans.php'),'legacy performance navigation must stay hidden from the education-focused Super Admin');
 
 assert(workflow.includes('node tests/reconciliation-performance-191.cjs'),
   'performance source regression missing from quality gate');

@@ -75,8 +75,7 @@ assert(!riskPage.includes("mrb_sync($pdo"),
   '1.2.68 target-risk queue must remain read-only and must not send notifications');
 assert(policies.includes('aria-label="Hedef Risk Bildirimleri"'),
   'target-policy center notification shortcut missing');
-assert(admin.includes('Mutabakat Hedef Risk Bildirimleri'),
-  'Super Admin notification navigation missing');
+assert(!admin.includes('Mutabakat Hedef Risk Bildirimleri'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 
 assert(notifications.includes("'super_admin'=>'Süper Admin'"),
   'central system notification support for Super Admin missing');

@@ -77,7 +77,7 @@ assert(migration.includes('PRIMARY KEY(belge_id,tahsilat_id)'),
 assert(!migration.includes('ALTER TABLE kurum_sozlesmeleri'),'release must not mutate contract source schema');
 assert(!migration.includes('ALTER TABLE kurum_tahsilatlari'),'release must not mutate payment source schema');
 
-assert(admin.includes('Ticari Belge & Tahakkuk'),'Super Admin document navigation missing');
+assert(!admin.includes('Ticari Belge & Tahakkuk'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 assert(dashboard.includes('aria-label="Ticari Belgeler"'),'dashboard document shortcut missing');
 assert(finance.includes('aria-label="Ticari Belgeler"'),'finance document shortcut missing');
 assert(calendar.includes('aria-label="Ticari Belgeler"'),'calendar document shortcut missing');

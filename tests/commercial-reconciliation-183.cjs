@@ -71,7 +71,7 @@ assert(css.includes('.tm-summary-grid'),'reconciliation summary styles missing')
 assert(css.includes('.tm-table'),'reconciliation table styles missing');
 assert(css.includes('.tm-issues'),'integrity issue styles missing');
 
-assert(admin.includes('Ticari Mutabakat & Kontrol'),'Super Admin reconciliation navigation missing');
+assert(!admin.includes('Ticari Mutabakat & Kontrol'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 assert(dashboard.includes('aria-label="Ticari Mutabakat"'),'dashboard reconciliation shortcut missing');
 assert(documents.includes('aria-label="Ticari Mutabakat"'),'commercial documents reconciliation shortcut missing');
 assert(finance.includes('aria-label="Ticari Mutabakat"'),'finance reconciliation shortcut missing');

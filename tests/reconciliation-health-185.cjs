@@ -76,8 +76,7 @@ assert(reconciliation.includes('aria-label="Mutabakat Sağlığı"'),
   'reconciliation diagnostic health shortcut missing');
 assert(dashboard.includes('aria-label="Mutabakat Sağlığı"'),
   'commercial dashboard health shortcut missing');
-assert(admin.includes('Mutabakat Aksiyon Sağlığı'),
-  'Super Admin health navigation missing');
+assert(!admin.includes('Mutabakat Aksiyon Sağlığı'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 
 assert(dashboardDomain.includes("'reconciliation_open'=>0"),
   'commercial KPI bridge reconciliation-open counter missing');

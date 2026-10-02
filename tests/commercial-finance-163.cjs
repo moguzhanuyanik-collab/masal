@@ -35,7 +35,7 @@ assert(page.includes('href="lisans-yenilemeleri.php"'),'commercial finance must 
 assert(page.includes('Ticari Portföy'),'contract portfolio UI missing');
 assert(page.includes('TAHSİLAT GEÇMİŞİ'),'payment history UI missing');
 assert(page.includes('resmi e-Fatura/e-Arşiv belgesi üretmez'),'page must not claim regulated invoice generation');
-assert(admin.includes('href="ticari-finans.php"'),'Super Admin commercial finance navigation missing');
+assert(!admin.includes('href="ticari-finans.php"'),'legacy commercial navigation must stay hidden from the education-focused Super Admin');
 
 assert(migration.includes('CREATE TABLE IF NOT EXISTS kurum_sozlesmeleri'),'contract table migration missing');
 assert(migration.includes('CREATE TABLE IF NOT EXISTS kurum_tahsilatlari'),'payment table migration missing');
