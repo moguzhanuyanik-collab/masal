@@ -28,13 +28,26 @@ $verified=verify_activated_update_files($source,$live,$files,[]);
 check104($verified['files']===2,'Verification file count mismatch.');
 
 file_put_contents($live.'/existing.txt',"tampered\n");
-$tamperRejected=false;
-try{
-    verify_activated_update_files($source,$live,$files,[]);
-}catch(RuntimeException $e){
-    $tamperRejected=str_contains($e->getMessage(),'bütünlüğü');
+$repaired=verify_activated_update_files($source,$live,$files,[]);
+check104($repaired['files']===2,'Repair verification file count mismatch.');
+check104(($repaired['repaired_count']??0)===1,'Tampered target should be repaired exactly once.');
+check104(in_array('existing.txt',$repaired['repaired_files']??[],true),'Repaired file list missing tampered target.');
+check104(file_get_contents($live.'/existing.txt')==="new-existing\n",'Tampered target was not restored from verified source.');
+
+$symlinkRejected=true;
+if(function_exists('symlink')){
+    @unlink($live.'/existing.txt');
+    if(@symlink($source.'/existing.txt',$live.'/existing.txt')){
+        $symlinkRejected=false;
+        try{
+            verify_activated_update_files($source,$live,$files,[]);
+        }catch(RuntimeException $e){
+            $symlinkRejected=str_contains($e->getMessage(),'sembolik bağlantı');
+        }
+        @unlink($live.'/existing.txt');
+    }
 }
-check104($tamperRejected,'Post-copy tamper was not rejected.');
+check104($symlinkRejected,'Unsafe symlink target was not rejected.');
 
 delete_tree($base);
-echo "PASS: activation preflight, atomic replacement and post-copy SHA-256 verification\n";
+echo "PASS: activation preflight, atomic replacement, one-shot repair and SHA-256 verification\n";
