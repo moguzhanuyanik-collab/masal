@@ -4,6 +4,7 @@ declare(strict_types=1);
 require __DIR__.'/src/bootstrap.php';
 require __DIR__.'/src/auth.php';
 require __DIR__.'/src/ticari_finans.php';
+require __DIR__.'/src/ticari_taksit.php';
 require __DIR__.'/src/kurum_ticari_360.php';
 
 $user=require_role('super_admin');
@@ -81,7 +82,7 @@ $statementQuery=http_build_query([
 <title>Kurum Ticari 360 — İlkAdım</title>
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="super-admin-pages.css?v=1.0.72">
-<link rel="stylesheet" href="kurum-ticari-360.css?v=1.2.54">
+<link rel="stylesheet" href="kurum-ticari-360.css?v=1.2.55">
 </head>
 <body class="role-page sa-subpage">
 <?php require __DIR__.'/src/super_admin_icons.php'; ?>
@@ -233,17 +234,18 @@ $statementQuery=http_build_query([
 <div class="k360-table-wrap">
 <table class="k360-table">
 <thead><tr>
-<th>Sözleşme</th><th>Paket</th><th>Durum</th><th>Dönem</th><th>Vade</th><th>Toplam</th><th>Tahsilat</th><th>Açık</th><th>Risk</th><th>Yenileme</th><th>Hatırlatma</th>
+<th>Sözleşme</th><th>Paket</th><th>Durum</th><th>Dönem</th><th>Vade</th><th>Taksit Planı</th><th>Toplam</th><th>Tahsilat</th><th>Açık</th><th>Risk</th><th>Yenileme</th><th>Hatırlatma</th>
 </tr></thead>
 <tbody>
-<?php if(!$contracts):?><tr><td colspan="11">Kurum için sözleşme kaydı yok.</td></tr><?php endif;?>
+<?php if(!$contracts):?><tr><td colspan="12">Kurum için sözleşme kaydı yok.</td></tr><?php endif;?>
 <?php foreach($contracts as $row):?>
 <tr class="<?=!empty($row['gecikmis'])?'k360-overdue':''?>">
 <td><a href="ticari-finans.php?sozlesme_id=<?=(int)$row['id']?>"><strong><?=k360h((string)$row['sozlesme_no'])?></strong><small>#<?=(int)$row['id']?></small></a></td>
 <td><?=k360h((string)($row['paket_adi']?:'—'))?></td>
 <td><span class="role-pill"><?=k360h(k360_contract_status((string)$row['durum']))?></span></td>
 <td><?=k360h((string)$row['baslangic_tarihi'])?><small><?=k360h((string)($row['bitis_tarihi']?:'Süresiz'))?></small></td>
-<td><?=k360h((string)($row['vade_tarihi']?:'—'))?><?php if(!empty($row['gecikmis'])):?><small class="k360-danger">Gecikmiş</small><?php endif;?></td>
+<td><?php if(!empty($row['taksit_plani_aktif']) && !empty($row['taksit_sonraki_vade'])):?><?=k360h((string)$row['taksit_sonraki_vade'])?><small>Sonraki taksit</small><?php else:?><?=k360h((string)($row['vade_tarihi']?:'—'))?><?php endif;?><?php if(!empty($row['gecikmis'])):?><small class="k360-danger">Gecikmiş</small><?php endif;?></td>
+<td><?php if((string)($row['taksit_plan_durumu']??'')!==''):?><a class="role-pill <?=!empty($row['taksit_plani_aktif'])?'ok':''?>" href="ticari-finans.php?sozlesme_id=<?=(int)$row['id']?>"><?=k360h((string)$row['taksit_plan_durumu'])?> · <?=(int)($row['taksit_sayisi']??0)?></a><?php if((float)($row['taksit_gecikmis_tutar']??0)>0):?><small class="k360-danger"><?=k360m($row['taksit_gecikmis_tutar'])?> <?=k360h((string)$row['para_birimi'])?> gecikmiş</small><?php endif;?><?php else:?>—<?php endif;?></td>
 <td><?=k360m($row['toplam_tutar'])?> <?=k360h((string)$row['para_birimi'])?></td>
 <td><?=k360m($row['tahsil_edilen'])?> <?=k360h((string)$row['para_birimi'])?><small><?=(int)$row['aktif_tahsilat_sayisi']?> aktif / <?=(int)$row['tahsilat_gecmisi']?> geçmiş</small></td>
 <td><?=k360m($row['kalan_tutar'])?> <?=k360h((string)$row['para_birimi'])?></td>
