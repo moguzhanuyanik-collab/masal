@@ -20,10 +20,12 @@ assert(!/\d+ - \d+ işleminin sonucu kaçtır\?/u.test(normalizedSource),'mechan
 assert(!/sayısından hemen önce hangi sayı gelir\?/u.test(normalizedSource),'mechanical previous-number prompt must be removed');
 assert(!/sayısından hemen sonra hangi sayı gelir\?/u.test(normalizedSource),'mechanical next-number prompt must be removed');
 
-assert(normalizedSource.includes("Sayı yolunda 5'den"));
-assert(normalizedSource.includes('daha çok boncuğu gösteren sayı'));
+assert(normalizedSource.includes('Sayı yolunda 5 sayısından'));
+assert(/daha çok boncuğu gösteren sayı/i.test(normalizedSource));
 assert(normalizedSource.includes('kaç çıkartması var?'));
 assert(normalizedSource.includes('kaç balon kaldı?'));
+assert(!/\d+'(?:dan|den)\b/u.test(normalizedSource),'numeric suffix wording should avoid awkward Turkish apostrophe forms');
+assert(!/\d+ ile \d+'yi bir araya getirince/u.test(normalizedSource),'addition explanations should use child-friendly grammar');
 assert(normalizedSource.includes('yaklaşık kaç tane görüyorsun?'));
 assert(normalizedSource.includes('▭ Bu işaret hangi şekle benzer?'));
 assert(normalizedSource.includes('Kırmızı: 🔴🔴🔴🔴🔴🔴'));
