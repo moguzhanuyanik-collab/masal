@@ -23,7 +23,7 @@ assert(!/sayısından hemen sonra hangi sayı gelir\?/u.test(normalizedSource),'
 assert(normalizedSource.includes('Sayı yolunda 5 sayısından'));
 assert(/daha çok boncuğu gösteren sayı/i.test(normalizedSource));
 assert(normalizedSource.includes('kaç çıkartması var?'));
-assert(normalizedSource.includes('kaç balon kaldı?'));
+assert(/kaç balon kaldı\?/i.test(normalizedSource),'subtraction stories must include a concrete balloon context');
 assert(!/\d+'(?:dan|den)\b/u.test(normalizedSource),'numeric suffix wording should avoid awkward Turkish apostrophe forms');
 assert(!/\d+ ile \d+'yi bir araya getirince/u.test(normalizedSource),'addition explanations should use child-friendly grammar');
 assert(normalizedSource.includes('yaklaşık kaç tane görüyorsun?'));
