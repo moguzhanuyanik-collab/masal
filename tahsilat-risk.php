@@ -139,6 +139,7 @@ $selectedReminders=$selected&&$reminderReady?th_contract_history($pdo,$selectedI
 <div class="sa-page-actions">
 <a class="sa-page-action" href="ticari-finans.php" aria-label="Ticari Finans"><svg><use href="#sa-database"/></svg></a>
 <a class="sa-page-action" href="ticari-dashboard.php" aria-label="Ticari Dashboard"><svg><use href="#sa-database"/></svg></a>
+<a class="sa-page-action" href="tahsilat-takvimi.php" aria-label="Tahsilat Takvimi"><svg><use href="#sa-chart"/></svg></a>
 <a class="sa-page-action" href="lisans-yenilemeleri.php" aria-label="Lisans Yenilemeleri"><svg><use href="#sa-refresh"/></svg></a>
 <a class="sa-page-action" href="super-admin.php" aria-label="Panel"><svg><use href="#sa-home"/></svg></a>
 </div>
@@ -382,6 +383,7 @@ $isOpen=in_array($stage,tr_open_stages(),true);
 <a href="super-admin.php"><span>⌂</span>Panel</a>
 <a href="lisans-yenilemeleri.php"><span>⏳</span>Yenileme</a>
 <a href="ticari-dashboard.php"><span>📊</span>KPI</a>
+<a href="tahsilat-takvimi.php"><span>🗓️</span>Takvim</a>
 <a href="ticari-finans.php"><span>₺</span>Finans</a>
 <a class="active" href="tahsilat-risk.php"><span>⚠️</span>Risk</a>
 <a href="guncelleme.php"><span>↻</span>Güncelle</a>
