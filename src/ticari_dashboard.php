@@ -97,6 +97,10 @@ function td_monthly_collections(PDO $pdo,int $months=6): array {
         COUNT(*) tahsilat_sayisi,
         COUNT(DISTINCT t.kurum_id) kurum_sayisi
         FROM kurum_tahsilatlari t
+        INNER JOIN kurum_sozlesmeleri s
+          ON s.id=t.sozlesme_id
+         AND s.kurum_id=t.kurum_id
+         AND s.durum IN ('aktif','tamamlandi')
         WHERE t.durum='aktif'
           AND t.tahsilat_tarihi>=?
         GROUP BY DATE_FORMAT(t.tahsilat_tarihi,'%Y-%m'),t.para_birimi
@@ -227,7 +231,10 @@ function td_recent_payments(PDO $pdo,int $limit=15): array {
         t.referans_no,t.olusturulma_tarihi,
         s.sozlesme_no,k.ad kurum_adi
         FROM kurum_tahsilatlari t
-        INNER JOIN kurum_sozlesmeleri s ON s.id=t.sozlesme_id AND s.kurum_id=t.kurum_id
+        INNER JOIN kurum_sozlesmeleri s
+          ON s.id=t.sozlesme_id
+         AND s.kurum_id=t.kurum_id
+         AND s.durum IN ('aktif','tamamlandi')
         INNER JOIN kurumlar k ON k.id=t.kurum_id
         WHERE t.durum='aktif'
         ORDER BY t.tahsilat_tarihi DESC,t.id DESC
