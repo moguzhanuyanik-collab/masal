@@ -477,3 +477,10 @@ function kt360_statement(PDO $pdo,int $institutionId,array $filters,int $limit=5
         'truncated'=>$truncated,
     ];
 }
+
+
+function kt360_csv_safe_cell(string $value): string {
+    $value=str_replace(["\0"],'',$value);
+    if($value!=='' && preg_match('/^[=+\-@\t\r]/u',$value)===1) return "'".$value;
+    return $value;
+}
