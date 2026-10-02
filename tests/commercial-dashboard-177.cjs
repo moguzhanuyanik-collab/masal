@@ -37,6 +37,8 @@ assert(domain.includes("lys.yenileme_id IS NOT NULL"),
   'renewal revenue linkage missing');
 assert(domain.includes("t.durum='aktif'"),
   'monthly and recent payment data must ignore cancelled collections');
+assert(domain.includes("s.durum IN ('aktif','tamamlandi')"),
+  'monthly and recent payment feeds must stay inside valid commercial portfolio');
 assert(domain.includes("s.kurum_id,k.ad kurum_adi,k.kod kurum_kodu,s.para_birimi"),
   'institution+currency aggregation contract missing');
 assert(domain.includes("kalan_bakiye DESC"),
