@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.52",
+  "version": "1.2.53",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -226,6 +226,7 @@
     "RELEASE-1.2.50.md",
     "RELEASE-1.2.51.md",
     "RELEASE-1.2.52.md",
+    "RELEASE-1.2.53.md",
     "RELEASE-1.2.6.md",
     "RELEASE-1.2.7.md",
     "RELEASE-1.2.8.md",
@@ -444,6 +445,8 @@
     "kurum-siniflari.css",
     "kurum-siniflari.js",
     "kurum-siniflari.php",
+    "kurum-ticari-360.css",
+    "kurum-ticari-360.php",
     "kurum-velileri.php",
     "kurum-yoneticileri.php",
     "kurum.css",
@@ -522,6 +525,7 @@
     "src/kurum_raporlari.php",
     "src/kurum_rol_sayfasi.php",
     "src/kurum_siniflari.php",
+    "src/kurum_ticari_360.php",
     "src/kurum_yonetimi.php",
     "src/kurumlar_modulu.php",
     "src/lisans_yenileme.php",
@@ -597,6 +601,8 @@
     "tests/institution-class-edit-db-136.php",
     "tests/institution-classes-groups-134.cjs",
     "tests/institution-classes-groups-db-134.php",
+    "tests/institution-commercial-360-178.cjs",
+    "tests/institution-commercial-360-db-178.php",
     "tests/institution-content-center-133.cjs",
     "tests/institution-content-detail-141.cjs",
     "tests/institution-content-detail-db-141.php",
@@ -750,5 +756,5 @@
     "yonetici.css"
   ],
   "release_revision": 1,
-  "name": "Ticari yönetim dashboardu ve gelir tahsilat KPI merkezi"
+  "name": "Kurum ticari 360 ve hesap ekstresi görünümü"
 }
