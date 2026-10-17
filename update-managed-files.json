@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "1.2.83",
+  "version": "1.2.84",
   "files": [
     ".github/workflows/quality.yml",
     "HOTFIX-1.0.3.md",
@@ -258,6 +258,7 @@
     "RELEASE-1.2.79.md",
     "RELEASE-1.2.8.md",
     "RELEASE-1.2.80.md",
+    "RELEASE-1.2.84.md",
     "RELEASE-1.2.9.md",
     "YETKILENDIRME-1.0.35.md",
     "activities-extra.js",
@@ -918,6 +919,6 @@
     "yonetici-yetkileri.php",
     "yonetici.css"
   ],
-  "release_revision": 5,
-  "name": "Sade eğitim yönetimi ve anlık AdımBot ses akışı"
+  "release_revision": 1,
+  "name": "Öğretmen ve Yönetici Panelleri Modern Arayüz ve Tasarım İyileştirmeleri"
 }
