@@ -151,7 +151,7 @@ add_plan_181($pdo,$cA,10,[
 ]);
 $payA=add_payment_181($pdo,$cA,10,'TRY','450');
 
-$cB=add_contract_181($pdo,20,'CAL-B','TRY','aktif','500',$today->modify('-10 days')->format('Y-m-d'));
+$cB=add_contract_181($pdo,20,'CAL-B','TRY','aktif','500',$today->modify('-40 days')->format('Y-m-d'));
 add_payment_181($pdo,$cB,20,'TRY','100');
 
 $cC=add_contract_181($pdo,30,'CAL-C','USD','aktif','1000',$today->modify('+20 days')->format('Y-m-d'));
