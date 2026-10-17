@@ -68,7 +68,7 @@ $repaired=recover_missing_064_checkpoint_after_1_1_98_bridge($pdo,$root,'1.1.97'
 ok_124(auth_table_exists($pdo,'adimbot_rate_limitleri'),
     '064 kaydı mevcut ama tablo eksik olduğunda idempotent şema onarımı çalışmalı.');
 ok_124($repaired===[],'Kayıt zaten mevcutken ikinci recovery migrationı yeniden uygulanmış saymamalı.');
-ok_124((int)$pdo->query("SELECT COUNT(*) FROM sistem_migrations WHERE migration='064_adimbot_rate_limit_ve_migration_checkpoint'")===1,
+ok_124((int)$pdo->query("SELECT COUNT(*) FROM sistem_migrations WHERE migration='064_adimbot_rate_limit_ve_migration_checkpoint'")->fetchColumn()===1,
     '064 migration kaydı ikinci recoveryde çoğalmamalı.');
 
 $pdo->exec('DROP TABLE adimbot_rate_limitleri');
